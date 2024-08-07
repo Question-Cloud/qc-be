@@ -41,9 +41,11 @@ public class UserEntity {
     @Column
     private String name;
 
+    @Column
+    private String email;
+
     @Builder
-    public UserEntity(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone,
-        String name) {
+    public UserEntity(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -51,6 +53,7 @@ public class UserEntity {
         this.accountType = accountType;
         this.phone = phone;
         this.name = name;
+        this.email = email;
     }
 
     public User toDomain() {
@@ -62,6 +65,7 @@ public class UserEntity {
             .accountType(accountType)
             .phone(phone)
             .name(name)
+            .email(email)
             .build();
     }
 }

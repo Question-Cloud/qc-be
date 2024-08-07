@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
-
     @Override
     public User append(User user) {
         return userJpaRepository.save(user.toEntity()).toDomain();
@@ -27,5 +26,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Boolean checkDuplicatePhone(String phone) {
         return userJpaRepository.existsByPhone(phone);
+    }
+
+    @Override
+    public Boolean checkDuplicateEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
     }
 }

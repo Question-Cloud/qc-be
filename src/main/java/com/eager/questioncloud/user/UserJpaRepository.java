@@ -8,4 +8,6 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByAccountTypeAndSocialUid(AccountType accountType, String socialUid);
 
     Boolean existsByPhone(String phone);
+
+    Boolean existsByEmail(String email);
 }

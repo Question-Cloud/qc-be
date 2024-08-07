@@ -19,6 +19,9 @@ public class UserCreator {
         if (checkDuplicatePhone(user)) {
             throw new RuntimeException();
         }
+        if (checkDuplicateEmail(user.getEmail())) {
+            throw new RuntimeException();
+        }
         return userRepository.append(user);
     }
 
@@ -38,5 +41,9 @@ public class UserCreator {
 
     public Boolean checkDuplicatePhone(User user) {
         return userRepository.checkDuplicatePhone(user.getPhone());
+    }
+
+    public Boolean checkDuplicateEmail(String email) {
+        return userRepository.checkDuplicateEmail(email);
     }
 }

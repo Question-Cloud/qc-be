@@ -12,9 +12,10 @@ public class User {
     private AccountType accountType;
     private String phone;
     private String name;
+    private String email;
 
     @Builder
-    public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name) {
+    public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -22,6 +23,7 @@ public class User {
         this.accountType = accountType;
         this.phone = phone;
         this.name = name;
+        this.email = email;
     }
 
     public UserEntity toEntity() {
@@ -33,6 +35,7 @@ public class User {
             .accountType(accountType)
             .phone(phone)
             .name(name)
+            .email(email)
             .build();
     }
 }

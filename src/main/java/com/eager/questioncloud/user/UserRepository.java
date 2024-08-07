@@ -8,4 +8,6 @@ public interface UserRepository {
     Boolean checkDuplicateSocialUid(AccountType accountType, String socialUid);
 
     Boolean checkDuplicatePhone(String phone);
+
+    Boolean checkDuplicateEmail(String email);
 }

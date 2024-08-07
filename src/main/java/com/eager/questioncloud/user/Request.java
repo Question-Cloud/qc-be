@@ -11,6 +11,7 @@ public class Request {
         private AccountType accountType;
         private String phone;
         private String name;
+        private String email;
 
         public User toDomain() {
             return User.builder()
@@ -20,6 +21,7 @@ public class Request {
                 .accountType(accountType)
                 .phone(phone)
                 .name(name)
+                .email(email)
                 .build();
         }
     }
