@@ -44,8 +44,13 @@ public class UserEntity {
     @Column
     private String email;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
     @Builder
-    public UserEntity(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email) {
+    public UserEntity(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
+        UserStatus userStatus) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -54,6 +59,7 @@ public class UserEntity {
         this.phone = phone;
         this.name = name;
         this.email = email;
+        this.userStatus = userStatus;
     }
 
     public User toDomain() {
@@ -66,6 +72,7 @@ public class UserEntity {
             .phone(phone)
             .name(name)
             .email(email)
+            .userStatus(userStatus)
             .build();
     }
 }

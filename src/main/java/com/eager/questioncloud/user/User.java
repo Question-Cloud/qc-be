@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.user.Request.CreateUserRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,9 +14,11 @@ public class User {
     private String phone;
     private String name;
     private String email;
+    private UserStatus userStatus;
 
     @Builder
-    public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email) {
+    public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
+        UserStatus userStatus) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -24,6 +27,20 @@ public class User {
         this.phone = phone;
         this.name = name;
         this.email = email;
+        this.userStatus = userStatus;
+    }
+
+    public static User create(CreateUserRequest createUserRequest) {
+        return User.builder()
+            .loginId(createUserRequest.getLoginId())
+            .password(createUserRequest.getAccountType().equals(AccountType.ID) ? null : PasswordProcessor.encode(createUserRequest.getPassword()))
+            .socialUid(createUserRequest.getSocialUid())
+            .accountType(createUserRequest.getAccountType())
+            .phone(createUserRequest.getPhone())
+            .name(createUserRequest.getName())
+            .email(createUserRequest.getEmail())
+            .userStatus(UserStatus.PendingEmailVerification)
+            .build();
     }
 
     public UserEntity toEntity() {
@@ -36,6 +53,7 @@ public class User {
             .phone(phone)
             .name(name)
             .email(email)
+            .userStatus(userStatus)
             .build();
     }
 }

@@ -18,6 +18,6 @@ public class CreateUserController {
 
     @PostMapping
     public void createUser(@RequestBody CreateUserRequest createUserRequest) {
-        createUserService.create(createUserRequest.toDomain());
+        createUserService.create(User.create(createUserRequest));
     }
 }

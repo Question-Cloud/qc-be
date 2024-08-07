@@ -12,17 +12,5 @@ public class Request {
         private String phone;
         private String name;
         private String email;
-
-        public User toDomain() {
-            return User.builder()
-                .loginId(loginId)
-                .password(accountType.equals(AccountType.ID) ? null : PasswordProcessor.encode(password))
-                .socialUid(socialUid)
-                .accountType(accountType)
-                .phone(phone)
-                .name(name)
-                .email(email)
-                .build();
-        }
     }
 }
