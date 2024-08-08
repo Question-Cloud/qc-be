@@ -29,6 +29,10 @@ public class User {
         this.userStatus = userStatus;
     }
 
+    public void active() {
+        this.userStatus = UserStatus.Active;
+    }
+
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
             throw new RuntimeException();

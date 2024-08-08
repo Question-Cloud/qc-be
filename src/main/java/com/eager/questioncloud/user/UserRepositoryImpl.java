@@ -10,7 +10,19 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
+    public User getUser(Long uid) {
+        return userJpaRepository.findById(uid)
+            .orElseThrow(RuntimeException::new)
+            .toDomain();
+    }
+
+    @Override
     public User append(User user) {
+        return userJpaRepository.save(user.toEntity()).toDomain();
+    }
+
+    @Override
+    public User save(User user) {
         return userJpaRepository.save(user.toEntity()).toDomain();
     }
 

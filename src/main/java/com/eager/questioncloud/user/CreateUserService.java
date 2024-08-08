@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CreateUserService {
     private final UserCreator userCreator;
+    private final UserUpdater userUpdater;
+    private final UserReader userReader;
     private final CreateSocialUserInformationCreator createSocialUserInformationCreator;
     private final CreateSocialUserInformationReader createSocialUserInformationReader;
     private final CreateSocialUserInformationUpdater createSocialUserInformationUpdater;
@@ -24,5 +26,10 @@ public class CreateUserService {
 
     public CreateSocialUserInformation createSocialUserInformation(CreateSocialUserInformation createSocialUserInformation) {
         return createSocialUserInformationCreator.create(createSocialUserInformation);
+    }
+
+    public void verifyCreateUser(Long uid) {
+        User user = userReader.getUser(uid);
+        userUpdater.verifyUser(user);
     }
 }

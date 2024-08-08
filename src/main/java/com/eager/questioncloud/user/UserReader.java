@@ -9,7 +9,11 @@ import org.springframework.stereotype.Component;
 public class UserReader {
     private final UserRepository userRepository;
 
-    Optional<User> getSocialUser(AccountType accountType, String socialUid) {
+    public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
         return userRepository.getSocialUser(accountType, socialUid);
+    }
+
+    public User getUser(Long uid) {
+        return userRepository.getUser(uid);
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class EmailVerificationService {
     private final EmailVerificationCreator emailVerificationCreator;
+    private final EmailVerificationReader emailVerificationReader;
+    private final EmailVerificationUpdater emailVerificationUpdater;
     private final GoogleMailSender googleMailSender;
 
     public void sendVerificationEmail(User user) {
@@ -24,5 +26,11 @@ public class EmailVerificationService {
                 CreateUserEmailVerificationTemplate.title,
                 CreateUserEmailVerificationTemplate.generate(emailVerification.getToken()))
         );
+    }
+
+    public EmailVerification verify(String token, EmailVerificationType emailVerificationType) {
+        EmailVerification emailVerification = emailVerificationReader.find(token, emailVerificationType);
+        emailVerificationUpdater.verify(emailVerification);
+        return emailVerification;
     }
 }

@@ -19,6 +19,10 @@ public class EmailVerification {
         this.isVerified = isVerified;
     }
 
+    public void verify() {
+        this.isVerified = true;
+    }
+
     public static EmailVerification create(Long uid, EmailVerificationType emailVerificationType) {
         return EmailVerification.builder()
             .token(UUID.randomUUID().toString())

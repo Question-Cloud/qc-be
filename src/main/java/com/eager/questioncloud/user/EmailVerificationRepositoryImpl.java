@@ -12,4 +12,16 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     public EmailVerification append(EmailVerification emailVerification) {
         return emailVerificationJpaRepository.save(emailVerification.toEntity()).toDomain();
     }
+
+    @Override
+    public EmailVerification find(String token, EmailVerificationType emailVerificationType) {
+        return emailVerificationJpaRepository.findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(token, emailVerificationType)
+            .orElseThrow(RuntimeException::new)
+            .toDomain();
+    }
+
+    @Override
+    public EmailVerification save(EmailVerification emailVerification) {
+        return emailVerificationJpaRepository.save(emailVerification.toEntity()).toDomain();
+    }
 }
