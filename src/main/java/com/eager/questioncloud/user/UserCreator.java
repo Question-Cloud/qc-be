@@ -16,7 +16,7 @@ public class UserCreator {
         if (checkDuplicateSocialUid(user.getAccountType(), user.getSocialUid())) {
             throw new RuntimeException();
         }
-        if (checkDuplicatePhone(user)) {
+        if (checkDuplicatePhone(user.getPhone())) {
             throw new RuntimeException();
         }
         if (checkDuplicateEmail(user.getEmail())) {
@@ -39,8 +39,8 @@ public class UserCreator {
         return userRepository.checkDuplicateSocialUid(accountType, socialUid);
     }
 
-    public Boolean checkDuplicatePhone(User user) {
-        return userRepository.checkDuplicatePhone(user.getPhone());
+    public Boolean checkDuplicatePhone(String phone) {
+        return userRepository.checkDuplicatePhone(phone);
     }
 
     public Boolean checkDuplicateEmail(String email) {
