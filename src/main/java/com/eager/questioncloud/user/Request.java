@@ -1,7 +1,6 @@
 package com.eager.questioncloud.user;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.regex.Pattern;
@@ -15,7 +14,7 @@ public class Request {
 
         private String password;
 
-        private String socialUid;
+        private String socialRegisterToken;
 
         private AccountType accountType;
 
@@ -35,7 +34,7 @@ public class Request {
                 passwordValidate();
                 return;
             }
-            socialUidValidate();
+            socialRegisterTokenValidate();
         }
 
         public void loginIdValidate() {
@@ -50,8 +49,8 @@ public class Request {
             }
         }
 
-        public void socialUidValidate() {
-            if (!StringUtils.hasText(socialUid)) {
+        public void socialRegisterTokenValidate() {
+            if (!StringUtils.hasText(socialRegisterToken)) {
                 throw new RuntimeException();
             }
         }

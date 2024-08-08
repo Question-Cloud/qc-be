@@ -1,6 +1,5 @@
 package com.eager.questioncloud.user;
 
-import com.eager.questioncloud.user.Request.CreateUserRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,24 +29,25 @@ public class User {
         this.userStatus = userStatus;
     }
 
-    public static User create(CreateUserRequest createUserRequest) {
-        if (createUserRequest.getAccountType().equals(AccountType.ID)) {
-            return User.builder()
-                .loginId(createUserRequest.getLoginId())
-                .password(PasswordProcessor.encode(createUserRequest.getPassword()))
-                .accountType(createUserRequest.getAccountType())
-                .phone(createUserRequest.getPhone())
-                .name(createUserRequest.getName())
-                .email(createUserRequest.getEmail())
-                .userStatus(UserStatus.PendingEmailVerification)
-                .build();
-        }
+    public static User create(CreateUser createUser) {
         return User.builder()
-            .socialUid(createUserRequest.getSocialUid())
-            .accountType(createUserRequest.getAccountType())
-            .phone(createUserRequest.getPhone())
-            .name(createUserRequest.getName())
-            .email(createUserRequest.getEmail())
+            .loginId(createUser.getLoginId())
+            .password(PasswordProcessor.encode(createUser.getPassword()))
+            .accountType(createUser.getAccountType())
+            .phone(createUser.getPhone())
+            .name(createUser.getName())
+            .email(createUser.getEmail())
+            .userStatus(UserStatus.PendingEmailVerification)
+            .build();
+    }
+
+    public static User create(CreateUser createUser, String socialUid) {
+        return User.builder()
+            .socialUid(socialUid)
+            .accountType(createUser.getAccountType())
+            .phone(createUser.getPhone())
+            .name(createUser.getName())
+            .email(createUser.getEmail())
             .userStatus(UserStatus.PendingEmailVerification)
             .build();
     }

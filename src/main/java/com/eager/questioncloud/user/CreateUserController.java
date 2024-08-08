@@ -17,6 +17,6 @@ public class CreateUserController {
     @PostMapping
     public void createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         createUserRequest.validate();
-        createUserService.create(User.create(createUserRequest));
+        createUserService.create(CreateUser.toDomain(createUserRequest));
     }
 }
