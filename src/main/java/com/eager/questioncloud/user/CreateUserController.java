@@ -1,6 +1,7 @@
 package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.user.Request.CreateUserRequest;
+import jakarta.validation.Valid;
 import java.net.http.HttpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,8 @@ public class CreateUserController {
     private final CreateUserService createUserService;
 
     @PostMapping
-    public void createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public void createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        createUserRequest.validate();
         createUserService.create(User.create(createUserRequest));
     }
 }

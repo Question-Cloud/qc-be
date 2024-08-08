@@ -31,9 +31,18 @@ public class User {
     }
 
     public static User create(CreateUserRequest createUserRequest) {
+        if (createUserRequest.getAccountType().equals(AccountType.ID)) {
+            return User.builder()
+                .loginId(createUserRequest.getLoginId())
+                .password(PasswordProcessor.encode(createUserRequest.getPassword()))
+                .accountType(createUserRequest.getAccountType())
+                .phone(createUserRequest.getPhone())
+                .name(createUserRequest.getName())
+                .email(createUserRequest.getEmail())
+                .userStatus(UserStatus.PendingEmailVerification)
+                .build();
+        }
         return User.builder()
-            .loginId(createUserRequest.getLoginId())
-            .password(createUserRequest.getAccountType().equals(AccountType.ID) ? null : PasswordProcessor.encode(createUserRequest.getPassword()))
             .socialUid(createUserRequest.getSocialUid())
             .accountType(createUserRequest.getAccountType())
             .phone(createUserRequest.getPhone())
