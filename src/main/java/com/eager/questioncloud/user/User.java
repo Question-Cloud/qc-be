@@ -29,6 +29,15 @@ public class User {
         this.userStatus = userStatus;
     }
 
+    public void checkUserStatus() {
+        if (userStatus.equals(UserStatus.PendingEmailVerification)) {
+            throw new RuntimeException();
+        }
+        if (!userStatus.equals(UserStatus.Active)) {
+            throw new RuntimeException();
+        }
+    }
+
     public static User create(CreateUser createUser) {
         return User.builder()
             .loginId(createUser.getLoginId())

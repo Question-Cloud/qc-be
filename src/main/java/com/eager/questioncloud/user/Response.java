@@ -11,7 +11,6 @@ public class Response {
     public static class SocialAuthenticateResponse {
         private Boolean isRegistered;
         private String registerToken;
-        private String accessToken;
-        private String refreshToken;
+        private AuthenticationToken authenticationToken;
     }
 }
