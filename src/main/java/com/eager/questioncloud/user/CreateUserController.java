@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.user.Request.CreateUserRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,9 @@ public class CreateUserController {
     private final CreateUserService createUserService;
 
     @PostMapping
-    public void createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public DefaultResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         createUserRequest.validate();
         createUserService.create(CreateUser.toDomain(createUserRequest));
+        return DefaultResponse.success();
     }
 }
