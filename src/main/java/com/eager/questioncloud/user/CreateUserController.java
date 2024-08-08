@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreateUserController {
     private final CreateUserService createUserService;
+    private final EmailVerificationService emailVerificationService;
 
     @PostMapping
     public DefaultResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         createUserRequest.validate();
-        createUserService.create(CreateUser.toDomain(createUserRequest));
+        User user = createUserService.create(CreateUser.toDomain(createUserRequest));
+        emailVerificationService.sendVerificationEmail(user);
         return DefaultResponse.success();
     }
 }
