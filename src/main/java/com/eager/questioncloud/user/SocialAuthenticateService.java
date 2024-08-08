@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserSocialService {
+public class SocialAuthenticateService {
     private final KakaoProcessor kakaoProcessor;
 
     public String getSocialUid(AccountType accountType, String code) {

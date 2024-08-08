@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user/social")
 @RequiredArgsConstructor
 public class UserSocialAuthController {
-    private final UserSocialService userSocialService;
+    private final SocialAuthenticateService socialAuthenticateService;
     private final UserService userService;
 
     @GetMapping
     public SocialAuthenticateResponse socialAuth(@RequestParam AccountType accountType, @RequestParam String code) {
-        String socialUid = userSocialService.getSocialUid(accountType, code);
+        String socialUid = socialAuthenticateService.getSocialUid(accountType, code);
         Optional<User> socialUser = userService.getSocialUser(accountType, socialUid);
         if (socialUser.isPresent()) {
             return new SocialAuthenticateResponse(true, null, "accessToken", "refreshToken");
