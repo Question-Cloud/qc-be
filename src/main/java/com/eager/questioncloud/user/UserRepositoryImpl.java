@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User append(User user) {
         return userJpaRepository.save(user.toEntity()).toDomain();
+    }
+
+    @Override
+    public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
+        return userJpaRepository.findByAccountTypeAndSocialUid(accountType, socialUid);
     }
 
     @Override
