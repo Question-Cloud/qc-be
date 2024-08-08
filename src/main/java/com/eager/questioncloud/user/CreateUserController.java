@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class CreateUserController {
-    private final UserService userService;
+    private final CreateUserService createUserService;
 
     @PostMapping
     public void createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         createUserRequest.validate();
-        userService.create(User.create(createUserRequest));
+        createUserService.create(User.create(createUserRequest));
     }
 }

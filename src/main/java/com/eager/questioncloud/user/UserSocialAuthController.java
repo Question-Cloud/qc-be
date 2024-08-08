@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserSocialAuthController {
     private final SocialAuthenticateService socialAuthenticateService;
+    private final CreateUserService createUserService;
     private final UserService userService;
 
     @GetMapping
@@ -21,8 +22,8 @@ public class UserSocialAuthController {
         Optional<User> socialUser = userService.getSocialUser(accountType, socialUid);
         if (socialUser.isPresent()) {
             return new SocialAuthenticateResponse(true, null, "accessToken", "refreshToken");
-        } else {
-            return new SocialAuthenticateResponse(false, "registerToken", null, null);
         }
+        CreateSocialUserInformation createSocialUserInformation = createUserService.createSocialUserInformation(accountType, socialUid);
+        return new SocialAuthenticateResponse(false, createSocialUserInformation.getRegisterToken(), null, null);
     }
 }
