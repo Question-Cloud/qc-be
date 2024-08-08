@@ -13,7 +13,7 @@ public class CreateUserService {
         return userCreator.create(user);
     }
 
-    public CreateSocialUserInformation createSocialUserInformation(AccountType accountType, String socialUid) {
-        return createSocialUserInformationCreator.create(CreateSocialUserInformation.create(accountType, socialUid));
+    public CreateSocialUserInformation createSocialUserInformation(CreateSocialUserInformation createSocialUserInformation) {
+        return createSocialUserInformationCreator.create(createSocialUserInformation);
     }
 }

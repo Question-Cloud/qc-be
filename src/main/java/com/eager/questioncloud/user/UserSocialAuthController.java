@@ -23,7 +23,8 @@ public class UserSocialAuthController {
         if (socialUser.isPresent()) {
             return new SocialAuthenticateResponse(true, null, "accessToken", "refreshToken");
         }
-        CreateSocialUserInformation createSocialUserInformation = createUserService.createSocialUserInformation(accountType, socialUid);
+        CreateSocialUserInformation createSocialUserInformation = createUserService.createSocialUserInformation(
+            CreateSocialUserInformation.create(accountType, code));
         return new SocialAuthenticateResponse(false, createSocialUserInformation.getRegisterToken(), null, null);
     }
 }
