@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        authenticationService.tokenAuthentication(token);
+        authenticationService.authentication(token);
         filterChain.doFilter(request, response);
     }
 

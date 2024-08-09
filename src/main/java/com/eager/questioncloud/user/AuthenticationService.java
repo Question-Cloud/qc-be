@@ -25,11 +25,11 @@ public class AuthenticationService {
         return authenticationTokenProcessor.refresh(refreshToken);
     }
 
-    public void tokenAuthentication(String token) {
+    public void authentication(String token) {
         try {
             Claims claims = authenticationTokenProcessor.getAccessTokenClaimsWithValidate(token);
             Long uid = claims.get("uid", Long.class);
-            authenticationManager.springSecurityAuthentication(uid);
+            authenticationManager.authentication(uid);
         } catch (Exception ignored) {
         }
     }

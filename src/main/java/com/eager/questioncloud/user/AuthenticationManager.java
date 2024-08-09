@@ -21,7 +21,7 @@ public class AuthenticationManager {
         return user;
     }
 
-    public void springSecurityAuthentication(Long uid) {
+    public void authentication(Long uid) {
         User user = userRepository.getUser(uid);
         UserPrincipal userPrincipal = new UserPrincipal(user);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
