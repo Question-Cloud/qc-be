@@ -16,4 +16,8 @@ public class AuthenticationService {
     public AuthenticationToken generateAuthenticateToken(Long uid) {
         return new AuthenticationToken(authenticationTokenProcessor.generateAccessToken(uid), authenticationTokenProcessor.generateRefreshToken(uid));
     }
+
+    public AuthenticationToken refresh(String refreshToken) {
+        return authenticationTokenProcessor.refresh(refreshToken);
+    }
 }

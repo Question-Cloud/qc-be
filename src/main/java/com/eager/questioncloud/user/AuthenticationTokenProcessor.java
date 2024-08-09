@@ -16,12 +16,21 @@ public class AuthenticationTokenProcessor {
     private final RefreshTokenRepository refreshTokenRepository;
     public static final Long ACCESS_TOKEN_VALID_TIME = 1000 * 60L * 60L * 24L;
     public static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
-    
+
     public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey,
         RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         this.refreshTokenRepository = refreshTokenRepository;
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts
+            .parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
     }
 
     public String generateAccessToken(Long uid) {
@@ -51,5 +60,39 @@ public class AuthenticationTokenProcessor {
 
         refreshTokenRepository.save(refreshToken, uid);
         return refreshToken;
+    }
+
+    public AuthenticationToken refresh(String refreshToken) {
+        Claims claims = getRefreshTokenClaimsWithValidate(refreshToken);
+        Long uid = claims.get("uid", Long.class);
+        String accessToken = generateAccessToken(uid);
+        if (isExpireSoon(claims.getExpiration())) {
+            return new AuthenticationToken(accessToken, generateRefreshToken(uid));
+        }
+        return new AuthenticationToken(accessToken, refreshToken);
+    }
+
+    public Claims getRefreshTokenClaimsWithValidate(String refreshToken) {
+        Claims claims = getClaims(refreshToken);
+
+        if (!claims.getSubject().equals("refreshToken")) {
+            throw new RuntimeException();
+        }
+
+        Long uid = claims.get("uid", Long.class);
+        String refreshTokenInStore = refreshTokenRepository.get(uid);
+
+        if (!refreshToken.equals(refreshTokenInStore)) {
+            throw new RuntimeException();
+        }
+
+        return claims;
+    }
+
+    public Boolean isExpireSoon(Date expireDate) {
+        Date now = new Date();
+        long differenceInMillis = expireDate.getTime() - now.getTime();
+        long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);
+        return differenceInDays <= 7;
     }
 }

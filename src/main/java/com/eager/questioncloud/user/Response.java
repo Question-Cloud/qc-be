@@ -20,4 +20,11 @@ public class Response {
     public static class LoginResponse {
         private AuthenticationToken authenticationToken;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class RefreshResponse {
+        private AuthenticationToken authenticationToken;
+    }
 }

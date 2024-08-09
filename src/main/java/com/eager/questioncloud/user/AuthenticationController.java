@@ -2,6 +2,7 @@ package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.user.Request.LoginRequest;
 import com.eager.questioncloud.user.Response.LoginResponse;
+import com.eager.questioncloud.user.Response.RefreshResponse;
 import com.eager.questioncloud.user.Response.SocialAuthenticateResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,12 @@ public class AuthenticationController {
         User user = authenticationService.authentication(loginRequest.getLoginId(), loginRequest.getPassword());
         AuthenticationToken authenticationToken = authenticationService.generateAuthenticateToken(user.getUid());
         return new LoginResponse(authenticationToken);
+    }
+
+    @PostMapping("/refresh")
+    public RefreshResponse refresh(@RequestParam String refreshToken) {
+        AuthenticationToken authenticationToken = authenticationService.refresh(refreshToken);
+        return new RefreshResponse(authenticationToken);
     }
 
     @GetMapping("/social")
