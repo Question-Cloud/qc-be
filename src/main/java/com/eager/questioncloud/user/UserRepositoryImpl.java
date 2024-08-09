@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,14 +14,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUserByLoginId(String loginId) {
         return userJpaRepository.findByLoginId(loginId)
-            .orElseThrow(RuntimeException::new)
+            .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
             .toDomain();
     }
 
     @Override
     public User getUser(Long uid) {
         return userJpaRepository.findById(uid)
-            .orElseThrow(RuntimeException::new)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();
     }
 
@@ -41,11 +43,6 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Boolean checkDuplicateLoginId(String loginId) {
         return userJpaRepository.existsByLoginId(loginId);
-    }
-
-    @Override
-    public Boolean checkDuplicateSocialUid(AccountType accountType, String socialUid) {
-        return userJpaRepository.existsByAccountTypeAndSocialUid(accountType, socialUid);
     }
 
     @Override

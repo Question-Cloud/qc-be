@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +14,7 @@ public class CreateSocialUserInformationRepositoryImpl implements CreateSocialUs
     @Override
     public CreateSocialUserInformation find(String registerToken) {
         return createSocialUserInformationJpaRepository.findByRegisterTokenAndIsUsedFalse(registerToken)
-            .orElseThrow(RuntimeException::new)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();
     }
 

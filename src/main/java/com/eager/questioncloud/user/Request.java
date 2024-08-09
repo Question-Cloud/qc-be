@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -39,19 +41,19 @@ public class Request {
 
         public void loginIdValidate() {
             if (!Pattern.matches("^[a-zA-Z0-9]{6,20}$", loginId)) {
-                throw new RuntimeException();
+                throw new CustomException(Error.BAD_REQUEST);
             }
         }
 
         public void passwordValidate() {
             if (!Pattern.matches("^(?!.*\\s).{8,}$", password)) {
-                throw new RuntimeException();
+                throw new CustomException(Error.BAD_REQUEST);
             }
         }
 
         public void socialRegisterTokenValidate() {
             if (!StringUtils.hasText(socialRegisterToken)) {
-                throw new RuntimeException();
+                throw new CustomException(Error.BAD_REQUEST);
             }
         }
     }

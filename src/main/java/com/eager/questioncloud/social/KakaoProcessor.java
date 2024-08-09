@@ -1,5 +1,7 @@
 package com.eager.questioncloud.social;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.user.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -39,7 +41,7 @@ public class KakaoProcessor implements SocialProcessor {
             .block();
 
         if (res == null || res.getAccess_token() == null) {
-            throw new RuntimeException();
+            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         return res.getAccess_token();
@@ -57,7 +59,7 @@ public class KakaoProcessor implements SocialProcessor {
             .block();
 
         if (kakaoUserInfo == null || kakaoUserInfo.getSub() == null) {
-            throw new RuntimeException();
+            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         return new SocialUserInfo(kakaoUserInfo.getSub(), kakaoUserInfo.getEmail(), kakaoUserInfo.getNickname(), AccountType.KAKAO);
