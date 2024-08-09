@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +13,7 @@ public class AuthenticationManager {
     public User authentication(String loginId, String password) {
         User user = userRepository.getUserByLoginId(loginId);
         if (!PasswordProcessor.matches(password, user.getPassword())) {
-            throw new RuntimeException();
+            throw new CustomException(Error.FAIL_LOGIN);
         }
         return user;
     }

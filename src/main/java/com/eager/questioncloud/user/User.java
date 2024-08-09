@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,10 +37,10 @@ public class User {
 
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
-            throw new RuntimeException();
+            throw new CustomException(Error.PENDING_EMAIL_VERIFICATION);
         }
         if (!userStatus.equals(UserStatus.Active)) {
-            throw new RuntimeException();
+            throw new CustomException(Error.NOT_ACTIVE_USER);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,12 +27,16 @@ public class AuthenticationTokenProcessor {
     }
 
     public Claims getClaims(String token) {
-        return Jwts
-            .parserBuilder()
-            .setSigningKey(secretKey)
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+        try {
+            return Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        } catch (Exception e) {
+            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+        }
     }
 
     public String generateAccessToken(Long uid) {
@@ -76,14 +82,14 @@ public class AuthenticationTokenProcessor {
         Claims claims = getClaims(refreshToken);
 
         if (!claims.getSubject().equals("refreshToken")) {
-            throw new RuntimeException();
+            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
         }
 
         Long uid = claims.get("uid", Long.class);
         String refreshTokenInStore = refreshTokenRepository.get(uid);
 
         if (!refreshToken.equals(refreshTokenInStore)) {
-            throw new RuntimeException();
+            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
         }
 
         return claims;

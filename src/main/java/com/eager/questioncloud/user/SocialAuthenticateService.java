@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.social.KakaoProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class SocialAuthenticateService {
                 return kakaoProcessor.getUserInfo(accessToken).getUid();
             }
             default -> {
-                throw new RuntimeException();
+                throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
             }
         }
     }

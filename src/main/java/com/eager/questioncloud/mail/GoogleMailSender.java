@@ -1,5 +1,7 @@
 package com.eager.questioncloud.mail;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +19,12 @@ public class GoogleMailSender {
         MimeMessageHelper mimeMessageHelper = null;
         try {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-            mimeMessageHelper.setTo(email.getTo()); // 메일 수신자
-            mimeMessageHelper.setSubject(email.getSubject()); // 메일 제목
-            mimeMessageHelper.setText(email.getContent(), true); // 메일 본문 내용, HTML 여부
+            mimeMessageHelper.setTo(email.getTo());
+            mimeMessageHelper.setSubject(email.getSubject());
+            mimeMessageHelper.setText(email.getContent(), true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
         }
     }
 }

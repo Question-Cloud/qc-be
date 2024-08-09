@@ -1,5 +1,7 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -11,16 +13,13 @@ public class UserCreator {
 
     public User create(User user) {
         if (checkDuplicateLoginId(user.getLoginId())) {
-            throw new RuntimeException();
-        }
-        if (checkDuplicateSocialUid(user.getAccountType(), user.getSocialUid())) {
-            throw new RuntimeException();
+            throw new CustomException(Error.DUPLICATE_LOGIN_ID);
         }
         if (checkDuplicatePhone(user.getPhone())) {
-            throw new RuntimeException();
+            throw new CustomException(Error.DUPLICATE_PHONE);
         }
         if (checkDuplicateEmail(user.getEmail())) {
-            throw new RuntimeException();
+            throw new CustomException(Error.DUPLICATE_EMAIL);
         }
         return userRepository.append(user);
     }
@@ -30,13 +29,6 @@ public class UserCreator {
             return false;
         }
         return userRepository.checkDuplicateLoginId(loginId);
-    }
-
-    public Boolean checkDuplicateSocialUid(AccountType accountType, String socialUid) {
-        if (accountType.equals(AccountType.ID)) {
-            return false;
-        }
-        return userRepository.checkDuplicateSocialUid(accountType, socialUid);
     }
 
     public Boolean checkDuplicatePhone(String phone) {
