@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user/social")
+@RequestMapping("/api/user/auth")
 @RequiredArgsConstructor
-public class UserSocialAuthController {
+public class UserAuthController {
     private final SocialAuthenticateService socialAuthenticateService;
     private final AuthenticationService authenticationService;
     private final CreateUserService createUserService;
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/social")
     public SocialAuthenticateResponse socialAuth(@RequestParam AccountType accountType, @RequestParam String code) {
         String socialUid = socialAuthenticateService.getSocialUid(accountType, code);
         Optional<User> socialUser = userService.getSocialUser(accountType, socialUid);
