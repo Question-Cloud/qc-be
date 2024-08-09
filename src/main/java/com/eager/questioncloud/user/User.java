@@ -2,11 +2,17 @@ package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
-public class User {
+public class User implements UserDetails {
     private Long uid;
     private String loginId;
     private String password;
@@ -29,6 +35,43 @@ public class User {
         this.name = name;
         this.email = email;
         this.userStatus = userStatus;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.name;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return !this.userStatus.equals(UserStatus.Active);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !this.userStatus.equals(UserStatus.Active);
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return !this.userStatus.equals(UserStatus.Active);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return !this.userStatus.equals(UserStatus.Active);
     }
 
     public void active() {

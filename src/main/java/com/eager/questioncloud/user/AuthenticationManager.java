@@ -2,7 +2,10 @@ package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,5 +19,15 @@ public class AuthenticationManager {
             throw new CustomException(Error.FAIL_LOGIN);
         }
         return user;
+    }
+
+    public void springSecurityAuthentication(Long uid) {
+        User user = userRepository.getUser(uid);
+        UserPrincipal userPrincipal = new UserPrincipal(user);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            userPrincipal,
+            user.getPassword(),
+            user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 }

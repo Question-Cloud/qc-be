@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,14 @@ public class AuthenticationService {
 
     public AuthenticationToken refresh(String refreshToken) {
         return authenticationTokenProcessor.refresh(refreshToken);
+    }
+
+    public void tokenAuthentication(String token) {
+        try {
+            Claims claims = authenticationTokenProcessor.getAccessTokenClaimsWithValidate(token);
+            Long uid = claims.get("uid", Long.class);
+            authenticationManager.springSecurityAuthentication(uid);
+        } catch (Exception ignored) {
+        }
     }
 }
