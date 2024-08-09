@@ -13,12 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationTokenProcessor {
     private final Key secretKey;
+    private final RefreshTokenRepository refreshTokenRepository;
     public static final Long ACCESS_TOKEN_VALID_TIME = 1000 * 60L * 60L * 24L;
     public static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
-
-    public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey) {
+    
+    public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey,
+        RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public String generateAccessToken(Long uid) {
@@ -39,11 +42,14 @@ public class AuthenticationTokenProcessor {
         claims.put("uid", uid);
         Date currentTime = new Date();
 
-        return Jwts.builder()
+        String refreshToken = Jwts.builder()
             .setClaims(claims)
             .setIssuedAt(currentTime)
             .setExpiration(new Date(currentTime.getTime() + REFRESH_TOKEN_VALID_TIME))
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
+
+        refreshTokenRepository.save(refreshToken, uid);
+        return refreshToken;
     }
 }

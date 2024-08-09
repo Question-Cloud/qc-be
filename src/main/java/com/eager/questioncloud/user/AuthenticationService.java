@@ -14,8 +14,6 @@ public class AuthenticationService {
     }
 
     public AuthenticationToken generateAuthenticateToken(Long uid) {
-        return new AuthenticationToken(
-            authenticationTokenProcessor.generateAccessToken(uid),
-            authenticationTokenProcessor.generateRefreshToken(uid));
+        return new AuthenticationToken(authenticationTokenProcessor.generateAccessToken(uid), authenticationTokenProcessor.generateRefreshToken(uid));
     }
 }
