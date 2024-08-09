@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user;
 
 public interface RefreshTokenRepository {
-    String get(String uid);
+    String get(Long uid);
 
     void delete(String uid);
 
