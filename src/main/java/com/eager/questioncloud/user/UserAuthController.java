@@ -18,7 +18,7 @@ public class UserAuthController {
     private final UserService userService;
 
     @GetMapping("/social")
-    public SocialAuthenticateResponse socialAuth(@RequestParam AccountType accountType, @RequestParam String code) {
+    public SocialAuthenticateResponse socialLogin(@RequestParam AccountType accountType, @RequestParam String code) {
         String socialUid = socialAuthenticateService.getSocialUid(accountType, code);
         Optional<User> socialUser = userService.getSocialUser(accountType, socialUid);
         if (socialUser.isPresent()) {
