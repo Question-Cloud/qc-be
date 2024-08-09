@@ -10,8 +10,11 @@ public class AuthenticationService {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final AuthenticationManager authenticationManager;
 
-    public User authentication(String loginId, String password) {
-        return authenticationManager.authentication(loginId, password);
+    public AuthenticationToken login(String loginId, String password) {
+        User user = authenticationManager.getUserByCredentials(loginId, password);
+        return new AuthenticationToken(
+            authenticationTokenProcessor.generateAccessToken(user.getUid()),
+            authenticationTokenProcessor.generateRefreshToken(user.getUid()));
     }
 
     public AuthenticationToken generateAuthenticateToken(Long uid) {
