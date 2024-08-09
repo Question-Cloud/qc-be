@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class UserAuthController {
+public class AuthenticationController {
     private final SocialAuthenticateService socialAuthenticateService;
     private final AuthenticationService authenticationService;
     private final CreateUserService createUserService;
