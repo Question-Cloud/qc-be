@@ -10,6 +10,13 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
+    public User getUserByLoginId(String loginId) {
+        return userJpaRepository.findByLoginId(loginId)
+            .orElseThrow(RuntimeException::new)
+            .toDomain();
+    }
+
+    @Override
     public User getUser(Long uid) {
         return userJpaRepository.findById(uid)
             .orElseThrow(RuntimeException::new)

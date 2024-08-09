@@ -13,4 +13,11 @@ public class Response {
         private String registerToken;
         private AuthenticationToken authenticationToken;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class LoginResponse {
+        private AuthenticationToken authenticationToken;
+    }
 }

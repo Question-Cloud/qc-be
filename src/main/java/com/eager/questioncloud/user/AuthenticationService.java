@@ -7,6 +7,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
+    private final AuthenticationManager authenticationManager;
+
+    public User authentication(String loginId, String password) {
+        return authenticationManager.authentication(loginId, password);
+    }
 
     public AuthenticationToken generateAuthenticateToken(Long uid) {
         return new AuthenticationToken(

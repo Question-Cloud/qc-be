@@ -55,4 +55,10 @@ public class Request {
             }
         }
     }
+
+    @Getter
+    public static class LoginRequest {
+        private String loginId;
+        private String password;
+    }
 }
