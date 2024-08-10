@@ -78,6 +78,16 @@ public class AuthenticationTokenProcessor {
         return new AuthenticationToken(accessToken, refreshToken);
     }
 
+    public Claims getAccessTokenClaimsWithValidate(String accessToken) {
+        Claims claims = getClaims(accessToken);
+
+        if (!claims.getSubject().equals("accessToken")) {
+            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+        }
+
+        return claims;
+    }
+
     public Claims getRefreshTokenClaimsWithValidate(String refreshToken) {
         Claims claims = getClaims(refreshToken);
 
