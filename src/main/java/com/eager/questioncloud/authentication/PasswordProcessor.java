@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.authentication;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

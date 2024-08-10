@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.authentication.AuthenticationToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

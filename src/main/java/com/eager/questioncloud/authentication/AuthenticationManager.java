@@ -1,8 +1,10 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.authentication;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.security.UserPrincipal;
+import com.eager.questioncloud.user.User;
+import com.eager.questioncloud.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

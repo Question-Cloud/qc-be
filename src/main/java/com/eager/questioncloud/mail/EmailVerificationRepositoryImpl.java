@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.mail;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

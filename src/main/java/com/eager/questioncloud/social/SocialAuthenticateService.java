@@ -1,8 +1,8 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.social;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.social.KakaoProcessor;
+import com.eager.questioncloud.user.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

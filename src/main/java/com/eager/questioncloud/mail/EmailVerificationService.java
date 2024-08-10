@@ -1,8 +1,6 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.mail;
 
-import com.eager.questioncloud.mail.CreateUserEmailVerificationTemplate;
-import com.eager.questioncloud.mail.Email;
-import com.eager.questioncloud.mail.GoogleMailSender;
+import com.eager.questioncloud.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

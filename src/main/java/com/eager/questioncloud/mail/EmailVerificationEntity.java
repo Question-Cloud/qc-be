@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.mail;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
