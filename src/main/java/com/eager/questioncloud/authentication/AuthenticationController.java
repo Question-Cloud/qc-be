@@ -1,5 +1,6 @@
 package com.eager.questioncloud.authentication;
 
+import com.eager.questioncloud.social.SocialAuthenticateService;
 import com.eager.questioncloud.user.AccountType;
 import com.eager.questioncloud.user.CreateSocialUserInformation;
 import com.eager.questioncloud.user.CreateUserService;
@@ -7,7 +8,6 @@ import com.eager.questioncloud.user.Request.LoginRequest;
 import com.eager.questioncloud.user.Response.LoginResponse;
 import com.eager.questioncloud.user.Response.RefreshResponse;
 import com.eager.questioncloud.user.Response.SocialAuthenticateResponse;
-import com.eager.questioncloud.user.SocialAuthenticateService;
 import com.eager.questioncloud.user.User;
 import com.eager.questioncloud.user.UserService;
 import java.util.Optional;
