@@ -1,5 +1,6 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.authentication;
 
+import com.eager.questioncloud.user.User;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

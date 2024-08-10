@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.authentication.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.util.ArrayList;
