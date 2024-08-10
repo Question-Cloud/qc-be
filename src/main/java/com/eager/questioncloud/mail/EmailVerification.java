@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.mail;
 
 import java.util.UUID;
 import lombok.Builder;

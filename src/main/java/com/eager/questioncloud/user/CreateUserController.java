@@ -1,6 +1,9 @@
 package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.common.DefaultResponse;
+import com.eager.questioncloud.mail.EmailVerification;
+import com.eager.questioncloud.mail.EmailVerificationService;
+import com.eager.questioncloud.mail.EmailVerificationType;
 import com.eager.questioncloud.user.Request.CreateUserRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
