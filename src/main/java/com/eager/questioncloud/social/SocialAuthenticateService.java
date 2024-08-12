@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SocialAuthenticateService {
-    private final KakaoProcessor kakaoProcessor;
+    private final KakaoAPI kakaoProcessor;
 
     public String getSocialUid(AccountType accountType, String code) {
         switch (accountType) {
