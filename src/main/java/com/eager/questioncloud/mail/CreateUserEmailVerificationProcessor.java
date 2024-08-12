@@ -2,18 +2,16 @@ package com.eager.questioncloud.mail;
 
 import com.eager.questioncloud.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class EmailVerificationService {
-    private final EmailVerificationCreator emailVerificationCreator;
-    private final EmailVerificationReader emailVerificationReader;
-    private final EmailVerificationUpdater emailVerificationUpdater;
+public class CreateUserEmailVerificationProcessor {
+    private final EmailVerificationRepository emailVerificationRepository;
     private final GoogleMailSender googleMailSender;
 
-    public void sendVerificationEmail(User user) {
-        EmailVerification emailVerification = emailVerificationCreator.append(
+    public void sendVerificationMail(User user) {
+        EmailVerification emailVerification = emailVerificationRepository.append(
             EmailVerification.create(
                 user.getUid(),
                 EmailVerificationType.CreateUser)
@@ -27,8 +25,9 @@ public class EmailVerificationService {
     }
 
     public EmailVerification verify(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationReader.find(token, emailVerificationType);
-        emailVerificationUpdater.verify(emailVerification);
+        EmailVerification emailVerification = emailVerificationRepository.find(token, emailVerificationType);
+        emailVerification.verify();
+        emailVerificationRepository.save(emailVerification);
         return emailVerification;
     }
 }

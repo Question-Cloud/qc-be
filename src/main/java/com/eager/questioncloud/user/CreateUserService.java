@@ -1,5 +1,8 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.mail.CreateUserEmailVerificationProcessor;
+import com.eager.questioncloud.mail.EmailVerification;
+import com.eager.questioncloud.mail.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,24 +15,32 @@ public class CreateUserService {
     private final CreateSocialUserInformationCreator createSocialUserInformationCreator;
     private final CreateSocialUserInformationReader createSocialUserInformationReader;
     private final CreateSocialUserInformationUpdater createSocialUserInformationUpdater;
+    private final CreateUserEmailVerificationProcessor createUserEmailVerificationProcessor;
 
     public User create(CreateUser createUser) {
-        if (createUser.getAccountType().equals(AccountType.ID)) {
-            return userCreator.create(User.create(createUser));
+        switch (createUser.getAccountType()) {
+            case ID -> {
+                User user = userCreator.create(User.create(createUser));
+                createUserEmailVerificationProcessor.sendVerificationMail(user);
+                return user;
+            }
+            default -> {
+                CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationReader.find(createUser.getSocialRegisterToken());
+                createSocialUserInformationUpdater.use(createSocialUserInformation);
+                User user = userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
+                createUserEmailVerificationProcessor.sendVerificationMail(user);
+                return user;
+            }
         }
-
-        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationReader.find(createUser.getSocialRegisterToken());
-        createSocialUserInformationUpdater.use(createSocialUserInformation);
-
-        return userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
     }
 
     public CreateSocialUserInformation createSocialUserInformation(CreateSocialUserInformation createSocialUserInformation) {
         return createSocialUserInformationCreator.create(createSocialUserInformation);
     }
 
-    public void verifyCreateUser(Long uid) {
-        User user = userReader.getUser(uid);
+    public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {
+        EmailVerification emailVerification = createUserEmailVerificationProcessor.verify(token, emailVerificationType);
+        User user = userReader.getUser(emailVerification.getUid());
         userUpdater.verifyUser(user);
     }
 }

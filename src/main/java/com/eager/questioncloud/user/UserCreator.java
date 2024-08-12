@@ -25,7 +25,7 @@ public class UserCreator {
     }
 
     public Boolean checkDuplicateLoginId(String loginId) {
-        if (StringUtils.hasText(loginId)) {
+        if (!StringUtils.hasText(loginId)) {
             return false;
         }
         return userRepository.checkDuplicateLoginId(loginId);
