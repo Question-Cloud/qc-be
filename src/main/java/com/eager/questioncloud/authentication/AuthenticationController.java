@@ -1,6 +1,6 @@
 package com.eager.questioncloud.authentication;
 
-import com.eager.questioncloud.social.SocialAuthenticateService;
+import com.eager.questioncloud.social.SocialAuthenticateProcessor;
 import com.eager.questioncloud.user.AccountType;
 import com.eager.questioncloud.user.CreateSocialUserInformation;
 import com.eager.questioncloud.user.CreateUserService;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-    private final SocialAuthenticateService socialAuthenticateService;
+    private final SocialAuthenticateProcessor socialAuthenticateProcessor;
     private final AuthenticationService authenticationService;
     private final CreateUserService createUserService;
     private final UserService userService;
@@ -42,7 +42,7 @@ public class AuthenticationController {
 
     @GetMapping("/social")
     public SocialAuthenticateResponse socialLogin(@RequestParam AccountType accountType, @RequestParam String code) {
-        String socialUid = socialAuthenticateService.getSocialUid(accountType, code);
+        String socialUid = socialAuthenticateProcessor.getSocialUid(accountType, code);
         Optional<User> socialUser = userService.getSocialUser(accountType, socialUid);
         if (socialUser.isPresent()) {
             socialUser.get().checkUserStatus();

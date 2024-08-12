@@ -4,11 +4,11 @@ import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.user.AccountType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class SocialAuthenticateService {
+public class SocialAuthenticateProcessor {
     private final KakaoAPI kakaoProcessor;
 
     public String getSocialUid(AccountType accountType, String code) {
