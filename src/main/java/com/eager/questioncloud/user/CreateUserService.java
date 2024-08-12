@@ -27,10 +27,6 @@ public class CreateUserService {
         return user;
     }
 
-    public CreateSocialUserInformation createSocialUserInformation(CreateSocialUserInformation createSocialUserInformation) {
-        return createSocialUserInformationProcessor.create(createSocialUserInformation);
-    }
-
     public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {
         EmailVerification emailVerification = createUserEmailVerificationProcessor.verify(token, emailVerificationType);
         User user = userReader.getUser(emailVerification.getUid());

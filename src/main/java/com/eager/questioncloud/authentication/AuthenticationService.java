@@ -1,5 +1,8 @@
 package com.eager.questioncloud.authentication;
 
+import com.eager.questioncloud.social.SocialAuthenticateProcessor;
+import com.eager.questioncloud.user.AccountType;
+import com.eager.questioncloud.user.Response.SocialAuthenticateResponse;
 import com.eager.questioncloud.user.User;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +13,17 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final AuthenticationManager authenticationManager;
+    private final SocialAuthenticateProcessor socialAuthenticateProcessor;
 
     public AuthenticationToken login(String loginId, String password) {
         User user = authenticationManager.getUserByCredentials(loginId, password);
         return new AuthenticationToken(
             authenticationTokenProcessor.generateAccessToken(user.getUid()),
             authenticationTokenProcessor.generateRefreshToken(user.getUid()));
+    }
+
+    public SocialAuthenticateResponse socialLogin(AccountType accountType, String code) {
+        return socialAuthenticateProcessor.socialLogin(accountType, code);
     }
 
     public AuthenticationToken generateAuthenticateToken(Long uid) {

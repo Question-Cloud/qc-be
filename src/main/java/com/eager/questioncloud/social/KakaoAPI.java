@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class KakaoProcessor implements SocialProcessor {
+public class KakaoAPI implements SocialAPI {
     @Value("${KAKAO_API_KEY}")
     private String KAKAO_API_KEY;
 

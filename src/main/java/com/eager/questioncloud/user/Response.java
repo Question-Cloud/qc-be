@@ -13,6 +13,14 @@ public class Response {
         private Boolean isRegistered;
         private String registerToken;
         private AuthenticationToken authenticationToken;
+
+        public static SocialAuthenticateResponse login(AuthenticationToken authenticationToken) {
+            return new SocialAuthenticateResponse(true, null, authenticationToken);
+        }
+
+        public static SocialAuthenticateResponse needsRegister(String registerToken) {
+            return new SocialAuthenticateResponse(false, registerToken, null);
+        }
     }
 
     @Getter
