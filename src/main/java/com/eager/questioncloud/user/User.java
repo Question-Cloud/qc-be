@@ -3,6 +3,7 @@ package com.eager.questioncloud.user;
 import com.eager.questioncloud.authentication.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.exception.NotVerificationUserException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -81,7 +82,7 @@ public class User implements UserDetails {
 
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
-            throw new CustomException(Error.PENDING_EMAIL_VERIFICATION);
+            throw new NotVerificationUserException(this);
         }
         if (!userStatus.equals(UserStatus.Active)) {
             throw new CustomException(Error.NOT_ACTIVE_USER);

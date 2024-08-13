@@ -17,14 +17,18 @@ public class CreateUserService {
 
     public User create(CreateUser createUser) {
         if (createUser.getAccountType().equals(AccountType.ID)) {
-            User user = userCreator.create(User.create(createUser));
-            createUserEmailVerificationProcessor.sendVerificationMail(user);
-            return user;
+            return userCreator.create(User.create(createUser));
         }
         CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.use(createUser.getSocialRegisterToken());
-        User user = userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
-        createUserEmailVerificationProcessor.sendVerificationMail(user);
-        return user;
+        return userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
+    }
+
+    public EmailVerification sendCreateUserVerifyMail(User user) {
+        return createUserEmailVerificationProcessor.sendVerificationMail(user);
+    }
+
+    public void resend(String resendToken) {
+        createUserEmailVerificationProcessor.resendVerificationMail(resendToken);
     }
 
     public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {
