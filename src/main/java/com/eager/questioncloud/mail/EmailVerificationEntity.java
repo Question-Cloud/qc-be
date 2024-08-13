@@ -20,6 +20,9 @@ public class EmailVerificationEntity {
     private String token;
 
     @Column
+    private String resendToken;
+
+    @Column
     private Long uid;
 
     @Column
@@ -30,8 +33,9 @@ public class EmailVerificationEntity {
     private Boolean isVerified;
 
     @Builder
-    public EmailVerificationEntity(String token, Long uid, EmailVerificationType emailVerificationType, Boolean isVerified) {
+    public EmailVerificationEntity(String token, String resendToken, Long uid, EmailVerificationType emailVerificationType, Boolean isVerified) {
         this.token = token;
+        this.resendToken = resendToken;
         this.uid = uid;
         this.emailVerificationType = emailVerificationType;
         this.isVerified = isVerified;
@@ -40,6 +44,7 @@ public class EmailVerificationEntity {
     public EmailVerification toDomain() {
         return EmailVerification.builder()
             .token(token)
+            .resendToken(resendToken)
             .uid(uid)
             .emailVerificationType(emailVerificationType)
             .isVerified(isVerified)
