@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SocialAuthenticateProcessor {
     private final KakaoAPI kakaoProcessor;
+    private final GoogleAPI googleProcessor;
     private final AuthenticationManager authenticationManager;
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
@@ -27,6 +28,10 @@ public class SocialAuthenticateProcessor {
             case KAKAO -> {
                 String accessToken = kakaoProcessor.getAccessToken(code);
                 return kakaoProcessor.getUserInfo(accessToken).getUid();
+            }
+            case GOOGLE -> {
+                String accessToken = googleProcessor.getAccessToken(code);
+                return googleProcessor.getUserInfo(accessToken).getUid();
             }
             default -> {
                 throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
