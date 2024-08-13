@@ -1,6 +1,6 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.mail;
 
-import com.eager.questioncloud.mail.EmailVerification;
+import com.eager.questioncloud.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

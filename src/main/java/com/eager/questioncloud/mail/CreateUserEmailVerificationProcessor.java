@@ -1,6 +1,5 @@
 package com.eager.questioncloud.mail;
 
-import com.eager.questioncloud.user.EmailVerificationWithUser;
 import com.eager.questioncloud.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

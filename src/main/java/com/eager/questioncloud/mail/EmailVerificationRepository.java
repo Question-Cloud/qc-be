@@ -1,7 +1,5 @@
 package com.eager.questioncloud.mail;
 
-import com.eager.questioncloud.user.EmailVerificationWithUser;
-
 public interface EmailVerificationRepository {
     EmailVerification append(EmailVerification emailVerification);
 

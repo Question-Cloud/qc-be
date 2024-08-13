@@ -2,7 +2,6 @@ package com.eager.questioncloud.mail;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.EmailVerificationWithUser;
 import com.eager.questioncloud.user.User;
 import com.eager.questioncloud.user.UserEntity;
 import jakarta.persistence.Tuple;
