@@ -11,4 +11,6 @@ public interface EmailVerificationJpaRepository extends JpaRepository<EmailVerif
 
     @Query(value = "SELECT e as emailVerification, u as user from EmailVerificationEntity e left join UserEntity u on u.uid = e.uid where e.resendToken =:resendToken and e.isVerified = false")
     Optional<Tuple> findByResendTokenWithUser(String resendToken);
+
+    Optional<EmailVerificationEntity> findByUidAndIsVerifiedFalse(Long uid);
 }

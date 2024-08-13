@@ -26,6 +26,10 @@ public class CreateUserEmailVerificationProcessor {
         return emailVerification;
     }
 
+    public EmailVerification getForException(Long uid) {
+        return emailVerificationRepository.findForException(uid);
+    }
+
     public void resendVerificationMail(String resendToken) {
         EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.findForResend(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();

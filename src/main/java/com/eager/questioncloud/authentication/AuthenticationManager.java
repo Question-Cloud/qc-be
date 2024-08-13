@@ -22,6 +22,7 @@ public class AuthenticationManager {
         if (!PasswordProcessor.matches(password, user.getPassword())) {
             throw new CustomException(Error.FAIL_LOGIN);
         }
+        user.checkUserStatus();
         return user;
     }
 

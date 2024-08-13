@@ -9,5 +9,7 @@ public interface EmailVerificationRepository {
 
     EmailVerificationWithUser findForResend(String resendToken);
 
+    EmailVerification findForException(Long uid);
+
     EmailVerification save(EmailVerification emailVerification);
 }

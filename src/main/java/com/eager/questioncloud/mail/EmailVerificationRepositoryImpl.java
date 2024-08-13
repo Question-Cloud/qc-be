@@ -36,6 +36,13 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
+    public EmailVerification findForException(Long uid) {
+        return emailVerificationJpaRepository.findByUidAndIsVerifiedFalse(uid)
+            .orElseThrow(() -> new CustomException(Error.INTERNAL_SERVER_ERROR))
+            .toDomain();
+    }
+
+    @Override
     public EmailVerification save(EmailVerification emailVerification) {
         return emailVerificationJpaRepository.save(emailVerification.toEntity()).toDomain();
     }
