@@ -50,7 +50,6 @@ public class KakaoAPI implements SocialAPI {
     @Override
     public SocialUserInfo getUserInfo(String accessToken) {
         WebClient webClient = WebClient.create("https://kapi.kakao.com/v1/oidc/userinfo");
-        System.out.println(accessToken);
         KakaoUserInfo kakaoUserInfo = webClient.get()
             .headers(header -> {
                 header.add("Authorization", "Bearer " + accessToken);
