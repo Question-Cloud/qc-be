@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class SocialAuthenticateProcessor {
     private final KakaoAPI kakaoProcessor;
     private final GoogleAPI googleProcessor;
+    private final NaverAPI naverProcessor;
     private final AuthenticationManager authenticationManager;
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
@@ -32,6 +33,10 @@ public class SocialAuthenticateProcessor {
             case GOOGLE -> {
                 String accessToken = googleProcessor.getAccessToken(code);
                 return googleProcessor.getUserInfo(accessToken).getUid();
+            }
+            case NAVER -> {
+                String accessToken = naverProcessor.getAccessToken(code);
+                return naverProcessor.getUserInfo(accessToken).getUid();
             }
             default -> {
                 throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
