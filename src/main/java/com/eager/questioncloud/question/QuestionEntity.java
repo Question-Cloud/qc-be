@@ -40,6 +40,9 @@ public class QuestionEntity {
     private String description;
 
     @Column
+    private String thumbnail;
+
+    @Column
     private String fileUrl;
 
     @Column
@@ -53,14 +56,15 @@ public class QuestionEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionEntity(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String fileUrl,
-        QuestionLevel questionLevel, int price, LocalDateTime createdAt) {
+    public QuestionEntity(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
+        String fileUrl, QuestionLevel questionLevel, int price, LocalDateTime createdAt) {
         this.id = id;
         this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
         this.subject = subject;
         this.title = title;
         this.description = description;
+        this.thumbnail = thumbnail;
         this.fileUrl = fileUrl;
         this.questionLevel = questionLevel;
         this.price = price;
@@ -75,6 +79,7 @@ public class QuestionEntity {
             .subject(subject)
             .title(title)
             .description(description)
+            .thumbnail(thumbnail)
             .fileUrl(fileUrl)
             .questionLevel(questionLevel)
             .price(price)
