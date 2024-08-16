@@ -4,6 +4,7 @@ import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionC
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
+import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -51,6 +52,30 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .orderBy(sort(sort), questionEntity.id.desc())
             .where(questionEntity.questionLevel.in(questionLevels), questionCategoryEntity.id.in(questionCategoryIds))
             .fetch();
+    }
+
+    @Override
+    public QuestionDetail getQuestionDetail(Long questionId) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+        return jpaQueryFactory.select(
+                Projections.constructor(
+                    QuestionDetail.class,
+                    questionEntity.id,
+                    questionEntity.title,
+                    userEntity.name,
+                    questionEntity.subject,
+                    parent.title,
+                    child.title,
+                    questionEntity.questionLevel,
+                    questionEntity.createdAt,
+                    questionEntity.price
+                ))
+            .from(questionEntity)
+            .leftJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
+            .fetchFirst();
     }
 
     private OrderSpecifier<?> sort(QuestionSortType sort) {
