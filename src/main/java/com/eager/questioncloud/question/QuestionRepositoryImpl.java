@@ -56,7 +56,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private OrderSpecifier<?> sort(QuestionSortType sort) {
         switch (sort) {
             case Popularity -> {
-                return null;
+                return questionEntity.count.desc();
             }
             case Rate -> {
                 return null;
