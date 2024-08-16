@@ -6,5 +6,5 @@ import java.util.List;
 public interface QuestionRepository {
     int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels);
 
-    List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels);
+    List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionSortType sort);
 }

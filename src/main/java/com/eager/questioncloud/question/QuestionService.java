@@ -14,7 +14,8 @@ public class QuestionService {
         return questionReader.getTotalFiltering(questionCategoryIds, questionLevels);
     }
 
-    public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels) {
-        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels);
+    public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
+        QuestionSortType sort) {
+        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels, sort);
     }
 }

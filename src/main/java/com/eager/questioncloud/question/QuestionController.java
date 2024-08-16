@@ -17,9 +17,9 @@ public class QuestionController {
 
     @GetMapping
     public PagingResponse<QuestionFilterItem> getQuestionListByFiltering(
-        @RequestParam List<Long> categories, @RequestParam List<QuestionLevel> levels) {
+        @RequestParam List<Long> categories, @RequestParam List<QuestionLevel> levels, @RequestParam QuestionSortType sort) {
         int total = questionService.getTotalFiltering(categories, levels);
-        List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(categories, levels);
+        List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(categories, levels, sort);
         return new PagingResponse<>(total, questionFilterItems);
     }
 }
