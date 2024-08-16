@@ -5,6 +5,7 @@ import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -33,7 +34,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels) {
+    public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
+        QuestionSortType sort) {
         return jpaQueryFactory.select(
                 Projections.constructor(
                     QuestionFilterItem.class,
@@ -46,7 +48,28 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .from(questionEntity)
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
+            .orderBy(sort(sort), questionEntity.id.desc())
             .where(questionEntity.questionLevel.in(questionLevels), questionCategoryEntity.id.in(questionCategoryIds))
             .fetch();
+    }
+
+    private OrderSpecifier<?> sort(QuestionSortType sort) {
+        switch (sort) {
+            case Popularity -> {
+                return null;
+            }
+            case Rate -> {
+                return null;
+            }
+            case Latest -> {
+                return questionEntity.createdAt.desc();
+            }
+            case LEVEL -> {
+                return questionEntity.questionLevel.desc();
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 }
