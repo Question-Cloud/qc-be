@@ -57,11 +57,14 @@ public class QuestionEntity {
     private int price;
 
     @Column
+    private int count;
+
+    @Column
     private LocalDateTime createdAt;
 
     @Builder
     public QuestionEntity(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
-        String fileUrl, QuestionType questionType, QuestionLevel questionLevel, int price, LocalDateTime createdAt) {
+        String fileUrl, QuestionType questionType, QuestionLevel questionLevel, int price, int count, LocalDateTime createdAt) {
         this.id = id;
         this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
@@ -73,6 +76,7 @@ public class QuestionEntity {
         this.questionType = questionType;
         this.questionLevel = questionLevel;
         this.price = price;
+        this.count = count;
         this.createdAt = createdAt;
     }
 
@@ -89,6 +93,7 @@ public class QuestionEntity {
             .questionType(questionType)
             .questionLevel(questionLevel)
             .price(price)
+            .count(count)
             .createdAt(createdAt)
             .build();
     }
