@@ -10,6 +10,8 @@ public class QuestionDto {
     public static class QuestionFilterItem {
         private Long id;
         private String title;
+        private String parentCategory;
+        private String childCategory;
         private String thumbnail;
         private String creatorName;
         private QuestionLevel questionLevel;

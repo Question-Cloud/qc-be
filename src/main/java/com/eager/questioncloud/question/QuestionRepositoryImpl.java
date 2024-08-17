@@ -38,11 +38,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Override
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
         QuestionSortType sort, Pageable pageable) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(
                     QuestionFilterItem.class,
                     questionEntity.id,
                     questionEntity.title,
+                    parent.title,
+                    child.title,
                     questionEntity.thumbnail,
                     userEntity.name,
                     questionEntity.questionLevel,
@@ -50,6 +54,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .from(questionEntity)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .orderBy(sort(sort), questionEntity.id.desc())
