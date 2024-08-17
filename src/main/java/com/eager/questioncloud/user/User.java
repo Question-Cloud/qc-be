@@ -23,11 +23,12 @@ public class User implements UserDetails {
     private String phone;
     private String name;
     private String email;
+    private UserType userType;
     private UserStatus userStatus;
 
     @Builder
     public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
-        UserStatus userStatus) {
+        UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
         this.phone = phone;
         this.name = name;
         this.email = email;
+        this.userType = userType;
         this.userStatus = userStatus;
     }
 
@@ -97,6 +99,7 @@ public class User implements UserDetails {
             .phone(createUser.getPhone())
             .name(createUser.getName())
             .email(createUser.getEmail())
+            .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
             .build();
     }
@@ -108,6 +111,7 @@ public class User implements UserDetails {
             .phone(createUser.getPhone())
             .name(createUser.getName())
             .email(createUser.getEmail())
+            .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
             .build();
     }
@@ -122,6 +126,7 @@ public class User implements UserDetails {
             .phone(phone)
             .name(name)
             .email(email)
+            .userType(userType)
             .userStatus(userStatus)
             .build();
     }
