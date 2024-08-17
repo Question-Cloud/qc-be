@@ -4,6 +4,7 @@ import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,8 +17,8 @@ public class QuestionService {
     }
 
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionSortType sort) {
-        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels, sort);
+        QuestionSortType sort, Pageable pageable) {
+        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels, sort, pageable);
     }
 
     public QuestionDetail getQuestionDetail(Long questionId) {

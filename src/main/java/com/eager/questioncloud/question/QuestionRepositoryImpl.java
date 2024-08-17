@@ -11,6 +11,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,7 +37,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionSortType sort) {
+        QuestionSortType sort, Pageable pageable) {
         return jpaQueryFactory.select(
                 Projections.constructor(
                     QuestionFilterItem.class,
@@ -47,6 +48,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     questionEntity.questionLevel,
                     questionEntity.price))
             .from(questionEntity)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .orderBy(sort(sort), questionEntity.id.desc())
