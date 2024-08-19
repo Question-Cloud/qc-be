@@ -45,6 +45,9 @@ public class UserEntity {
     private String email;
 
     @Column
+    private int point;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
@@ -54,7 +57,7 @@ public class UserEntity {
 
     @Builder
     public UserEntity(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
-        UserType userType, UserStatus userStatus) {
+        int point, UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -63,6 +66,7 @@ public class UserEntity {
         this.phone = phone;
         this.name = name;
         this.email = email;
+        this.point = point;
         this.userType = userType;
         this.userStatus = userStatus;
     }
@@ -77,6 +81,7 @@ public class UserEntity {
             .phone(phone)
             .name(name)
             .email(email)
+            .point(point)
             .userType(userType)
             .userStatus(userStatus)
             .build();

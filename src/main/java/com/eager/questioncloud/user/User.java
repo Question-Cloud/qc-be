@@ -23,12 +23,13 @@ public class User implements UserDetails {
     private String phone;
     private String name;
     private String email;
+    private int point;
     private UserType userType;
     private UserStatus userStatus;
 
     @Builder
     public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
-        UserType userType, UserStatus userStatus) {
+        int point, UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.loginId = loginId;
         this.password = password;
@@ -37,6 +38,7 @@ public class User implements UserDetails {
         this.phone = phone;
         this.name = name;
         this.email = email;
+        this.point = point;
         this.userType = userType;
         this.userStatus = userStatus;
     }
@@ -91,6 +93,13 @@ public class User implements UserDetails {
         }
     }
 
+    public void usePoint(int amount) {
+        if (point < amount) {
+            throw new CustomException(Error.NOT_ENOUGH_POINT);
+        }
+        this.point = this.point - amount;
+    }
+
     public static User create(CreateUser createUser) {
         return User.builder()
             .loginId(createUser.getLoginId())
@@ -99,6 +108,7 @@ public class User implements UserDetails {
             .phone(createUser.getPhone())
             .name(createUser.getName())
             .email(createUser.getEmail())
+            .point(0)
             .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
             .build();
@@ -111,6 +121,7 @@ public class User implements UserDetails {
             .phone(createUser.getPhone())
             .name(createUser.getName())
             .email(createUser.getEmail())
+            .point(0)
             .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
             .build();
@@ -126,6 +137,7 @@ public class User implements UserDetails {
             .phone(phone)
             .name(name)
             .email(email)
+            .point(point)
             .userType(userType)
             .userStatus(userStatus)
             .build();

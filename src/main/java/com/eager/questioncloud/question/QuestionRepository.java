@@ -12,4 +12,6 @@ public interface QuestionRepository {
         Pageable pageable);
 
     QuestionDetail getQuestionDetail(Long questionId);
+
+    List<Question> getQuestionListInIds(List<Long> questionIds);
 }

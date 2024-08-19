@@ -12,4 +12,8 @@ public class UserUpdater {
         user.active();
         return userRepository.save(user);
     }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
 }
