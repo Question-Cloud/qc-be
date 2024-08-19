@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class UserQuestionLibraryCreator {
     private final UserQuestionLibraryRepository userQuestionLibraryRepository;
 
-    public List<UserQuestionLibrary> append(Long userId, List<Long> questionIds) {
+    public List<UserQuestionLibrary> appendUserQuestion(Long userId, List<Long> questionIds) {
         if (userQuestionLibraryRepository.checkDuplicate(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }

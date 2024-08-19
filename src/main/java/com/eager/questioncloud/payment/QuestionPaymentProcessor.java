@@ -28,7 +28,7 @@ public class QuestionPaymentProcessor {
         QuestionPayment questionPayment = questionPaymentCreator.append(QuestionPayment.create(userId, couponId, finalAmount));
         questionPaymentOrderCreator.append(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
 
-        userQuestionLibraryCreator.append(userId, questionIds);
+        userQuestionLibraryCreator.appendUserQuestion(userId, questionIds);
         return questionPayment;
     }
 
