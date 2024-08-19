@@ -1,10 +1,10 @@
 package com.eager.questioncloud.payment;
 
-import com.eager.questioncloud.library.UserQuestionLibrary;
 import com.eager.questioncloud.library.UserQuestionLibraryCreator;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
 import com.eager.questioncloud.user.UserPointManager;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +18,7 @@ public class QuestionPaymentProcessor {
     private final UserPointManager userPointManager;
     private final UserQuestionLibraryCreator userQuestionLibraryCreator;
 
+    @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long couponId) {
         int originalAmount = getOriginalAmount(questionIds);
         int finalAmount = originalAmount; //Todo add Coupon Logic
@@ -27,7 +28,7 @@ public class QuestionPaymentProcessor {
         QuestionPayment questionPayment = questionPaymentCreator.append(QuestionPayment.create(userId, couponId, finalAmount));
         questionPaymentOrderCreator.append(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
 
-        userQuestionLibraryCreator.append(UserQuestionLibrary.create(userId, questionIds));
+        userQuestionLibraryCreator.append(userId, questionIds);
         return questionPayment;
     }
 

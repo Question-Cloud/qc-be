@@ -13,4 +13,9 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     public List<UserQuestionLibrary> append(List<UserQuestionLibrary> userQuestionLibraries) {
         return UserQuestionLibraryEntity.toModel(userQuestionLibraryJpaRepository.saveAll(UserQuestionLibrary.toEntity(userQuestionLibraries)));
     }
+
+    @Override
+    public Boolean checkDuplicate(Long userId, List<Long> questionIds) {
+        return userQuestionLibraryJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
+    }
 }
