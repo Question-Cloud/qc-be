@@ -25,7 +25,7 @@ public class QuestionPaymentProcessor {
 
         userPointManager.usePoint(userId, finalAmount);
 
-        QuestionPayment questionPayment = questionPaymentCreator.append(QuestionPayment.create(userId, couponId, finalAmount));
+        QuestionPayment questionPayment = questionPaymentCreator.createQuestionPayment(QuestionPayment.create(userId, couponId, finalAmount));
         questionPaymentOrderCreator.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
 
         userQuestionLibraryCreator.appendUserQuestion(userId, questionIds);
