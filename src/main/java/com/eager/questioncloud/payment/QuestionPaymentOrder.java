@@ -1,5 +1,7 @@
 package com.eager.questioncloud.payment;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,6 +16,23 @@ public class QuestionPaymentOrder {
         this.id = id;
         this.paymentId = paymentId;
         this.questionId = questionId;
+    }
+
+    public static List<QuestionPaymentOrder> createOrders(Long paymentId, List<Long> questionIds) {
+        return questionIds
+            .stream()
+            .map(questionId -> QuestionPaymentOrder.builder()
+                .paymentId(paymentId)
+                .questionId(questionId)
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    public static List<QuestionPaymentOrderEntity> toEntity(List<QuestionPaymentOrder> orders) {
+        return orders
+            .stream()
+            .map(QuestionPaymentOrder::toEntity)
+            .collect(Collectors.toList());
     }
 
     public QuestionPaymentOrderEntity toEntity() {

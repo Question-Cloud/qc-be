@@ -10,6 +10,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -85,6 +86,17 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
+    }
+
+    @Override
+    public List<Question> getQuestionListInIds(List<Long> questionIds) {
+        return jpaQueryFactory.select(questionEntity)
+            .from(questionEntity)
+            .where(questionEntity.id.in(questionIds))
+            .fetch()
+            .stream()
+            .map(QuestionEntity::toDomain)
+            .collect(Collectors.toList());
     }
 
     private OrderSpecifier<?> sort(QuestionSortType sort) {

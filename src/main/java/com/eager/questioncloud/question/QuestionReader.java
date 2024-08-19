@@ -24,4 +24,8 @@ public class QuestionReader {
     public QuestionDetail getQuestionDetail(Long questionId) {
         return questionRepository.getQuestionDetail(questionId);
     }
+
+    public List<Question> getQuestions(List<Long> questionIds) {
+        return questionRepository.getQuestionListInIds(questionIds);
+    }
 }

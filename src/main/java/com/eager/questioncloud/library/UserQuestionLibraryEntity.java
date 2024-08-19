@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +42,13 @@ public class UserQuestionLibraryEntity {
         this.questionId = questionId;
         this.isUsed = isUsed;
         this.createdAt = createdAt;
+    }
+
+    public static List<UserQuestionLibrary> toModel(List<UserQuestionLibraryEntity> userQuestionLibraryEntities) {
+        return userQuestionLibraryEntities
+            .stream()
+            .map(UserQuestionLibraryEntity::toModel)
+            .collect(Collectors.toList());
     }
 
     public UserQuestionLibrary toModel() {

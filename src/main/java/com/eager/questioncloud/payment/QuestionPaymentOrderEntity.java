@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,13 @@ public class QuestionPaymentOrderEntity {
         this.id = id;
         this.paymentId = paymentId;
         this.questionId = questionId;
+    }
+
+    public static List<QuestionPaymentOrder> toModel(List<QuestionPaymentOrderEntity> orders) {
+        return orders
+            .stream()
+            .map(QuestionPaymentOrderEntity::toModel)
+            .collect(Collectors.toList());
     }
 
     public QuestionPaymentOrder toModel() {

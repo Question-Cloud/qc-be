@@ -21,6 +21,15 @@ public class QuestionPayment {
         this.createdAt = createdAt;
     }
 
+    public static QuestionPayment create(Long userId, Long couponId, int amount) {
+        return QuestionPayment.builder()
+            .userId(userId)
+            .couponId(couponId)
+            .amount(amount)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
     public QuestionPaymentEntity toEntity() {
         return QuestionPaymentEntity.builder()
             .id(id)

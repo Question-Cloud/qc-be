@@ -17,7 +17,8 @@ public enum Error {
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다."),
     DUPLICATE_PHONE(HttpStatus.CONFLICT, "이미 사용중인 핸드폰입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "결과가 존재하지 않습니다."),
-    BAD_REQUEST(HttpStatus.BAD_REQUEST, "올바르지 않은 요청입니다.");
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "올바르지 않은 요청입니다."),
+    NOT_ENOUGH_POINT(HttpStatus.FORBIDDEN, "포인트가 부족합니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
