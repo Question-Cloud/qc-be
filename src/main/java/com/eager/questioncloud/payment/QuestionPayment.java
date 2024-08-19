@@ -8,13 +8,15 @@ import lombok.Getter;
 public class QuestionPayment {
     private Long id;
     private Long userId;
+    private Long couponId;
     private int amount;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, Long userId, int amount, LocalDateTime createdAt) {
+    public QuestionPayment(Long id, Long userId, Long couponId, int amount, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
+        this.couponId = couponId;
         this.amount = amount;
         this.createdAt = createdAt;
     }
@@ -23,6 +25,7 @@ public class QuestionPayment {
         return QuestionPaymentEntity.builder()
             .id(id)
             .userId(userId)
+            .couponId(couponId)
             .amount(amount)
             .createdAt(createdAt)
             .build();

@@ -25,15 +25,19 @@ public class QuestionPaymentEntity {
     private Long userId;
 
     @Column
+    private Long couponId;
+
+    @Column
     private int amount;
 
     @Column
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPaymentEntity(Long id, Long userId, int amount, LocalDateTime createdAt) {
+    public QuestionPaymentEntity(Long id, Long userId, Long couponId, int amount, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
+        this.couponId = couponId;
         this.amount = amount;
         this.createdAt = createdAt;
     }
@@ -42,6 +46,7 @@ public class QuestionPaymentEntity {
         return QuestionPayment.builder()
             .id(id)
             .userId(userId)
+            .couponId(couponId)
             .amount(amount)
             .createdAt(createdAt)
             .build();
