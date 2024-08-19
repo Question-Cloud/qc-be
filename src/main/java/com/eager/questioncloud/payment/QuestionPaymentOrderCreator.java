@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class QuestionPaymentOrderCreator {
     private final QuestionPaymentOrderRepository questionPaymentOrderRepository;
 
-    List<QuestionPaymentOrder> append(List<QuestionPaymentOrder> orders) {
+    List<QuestionPaymentOrder> createQuestionPaymentOrders(List<QuestionPaymentOrder> orders) {
         return questionPaymentOrderRepository.append(orders);
     }
 }
