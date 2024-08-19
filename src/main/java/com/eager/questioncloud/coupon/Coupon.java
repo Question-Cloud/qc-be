@@ -25,6 +25,10 @@ public class Coupon {
         this.endAt = endAt;
     }
 
+    public void decrease() {
+        this.remainingCount = this.remainingCount - 1;
+    }
+
     public CouponEntity toEntity() {
         return CouponEntity.builder()
             .id(id)

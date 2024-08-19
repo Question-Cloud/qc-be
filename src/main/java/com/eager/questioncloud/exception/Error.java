@@ -19,7 +19,10 @@ public enum Error {
     NOT_FOUND(HttpStatus.NOT_FOUND, "결과가 존재하지 않습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "올바르지 않은 요청입니다."),
     NOT_ENOUGH_POINT(HttpStatus.FORBIDDEN, "포인트가 부족합니다."),
-    ALREADY_OWN_QUESTION(HttpStatus.CONFLICT, "이미 보유하고 있는 문제입니다.");
+    ALREADY_OWN_QUESTION(HttpStatus.CONFLICT, "이미 보유하고 있는 문제입니다."),
+    ALREADY_REGISTER_COUPON(HttpStatus.CONFLICT, "이미 등록한 쿠폰입니다."),
+    EXPIRED_COUPON(HttpStatus.BAD_REQUEST, "등록 기간이 지난 쿠폰입니다."),
+    LIMITED_COUPON(HttpStatus.BAD_REQUEST, "쿠폰 물량이 전부 소진되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
