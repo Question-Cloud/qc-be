@@ -1,5 +1,6 @@
 package com.eager.questioncloud.payment;
 
+import com.eager.questioncloud.coupon.UserCouponProcessor;
 import com.eager.questioncloud.library.UserQuestionLibraryCreator;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
@@ -17,19 +18,24 @@ public class QuestionPaymentProcessor {
     private final QuestionPaymentOrderCreator questionPaymentOrderCreator;
     private final UserPointManager userPointManager;
     private final UserQuestionLibraryCreator userQuestionLibraryCreator;
+    private final UserCouponProcessor userCouponProcessor;
 
     @Transactional
-    public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long couponId) {
+    public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long userCouponId) {
         int originalAmount = getOriginalAmount(questionIds);
-        int finalAmount = originalAmount; //Todo add Coupon Logic
+        int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
         userPointManager.usePoint(userId, finalAmount);
 
-        QuestionPayment questionPayment = questionPaymentCreator.createQuestionPayment(QuestionPayment.create(userId, couponId, finalAmount));
+        QuestionPayment questionPayment = questionPaymentCreator.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
         questionPaymentOrderCreator.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
 
         userQuestionLibraryCreator.appendUserQuestion(userId, questionIds);
         return questionPayment;
+    }
+
+    public Boolean isUsingCoupon(Long couponId) {
+        return couponId != null;
     }
 
     public int getOriginalAmount(List<Long> questionIds) {
