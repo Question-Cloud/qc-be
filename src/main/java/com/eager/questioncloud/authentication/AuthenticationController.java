@@ -1,7 +1,7 @@
 package com.eager.questioncloud.authentication;
 
+import com.eager.questioncloud.authentication.Request.LoginRequest;
 import com.eager.questioncloud.user.AccountType;
-import com.eager.questioncloud.user.Request.LoginRequest;
 import com.eager.questioncloud.user.Response.LoginResponse;
 import com.eager.questioncloud.user.Response.RefreshResponse;
 import com.eager.questioncloud.user.Response.SocialAuthenticateResponse;
@@ -21,6 +21,7 @@ public class AuthenticationController {
 
     @PostMapping
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+        loginRequest.validate();
         AuthenticationToken authenticationToken = authenticationService.login(loginRequest.getEmail(), loginRequest.getPassword());
         return new LoginResponse(authenticationToken);
     }
