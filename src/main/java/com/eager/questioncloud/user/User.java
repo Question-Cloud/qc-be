@@ -104,7 +104,7 @@ public class User implements UserDetails {
         return User.builder()
             .loginId(createUser.getLoginId())
             .password(PasswordProcessor.encode(createUser.getPassword()))
-            .accountType(createUser.getAccountType())
+            .accountType(AccountType.ID)
             .phone(createUser.getPhone())
             .name(createUser.getName())
             .email(createUser.getEmail())
