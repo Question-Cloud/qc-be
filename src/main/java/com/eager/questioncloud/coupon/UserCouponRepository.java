@@ -1,5 +1,8 @@
 package com.eager.questioncloud.coupon;
 
+import com.eager.questioncloud.coupon.UserCouponDto.AvailableUserCouponItem;
+import java.util.List;
+
 public interface UserCouponRepository {
     UserCoupon append(UserCoupon userCoupon);
 
@@ -8,4 +11,6 @@ public interface UserCouponRepository {
     Boolean checkDuplicate(Long userId, Long couponId);
 
     UserCoupon save(UserCoupon userCoupon);
+
+    List<AvailableUserCouponItem> getAvailableUserCoupons(Long userId);
 }
