@@ -33,13 +33,17 @@ public class UserCouponEntity {
     @Column
     private LocalDateTime createdAt;
 
+    @Column
+    private LocalDateTime endAt;
+
     @Builder
-    public UserCouponEntity(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt) {
+    public UserCouponEntity(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt, LocalDateTime endAt) {
         this.id = id;
         this.userId = userId;
         this.couponId = couponId;
         this.isUsed = isUsed;
         this.createdAt = createdAt;
+        this.endAt = endAt;
     }
 
     public UserCoupon toModel() {
@@ -49,6 +53,7 @@ public class UserCouponEntity {
             .couponId(couponId)
             .isUsed(isUsed)
             .createdAt(createdAt)
+            .endAt(endAt)
             .build();
     }
 }

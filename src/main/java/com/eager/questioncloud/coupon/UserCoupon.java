@@ -13,14 +13,16 @@ public class UserCoupon {
     private Long couponId;
     private Boolean isUsed;
     private LocalDateTime createdAt;
+    private LocalDateTime endAt;
 
     @Builder
-    public UserCoupon(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt) {
+    public UserCoupon(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt, LocalDateTime endAt) {
         this.id = id;
         this.userId = userId;
         this.couponId = couponId;
         this.isUsed = isUsed;
         this.createdAt = createdAt;
+        this.endAt = endAt;
     }
 
     public static UserCoupon create(Long userId, Coupon coupon) {
@@ -35,6 +37,7 @@ public class UserCoupon {
             .couponId(coupon.getId())
             .isUsed(false)
             .createdAt(LocalDateTime.now())
+            .endAt(coupon.getEndAt())
             .build();
     }
 
@@ -45,6 +48,7 @@ public class UserCoupon {
             .couponId(couponId)
             .isUsed(isUsed)
             .createdAt(createdAt)
+            .endAt(endAt)
             .build();
     }
 }
