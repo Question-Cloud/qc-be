@@ -37,7 +37,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
-        return userJpaRepository.findByAccountTypeAndSocialUid(accountType, socialUid);
+        Optional<UserEntity> userEntity = userJpaRepository.findByAccountTypeAndSocialUid(accountType, socialUid);
+        return userEntity.map(UserEntity::toDomain);
     }
 
     @Override

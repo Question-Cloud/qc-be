@@ -11,9 +11,8 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
     Boolean existsByPhone(String phone);
 
     Boolean existsByEmail(String email);
-
-    // Todo 리턴 타입 변경 User -> UserEntity
-    Optional<User> findByAccountTypeAndSocialUid(AccountType accountType, String socialUid);
+    
+    Optional<UserEntity> findByAccountTypeAndSocialUid(AccountType accountType, String socialUid);
 
     Optional<UserEntity> findByLoginId(String loginId);
 }
