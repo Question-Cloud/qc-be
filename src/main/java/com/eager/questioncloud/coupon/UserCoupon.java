@@ -25,6 +25,13 @@ public class UserCoupon {
         this.endAt = endAt;
     }
 
+    public void use() {
+        if (endAt.isBefore(LocalDateTime.now())) {
+            throw new CustomException(Error.EXPIRED_COUPON);
+        }
+        this.isUsed = true;
+    }
+
     public static UserCoupon create(Long userId, Coupon coupon) {
         if (coupon.getEndAt().isBefore(LocalDateTime.now())) {
             throw new CustomException(Error.EXPIRED_COUPON);

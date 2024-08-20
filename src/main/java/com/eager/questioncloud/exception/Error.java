@@ -22,7 +22,8 @@ public enum Error {
     ALREADY_OWN_QUESTION(HttpStatus.CONFLICT, "이미 보유하고 있는 문제입니다."),
     ALREADY_REGISTER_COUPON(HttpStatus.CONFLICT, "이미 등록한 쿠폰입니다."),
     EXPIRED_COUPON(HttpStatus.BAD_REQUEST, "등록 기간이 지난 쿠폰입니다."),
-    LIMITED_COUPON(HttpStatus.BAD_REQUEST, "쿠폰 물량이 전부 소진되었습니다.");
+    LIMITED_COUPON(HttpStatus.BAD_REQUEST, "쿠폰 물량이 전부 소진되었습니다."),
+    WRONG_COUPON(HttpStatus.BAD_REQUEST, "잘못된 쿠폰 사용입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

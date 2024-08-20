@@ -1,5 +1,6 @@
 package com.eager.questioncloud.payment;
 
+import com.eager.questioncloud.coupon.UserCouponProcessor;
 import com.eager.questioncloud.library.UserQuestionLibraryCreator;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
@@ -17,12 +18,13 @@ public class QuestionPaymentProcessor {
     private final QuestionPaymentOrderCreator questionPaymentOrderCreator;
     private final UserPointManager userPointManager;
     private final UserQuestionLibraryCreator userQuestionLibraryCreator;
+    private final UserCouponProcessor userCouponProcessor;
 
     @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long couponId) {
         int originalAmount = getOriginalAmount(questionIds);
-        int finalAmount = originalAmount; //Todo add Coupon Logic
-
+        int finalAmount = isUsingCoupon(couponId) ? userCouponProcessor.useCoupon(userId, couponId, originalAmount) : originalAmount;
+        
         userPointManager.usePoint(userId, finalAmount);
 
         QuestionPayment questionPayment = questionPaymentCreator.createQuestionPayment(QuestionPayment.create(userId, couponId, finalAmount));
@@ -30,6 +32,10 @@ public class QuestionPaymentProcessor {
 
         userQuestionLibraryCreator.appendUserQuestion(userId, questionIds);
         return questionPayment;
+    }
+
+    public Boolean isUsingCoupon(Long couponId) {
+        return couponId != null;
     }
 
     public int getOriginalAmount(List<Long> questionIds) {

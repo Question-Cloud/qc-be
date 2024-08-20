@@ -11,4 +11,8 @@ public class CouponReader {
     public Coupon getCoupon(String code) {
         return couponRepository.getCoupon(code);
     }
+
+    public Coupon getCoupon(Long id) {
+        return couponRepository.getCoupon(id);
+    }
 }
