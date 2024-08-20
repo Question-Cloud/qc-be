@@ -16,7 +16,7 @@ public class CreateUserService {
     private final CreateUserEmailVerificationProcessor createUserEmailVerificationProcessor;
 
     public User create(CreateUser createUser) {
-        if (createUser.getAccountType().equals(AccountType.ID)) {
+        if (createUser.getAccountType().equals(AccountType.EMAIL)) {
             return userCreator.create(User.create(createUser));
         }
         CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.use(

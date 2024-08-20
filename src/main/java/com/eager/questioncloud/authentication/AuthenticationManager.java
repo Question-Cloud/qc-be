@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 public class AuthenticationManager {
     private final UserRepository userRepository;
 
-    public User getUserByCredentials(String loginId, String password) {
-        User user = userRepository.getUserByLoginId(loginId);
+    public User getUserByCredentials(String email, String password) {
+        User user = userRepository.getUserByEmail(email);
         if (!PasswordProcessor.matches(password, user.getPassword())) {
             throw new CustomException(Error.FAIL_LOGIN);
         }

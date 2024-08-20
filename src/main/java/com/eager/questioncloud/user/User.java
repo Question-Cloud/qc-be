@@ -16,28 +16,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class User implements UserDetails {
     private Long uid;
-    private String loginId;
+    private String email;
     private String password;
     private String socialUid;
     private AccountType accountType;
     private String phone;
     private String name;
-    private String email;
     private int point;
     private UserType userType;
     private UserStatus userStatus;
 
     @Builder
-    public User(Long uid, String loginId, String password, String socialUid, AccountType accountType, String phone, String name, String email,
-        int point, UserType userType, UserStatus userStatus) {
+    public User(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name, int point,
+        UserType userType, UserStatus userStatus) {
         this.uid = uid;
-        this.loginId = loginId;
+        this.email = email;
         this.password = password;
         this.socialUid = socialUid;
         this.accountType = accountType;
         this.phone = phone;
         this.name = name;
-        this.email = email;
         this.point = point;
         this.userType = userType;
         this.userStatus = userStatus;
@@ -102,12 +100,11 @@ public class User implements UserDetails {
 
     public static User create(CreateUser createUser) {
         return User.builder()
-            .loginId(createUser.getLoginId())
+            .email(createUser.getEmail())
             .password(PasswordProcessor.encode(createUser.getPassword()))
-            .accountType(AccountType.ID)
+            .accountType(AccountType.EMAIL)
             .phone(createUser.getPhone())
             .name(createUser.getName())
-            .email(createUser.getEmail())
             .point(0)
             .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
@@ -116,11 +113,11 @@ public class User implements UserDetails {
 
     public static User create(CreateUser createUser, String socialUid) {
         return User.builder()
+            .email(createUser.getEmail())
             .socialUid(socialUid)
             .accountType(createUser.getAccountType())
             .phone(createUser.getPhone())
             .name(createUser.getName())
-            .email(createUser.getEmail())
             .point(0)
             .userType(UserType.NormalUser)
             .userStatus(UserStatus.PendingEmailVerification)
@@ -130,13 +127,12 @@ public class User implements UserDetails {
     public UserEntity toEntity() {
         return UserEntity.builder()
             .uid(uid)
-            .loginId(loginId)
+            .email(email)
             .password(password)
             .socialUid(socialUid)
             .accountType(accountType)
             .phone(phone)
             .name(name)
-            .email(email)
             .point(point)
             .userType(userType)
             .userStatus(userStatus)

@@ -12,7 +12,8 @@ import org.springframework.util.StringUtils;
 public class Request {
     @Getter
     public static class CreateUserRequest {
-        private String loginId;
+        @Email
+        private String email;
 
         private String password;
 
@@ -27,22 +28,12 @@ public class Request {
         @Size(min = 2)
         private String name;
 
-        @Email
-        private String email;
-
         public void validate() {
-            if (accountType.equals(AccountType.ID)) {
-                loginIdValidate();
+            if (accountType.equals(AccountType.EMAIL)) {
                 passwordValidate();
                 return;
             }
             socialRegisterTokenValidate();
-        }
-
-        public void loginIdValidate() {
-            if (!Pattern.matches("^[a-zA-Z0-9]{6,20}$", loginId)) {
-                throw new CustomException(Error.BAD_REQUEST);
-            }
         }
 
         public void passwordValidate() {
@@ -60,7 +51,7 @@ public class Request {
 
     @Getter
     public static class LoginRequest {
-        private String loginId;
+        private String email;
         private String password;
     }
 }
