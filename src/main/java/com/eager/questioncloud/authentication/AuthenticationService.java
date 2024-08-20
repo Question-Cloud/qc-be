@@ -15,8 +15,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final SocialAuthenticateProcessor socialAuthenticateProcessor;
 
-    public AuthenticationToken login(String loginId, String password) {
-        User user = authenticationManager.getUserByCredentials(loginId, password);
+    public AuthenticationToken login(String email, String password) {
+        User user = authenticationManager.getUserByCredentials(email, password);
         return new AuthenticationToken(
             authenticationTokenProcessor.generateAccessToken(user.getUid()),
             authenticationTokenProcessor.generateRefreshToken(user.getUid()));

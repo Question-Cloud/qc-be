@@ -13,7 +13,6 @@ public enum Error {
     FAIL_SOCIAL_LOGIN(HttpStatus.UNAUTHORIZED, "소셜 로그인 실패"),
     PENDING_EMAIL_VERIFICATION(HttpStatus.FORBIDDEN, "이메일 인증이 완료되지 않은 계정입니다."),
     NOT_ACTIVE_USER(HttpStatus.FORBIDDEN, "탈퇴 혹은 정지 된 계정입니다."),
-    DUPLICATE_LOGIN_ID(HttpStatus.CONFLICT, "이미 사용중인 아이디입니다."),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다."),
     DUPLICATE_PHONE(HttpStatus.CONFLICT, "이미 사용중인 핸드폰입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "결과가 존재하지 않습니다."),

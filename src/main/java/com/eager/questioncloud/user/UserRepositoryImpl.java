@@ -12,8 +12,8 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public User getUserByLoginId(String loginId) {
-        return userJpaRepository.findByLoginId(loginId)
+    public User getUserByEmail(String email) {
+        return userJpaRepository.findByEmail(email)
             .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
             .toDomain();
     }
@@ -39,11 +39,6 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
         Optional<UserEntity> userEntity = userJpaRepository.findByAccountTypeAndSocialUid(accountType, socialUid);
         return userEntity.map(UserEntity::toDomain);
-    }
-
-    @Override
-    public Boolean checkDuplicateLoginId(String loginId) {
-        return userJpaRepository.existsByLoginId(loginId);
     }
 
     @Override

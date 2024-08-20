@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum AccountType {
-    ID("ID"), KAKAO("KAKAO"), GOOGLE("GOOGLE"), NAVER("NAVER");
+    EMAIL("EMAIL"), KAKAO("KAKAO"), GOOGLE("GOOGLE"), NAVER("NAVER");
 
     private final String value;
 

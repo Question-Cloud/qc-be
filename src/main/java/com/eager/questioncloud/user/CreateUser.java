@@ -7,22 +7,21 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateUser {
-    private String loginId;
+    private String email;
     private String password;
     private String socialRegisterToken;
     private AccountType accountType;
     private String phone;
     private String name;
-    private String email;
+
 
     public static CreateUser toDomain(CreateUserRequest createUserRequest) {
         return new CreateUser(
-            createUserRequest.getLoginId(),
+            createUserRequest.getEmail(),
             createUserRequest.getPassword(),
             createUserRequest.getSocialRegisterToken(),
             createUserRequest.getAccountType(),
             createUserRequest.getPhone(),
-            createUserRequest.getName(),
-            createUserRequest.getEmail());
+            createUserRequest.getName());
     }
 }
