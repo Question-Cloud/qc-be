@@ -19,7 +19,9 @@ public class CreateUserService {
         if (createUser.getAccountType().equals(AccountType.ID)) {
             return userCreator.create(User.create(createUser));
         }
-        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.use(createUser.getSocialRegisterToken());
+        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.use(
+            createUser.getSocialRegisterToken(),
+            createUser.getAccountType());
         return userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
     }
 

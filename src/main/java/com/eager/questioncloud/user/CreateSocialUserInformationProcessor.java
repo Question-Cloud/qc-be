@@ -12,8 +12,8 @@ public class CreateSocialUserInformationProcessor {
         return createSocialUserInformationRepository.append(createSocialUserInformation);
     }
 
-    public CreateSocialUserInformation use(String token) {
-        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationRepository.find(token);
+    public CreateSocialUserInformation use(String token, AccountType accountType) {
+        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationRepository.find(token, accountType);
         createSocialUserInformation.use();
         return createSocialUserInformationRepository.save(createSocialUserInformation);
     }

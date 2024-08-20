@@ -12,8 +12,8 @@ public class CreateSocialUserInformationRepositoryImpl implements CreateSocialUs
 
 
     @Override
-    public CreateSocialUserInformation find(String registerToken) {
-        return createSocialUserInformationJpaRepository.findByRegisterTokenAndIsUsedFalse(registerToken)
+    public CreateSocialUserInformation find(String registerToken, AccountType accountType) {
+        return createSocialUserInformationJpaRepository.findByRegisterTokenAndAccountTypeAndIsUsedFalse(registerToken, accountType)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();
     }
