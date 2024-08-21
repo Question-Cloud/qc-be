@@ -4,6 +4,8 @@ import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionC
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import com.querydsl.core.types.OrderSpecifier;
@@ -68,7 +70,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public QuestionDetail getQuestionDetail(Long questionId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        return jpaQueryFactory.select(
+        QuestionDetail questionDetail = jpaQueryFactory.select(
                 Projections.constructor(
                     QuestionDetail.class,
                     questionEntity.id,
@@ -82,10 +84,17 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     questionEntity.price
                 ))
             .from(questionEntity)
+            .where(questionEntity.id.eq(questionId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
+
+        if (questionDetail == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+        
+        return questionDetail;
     }
 
     @Override
