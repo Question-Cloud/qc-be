@@ -6,4 +6,6 @@ public interface UserQuestionLibraryRepository {
     List<UserQuestionLibrary> append(List<UserQuestionLibrary> userQuestionLibraries);
 
     Boolean checkDuplicate(Long userId, List<Long> questionIds);
+
+    Boolean isOwned(Long userId, Long questionId);
 }
