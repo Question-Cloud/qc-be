@@ -6,10 +6,10 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface QuestionRepository {
-    int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels);
+    int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType type);
 
-    List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionSortType sort,
-        Pageable pageable);
+    List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType,
+        QuestionSortType sort, Pageable pageable);
 
     QuestionDetail getQuestionDetail(Long questionId);
 
