@@ -9,5 +9,6 @@ public class Response {
     @AllArgsConstructor
     public static class QuestionDetailResponse {
         private QuestionDetail question;
+        private Boolean isOwned;
     }
 }

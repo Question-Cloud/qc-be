@@ -1,12 +1,15 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.common.PagingResponse;
+import com.eager.questioncloud.library.UserQuestionLibraryService;
 import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import com.eager.questioncloud.question.Response.QuestionDetailResponse;
+import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
+    private final UserQuestionLibraryService userQuestionLibraryService;
 
     @GetMapping
     public PagingResponse<QuestionFilterItem> getQuestionListByFiltering(
@@ -28,8 +32,9 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public QuestionDetailResponse getQuestionDetail(@PathVariable Long questionId) {
+    public QuestionDetailResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
         QuestionDetail questionDetail = questionService.getQuestionDetail(questionId);
-        return new QuestionDetailResponse(questionDetail);
+        Boolean isOwned = userQuestionLibraryService.isOwned(userPrincipal.getUser().getUid(), questionId);
+        return new QuestionDetailResponse(questionDetail, isOwned);
     }
 }
