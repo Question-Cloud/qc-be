@@ -23,12 +23,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels) {
+    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
-            .where(questionEntity.questionLevel.in(questionLevels), questionCategoryEntity.id.in(questionCategoryIds))
+            .where(
+                questionEntity.questionLevel.in(questionLevels),
+                questionCategoryEntity.id.in(questionCategoryIds),
+                questionEntity.questionType.eq(questionType))
             .fetchFirst();
 
         if (total == null) {
@@ -40,7 +43,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionSortType sort, Pageable pageable) {
+        QuestionType questionType, QuestionSortType sort, Pageable pageable) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
@@ -62,7 +65,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .orderBy(sort(sort), questionEntity.id.desc())
-            .where(questionEntity.questionLevel.in(questionLevels), questionCategoryEntity.id.in(questionCategoryIds))
+            .where(
+                questionEntity.questionLevel.in(questionLevels),
+                questionCategoryEntity.id.in(questionCategoryIds),
+                questionEntity.questionType.eq(questionType))
             .fetch();
     }
 
@@ -93,7 +99,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         if (questionDetail == null) {
             throw new CustomException(Error.NOT_FOUND);
         }
-        
+
         return questionDetail;
     }
 

@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
     private final QuestionReader questionReader;
 
-    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels) {
-        return questionReader.getTotalFiltering(questionCategoryIds, questionLevels);
+    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType) {
+        return questionReader.getTotalFiltering(questionCategoryIds, questionLevels, questionType);
     }
 
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionSortType sort, Pageable pageable) {
-        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels, sort, pageable);
+        QuestionType questionType, QuestionSortType sort, Pageable pageable) {
+        return questionReader.getQuestionListByFiltering(questionCategoryIds, questionLevels, questionType, sort, pageable);
     }
 
     public QuestionDetail getQuestionDetail(Long questionId) {
