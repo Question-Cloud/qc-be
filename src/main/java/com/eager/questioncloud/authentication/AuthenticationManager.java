@@ -39,4 +39,14 @@ public class AuthenticationManager {
             user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
+
+    public void setGuest() {
+        User guest = User.guest();
+        UserPrincipal userPrincipal = new UserPrincipal(guest);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            userPrincipal,
+            guest.getPassword(),
+            guest.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
 }

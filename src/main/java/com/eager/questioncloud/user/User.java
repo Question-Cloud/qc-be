@@ -41,10 +41,22 @@ public class User implements UserDetails {
         this.userStatus = userStatus;
     }
 
+    public static User guest() {
+        return User.builder()
+            .uid(-1L)
+            .email("guest")
+            .password("guest")
+            .build();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        if (uid.equals(-1L)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
         return authorities;
     }
 
