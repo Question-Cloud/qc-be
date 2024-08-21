@@ -42,4 +42,8 @@ public class AuthenticationService {
         } catch (Exception ignored) {
         }
     }
+
+    public void guestAuthentication() {
+        authenticationManager.setGuest();
+    }
 }
