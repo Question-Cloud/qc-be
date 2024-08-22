@@ -15,7 +15,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -43,8 +42,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionType questionType, Long userId, QuestionSortType sort, Pageable pageable) {
+    public List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
@@ -60,19 +58,19 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     questionEntity.price,
                     userQuestionLibraryEntity.id.isNotNull()))
             .from(questionEntity)
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
+            .offset(questionFilter.getPageable().getOffset())
+            .limit(questionFilter.getPageable().getPageSize())
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .leftJoin(userQuestionLibraryEntity)
-            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(userId))
-            .orderBy(sort(sort), questionEntity.id.desc())
+            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
+            .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
             .where(
-                questionEntity.questionLevel.in(questionLevels),
-                questionCategoryEntity.id.in(questionCategoryIds),
-                questionEntity.questionType.eq(questionType))
+                questionEntity.questionLevel.in(questionFilter.getLevels()),
+                questionCategoryEntity.id.in(questionFilter.getCategories()),
+                questionEntity.questionType.eq(questionFilter.getQuestionType()))
             .fetch();
     }
 
