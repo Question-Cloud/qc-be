@@ -16,6 +16,7 @@ public class QuestionDto {
         private String creatorName;
         private QuestionLevel questionLevel;
         private int price;
+        private Boolean isOwned;
     }
 
     @Getter

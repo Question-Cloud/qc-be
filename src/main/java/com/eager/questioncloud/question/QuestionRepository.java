@@ -9,7 +9,7 @@ public interface QuestionRepository {
     int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType type);
 
     List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType,
-        QuestionSortType sort, Pageable pageable);
+        Long userId, QuestionSortType sort, Pageable pageable);
 
     QuestionDetail getQuestionDetail(Long questionId);
 

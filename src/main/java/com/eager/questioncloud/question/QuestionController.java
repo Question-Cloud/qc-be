@@ -25,10 +25,11 @@ public class QuestionController {
 
     @GetMapping
     public PagingResponse<QuestionFilterItem> getQuestionListByFiltering(
-        @RequestParam List<Long> categories, @RequestParam List<QuestionLevel> levels, @RequestParam QuestionType questionType,
-        @RequestParam QuestionSortType sort, Pageable pageable) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam List<Long> categories, @RequestParam List<QuestionLevel> levels,
+        @RequestParam QuestionType questionType, @RequestParam QuestionSortType sort, Pageable pageable) {
         int total = questionService.getTotalFiltering(categories, levels, questionType);
-        List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(categories, levels, questionType, sort, pageable);
+        List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(categories, levels, questionType,
+            userPrincipal.getUser().getUid(), sort, pageable);
         return new PagingResponse<>(total, questionFilterItems);
     }
 

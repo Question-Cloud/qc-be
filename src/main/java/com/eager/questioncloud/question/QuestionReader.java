@@ -17,8 +17,8 @@ public class QuestionReader {
     }
 
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionType questionType, QuestionSortType sort, Pageable pageable) {
-        return questionRepository.getQuestionListByFiltering(questionCategoryIds, questionLevels, questionType, sort, pageable);
+        QuestionType questionType, Long userId, QuestionSortType sort, Pageable pageable) {
+        return questionRepository.getQuestionListByFiltering(questionCategoryIds, questionLevels, questionType, userId, sort, pageable);
     }
 
     public QuestionDetail getQuestionDetail(Long questionId) {

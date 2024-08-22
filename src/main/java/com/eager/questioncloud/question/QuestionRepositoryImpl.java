@@ -1,5 +1,6 @@
 package com.eager.questioncloud.question;
 
+import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
 import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
@@ -43,7 +44,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<QuestionFilterItem> getQuestionListByFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels,
-        QuestionType questionType, QuestionSortType sort, Pageable pageable) {
+        QuestionType questionType, Long userId, QuestionSortType sort, Pageable pageable) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
@@ -56,7 +57,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     questionEntity.thumbnail,
                     userEntity.name,
                     questionEntity.questionLevel,
-                    questionEntity.price))
+                    questionEntity.price,
+                    userQuestionLibraryEntity.id.isNotNull()))
             .from(questionEntity)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -64,6 +66,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
+            .leftJoin(userQuestionLibraryEntity)
+            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(userId))
             .orderBy(sort(sort), questionEntity.id.desc())
             .where(
                 questionEntity.questionLevel.in(questionLevels),
