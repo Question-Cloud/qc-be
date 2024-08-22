@@ -31,5 +31,6 @@ public class QuestionDto {
         private QuestionLevel questionLevel;
         private LocalDateTime createdAt;
         private int price;
+        private Boolean isOwned;
     }
 }

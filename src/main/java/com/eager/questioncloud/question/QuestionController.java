@@ -44,8 +44,7 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public QuestionDetailResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionDetail questionDetail = questionService.getQuestionDetail(questionId);
-        Boolean isOwned = userQuestionLibraryService.isOwned(userPrincipal.getUser().getUid(), questionId);
-        return new QuestionDetailResponse(questionDetail, isOwned);
+        QuestionDetail questionDetail = questionService.getQuestionDetail(questionId, userPrincipal.getUser().getUid());
+        return new QuestionDetailResponse(questionDetail);
     }
 }

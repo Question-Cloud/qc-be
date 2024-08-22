@@ -9,7 +9,7 @@ public interface QuestionRepository {
 
     List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter);
 
-    QuestionDetail getQuestionDetail(Long questionId);
+    QuestionDetail getQuestionDetail(Long questionId, Long userId);
 
     List<Question> getQuestionListInIds(List<Long> questionIds);
 }

@@ -19,7 +19,7 @@ public class QuestionService {
         return questionReader.getQuestionListByFiltering(questionFilter);
     }
 
-    public QuestionDetail getQuestionDetail(Long questionId) {
-        return questionReader.getQuestionDetail(questionId);
+    public QuestionDetail getQuestionDetail(Long questionId, Long userId) {
+        return questionReader.getQuestionDetail(questionId, userId);
     }
 }
