@@ -19,8 +19,8 @@ public class QuestionReader {
         return questionRepository.getQuestionListByFiltering(questionFilter);
     }
 
-    public QuestionDetail getQuestionDetail(Long questionId) {
-        return questionRepository.getQuestionDetail(questionId);
+    public QuestionDetail getQuestionDetail(Long questionId, Long userId) {
+        return questionRepository.getQuestionDetail(questionId, userId);
     }
 
     public List<Question> getQuestions(List<Long> questionIds) {

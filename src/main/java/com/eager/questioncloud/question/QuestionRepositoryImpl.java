@@ -75,7 +75,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public QuestionDetail getQuestionDetail(Long questionId) {
+    public QuestionDetail getQuestionDetail(Long questionId, Long userId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         QuestionDetail questionDetail = jpaQueryFactory.select(
@@ -89,11 +89,13 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     child.title,
                     questionEntity.questionLevel,
                     questionEntity.createdAt,
-                    questionEntity.price
+                    questionEntity.price,
+                    userQuestionLibraryEntity.id.isNotNull()
                 ))
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
+            .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionId), userQuestionLibraryEntity.userId.eq(userId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();

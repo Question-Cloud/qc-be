@@ -1,7 +1,6 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.library.UserQuestionLibraryService;
 import com.eager.questioncloud.question.QuestionCategoryDto.QuestionCategoryListItem;
 import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
-    private final UserQuestionLibraryService userQuestionLibraryService;
     private final QuestionCategoryService questionCategoryService;
 
     @GetMapping
@@ -44,8 +42,7 @@ public class QuestionController {
 
     @GetMapping("/{questionId}")
     public QuestionDetailResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionDetail questionDetail = questionService.getQuestionDetail(questionId);
-        Boolean isOwned = userQuestionLibraryService.isOwned(userPrincipal.getUser().getUid(), questionId);
-        return new QuestionDetailResponse(questionDetail, isOwned);
+        QuestionDetail questionDetail = questionService.getQuestionDetail(questionId, userPrincipal.getUser().getUid());
+        return new QuestionDetailResponse(questionDetail);
     }
 }
