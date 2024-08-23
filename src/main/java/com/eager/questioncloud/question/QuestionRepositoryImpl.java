@@ -3,6 +3,7 @@ package com.eager.questioncloud.question;
 import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
 import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;
@@ -11,6 +12,7 @@ import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,6 +58,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                     userEntity.name,
                     questionEntity.questionLevel,
                     questionEntity.price,
+                    MathExpressions.round(questionReviewEntity.rate.avg(), 1).coalesce(0.0),
                     userQuestionLibraryEntity.id.isNotNull()))
             .from(questionEntity)
             .offset(questionFilter.getPageable().getOffset())
@@ -66,6 +69,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .leftJoin(userQuestionLibraryEntity)
             .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
+            .leftJoin(questionReviewEntity).on(questionReviewEntity.questionId.eq(questionEntity.id))
+            .groupBy(questionEntity.id)
             .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
             .where(
                 questionEntity.questionLevel.in(questionFilter.getLevels()),
@@ -124,7 +129,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 return questionEntity.count.desc();
             }
             case Rate -> {
-                return null;
+                return questionReviewEntity.rate.avg().desc();
             }
             case Latest -> {
                 return questionEntity.createdAt.desc();
