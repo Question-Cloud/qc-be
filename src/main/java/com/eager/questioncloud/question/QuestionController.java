@@ -1,10 +1,8 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.question.QuestionCategoryDto.QuestionCategoryListItem;
 import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
-import com.eager.questioncloud.question.Response.QuestionCategoriesResponse;
 import com.eager.questioncloud.question.Response.QuestionDetailResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
-    private final QuestionCategoryService questionCategoryService;
 
     @GetMapping
     public PagingResponse<QuestionFilterItem> getQuestionListByFiltering(
@@ -32,12 +29,6 @@ public class QuestionController {
         List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(
             new QuestionFilter(userPrincipal.getUser().getUid(), categories, levels, questionType, sort, pageable));
         return new PagingResponse<>(total, questionFilterItems);
-    }
-
-    @GetMapping("/category")
-    public QuestionCategoriesResponse getQuestionCategories() {
-        List<QuestionCategoryListItem> categories = questionCategoryService.getQuestionCategories();
-        return new QuestionCategoriesResponse(categories);
     }
 
     @GetMapping("/{questionId}")
