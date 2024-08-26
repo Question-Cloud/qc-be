@@ -10,6 +10,8 @@ public class UserCouponDto {
     public static class AvailableUserCouponItem {
         private Long id;
         private String title;
+        private CouponType couponType;
+        private int value;
         private LocalDateTime endAt;
     }
 }
