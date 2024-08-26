@@ -48,6 +48,8 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
                     AvailableUserCouponItem.class,
                     userCouponEntity.id,
                     couponEntity.title,
+                    couponEntity.couponType,
+                    couponEntity.value,
                     userCouponEntity.endAt))
             .from(userCouponEntity)
             .leftJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
