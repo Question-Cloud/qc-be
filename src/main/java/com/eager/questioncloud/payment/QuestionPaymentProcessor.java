@@ -2,9 +2,9 @@ package com.eager.questioncloud.payment;
 
 import com.eager.questioncloud.coupon.UserCouponProcessor;
 import com.eager.questioncloud.library.UserQuestionLibraryCreator;
+import com.eager.questioncloud.point.UserPointManager;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
-import com.eager.questioncloud.user.UserPointManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
