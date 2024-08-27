@@ -42,6 +42,9 @@ public class UserEntity {
     private String name;
 
     @Column
+    private String profileImage;
+
+    @Column
     private int point;
 
     @Column
@@ -53,8 +56,8 @@ public class UserEntity {
     private UserStatus userStatus;
 
     @Builder
-    public UserEntity(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name, int point,
-        UserType userType, UserStatus userStatus) {
+    public UserEntity(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name,
+        String profileImage, int point, UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.email = email;
         this.password = password;
@@ -62,6 +65,7 @@ public class UserEntity {
         this.accountType = accountType;
         this.phone = phone;
         this.name = name;
+        this.profileImage = profileImage;
         this.point = point;
         this.userType = userType;
         this.userStatus = userStatus;
@@ -76,6 +80,7 @@ public class UserEntity {
             .accountType(accountType)
             .phone(phone)
             .name(name)
+            .profileImage(profileImage)
             .point(point)
             .userType(userType)
             .userStatus(userStatus)
