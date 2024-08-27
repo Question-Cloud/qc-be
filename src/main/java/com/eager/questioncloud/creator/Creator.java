@@ -19,6 +19,14 @@ public class Creator {
         this.introduction = introduction;
     }
 
+    public static Creator create(Long userId, Subject mainSubject, String introduction) {
+        return Creator.builder()
+            .userId(userId)
+            .mainSubject(mainSubject)
+            .introduction(introduction)
+            .build();
+    }
+
     public CreatorEntity toEntity() {
         return CreatorEntity.builder()
             .id(id)
