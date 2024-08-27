@@ -5,6 +5,7 @@ import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 
@@ -33,5 +34,15 @@ public class PortoneAPI {
         }
 
         return portonePayment;
+    }
+
+    public void cancel(String paymentId) {
+        WebClient webClient = WebClient.create("https://api.portone.io");
+        webClient.post()
+            .uri("/payments/%s/cancel".formatted(paymentId))
+            .headers(headers -> headers.set("Authorization", "Portone %s".formatted(PORT_ONE_SECRET_KEY)))
+            .body(BodyInserters.fromValue(new PortoneCancelRequest("Invalid Payment")))
+            .exchangeToMono(response -> response.bodyToMono(Void.class))
+            .subscribe();
     }
 }
