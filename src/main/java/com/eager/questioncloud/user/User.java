@@ -22,13 +22,14 @@ public class User implements UserDetails {
     private AccountType accountType;
     private String phone;
     private String name;
+    private String profileImage;
     private int point;
     private UserType userType;
     private UserStatus userStatus;
 
     @Builder
-    public User(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name, int point,
-        UserType userType, UserStatus userStatus) {
+    public User(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name, String profileImage,
+        int point, UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.email = email;
         this.password = password;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
         this.accountType = accountType;
         this.phone = phone;
         this.name = name;
+        this.profileImage = profileImage;
         this.point = point;
         this.userType = userType;
         this.userStatus = userStatus;
@@ -145,6 +147,7 @@ public class User implements UserDetails {
             .accountType(accountType)
             .phone(phone)
             .name(name)
+            .profileImage(profileImage)
             .point(point)
             .userType(userType)
             .userStatus(userStatus)
