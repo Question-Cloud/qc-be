@@ -18,9 +18,4 @@ public class UserPointManager {
         }
         userPointUpdater.updateUserPoint(userId, userPoint - amount);
     }
-
-    public void chargePoint(Long userId, int amount) {
-        int userPoint = userPointReader.getUserPoint(userId);
-        userPointUpdater.updateUserPoint(userId, userPoint + amount);
-    }
 }

@@ -1,5 +1,6 @@
 package com.eager.questioncloud.point;
 
+import com.eager.questioncloud.portone.PortonePayment;
 import com.eager.questioncloud.portone.PortonePaymentStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
@@ -26,6 +27,18 @@ public class UserPointPayment {
         this.amount = amount;
         this.receiptUrl = receiptUrl;
         this.createdAt = createdAt;
+    }
+
+    public static UserPointPayment create(Long userId, ChargePointType chargePointType, PortonePayment portonePayment) {
+        return UserPointPayment.builder()
+            .paymentId(portonePayment.getId())
+            .userId(userId)
+            .status(portonePayment.getStatus())
+            .chargePointType(chargePointType)
+            .amount(portonePayment.getAmount().getTotal())
+            .receiptUrl(portonePayment.getReceiptUrl())
+            .createdAt(LocalDateTime.now())
+            .build();
     }
 
     public UserPointPaymentEntity toEntity() {
