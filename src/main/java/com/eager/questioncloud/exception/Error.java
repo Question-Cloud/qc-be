@@ -25,8 +25,7 @@ public enum Error {
     WRONG_COUPON(HttpStatus.BAD_REQUEST, "잘못된 쿠폰 사용입니다."),
     PAYMENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "결제 요청 실패"),
     ALREADY_PROCESSED_PAYMENT(HttpStatus.CONFLICT, "이미 처리된 결제입니다."),
-    NOT_PROCESS_PAYMENT(HttpStatus.BAD_REQUEST, "완료된 결제가 아닙니다."),
-    ALREADY_REGISTER_CREATOR(HttpStatus.CONFLICT, "이미 크리에이터입니다.");
+    NOT_PROCESS_PAYMENT(HttpStatus.BAD_REQUEST, "완료된 결제가 아닙니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
