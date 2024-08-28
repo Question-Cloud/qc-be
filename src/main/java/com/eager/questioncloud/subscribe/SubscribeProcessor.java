@@ -1,6 +1,6 @@
 package com.eager.questioncloud.subscribe;
 
-import com.eager.questioncloud.creator.CreatorRepository;
+import com.eager.questioncloud.creator.CreatorReader;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 public class SubscribeProcessor {
     private final SubscribeReader subscribeReader;
     private final SubscribeCreator subscribeCreator;
-    private final CreatorRepository creatorRepository;
+    private final CreatorReader creatorReader;
 
     public Subscribe subscribe(Long userId, Long creatorId) {
-        if (!creatorRepository.existsById(creatorId)) {
+        if (!creatorReader.isExistsCreator(creatorId)) {
             throw new CustomException(Error.NOT_FOUND);
         }
 

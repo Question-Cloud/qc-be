@@ -12,4 +12,8 @@ public class CreatorReader {
     public CreatorInformation getCreatorInformation(Long creatorId) {
         return creatorRepository.getCreatorInformation(creatorId);
     }
+
+    public Boolean isExistsCreator(Long creatorId) {
+        return creatorRepository.existsById(creatorId);
+    }
 }
