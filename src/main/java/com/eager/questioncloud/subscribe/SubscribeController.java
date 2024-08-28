@@ -2,9 +2,11 @@ package com.eager.questioncloud.subscribe;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import com.eager.questioncloud.subscribe.Response.IsSubscribedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscribeService subscribeService;
+
+    @GetMapping("/{creatorId}")
+    public IsSubscribedResponse isSubscribed(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long creatorId) {
+        Boolean isSubscribed = subscribeService.isSubscribed(userPrincipal.getUser().getUid(), creatorId);
+        return new IsSubscribedResponse(isSubscribed);
+    }
 
     @PostMapping("/{creatorId}")
     public DefaultResponse subscribe(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long creatorId) {

@@ -18,7 +18,7 @@ public class SubscribeProcessor {
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        if (subscribeRepository.checkAlreadySubscribe(userId, creatorId)) {
+        if (subscribeRepository.isSubscribed(userId, creatorId)) {
             throw new CustomException(Error.ALREADY_SUBSCRIBE_CREATOR);
         }
 

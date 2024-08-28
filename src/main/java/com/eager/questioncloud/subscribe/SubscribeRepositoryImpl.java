@@ -14,7 +14,7 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     }
 
     @Override
-    public Boolean checkAlreadySubscribe(Long subscriberId, Long creatorId) {
+    public Boolean isSubscribed(Long subscriberId, Long creatorId) {
         return subscribeJpaRepository.existsBySubscriberIdAndCreatorId(subscriberId, creatorId);
     }
 
