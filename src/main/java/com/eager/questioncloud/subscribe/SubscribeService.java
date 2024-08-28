@@ -11,4 +11,8 @@ public class SubscribeService {
     public Subscribe subscribe(Long userId, Long creatorId) {
         return subscribeProcessor.subscribe(userId, creatorId);
     }
+
+    public void unSubscribe(Long userId, Long creatorId) {
+        subscribeProcessor.unSubscribe(userId, creatorId);
+    }
 }

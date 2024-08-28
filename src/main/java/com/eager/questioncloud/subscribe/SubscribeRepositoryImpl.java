@@ -17,4 +17,9 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     public Boolean checkAlreadySubscribe(Long subscriberId, Long creatorId) {
         return subscribeJpaRepository.existsBySubscriberIdAndCreatorId(subscriberId, creatorId);
     }
+
+    @Override
+    public void unSubscribe(Long subscriberId, Long creatorId) {
+        subscribeJpaRepository.deleteBySubscriberIdAndCreatorId(subscriberId, creatorId);
+    }
 }

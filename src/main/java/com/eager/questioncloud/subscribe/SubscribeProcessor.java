@@ -3,6 +3,7 @@ package com.eager.questioncloud.subscribe;
 import com.eager.questioncloud.creator.CreatorRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,12 @@ public class SubscribeProcessor {
         if (subscribeRepository.checkAlreadySubscribe(userId, creatorId)) {
             throw new CustomException(Error.ALREADY_SUBSCRIBE_CREATOR);
         }
-        
+
         return subscribeRepository.append(Subscribe.create(userId, creatorId));
+    }
+
+    @Transactional
+    public void unSubscribe(Long userId, Long creatorId) {
+        subscribeRepository.unSubscribe(userId, creatorId);
     }
 }
