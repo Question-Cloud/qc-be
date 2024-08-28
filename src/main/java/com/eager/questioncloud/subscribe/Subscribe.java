@@ -19,6 +19,14 @@ public class Subscribe {
         this.createdAt = createdAt;
     }
 
+    public static Subscribe create(Long subscriberId, Long creatorId) {
+        return Subscribe.builder()
+            .subscriberId(subscriberId)
+            .creatorId(creatorId)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
     public SubscribeEntity toEntity() {
         return SubscribeEntity.builder()
             .id(id)

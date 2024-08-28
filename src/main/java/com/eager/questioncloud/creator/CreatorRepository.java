@@ -7,5 +7,7 @@ public interface CreatorRepository {
 
     Boolean existsByUserId(Long userId);
 
+    Boolean existsById(Long creatorId);
+
     CreatorInformation getCreatorInformation(Long creatorId);
 }
