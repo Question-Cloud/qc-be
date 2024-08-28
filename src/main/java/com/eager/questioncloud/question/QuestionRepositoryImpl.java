@@ -33,7 +33,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .where(
                 questionLevelFilter(questionFilter.getLevels()),
                 questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()))
+                questionTypeFilter(questionFilter.getQuestionType()),
+                questionCreatorFilter(questionFilter.getCreatorId()))
             .fetchFirst();
 
         if (total == null) {
@@ -76,7 +77,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .where(
                 questionLevelFilter(questionFilter.getLevels()),
                 questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()))
+                questionTypeFilter(questionFilter.getQuestionType()),
+                questionCreatorFilter(questionFilter.getCreatorId()))
             .fetch();
     }
 
@@ -163,5 +165,12 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             return null;
         }
         return questionEntity.questionType.eq(questionType);
+    }
+
+    private BooleanExpression questionCreatorFilter(Long creatorId) {
+        if (creatorId == null) {
+            return null;
+        }
+        return questionEntity.creatorId.eq(creatorId);
     }
 }
