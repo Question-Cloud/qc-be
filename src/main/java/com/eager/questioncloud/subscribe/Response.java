@@ -6,7 +6,8 @@ import lombok.Getter;
 public class Response {
     @Getter
     @AllArgsConstructor
-    public static class IsSubscribedResponse {
+    public static class CreatorSubscribeInformationResponse {
         private Boolean isSubscribed;
+        private int count;
     }
 }

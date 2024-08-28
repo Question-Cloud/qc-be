@@ -11,4 +11,8 @@ public class SubscribeReader {
     public Boolean isSubscribed(Long userId, Long creatorId) {
         return subscribeRepository.isSubscribed(userId, creatorId);
     }
+
+    public int countSubscriber(Long creatorId) {
+        return subscribeRepository.countSubscriber(creatorId);
+    }
 }

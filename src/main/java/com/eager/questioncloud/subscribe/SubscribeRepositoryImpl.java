@@ -22,4 +22,9 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     public void unSubscribe(Long subscriberId, Long creatorId) {
         subscribeJpaRepository.deleteBySubscriberIdAndCreatorId(subscriberId, creatorId);
     }
+
+    @Override
+    public int countSubscriber(Long creatorId) {
+        return subscribeJpaRepository.countByCreatorId(creatorId);
+    }
 }

@@ -6,4 +6,6 @@ public interface SubscribeRepository {
     Boolean isSubscribed(Long subscriberId, Long creatorId);
 
     void unSubscribe(Long subscriberId, Long creatorId);
+
+    int countSubscriber(Long creatorId);
 }

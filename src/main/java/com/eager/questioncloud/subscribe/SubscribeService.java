@@ -20,4 +20,8 @@ public class SubscribeService {
     public Boolean isSubscribed(Long userId, Long creatorId) {
         return subscribeReader.isSubscribed(userId, creatorId);
     }
+
+    public int countSubscriber(Long creatorId) {
+        return subscribeReader.countSubscriber(creatorId);
+    }
 }

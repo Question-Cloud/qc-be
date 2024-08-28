@@ -6,4 +6,6 @@ public interface SubscribeJpaRepository extends JpaRepository<SubscribeEntity, L
     Boolean existsBySubscriberIdAndCreatorId(Long subscriberId, Long creatorId);
 
     void deleteBySubscriberIdAndCreatorId(Long subscriberId, Long creatorId);
+
+    int countByCreatorId(Long creatorId);
 }
