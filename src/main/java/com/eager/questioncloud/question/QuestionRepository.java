@@ -5,7 +5,7 @@ import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import java.util.List;
 
 public interface QuestionRepository {
-    int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType type);
+    int getTotalFiltering(QuestionFilter questionFilter);
 
     List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter);
 

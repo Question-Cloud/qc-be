@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
     private final QuestionReader questionReader;
 
-    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType) {
-        return questionReader.getTotalFiltering(questionCategoryIds, questionLevels, questionType);
+    public int getTotalFiltering(QuestionFilter questionFilter) {
+        return questionReader.getTotalFiltering(questionFilter);
     }
 
     public List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter) {

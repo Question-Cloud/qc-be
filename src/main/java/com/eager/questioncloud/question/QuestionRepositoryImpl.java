@@ -1,5 +1,6 @@
 package com.eager.questioncloud.question;
 
+import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
 import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
@@ -12,6 +13,7 @@ import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
 import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -25,15 +27,14 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType) {
+    public int getTotalFiltering(QuestionFilter questionFilter) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
-            .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
-            .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .where(
-                questionEntity.questionLevel.in(questionLevels),
-                questionCategoryEntity.id.in(questionCategoryIds),
-                questionEntity.questionType.eq(questionType))
+                questionLevelFilter(questionFilter.getLevels()),
+                questionCategoryFilter(questionFilter.getCategories()),
+                questionTypeFilter(questionFilter.getQuestionType()),
+                questionCreatorFilter(questionFilter.getCreatorId()))
             .fetchFirst();
 
         if (total == null) {
@@ -65,7 +66,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .limit(questionFilter.getPageable().getPageSize())
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .leftJoin(userQuestionLibraryEntity)
             .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
@@ -73,9 +75,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .groupBy(questionEntity.id)
             .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
             .where(
-                questionEntity.questionLevel.in(questionFilter.getLevels()),
-                questionCategoryEntity.id.in(questionFilter.getCategories()),
-                questionEntity.questionType.eq(questionFilter.getQuestionType()))
+                questionLevelFilter(questionFilter.getLevels()),
+                questionCategoryFilter(questionFilter.getCategories()),
+                questionTypeFilter(questionFilter.getQuestionType()),
+                questionCreatorFilter(questionFilter.getCreatorId()))
             .fetch();
     }
 
@@ -141,5 +144,33 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 return null;
             }
         }
+    }
+
+    private BooleanExpression questionLevelFilter(List<QuestionLevel> levels) {
+        if (levels == null || levels.isEmpty()) {
+            return null;
+        }
+        return questionEntity.questionLevel.in(levels);
+    }
+
+    private BooleanExpression questionCategoryFilter(List<Long> categories) {
+        if (categories == null || categories.isEmpty()) {
+            return null;
+        }
+        return questionEntity.questionCategoryId.in(categories);
+    }
+
+    private BooleanExpression questionTypeFilter(QuestionType questionType) {
+        if (questionType == null) {
+            return null;
+        }
+        return questionEntity.questionType.eq(questionType);
+    }
+
+    private BooleanExpression questionCreatorFilter(Long creatorId) {
+        if (creatorId == null) {
+            return null;
+        }
+        return questionEntity.creatorId.eq(creatorId);
     }
 }
