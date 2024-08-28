@@ -32,6 +32,11 @@ public class CreatorRepositoryImpl implements CreatorRepository {
     }
 
     @Override
+    public Boolean existsById(Long creatorId) {
+        return creatorJpaRepository.existsById(creatorId);
+    }
+
+    @Override
     public CreatorInformation getCreatorInformation(Long creatorId) {
         Integer salesCount = getCreatorSalesCount(creatorId);
         Double rate = getCreatorRate(creatorId);
@@ -52,7 +57,7 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             throw new CustomException(Error.NOT_FOUND);
 
         }
-        
+
         return CreatorInformation.builder()
             .creatorId(result.get(creatorEntity.id))
             .name(result.get(userEntity.name))
