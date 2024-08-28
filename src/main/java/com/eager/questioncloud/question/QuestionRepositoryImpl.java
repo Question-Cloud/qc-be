@@ -1,5 +1,6 @@
 package com.eager.questioncloud.question;
 
+import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
 import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
@@ -29,8 +30,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public int getTotalFiltering(QuestionFilter questionFilter) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
-            .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
-            .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .where(
                 questionLevelFilter(questionFilter.getLevels()),
                 questionCategoryFilter(questionFilter.getCategories()),
@@ -66,7 +65,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .limit(questionFilter.getPageable().getPageSize())
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .leftJoin(userQuestionLibraryEntity)
             .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
@@ -155,7 +155,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         if (categories == null || categories.isEmpty()) {
             return null;
         }
-        return questionCategoryEntity.id.in(categories);
+        return questionEntity.questionCategoryId.in(categories);
     }
 
     private BooleanExpression questionTypeFilter(QuestionType questionType) {
