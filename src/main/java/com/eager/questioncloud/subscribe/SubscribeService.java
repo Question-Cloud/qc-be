@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 public class SubscribeService {
     private final SubscribeProcessor subscribeProcessor;
     private final SubscribeReader subscribeReader;
+    private final SubscribeRemover subscribeRemover;
 
     public Subscribe subscribe(Long userId, Long creatorId) {
         return subscribeProcessor.subscribe(userId, creatorId);
     }
 
     public void unSubscribe(Long userId, Long creatorId) {
-        subscribeProcessor.unSubscribe(userId, creatorId);
+        subscribeRemover.unSubscribe(userId, creatorId);
     }
 
     public Boolean isSubscribed(Long userId, Long creatorId) {
