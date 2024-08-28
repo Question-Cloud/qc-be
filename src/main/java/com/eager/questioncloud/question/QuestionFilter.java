@@ -12,6 +12,7 @@ public class QuestionFilter {
     private List<Long> categories;
     private List<QuestionLevel> levels;
     private QuestionType questionType;
+    private Long creatorId;
     private QuestionSortType sort;
     private Pageable pageable;
 }

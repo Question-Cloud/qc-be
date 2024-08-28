@@ -25,15 +25,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public int getTotalFiltering(List<Long> questionCategoryIds, List<QuestionLevel> questionLevels, QuestionType questionType) {
+    public int getTotalFiltering(QuestionFilter questionFilter) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .innerJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
             .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
             .where(
-                questionEntity.questionLevel.in(questionLevels),
-                questionCategoryEntity.id.in(questionCategoryIds),
-                questionEntity.questionType.eq(questionType))
+                questionEntity.questionLevel.in(questionFilter.getLevels()),
+                questionCategoryEntity.id.in(questionFilter.getCategories()),
+                questionEntity.questionType.eq(questionFilter.getQuestionType()))
             .fetchFirst();
 
         if (total == null) {
