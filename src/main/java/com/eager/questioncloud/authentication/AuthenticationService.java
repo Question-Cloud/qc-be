@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationProcessor authenticationProcessor;
     private final SocialAuthenticateProcessor socialAuthenticateProcessor;
 
     public AuthenticationToken login(String email, String password) {
-        User user = authenticationManager.getUserByCredentials(email, password);
+        User user = authenticationProcessor.getUserByCredentials(email, password);
         return new AuthenticationToken(
             authenticationTokenProcessor.generateAccessToken(user.getUid()),
             authenticationTokenProcessor.generateRefreshToken(user.getUid()));
@@ -38,12 +38,12 @@ public class AuthenticationService {
         try {
             Claims claims = authenticationTokenProcessor.getAccessTokenClaimsWithValidate(token);
             Long uid = claims.get("uid", Long.class);
-            authenticationManager.authentication(uid);
+            authenticationProcessor.authentication(uid);
         } catch (Exception ignored) {
         }
     }
 
     public void guestAuthentication() {
-        authenticationManager.setGuest();
+        authenticationProcessor.setGuest();
     }
 }

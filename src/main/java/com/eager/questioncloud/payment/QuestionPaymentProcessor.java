@@ -1,8 +1,8 @@
 package com.eager.questioncloud.payment;
 
 import com.eager.questioncloud.coupon.UserCouponProcessor;
-import com.eager.questioncloud.library.UserQuestionLibraryCreator;
-import com.eager.questioncloud.point.UserPointManager;
+import com.eager.questioncloud.library.UserQuestionLibraryAppender;
+import com.eager.questioncloud.point.UserPointProcessor;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
 import jakarta.transaction.Transactional;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionPaymentProcessor {
     private final QuestionReader questionReader;
-    private final QuestionPaymentCreator questionPaymentCreator;
-    private final QuestionPaymentOrderCreator questionPaymentOrderCreator;
-    private final UserPointManager userPointManager;
-    private final UserQuestionLibraryCreator userQuestionLibraryCreator;
+    private final QuestionPaymentAppender questionPaymentAppender;
+    private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
+    private final UserPointProcessor userPointProcessor;
+    private final UserQuestionLibraryAppender userQuestionLibraryAppender;
     private final UserCouponProcessor userCouponProcessor;
 
     @Transactional
@@ -25,12 +25,12 @@ public class QuestionPaymentProcessor {
         int originalAmount = getOriginalAmount(questionIds);
         int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
-        userPointManager.usePoint(userId, finalAmount);
+        userPointProcessor.usePoint(userId, finalAmount);
 
-        QuestionPayment questionPayment = questionPaymentCreator.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
-        questionPaymentOrderCreator.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
+        QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
+        questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
 
-        userQuestionLibraryCreator.appendUserQuestion(userId, questionIds);
+        userQuestionLibraryAppender.appendUserQuestion(userId, questionIds);
         return questionPayment;
     }
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointManager {
+public class UserPointProcessor {
     private final UserPointReader userPointReader;
     private final UserPointUpdater userPointUpdater;
 

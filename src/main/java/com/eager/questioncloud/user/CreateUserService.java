@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CreateUserService {
-    private final UserCreator userCreator;
+    private final UserAppender userAppender;
     private final UserUpdater userUpdater;
     private final UserReader userReader;
     private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
@@ -17,12 +17,12 @@ public class CreateUserService {
 
     public User create(CreateUser createUser) {
         if (createUser.getAccountType().equals(AccountType.EMAIL)) {
-            return userCreator.create(User.create(createUser));
+            return userAppender.create(User.create(createUser));
         }
         CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.use(
             createUser.getSocialRegisterToken(),
             createUser.getAccountType());
-        return userCreator.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
+        return userAppender.create(User.create(createUser, createSocialUserInformation.getSocialUid()));
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {

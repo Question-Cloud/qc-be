@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AuthenticationManager {
+public class AuthenticationProcessor {
     private final UserRepository userRepository;
 
     public User getUserByCredentials(String email, String password) {

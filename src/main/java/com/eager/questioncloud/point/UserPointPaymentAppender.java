@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointPaymentCreator {
+public class UserPointPaymentAppender {
     private final UserPointPaymentRepository userPointPaymentRepository;
 
     public UserPointPayment append(UserPointPayment userPointPayment) {
