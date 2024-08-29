@@ -1,9 +1,9 @@
 package com.eager.questioncloud.authentication;
 
 public interface RefreshTokenRepository {
-    String get(Long uid);
+    String getByUserId(Long uid);
 
     void delete(String uid);
 
-    void save(String token, Long uid);
+    void append(String token, Long uid);
 }

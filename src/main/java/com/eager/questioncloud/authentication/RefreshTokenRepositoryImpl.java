@@ -12,7 +12,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     public static final String REFRESH_TOKEN_KEY_PREFIX = "REFRESH-TOKEN-UID:";
 
     @Override
-    public String get(Long uid) {
+    public String getByUserId(Long uid) {
         return redisTemplate.opsForValue().get(REFRESH_TOKEN_KEY_PREFIX + uid);
     }
 
@@ -22,7 +22,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public void save(String token, Long uid) {
+    public void append(String token, Long uid) {
         redisTemplate.opsForValue().set(REFRESH_TOKEN_KEY_PREFIX + uid, token, Duration.ofHours(24));
     }
 }
