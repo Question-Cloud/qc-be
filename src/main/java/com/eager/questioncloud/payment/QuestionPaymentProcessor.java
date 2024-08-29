@@ -2,7 +2,7 @@ package com.eager.questioncloud.payment;
 
 import com.eager.questioncloud.coupon.UserCouponProcessor;
 import com.eager.questioncloud.library.UserQuestionLibraryAppender;
-import com.eager.questioncloud.point.UserPointManager;
+import com.eager.questioncloud.point.UserPointProcessor;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionReader;
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ public class QuestionPaymentProcessor {
     private final QuestionReader questionReader;
     private final QuestionPaymentAppender questionPaymentAppender;
     private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
-    private final UserPointManager userPointManager;
+    private final UserPointProcessor userPointProcessor;
     private final UserQuestionLibraryAppender userQuestionLibraryAppender;
     private final UserCouponProcessor userCouponProcessor;
 
@@ -25,7 +25,7 @@ public class QuestionPaymentProcessor {
         int originalAmount = getOriginalAmount(questionIds);
         int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
-        userPointManager.usePoint(userId, finalAmount);
+        userPointProcessor.usePoint(userId, finalAmount);
 
         QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
         questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));

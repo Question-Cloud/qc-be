@@ -1,6 +1,6 @@
 package com.eager.questioncloud.social;
 
-import com.eager.questioncloud.authentication.AuthenticationManager;
+import com.eager.questioncloud.authentication.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.AuthenticationToken;
 import com.eager.questioncloud.authentication.AuthenticationTokenProcessor;
 import com.eager.questioncloud.exception.CustomException;
@@ -20,7 +20,7 @@ public class SocialAuthenticateProcessor {
     private final KakaoAPI kakaoProcessor;
     private final GoogleAPI googleProcessor;
     private final NaverAPI naverProcessor;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationProcessor authenticationProcessor;
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
 
@@ -46,7 +46,7 @@ public class SocialAuthenticateProcessor {
 
     public SocialAuthenticateResponse socialLogin(AccountType accountType, String code) {
         String socialUid = getSocialUid(accountType, code);
-        Optional<User> socialUser = authenticationManager.getUserBySocialUid(accountType, socialUid);
+        Optional<User> socialUser = authenticationProcessor.getUserBySocialUid(accountType, socialUid);
         if (socialUser.isPresent()) {
             socialUser.get().checkUserStatus();
             return SocialAuthenticateResponse.login(new AuthenticationToken(
