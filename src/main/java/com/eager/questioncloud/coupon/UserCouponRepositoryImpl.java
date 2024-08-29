@@ -32,7 +32,7 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
-    public Boolean checkDuplicate(Long userId, Long couponId) {
+    public Boolean isRegistered(Long userId, Long couponId) {
         return userCouponJpaRepository.existsByUserIdAndCouponId(userId, couponId);
     }
 

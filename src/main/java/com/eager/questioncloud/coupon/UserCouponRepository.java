@@ -8,7 +8,7 @@ public interface UserCouponRepository {
 
     UserCoupon getUserCoupon(Long userCouponId, Long userId);
 
-    Boolean checkDuplicate(Long userId, Long couponId);
+    Boolean isRegistered(Long userId, Long couponId);
 
     UserCoupon save(UserCoupon userCoupon);
 
