@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SubscribeProcessor {
     private final SubscribeReader subscribeReader;
-    private final SubscribeCreator subscribeCreator;
+    private final SubscribeAppender subscribeAppender;
     private final CreatorReader creatorReader;
 
     public Subscribe subscribe(Long userId, Long creatorId) {
@@ -22,6 +22,6 @@ public class SubscribeProcessor {
             throw new CustomException(Error.ALREADY_SUBSCRIBE_CREATOR);
         }
 
-        return subscribeCreator.append(Subscribe.create(userId, creatorId));
+        return subscribeAppender.append(Subscribe.create(userId, creatorId));
     }
 }

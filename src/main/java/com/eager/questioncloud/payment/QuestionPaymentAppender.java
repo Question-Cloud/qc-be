@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionPaymentCreator {
+public class QuestionPaymentAppender {
     private final QuestionPaymentRepository questionPaymentRepository;
 
     public QuestionPayment createQuestionPayment(QuestionPayment questionPayment) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserCouponCreator {
+public class UserCouponAppender {
     private final UserCouponRepository userCouponRepository;
     private final CouponReader couponReader;
     private final CouponUpdater couponUpdater;

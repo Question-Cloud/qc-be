@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SubscribeCreator {
+public class SubscribeAppender {
     private final SubscribeRepository subscribeRepository;
 
     public Subscribe append(Subscribe subscribe) {

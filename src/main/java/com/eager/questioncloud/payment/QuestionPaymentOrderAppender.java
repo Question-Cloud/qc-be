@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionPaymentOrderCreator {
+public class QuestionPaymentOrderAppender {
     private final QuestionPaymentOrderRepository questionPaymentOrderRepository;
 
     List<QuestionPaymentOrder> createQuestionPaymentOrders(List<QuestionPaymentOrder> orders) {

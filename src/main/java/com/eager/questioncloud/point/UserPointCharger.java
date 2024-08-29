@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserPointCharger {
     private final UserPointPaymentReader userPointPaymentReader;
-    private final UserPointPaymentCreator userPointPaymentCreator;
+    private final UserPointPaymentAppender userPointPaymentAppender;
     private final UserPointReader userPointReader;
     private final UserPointUpdater userPointUpdater;
     private final PortoneAPI portoneAPI;
@@ -27,7 +27,7 @@ public class UserPointCharger {
         int userPoint = userPointReader.getUserPoint(userId);
         userPointUpdater.updateUserPoint(userId, userPoint + chargePointType.getAmount());
 
-        userPointPaymentCreator.append(UserPointPayment.create(userId, chargePointType, portonePayment));
+        userPointPaymentAppender.append(UserPointPayment.create(userId, chargePointType, portonePayment));
     }
 
     private void validatePayment(PortonePayment portonePayment, ChargePointType chargePointType) {
@@ -38,7 +38,7 @@ public class UserPointCharger {
         if (!portonePayment.getStatus().equals(PortonePaymentStatus.PAID)) {
             throw new CustomException(Error.NOT_PROCESS_PAYMENT);
         }
-        
+
         if (portonePayment.getAmount().getTotal() != chargePointType.getAmount()) {
             throw new InvalidPaymentException(portonePayment);
         }
