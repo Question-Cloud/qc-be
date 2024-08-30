@@ -3,11 +3,11 @@ package com.eager.questioncloud.mail;
 public interface EmailVerificationRepository {
     EmailVerification append(EmailVerification emailVerification);
 
-    EmailVerification find(String token, EmailVerificationType emailVerificationType);
+    EmailVerification get(String token, EmailVerificationType emailVerificationType);
 
-    EmailVerificationWithUser findForResend(String resendToken);
+    EmailVerification getForNotVerifiedUser(Long userId);
 
-    EmailVerification findForException(Long uid);
+    EmailVerificationWithUser getForResend(String resendToken);
 
     EmailVerification save(EmailVerification emailVerification);
 }
