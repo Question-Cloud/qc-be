@@ -27,10 +27,6 @@ public class CreateUserEmailVerificationProcessor {
         return emailVerification;
     }
 
-    public EmailVerification getForNotVerifiedUser(Long uid) {
-        return emailVerificationReader.getForNotVerifiedUser(uid);
-    }
-
     public void resendVerificationMail(String resendToken) {
         EmailVerificationWithUser emailVerificationWithUser = emailVerificationReader.getForResend(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
