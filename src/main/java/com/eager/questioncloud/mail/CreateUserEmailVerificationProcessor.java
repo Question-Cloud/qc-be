@@ -27,7 +27,7 @@ public class CreateUserEmailVerificationProcessor {
         return emailVerification;
     }
 
-    public EmailVerification getForException(Long uid) {
+    public EmailVerification getForNotVerifiedUser(Long uid) {
         return emailVerificationReader.getForNotVerifiedUser(uid);
     }
 
