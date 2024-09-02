@@ -17,4 +17,8 @@ public class UserCouponReader {
     public UserCoupon getUserCoupon(Long userCouponId, Long userId) {
         return userCouponRepository.getUserCoupon(userCouponId, userId);
     }
+
+    public Boolean isRegistered(Long userId, Long couponId) {
+        return userCouponRepository.isRegistered(userId, couponId);
+    }
 }

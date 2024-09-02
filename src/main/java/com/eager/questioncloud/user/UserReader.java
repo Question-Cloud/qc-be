@@ -16,4 +16,8 @@ public class UserReader {
     public User getUser(Long uid) {
         return userRepository.getUser(uid);
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
 }

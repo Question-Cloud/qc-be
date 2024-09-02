@@ -7,11 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CreateUserEmailVerificationProcessor {
-    private final EmailVerificationRepository emailVerificationRepository;
+    private final EmailVerificationAppender emailVerificationAppender;
+    private final EmailVerificationReader emailVerificationReader;
+    private final EmailVerificationUpdater emailVerificationUpdater;
     private final GoogleMailSender googleMailSender;
 
     public EmailVerification sendVerificationMail(User user) {
-        EmailVerification emailVerification = emailVerificationRepository.append(
+        EmailVerification emailVerification = emailVerificationAppender.append(
             EmailVerification.create(
                 user.getUid(),
                 EmailVerificationType.CreateUser)
@@ -25,12 +27,8 @@ public class CreateUserEmailVerificationProcessor {
         return emailVerification;
     }
 
-    public EmailVerification getForException(Long uid) {
-        return emailVerificationRepository.findForException(uid);
-    }
-
     public void resendVerificationMail(String resendToken) {
-        EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.findForResend(resendToken);
+        EmailVerificationWithUser emailVerificationWithUser = emailVerificationReader.getForResend(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
         User user = emailVerificationWithUser.getUser();
         googleMailSender.sendMail(
@@ -43,9 +41,8 @@ public class CreateUserEmailVerificationProcessor {
     }
 
     public EmailVerification verify(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationRepository.find(token, emailVerificationType);
-        emailVerification.verify();
-        emailVerificationRepository.save(emailVerification);
+        EmailVerification emailVerification = emailVerificationReader.get(token, emailVerificationType);
+        emailVerificationUpdater.verify(emailVerification);
         return emailVerification;
     }
 }

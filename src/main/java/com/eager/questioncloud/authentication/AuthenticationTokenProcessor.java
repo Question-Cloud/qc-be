@@ -15,15 +15,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationTokenProcessor {
     private final Key secretKey;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenAppender refreshTokenAppender;
+    private final RefreshTokenReader refreshTokenReader;
     public static final Long ACCESS_TOKEN_VALID_TIME = 1000 * 60L * 60L * 24L;
     public static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
 
     public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey,
-        RefreshTokenRepository refreshTokenRepository) {
+        RefreshTokenAppender refreshTokenAppender, RefreshTokenReader refreshTokenReader) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenAppender = refreshTokenAppender;
+        this.refreshTokenReader = refreshTokenReader;
     }
 
     public Claims getClaims(String token) {
@@ -64,7 +66,7 @@ public class AuthenticationTokenProcessor {
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
 
-        refreshTokenRepository.save(refreshToken, uid);
+        refreshTokenAppender.append(refreshToken, uid);
         return refreshToken;
     }
 
@@ -96,7 +98,7 @@ public class AuthenticationTokenProcessor {
         }
 
         Long uid = claims.get("uid", Long.class);
-        String refreshTokenInStore = refreshTokenRepository.get(uid);
+        String refreshTokenInStore = refreshTokenReader.getByUserId(uid);
 
         if (!refreshToken.equals(refreshTokenInStore)) {
             throw new CustomException(Error.UNAUTHORIZED_TOKEN);

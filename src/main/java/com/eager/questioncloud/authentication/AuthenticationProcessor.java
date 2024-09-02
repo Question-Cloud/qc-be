@@ -5,7 +5,7 @@ import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.security.UserPrincipal;
 import com.eager.questioncloud.user.AccountType;
 import com.eager.questioncloud.user.User;
-import com.eager.questioncloud.user.UserRepository;
+import com.eager.questioncloud.user.UserReader;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationProcessor {
-    private final UserRepository userRepository;
+    private final UserReader userReader;
 
     public User getUserByCredentials(String email, String password) {
-        User user = userRepository.getUserByEmail(email);
+        User user = userReader.getUserByEmail(email);
         if (!PasswordProcessor.matches(password, user.getPassword())) {
             throw new CustomException(Error.FAIL_LOGIN);
         }
@@ -27,11 +27,11 @@ public class AuthenticationProcessor {
     }
 
     public Optional<User> getUserBySocialUid(AccountType accountType, String socialUid) {
-        return userRepository.getSocialUser(accountType, socialUid);
+        return userReader.getSocialUser(accountType, socialUid);
     }
 
     public void authentication(Long uid) {
-        User user = userRepository.getUser(uid);
+        User user = userReader.getUser(uid);
         UserPrincipal userPrincipal = new UserPrincipal(user);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
