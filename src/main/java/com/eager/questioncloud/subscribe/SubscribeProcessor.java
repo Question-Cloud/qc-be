@@ -12,6 +12,7 @@ public class SubscribeProcessor {
     private final SubscribeReader subscribeReader;
     private final SubscribeAppender subscribeAppender;
     private final CreatorReader creatorReader;
+    private final SubscribeRemover subscribeRemover;
 
     public Subscribe subscribe(Long userId, Long creatorId) {
         if (!creatorReader.isExistsCreator(creatorId)) {
@@ -23,5 +24,9 @@ public class SubscribeProcessor {
         }
 
         return subscribeAppender.append(Subscribe.create(userId, creatorId));
+    }
+
+    public void unSubscribe(Long userId, Long creatorId) {
+        subscribeRemover.unSubscribe(userId, creatorId);
     }
 }
