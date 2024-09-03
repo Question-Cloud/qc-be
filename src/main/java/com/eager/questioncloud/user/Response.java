@@ -1,6 +1,7 @@
 package com.eager.questioncloud.user;
 
 import com.eager.questioncloud.authentication.AuthenticationToken;
+import com.eager.questioncloud.user.UserDto.MyInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +43,12 @@ public class Response {
     @AllArgsConstructor
     public static class CreateUserResponse {
         private String resendToken;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class MyInformationResponse {
+        private MyInformation myInformation;
     }
 }
