@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user;
 
-import com.eager.questioncloud.mail.CreateUserEmailVerificationProcessor;
 import com.eager.questioncloud.mail.EmailVerification;
+import com.eager.questioncloud.mail.EmailVerificationProcessor;
 import com.eager.questioncloud.mail.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ public class CreateUserService {
     private final UserUpdater userUpdater;
     private final UserReader userReader;
     private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
-    private final CreateUserEmailVerificationProcessor createUserEmailVerificationProcessor;
+    private final EmailVerificationProcessor emailVerificationProcessor;
 
     public User create(CreateUser createUser) {
         if (createUser.getAccountType().equals(AccountType.EMAIL)) {
@@ -26,15 +26,15 @@ public class CreateUserService {
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
-        return createUserEmailVerificationProcessor.sendVerificationMail(user);
+        return emailVerificationProcessor.sendVerificationMail(user, EmailVerificationType.CreateUser);
     }
 
     public void resend(String resendToken) {
-        createUserEmailVerificationProcessor.resendVerificationMail(resendToken);
+        emailVerificationProcessor.resendVerificationMail(resendToken);
     }
 
     public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = createUserEmailVerificationProcessor.verify(token, emailVerificationType);
+        EmailVerification emailVerification = emailVerificationProcessor.verify(token, emailVerificationType);
         User user = userReader.getUser(emailVerification.getUid());
         userUpdater.verifyUser(user);
     }
