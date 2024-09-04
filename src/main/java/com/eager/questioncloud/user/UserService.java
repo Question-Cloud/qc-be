@@ -26,4 +26,8 @@ public class UserService {
         EmailVerification emailVerification = emailVerificationProcessor.verify(token, EmailVerificationType.ChangePassword);
         userUpdater.changePassword(userReader.getUser(emailVerification.getUid()), newPassword);
     }
+
+    public void updateUser(User user, String name, String profileImage) {
+        userUpdater.updateUser(user, name, profileImage);
+    }
 }
