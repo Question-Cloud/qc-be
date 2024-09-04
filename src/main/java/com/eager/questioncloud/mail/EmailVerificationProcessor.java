@@ -6,24 +6,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreateUserEmailVerificationProcessor {
+public class EmailVerificationProcessor {
     private final EmailVerificationAppender emailVerificationAppender;
     private final EmailVerificationReader emailVerificationReader;
     private final EmailVerificationUpdater emailVerificationUpdater;
     private final GoogleMailSender googleMailSender;
 
-    public EmailVerification sendVerificationMail(User user) {
+    public EmailVerification sendVerificationMail(User user, EmailVerificationType emailVerificationType) {
         EmailVerification emailVerification = emailVerificationAppender.append(
             EmailVerification.create(
                 user.getUid(),
-                EmailVerificationType.CreateUser)
+                emailVerificationType)
         );
+        EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(emailVerificationType, emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
                 user.getEmail(),
-                CreateUserEmailVerificationTemplate.title,
-                CreateUserEmailVerificationTemplate.generate(emailVerification.getToken()))
-        );
+                template.getTitle(),
+                template.getContent()
+            ));
         return emailVerification;
     }
 
@@ -31,12 +32,14 @@ public class CreateUserEmailVerificationProcessor {
         EmailVerificationWithUser emailVerificationWithUser = emailVerificationReader.getForResend(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
         User user = emailVerificationWithUser.getUser();
+        EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
+            emailVerification.getEmailVerificationType(),
+            emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
                 user.getEmail(),
-                CreateUserEmailVerificationTemplate.title,
-                CreateUserEmailVerificationTemplate.generate(emailVerification.getToken())
-            )
+                template.getTitle(),
+                template.getContent())
         );
     }
 

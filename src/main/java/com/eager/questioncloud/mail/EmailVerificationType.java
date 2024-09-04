@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EmailVerificationType {
-    CreateUser("CreateUser");
+    CreateUser("CreateUser"), ChangePassword("ChangePassword");
 
     private final String value;
 
