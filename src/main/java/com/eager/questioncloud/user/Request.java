@@ -48,4 +48,16 @@ public class Request {
             }
         }
     }
+
+    @Getter
+    public static class ChangePasswordRequest {
+        private String token;
+        private String newPassword;
+
+        public void passwordValidate() {
+            if (!Pattern.matches("^(?!.*\\s).{8,}$", newPassword)) {
+                throw new CustomException(Error.BAD_REQUEST);
+            }
+        }
+    }
 }

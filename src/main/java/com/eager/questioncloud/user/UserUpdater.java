@@ -16,4 +16,9 @@ public class UserUpdater {
     public User updateUser(User user) {
         return userRepository.save(user);
     }
+
+    public User changePassword(User user, String newPassword) {
+        user.changePassword(newPassword);
+        return userRepository.save(user);
+    }
 }
