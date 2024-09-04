@@ -112,6 +112,13 @@ public class User implements UserDetails {
         this.point = this.point - amount;
     }
 
+    public void changePassword(String newPassword) {
+        if (!accountType.equals(AccountType.EMAIL)) {
+            throw new CustomException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT);
+        }
+        this.password = PasswordProcessor.encode(newPassword);
+    }
+
     public static User create(CreateUser createUser) {
         return User.builder()
             .email(createUser.getEmail())
