@@ -13,8 +13,8 @@ public class UserUpdater {
         return userRepository.save(user);
     }
 
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public User updateUser(User user, String name, String profileImage) {
+        return userRepository.save(user.update(name, profileImage));
     }
 
     public User changePassword(User user, String newPassword) {

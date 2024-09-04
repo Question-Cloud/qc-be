@@ -119,6 +119,12 @@ public class User implements UserDetails {
         this.password = PasswordProcessor.encode(newPassword);
     }
 
+    public User update(String name, String profileImage) {
+        this.name = name;
+        this.profileImage = profileImage;
+        return this;
+    }
+
     public static User create(CreateUser createUser) {
         return User.builder()
             .email(createUser.getEmail())
