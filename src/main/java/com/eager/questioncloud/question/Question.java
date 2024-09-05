@@ -14,6 +14,7 @@ public class Question {
     private String description;
     private String thumbnail;
     private String fileUrl;
+    private String explanationUrl;
     private QuestionType questionType;
     private QuestionLevel questionLevel;
     private int price;
@@ -22,7 +23,8 @@ public class Question {
 
     @Builder
     public Question(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
-        String fileUrl, QuestionType questionType, QuestionLevel questionLevel, int price, int count, LocalDateTime createdAt) {
+        String fileUrl, String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, int price, int count,
+        LocalDateTime createdAt) {
         this.id = id;
         this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
@@ -31,6 +33,7 @@ public class Question {
         this.description = description;
         this.thumbnail = thumbnail;
         this.fileUrl = fileUrl;
+        this.explanationUrl = explanationUrl;
         this.questionType = questionType;
         this.questionLevel = questionLevel;
         this.price = price;
@@ -48,6 +51,7 @@ public class Question {
             .description(description)
             .thumbnail(thumbnail)
             .fileUrl(fileUrl)
+            .explanationUrl(explanationUrl)
             .questionType(questionType)
             .questionLevel(questionLevel)
             .price(price)
