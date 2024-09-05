@@ -27,6 +27,11 @@ public class Creator {
             .build();
     }
 
+    public void update(Subject mainSubject, String introduction) {
+        this.mainSubject = mainSubject;
+        this.introduction = introduction;
+    }
+
     public CreatorEntity toEntity() {
         return CreatorEntity.builder()
             .id(id)

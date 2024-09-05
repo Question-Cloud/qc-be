@@ -70,6 +70,18 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .build();
     }
 
+    @Override
+    public Creator findByUserId(Long userId) {
+        return creatorJpaRepository.findByUserId(userId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
+    public Creator save(Creator creator) {
+        return creatorJpaRepository.save(creator.toEntity()).toModel();
+    }
+
     private Integer getCreatorSalesCount(Long creatorId) {
         return jpaQueryFactory
             .select(userQuestionLibraryEntity.id.countDistinct().intValue())

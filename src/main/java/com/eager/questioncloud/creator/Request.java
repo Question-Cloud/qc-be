@@ -9,4 +9,10 @@ public class Request {
         private Subject mainSubject;
         private String introduction;
     }
+
+    @Getter
+    public static class UpdateMyCreatorInformationRequest {
+        private Subject mainSubject;
+        private String introduction;
+    }
 }

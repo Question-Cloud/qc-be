@@ -1,6 +1,7 @@
 package com.eager.questioncloud.creator;
 
 import com.eager.questioncloud.question.Subject;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,5 +30,12 @@ public class CreatorDto {
             this.rate = rate;
             this.introduction = introduction;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MyCreatorInformation {
+        private Subject mainSubject;
+        private String introduction;
     }
 }
