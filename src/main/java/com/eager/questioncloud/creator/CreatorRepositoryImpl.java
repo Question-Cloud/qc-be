@@ -77,6 +77,11 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .toModel();
     }
 
+    @Override
+    public Creator save(Creator creator) {
+        return creatorJpaRepository.save(creator.toEntity()).toModel();
+    }
+
     private Integer getCreatorSalesCount(Long creatorId) {
         return jpaQueryFactory
             .select(userQuestionLibraryEntity.id.countDistinct().intValue())

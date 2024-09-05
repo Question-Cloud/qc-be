@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class CreatorService {
     private final CreatorRegister creatorRegister;
     private final CreatorReader creatorReader;
+    private final CreatorUpdater creatorUpdater;
 
     public Creator register(Long userId, Subject mainSubject, String introduction) {
         return creatorRegister.register(userId, mainSubject, introduction);
@@ -22,5 +23,10 @@ public class CreatorService {
 
     public MyCreatorInformation getMyCreatorInformation(Long userId) {
         return creatorReader.getMyCreatorInformation(userId);
+    }
+
+    public void updateMyCreatorInformation(Long userId, Subject mainSubject, String introduction) {
+        Creator creator = creatorReader.getByUserId(userId);
+        creatorUpdater.update(creator, mainSubject, introduction);
     }
 }

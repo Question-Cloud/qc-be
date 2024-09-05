@@ -22,4 +22,8 @@ public class CreatorReader {
     public Boolean isExistsCreator(Long creatorId) {
         return creatorRepository.existsById(creatorId);
     }
+
+    public Creator getByUserId(Long userId) {
+        return creatorRepository.findByUserId(userId);
+    }
 }
