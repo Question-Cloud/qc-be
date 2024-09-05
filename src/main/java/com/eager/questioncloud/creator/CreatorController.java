@@ -1,8 +1,10 @@
 package com.eager.questioncloud.creator;
 
 import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.CreatorDto.MyCreatorInformation;
 import com.eager.questioncloud.creator.Request.RegisterCreatorRequest;
 import com.eager.questioncloud.creator.Response.CreatorInformationResponse;
+import com.eager.questioncloud.creator.Response.MyCreatorInformationResponse;
 import com.eager.questioncloud.creator.Response.RegisterCreatorResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorController {
     private final CreatorService creatorService;
+
+    @GetMapping("/me")
+    public MyCreatorInformationResponse getMyCreatorInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        MyCreatorInformation information = creatorService.getMyCreatorInformation(userPrincipal.getUser().getUid());
+        return new MyCreatorInformationResponse(information);
+    }
 
     @GetMapping("/{creatorId}")
     public CreatorInformationResponse getCreatorInformation(@PathVariable Long creatorId) {
