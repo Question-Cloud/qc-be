@@ -9,10 +9,8 @@ import com.eager.questioncloud.library.UserQuestionLibraryDto.UserQuestionLibrar
 import com.eager.questioncloud.question.QQuestionCategoryEntity;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.question.QuestionFilter;
-import com.eager.questioncloud.question.QuestionLevel;
-import com.eager.questioncloud.question.QuestionType;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -59,11 +57,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
                         questionEntity.explanationUrl)))
             .from(userQuestionLibraryEntity)
             .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
-            .innerJoin(questionEntity).on(
-                questionEntity.id.eq(userQuestionLibraryEntity.questionId),
-                questionLevelFilter(questionFilter.getLevels()),
-                questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()))
+            .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
@@ -78,11 +72,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
         Integer count = jpaQueryFactory.select(userQuestionLibraryEntity.id.count().intValue())
             .from(userQuestionLibraryEntity)
             .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
-            .innerJoin(questionEntity).on(
-                questionEntity.id.eq(userQuestionLibraryEntity.questionId),
-                questionLevelFilter(questionFilter.getLevels()),
-                questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()))
+            .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
@@ -92,28 +82,26 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
         if (count == null) {
             return 0;
         }
-        
+
         return count;
     }
 
-    private BooleanExpression questionLevelFilter(List<QuestionLevel> levels) {
-        if (levels == null || levels.isEmpty()) {
-            return null;
+    private BooleanBuilder questionEntityJoinCondition(QuestionFilter questionFilter) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (questionFilter.getLevels() != null && !questionFilter.getLevels().isEmpty()) {
+            builder.and(questionEntity.questionLevel.in(questionFilter.getLevels()));
         }
-        return questionEntity.questionLevel.in(levels);
-    }
 
-    private BooleanExpression questionCategoryFilter(List<Long> categories) {
-        if (categories == null || categories.isEmpty()) {
-            return null;
+        if (questionFilter.getCategories() != null && !questionFilter.getCategories().isEmpty()) {
+            builder.and(questionEntity.questionCategoryId.in(questionFilter.getCategories()));
         }
-        return questionEntity.questionCategoryId.in(categories);
-    }
 
-    private BooleanExpression questionTypeFilter(QuestionType questionType) {
-        if (questionType == null) {
-            return null;
+        if (questionFilter.getQuestionType() != null) {
+            builder.and(questionEntity.questionType.eq(questionFilter.getQuestionType()));
         }
-        return questionEntity.questionType.eq(questionType);
+
+        builder.and(questionEntity.id.eq(userQuestionLibraryEntity.questionId));
+
+        return builder;
     }
 }
