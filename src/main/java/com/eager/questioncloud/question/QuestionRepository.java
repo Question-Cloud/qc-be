@@ -1,15 +1,14 @@
 package com.eager.questioncloud.question;
 
-import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
-import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import java.util.List;
 
 public interface QuestionRepository {
     int getTotalFiltering(QuestionFilter questionFilter);
 
-    List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter);
+    List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter);
 
-    QuestionDetail getQuestionDetail(Long questionId, Long userId);
+    QuestionInformation getQuestionInformation(Long questionId, Long userId);
 
     List<Question> getQuestionListInIds(List<Long> questionIds);
 }

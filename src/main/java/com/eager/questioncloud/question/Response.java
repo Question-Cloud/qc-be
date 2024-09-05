@@ -1,7 +1,7 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.question.QuestionCategoryDto.QuestionCategoryListItem;
-import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Getter;
 public class Response {
     @Getter
     @AllArgsConstructor
-    public static class QuestionDetailResponse {
-        private QuestionDetail question;
+    public static class QuestionInformationResponse {
+        private QuestionInformation question;
     }
 
     @Getter

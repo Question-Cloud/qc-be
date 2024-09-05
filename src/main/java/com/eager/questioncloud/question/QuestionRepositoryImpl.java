@@ -9,8 +9,7 @@ import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
-import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -45,12 +44,12 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter) {
+    public List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(
-                    QuestionFilterItem.class,
+                    QuestionInformation.class,
                     questionEntity.id,
                     questionEntity.title,
                     parent.title,
@@ -83,36 +82,40 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public QuestionDetail getQuestionDetail(Long questionId, Long userId) {
+    public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        QuestionDetail questionDetail = jpaQueryFactory.select(
+        QuestionInformation questionInformation = jpaQueryFactory.select(
                 Projections.constructor(
-                    QuestionDetail.class,
+                    QuestionInformation.class,
                     questionEntity.id,
                     questionEntity.title,
-                    userEntity.name,
-                    questionEntity.subject,
                     parent.title,
                     child.title,
+                    questionEntity.thumbnail,
+                    userEntity.name,
                     questionEntity.questionLevel,
-                    questionEntity.createdAt,
                     questionEntity.price,
-                    userQuestionLibraryEntity.id.isNotNull()
-                ))
+                    MathExpressions.round(questionReviewEntity.rate.avg(), 1).coalesce(0.0),
+                    userQuestionLibraryEntity.id.isNotNull()))
             .from(questionEntity)
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
+            .leftJoin(userQuestionLibraryEntity)
+            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(userId))
+            .leftJoin(questionReviewEntity).on(questionReviewEntity.questionId.eq(questionEntity.id))
+            .groupBy(questionEntity.id)
             .where(questionEntity.id.eq(questionId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(questionEntity.creatorId))
-            .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionId), userQuestionLibraryEntity.userId.eq(userId))
-            .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
-            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
 
-        if (questionDetail == null) {
+        if (questionInformation == null) {
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        return questionDetail;
+        return questionInformation;
     }
 
     @Override
