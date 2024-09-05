@@ -1,9 +1,8 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
-import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
-import com.eager.questioncloud.question.Response.QuestionDetailResponse;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.question.Response.QuestionInformationResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
-    public PagingResponse<QuestionFilterItem> getQuestionListByFiltering(
+    public PagingResponse<QuestionInformation> getQuestionListByFiltering(
         @AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestParam(required = false) List<Long> categories,
         @RequestParam(required = false) List<QuestionLevel> levels,
@@ -33,13 +32,13 @@ public class QuestionController {
         QuestionFilter questionFilter = new QuestionFilter(
             userPrincipal.getUser().getUid(), categories, levels, questionType, creatorId, sort, pageable);
         int total = questionService.getTotalFiltering(questionFilter);
-        List<QuestionFilterItem> questionFilterItems = questionService.getQuestionListByFiltering(questionFilter);
-        return new PagingResponse<>(total, questionFilterItems);
+        List<QuestionInformation> questionInformation = questionService.getQuestionListByFiltering(questionFilter);
+        return new PagingResponse<>(total, questionInformation);
     }
 
     @GetMapping("/{questionId}")
-    public QuestionDetailResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionDetail questionDetail = questionService.getQuestionDetail(questionId, userPrincipal.getUser().getUid());
-        return new QuestionDetailResponse(questionDetail);
+    public QuestionInformationResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
+        QuestionInformation questionInformation = questionService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
+        return new QuestionInformationResponse(questionInformation);
     }
 }

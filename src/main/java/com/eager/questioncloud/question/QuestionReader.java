@@ -1,7 +1,6 @@
 package com.eager.questioncloud.question;
 
-import com.eager.questioncloud.question.QuestionDto.QuestionDetail;
-import com.eager.questioncloud.question.QuestionDto.QuestionFilterItem;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,12 +14,12 @@ public class QuestionReader {
         return questionRepository.getTotalFiltering(questionFilter);
     }
 
-    public List<QuestionFilterItem> getQuestionListByFiltering(QuestionFilter questionFilter) {
+    public List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
         return questionRepository.getQuestionListByFiltering(questionFilter);
     }
 
-    public QuestionDetail getQuestionDetail(Long questionId, Long userId) {
-        return questionRepository.getQuestionDetail(questionId, userId);
+    public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
+        return questionRepository.getQuestionInformation(questionId, userId);
     }
 
     public List<Question> getQuestions(List<Long> questionIds) {
