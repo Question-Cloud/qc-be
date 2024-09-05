@@ -1,9 +1,13 @@
 package com.eager.questioncloud.subscribe;
 
 import com.eager.questioncloud.common.DefaultResponse;
+import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import com.eager.questioncloud.subscribe.Response.CreatorSubscribeInformationResponse;
+import com.eager.questioncloud.subscribe.SubscribeDto.SubscribeListItem;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscribeService subscribeService;
+
+    @GetMapping("/my-subscribe")
+    public PagingResponse<SubscribeListItem> getMySubscribeList(@AuthenticationPrincipal UserPrincipal userPrincipal, Pageable pageable) {
+        int total = subscribeService.countMySubscribe(userPrincipal.getUser().getUid());
+        List<SubscribeListItem> mySubscribeList = subscribeService.getMySubscribeList(userPrincipal.getUser().getUid(), pageable);
+        return new PagingResponse<>(total, mySubscribeList);
+    }
 
     @GetMapping("/{creatorId}")
     public CreatorSubscribeInformationResponse isSubscribed(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long creatorId) {

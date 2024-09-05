@@ -1,6 +1,9 @@
 package com.eager.questioncloud.subscribe;
 
+import com.eager.questioncloud.subscribe.SubscribeDto.SubscribeListItem;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,5 +26,13 @@ public class SubscribeService {
 
     public int countSubscriber(Long creatorId) {
         return subscribeReader.countSubscriber(creatorId);
+    }
+
+    public List<SubscribeListItem> getMySubscribeList(Long userId, Pageable pageable) {
+        return subscribeReader.getMySubscribeList(userId, pageable);
+    }
+
+    public int countMySubscribe(Long userId) {
+        return subscribeReader.countMySubscribe(userId);
     }
 }

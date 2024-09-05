@@ -34,6 +34,17 @@ public class CreatorDto {
 
     @Getter
     @AllArgsConstructor
+    public static class CreatorSimpleInformation {
+        private Long creatorId;
+        private String name;
+        private String profileImage;
+        private Subject mainSubject;
+        private String introduction;
+        private int subscribeCount;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class MyCreatorInformation {
         private Subject mainSubject;
         private String introduction;
