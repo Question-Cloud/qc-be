@@ -9,7 +9,7 @@ public class QuestionReviewUpdater {
     private final QuestionReviewRepository questionReviewRepository;
 
     public void update(Long reviewId, Long userId, String comment, int rate) {
-        QuestionReview questionReview = questionReviewRepository.getForModify(reviewId, userId);
+        QuestionReview questionReview = questionReviewRepository.getForModifyAndDelete(reviewId, userId);
         questionReview.modify(comment, rate);
         questionReviewRepository.save(questionReview);
     }

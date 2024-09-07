@@ -81,7 +81,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public QuestionReview getForModify(Long reviewId, Long userId) {
+    public QuestionReview getForModifyAndDelete(Long reviewId, Long userId) {
         return questionReviewJpaRepository.findByIdAndReviewerIdAndIsDeletedFalse(reviewId, userId)
             .stream()
             .filter(item -> !item.getIsDeleted())

@@ -11,7 +11,7 @@ public interface QuestionReviewRepository {
 
     QuestionReview getMyQuestionReview(Long questionId, Long userId);
 
-    QuestionReview getForModify(Long reviewId, Long userId);
+    QuestionReview getForModifyAndDelete(Long reviewId, Long userId);
 
     QuestionReview append(QuestionReview questionReview);
 
