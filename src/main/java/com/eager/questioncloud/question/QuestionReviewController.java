@@ -1,7 +1,9 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.common.PagingResponse;
+import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.question.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,11 @@ public class QuestionReviewController {
             userPrincipal.getUser().getUid(),
             pageable);
         return new PagingResponse<>(total, questionReviewItems);
+    }
+
+    @GetMapping("/me")
+    public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
+        MyQuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
+        return new MyQuestionReviewResponse(review);
     }
 }

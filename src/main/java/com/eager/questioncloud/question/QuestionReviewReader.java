@@ -1,5 +1,8 @@
 package com.eager.questioncloud.question;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +20,13 @@ public class QuestionReviewReader {
 
     public List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, Pageable pageable) {
         return questionReviewRepository.getQuestionReviews(questionId, userId, pageable);
+    }
+
+    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
+        MyQuestionReview myQuestionReview = questionReviewRepository.getMyQuestionReview(questionId, userId);
+        if (myQuestionReview == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+        return myQuestionReview;
     }
 }

@@ -18,4 +18,12 @@ public class QuestionReviewDto {
         private String comment;
         private LocalDateTime createdAt;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MyQuestionReview {
+        private Long id;
+        private Integer rate;
+        private String comment;
+    }
 }

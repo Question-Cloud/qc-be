@@ -3,9 +3,11 @@ package com.eager.questioncloud.question;
 import static com.eager.questioncloud.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
+import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.user.UserType;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -68,5 +70,18 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
                 tuple.get(questionReviewEntity.createdAt)
             ))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
+        return jpaQueryFactory.select(
+                Projections.constructor(
+                    MyQuestionReview.class,
+                    questionReviewEntity.id,
+                    questionReviewEntity.rate,
+                    questionReviewEntity.comment))
+            .from(questionReviewEntity)
+            .where(questionReviewEntity.questionId.eq(questionId), questionReviewEntity.reviewerId.eq(userId))
+            .fetchFirst();
     }
 }
