@@ -12,6 +12,7 @@ public class QuestionReviewService {
     private final QuestionReviewReader questionReviewReader;
     private final QuestionReviewRegister questionReviewRegister;
     private final QuestionReviewUpdater questionReviewUpdater;
+    private final QuestionReviewRemover questionReviewRemover;
 
     public int getTotal(Long questionId) {
         return questionReviewReader.getTotal(questionId);
@@ -31,5 +32,9 @@ public class QuestionReviewService {
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
         questionReviewUpdater.update(reviewId, userId, comment, rate);
+    }
+
+    public void delete(Long reviewId, Long userId) {
+        questionReviewRemover.delete(reviewId, userId);
     }
 }

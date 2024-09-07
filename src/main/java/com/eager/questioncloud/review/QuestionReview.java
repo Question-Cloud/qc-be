@@ -30,6 +30,10 @@ public class QuestionReview {
         this.rate = rate;
     }
 
+    public void delete() {
+        this.isDeleted = true;
+    }
+
     public static QuestionReview create(Long questionId, Long reviewerId, String comment, int rate) {
         return QuestionReview.builder()
             .questionId(questionId)
