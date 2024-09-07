@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.Request.ModifyQuestionReviewRequest;
 import com.eager.questioncloud.review.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +53,13 @@ public class QuestionReviewController {
                 request.getComment(),
                 request.getRate())
         );
+        return DefaultResponse.success();
+    }
+
+    @PatchMapping
+    public DefaultResponse modifyQuestionReview(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ModifyQuestionReviewRequest request) {
+        questionReviewService.modify(request.getReviewId(), userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
         return DefaultResponse.success();
     }
 }

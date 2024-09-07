@@ -25,6 +25,11 @@ public class QuestionReview {
         this.isDeleted = isDeleted;
     }
 
+    public void modify(String comment, int rate) {
+        this.comment = comment;
+        this.rate = rate;
+    }
+
     public static QuestionReview create(Long questionId, Long reviewerId, String comment, int rate) {
         return QuestionReview.builder()
             .questionId(questionId)

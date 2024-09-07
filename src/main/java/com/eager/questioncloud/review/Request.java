@@ -9,4 +9,11 @@ public class Request {
         private int rate;
         private String comment;
     }
+
+    @Getter
+    public static class ModifyQuestionReviewRequest {
+        private Long reviewId;
+        private int rate;
+        private String comment;
+    }
 }

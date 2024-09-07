@@ -11,7 +11,11 @@ public interface QuestionReviewRepository {
 
     QuestionReview getMyQuestionReview(Long questionId, Long userId);
 
+    QuestionReview getForModify(Long reviewId, Long userId);
+
     QuestionReview append(QuestionReview questionReview);
 
     Boolean isWritten(Long questionId, Long userId);
+
+    QuestionReview save(QuestionReview questionReview);
 }

@@ -81,6 +81,16 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
+    public QuestionReview getForModify(Long reviewId, Long userId) {
+        return questionReviewJpaRepository.findByIdAndReviewerIdAndIsDeletedFalse(reviewId, userId)
+            .stream()
+            .filter(item -> !item.getIsDeleted())
+            .findFirst()
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
     public QuestionReview append(QuestionReview questionReview) {
         return questionReviewJpaRepository.save(questionReview.toEntity()).toModel();
     }
@@ -96,5 +106,10 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .fetchFirst();
 
         return reviewId != null;
+    }
+
+    @Override
+    public QuestionReview save(QuestionReview questionReview) {
+        return questionReviewJpaRepository.save(questionReviewJpaRepository.save(questionReview.toEntity())).toModel();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class QuestionReviewService {
     private final QuestionReviewReader questionReviewReader;
     private final QuestionReviewRegister questionReviewRegister;
+    private final QuestionReviewUpdater questionReviewUpdater;
 
     public int getTotal(Long questionId) {
         return questionReviewReader.getTotal(questionId);
@@ -26,5 +27,9 @@ public class QuestionReviewService {
 
     public QuestionReview register(QuestionReview questionReview) {
         return questionReviewRegister.register(questionReview);
+    }
+
+    public void modify(Long reviewId, Long userId, String comment, int rate) {
+        questionReviewUpdater.update(reviewId, userId, comment, rate);
     }
 }
