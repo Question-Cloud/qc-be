@@ -58,10 +58,10 @@ public class QuestionReviewController {
         return DefaultResponse.success();
     }
 
-    @PatchMapping
+    @PatchMapping("/{reviewId}")
     public DefaultResponse modifyQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ModifyQuestionReviewRequest request) {
-        questionReviewService.modify(request.getReviewId(), userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId, @RequestBody ModifyQuestionReviewRequest request) {
+        questionReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
         return DefaultResponse.success();
     }
 

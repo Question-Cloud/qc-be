@@ -12,7 +12,6 @@ public class Request {
 
     @Getter
     public static class ModifyQuestionReviewRequest {
-        private Long reviewId;
         private int rate;
         private String comment;
     }
