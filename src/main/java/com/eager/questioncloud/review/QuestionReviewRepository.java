@@ -1,6 +1,5 @@
 package com.eager.questioncloud.review;
 
-import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +9,7 @@ public interface QuestionReviewRepository {
 
     List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, Pageable pageable);
 
-    MyQuestionReview getMyQuestionReview(Long questionId, Long userId);
+    QuestionReview getMyQuestionReview(Long questionId, Long userId);
 
     QuestionReview append(QuestionReview questionReview);
 

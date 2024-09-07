@@ -3,11 +3,11 @@ package com.eager.questioncloud.review;
 import static com.eager.questioncloud.review.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.user.UserType;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -74,16 +74,10 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
-        return jpaQueryFactory.select(
-                Projections.constructor(
-                    MyQuestionReview.class,
-                    questionReviewEntity.id,
-                    questionReviewEntity.rate,
-                    questionReviewEntity.comment))
-            .from(questionReviewEntity)
-            .where(questionReviewEntity.questionId.eq(questionId), questionReviewEntity.reviewerId.eq(userId))
-            .fetchFirst();
+    public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
+        return questionReviewJpaRepository.findByQuestionIdAndReviewerIdAndIsDeletedFalse(questionId, userId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
     }
 
     @Override

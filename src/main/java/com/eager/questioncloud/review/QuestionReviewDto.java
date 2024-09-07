@@ -25,5 +25,9 @@ public class QuestionReviewDto {
         private Long id;
         private Integer rate;
         private String comment;
+
+        public static MyQuestionReview of(QuestionReview questionReview) {
+            return new MyQuestionReview(questionReview.getId(), questionReview.getRate(), questionReview.getComment());
+        }
     }
 }

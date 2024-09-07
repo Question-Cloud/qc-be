@@ -37,8 +37,8 @@ public class QuestionReviewController {
 
     @GetMapping("/me")
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
-        MyQuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
-        return new MyQuestionReviewResponse(review);
+        QuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
+        return new MyQuestionReviewResponse(MyQuestionReview.of(review));
     }
 
     @PostMapping

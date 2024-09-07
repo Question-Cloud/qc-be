@@ -1,6 +1,5 @@
 package com.eager.questioncloud.review;
 
-import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class QuestionReviewService {
         return questionReviewReader.getQuestionReviews(questionId, userId, pageable);
     }
 
-    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
+    public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
         return questionReviewReader.getMyQuestionReview(questionId, userId);
     }
 
