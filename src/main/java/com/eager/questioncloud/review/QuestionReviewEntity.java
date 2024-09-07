@@ -1,4 +1,4 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.review;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,5 +48,17 @@ public class QuestionReviewEntity {
         this.rate = rate;
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
+    }
+
+    public QuestionReview toModel() {
+        return QuestionReview.builder()
+            .id(id)
+            .questionId(questionId)
+            .reviewerId(reviewerId)
+            .comment(comment)
+            .rate(rate)
+            .createdAt(createdAt)
+            .isDeleted(isDeleted)
+            .build();
     }
 }

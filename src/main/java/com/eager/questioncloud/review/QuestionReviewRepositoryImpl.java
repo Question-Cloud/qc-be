@@ -1,9 +1,11 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.review;
 
-import static com.eager.questioncloud.question.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.review.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.user.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final QuestionReviewJpaRepository questionReviewJpaRepository;
 
     @Override
     public int getTotal(Long questionId) {
@@ -68,5 +71,45 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
                 tuple.get(questionReviewEntity.createdAt)
             ))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
+        return questionReviewJpaRepository.findByQuestionIdAndReviewerIdAndIsDeletedFalse(questionId, userId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
+    public QuestionReview getForModifyAndDelete(Long reviewId, Long userId) {
+        return questionReviewJpaRepository.findByIdAndReviewerIdAndIsDeletedFalse(reviewId, userId)
+            .stream()
+            .filter(item -> !item.getIsDeleted())
+            .findFirst()
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
+    public QuestionReview append(QuestionReview questionReview) {
+        return questionReviewJpaRepository.save(questionReview.toEntity()).toModel();
+    }
+
+    @Override
+    public Boolean isWritten(Long questionId, Long userId) {
+        Long reviewId = jpaQueryFactory.select(questionReviewEntity.id)
+            .from(questionReviewEntity)
+            .where(
+                questionReviewEntity.questionId.eq(questionId),
+                questionReviewEntity.reviewerId.eq(userId),
+                questionReviewEntity.isDeleted.isFalse())
+            .fetchFirst();
+
+        return reviewId != null;
+    }
+
+    @Override
+    public QuestionReview save(QuestionReview questionReview) {
+        return questionReviewJpaRepository.save(questionReviewJpaRepository.save(questionReview.toEntity())).toModel();
     }
 }
