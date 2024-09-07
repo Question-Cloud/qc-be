@@ -1,9 +1,9 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.review;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
-import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
-import com.eager.questioncloud.question.Response.MyQuestionReviewResponse;
+import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

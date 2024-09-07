@@ -4,7 +4,7 @@ import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
 import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.question.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.review.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;

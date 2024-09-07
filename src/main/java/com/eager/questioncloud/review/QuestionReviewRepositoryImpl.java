@@ -1,10 +1,10 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.review;
 
-import static com.eager.questioncloud.question.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.review.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
-import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.user.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;

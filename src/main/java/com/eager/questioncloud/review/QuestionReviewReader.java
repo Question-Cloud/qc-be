@@ -1,9 +1,9 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.review;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.QuestionReviewDto.MyQuestionReview;
-import com.eager.questioncloud.question.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
