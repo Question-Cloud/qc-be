@@ -11,4 +11,8 @@ public interface QuestionReviewRepository {
     List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, Pageable pageable);
 
     MyQuestionReview getMyQuestionReview(Long questionId, Long userId);
+
+    QuestionReview append(QuestionReview questionReview);
+
+    Boolean isWritten(Long questionId, Long userId);
 }

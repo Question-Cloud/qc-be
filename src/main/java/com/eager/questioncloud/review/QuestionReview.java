@@ -24,4 +24,27 @@ public class QuestionReview {
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
     }
+
+    public static QuestionReview create(Long questionId, Long reviewerId, String comment, int rate) {
+        return QuestionReview.builder()
+            .questionId(questionId)
+            .reviewerId(reviewerId)
+            .comment(comment)
+            .rate(rate)
+            .createdAt(LocalDateTime.now())
+            .isDeleted(false)
+            .build();
+    }
+
+    public QuestionReviewEntity toEntity() {
+        return QuestionReviewEntity.builder()
+            .id(id)
+            .questionId(questionId)
+            .reviewerId(reviewerId)
+            .comment(comment)
+            .rate(rate)
+            .createdAt(createdAt)
+            .isDeleted(isDeleted)
+            .build();
+    }
 }

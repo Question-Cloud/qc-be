@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionReviewService {
     private final QuestionReviewReader questionReviewReader;
+    private final QuestionReviewRegister questionReviewRegister;
 
     public int getTotal(Long questionId) {
         return questionReviewReader.getTotal(questionId);
@@ -22,5 +23,9 @@ public class QuestionReviewService {
 
     public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
         return questionReviewReader.getMyQuestionReview(questionId, userId);
+    }
+
+    public QuestionReview register(QuestionReview questionReview) {
+        return questionReviewRegister.register(questionReview);
     }
 }

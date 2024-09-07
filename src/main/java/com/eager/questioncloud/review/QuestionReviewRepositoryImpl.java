@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final QuestionReviewJpaRepository questionReviewJpaRepository;
 
     @Override
     public int getTotal(Long questionId) {
@@ -83,5 +84,23 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .from(questionReviewEntity)
             .where(questionReviewEntity.questionId.eq(questionId), questionReviewEntity.reviewerId.eq(userId))
             .fetchFirst();
+    }
+
+    @Override
+    public QuestionReview append(QuestionReview questionReview) {
+        return questionReviewJpaRepository.save(questionReview.toEntity()).toModel();
+    }
+
+    @Override
+    public Boolean isWritten(Long questionId, Long userId) {
+        Long reviewId = jpaQueryFactory.select(questionReviewEntity.id)
+            .from(questionReviewEntity)
+            .where(
+                questionReviewEntity.questionId.eq(questionId),
+                questionReviewEntity.reviewerId.eq(userId),
+                questionReviewEntity.isDeleted.isFalse())
+            .fetchFirst();
+
+        return reviewId != null;
     }
 }

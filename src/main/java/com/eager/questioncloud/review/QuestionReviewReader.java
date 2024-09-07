@@ -29,4 +29,8 @@ public class QuestionReviewReader {
         }
         return myQuestionReview;
     }
+
+    public Boolean isWritten(Long questionId, Long userId) {
+        return questionReviewRepository.isWritten(questionId, userId);
+    }
 }

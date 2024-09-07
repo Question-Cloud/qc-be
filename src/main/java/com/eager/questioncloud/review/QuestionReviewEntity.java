@@ -49,4 +49,16 @@ public class QuestionReviewEntity {
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
     }
+
+    public QuestionReview toModel() {
+        return QuestionReview.builder()
+            .id(id)
+            .questionId(questionId)
+            .reviewerId(reviewerId)
+            .comment(comment)
+            .rate(rate)
+            .createdAt(createdAt)
+            .isDeleted(isDeleted)
+            .build();
+    }
 }

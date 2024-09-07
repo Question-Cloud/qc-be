@@ -11,4 +11,6 @@ public interface QuestionRepository {
     QuestionInformation getQuestionInformation(Long questionId, Long userId);
 
     List<Question> getQuestionListInIds(List<Long> questionIds);
+
+    Boolean isAvailable(Long questionId);
 }

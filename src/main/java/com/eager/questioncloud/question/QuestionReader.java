@@ -25,4 +25,8 @@ public class QuestionReader {
     public List<Question> getQuestions(List<Long> questionIds) {
         return questionRepository.getQuestionListInIds(questionIds);
     }
+
+    public Boolean isAvailable(Long questionId) {
+        return questionRepository.isAvailable(questionId);
+    }
 }

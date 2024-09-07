@@ -1,8 +1,10 @@
 package com.eager.questioncloud.review;
 
+import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.List;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +39,18 @@ public class QuestionReviewController {
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
         MyQuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
         return new MyQuestionReviewResponse(review);
+    }
+
+    @PostMapping
+    public DefaultResponse registerQuestionReview(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterQuestionReviewRequest request) {
+        questionReviewService.register(
+            QuestionReview.create(
+                request.getQuestionId(),
+                userPrincipal.getUser().getUid(),
+                request.getComment(),
+                request.getRate())
+        );
+        return DefaultResponse.success();
     }
 }

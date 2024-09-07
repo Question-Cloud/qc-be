@@ -129,6 +129,16 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public Boolean isAvailable(Long questionId) {
+        Long result = jpaQueryFactory.select(questionEntity.id)
+            .from(questionEntity)
+            .where(questionEntity.id.eq(questionId))
+            .fetchFirst();
+
+        return result != null;
+    }
+
     private OrderSpecifier<?> sort(QuestionSortType sort) {
         switch (sort) {
             case Popularity -> {
