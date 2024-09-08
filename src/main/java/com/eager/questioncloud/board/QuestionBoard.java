@@ -27,6 +27,17 @@ public class QuestionBoard {
         this.createdAt = createdAt;
     }
 
+    public static QuestionBoard create(Long questionId, Long writerId, String title, String comment, List<QuestionBoardFile> files) {
+        return QuestionBoard.builder()
+            .questionId(questionId)
+            .writerId(writerId)
+            .title(title)
+            .comment(comment)
+            .files(files)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
     public QuestionBoardEntity toEntity() {
         return QuestionBoardEntity.builder()
             .id(id)
