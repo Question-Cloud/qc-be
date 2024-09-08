@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class QuestionBoardRepositoryImpl {
+public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
 }
