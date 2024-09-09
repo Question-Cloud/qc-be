@@ -56,7 +56,7 @@ public class QuestionBoardController {
                 questionId,
                 userPrincipal.getUser().getUid(),
                 request.getTitle(),
-                request.getComment(),
+                request.getContent(),
                 request.getFiles())
         );
         return DefaultResponse.success();

@@ -7,7 +7,7 @@ public class Request {
     @Getter
     public static class RegisterQuestionBoardRequest {
         private String title;
-        private String comment;
+        private String content;
         private List<QuestionBoardFile> files;
     }
 
