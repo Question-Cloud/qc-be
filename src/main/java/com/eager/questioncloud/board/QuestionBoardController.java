@@ -2,6 +2,7 @@ package com.eager.questioncloud.board;
 
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.Request.ModifyQuestionBoardRequest;
 import com.eager.questioncloud.board.Request.RegisterQuestionBoardRequest;
 import com.eager.questioncloud.board.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionBoardController {
     private final QuestionBoardService questionBoardService;
+
+    @PatchMapping("/{boardId}")
+    public DefaultResponse modify(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody ModifyQuestionBoardRequest request) {
+        questionBoardService.modify(boardId, userPrincipal.getUser().getUid(), request.getTitle(), request.getContent(), request.getFiles());
+        return DefaultResponse.success();
+    }
 
     @GetMapping("/question/{questionId}/{boardId}")
     public QuestionBoardResponse getQuestionBoard(

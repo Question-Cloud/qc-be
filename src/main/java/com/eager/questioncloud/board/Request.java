@@ -10,4 +10,11 @@ public class Request {
         private String comment;
         private List<QuestionBoardFile> files;
     }
+
+    @Getter
+    public static class ModifyQuestionBoardRequest {
+        private String title;
+        private String content;
+        private List<QuestionBoardFile> files;
+    }
 }

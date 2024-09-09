@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class QuestionBoardService {
     private final QuestionBoardRegister questionBoardRegister;
     private final QuestionBoardReader questionBoardReader;
+    private final QuestionBoardUpdater questionBoardUpdater;
 
     public QuestionBoard register(QuestionBoard questionBoard) {
         return questionBoardRegister.register(questionBoard);
@@ -27,5 +28,9 @@ public class QuestionBoardService {
 
     public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
         return questionBoardReader.getQuestionBoardDetail(userId, questionId, boardId);
+    }
+
+    public void modify(Long boardId, Long userId, String title, String content, List<QuestionBoardFile> files) {
+        questionBoardUpdater.modify(boardId, userId, title, content, files);
     }
 }

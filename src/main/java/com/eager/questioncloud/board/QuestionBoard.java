@@ -38,6 +38,12 @@ public class QuestionBoard {
             .build();
     }
 
+    public void modify(String title, String content, List<QuestionBoardFile> files) {
+        this.title = title;
+        this.content = content;
+        this.files = files;
+    }
+
     public QuestionBoardEntity toEntity() {
         return QuestionBoardEntity.builder()
             .id(id)

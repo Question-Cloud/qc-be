@@ -12,5 +12,9 @@ public interface QuestionBoardRepository {
 
     QuestionBoardDetail getQuestionBoardDetail(Long questionId, Long boardId);
 
+    QuestionBoard getForModifyAndDelete(Long boardId, Long userId);
+
     int count(Long questionId);
+
+    QuestionBoard save(QuestionBoard questionBoard);
 }

@@ -85,6 +85,13 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
+    public QuestionBoard getForModifyAndDelete(Long boardId, Long userId) {
+        return questionBoardJpaRepository.findByIdAndWriterId(boardId, userId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
     public int count(Long questionId) {
         Integer result = jpaQueryFactory.select(questionBoardEntity.id.count().intValue())
             .from(questionBoardEntity)
@@ -96,5 +103,10 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
         }
 
         return result;
+    }
+
+    @Override
+    public QuestionBoard save(QuestionBoard questionBoard) {
+        return questionBoardJpaRepository.save(questionBoard.toEntity()).toModel();
     }
 }
