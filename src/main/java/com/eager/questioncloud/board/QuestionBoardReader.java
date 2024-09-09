@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionBoardReader {
     private final QuestionBoardRepository questionBoardRepository;
-    private final QuestionBoardReadValidator questionBoardReadValidator;
+    private final QuestionBoardValidator questionBoardValidator;
 
     public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
-        questionBoardReadValidator.accessValidator(userId, questionId);
+        questionBoardValidator.accessValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardDetail(questionId, boardId);
     }
 
     public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, Pageable pageable) {
-        questionBoardReadValidator.accessValidator(userId, questionId);
+        questionBoardValidator.accessValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardList(questionId, pageable);
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionBoardReadValidator {
+public class QuestionBoardValidator {
     private final QuestionReader questionReader;
     private final UserQuestionLibraryReader userQuestionLibraryReader;
 
