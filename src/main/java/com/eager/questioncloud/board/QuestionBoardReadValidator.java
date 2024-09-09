@@ -14,15 +14,6 @@ public class QuestionBoardReadValidator {
     private final QuestionReader questionReader;
     private final UserQuestionLibraryReader userQuestionLibraryReader;
 
-    public void questionBoardListValidator(Long userId, Long questionId) {
-        if (!questionReader.isAvailable(questionId)) {
-            throw new CustomException(Error.NOT_FOUND);
-        }
-        if (!userQuestionLibraryReader.isOwned(userId, questionId)) {
-            throw new CustomException(Error.NOT_OWNED_QUESTION);
-        }
-    }
-
     public void accessValidator(Long userId, Long questionId) {
         if (!questionReader.isAvailable(questionId)) {
             throw new CustomException(Error.NOT_FOUND);

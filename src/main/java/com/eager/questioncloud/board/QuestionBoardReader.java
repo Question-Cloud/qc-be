@@ -19,7 +19,7 @@ public class QuestionBoardReader {
     }
 
     public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, Pageable pageable) {
-        questionBoardReadValidator.questionBoardListValidator(userId, questionId);
+        questionBoardReadValidator.accessValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardList(questionId, pageable);
     }
 
