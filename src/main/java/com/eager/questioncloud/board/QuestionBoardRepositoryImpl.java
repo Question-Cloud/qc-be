@@ -109,4 +109,9 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     public QuestionBoard save(QuestionBoard questionBoard) {
         return questionBoardJpaRepository.save(questionBoard.toEntity()).toModel();
     }
+
+    @Override
+    public void delete(QuestionBoard questionBoard) {
+        questionBoardJpaRepository.delete(questionBoard.toEntity());
+    }
 }

@@ -17,4 +17,6 @@ public interface QuestionBoardRepository {
     int count(Long questionId);
 
     QuestionBoard save(QuestionBoard questionBoard);
+
+    void delete(QuestionBoard questionBoard);
 }
