@@ -1,5 +1,6 @@
 package com.eager.questioncloud.board;
 
+import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +23,9 @@ public class QuestionBoardService {
 
     public int countQuestionBoard(Long questionId) {
         return questionBoardReader.count(questionId);
+    }
+
+    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
+        return questionBoardReader.getQuestionBoardDetail(userId, questionId, boardId);
     }
 }

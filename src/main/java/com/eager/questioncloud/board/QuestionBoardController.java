@@ -1,7 +1,9 @@
 package com.eager.questioncloud.board;
 
+import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.board.Request.RegisterQuestionBoardRequest;
+import com.eager.questioncloud.board.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -21,6 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class QuestionBoardController {
     private final QuestionBoardService questionBoardService;
+
+    @GetMapping("/question/{questionId}/{boardId}")
+    public QuestionBoardResponse getQuestionBoard(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @PathVariable Long boardId) {
+        QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), questionId, boardId);
+        return new QuestionBoardResponse(board);
+    }
 
     @GetMapping("/question/{questionId}")
     public PagingResponse<QuestionBoardListItem> getQuestionBoards(
