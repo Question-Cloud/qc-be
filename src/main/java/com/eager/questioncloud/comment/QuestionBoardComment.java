@@ -30,6 +30,10 @@ public class QuestionBoardComment {
             .build();
     }
 
+    public void modify(String comment) {
+        this.comment = comment;
+    }
+
     public QuestionBoardCommentEntity toEntity() {
         return QuestionBoardCommentEntity.builder()
             .id(id)

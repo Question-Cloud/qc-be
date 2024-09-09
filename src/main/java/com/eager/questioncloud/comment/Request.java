@@ -8,4 +8,9 @@ public class Request {
         private Long boardId;
         private String comment;
     }
+
+    @Getter
+    public static class ModifyQuestionBoardCommentRequest {
+        private String comment;
+    }
 }
