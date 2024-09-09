@@ -10,7 +10,7 @@ public interface QuestionBoardRepository {
 
     List<QuestionBoardListItem> getQuestionBoardList(Long questionId, Pageable pageable);
 
-    QuestionBoardDetail getQuestionBoardDetail(Long questionId, Long boardId);
+    QuestionBoardDetail getQuestionBoardDetail(Long boardId);
 
     QuestionBoard getForModifyAndDelete(Long boardId, Long userId);
 

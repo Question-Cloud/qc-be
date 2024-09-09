@@ -13,9 +13,10 @@ public class QuestionBoardReader {
     private final QuestionBoardRepository questionBoardRepository;
     private final QuestionBoardValidator questionBoardValidator;
 
-    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
-        questionBoardValidator.permissionValidator(userId, questionId);
-        return questionBoardRepository.getQuestionBoardDetail(questionId, boardId);
+    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long boardId) {
+        QuestionBoardDetail questionBoard = questionBoardRepository.getQuestionBoardDetail(boardId);
+        questionBoardValidator.permissionValidator(userId, questionBoard.getQuestionId());
+        return questionBoard;
     }
 
     public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, Pageable pageable) {

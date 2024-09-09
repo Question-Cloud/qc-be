@@ -53,7 +53,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoardDetail getQuestionBoardDetail(Long questionId, Long boardId) {
+    public QuestionBoardDetail getQuestionBoardDetail(Long boardId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         QuestionBoardDetail questionBoardDetail = jpaQueryFactory.select(
@@ -70,7 +70,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     questionBoardEntity.createdAt
                 ))
             .from(questionBoardEntity)
-            .where(questionBoardEntity.id.eq(boardId), questionBoardEntity.questionId.eq(questionId))
+            .where(questionBoardEntity.id.eq(boardId))
             .leftJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))

@@ -41,10 +41,10 @@ public class QuestionBoardController {
         return DefaultResponse.success();
     }
 
-    @GetMapping("/question/{questionId}/{boardId}")
+    @GetMapping("/{boardId}")
     public QuestionBoardResponse getQuestionBoard(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @PathVariable Long boardId) {
-        QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), questionId, boardId);
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
+        QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
         return new QuestionBoardResponse(board);
     }
 

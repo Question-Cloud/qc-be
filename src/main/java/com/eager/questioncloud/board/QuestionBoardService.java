@@ -27,8 +27,8 @@ public class QuestionBoardService {
         return questionBoardReader.count(questionId);
     }
 
-    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
-        return questionBoardReader.getQuestionBoardDetail(userId, questionId, boardId);
+    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long boardId) {
+        return questionBoardReader.getQuestionBoardDetail(userId, boardId);
     }
 
     public void modify(Long boardId, Long userId, String title, String content, List<QuestionBoardFile> files) {
