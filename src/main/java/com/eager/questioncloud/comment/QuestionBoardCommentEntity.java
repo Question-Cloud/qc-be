@@ -22,6 +22,9 @@ public class QuestionBoardCommentEntity {
     private Long id;
 
     @Column
+    private Long boardId;
+
+    @Column
     private Long writerId;
 
     @Column
@@ -31,8 +34,9 @@ public class QuestionBoardCommentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardCommentEntity(Long id, Long writerId, String comment, LocalDateTime createdAt) {
+    public QuestionBoardCommentEntity(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
+        this.boardId = boardId;
         this.writerId = writerId;
         this.comment = comment;
         this.createdAt = createdAt;
@@ -41,6 +45,7 @@ public class QuestionBoardCommentEntity {
     public QuestionBoardComment toModel() {
         return QuestionBoardComment.builder()
             .id(id)
+            .boardId(boardId)
             .writerId(writerId)
             .comment(comment)
             .createdAt(createdAt)

@@ -7,13 +7,15 @@ import lombok.Getter;
 @Getter
 public class QuestionBoardComment {
     private Long id;
+    private Long boardId;
     private Long writerId;
     private String comment;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardComment(Long id, Long writerId, String comment, LocalDateTime createdAt) {
+    public QuestionBoardComment(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
+        this.boardId = boardId;
         this.writerId = writerId;
         this.comment = comment;
         this.createdAt = createdAt;
@@ -22,6 +24,7 @@ public class QuestionBoardComment {
     public QuestionBoardCommentEntity toEntity() {
         return QuestionBoardCommentEntity.builder()
             .id(id)
+            .boardId(boardId)
             .writerId(writerId)
             .comment(comment)
             .createdAt(createdAt)
