@@ -11,28 +11,28 @@ public class QuestionBoard {
     private Long questionId;
     private Long writerId;
     private String title;
-    private String comment;
+    private String content;
     private List<QuestionBoardFile> files;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoard(Long id, Long questionId, Long writerId, String title, String comment, List<QuestionBoardFile> files,
+    public QuestionBoard(Long id, Long questionId, Long writerId, String title, String content, List<QuestionBoardFile> files,
         LocalDateTime createdAt) {
         this.id = id;
         this.questionId = questionId;
         this.writerId = writerId;
         this.title = title;
-        this.comment = comment;
+        this.content = content;
         this.files = files;
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoard create(Long questionId, Long writerId, String title, String comment, List<QuestionBoardFile> files) {
+    public static QuestionBoard create(Long questionId, Long writerId, String title, String content, List<QuestionBoardFile> files) {
         return QuestionBoard.builder()
             .questionId(questionId)
             .writerId(writerId)
             .title(title)
-            .comment(comment)
+            .content(content)
             .files(files)
             .createdAt(LocalDateTime.now())
             .build();
@@ -44,7 +44,7 @@ public class QuestionBoard {
             .questionId(questionId)
             .writerId(writerId)
             .title(title)
-            .comment(comment)
+            .content(content)
             .files(files)
             .createdAt(createdAt)
             .build();

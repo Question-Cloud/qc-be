@@ -33,7 +33,7 @@ public class QuestionBoardEntity {
     private String title;
 
     @Column
-    private String comment;
+    private String content;
 
     @Convert(converter = QuestionBoardFileConverter.class)
     private List<QuestionBoardFile> files;
@@ -42,13 +42,13 @@ public class QuestionBoardEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardEntity(Long id, Long questionId, Long writerId, String title, String comment, List<QuestionBoardFile> files,
+    public QuestionBoardEntity(Long id, Long questionId, Long writerId, String title, String content, List<QuestionBoardFile> files,
         LocalDateTime createdAt) {
         this.id = id;
         this.questionId = questionId;
         this.writerId = writerId;
         this.title = title;
-        this.comment = comment;
+        this.content = content;
         this.files = files;
         this.createdAt = createdAt;
     }
@@ -59,7 +59,7 @@ public class QuestionBoardEntity {
             .questionId(questionId)
             .writerId(writerId)
             .title(title)
-            .comment(comment)
+            .content(content)
             .files(files)
             .createdAt(createdAt)
             .build();
