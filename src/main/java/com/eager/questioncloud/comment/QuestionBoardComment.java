@@ -21,6 +21,15 @@ public class QuestionBoardComment {
         this.createdAt = createdAt;
     }
 
+    public static QuestionBoardComment create(Long boardId, Long writerId, String comment) {
+        return QuestionBoardComment.builder()
+            .boardId(boardId)
+            .writerId(writerId)
+            .comment(comment)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
     public QuestionBoardCommentEntity toEntity() {
         return QuestionBoardCommentEntity.builder()
             .id(id)
