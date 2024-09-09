@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -47,20 +48,19 @@ public class QuestionBoardController {
         return new QuestionBoardResponse(board);
     }
 
-    @GetMapping("/question/{questionId}")
+    @GetMapping
     public PagingResponse<QuestionBoardListItem> getQuestionBoards(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, Pageable pageable) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, Pageable pageable) {
         int total = questionBoardService.countQuestionBoard(questionId);
         List<QuestionBoardListItem> boards = questionBoardService.getQuestionBoardList(userPrincipal.getUser().getUid(), questionId, pageable);
         return new PagingResponse<>(total, boards);
     }
 
-    @PostMapping("/question/{questionId}")
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
-        @RequestBody RegisterQuestionBoardRequest request) {
+    @PostMapping
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterQuestionBoardRequest request) {
         questionBoardService.register(
             QuestionBoard.create(
-                questionId,
+                request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
                 request.getTitle(),
                 request.getContent(),
