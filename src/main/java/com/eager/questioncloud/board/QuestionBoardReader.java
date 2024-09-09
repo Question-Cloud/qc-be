@@ -14,12 +14,12 @@ public class QuestionBoardReader {
     private final QuestionBoardValidator questionBoardValidator;
 
     public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long questionId, Long boardId) {
-        questionBoardValidator.accessValidator(userId, questionId);
+        questionBoardValidator.permissionValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardDetail(questionId, boardId);
     }
 
     public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, Pageable pageable) {
-        questionBoardValidator.accessValidator(userId, questionId);
+        questionBoardValidator.permissionValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardList(questionId, pageable);
     }
 

@@ -14,7 +14,7 @@ public class QuestionBoardValidator {
     private final QuestionReader questionReader;
     private final UserQuestionLibraryReader userQuestionLibraryReader;
 
-    public void accessValidator(Long userId, Long questionId) {
+    public void permissionValidator(Long userId, Long questionId) {
         if (!questionReader.isAvailable(questionId)) {
             throw new CustomException(Error.NOT_FOUND);
         }
