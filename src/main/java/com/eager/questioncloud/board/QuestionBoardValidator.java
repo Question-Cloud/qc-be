@@ -1,25 +1,18 @@
 package com.eager.questioncloud.board;
 
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.library.UserQuestionLibraryReader;
-import com.eager.questioncloud.question.QuestionReader;
+import com.eager.questioncloud.question.QuestionPermissionValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class QuestionBoardValidator {
-    private final QuestionReader questionReader;
-    private final UserQuestionLibraryReader userQuestionLibraryReader;
+    private final QuestionBoardReader questionBoardReader;
+    private final QuestionPermissionValidator questionPermissionValidator;
 
-    public void permissionValidator(Long userId, Long questionId) {
-        if (!questionReader.isAvailable(questionId)) {
-            throw new CustomException(Error.NOT_FOUND);
-        }
-        if (!userQuestionLibraryReader.isOwned(userId, questionId)) {
-            throw new CustomException(Error.NOT_OWNED_QUESTION);
-        }
+    public void permissionValidator(Long boardId, Long userId) {
+        QuestionBoard questionBoard = questionBoardReader.get(boardId);
+        questionPermissionValidator.permissionValidator(userId, questionBoard.getQuestionId());
     }
 }

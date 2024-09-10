@@ -1,5 +1,6 @@
 package com.eager.questioncloud.board;
 
+import com.eager.questioncloud.question.QuestionPermissionValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionBoardRegister {
     private final QuestionBoardAppender questionBoardAppender;
-    private final QuestionBoardValidator questionBoardValidator;
+    private final QuestionPermissionValidator questionPermissionValidator;
 
     public QuestionBoard register(QuestionBoard questionBoard) {
-        questionBoardValidator.permissionValidator(questionBoard.getWriterId(), questionBoard.getQuestionId());
+        questionPermissionValidator.permissionValidator(questionBoard.getWriterId(), questionBoard.getQuestionId());
         return questionBoardAppender.append(questionBoard);
     }
 }
