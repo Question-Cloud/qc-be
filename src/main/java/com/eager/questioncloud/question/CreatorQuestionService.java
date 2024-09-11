@@ -15,19 +15,25 @@ public class CreatorQuestionService {
     private final QuestionRegister questionRegister;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
-    private final CreatorQuestionReader creatorQuestionReader;
+    private final QuestionReader questionReader;
 
     public int count(Long userId) {
-        return creatorQuestionReader.count(userId);
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionReader.getTotalFiltering(
+            new QuestionFilter(userId, null, null, null, creator.getId(), QuestionSortType.Latest, null)
+        );
     }
 
     public List<QuestionInformation> getQuestions(Long userId, Pageable pageable) {
-        return creatorQuestionReader.getQuestions(userId, pageable);
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionReader.getQuestionListByFiltering(
+            new QuestionFilter(userId, null, null, null, creator.getId(), QuestionSortType.Latest, pageable)
+        );
     }
 
     public QuestionContent get(Long userId, Long questionId) {
         Creator creator = creatorReader.getByUserId(userId);
-        return creatorQuestionReader.getQuestionContent(creator.getId(), questionId);
+        return questionReader.getQuestionContent(creator.getId(), questionId);
     }
 
     public Question register(Long userId, QuestionContent questionContent) {
