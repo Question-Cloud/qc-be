@@ -18,5 +18,7 @@ public interface QuestionRepository {
 
     Question getForModifyAndDelete(Long questionId, Long creatorId);
 
+    Question get(Long questionId);
+
     Question save(Question question);
 }

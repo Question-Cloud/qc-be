@@ -18,4 +18,10 @@ public class Response {
     public static class QuestionCategoriesResponse {
         private List<QuestionCategoryListItem> categories;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class QuestionContentResponse {
+        private QuestionContent question;
+    }
 }

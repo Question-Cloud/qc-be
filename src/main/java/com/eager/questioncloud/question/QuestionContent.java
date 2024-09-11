@@ -17,4 +17,19 @@ public class QuestionContent {
     private QuestionLevel questionLevel;
     private QuestionStatus questionStatus;
     private int price;
+
+    public static QuestionContent of(Question question) {
+        return new QuestionContent(
+            question.getQuestionCategoryId(),
+            question.getSubject(),
+            question.getTitle(),
+            question.getDescription(),
+            question.getThumbnail(),
+            question.getFileUrl(),
+            question.getExplanationUrl(),
+            question.getQuestionType(),
+            question.getQuestionLevel(),
+            question.getQuestionStatus(),
+            question.getPrice());
+    }
 }

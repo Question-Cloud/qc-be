@@ -9,6 +9,11 @@ public class CreatorQuestionService {
     private final QuestionRegister questionRegister;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
+    private final QuestionReader questionReader;
+
+    public QuestionContent get(Long userId, Long questionId) {
+        return questionReader.getQuestionContent(userId, questionId);
+    }
 
     public Question register(Long userId, QuestionContent questionContent) {
         return questionRegister.register(userId, questionContent);

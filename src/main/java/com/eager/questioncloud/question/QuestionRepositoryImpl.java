@@ -153,6 +153,14 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
+    public Question get(Long questionId) {
+        return questionJpaRepository.findById(questionId)
+            .filter(question -> !question.getQuestionStatus().equals(QuestionStatus.Delete))
+            .map(QuestionEntity::toDomain)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
+    }
+
+    @Override
     public Question save(Question question) {
         return questionJpaRepository.save(question.toEntity()).toDomain();
     }
