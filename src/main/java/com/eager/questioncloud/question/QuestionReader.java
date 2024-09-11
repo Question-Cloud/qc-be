@@ -1,6 +1,5 @@
 package com.eager.questioncloud.question;
 
-import com.eager.questioncloud.creator.Creator;
 import com.eager.questioncloud.creator.CreatorReader;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
@@ -39,10 +38,9 @@ public class QuestionReader {
         return questionRepository.get(questionId);
     }
 
-    public QuestionContent getQuestionContent(Long userId, Long questionId) {
+    public QuestionContent getQuestionContent(Long creatorId, Long questionId) {
         Question question = questionRepository.get(questionId);
-        Creator creator = creatorReader.getByUserId(userId);
-        if (!question.getCreatorId().equals(creator.getId())) {
+        if (!question.getCreatorId().equals(creatorId)) {
             throw new CustomException(Error.FORBIDDEN);
         }
         return QuestionContent.of(question);

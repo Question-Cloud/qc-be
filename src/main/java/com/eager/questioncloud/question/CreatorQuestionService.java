@@ -1,29 +1,36 @@
 package com.eager.questioncloud.question;
 
+import com.eager.questioncloud.creator.Creator;
+import com.eager.questioncloud.creator.CreatorReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CreatorQuestionService {
+    private final CreatorReader creatorReader;
     private final QuestionRegister questionRegister;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
     private final QuestionReader questionReader;
 
     public QuestionContent get(Long userId, Long questionId) {
-        return questionReader.getQuestionContent(userId, questionId);
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionReader.getQuestionContent(creator.getId(), questionId);
     }
 
     public Question register(Long userId, QuestionContent questionContent) {
-        return questionRegister.register(userId, questionContent);
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionRegister.register(creator.getId(), questionContent);
     }
 
     public void modify(Long userId, Long questionId, QuestionContent questionContent) {
-        questionUpdater.modify(userId, questionId, questionContent);
+        Creator creator = creatorReader.getByUserId(userId);
+        questionUpdater.modify(creator.getId(), questionId, questionContent);
     }
 
     public void delete(Long userId, Long questionId) {
-        questionRemover.remove(userId, questionId);
+        Creator creator = creatorReader.getByUserId(userId);
+        questionRemover.remove(creator.getId(), questionId);
     }
 }
