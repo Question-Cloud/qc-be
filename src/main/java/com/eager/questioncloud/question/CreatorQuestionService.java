@@ -2,7 +2,10 @@ package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.creator.Creator;
 import com.eager.questioncloud.creator.CreatorReader;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +16,20 @@ public class CreatorQuestionService {
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
     private final QuestionReader questionReader;
+
+    public int count(Long userId) {
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionReader.getTotalFiltering(
+            new QuestionFilter(userId, null, null, null, creator.getId(), QuestionSortType.Latest, null)
+        );
+    }
+
+    public List<QuestionInformation> getQuestions(Long userId, Pageable pageable) {
+        Creator creator = creatorReader.getByUserId(userId);
+        return questionReader.getQuestionListByFiltering(
+            new QuestionFilter(userId, null, null, null, creator.getId(), QuestionSortType.Latest, pageable)
+        );
+    }
 
     public QuestionContent get(Long userId, Long questionId) {
         Creator creator = creatorReader.getByUserId(userId);
