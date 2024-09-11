@@ -41,6 +41,36 @@ public class Question {
         this.createdAt = createdAt;
     }
 
+    public static Question create(Long creatorId, QuestionContent questionContent) {
+        return Question.builder()
+            .questionCategoryId(questionContent.getQuestionCategoryId())
+            .creatorId(creatorId)
+            .subject(questionContent.getSubject())
+            .title(questionContent.getTitle())
+            .description(questionContent.getDescription())
+            .thumbnail(questionContent.getThumbnail())
+            .fileUrl(questionContent.getFileUrl())
+            .explanationUrl(questionContent.getExplanationUrl())
+            .questionType(questionContent.getQuestionType())
+            .questionLevel(questionContent.getQuestionLevel())
+            .price(questionContent.getPrice())
+            .count(0)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
+    public void modify(QuestionContent questionContent) {
+        this.questionCategoryId = questionContent.getQuestionCategoryId();
+        this.subject = questionContent.getSubject();
+        this.title = questionContent.getTitle();
+        this.description = questionContent.getDescription();
+        this.thumbnail = questionContent.getThumbnail();
+        this.fileUrl = questionContent.getFileUrl();
+        this.explanationUrl = questionContent.getExplanationUrl();
+        this.questionLevel = questionContent.getQuestionLevel();
+        this.price = questionContent.getPrice();
+    }
+
     public QuestionEntity toEntity() {
         return QuestionEntity.builder()
             .id(id)
