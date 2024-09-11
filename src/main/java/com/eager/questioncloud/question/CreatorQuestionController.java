@@ -6,6 +6,7 @@ import com.eager.questioncloud.question.Request.RegisterSelfMadeQuestionRequest;
 import com.eager.questioncloud.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,12 @@ public class CreatorQuestionController {
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @RequestBody ModifySelfMadeQuestionRequest request) {
         creatorQuestionService.modify(userPrincipal.getUser().getUid(), questionId, request.toModel());
+        return DefaultResponse.success();
+    }
+
+    @DeleteMapping("/{questionId}")
+    public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
+        creatorQuestionService.delete(userPrincipal.getUser().getUid(), questionId);
         return DefaultResponse.success();
     }
 }

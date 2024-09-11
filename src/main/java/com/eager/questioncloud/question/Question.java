@@ -75,6 +75,10 @@ public class Question {
         this.price = questionContent.getPrice();
     }
 
+    public void delete() {
+        this.questionStatus = QuestionStatus.Delete;
+    }
+
     public QuestionEntity toEntity() {
         return QuestionEntity.builder()
             .id(id)
