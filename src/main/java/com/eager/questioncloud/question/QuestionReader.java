@@ -1,6 +1,5 @@
 package com.eager.questioncloud.question;
 
-import com.eager.questioncloud.creator.CreatorReader;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionReader {
     private final QuestionRepository questionRepository;
-    private final CreatorReader creatorReader;
 
     public int getTotalFiltering(QuestionFilter questionFilter) {
         return questionRepository.getTotalFiltering(questionFilter);
