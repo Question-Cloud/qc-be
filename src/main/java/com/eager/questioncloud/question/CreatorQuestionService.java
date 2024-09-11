@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreatorQuestionService {
     private final CreatorReader creatorReader;
-    private final QuestionRegister questionRegister;
+    private final CreatorQuestionRegister creatorQuestionRegister;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
     private final CreatorQuestionReader creatorQuestionReader;
@@ -30,8 +30,7 @@ public class CreatorQuestionService {
     }
 
     public Question register(Long userId, QuestionContent questionContent) {
-        Creator creator = creatorReader.getByUserId(userId);
-        return questionRegister.register(creator.getId(), questionContent);
+        return creatorQuestionRegister.register(userId, questionContent);
     }
 
     public void modify(Long userId, Long questionId, QuestionContent questionContent) {
