@@ -1,6 +1,5 @@
 package com.eager.questioncloud.question;
 
-import com.eager.questioncloud.creator.Creator;
 import com.eager.questioncloud.creator.CreatorReader;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import java.util.List;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class CreatorQuestionService {
     private final CreatorReader creatorReader;
     private final CreatorQuestionRegister creatorQuestionRegister;
-    private final QuestionUpdater questionUpdater;
-    private final QuestionRemover questionRemover;
+    private final CreatorQuestionUpdater creatorQuestionUpdater;
+    private final CreatorQuestionRemover creatorQuestionRemover;
     private final CreatorQuestionReader creatorQuestionReader;
 
     public int count(Long userId) {
@@ -34,12 +33,10 @@ public class CreatorQuestionService {
     }
 
     public void modify(Long userId, Long questionId, QuestionContent questionContent) {
-        Creator creator = creatorReader.getByUserId(userId);
-        questionUpdater.modify(creator.getId(), questionId, questionContent);
+        creatorQuestionUpdater.modify(userId, questionId, questionContent);
     }
 
     public void delete(Long userId, Long questionId) {
-        Creator creator = creatorReader.getByUserId(userId);
-        questionRemover.remove(creator.getId(), questionId);
+        creatorQuestionRemover.remove(userId, questionId);
     }
 }
