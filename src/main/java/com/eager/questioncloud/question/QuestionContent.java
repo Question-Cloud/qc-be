@@ -15,5 +15,6 @@ public class QuestionContent {
     private String explanationUrl;
     private QuestionType questionType;
     private QuestionLevel questionLevel;
+    private QuestionStatus questionStatus;
     private int price;
 }

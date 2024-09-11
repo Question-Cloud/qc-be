@@ -57,6 +57,10 @@ public class QuestionEntity {
     private QuestionLevel questionLevel;
 
     @Column
+    @Enumerated(EnumType.STRING)
+    private QuestionStatus questionStatus;
+
+    @Column
     private int price;
 
     @Column
@@ -67,8 +71,8 @@ public class QuestionEntity {
 
     @Builder
     public QuestionEntity(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
-        String fileUrl, String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, int price, int count,
-        LocalDateTime createdAt) {
+        String fileUrl, String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, QuestionStatus questionStatus, int price,
+        int count, LocalDateTime createdAt) {
         this.id = id;
         this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
@@ -80,6 +84,7 @@ public class QuestionEntity {
         this.explanationUrl = explanationUrl;
         this.questionType = questionType;
         this.questionLevel = questionLevel;
+        this.questionStatus = questionStatus;
         this.price = price;
         this.count = count;
         this.createdAt = createdAt;
@@ -98,6 +103,7 @@ public class QuestionEntity {
             .explanationUrl(explanationUrl)
             .questionType(questionType)
             .questionLevel(questionLevel)
+            .questionStatus(questionStatus)
             .price(price)
             .count(count)
             .createdAt(createdAt)

@@ -25,6 +25,7 @@ public class Request {
                 explanationUrl,
                 QuestionType.SelfMade,
                 questionLevel,
+                QuestionStatus.Available,
                 price);
         }
     }
@@ -39,6 +40,7 @@ public class Request {
         private String fileUrl;
         private String explanationUrl;
         private QuestionLevel questionLevel;
+        private QuestionStatus questionStatus;
         private int price;
 
         public QuestionContent toModel() {
@@ -51,6 +53,7 @@ public class Request {
                 explanationUrl,
                 QuestionType.SelfMade,
                 questionLevel,
+                questionStatus,
                 price);
         }
     }
