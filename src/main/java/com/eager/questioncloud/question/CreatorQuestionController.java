@@ -35,7 +35,7 @@ public class CreatorQuestionController {
 
     @GetMapping("/{questionId}")
     public QuestionContentResponse getQuestion(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionContent questionContent = creatorQuestionService.get(userPrincipal.getUser().getUid(), questionId);
+        QuestionContent questionContent = creatorQuestionService.getQuestionContent(userPrincipal.getUser().getUid(), questionId);
         return new QuestionContentResponse(questionContent);
     }
 
