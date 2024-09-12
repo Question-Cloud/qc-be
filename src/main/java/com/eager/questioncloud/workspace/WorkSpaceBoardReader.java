@@ -1,6 +1,7 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.workspace;
 
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.QuestionBoardRepository;
 import com.eager.questioncloud.creator.Creator;
 import com.eager.questioncloud.creator.CreatorReader;
 import java.util.List;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreatorQuestionBoardReader {
+public class WorkSpaceBoardReader {
     private final QuestionBoardRepository questionBoardRepository;
     private final CreatorReader creatorReader;
 

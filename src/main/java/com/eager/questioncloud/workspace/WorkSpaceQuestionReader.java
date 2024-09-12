@@ -1,10 +1,15 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.workspace;
 
 import com.eager.questioncloud.creator.Creator;
 import com.eager.questioncloud.creator.CreatorReader;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.question.Question;
+import com.eager.questioncloud.question.QuestionContent;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.question.QuestionFilter;
+import com.eager.questioncloud.question.QuestionRepository;
+import com.eager.questioncloud.question.QuestionSortType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreatorQuestionReader {
+public class WorkSpaceQuestionReader {
     private final CreatorReader creatorReader;
     private final QuestionRepository questionRepository;
 
