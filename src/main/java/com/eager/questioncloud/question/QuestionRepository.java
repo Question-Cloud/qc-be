@@ -13,4 +13,12 @@ public interface QuestionRepository {
     List<Question> getQuestionListInIds(List<Long> questionIds);
 
     Boolean isAvailable(Long questionId);
+
+    Question append(Question question);
+
+    Question getForModifyAndDelete(Long questionId, Long creatorId);
+
+    Question get(Long questionId);
+
+    Question save(Question question);
 }

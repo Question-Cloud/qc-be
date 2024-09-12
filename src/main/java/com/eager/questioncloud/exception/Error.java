@@ -30,7 +30,8 @@ public enum Error {
     ALREADY_SUBSCRIBE_CREATOR(HttpStatus.CONFLICT, "이미 구독중인 크리에이터입니다."),
     NOT_PASSWORD_SUPPORT_ACCOUNT(HttpStatus.BAD_REQUEST, "비밀번호를 사용하지 않는 계정 유형입니다."),
     ALREADY_REGISTER_REVIEW(HttpStatus.CONFLICT, "이미 후기를 남긴 문제입니다."),
-    NOT_OWNED_QUESTION(HttpStatus.BAD_REQUEST, "보유하고 있는 문제가 아닙니다.");
+    NOT_OWNED_QUESTION(HttpStatus.BAD_REQUEST, "보유하고 있는 문제가 아닙니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

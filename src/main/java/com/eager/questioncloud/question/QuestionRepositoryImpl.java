@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
+    private final QuestionJpaRepository questionJpaRepository;
 
     @Override
     public int getTotalFiltering(QuestionFilter questionFilter) {
@@ -137,6 +138,31 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .fetchFirst();
 
         return result != null;
+    }
+
+    @Override
+    public Question append(Question question) {
+        return questionJpaRepository.save(question.toEntity()).toDomain();
+    }
+
+    @Override
+    public Question getForModifyAndDelete(Long questionId, Long creatorId) {
+        return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toDomain();
+    }
+
+    @Override
+    public Question get(Long questionId) {
+        return questionJpaRepository.findById(questionId)
+            .filter(question -> !question.getQuestionStatus().equals(QuestionStatus.Delete))
+            .map(QuestionEntity::toDomain)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
+    }
+
+    @Override
+    public Question save(Question question) {
+        return questionJpaRepository.save(question.toEntity()).toDomain();
     }
 
     private OrderSpecifier<?> sort(QuestionSortType sort) {
