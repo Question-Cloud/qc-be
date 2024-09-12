@@ -1,7 +1,9 @@
-package com.eager.questioncloud.question;
+package com.eager.questioncloud.workspace;
 
+import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
+import com.eager.questioncloud.question.QuestionContent;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.question.Request.ModifySelfMadeQuestionRequest;
 import com.eager.questioncloud.question.Request.RegisterSelfMadeQuestionRequest;
@@ -21,40 +23,48 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/question/self-made")
+@RequestMapping("/api/workspace")
 @RequiredArgsConstructor
-public class CreatorQuestionController {
-    private final CreatorQuestionService creatorQuestionService;
+public class WorkSpaceController {
+    private final WorkSpaceQuestionService workSpaceQuestionService;
+    private final WorkSpaceBoardService workSpaceBoardService;
 
-    @GetMapping
+    @GetMapping("/question")
     public PagingResponse<QuestionInformation> getQuestions(@AuthenticationPrincipal UserPrincipal userPrincipal, Pageable pageable) {
-        int total = creatorQuestionService.count(userPrincipal.getUser().getUid());
-        List<QuestionInformation> questions = creatorQuestionService.getQuestions(userPrincipal.getUser().getUid(), pageable);
+        int total = workSpaceQuestionService.count(userPrincipal.getUser().getUid());
+        List<QuestionInformation> questions = workSpaceQuestionService.getQuestions(userPrincipal.getUser().getUid(), pageable);
         return new PagingResponse<>(total, questions);
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping("/question/{questionId}")
     public QuestionContentResponse getQuestion(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionContent questionContent = creatorQuestionService.getQuestionContent(userPrincipal.getUser().getUid(), questionId);
+        QuestionContent questionContent = workSpaceQuestionService.getQuestionContent(userPrincipal.getUser().getUid(), questionId);
         return new QuestionContentResponse(questionContent);
     }
 
-    @PostMapping
+    @PostMapping("/question")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterSelfMadeQuestionRequest request) {
-        creatorQuestionService.register(userPrincipal.getUser().getUid(), request.toModel());
+        workSpaceQuestionService.register(userPrincipal.getUser().getUid(), request.toModel());
         return DefaultResponse.success();
     }
 
-    @PatchMapping("/{questionId}")
+    @PatchMapping("/question/{questionId}")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @RequestBody ModifySelfMadeQuestionRequest request) {
-        creatorQuestionService.modify(userPrincipal.getUser().getUid(), questionId, request.toModel());
+        workSpaceQuestionService.modify(userPrincipal.getUser().getUid(), questionId, request.toModel());
         return DefaultResponse.success();
     }
 
-    @DeleteMapping("/{questionId}")
+    @DeleteMapping("/question/{questionId}")
     public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        creatorQuestionService.delete(userPrincipal.getUser().getUid(), questionId);
+        workSpaceQuestionService.delete(userPrincipal.getUser().getUid(), questionId);
         return DefaultResponse.success();
+    }
+
+    @GetMapping("/board")
+    public PagingResponse<QuestionBoardListItem> creatorQuestionBoardList(@AuthenticationPrincipal UserPrincipal userPrincipal, Pageable pageable) {
+        int total = workSpaceBoardService.countCreatorQuestionBoardList(userPrincipal.getUser().getUid());
+        List<QuestionBoardListItem> boards = workSpaceBoardService.getCreatorQuestionBoardList(userPrincipal.getUser().getUid(), pageable);
+        return new PagingResponse<>(total, boards);
     }
 }

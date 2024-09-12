@@ -68,11 +68,4 @@ public class QuestionBoardController {
         );
         return DefaultResponse.success();
     }
-
-    @GetMapping("/creator/me")
-    public PagingResponse<QuestionBoardListItem> creatorQuestionBoardList(@AuthenticationPrincipal UserPrincipal userPrincipal, Pageable pageable) {
-        int total = questionBoardService.countCreatorQuestionBoardList(userPrincipal.getUser().getUid());
-        List<QuestionBoardListItem> boards = questionBoardService.getCreatorQuestionBoardList(userPrincipal.getUser().getUid(), pageable);
-        return new PagingResponse<>(total, boards);
-    }
 }
