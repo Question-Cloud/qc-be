@@ -5,6 +5,7 @@ import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.security.UserPrincipal;
 import com.eager.questioncloud.user.AccountType;
 import com.eager.questioncloud.user.User;
+import com.eager.questioncloud.user.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.UserReader;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,18 +32,18 @@ public class AuthenticationProcessor {
     }
 
     public void authentication(Long uid) {
-        User user = userReader.getUser(uid);
+        UserWithCreator user = userReader.getUserWithCreator(uid);
         UserPrincipal userPrincipal = new UserPrincipal(user);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
-            user.getPassword(),
-            user.getAuthorities());
+            user.getUser().getUsername(),
+            user.getUser().getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     public void setGuest() {
         User guest = User.guest();
-        UserPrincipal userPrincipal = new UserPrincipal(guest);
+        UserPrincipal userPrincipal = new UserPrincipal(new UserWithCreator(guest, null));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
             guest.getPassword(),

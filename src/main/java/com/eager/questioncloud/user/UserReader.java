@@ -1,5 +1,6 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.user.UserDto.UserWithCreator;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,10 @@ public class UserReader {
 
     public User getUser(Long uid) {
         return userRepository.getUser(uid);
+    }
+
+    public UserWithCreator getUserWithCreator(Long uid) {
+        return userRepository.getUserWithCreatorId(uid);
     }
 
     public User getUserByEmail(String email) {

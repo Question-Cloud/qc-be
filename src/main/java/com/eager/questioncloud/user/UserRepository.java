@@ -1,11 +1,14 @@
 package com.eager.questioncloud.user;
 
+import com.eager.questioncloud.user.UserDto.UserWithCreator;
 import java.util.Optional;
 
 public interface UserRepository {
     User getUserByEmail(String email);
 
     User getUser(Long uid);
+
+    UserWithCreator getUserWithCreatorId(Long uid);
 
     User append(User user);
 
