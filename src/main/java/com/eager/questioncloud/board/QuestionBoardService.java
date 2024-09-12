@@ -14,6 +14,7 @@ public class QuestionBoardService {
     private final QuestionBoardReader questionBoardReader;
     private final QuestionBoardUpdater questionBoardUpdater;
     private final QuestionBoardRemover questionBoardRemover;
+    private final CreatorQuestionBoardReader creatorQuestionBoardReader;
 
     public QuestionBoard register(QuestionBoard questionBoard) {
         return questionBoardRegister.register(questionBoard);
@@ -37,5 +38,13 @@ public class QuestionBoardService {
 
     public void delete(Long boardId, Long userId) {
         questionBoardRemover.delete(boardId, userId);
+    }
+
+    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long userId, Pageable pageable) {
+        return creatorQuestionBoardReader.getCreatorQuestionBoardList(userId, pageable);
+    }
+
+    public int countCreatorQuestionBoardList(Long userId) {
+        return creatorQuestionBoardReader.countCreatorQuestionBoard(userId);
     }
 }

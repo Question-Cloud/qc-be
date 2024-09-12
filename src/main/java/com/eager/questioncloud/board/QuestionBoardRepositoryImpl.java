@@ -53,6 +53,46 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
+    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, Pageable pageable) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+        return jpaQueryFactory.select(
+                Projections.constructor(QuestionBoardListItem.class,
+                    questionBoardEntity.id,
+                    questionBoardEntity.title,
+                    parent.title,
+                    child.title,
+                    questionEntity.title,
+                    userEntity.name,
+                    questionBoardEntity.createdAt
+                ))
+            .from(questionEntity)
+            .where(questionEntity.creatorId.eq(creatorId))
+            .innerJoin(questionBoardEntity).on(questionBoardEntity.questionId.eq(questionEntity.id))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    @Override
+    public int countCreatorQuestionBoard(Long creatorId) {
+        Integer result = jpaQueryFactory.select(questionBoardEntity.id.count().intValue())
+            .from(questionEntity)
+            .where(questionEntity.creatorId.eq(creatorId))
+            .innerJoin(questionBoardEntity).on(questionBoardEntity.questionId.eq(questionEntity.id))
+            .fetchFirst();
+
+        if (result == null) {
+            return 0;
+        }
+
+        return result;
+    }
+
+    @Override
     public QuestionBoardDetail getQuestionBoardDetail(Long boardId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
