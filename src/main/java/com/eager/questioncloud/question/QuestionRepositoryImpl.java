@@ -10,6 +10,7 @@ import static com.eager.questioncloud.user.QUserEntity.userEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformationForWorkSpace;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,6 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -163,6 +165,44 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Override
     public Question save(Question question) {
         return questionJpaRepository.save(question.toEntity()).toDomain();
+    }
+
+    @Override
+    public List<QuestionInformationForWorkSpace> getCreatorQuestion(Long creatorId, Pageable pageable) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+        return jpaQueryFactory.select(
+                Projections.constructor(
+                    QuestionInformationForWorkSpace.class,
+                    questionEntity.id,
+                    questionEntity.title,
+                    parent.title,
+                    child.title,
+                    questionEntity.thumbnail,
+                    questionEntity.questionLevel,
+                    questionEntity.price))
+            .from(questionEntity)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(questionCategoryEntity).on(questionCategoryEntity.id.eq(questionEntity.questionCategoryId))
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetch();
+    }
+
+    @Override
+    public int countCreatorQuestion(Long creatorId) {
+        Integer result = jpaQueryFactory.select(questionEntity.id.count().intValue())
+            .from(questionEntity)
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetchFirst();
+
+        if (result == null) {
+            return 0;
+        }
+
+        return result;
     }
 
     private OrderSpecifier<?> sort(QuestionSortType sort) {

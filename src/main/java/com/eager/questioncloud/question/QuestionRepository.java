@@ -1,7 +1,9 @@
 package com.eager.questioncloud.question;
 
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformationForWorkSpace;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface QuestionRepository {
     int getTotalFiltering(QuestionFilter questionFilter);
@@ -21,4 +23,8 @@ public interface QuestionRepository {
     Question get(Long questionId);
 
     Question save(Question question);
+
+    List<QuestionInformationForWorkSpace> getCreatorQuestion(Long creatorId, Pageable pageable);
+
+    int countCreatorQuestion(Long creatorId);
 }
