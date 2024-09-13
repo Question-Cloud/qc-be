@@ -48,6 +48,7 @@ public class User implements UserDetails {
             .uid(-1L)
             .email("guest")
             .password("guest")
+            .name("guest")
             .build();
     }
 
@@ -56,8 +57,10 @@ public class User implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (uid.equals(-1L)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if (userType.equals(UserType.NormalUser)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_NormalUser"));
+        } else if (userType.equals(UserType.CreatorUser)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_CreatorUser"));
         }
         return authorities;
     }

@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class WorkSpaceBoardService {
     private final WorkSpaceBoardReader workSpaceBoardReader;
 
-    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long userId, Pageable pageable) {
-        return workSpaceBoardReader.getCreatorQuestionBoardList(userId, pageable);
+    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, Pageable pageable) {
+        return workSpaceBoardReader.getCreatorQuestionBoardList(creatorId, pageable);
     }
 
-    public int countCreatorQuestionBoardList(Long userId) {
-        return workSpaceBoardReader.countCreatorQuestionBoard(userId);
+    public int countCreatorQuestionBoardList(Long creatorId) {
+        return workSpaceBoardReader.countCreatorQuestionBoard(creatorId);
     }
 }

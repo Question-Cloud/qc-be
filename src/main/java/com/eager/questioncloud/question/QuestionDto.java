@@ -32,4 +32,16 @@ public class QuestionDto {
         private String fileUrl;
         private String explanationUrl;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class QuestionInformationForWorkSpace {
+        private Long id;
+        private String title;
+        private String parentCategory;
+        private String childCategory;
+        private String thumbnail;
+        private QuestionLevel questionLevel;
+        private int price;
+    }
 }

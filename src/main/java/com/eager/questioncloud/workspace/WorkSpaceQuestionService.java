@@ -2,7 +2,7 @@ package com.eager.questioncloud.workspace;
 
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionContent;
-import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.question.QuestionDto.QuestionInformationForWorkSpace;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,27 +16,27 @@ public class WorkSpaceQuestionService {
     private final WorkSpaceQuestionRemover workSpaceQuestionRemover;
     private final WorkSpaceQuestionReader workSpaceQuestionReader;
 
-    public int count(Long userId) {
-        return workSpaceQuestionReader.count(userId);
+    public int count(Long creatorId) {
+        return workSpaceQuestionReader.count(creatorId);
     }
 
-    public List<QuestionInformation> getQuestions(Long userId, Pageable pageable) {
-        return workSpaceQuestionReader.getQuestions(userId, pageable);
+    public List<QuestionInformationForWorkSpace> getQuestions(Long creatorId, Pageable pageable) {
+        return workSpaceQuestionReader.getQuestions(creatorId, pageable);
     }
 
-    public QuestionContent getQuestionContent(Long userId, Long questionId) {
-        return workSpaceQuestionReader.getQuestionContent(userId, questionId);
+    public QuestionContent getQuestionContent(Long creatorId, Long questionId) {
+        return workSpaceQuestionReader.getQuestionContent(creatorId, questionId);
     }
 
-    public Question register(Long userId, QuestionContent questionContent) {
-        return workSpaceQuestionRegister.register(userId, questionContent);
+    public Question register(Long creatorId, QuestionContent questionContent) {
+        return workSpaceQuestionRegister.register(creatorId, questionContent);
     }
 
-    public void modify(Long userId, Long questionId, QuestionContent questionContent) {
-        workSpaceQuestionUpdater.modify(userId, questionId, questionContent);
+    public void modify(Long creatorId, Long questionId, QuestionContent questionContent) {
+        workSpaceQuestionUpdater.modify(creatorId, questionId, questionContent);
     }
 
-    public void delete(Long userId, Long questionId) {
-        workSpaceQuestionRemover.remove(userId, questionId);
+    public void delete(Long creatorId, Long questionId) {
+        workSpaceQuestionRemover.remove(creatorId, questionId);
     }
 }
