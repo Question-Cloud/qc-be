@@ -27,6 +27,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getUserByPhone(String phone) {
+        return userJpaRepository.findByPhone(phone)
+            .filter(entity -> !entity.getUserStatus().equals(UserStatus.Deleted))
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toDomain();
+    }
+
+    @Override
     public User getUser(Long uid) {
         return userJpaRepository.findById(uid)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
@@ -55,7 +63,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {
             return new UserWithCreator(user.toDomain(), creator.toModel());
         }
-        
+
         return new UserWithCreator(user.toDomain(), null);
     }
 
