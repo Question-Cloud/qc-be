@@ -6,6 +6,8 @@ import java.util.Optional;
 public interface UserRepository {
     User getUserByEmail(String email);
 
+    User getUserByPhone(String phone);
+
     User getUser(Long uid);
 
     UserWithCreator getUserWithCreatorId(Long uid);

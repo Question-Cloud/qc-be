@@ -25,4 +25,8 @@ public class UserReader {
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
     }
+
+    public User getUserByPhone(String phone) {
+        return userRepository.getUserByPhone(phone);
+    }
 }
