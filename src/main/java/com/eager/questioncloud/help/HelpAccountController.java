@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelpAccountController {
     private final HelpAccountService helpAccountService;
 
-    @GetMapping("/recover/forgotten-email")
+    @GetMapping("/recover/email")
     public RecoverForgottenEmailResponse recoverForgottenEmail(@RequestParam String phone) {
         String email = helpAccountService.recoverForgottenEmail(phone);
         return new RecoverForgottenEmailResponse(email);
     }
 
-    @GetMapping("/recover/forgotten-password/send-mail")
+    @GetMapping("/recover/password")
     public DefaultResponse sendRecoverForgottenPasswordMail(@RequestParam String email) {
         helpAccountService.sendRecoverForgottenPasswordMail(email);
         return DefaultResponse.success();
