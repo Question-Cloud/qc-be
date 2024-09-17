@@ -36,7 +36,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionLevelFilter(questionFilter.getLevels()),
                 questionCategoryFilter(questionFilter.getCategories()),
                 questionTypeFilter(questionFilter.getQuestionType()),
-                questionCreatorFilter(questionFilter.getCreatorId()))
+                questionCreatorFilter(questionFilter.getCreatorId()),
+                questionStatusFilter())
             .fetchFirst();
 
         if (total == null) {
@@ -80,7 +81,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionLevelFilter(questionFilter.getLevels()),
                 questionCategoryFilter(questionFilter.getCategories()),
                 questionTypeFilter(questionFilter.getQuestionType()),
-                questionCreatorFilter(questionFilter.getCreatorId()))
+                questionCreatorFilter(questionFilter.getCreatorId()),
+                questionStatusFilter())
             .fetch();
     }
 
@@ -251,5 +253,9 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             return null;
         }
         return questionEntity.creatorId.eq(creatorId);
+    }
+
+    private BooleanExpression questionStatusFilter() {
+        return questionEntity.questionStatus.ne(QuestionStatus.Delete).and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable));
     }
 }
