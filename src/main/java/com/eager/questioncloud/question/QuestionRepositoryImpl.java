@@ -127,7 +127,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public List<Question> getQuestionListInIds(List<Long> questionIds) {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
-            .where(questionEntity.id.in(questionIds))
+            .where(questionEntity.id.in(questionIds), questionStatusFilter())
             .fetch()
             .stream()
             .map(QuestionEntity::toDomain)
