@@ -91,11 +91,6 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public QuestionReview append(QuestionReview questionReview) {
-        return questionReviewJpaRepository.save(questionReview.toEntity()).toModel();
-    }
-
-    @Override
     public Boolean isWritten(Long questionId, Long userId) {
         Long reviewId = jpaQueryFactory.select(questionReviewEntity.id)
             .from(questionReviewEntity)

@@ -9,6 +9,6 @@ public class QuestionReviewAppender {
     private final QuestionReviewRepository questionReviewRepository;
 
     public QuestionReview append(QuestionReview questionReview) {
-        return questionReviewRepository.append(questionReview);
+        return questionReviewRepository.save(questionReview);
     }
 }
