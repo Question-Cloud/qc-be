@@ -9,6 +9,6 @@ public class CreateSocialUserInformationAppender {
     private final CreateSocialUserInformationRepository createSocialUserInformationRepository;
 
     public CreateSocialUserInformation append(CreateSocialUserInformation createSocialUserInformation) {
-        return createSocialUserInformationRepository.append(createSocialUserInformation);
+        return createSocialUserInformationRepository.save(createSocialUserInformation);
     }
 }

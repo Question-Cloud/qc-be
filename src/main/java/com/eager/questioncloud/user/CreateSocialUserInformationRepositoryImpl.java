@@ -17,12 +17,7 @@ public class CreateSocialUserInformationRepositoryImpl implements CreateSocialUs
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();
     }
-
-    @Override
-    public CreateSocialUserInformation append(CreateSocialUserInformation createSocialUserInformation) {
-        return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toDomain();
-    }
-
+    
     @Override
     public CreateSocialUserInformation save(CreateSocialUserInformation createSocialUserInformation) {
         return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toDomain();
