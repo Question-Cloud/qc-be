@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface SubscribeRepository {
-    Subscribe append(Subscribe subscribe);
+    Subscribe save(Subscribe subscribe);
 
     Boolean isSubscribed(Long subscriberId, Long creatorId);
 

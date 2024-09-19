@@ -9,6 +9,6 @@ public class SubscribeAppender {
     private final SubscribeRepository subscribeRepository;
 
     public Subscribe append(Subscribe subscribe) {
-        return subscribeRepository.append(subscribe);
+        return subscribeRepository.save(subscribe);
     }
 }
