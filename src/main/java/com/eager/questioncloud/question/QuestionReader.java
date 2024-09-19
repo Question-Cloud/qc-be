@@ -1,5 +1,7 @@
 package com.eager.questioncloud.question;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,13 @@ public class QuestionReader {
     }
 
     public List<Question> getQuestions(List<Long> questionIds) {
-        return questionRepository.getQuestionListInIds(questionIds);
+        List<Question> questions = questionRepository.getQuestionListInIds(questionIds);
+
+        if (questions.size() != questionIds.size()) {
+            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+        }
+
+        return questions;
     }
 
     public Boolean isAvailable(Long questionId) {

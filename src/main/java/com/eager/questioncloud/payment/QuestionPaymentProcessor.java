@@ -22,13 +22,14 @@ public class QuestionPaymentProcessor {
 
     @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long userCouponId) {
-        int originalAmount = getOriginalAmount(questionIds);
+        List<Question> questions = questionReader.getQuestions(questionIds);
+        int originalAmount = getOriginalAmount(questions);
         int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
         userPointProcessor.usePoint(userId, finalAmount);
 
         QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
-        questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questionIds));
+        questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questions));
 
         userQuestionLibraryAppender.appendUserQuestion(userId, questionIds);
         return questionPayment;
@@ -38,8 +39,8 @@ public class QuestionPaymentProcessor {
         return couponId != null;
     }
 
-    public int getOriginalAmount(List<Long> questionIds) {
-        return questionReader.getQuestions(questionIds)
+    public int getOriginalAmount(List<Question> questions) {
+        return questions
             .stream()
             .mapToInt(Question::getPrice)
             .sum();
