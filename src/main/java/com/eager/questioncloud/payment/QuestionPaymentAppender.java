@@ -9,6 +9,6 @@ public class QuestionPaymentAppender {
     private final QuestionPaymentRepository questionPaymentRepository;
 
     public QuestionPayment createQuestionPayment(QuestionPayment questionPayment) {
-        return questionPaymentRepository.append(questionPayment);
+        return questionPaymentRepository.save(questionPayment);
     }
 }
