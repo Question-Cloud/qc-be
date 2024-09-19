@@ -9,6 +9,6 @@ public class UserCouponAppender {
     private final UserCouponRepository userCouponRepository;
 
     public UserCoupon append(UserCoupon userCoupon) {
-        return userCouponRepository.append(userCoupon);
+        return userCouponRepository.save(userCoupon);
     }
 }
