@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point;
 
 public interface UserPointPaymentRepository {
-    UserPointPayment append(UserPointPayment userPointPayment);
+    UserPointPayment save(UserPointPayment userPointPayment);
 
     Boolean existsById(String paymentId);
 }

@@ -9,7 +9,7 @@ public class UserPointPaymentRepositoryImpl implements UserPointPaymentRepositor
     private final UserPointPaymentJpaRepository userPointPaymentJpaRepository;
 
     @Override
-    public UserPointPayment append(UserPointPayment userPointPayment) {
+    public UserPointPayment save(UserPointPayment userPointPayment) {
         return userPointPaymentJpaRepository.save(userPointPayment.toEntity()).toModel();
     }
 
