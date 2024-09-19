@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CreatorService {
-    private final CreatorRegister creatorRegister;
+    private final CreatorAppender creatorAppender;
     private final CreatorReader creatorReader;
     private final CreatorUpdater creatorUpdater;
 
     public Creator register(Long userId, Subject mainSubject, String introduction) {
-        return creatorRegister.register(userId, mainSubject, introduction);
+        return creatorAppender.append(Creator.create(userId, mainSubject, introduction));
     }
 
     public CreatorInformation getCreatorInformation(Long creatorId) {
