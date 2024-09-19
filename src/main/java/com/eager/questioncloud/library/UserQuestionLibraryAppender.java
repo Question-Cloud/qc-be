@@ -15,6 +15,6 @@ public class UserQuestionLibraryAppender {
         if (userQuestionLibraryRepository.checkDuplicate(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
-        return userQuestionLibraryRepository.append(UserQuestionLibrary.create(userId, questionIds));
+        return userQuestionLibraryRepository.saveAll(UserQuestionLibrary.create(userId, questionIds));
     }
 }

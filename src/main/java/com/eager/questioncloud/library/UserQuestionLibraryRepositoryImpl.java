@@ -23,7 +23,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     private final UserQuestionLibraryJpaRepository userQuestionLibraryJpaRepository;
 
     @Override
-    public List<UserQuestionLibrary> append(List<UserQuestionLibrary> userQuestionLibraries) {
+    public List<UserQuestionLibrary> saveAll(List<UserQuestionLibrary> userQuestionLibraries) {
         return UserQuestionLibraryEntity.toModel(userQuestionLibraryJpaRepository.saveAll(UserQuestionLibrary.toEntity(userQuestionLibraries)));
     }
 
