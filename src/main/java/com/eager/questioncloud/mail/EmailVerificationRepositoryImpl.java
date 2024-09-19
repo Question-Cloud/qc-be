@@ -18,11 +18,6 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public EmailVerification append(EmailVerification emailVerification) {
-        return emailVerificationJpaRepository.save(emailVerification.toEntity()).toDomain();
-    }
-
-    @Override
     public EmailVerification get(String token, EmailVerificationType emailVerificationType) {
         return emailVerificationJpaRepository.findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(token, emailVerificationType)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
