@@ -28,11 +28,15 @@ public class QuestionPaymentOrderEntity {
     @Column
     private Long questionId;
 
+    @Column
+    private int price;
+
     @Builder
-    public QuestionPaymentOrderEntity(Long id, Long paymentId, Long questionId) {
+    public QuestionPaymentOrderEntity(Long id, Long paymentId, Long questionId, int price) {
         this.id = id;
         this.paymentId = paymentId;
         this.questionId = questionId;
+        this.price = price;
     }
 
     public static List<QuestionPaymentOrder> toModel(List<QuestionPaymentOrderEntity> orders) {
@@ -47,6 +51,7 @@ public class QuestionPaymentOrderEntity {
             .id(id)
             .paymentId(paymentId)
             .questionId(questionId)
+            .price(price)
             .build();
     }
 }
