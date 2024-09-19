@@ -3,5 +3,5 @@ package com.eager.questioncloud.payment;
 import java.util.List;
 
 public interface QuestionPaymentOrderRepository {
-    List<QuestionPaymentOrder> append(List<QuestionPaymentOrder> questionPaymentOrders);
+    List<QuestionPaymentOrder> saveAll(List<QuestionPaymentOrder> questionPaymentOrders);
 }
