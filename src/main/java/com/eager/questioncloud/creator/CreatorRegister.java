@@ -15,6 +15,6 @@ public class CreatorRegister {
         if (creatorRepository.existsByUserId(userId)) {
             throw new CustomException(Error.ALREADY_REGISTER_CREATOR);
         }
-        return creatorRepository.append(Creator.create(userId, mainSubject, introduction));
+        return creatorRepository.save(Creator.create(userId, mainSubject, introduction));
     }
 }
