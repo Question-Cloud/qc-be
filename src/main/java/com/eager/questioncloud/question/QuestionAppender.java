@@ -9,6 +9,6 @@ public class QuestionAppender {
     private final QuestionRepository questionRepository;
 
     public Question append(Question question) {
-        return questionRepository.append(question);
+        return questionRepository.save(question);
     }
 }

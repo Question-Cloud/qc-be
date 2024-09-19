@@ -13,6 +13,6 @@ public class WorkSpaceQuestionRegister {
 
     public Question register(Long creatorId, QuestionContent questionContent) {
         Question question = Question.create(creatorId, questionContent);
-        return questionRepository.append(question);
+        return questionRepository.save(question);
     }
 }

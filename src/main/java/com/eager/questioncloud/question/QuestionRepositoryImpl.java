@@ -145,11 +145,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public Question append(Question question) {
-        return questionJpaRepository.save(question.toEntity()).toDomain();
-    }
-
-    @Override
     public Question getForModifyAndDelete(Long questionId, Long creatorId) {
         return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
