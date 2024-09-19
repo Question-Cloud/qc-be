@@ -22,7 +22,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public void append(String token, Long uid) {
+    public void save(String token, Long uid) {
         redisTemplate.opsForValue().set(REFRESH_TOKEN_KEY_PREFIX + uid, token, Duration.ofHours(24));
     }
 }
