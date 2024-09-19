@@ -4,8 +4,6 @@ import com.eager.questioncloud.coupon.UserCouponDto.AvailableUserCouponItem;
 import java.util.List;
 
 public interface UserCouponRepository {
-    UserCoupon append(UserCoupon userCoupon);
-
     UserCoupon getUserCoupon(Long userCouponId, Long userId);
 
     Boolean isRegistered(Long userId, Long couponId);

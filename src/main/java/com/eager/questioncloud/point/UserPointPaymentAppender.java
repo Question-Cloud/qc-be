@@ -9,6 +9,6 @@ public class UserPointPaymentAppender {
     private final UserPointPaymentRepository userPointPaymentRepository;
 
     public UserPointPayment append(UserPointPayment userPointPayment) {
-        return userPointPaymentRepository.append(userPointPayment);
+        return userPointPaymentRepository.save(userPointPayment);
     }
 }

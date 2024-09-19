@@ -22,11 +22,6 @@ public class CreatorRepositoryImpl implements CreatorRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Creator append(Creator creator) {
-        return creatorJpaRepository.save(creator.toEntity()).toModel();
-    }
-
-    @Override
     public Boolean existsByUserId(Long userId) {
         return creatorJpaRepository.existsByUserId(userId);
     }

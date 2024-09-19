@@ -16,8 +16,6 @@ public interface QuestionRepository {
 
     Boolean isAvailable(Long questionId);
 
-    Question append(Question question);
-
     Question getForModifyAndDelete(Long questionId, Long creatorId);
 
     Question get(Long questionId);

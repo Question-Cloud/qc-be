@@ -18,12 +18,7 @@ import org.springframework.stereotype.Repository;
 public class UserCouponRepositoryImpl implements UserCouponRepository {
     private final UserCouponJpaRepository userCouponJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public UserCoupon append(UserCoupon userCoupon) {
-        return userCouponJpaRepository.save(userCoupon.toEntity()).toModel();
-    }
-
+    
     @Override
     public UserCoupon getUserCoupon(Long userCouponId, Long userId) {
         return userCouponJpaRepository.findByIdAndUserIdAndIsUsedFalse(userCouponId, userId)

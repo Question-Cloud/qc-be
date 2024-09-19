@@ -13,8 +13,6 @@ public interface QuestionReviewRepository {
 
     QuestionReview getForModifyAndDelete(Long reviewId, Long userId);
 
-    QuestionReview append(QuestionReview questionReview);
-
     Boolean isWritten(Long questionId, Long userId);
 
     QuestionReview save(QuestionReview questionReview);

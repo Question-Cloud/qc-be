@@ -9,6 +9,6 @@ public class QuestionBoardAppender {
     private final QuestionBoardRepository questionBoardRepository;
 
     public QuestionBoard append(QuestionBoard questionBoard) {
-        return questionBoardRepository.append(questionBoard);
+        return questionBoardRepository.save(questionBoard);
     }
 }

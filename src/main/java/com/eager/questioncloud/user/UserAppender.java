@@ -17,7 +17,7 @@ public class UserAppender {
         if (checkDuplicatePhone(user.getPhone())) {
             throw new CustomException(Error.DUPLICATE_PHONE);
         }
-        return userRepository.append(user);
+        return userRepository.save(user);
     }
 
     public Boolean checkDuplicatePhone(String phone) {

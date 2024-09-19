@@ -23,11 +23,6 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public QuestionBoard append(QuestionBoard questionBoard) {
-        return questionBoardJpaRepository.save(questionBoard.toEntity()).toModel();
-    }
-
-    @Override
     public List<QuestionBoardListItem> getQuestionBoardList(Long questionId, Pageable pageable) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");

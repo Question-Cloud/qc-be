@@ -12,8 +12,6 @@ public interface UserRepository {
 
     UserWithCreator getUserWithCreatorId(Long uid);
 
-    User append(User user);
-
     User save(User user);
 
     Optional<User> getSocialUser(AccountType accountType, String socialUid);

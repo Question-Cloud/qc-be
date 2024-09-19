@@ -9,6 +9,6 @@ public class RefreshTokenAppender {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public void append(String token, Long uid) {
-        refreshTokenRepository.append(token, uid);
+        refreshTokenRepository.save(token, uid);
     }
 }

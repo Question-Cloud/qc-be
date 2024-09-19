@@ -12,6 +12,6 @@ public class QuestionBoardCommentAppender {
 
     public QuestionBoardComment append(QuestionBoardComment questionBoardComment) {
         questionBoardValidator.permissionValidator(questionBoardComment.getBoardId(), questionBoardComment.getWriterId());
-        return questionBoardCommentRepository.append(questionBoardComment);
+        return questionBoardCommentRepository.save(questionBoardComment);
     }
 }

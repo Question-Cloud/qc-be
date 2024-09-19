@@ -10,6 +10,6 @@ public class QuestionPaymentOrderAppender {
     private final QuestionPaymentOrderRepository questionPaymentOrderRepository;
 
     List<QuestionPaymentOrder> createQuestionPaymentOrders(List<QuestionPaymentOrder> orders) {
-        return questionPaymentOrderRepository.append(orders);
+        return questionPaymentOrderRepository.saveAll(orders);
     }
 }

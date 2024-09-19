@@ -21,12 +21,7 @@ import org.springframework.stereotype.Repository;
 public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentRepository {
     private final QuestionBoardCommentJpaRepository questionBoardCommentJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public QuestionBoardComment append(QuestionBoardComment questionBoardComment) {
-        return questionBoardCommentJpaRepository.save(questionBoardComment.toEntity()).toModel();
-    }
-
+    
     @Override
     public QuestionBoardComment save(QuestionBoardComment questionBoardComment) {
         return questionBoardCommentJpaRepository.save(questionBoardComment.toEntity()).toModel();

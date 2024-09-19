@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface QuestionBoardCommentRepository {
-    QuestionBoardComment append(QuestionBoardComment questionBoardComment);
-
     QuestionBoardComment save(QuestionBoardComment questionBoardComment);
 
     QuestionBoardComment getForModifyAndDelete(Long commentId, Long userId);

@@ -9,7 +9,7 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
     private final QuestionPaymentJpaRepository questionPaymentJpaRepository;
 
     @Override
-    public QuestionPayment append(QuestionPayment questionPayment) {
+    public QuestionPayment save(QuestionPayment questionPayment) {
         return questionPaymentJpaRepository.save(questionPayment.toEntity()).toModel();
     }
 }

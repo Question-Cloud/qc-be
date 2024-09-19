@@ -10,7 +10,7 @@ public class QuestionPaymentOrderRepositoryImpl implements QuestionPaymentOrderR
     private final QuestionPaymentOrderJpaRepository questionPaymentOrderJpaRepository;
 
     @Override
-    public List<QuestionPaymentOrder> append(List<QuestionPaymentOrder> questionPaymentOrders) {
+    public List<QuestionPaymentOrder> saveAll(List<QuestionPaymentOrder> questionPaymentOrders) {
         return QuestionPaymentOrderEntity.toModel(questionPaymentOrderJpaRepository.saveAll(QuestionPaymentOrder.toEntity(questionPaymentOrders)));
     }
 }

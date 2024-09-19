@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 public interface QuestionBoardRepository {
-    QuestionBoard append(QuestionBoard questionBoard);
-
     List<QuestionBoardListItem> getQuestionBoardList(Long questionId, Pageable pageable);
 
     List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, Pageable pageable);

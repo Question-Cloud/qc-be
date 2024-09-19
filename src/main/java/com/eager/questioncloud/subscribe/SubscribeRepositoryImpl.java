@@ -20,7 +20,7 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Subscribe append(Subscribe subscribe) {
+    public Subscribe save(Subscribe subscribe) {
         return subscribeJpaRepository.save(subscribe.toEntity()).toModel();
     }
 

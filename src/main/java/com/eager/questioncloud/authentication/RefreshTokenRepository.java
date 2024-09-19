@@ -5,5 +5,5 @@ public interface RefreshTokenRepository {
 
     void delete(String uid);
 
-    void append(String token, Long uid);
+    void save(String token, Long uid);
 }
