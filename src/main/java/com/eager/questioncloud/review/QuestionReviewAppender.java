@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionReviewAppender {
     private final QuestionReviewRepository questionReviewRepository;
+    private final QuestionReviewValidator questionReviewValidator;
 
     public QuestionReview append(QuestionReview questionReview) {
+        questionReviewValidator.validate(questionReview);
         return questionReviewRepository.save(questionReview);
     }
 }

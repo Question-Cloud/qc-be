@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionReviewRegister {
+public class QuestionReviewValidator {
     private final QuestionReviewReader questionReviewReader;
-    private final QuestionReviewAppender questionReviewAppender;
     private final UserQuestionLibraryReader userQuestionLibraryReader;
     private final QuestionReader questionReader;
 
-    public QuestionReview register(QuestionReview questionReview) {
+    public void validate(QuestionReview questionReview) {
         if (!questionReader.isAvailable(questionReview.getQuestionId())) {
             throw new CustomException(Error.NOT_FOUND);
         }
@@ -27,6 +26,5 @@ public class QuestionReviewRegister {
         if (questionReviewReader.isWritten(questionReview.getQuestionId(), questionReview.getReviewerId())) {
             throw new CustomException(Error.ALREADY_REGISTER_REVIEW);
         }
-        return questionReviewAppender.append(questionReview);
     }
 }
