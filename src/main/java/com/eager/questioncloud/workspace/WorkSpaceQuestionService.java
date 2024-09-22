@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WorkSpaceQuestionService {
-    private final WorkSpaceQuestionRegister workSpaceQuestionRegister;
+    private final WorkSpaceQuestionAppender workSpaceQuestionAppender;
     private final WorkSpaceQuestionUpdater workSpaceQuestionUpdater;
     private final WorkSpaceQuestionRemover workSpaceQuestionRemover;
     private final WorkSpaceQuestionReader workSpaceQuestionReader;
@@ -29,7 +29,7 @@ public class WorkSpaceQuestionService {
     }
 
     public Question register(Long creatorId, QuestionContent questionContent) {
-        return workSpaceQuestionRegister.register(creatorId, questionContent);
+        return workSpaceQuestionAppender.register(creatorId, questionContent);
     }
 
     public void modify(Long creatorId, Long questionId, QuestionContent questionContent) {

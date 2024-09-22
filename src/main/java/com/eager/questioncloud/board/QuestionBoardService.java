@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class QuestionBoardService {
-    private final QuestionBoardRegister questionBoardRegister;
+    private final QuestionBoardAppender questionBoardAppender;
     private final QuestionBoardReader questionBoardReader;
     private final QuestionBoardUpdater questionBoardUpdater;
     private final QuestionBoardRemover questionBoardRemover;
 
     public QuestionBoard register(QuestionBoard questionBoard) {
-        return questionBoardRegister.register(questionBoard);
+        return questionBoardAppender.append(questionBoard);
     }
 
     public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, Pageable pageable) {
