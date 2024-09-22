@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class WorkSpaceQuestionRegister {
+public class WorkSpaceQuestionAppender {
     private final QuestionRepository questionRepository;
 
     public Question register(Long creatorId, QuestionContent questionContent) {
