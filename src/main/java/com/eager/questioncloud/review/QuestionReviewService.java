@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionReviewService {
     private final QuestionReviewReader questionReviewReader;
-    private final QuestionReviewRegister questionReviewRegister;
+    private final QuestionReviewAppender questionReviewAppender;
     private final QuestionReviewUpdater questionReviewUpdater;
     private final QuestionReviewRemover questionReviewRemover;
 
@@ -27,7 +27,7 @@ public class QuestionReviewService {
     }
 
     public QuestionReview register(QuestionReview questionReview) {
-        return questionReviewRegister.register(questionReview);
+        return questionReviewAppender.append(questionReview);
     }
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
