@@ -18,6 +18,15 @@ public class QuestionReviewStatistics {
         this.averageRate = averageRate;
     }
 
+    public static QuestionReviewStatistics create(Long questionId) {
+        return QuestionReviewStatistics.builder()
+            .questionId(questionId)
+            .reviewCount(0)
+            .totalRate(0)
+            .averageRate(0.0)
+            .build();
+    }
+
     public QuestionReviewStatisticsEntity toEntity() {
         return QuestionReviewStatisticsEntity.builder()
             .questionId(questionId)
