@@ -1,11 +1,13 @@
 package com.eager.questioncloud.question;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 public class QuestionDto {
     @Getter
     @AllArgsConstructor
+    @Builder
     public static class QuestionInformation {
         private Long id;
         private String title;
