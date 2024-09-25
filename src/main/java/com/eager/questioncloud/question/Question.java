@@ -20,13 +20,12 @@ public class Question {
     private QuestionStatus questionStatus;
     private int price;
     private int count;
-    private int totalRate;
     private LocalDateTime createdAt;
 
     @Builder
     public Question(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
         String fileUrl, String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, QuestionStatus questionStatus, int price,
-        int count, int totalRate, LocalDateTime createdAt) {
+        int count, LocalDateTime createdAt) {
         this.id = id;
         this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
@@ -41,7 +40,6 @@ public class Question {
         this.questionStatus = questionStatus;
         this.price = price;
         this.count = count;
-        this.totalRate = totalRate;
         this.createdAt = createdAt;
     }
 
@@ -60,7 +58,6 @@ public class Question {
             .questionStatus(QuestionStatus.Available)
             .price(questionContent.getPrice())
             .count(0)
-            .totalRate(0)
             .createdAt(LocalDateTime.now())
             .build();
     }
@@ -98,7 +95,6 @@ public class Question {
             .questionStatus(questionStatus)
             .price(price)
             .count(count)
-            .totalRate(totalRate)
             .createdAt(createdAt)
             .build();
     }
