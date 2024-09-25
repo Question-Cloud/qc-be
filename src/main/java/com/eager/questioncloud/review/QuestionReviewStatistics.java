@@ -27,6 +27,19 @@ public class QuestionReviewStatistics {
             .build();
     }
 
+    public void updateByNewReview(int newRate) {
+        this.reviewCount = this.reviewCount + 1;
+        this.totalRate = this.totalRate + newRate;
+        double value = (double) totalRate / (double) reviewCount;
+        this.averageRate = Math.round(value * 10.0) / 10.0;
+    }
+
+    public void updateByModifyReview(int fluctuationRate) {
+        this.totalRate = this.totalRate + fluctuationRate;
+        double value = (double) totalRate / (double) reviewCount;
+        this.averageRate = Math.round(value * 10.0) / 10.0;
+    }
+
     public QuestionReviewStatisticsEntity toEntity() {
         return QuestionReviewStatisticsEntity.builder()
             .questionId(questionId)

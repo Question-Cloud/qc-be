@@ -8,9 +8,12 @@ import org.springframework.stereotype.Component;
 public class QuestionReviewAppender {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionReviewValidator questionReviewValidator;
+    private final QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
     public QuestionReview append(QuestionReview questionReview) {
         questionReviewValidator.validate(questionReview);
-        return questionReviewRepository.save(questionReview);
+        questionReviewRepository.save(questionReview);
+        questionReviewStatisticsUpdater.updateByNewReview(questionReview.getQuestionId(), questionReview.getRate());
+        return questionReview;
     }
 }

@@ -27,7 +27,8 @@ public class QuestionReviewService {
     }
 
     public QuestionReview register(QuestionReview questionReview) {
-        return questionReviewAppender.append(questionReview);
+        questionReviewAppender.append(questionReview);
+        return questionReview;
     }
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
