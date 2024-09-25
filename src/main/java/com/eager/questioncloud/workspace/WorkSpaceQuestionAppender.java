@@ -3,6 +3,8 @@ package com.eager.questioncloud.workspace;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionContent;
 import com.eager.questioncloud.question.QuestionRepository;
+import com.eager.questioncloud.review.QuestionReviewStatistics;
+import com.eager.questioncloud.review.QuestionReviewStatisticsAppender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class WorkSpaceQuestionAppender {
     private final QuestionRepository questionRepository;
+    private final QuestionReviewStatisticsAppender questionReviewStatisticsAppender;
 
     public Question register(Long creatorId, QuestionContent questionContent) {
-        Question question = Question.create(creatorId, questionContent);
-        return questionRepository.save(question);
+        Question question = questionRepository.save(Question.create(creatorId, questionContent));
+        questionReviewStatisticsAppender.append(QuestionReviewStatistics.create(question.getId()));
+        return question;
     }
 }
