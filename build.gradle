@@ -63,3 +63,8 @@ clean.doLast {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+test {
+    minHeapSize = "2g"
+    maxHeapSize = "2g"
+}
