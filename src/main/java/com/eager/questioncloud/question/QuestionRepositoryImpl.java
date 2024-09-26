@@ -122,8 +122,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionEntity.id))
             .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .groupBy(questionEntity.id)
-            .groupBy(questionEntity.id)
             .where(questionEntity.id.eq(questionId))
             .fetchFirst();
 
