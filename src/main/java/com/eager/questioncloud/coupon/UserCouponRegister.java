@@ -22,8 +22,8 @@ public class UserCouponRegister {
             throw new CustomException(Error.ALREADY_REGISTER_COUPON);
         }
 
-        couponUpdater.decreaseCount(coupon);
-        
+        couponUpdater.decreaseCount(coupon.getId());
+
         return userCouponAppender.append(UserCoupon.create(userId, coupon));
     }
 }
