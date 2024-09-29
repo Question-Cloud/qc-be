@@ -9,4 +9,6 @@ public interface CouponRepository {
     Coupon getCoupon(String code);
 
     Coupon save(Coupon coupon);
+
+    Boolean decreaseCount(Long couponId);
 }
