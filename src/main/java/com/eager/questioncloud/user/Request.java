@@ -58,6 +58,7 @@ public class Request {
     @Getter
     public static class UpdateMyInformationRequest {
         private String profileImage;
+        @NotBlank
         private String name;
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
 
     @PatchMapping("/me")
     public DefaultResponse updateMyInformation(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateMyInformationRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid UpdateMyInformationRequest request) {
         userService.updateUser(userPrincipal.getUser(), request.getName(), request.getProfileImage());
         return DefaultResponse.success();
     }
