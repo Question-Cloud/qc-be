@@ -16,6 +16,7 @@ public class Request {
 
     @Getter
     public static class ModifyQuestionBoardCommentRequest {
+        @NotBlank
         private String comment;
     }
 }

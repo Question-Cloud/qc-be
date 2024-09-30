@@ -51,7 +51,8 @@ public class QuestionBoardCommentController {
 
     @PatchMapping("/{commentId}")
     public DefaultResponse modifyQuestionBoardComment(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId, @RequestBody ModifyQuestionBoardCommentRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
+        @RequestBody @Valid ModifyQuestionBoardCommentRequest request) {
         questionBoardCommentService.modifyQuestionBoardComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
         return DefaultResponse.success();
     }
