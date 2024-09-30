@@ -1,4 +1,4 @@
-package com.eager.questioncloud.common;
+package com.eager.questioncloud.valid;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

@@ -1,8 +1,8 @@
 package com.eager.questioncloud.authentication;
 
-import com.eager.questioncloud.common.EmailValidator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.valid.EmailValidator;
 import java.util.regex.Pattern;
 import lombok.Getter;
 

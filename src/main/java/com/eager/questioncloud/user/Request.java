@@ -1,9 +1,9 @@
 package com.eager.questioncloud.user;
 
-import com.eager.questioncloud.common.EmailValidator;
-import com.eager.questioncloud.common.PasswordValidator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.valid.EmailValidator;
+import com.eager.questioncloud.valid.PasswordValidator;
 import com.eager.questioncloud.valid.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
