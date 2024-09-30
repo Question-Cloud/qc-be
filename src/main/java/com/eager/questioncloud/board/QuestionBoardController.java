@@ -8,6 +8,7 @@ import com.eager.questioncloud.board.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -57,7 +58,7 @@ public class QuestionBoardController {
     }
 
     @PostMapping
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterQuestionBoardRequest request) {
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionBoardRequest request) {
         questionBoardService.register(
             QuestionBoard.create(
                 request.getQuestionId(),
