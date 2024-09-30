@@ -7,7 +7,6 @@ import com.eager.questioncloud.valid.PasswordValidator;
 import com.eager.questioncloud.valid.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.util.regex.Pattern;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
@@ -46,14 +45,13 @@ public class Request {
     }
 
     @Getter
-    public static class ChangePasswordRequest {
+    public static class ChangePasswordRequest implements Validatable {
+        @NotBlank
         private String token;
         private String newPassword;
 
-        public void passwordValidate() {
-            if (!Pattern.matches("^(?!.*\\s).{8,}$", newPassword)) {
-                throw new CustomException(Error.BAD_REQUEST);
-            }
+        public void validate() {
+            PasswordValidator.validate(newPassword);
         }
     }
 
