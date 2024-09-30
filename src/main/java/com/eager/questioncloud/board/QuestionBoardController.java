@@ -31,7 +31,7 @@ public class QuestionBoardController {
 
     @PatchMapping("/{boardId}")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody ModifyQuestionBoardRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody @Valid ModifyQuestionBoardRequest request) {
         questionBoardService.modify(boardId, userPrincipal.getUser().getUid(), request.getTitle(), request.getContent(), request.getFiles());
         return DefaultResponse.success();
     }

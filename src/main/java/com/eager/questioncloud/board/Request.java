@@ -23,8 +23,12 @@ public class Request {
 
     @Getter
     public static class ModifyQuestionBoardRequest {
+        @NotBlank
         private String title;
+
+        @NotBlank
         private String content;
-        private List<QuestionBoardFile> files;
+
+        private List<QuestionBoardFile> files = new ArrayList<>();
     }
 }
