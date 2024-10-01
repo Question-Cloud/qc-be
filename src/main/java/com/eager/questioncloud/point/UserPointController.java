@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.point.Request.ChargePointRequest;
 import com.eager.questioncloud.point.Response.GetUserPointResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,8 @@ public class UserPointController {
     }
 
     @PostMapping("/charge")
-    public DefaultResponse chargePoint(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChargePointRequest chargePointRequest) {
+    public DefaultResponse chargePoint(@AuthenticationPrincipal UserPrincipal userPrincipal,
+        @RequestBody @Valid ChargePointRequest chargePointRequest) {
         userPointService.chargePoint(userPrincipal.getUser().getUid(), chargePointRequest.getChargePointType(), chargePointRequest.getPaymentId());
         return DefaultResponse.success();
     }
