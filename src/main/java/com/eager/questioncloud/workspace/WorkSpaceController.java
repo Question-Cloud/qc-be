@@ -57,7 +57,8 @@ public class WorkSpaceController {
     @PatchMapping("/question/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @RequestBody ModifySelfMadeQuestionRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
+        @RequestBody @Valid ModifySelfMadeQuestionRequest request) {
         workSpaceQuestionService.modify(userPrincipal.getCreator().getId(), questionId, request.toModel());
         return DefaultResponse.success();
     }

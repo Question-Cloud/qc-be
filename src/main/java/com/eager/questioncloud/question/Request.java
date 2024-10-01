@@ -52,15 +52,34 @@ public class Request {
 
     @Getter
     public static class ModifySelfMadeQuestionRequest {
+        @NotNull
         private Long questionCategoryId;
+
+        @NotNull
         private Subject subject;
+
+        @NotBlank
         private String title;
+
+        @NotBlank
         private String description;
+
+        @NotBlank
         private String thumbnail;
+
+        @NotBlank
         private String fileUrl;
+
+        @NotBlank
         private String explanationUrl;
+
+        @NotNull
         private QuestionLevel questionLevel;
+
+        @NotNull
         private QuestionStatus questionStatus;
+
+        @Min(value = 100)
         private int price;
 
         public QuestionContent toModel() {
