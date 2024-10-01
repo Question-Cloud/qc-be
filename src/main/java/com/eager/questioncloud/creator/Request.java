@@ -16,6 +16,8 @@ public class Request {
     @Getter
     public static class UpdateMyCreatorInformationRequest {
         private Subject mainSubject;
+
+        @NotBlank
         private String introduction;
     }
 }

@@ -34,7 +34,7 @@ public class CreatorController {
 
     @PatchMapping("/me")
     public DefaultResponse updateMyCreatorInformation(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateMyCreatorInformationRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid UpdateMyCreatorInformationRequest request) {
         creatorService.updateMyCreatorInformation(userPrincipal.getUser().getUid(), request.getMainSubject(), request.getIntroduction());
         return DefaultResponse.success();
     }
