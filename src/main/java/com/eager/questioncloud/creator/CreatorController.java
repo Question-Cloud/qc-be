@@ -9,6 +9,7 @@ import com.eager.questioncloud.creator.Response.CreatorInformationResponse;
 import com.eager.questioncloud.creator.Response.MyCreatorInformationResponse;
 import com.eager.questioncloud.creator.Response.RegisterCreatorResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +47,7 @@ public class CreatorController {
 
     @PostMapping
     public RegisterCreatorResponse registerCreator(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterCreatorRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCreatorRequest request) {
         Creator creator = creatorService.register(userPrincipal.getUser().getUid(), request.getMainSubject(), request.getIntroduction());
         return new RegisterCreatorResponse(creator.getId());
     }
