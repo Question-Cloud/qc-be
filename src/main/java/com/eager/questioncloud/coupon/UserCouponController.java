@@ -5,6 +5,7 @@ import com.eager.questioncloud.coupon.Request.RegisterCouponRequest;
 import com.eager.questioncloud.coupon.Response.GetAvailableUserCouponsResponse;
 import com.eager.questioncloud.coupon.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,7 @@ public class UserCouponController {
     }
 
     @PostMapping
-    public DefaultResponse registerCoupon(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterCouponRequest request) {
+    public DefaultResponse registerCoupon(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCouponRequest request) {
         userCouponService.registerCoupon(userPrincipal.getUser().getUid(), request.getCode());
         return DefaultResponse.success();
     }

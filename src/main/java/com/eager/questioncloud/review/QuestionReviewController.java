@@ -8,6 +8,7 @@ import com.eager.questioncloud.review.Request.ModifyQuestionReviewRequest;
 import com.eager.questioncloud.review.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +48,7 @@ public class QuestionReviewController {
 
     @PostMapping
     public DefaultResponse registerQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterQuestionReviewRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionReviewRequest request) {
         questionReviewService.register(
             QuestionReview.create(
                 request.getQuestionId(),
@@ -60,7 +61,7 @@ public class QuestionReviewController {
 
     @PatchMapping("/{reviewId}")
     public DefaultResponse modifyQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId, @RequestBody ModifyQuestionReviewRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId, @RequestBody @Valid ModifyQuestionReviewRequest request) {
         questionReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
         return DefaultResponse.success();
     }

@@ -8,6 +8,7 @@ import com.eager.questioncloud.board.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class QuestionBoardController {
 
     @PatchMapping("/{boardId}")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody ModifyQuestionBoardRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody @Valid ModifyQuestionBoardRequest request) {
         questionBoardService.modify(boardId, userPrincipal.getUser().getUid(), request.getTitle(), request.getContent(), request.getFiles());
         return DefaultResponse.success();
     }
@@ -57,7 +58,7 @@ public class QuestionBoardController {
     }
 
     @PostMapping
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterQuestionBoardRequest request) {
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionBoardRequest request) {
         questionBoardService.register(
             QuestionBoard.create(
                 request.getQuestionId(),

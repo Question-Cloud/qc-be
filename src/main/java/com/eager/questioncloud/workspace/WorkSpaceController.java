@@ -9,6 +9,7 @@ import com.eager.questioncloud.question.Request.ModifySelfMadeQuestionRequest;
 import com.eager.questioncloud.question.Request.RegisterSelfMadeQuestionRequest;
 import com.eager.questioncloud.question.Response.QuestionContentResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +48,8 @@ public class WorkSpaceController {
 
     @PostMapping("/question")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RegisterSelfMadeQuestionRequest request) {
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
+        @RequestBody @Valid RegisterSelfMadeQuestionRequest request) {
         workSpaceQuestionService.register(userPrincipal.getCreator().getId(), request.toModel());
         return DefaultResponse.success();
     }
@@ -55,7 +57,8 @@ public class WorkSpaceController {
     @PatchMapping("/question/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId, @RequestBody ModifySelfMadeQuestionRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
+        @RequestBody @Valid ModifySelfMadeQuestionRequest request) {
         workSpaceQuestionService.modify(userPrincipal.getCreator().getId(), questionId, request.toModel());
         return DefaultResponse.success();
     }

@@ -6,6 +6,7 @@ import com.eager.questioncloud.user.Request.ChangePasswordRequest;
 import com.eager.questioncloud.user.Request.UpdateMyInformationRequest;
 import com.eager.questioncloud.user.Response.MyInformationResponse;
 import com.eager.questioncloud.user.UserDto.MyInformation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class UserController {
 
     @PatchMapping("/me")
     public DefaultResponse updateMyInformation(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateMyInformationRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid UpdateMyInformationRequest request) {
         userService.updateUser(userPrincipal.getUser(), request.getName(), request.getProfileImage());
         return DefaultResponse.success();
     }
@@ -40,8 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public DefaultResponse changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        changePasswordRequest.passwordValidate();
+    public DefaultResponse changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
         userService.changePassword(changePasswordRequest.getToken(), changePasswordRequest.getNewPassword());
         return DefaultResponse.success();
     }

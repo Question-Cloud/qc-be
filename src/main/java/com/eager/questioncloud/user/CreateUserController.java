@@ -22,7 +22,6 @@ public class CreateUserController {
 
     @PostMapping
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        createUserRequest.validate();
         User user = createUserService.create(CreateUser.toDomain(createUserRequest));
         EmailVerification emailVerification = createUserService.sendCreateUserVerifyMail(user);
         return new CreateUserResponse(emailVerification.getResendToken());

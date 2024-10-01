@@ -1,17 +1,18 @@
 package com.eager.questioncloud.user;
 
-import com.eager.questioncloud.common.EmailValidator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.valid.EmailValidator;
+import com.eager.questioncloud.valid.PasswordValidator;
+import com.eager.questioncloud.valid.Validatable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.util.regex.Pattern;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
 public class Request {
     @Getter
-    public static class CreateUserRequest {
+    public static class CreateUserRequest implements Validatable {
         private String email;
 
         private String password;
@@ -30,16 +31,10 @@ public class Request {
         public void validate() {
             if (accountType.equals(AccountType.EMAIL)) {
                 EmailValidator.validate(email);
-                passwordValidate();
+                PasswordValidator.validate(password);
                 return;
             }
             socialRegisterTokenValidate();
-        }
-
-        public void passwordValidate() {
-            if (!Pattern.matches("^(?!.*\\s).{8,}$", password)) {
-                throw new CustomException(Error.BAD_REQUEST);
-            }
         }
 
         public void socialRegisterTokenValidate() {
@@ -50,20 +45,20 @@ public class Request {
     }
 
     @Getter
-    public static class ChangePasswordRequest {
+    public static class ChangePasswordRequest implements Validatable {
+        @NotBlank
         private String token;
         private String newPassword;
 
-        public void passwordValidate() {
-            if (!Pattern.matches("^(?!.*\\s).{8,}$", newPassword)) {
-                throw new CustomException(Error.BAD_REQUEST);
-            }
+        public void validate() {
+            PasswordValidator.validate(newPassword);
         }
     }
 
     @Getter
     public static class UpdateMyInformationRequest {
         private String profileImage;
+        @NotBlank
         private String name;
     }
 }

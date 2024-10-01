@@ -6,6 +6,7 @@ import com.eager.questioncloud.comment.Request.ModifyQuestionBoardCommentRequest
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +40,7 @@ public class QuestionBoardCommentController {
 
     @PostMapping
     public DefaultResponse addQuestionBoardComment(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody AddQuestionBoardCommentRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid AddQuestionBoardCommentRequest request) {
         questionBoardCommentService.addQuestionBoardComment(
             QuestionBoardComment.create(
                 request.getBoardId(),
@@ -50,7 +51,8 @@ public class QuestionBoardCommentController {
 
     @PatchMapping("/{commentId}")
     public DefaultResponse modifyQuestionBoardComment(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId, @RequestBody ModifyQuestionBoardCommentRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
+        @RequestBody @Valid ModifyQuestionBoardCommentRequest request) {
         questionBoardCommentService.modifyQuestionBoardComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
         return DefaultResponse.success();
     }
