@@ -4,6 +4,8 @@ import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.question.Response.QuestionInformationResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +21,10 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 목록 조회", summary = "문제 목록 조회", tags = {"question"}, description = "문제 목록 조회")
     public PagingResponse<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
         int total = questionService.getTotalFiltering(questionFilter);
         List<QuestionInformation> questionInformation = questionService.getQuestionListByFiltering(questionFilter);
@@ -26,6 +32,10 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 상세 조회", summary = "문제 상세 조회", tags = {"question"}, description = "문제 상세 조회")
     public QuestionInformationResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
         QuestionInformation questionInformation = questionService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
         return new QuestionInformationResponse(questionInformation);
