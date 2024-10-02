@@ -40,6 +40,13 @@ public class QuestionReviewStatistics {
         this.averageRate = Math.round(value * 10.0) / 10.0;
     }
 
+    public void updateByDeleteReview(int rate) {
+        this.reviewCount = this.reviewCount - 1;
+        this.totalRate = this.totalRate - rate;
+        double value = (double) totalRate / (double) reviewCount;
+        this.averageRate = Math.round(value * 10.0) / 10.0;
+    }
+
     public QuestionReviewStatisticsEntity toEntity() {
         return QuestionReviewStatisticsEntity.builder()
             .questionId(questionId)
