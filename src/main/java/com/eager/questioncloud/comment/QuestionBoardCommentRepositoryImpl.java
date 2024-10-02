@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentRepository {
     private final QuestionBoardCommentJpaRepository questionBoardCommentJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
-    
+
     @Override
     public QuestionBoardComment save(QuestionBoardComment questionBoardComment) {
         return questionBoardCommentJpaRepository.save(questionBoardComment.toEntity()).toModel();
@@ -35,7 +35,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     }
 
     @Override
-    public List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Pageable pageable) {
+    public List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, Pageable pageable) {
         Long questionCreatorUserId = getQuestionCreatorUserId(boardId);
         return jpaQueryFactory.select(
                 questionBoardCommentEntity.id,
@@ -57,6 +57,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
                 .profileImage(tuple.get(userEntity.profileImage))
                 .comment(tuple.get(questionBoardCommentEntity.comment))
                 .isCreator(questionCreatorUserId.equals(tuple.get(userEntity.uid)))
+                .isWriter(userId.equals(tuple.get(userEntity.uid)))
                 .createdAt(tuple.get(questionBoardCommentEntity.createdAt))
                 .build())
             .collect(Collectors.toList());

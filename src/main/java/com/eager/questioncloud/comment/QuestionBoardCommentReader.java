@@ -15,7 +15,7 @@ public class QuestionBoardCommentReader {
 
     public List<QuestionBoardCommentDetail> getQuestionBoardComments(Long boardId, Long userId, Pageable pageable) {
         questionBoardValidator.permissionValidator(boardId, userId);
-        return questionBoardCommentRepository.getQuestionBoardCommentDetails(boardId, pageable);
+        return questionBoardCommentRepository.getQuestionBoardCommentDetails(boardId, userId, pageable);
     }
 
     public int count(Long boardId) {
