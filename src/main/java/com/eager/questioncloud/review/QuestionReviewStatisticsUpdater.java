@@ -19,4 +19,10 @@ public class QuestionReviewStatisticsUpdater {
         questionReviewStatistics.updateByModifyReview(fluctuationRate);
         questionReviewStatisticsRepository.save(questionReviewStatistics);
     }
+
+    public void updateByDeleteReview(Long questionId, int rate) {
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(questionId);
+        questionReviewStatistics.updateByDeleteReview(rate);
+        questionReviewStatisticsRepository.save(questionReviewStatistics);
+    }
 }
