@@ -9,7 +9,7 @@ public interface QuestionBoardCommentRepository {
 
     QuestionBoardComment getForModifyAndDelete(Long commentId, Long userId);
 
-    List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Pageable pageable);
+    List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, Pageable pageable);
 
     void delete(QuestionBoardComment questionBoardComment);
 

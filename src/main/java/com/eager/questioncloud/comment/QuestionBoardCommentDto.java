@@ -13,6 +13,7 @@ public class QuestionBoardCommentDto {
         private String profileImage;
         private String comment;
         private Boolean isCreator;
+        private Boolean isWriter;
         private LocalDateTime createdAt;
     }
 }
