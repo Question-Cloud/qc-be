@@ -8,6 +8,8 @@ import com.eager.questioncloud.review.Request.ModifyQuestionReviewRequest;
 import com.eager.questioncloud.review.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,10 @@ public class QuestionReviewController {
     private final QuestionReviewService questionReviewService;
 
     @GetMapping
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 리뷰 목록 조회", summary = "문제 리뷰 목록 조회", tags = {"question-review"}, description = "문제 리뷰 조회")
     public PagingResponse<QuestionReviewItem> getQuestionReviews(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, Pageable pageable) {
         int total = questionReviewService.getTotal(questionId);
@@ -41,12 +47,24 @@ public class QuestionReviewController {
     }
 
     @GetMapping("/me")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "내가 작성한 리뷰 조회", summary = "내가 작성한 리뷰 조회", tags = {"question-review"},
+        description = """
+                작성한 리뷰가 있다면 review 정보를 응답으로 반환하며
+                작성한 리뷰가 없다면 null를 반환합니다.
+            """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
         QuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
         return new MyQuestionReviewResponse(MyQuestionReview.of(review));
     }
 
     @PostMapping
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = {"question-review"}, description = "문제 리뷰 등록")
     public DefaultResponse registerQuestionReview(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionReviewRequest request) {
         questionReviewService.register(
@@ -60,6 +78,10 @@ public class QuestionReviewController {
     }
 
     @PatchMapping("/{reviewId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 리뷰 수정", summary = "문제 리뷰 수정", tags = {"question-review"}, description = "문제 리뷰 수정")
     public DefaultResponse modifyQuestionReview(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId, @RequestBody @Valid ModifyQuestionReviewRequest request) {
         questionReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
@@ -67,6 +89,10 @@ public class QuestionReviewController {
     }
 
     @DeleteMapping("/{reviewId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 리뷰 삭제", summary = "문제 리뷰 삭제", tags = {"question-review"}, description = "문제 리뷰 삭제")
     public DefaultResponse deleteQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId) {
         questionReviewService.delete(reviewId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
