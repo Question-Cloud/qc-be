@@ -9,6 +9,8 @@ import com.eager.questioncloud.review.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -36,6 +38,8 @@ public class QuestionReviewController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 리뷰 목록 조회", summary = "문제 리뷰 목록 조회", tags = {"question-review"}, description = "문제 리뷰 조회")
+    @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
+    @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionReviewItem> getQuestionReviews(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, Pageable pageable) {
         int total = questionReviewService.getTotal(questionId);
