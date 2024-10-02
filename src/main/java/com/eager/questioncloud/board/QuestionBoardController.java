@@ -8,6 +8,10 @@ import com.eager.questioncloud.board.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,10 @@ public class QuestionBoardController {
     private final QuestionBoardService questionBoardService;
 
     @PatchMapping("/{boardId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody @Valid ModifyQuestionBoardRequest request) {
         questionBoardService.modify(boardId, userPrincipal.getUser().getUid(), request.getTitle(), request.getContent(), request.getFiles());
@@ -37,12 +45,20 @@ public class QuestionBoardController {
     }
 
     @DeleteMapping("/{boardId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 게시판 글 삭제", summary = "문제 게시판 글 삭제", tags = {"question-board"}, description = "문제 게시판 글 삭제")
     public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
         questionBoardService.delete(boardId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 
     @GetMapping("/{boardId}")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
     public QuestionBoardResponse getQuestionBoard(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
         QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
@@ -50,6 +66,12 @@ public class QuestionBoardController {
     }
 
     @GetMapping
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 게시판 글 목록 조회", summary = "문제 게시판 글 목록 조회", tags = {"question-board"}, description = "문제 게시판 글 목록 조회")
+    @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
+    @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionBoardListItem> getQuestionBoards(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, Pageable pageable) {
         int total = questionBoardService.countQuestionBoard(questionId);
@@ -58,6 +80,10 @@ public class QuestionBoardController {
     }
 
     @PostMapping
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionBoardRequest request) {
         questionBoardService.register(
             QuestionBoard.create(
