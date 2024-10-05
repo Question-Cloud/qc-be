@@ -1,5 +1,6 @@
 package com.eager.questioncloud.review;
 
+import com.eager.questioncloud.annotation.DistributedLock;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.library.UserQuestionLibraryReader;
@@ -14,6 +15,7 @@ public class QuestionReviewValidator {
     private final UserQuestionLibraryReader userQuestionLibraryReader;
     private final QuestionReader questionReader;
 
+    @DistributedLock(key = "'REVIEW-APPEND:' + #questionReview.getReviewerId()")
     public void validate(QuestionReview questionReview) {
         if (!questionReader.isAvailable(questionReview.getQuestionId())) {
             throw new CustomException(Error.NOT_FOUND);

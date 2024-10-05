@@ -1,5 +1,6 @@
 package com.eager.questioncloud.review;
 
+import com.eager.questioncloud.annotation.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class QuestionReviewStatisticsUpdater {
     private final QuestionReviewStatisticsRepository questionReviewStatisticsRepository;
 
+    @DistributedLock(key = "'REVIEW-STATISTICS:' + #questionId")
     public void updateByNewReview(Long questionId, int newRate) {
         QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(questionId);
         questionReviewStatistics.updateByNewReview(newRate);
