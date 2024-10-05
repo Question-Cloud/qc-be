@@ -12,6 +12,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
 @RequiredArgsConstructor
@@ -25,20 +27,44 @@ public class DistributedLockAspect {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         DistributedLock distributedLock = signature.getMethod().getAnnotation(DistributedLock.class);
         String lockKey = LOCK_PREFIX + SpELParser.parse(signature.getParameterNames(), pjp.getArgs(), distributedLock.key());
-
         RLock lock = redissonClient.getLock(lockKey);
+        boolean isWithTransaction = TransactionSynchronizationManager.isActualTransactionActive();
         try {
             lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), TimeUnit.SECONDS);
             if (!lock.isLocked()) {
                 throw new CustomException(Error.INTERNAL_SERVER_ERROR);
             }
+            if (isWithTransaction) {
+                registerUnlockAfterCommit(lock);
+            }
             return pjp.proceed();
         } catch (Exception e) {
-            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+            if (lock.isLocked() && !isWithTransaction) {
+                lock.unlock();
+            }
+            throw e;
         } finally {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && !isWithTransaction) {
                 lock.unlock();
             }
         }
+    }
+
+    private void registerUnlockAfterCommit(RLock lock) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                }
+            }
+
+            @Override
+            public void afterCompletion(int status) {
+                if (lock.isLocked() && lock.isHeldByCurrentThread()) {
+                    lock.unlock();
+                }
+            }
+        });
     }
 }
