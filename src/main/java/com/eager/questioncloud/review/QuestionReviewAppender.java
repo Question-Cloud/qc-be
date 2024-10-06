@@ -2,6 +2,7 @@ package com.eager.questioncloud.review;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
@@ -11,7 +12,7 @@ public class QuestionReviewAppender {
     private final QuestionReviewValidator questionReviewValidator;
     private final QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public QuestionReview append(QuestionReview questionReview) {
         questionReviewValidator.validate(questionReview);
         questionReviewRepository.save(questionReview);
