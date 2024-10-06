@@ -22,6 +22,7 @@ public class QuestionReviewStatisticsUpdater {
         questionReviewStatisticsRepository.save(questionReviewStatistics);
     }
 
+    @DistributedLock(key = "'REVIEW-STATISTICS:' + #questionId")
     public void updateByDeleteReview(Long questionId, int rate) {
         QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(questionId);
         questionReviewStatistics.updateByDeleteReview(rate);
