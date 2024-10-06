@@ -16,6 +16,7 @@ public class QuestionReviewStatisticsUpdater {
         questionReviewStatisticsRepository.save(questionReviewStatistics);
     }
 
+    @DistributedLock(key = "'REVIEW-STATISTICS:' + #questionId")
     public void updateByModifyReview(Long questionId, int fluctuationRate) {
         QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(questionId);
         questionReviewStatistics.updateByModifyReview(fluctuationRate);
