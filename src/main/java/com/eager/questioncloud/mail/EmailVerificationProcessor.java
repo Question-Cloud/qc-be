@@ -1,6 +1,6 @@
 package com.eager.questioncloud.mail;
 
-import com.eager.questioncloud.user.User;
+import com.eager.questioncloud.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

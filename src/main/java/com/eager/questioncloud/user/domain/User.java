@@ -1,9 +1,10 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.domain;
 
 import com.eager.questioncloud.authentication.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;
+import com.eager.questioncloud.user.entity.UserEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

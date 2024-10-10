@@ -3,8 +3,8 @@ package com.eager.questioncloud.help;
 import com.eager.questioncloud.mail.EmailVerification;
 import com.eager.questioncloud.mail.EmailVerificationProcessor;
 import com.eager.questioncloud.mail.EmailVerificationType;
-import com.eager.questioncloud.user.User;
-import com.eager.questioncloud.user.UserReader;
+import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.implement.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

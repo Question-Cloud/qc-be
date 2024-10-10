@@ -1,5 +1,9 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.entity;
 
+import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.domain.UserStatus;
+import com.eager.questioncloud.user.domain.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

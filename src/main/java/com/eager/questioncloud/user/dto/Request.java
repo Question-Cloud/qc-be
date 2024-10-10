@@ -1,7 +1,8 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.dto;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.user.domain.AccountType;
 import com.eager.questioncloud.valid.EmailValidator;
 import com.eager.questioncloud.valid.PasswordValidator;
 import com.eager.questioncloud.valid.Validatable;

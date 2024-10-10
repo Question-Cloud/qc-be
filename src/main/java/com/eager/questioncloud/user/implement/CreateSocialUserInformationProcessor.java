@@ -1,5 +1,7 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.implement;
 
+import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.domain.CreateSocialUserInformation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

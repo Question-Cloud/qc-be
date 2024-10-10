@@ -1,6 +1,6 @@
 package com.eager.questioncloud.social;
 
-import com.eager.questioncloud.user.AccountType;
+import com.eager.questioncloud.user.domain.AccountType;
 import lombok.Getter;
 
 @Getter

@@ -2,7 +2,7 @@ package com.eager.questioncloud.social;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.AccountType;
+import com.eager.questioncloud.user.domain.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

@@ -6,7 +6,7 @@ import static com.eager.questioncloud.user.QUserEntity.userEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
-import com.eager.questioncloud.user.UserType;
+import com.eager.questioncloud.user.domain.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

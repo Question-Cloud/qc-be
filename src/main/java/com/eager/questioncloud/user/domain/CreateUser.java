@@ -1,6 +1,6 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.domain;
 
-import com.eager.questioncloud.user.Request.CreateUserRequest;
+import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

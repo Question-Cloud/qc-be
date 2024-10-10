@@ -1,6 +1,9 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.implement;
 
-import com.eager.questioncloud.user.UserDto.UserWithCreator;
+import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
+import com.eager.questioncloud.user.repository.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

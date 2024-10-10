@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.repository;
 
 import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
@@ -6,7 +6,12 @@ import static com.eager.questioncloud.user.QUserEntity.userEntity;
 import com.eager.questioncloud.creator.CreatorEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.UserDto.UserWithCreator;
+import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.domain.UserStatus;
+import com.eager.questioncloud.user.domain.UserType;
+import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
+import com.eager.questioncloud.user.entity.UserEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;

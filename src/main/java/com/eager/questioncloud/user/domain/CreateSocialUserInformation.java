@@ -1,5 +1,6 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.domain;
 
+import com.eager.questioncloud.user.entity.CreateSocialUserInformationEntity;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;

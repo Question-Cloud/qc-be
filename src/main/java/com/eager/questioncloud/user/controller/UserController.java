@@ -1,11 +1,12 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.security.UserPrincipal;
-import com.eager.questioncloud.user.Request.ChangePasswordRequest;
-import com.eager.questioncloud.user.Request.UpdateMyInformationRequest;
-import com.eager.questioncloud.user.Response.MyInformationResponse;
-import com.eager.questioncloud.user.UserDto.MyInformation;
+import com.eager.questioncloud.user.dto.Request.ChangePasswordRequest;
+import com.eager.questioncloud.user.dto.Request.UpdateMyInformationRequest;
+import com.eager.questioncloud.user.dto.Response.MyInformationResponse;
+import com.eager.questioncloud.user.dto.UserDto.MyInformation;
+import com.eager.questioncloud.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;

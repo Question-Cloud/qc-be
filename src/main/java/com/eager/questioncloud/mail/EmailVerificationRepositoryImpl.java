@@ -4,8 +4,8 @@ import static com.eager.questioncloud.mail.QEmailVerificationEntity.emailVerific
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.User;
-import com.eager.questioncloud.user.UserEntity;
+import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.entity.UserEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;

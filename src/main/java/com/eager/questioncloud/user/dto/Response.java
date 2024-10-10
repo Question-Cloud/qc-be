@@ -1,7 +1,7 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.dto;
 
 import com.eager.questioncloud.authentication.AuthenticationToken;
-import com.eager.questioncloud.user.UserDto.MyInformation;
+import com.eager.questioncloud.user.dto.UserDto.MyInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

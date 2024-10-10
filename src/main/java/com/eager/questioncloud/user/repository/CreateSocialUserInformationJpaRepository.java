@@ -1,5 +1,7 @@
-package com.eager.questioncloud.user;
+package com.eager.questioncloud.user.repository;
 
+import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.entity.CreateSocialUserInformationEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
