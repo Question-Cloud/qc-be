@@ -1,6 +1,6 @@
 package com.eager.questioncloud.subscribe.dto;
 
-import com.eager.questioncloud.creator.CreatorDto.CreatorSimpleInformation;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorSimpleInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

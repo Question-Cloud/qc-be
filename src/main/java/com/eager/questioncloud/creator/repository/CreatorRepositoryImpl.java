@@ -1,4 +1,4 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.creator.repository;
 
 import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
@@ -6,7 +6,8 @@ import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.review.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.domain.Creator;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

@@ -1,7 +1,7 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.creator.dto;
 
-import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
-import com.eager.questioncloud.creator.CreatorDto.MyCreatorInformation;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.dto.CreatorDto.MyCreatorInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

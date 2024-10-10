@@ -1,6 +1,7 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.creator.repository;
 
-import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.domain.Creator;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
 
 public interface CreatorRepository {
     Boolean existsByUserId(Long userId);

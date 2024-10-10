@@ -3,7 +3,7 @@ package com.eager.questioncloud.user.repository;
 import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.creator.CreatorEntity;
+import com.eager.questioncloud.creator.entity.CreatorEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.user.domain.AccountType;

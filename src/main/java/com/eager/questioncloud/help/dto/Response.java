@@ -1,4 +1,4 @@
-package com.eager.questioncloud.help;
+package com.eager.questioncloud.help.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,8 @@
-package com.eager.questioncloud.help;
+package com.eager.questioncloud.help.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.help.Response.RecoverForgottenEmailResponse;
+import com.eager.questioncloud.help.dto.Response.RecoverForgottenEmailResponse;
+import com.eager.questioncloud.help.service.HelpAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

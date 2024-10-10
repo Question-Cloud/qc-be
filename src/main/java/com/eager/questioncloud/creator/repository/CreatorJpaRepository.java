@@ -1,5 +1,6 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.creator.repository;
 
+import com.eager.questioncloud.creator.entity.CreatorEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

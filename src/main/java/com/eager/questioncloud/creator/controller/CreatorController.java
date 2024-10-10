@@ -1,13 +1,15 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.creator.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
-import com.eager.questioncloud.creator.CreatorDto.MyCreatorInformation;
-import com.eager.questioncloud.creator.Request.RegisterCreatorRequest;
-import com.eager.questioncloud.creator.Request.UpdateMyCreatorInformationRequest;
-import com.eager.questioncloud.creator.Response.CreatorInformationResponse;
-import com.eager.questioncloud.creator.Response.MyCreatorInformationResponse;
-import com.eager.questioncloud.creator.Response.RegisterCreatorResponse;
+import com.eager.questioncloud.creator.domain.Creator;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.dto.CreatorDto.MyCreatorInformation;
+import com.eager.questioncloud.creator.dto.Request.RegisterCreatorRequest;
+import com.eager.questioncloud.creator.dto.Request.UpdateMyCreatorInformationRequest;
+import com.eager.questioncloud.creator.dto.Response.CreatorInformationResponse;
+import com.eager.questioncloud.creator.dto.Response.MyCreatorInformationResponse;
+import com.eager.questioncloud.creator.dto.Response.RegisterCreatorResponse;
+import com.eager.questioncloud.creator.service.CreatorService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

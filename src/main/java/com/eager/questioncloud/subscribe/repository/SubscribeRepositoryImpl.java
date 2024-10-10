@@ -4,7 +4,7 @@ import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.subscribe.QSubscribeEntity.subscribeEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.creator.CreatorDto.CreatorSimpleInformation;
+import com.eager.questioncloud.creator.dto.CreatorDto.CreatorSimpleInformation;
 import com.eager.questioncloud.subscribe.QSubscribeEntity;
 import com.eager.questioncloud.subscribe.domain.Subscribe;
 import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
