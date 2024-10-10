@@ -1,4 +1,4 @@
-package com.eager.questioncloud.authentication;
+package com.eager.questioncloud.authentication.dto;
 
 import com.eager.questioncloud.valid.EmailValidator;
 import com.eager.questioncloud.valid.PasswordValidator;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.authentication;
+package com.eager.questioncloud.authentication.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

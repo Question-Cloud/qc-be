@@ -1,6 +1,6 @@
 package com.eager.questioncloud.user.domain;
 
-import com.eager.questioncloud.authentication.PasswordProcessor;
+import com.eager.questioncloud.authentication.implement.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.authentication;
+package com.eager.questioncloud.authentication.repository;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;

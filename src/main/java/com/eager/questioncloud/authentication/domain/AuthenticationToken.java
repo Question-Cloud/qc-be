@@ -1,4 +1,4 @@
-package com.eager.questioncloud.authentication;
+package com.eager.questioncloud.authentication.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

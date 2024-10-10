@@ -1,14 +1,14 @@
 package com.eager.questioncloud.social.implement;
 
-import com.eager.questioncloud.authentication.AuthenticationProcessor;
-import com.eager.questioncloud.authentication.AuthenticationToken;
-import com.eager.questioncloud.authentication.AuthenticationTokenProcessor;
+import com.eager.questioncloud.authentication.domain.AuthenticationToken;
+import com.eager.questioncloud.authentication.dto.Response.SocialAuthenticateResponse;
+import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
+import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.user.domain.AccountType;
 import com.eager.questioncloud.user.domain.CreateSocialUserInformation;
 import com.eager.questioncloud.user.domain.User;
-import com.eager.questioncloud.user.dto.Response.SocialAuthenticateResponse;
 import com.eager.questioncloud.user.implement.CreateSocialUserInformationProcessor;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
