@@ -1,7 +1,8 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.repository;
 
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.domain.QuestionBoard;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

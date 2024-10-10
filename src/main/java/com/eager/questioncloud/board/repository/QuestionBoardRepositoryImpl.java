@@ -1,11 +1,12 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.repository;
 
 import static com.eager.questioncloud.board.QQuestionBoardEntity.questionBoardEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.domain.QuestionBoard;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.QQuestionCategoryEntity;

@@ -1,5 +1,6 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.dto;
 
+import com.eager.questioncloud.board.domain.QuestionBoardFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.workspace.implement;
 
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
-import com.eager.questioncloud.board.QuestionBoardRepository;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.repository.QuestionBoardRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

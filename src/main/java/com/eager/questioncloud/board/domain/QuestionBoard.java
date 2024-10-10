@@ -1,5 +1,6 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.domain;
 
+import com.eager.questioncloud.board.entity.QuestionBoardEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

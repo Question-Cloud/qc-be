@@ -1,6 +1,6 @@
 package com.eager.questioncloud.workspace.controller;
 
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.question.dto.QuestionContent;

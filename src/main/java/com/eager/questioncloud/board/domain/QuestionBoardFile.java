@@ -1,4 +1,4 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

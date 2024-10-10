@@ -1,5 +1,6 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.repository;
 
+import com.eager.questioncloud.board.entity.QuestionBoardEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

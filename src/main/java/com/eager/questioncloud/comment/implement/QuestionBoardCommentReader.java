@@ -1,6 +1,6 @@
 package com.eager.questioncloud.comment.implement;
 
-import com.eager.questioncloud.board.QuestionBoardValidator;
+import com.eager.questioncloud.board.implement.QuestionBoardValidator;
 import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
 import com.eager.questioncloud.comment.repository.QuestionBoardCommentRepository;
 import java.util.List;

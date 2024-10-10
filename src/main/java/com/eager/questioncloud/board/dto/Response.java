@@ -1,6 +1,6 @@
-package com.eager.questioncloud.board;
+package com.eager.questioncloud.board.dto;
 
-import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
+import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
