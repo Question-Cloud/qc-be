@@ -1,4 +1,4 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.authentication.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.AuthenticationToken;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social.domain;
 
 import com.eager.questioncloud.user.domain.AccountType;
 import lombok.Getter;

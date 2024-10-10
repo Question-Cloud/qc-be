@@ -1,7 +1,10 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.social.domain.GoogleUserInfo;
+import com.eager.questioncloud.social.domain.SocialAccessToken;
+import com.eager.questioncloud.social.domain.SocialUserInfo;
 import com.eager.questioncloud.user.domain.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;

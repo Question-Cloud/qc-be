@@ -1,4 +1,4 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social.domain;
 
 import lombok.Getter;
 import lombok.Setter;
