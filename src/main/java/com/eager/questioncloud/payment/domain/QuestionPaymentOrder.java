@@ -1,5 +1,6 @@
-package com.eager.questioncloud.payment;
+package com.eager.questioncloud.payment.domain;
 
+import com.eager.questioncloud.payment.entity.QuestionPaymentOrderEntity;
 import com.eager.questioncloud.question.domain.Question;
 import java.util.List;
 import java.util.stream.Collectors;

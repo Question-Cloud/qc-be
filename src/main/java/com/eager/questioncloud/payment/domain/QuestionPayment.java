@@ -1,5 +1,6 @@
-package com.eager.questioncloud.payment;
+package com.eager.questioncloud.payment.domain;
 
+import com.eager.questioncloud.payment.entity.QuestionPaymentEntity;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

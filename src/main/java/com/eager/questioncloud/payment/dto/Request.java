@@ -1,4 +1,4 @@
-package com.eager.questioncloud.payment;
+package com.eager.questioncloud.payment.dto;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

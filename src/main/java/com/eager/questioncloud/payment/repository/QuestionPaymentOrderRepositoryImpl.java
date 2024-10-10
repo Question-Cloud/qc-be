@@ -1,5 +1,7 @@
-package com.eager.questioncloud.payment;
+package com.eager.questioncloud.payment.repository;
 
+import com.eager.questioncloud.payment.domain.QuestionPaymentOrder;
+import com.eager.questioncloud.payment.entity.QuestionPaymentOrderEntity;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
