@@ -2,7 +2,7 @@ package com.eager.questioncloud.question.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.library.UserQuestionLibraryReader;
+import com.eager.questioncloud.library.implement.UserQuestionLibraryReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
