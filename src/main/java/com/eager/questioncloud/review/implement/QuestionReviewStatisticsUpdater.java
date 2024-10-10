@@ -1,6 +1,8 @@
-package com.eager.questioncloud.review;
+package com.eager.questioncloud.review.implement;
 
 import com.eager.questioncloud.annotation.DistributedLock;
+import com.eager.questioncloud.review.domain.QuestionReviewStatistics;
+import com.eager.questioncloud.review.repository.QuestionReviewStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,11 @@
-package com.eager.questioncloud.review;
+package com.eager.questioncloud.review.service;
 
-import com.eager.questioncloud.review.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.domain.QuestionReview;
+import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.implement.QuestionReviewAppender;
+import com.eager.questioncloud.review.implement.QuestionReviewReader;
+import com.eager.questioncloud.review.implement.QuestionReviewRemover;
+import com.eager.questioncloud.review.implement.QuestionReviewUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

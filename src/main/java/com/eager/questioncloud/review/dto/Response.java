@@ -1,6 +1,6 @@
-package com.eager.questioncloud.review;
+package com.eager.questioncloud.review.dto;
 
-import com.eager.questioncloud.review.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.review.dto.QuestionReviewDto.MyQuestionReview;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

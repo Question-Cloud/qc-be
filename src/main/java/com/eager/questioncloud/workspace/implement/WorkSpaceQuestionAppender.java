@@ -3,8 +3,8 @@ package com.eager.questioncloud.workspace.implement;
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionContent;
 import com.eager.questioncloud.question.QuestionRepository;
-import com.eager.questioncloud.review.QuestionReviewStatistics;
-import com.eager.questioncloud.review.QuestionReviewStatisticsAppender;
+import com.eager.questioncloud.review.domain.QuestionReviewStatistics;
+import com.eager.questioncloud.review.implement.QuestionReviewStatisticsAppender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

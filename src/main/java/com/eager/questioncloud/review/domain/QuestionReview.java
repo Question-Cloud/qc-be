@@ -1,5 +1,6 @@
-package com.eager.questioncloud.review;
+package com.eager.questioncloud.review.domain;
 
+import com.eager.questioncloud.review.entity.QuestionReviewEntity;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

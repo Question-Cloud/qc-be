@@ -1,5 +1,6 @@
-package com.eager.questioncloud.review;
+package com.eager.questioncloud.review.entity;
 
+import com.eager.questioncloud.review.domain.QuestionReview;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
