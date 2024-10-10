@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.implement;
 
-import com.eager.questioncloud.coupon.UserCouponProcessor;
+import com.eager.questioncloud.coupon.implement.UserCouponProcessor;
 import com.eager.questioncloud.library.implement.UserQuestionLibraryAppender;
 import com.eager.questioncloud.payment.domain.QuestionPayment;
 import com.eager.questioncloud.payment.domain.QuestionPaymentOrder;

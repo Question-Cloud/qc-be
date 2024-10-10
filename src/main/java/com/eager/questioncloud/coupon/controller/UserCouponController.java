@@ -1,9 +1,10 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.coupon.Request.RegisterCouponRequest;
-import com.eager.questioncloud.coupon.Response.GetAvailableUserCouponsResponse;
-import com.eager.questioncloud.coupon.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.coupon.dto.Request.RegisterCouponRequest;
+import com.eager.questioncloud.coupon.dto.Response.GetAvailableUserCouponsResponse;
+import com.eager.questioncloud.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.coupon.service.UserCouponService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

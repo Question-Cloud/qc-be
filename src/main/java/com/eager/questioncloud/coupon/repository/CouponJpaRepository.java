@@ -1,5 +1,6 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.repository;
 
+import com.eager.questioncloud.coupon.entity.CouponEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

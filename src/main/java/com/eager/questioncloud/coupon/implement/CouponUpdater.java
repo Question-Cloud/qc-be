@@ -1,5 +1,6 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.implement;
 
+import com.eager.questioncloud.coupon.repository.CouponRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

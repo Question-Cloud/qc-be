@@ -1,5 +1,6 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.domain;
 
+import com.eager.questioncloud.coupon.entity.UserCouponEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.time.LocalDateTime;

@@ -1,9 +1,10 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.repository;
 
 import static com.eager.questioncloud.coupon.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.coupon.QUserCouponEntity.userCouponEntity;
 
-import com.eager.questioncloud.coupon.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.coupon.domain.UserCoupon;
+import com.eager.questioncloud.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.types.Projections;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Repository;
 public class UserCouponRepositoryImpl implements UserCouponRepository {
     private final UserCouponJpaRepository userCouponJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
-    
+
     @Override
     public UserCoupon getUserCoupon(Long userCouponId, Long userId) {
         return userCouponJpaRepository.findByIdAndUserIdAndIsUsedFalse(userCouponId, userId)

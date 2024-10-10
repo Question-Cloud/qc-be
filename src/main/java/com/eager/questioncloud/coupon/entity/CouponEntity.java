@@ -1,5 +1,7 @@
-package com.eager.questioncloud.coupon;
+package com.eager.questioncloud.coupon.entity;
 
+import com.eager.questioncloud.coupon.domain.Coupon;
+import com.eager.questioncloud.coupon.domain.CouponType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
