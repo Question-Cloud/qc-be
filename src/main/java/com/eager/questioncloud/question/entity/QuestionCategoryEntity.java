@@ -1,5 +1,6 @@
-package com.eager.questioncloud.creator;
+package com.eager.questioncloud.question.entity;
 
+import com.eager.questioncloud.question.domain.QuestionCategory;
 import com.eager.questioncloud.question.domain.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,37 +17,42 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "creator")
+@Table(name = "question_category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreatorEntity {
+public class QuestionCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private Long userId;
+    private Long parentId;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Subject mainSubject;
+    private Subject subject;
 
     @Column
-    private String introduction;
+    private String title;
+
+    @Column
+    private Boolean isParent;
 
     @Builder
-    public CreatorEntity(Long id, Long userId, Subject mainSubject, String introduction) {
+    public QuestionCategoryEntity(Long id, Long parentId, Subject subject, String title, Boolean isParent) {
         this.id = id;
-        this.userId = userId;
-        this.mainSubject = mainSubject;
-        this.introduction = introduction;
+        this.parentId = parentId;
+        this.subject = subject;
+        this.title = title;
+        this.isParent = isParent;
     }
 
-    public Creator toModel() {
-        return Creator.builder()
+    public QuestionCategory toDomain() {
+        return QuestionCategory.builder()
             .id(id)
-            .userId(userId)
-            .mainSubject(mainSubject)
-            .introduction(introduction)
+            .parentId(parentId)
+            .subject(subject)
+            .title(title)
+            .isParent(isParent)
             .build();
     }
 }

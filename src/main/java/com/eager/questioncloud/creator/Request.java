@@ -1,6 +1,6 @@
 package com.eager.questioncloud.creator;
 
-import com.eager.questioncloud.question.Subject;
+import com.eager.questioncloud.question.domain.Subject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

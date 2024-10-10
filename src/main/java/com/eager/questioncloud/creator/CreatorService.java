@@ -2,7 +2,7 @@ package com.eager.questioncloud.creator;
 
 import com.eager.questioncloud.creator.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.creator.CreatorDto.MyCreatorInformation;
-import com.eager.questioncloud.question.Subject;
+import com.eager.questioncloud.question.domain.Subject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace.implement;
+package com.eager.questioncloud.question.implement;
 
 import com.eager.questioncloud.question.domain.Question;
 import com.eager.questioncloud.question.repository.QuestionRepository;
@@ -7,12 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class WorkSpaceQuestionRemover {
+public class QuestionAppender {
     private final QuestionRepository questionRepository;
 
-    public void remove(Long creatorId, Long questionId) {
-        Question question = questionRepository.getForModifyAndDelete(questionId, creatorId);
-        question.delete();
-        questionRepository.save(question);
+    public Question append(Question question) {
+        return questionRepository.save(question);
     }
 }

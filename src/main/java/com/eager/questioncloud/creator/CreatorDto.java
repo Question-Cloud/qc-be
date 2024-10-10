@@ -1,6 +1,6 @@
 package com.eager.questioncloud.creator;
 
-import com.eager.questioncloud.question.Subject;
+import com.eager.questioncloud.question.domain.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -7,8 +7,8 @@ import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.library.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.question.QQuestionCategoryEntity;
-import com.eager.questioncloud.question.QuestionDto.QuestionInformationForLibrary;
-import com.eager.questioncloud.question.QuestionFilter;
+import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForLibrary;
+import com.eager.questioncloud.question.dto.QuestionFilter;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

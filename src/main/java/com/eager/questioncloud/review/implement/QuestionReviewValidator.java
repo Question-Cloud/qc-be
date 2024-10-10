@@ -4,7 +4,7 @@ import com.eager.questioncloud.annotation.DistributedLock;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.library.UserQuestionLibraryReader;
-import com.eager.questioncloud.question.QuestionReader;
+import com.eager.questioncloud.question.implement.QuestionReader;
 import com.eager.questioncloud.review.domain.QuestionReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

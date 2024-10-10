@@ -2,10 +2,10 @@ package com.eager.questioncloud.workspace.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.Question;
-import com.eager.questioncloud.question.QuestionContent;
-import com.eager.questioncloud.question.QuestionDto.QuestionInformationForWorkSpace;
-import com.eager.questioncloud.question.QuestionRepository;
+import com.eager.questioncloud.question.domain.Question;
+import com.eager.questioncloud.question.dto.QuestionContent;
+import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
+import com.eager.questioncloud.question.repository.QuestionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

@@ -1,8 +1,8 @@
 package com.eager.questioncloud.workspace.implement;
 
-import com.eager.questioncloud.question.Question;
-import com.eager.questioncloud.question.QuestionContent;
-import com.eager.questioncloud.question.QuestionRepository;
+import com.eager.questioncloud.question.domain.Question;
+import com.eager.questioncloud.question.dto.QuestionContent;
+import com.eager.questioncloud.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

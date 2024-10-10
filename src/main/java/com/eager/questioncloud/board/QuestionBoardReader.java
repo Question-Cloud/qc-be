@@ -2,7 +2,7 @@ package com.eager.questioncloud.board;
 
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
-import com.eager.questioncloud.question.QuestionPermissionValidator;
+import com.eager.questioncloud.question.implement.QuestionPermissionValidator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

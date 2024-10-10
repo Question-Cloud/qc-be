@@ -1,7 +1,7 @@
 package com.eager.questioncloud.library;
 
 import com.eager.questioncloud.library.UserQuestionLibraryDto.UserQuestionLibraryItem;
-import com.eager.questioncloud.question.QuestionFilter;
+import com.eager.questioncloud.question.dto.QuestionFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
