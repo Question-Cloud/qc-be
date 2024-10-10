@@ -1,5 +1,8 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.service;
 
+import com.eager.questioncloud.point.domain.ChargePointType;
+import com.eager.questioncloud.point.implement.UserPointProcessor;
+import com.eager.questioncloud.point.implement.UserPointReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

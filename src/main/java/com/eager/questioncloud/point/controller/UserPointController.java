@@ -1,8 +1,9 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.point.Request.ChargePointRequest;
-import com.eager.questioncloud.point.Response.GetUserPointResponse;
+import com.eager.questioncloud.point.dto.Request.ChargePointRequest;
+import com.eager.questioncloud.point.dto.Response.GetUserPointResponse;
+import com.eager.questioncloud.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,8 +1,10 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.InvalidPaymentException;
+import com.eager.questioncloud.point.domain.ChargePointType;
+import com.eager.questioncloud.point.domain.UserPointPayment;
 import com.eager.questioncloud.portone.PortoneAPI;
 import com.eager.questioncloud.portone.PortonePayment;
 import com.eager.questioncloud.portone.PortonePaymentStatus;

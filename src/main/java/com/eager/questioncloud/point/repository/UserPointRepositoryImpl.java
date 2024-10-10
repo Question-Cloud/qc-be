@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.repository;
 
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 

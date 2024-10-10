@@ -1,5 +1,6 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.domain;
 
+import com.eager.questioncloud.point.repository.UserPointPaymentEntity;
 import com.eager.questioncloud.portone.PortonePayment;
 import com.eager.questioncloud.portone.PortonePaymentStatus;
 import java.time.LocalDateTime;

@@ -1,5 +1,6 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.repository;
 
+import com.eager.questioncloud.point.domain.UserPointPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

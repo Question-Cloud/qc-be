@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point;
+package com.eager.questioncloud.point.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
