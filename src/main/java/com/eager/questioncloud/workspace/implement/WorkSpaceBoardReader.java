@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace;
+package com.eager.questioncloud.workspace.implement;
 
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.board.QuestionBoardRepository;

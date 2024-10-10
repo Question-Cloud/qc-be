@@ -1,8 +1,12 @@
-package com.eager.questioncloud.workspace;
+package com.eager.questioncloud.workspace.service;
 
 import com.eager.questioncloud.question.Question;
 import com.eager.questioncloud.question.QuestionContent;
 import com.eager.questioncloud.question.QuestionDto.QuestionInformationForWorkSpace;
+import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionAppender;
+import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionReader;
+import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionRemover;
+import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

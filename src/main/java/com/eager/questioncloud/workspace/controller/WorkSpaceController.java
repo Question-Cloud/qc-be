@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace;
+package com.eager.questioncloud.workspace.controller;
 
 import com.eager.questioncloud.board.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.common.DefaultResponse;
@@ -9,6 +9,8 @@ import com.eager.questioncloud.question.Request.ModifySelfMadeQuestionRequest;
 import com.eager.questioncloud.question.Request.RegisterSelfMadeQuestionRequest;
 import com.eager.questioncloud.question.Response.QuestionContentResponse;
 import com.eager.questioncloud.security.UserPrincipal;
+import com.eager.questioncloud.workspace.service.WorkSpaceBoardService;
+import com.eager.questioncloud.workspace.service.WorkSpaceQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
