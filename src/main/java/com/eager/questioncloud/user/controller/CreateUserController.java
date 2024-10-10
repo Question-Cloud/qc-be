@@ -1,8 +1,8 @@
 package com.eager.questioncloud.user.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.mail.EmailVerification;
-import com.eager.questioncloud.mail.EmailVerificationType;
+import com.eager.questioncloud.mail.domain.EmailVerification;
+import com.eager.questioncloud.mail.domain.EmailVerificationType;
 import com.eager.questioncloud.user.domain.CreateUser;
 import com.eager.questioncloud.user.domain.User;
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;

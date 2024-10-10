@@ -1,7 +1,8 @@
-package com.eager.questioncloud.mail;
+package com.eager.questioncloud.mail.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.mail.domain.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.mail;
+package com.eager.questioncloud.mail.template;
 
 import lombok.Getter;
 

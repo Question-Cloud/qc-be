@@ -1,5 +1,7 @@
-package com.eager.questioncloud.mail;
+package com.eager.questioncloud.mail.entity;
 
+import com.eager.questioncloud.mail.domain.EmailVerification;
+import com.eager.questioncloud.mail.domain.EmailVerificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
