@@ -1,4 +1,4 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

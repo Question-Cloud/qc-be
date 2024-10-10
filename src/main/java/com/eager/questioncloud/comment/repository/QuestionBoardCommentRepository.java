@@ -1,6 +1,7 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.repository;
 
-import com.eager.questioncloud.comment.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 

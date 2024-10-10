@@ -1,6 +1,11 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.service;
 
-import com.eager.questioncloud.comment.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.implement.QuestionBoardCommentAppender;
+import com.eager.questioncloud.comment.implement.QuestionBoardCommentReader;
+import com.eager.questioncloud.comment.implement.QuestionBoardCommentRemover;
+import com.eager.questioncloud.comment.implement.QuestionBoardCommentUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

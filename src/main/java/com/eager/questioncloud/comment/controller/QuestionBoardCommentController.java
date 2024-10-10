@@ -1,8 +1,10 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.controller;
 
-import com.eager.questioncloud.comment.QuestionBoardCommentDto.QuestionBoardCommentDetail;
-import com.eager.questioncloud.comment.Request.AddQuestionBoardCommentRequest;
-import com.eager.questioncloud.comment.Request.ModifyQuestionBoardCommentRequest;
+import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.dto.Request.AddQuestionBoardCommentRequest;
+import com.eager.questioncloud.comment.dto.Request.ModifyQuestionBoardCommentRequest;
+import com.eager.questioncloud.comment.service.QuestionBoardCommentService;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;

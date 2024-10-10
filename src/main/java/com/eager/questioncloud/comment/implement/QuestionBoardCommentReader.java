@@ -1,7 +1,8 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.implement;
 
 import com.eager.questioncloud.board.QuestionBoardValidator;
-import com.eager.questioncloud.comment.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.repository.QuestionBoardCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

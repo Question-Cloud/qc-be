@@ -1,4 +1,4 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.repository;
 
 import static com.eager.questioncloud.board.QQuestionBoardEntity.questionBoardEntity;
 import static com.eager.questioncloud.comment.QQuestionBoardCommentEntity.questionBoardCommentEntity;
@@ -6,7 +6,8 @@ import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.comment.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

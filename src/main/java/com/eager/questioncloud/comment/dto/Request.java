@@ -1,4 +1,4 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

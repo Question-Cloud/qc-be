@@ -1,5 +1,6 @@
-package com.eager.questioncloud.comment;
+package com.eager.questioncloud.comment.repository;
 
+import com.eager.questioncloud.comment.entity.QuestionBoardCommentEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
