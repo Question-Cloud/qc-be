@@ -1,10 +1,11 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
-import com.eager.questioncloud.subscribe.Response.CreatorSubscribeInformationResponse;
-import com.eager.questioncloud.subscribe.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.subscribe.dto.Response.CreatorSubscribeInformationResponse;
+import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.subscribe.service.SubscribeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

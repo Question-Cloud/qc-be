@@ -1,5 +1,6 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.domain;
 
+import com.eager.questioncloud.subscribe.entity.SubscribeEntity;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

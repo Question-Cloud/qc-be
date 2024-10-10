@@ -1,11 +1,13 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.repository;
 
 import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.subscribe.QSubscribeEntity.subscribeEntity;
 import static com.eager.questioncloud.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.creator.CreatorDto.CreatorSimpleInformation;
-import com.eager.questioncloud.subscribe.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.subscribe.QSubscribeEntity;
+import com.eager.questioncloud.subscribe.domain.Subscribe;
+import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

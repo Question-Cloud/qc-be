@@ -1,5 +1,6 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.implement;
 
+import com.eager.questioncloud.subscribe.repository.SubscribeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

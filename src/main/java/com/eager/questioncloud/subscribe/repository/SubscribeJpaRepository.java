@@ -1,5 +1,6 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.repository;
 
+import com.eager.questioncloud.subscribe.entity.SubscribeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubscribeJpaRepository extends JpaRepository<SubscribeEntity, Long> {

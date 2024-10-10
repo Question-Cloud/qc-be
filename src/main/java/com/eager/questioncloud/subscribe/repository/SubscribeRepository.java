@@ -1,6 +1,7 @@
-package com.eager.questioncloud.subscribe;
+package com.eager.questioncloud.subscribe.repository;
 
-import com.eager.questioncloud.subscribe.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.subscribe.domain.Subscribe;
+import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
