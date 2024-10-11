@@ -50,7 +50,7 @@ public class User implements UserDetails {
     public static User guest() {
         return User.builder()
             .uid(-1L)
-            .userInformation(new UserInformation("guest", "guest", "guest", "guest"))
+            .userInformation(UserInformation.getGuestInformation())
             .userAccountInformation(UserAccountInformation.getGuestAccountInformation())
             .build();
     }
