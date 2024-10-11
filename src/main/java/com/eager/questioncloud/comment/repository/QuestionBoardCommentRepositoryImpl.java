@@ -1,10 +1,10 @@
 package com.eager.questioncloud.comment.repository;
 
-import static com.eager.questioncloud.board.QQuestionBoardEntity.questionBoardEntity;
-import static com.eager.questioncloud.comment.QQuestionBoardCommentEntity.questionBoardCommentEntity;
-import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.board.entity.QQuestionBoardEntity.questionBoardEntity;
+import static com.eager.questioncloud.comment.entity.QQuestionBoardCommentEntity.questionBoardCommentEntity;
+import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.comment.domain.QuestionBoardComment;
 import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
