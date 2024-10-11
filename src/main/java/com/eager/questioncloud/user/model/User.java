@@ -5,6 +5,7 @@ import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;
 import com.eager.questioncloud.user.entity.UserEntity;
 import com.eager.questioncloud.user.vo.AccountType;
+import com.eager.questioncloud.user.vo.UserAccountInformation;
 import com.eager.questioncloud.user.vo.UserInformation;
 import com.eager.questioncloud.user.vo.UserStatus;
 import com.eager.questioncloud.user.vo.UserType;

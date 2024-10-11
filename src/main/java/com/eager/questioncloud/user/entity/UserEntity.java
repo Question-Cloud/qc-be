@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user.entity;
 
 import com.eager.questioncloud.user.model.User;
-import com.eager.questioncloud.user.model.UserAccountInformation;
+import com.eager.questioncloud.user.vo.UserAccountInformation;
 import com.eager.questioncloud.user.vo.UserInformation;
 import com.eager.questioncloud.user.vo.UserStatus;
 import com.eager.questioncloud.user.vo.UserType;

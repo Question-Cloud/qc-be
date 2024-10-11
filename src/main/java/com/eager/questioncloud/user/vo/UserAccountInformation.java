@@ -1,9 +1,8 @@
-package com.eager.questioncloud.user.model;
+package com.eager.questioncloud.user.vo;
 
 import com.eager.questioncloud.authentication.implement.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.vo.AccountType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
