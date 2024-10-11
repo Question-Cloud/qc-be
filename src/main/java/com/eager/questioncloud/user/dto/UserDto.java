@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user.dto;
 
 import com.eager.questioncloud.creator.domain.Creator;
-import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

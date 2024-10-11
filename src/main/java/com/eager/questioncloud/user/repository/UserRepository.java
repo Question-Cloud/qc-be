@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user.repository;
 
-import com.eager.questioncloud.user.domain.User;
 import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
+import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;
 import java.util.Optional;
 

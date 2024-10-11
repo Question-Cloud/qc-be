@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user.domain;
+package com.eager.questioncloud.user.model;
 
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
 import com.eager.questioncloud.user.vo.AccountType;

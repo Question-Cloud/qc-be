@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user.domain;
+package com.eager.questioncloud.user.model;
 
 import com.eager.questioncloud.authentication.implement.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
