@@ -8,7 +8,7 @@ import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.review.entity.QQuestionReviewEntity;
-import com.eager.questioncloud.user.domain.UserType;
+import com.eager.questioncloud.user.vo.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -42,7 +42,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
         QQuestionReviewEntity profile = new QQuestionReviewEntity("profile");
         List<Tuple> result = jpaQueryFactory.select(
                 questionReviewEntity.id,
-                userEntity.name,
+                userEntity.userInformation.name,
                 userEntity.uid,
                 userEntity.userType,
                 profile.id.count().intValue(),
@@ -63,7 +63,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .stream()
             .map(tuple -> new QuestionReviewItem(
                 tuple.get(questionReviewEntity.id),
-                tuple.get(userEntity.name),
+                tuple.get(userEntity.userInformation.name),
                 UserType.CreatorUser.equals(tuple.get(userEntity.userType)),
                 userId.equals(tuple.get(userEntity.uid)),
                 tuple.get(profile.id.count().intValue()),

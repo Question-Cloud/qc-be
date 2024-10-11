@@ -66,7 +66,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 parent.title,
                 child.title,
                 questionEntity.thumbnail,
-                userEntity.name,
+                userEntity.userInformation.name,
                 questionEntity.questionLevel,
                 questionEntity.price,
                 userQuestionLibraryEntity.id.isNotNull(),
@@ -98,7 +98,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .parentCategory(tuple.get(parent.title))
                 .childCategory(tuple.get(child.title))
                 .thumbnail(tuple.get(questionEntity.thumbnail))
-                .creatorName(tuple.get(userEntity.name))
+                .creatorName(tuple.get(userEntity.userInformation.name))
                 .questionLevel(tuple.get(questionEntity.questionLevel))
                 .price(tuple.get(questionEntity.price))
                 .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
@@ -118,7 +118,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 parent.title,
                 child.title,
                 questionEntity.thumbnail,
-                userEntity.name,
+                userEntity.userInformation.name,
                 questionEntity.questionLevel,
                 questionEntity.price,
                 userQuestionLibraryEntity.id.isNotNull(),
@@ -144,7 +144,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .parentCategory(tuple.get(parent.title))
             .childCategory(tuple.get(child.title))
             .thumbnail(tuple.get(questionEntity.thumbnail))
-            .creatorName(tuple.get(userEntity.name))
+            .creatorName(tuple.get(userEntity.userInformation.name))
             .questionLevel(tuple.get(questionEntity.questionLevel))
             .price(tuple.get(questionEntity.price))
             .rate(tuple.get(questionReviewStatisticsEntity.averageRate))

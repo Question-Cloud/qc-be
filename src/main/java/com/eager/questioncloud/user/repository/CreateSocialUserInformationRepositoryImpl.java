@@ -2,8 +2,8 @@ package com.eager.questioncloud.user.repository;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.domain.AccountType;
-import com.eager.questioncloud.user.domain.CreateSocialUserInformation;
+import com.eager.questioncloud.user.model.CreateSocialUserInformation;
+import com.eager.questioncloud.user.vo.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,11 +17,11 @@ public class CreateSocialUserInformationRepositoryImpl implements CreateSocialUs
     public CreateSocialUserInformation find(String registerToken, AccountType accountType) {
         return createSocialUserInformationJpaRepository.findByRegisterTokenAndAccountTypeAndIsUsedFalse(registerToken, accountType)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
     public CreateSocialUserInformation save(CreateSocialUserInformation createSocialUserInformation) {
-        return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toDomain();
+        return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toModel();
     }
 }

@@ -1,10 +1,13 @@
-package com.eager.questioncloud.user.domain;
+package com.eager.questioncloud.user.model;
 
-import com.eager.questioncloud.authentication.implement.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;
 import com.eager.questioncloud.user.entity.UserEntity;
+import com.eager.questioncloud.user.vo.UserAccountInformation;
+import com.eager.questioncloud.user.vo.UserInformation;
+import com.eager.questioncloud.user.vo.UserStatus;
+import com.eager.questioncloud.user.vo.UserType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,39 +20,38 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 public class User implements UserDetails {
     private Long uid;
-    private String email;
-    private String password;
-    private String socialUid;
-    private AccountType accountType;
-    private String phone;
-    private String name;
-    private String profileImage;
-    private int point;
+    private UserAccountInformation userAccountInformation;
+    private UserInformation userInformation;
     private UserType userType;
     private UserStatus userStatus;
+    private int point;
 
     @Builder
-    public User(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name, String profileImage,
-        int point, UserType userType, UserStatus userStatus) {
+    public User(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType, UserStatus userStatus,
+        int point) {
         this.uid = uid;
-        this.email = email;
-        this.password = password;
-        this.socialUid = socialUid;
-        this.accountType = accountType;
-        this.phone = phone;
-        this.name = name;
-        this.profileImage = profileImage;
-        this.point = point;
+        this.userAccountInformation = userAccountInformation;
+        this.userInformation = userInformation;
         this.userType = userType;
         this.userStatus = userStatus;
+        this.point = point;
+    }
+
+    public static User create(UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
+        UserStatus userStatus) {
+        return User.builder()
+            .userAccountInformation(userAccountInformation)
+            .userInformation(userInformation)
+            .userType(userType)
+            .userStatus(userStatus)
+            .build();
     }
 
     public static User guest() {
         return User.builder()
             .uid(-1L)
-            .email("guest")
-            .password("guest")
-            .name("guest")
+            .userInformation(UserInformation.getGuestInformation())
+            .userAccountInformation(UserAccountInformation.getGuestAccountInformation())
             .build();
     }
 
@@ -68,12 +70,12 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.name;
+        return this.userInformation.getName();
     }
 
     @Override
     public String getPassword() {
-        return this.password;
+        return this.userAccountInformation.getPassword();
     }
 
     @Override
@@ -109,65 +111,23 @@ public class User implements UserDetails {
         }
     }
 
-    public void usePoint(int amount) {
-        if (point < amount) {
-            throw new CustomException(Error.NOT_ENOUGH_POINT);
-        }
-        this.point = this.point - amount;
-    }
-
     public void changePassword(String newPassword) {
-        if (!accountType.equals(AccountType.EMAIL)) {
-            throw new CustomException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT);
-        }
-        this.password = PasswordProcessor.encode(newPassword);
+        userAccountInformation = userAccountInformation.changePassword(newPassword);
     }
 
     public User update(String name, String profileImage) {
-        this.name = name;
-        this.profileImage = profileImage;
+        userInformation = userInformation.updateUserInformation(name, profileImage);
         return this;
-    }
-
-    public static User create(CreateUser createUser) {
-        return User.builder()
-            .email(createUser.getEmail())
-            .password(PasswordProcessor.encode(createUser.getPassword()))
-            .accountType(AccountType.EMAIL)
-            .phone(createUser.getPhone())
-            .name(createUser.getName())
-            .point(0)
-            .userType(UserType.NormalUser)
-            .userStatus(UserStatus.PendingEmailVerification)
-            .build();
-    }
-
-    public static User create(CreateUser createUser, String socialUid) {
-        return User.builder()
-            .email(createUser.getEmail())
-            .socialUid(socialUid)
-            .accountType(createUser.getAccountType())
-            .phone(createUser.getPhone())
-            .name(createUser.getName())
-            .point(0)
-            .userType(UserType.NormalUser)
-            .userStatus(UserStatus.PendingEmailVerification)
-            .build();
     }
 
     public UserEntity toEntity() {
         return UserEntity.builder()
             .uid(uid)
-            .email(email)
-            .password(password)
-            .socialUid(socialUid)
-            .accountType(accountType)
-            .phone(phone)
-            .name(name)
-            .profileImage(profileImage)
-            .point(point)
+            .userAccountInformation(userAccountInformation)
+            .userInformation(userInformation)
             .userType(userType)
             .userStatus(userStatus)
+            .point(point)
             .build();
     }
 }

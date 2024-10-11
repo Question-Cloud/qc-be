@@ -1,12 +1,12 @@
 package com.eager.questioncloud.mail.implement;
 
-import com.eager.questioncloud.mail.template.EmailVerificationTemplate;
-import com.eager.questioncloud.mail.template.EmailVerificationTemplateCreator;
-import com.eager.questioncloud.mail.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.mail.domain.Email;
 import com.eager.questioncloud.mail.domain.EmailVerification;
 import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.mail.dto.EmailVerificationWithUser;
+import com.eager.questioncloud.mail.template.EmailVerificationTemplate;
+import com.eager.questioncloud.mail.template.EmailVerificationTemplateCreator;
+import com.eager.questioncloud.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class EmailVerificationProcessor {
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(emailVerificationType, emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
-                user.getEmail(),
+                user.getUserInformation().getEmail(),
                 template.getTitle(),
                 template.getContent()
             ));
@@ -43,7 +43,7 @@ public class EmailVerificationProcessor {
             emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
-                user.getEmail(),
+                user.getUserInformation().getEmail(),
                 template.getTitle(),
                 template.getContent())
         );

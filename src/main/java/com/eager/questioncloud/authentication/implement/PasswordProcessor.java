@@ -11,6 +11,9 @@ public class PasswordProcessor {
     public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static String encode(String rawPassword) {
+        if (rawPassword == null) {
+            return null;
+        }
         return passwordEncoder.encode(rawPassword);
     }
 

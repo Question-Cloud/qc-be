@@ -41,8 +41,8 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
         return jpaQueryFactory.select(
                 questionBoardCommentEntity.id,
                 userEntity.uid,
-                userEntity.name,
-                userEntity.profileImage,
+                userEntity.userInformation.name,
+                userEntity.userInformation.profileImage,
                 questionBoardCommentEntity.comment,
                 questionBoardCommentEntity.createdAt
             )
@@ -54,8 +54,8 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
             .stream()
             .map(tuple -> QuestionBoardCommentDetail.builder()
                 .id(tuple.get(questionBoardCommentEntity.id))
-                .writerName(tuple.get(userEntity.name))
-                .profileImage(tuple.get(userEntity.profileImage))
+                .writerName(tuple.get(userEntity.userInformation.name))
+                .profileImage(tuple.get(userEntity.userInformation.profileImage))
                 .comment(tuple.get(questionBoardCommentEntity.comment))
                 .isCreator(questionCreatorUserId.equals(tuple.get(userEntity.uid)))
                 .isWriter(userId.equals(tuple.get(userEntity.uid)))

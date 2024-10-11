@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user.entity;
 
-import com.eager.questioncloud.user.domain.AccountType;
-import com.eager.questioncloud.user.domain.CreateSocialUserInformation;
+import com.eager.questioncloud.user.model.CreateSocialUserInformation;
+import com.eager.questioncloud.user.vo.AccountType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,7 +39,7 @@ public class CreateSocialUserInformationEntity {
         this.isUsed = isUsed;
     }
 
-    public CreateSocialUserInformation toDomain() {
+    public CreateSocialUserInformation toModel() {
         return CreateSocialUserInformation.builder()
             .registerToken(registerToken)
             .socialUid(socialUid)

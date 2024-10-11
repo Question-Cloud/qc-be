@@ -6,7 +6,7 @@ import com.eager.questioncloud.authentication.dto.Response.LoginResponse;
 import com.eager.questioncloud.authentication.dto.Response.RefreshResponse;
 import com.eager.questioncloud.authentication.dto.Response.SocialAuthenticateResponse;
 import com.eager.questioncloud.authentication.service.AuthenticationService;
-import com.eager.questioncloud.user.domain.AccountType;
+import com.eager.questioncloud.user.vo.AccountType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

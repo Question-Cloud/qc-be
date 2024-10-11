@@ -53,7 +53,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
                         parent.title,
                         child.title,
                         questionEntity.thumbnail,
-                        userEntity.name,
+                        userEntity.userInformation.name,
                         questionEntity.questionLevel,
                         questionEntity.fileUrl,
                         questionEntity.explanationUrl)))

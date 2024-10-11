@@ -3,8 +3,8 @@ package com.eager.questioncloud.help.service;
 import com.eager.questioncloud.mail.domain.EmailVerification;
 import com.eager.questioncloud.mail.domain.EmailVerificationType;
 import com.eager.questioncloud.mail.implement.EmailVerificationProcessor;
-import com.eager.questioncloud.user.domain.User;
 import com.eager.questioncloud.user.implement.UserReader;
+import com.eager.questioncloud.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class HelpAccountService {
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public String recoverForgottenEmail(String phone) {
-        return userReader.getUserByPhone(phone).getEmail();
+        return userReader.getUserByPhone(phone).getUserInformation().getEmail();
     }
 
     public EmailVerification sendRecoverForgottenPasswordMail(String email) {

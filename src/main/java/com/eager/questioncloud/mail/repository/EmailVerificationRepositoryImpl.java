@@ -8,8 +8,8 @@ import com.eager.questioncloud.mail.domain.EmailVerification;
 import com.eager.questioncloud.mail.domain.EmailVerificationType;
 import com.eager.questioncloud.mail.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.mail.entity.EmailVerificationEntity;
-import com.eager.questioncloud.user.domain.User;
 import com.eager.questioncloud.user.entity.UserEntity;
+import com.eager.questioncloud.user.model.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
         Tuple result = emailVerificationJpaRepository.findByResendTokenWithUser(resendToken)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
         EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toDomain();
-        User user = result.get("user", UserEntity.class).toDomain();
+        User user = result.get("user", UserEntity.class).toModel();
         return new EmailVerificationWithUser(emailVerification, user);
     }
 

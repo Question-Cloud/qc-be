@@ -31,7 +31,7 @@ public class UserController {
     })
     @Operation(operationId = "내 정보 조회", summary = "내 정보 조회", tags = {"user"}, description = "내 정보 조회")
     public MyInformationResponse getMyInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return new MyInformationResponse(MyInformation.of(userPrincipal.getUser()));
+        return new MyInformationResponse(MyInformation.from(userPrincipal.getUser()));
     }
 
     @PatchMapping("/me")

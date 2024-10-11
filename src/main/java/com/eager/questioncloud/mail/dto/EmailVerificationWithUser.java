@@ -1,7 +1,7 @@
 package com.eager.questioncloud.mail.dto;
 
 import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,10 +1,10 @@
-package com.eager.questioncloud.user.domain;
+package com.eager.questioncloud.user.vo;
 
 import lombok.Getter;
 
 @Getter
 public enum AccountType {
-    EMAIL("EMAIL"), KAKAO("KAKAO"), GOOGLE("GOOGLE"), NAVER("NAVER");
+    EMAIL("EMAIL"), KAKAO("KAKAO"), GOOGLE("GOOGLE"), NAVER("NAVER"), GUEST("GUEST");
 
     private final String value;
 

@@ -1,6 +1,7 @@
-package com.eager.questioncloud.user.domain;
+package com.eager.questioncloud.user.model;
 
 import com.eager.questioncloud.user.entity.CreateSocialUserInformationEntity;
+import com.eager.questioncloud.user.vo.AccountType;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +21,6 @@ public class CreateSocialUserInformation {
         this.isUsed = isUsed;
     }
 
-    public void use() {
-        this.isUsed = true;
-    }
-
     public static CreateSocialUserInformation create(AccountType accountType, String socialUid) {
         return CreateSocialUserInformation.builder()
             .registerToken(UUID.randomUUID().toString())
@@ -31,6 +28,10 @@ public class CreateSocialUserInformation {
             .socialUid(socialUid)
             .isUsed(false)
             .build();
+    }
+    
+    public void use() {
+        this.isUsed = true;
     }
 
     public CreateSocialUserInformationEntity toEntity() {

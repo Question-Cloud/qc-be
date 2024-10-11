@@ -6,10 +6,10 @@ import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.domain.AccountType;
-import com.eager.questioncloud.user.domain.CreateSocialUserInformation;
-import com.eager.questioncloud.user.domain.User;
-import com.eager.questioncloud.user.implement.CreateSocialUserInformationProcessor;
+import com.eager.questioncloud.user.implement.CreateSocialUserInformationAppender;
+import com.eager.questioncloud.user.model.CreateSocialUserInformation;
+import com.eager.questioncloud.user.model.User;
+import com.eager.questioncloud.user.vo.AccountType;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class SocialAuthenticateProcessor {
     private final NaverAPI naverProcessor;
     private final AuthenticationProcessor authenticationProcessor;
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
-    private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
+    private final CreateSocialUserInformationAppender createSocialUserInformationAppender;
 
     public String getSocialUid(AccountType accountType, String code) {
         switch (accountType) {
@@ -53,7 +53,7 @@ public class SocialAuthenticateProcessor {
                 authenticationTokenProcessor.generateAccessToken(socialUser.get().getUid()),
                 authenticationTokenProcessor.generateRefreshToken(socialUser.get().getUid())));
         }
-        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationProcessor.create(
+        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationAppender.append(
             CreateSocialUserInformation.create(accountType, socialUid));
         return SocialAuthenticateResponse.needsRegister(createSocialUserInformation.getRegisterToken());
     }
