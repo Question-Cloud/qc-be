@@ -16,7 +16,7 @@ public class UserDto {
         private String phone;
         private UserType userType;
 
-        public static MyInformation of(User user) {
+        public static MyInformation from(User user) {
             return new MyInformation(
                 user.getUserInformation().getProfileImage(),
                 user.getUserInformation().getName(),
