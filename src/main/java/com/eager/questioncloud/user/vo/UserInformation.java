@@ -23,7 +23,7 @@ public class UserInformation {
         return new UserInformation(this.email, this.phone, name, profileImage);
     }
 
-    public static UserInformation from(CreateUserRequest createUserRequest) {
+    public static UserInformation create(CreateUserRequest createUserRequest) {
         return new UserInformation(createUserRequest.getEmail(), createUserRequest.getPhone(), createUserRequest.getName(), null);
     }
 }
