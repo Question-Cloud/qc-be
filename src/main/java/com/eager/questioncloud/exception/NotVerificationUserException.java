@@ -1,6 +1,6 @@
 package com.eager.questioncloud.exception;
 
-import com.eager.questioncloud.user.User;
+import com.eager.questioncloud.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
