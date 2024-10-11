@@ -17,11 +17,11 @@ public class CreateSocialUserInformationRepositoryImpl implements CreateSocialUs
     public CreateSocialUserInformation find(String registerToken, AccountType accountType) {
         return createSocialUserInformationJpaRepository.findByRegisterTokenAndAccountTypeAndIsUsedFalse(registerToken, accountType)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
     public CreateSocialUserInformation save(CreateSocialUserInformation createSocialUserInformation) {
-        return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toDomain();
+        return createSocialUserInformationJpaRepository.save(createSocialUserInformation.toEntity()).toModel();
     }
 }

@@ -39,7 +39,7 @@ public class CreateSocialUserInformationEntity {
         this.isUsed = isUsed;
     }
 
-    public CreateSocialUserInformation toDomain() {
+    public CreateSocialUserInformation toModel() {
         return CreateSocialUserInformation.builder()
             .registerToken(registerToken)
             .socialUid(socialUid)
