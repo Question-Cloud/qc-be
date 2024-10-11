@@ -1,15 +1,14 @@
 package com.eager.questioncloud.question.repository;
 
-import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
-import static com.eager.questioncloud.question.QQuestionCategoryEntity.questionCategoryEntity;
-import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.review.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
-import static com.eager.questioncloud.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.question.entity.QQuestionCategoryEntity.questionCategoryEntity;
+import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.review.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
+import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.QQuestionCategoryEntity;
 import com.eager.questioncloud.question.domain.Question;
 import com.eager.questioncloud.question.domain.QuestionLevel;
 import com.eager.questioncloud.question.domain.QuestionSortType;
@@ -18,6 +17,7 @@ import com.eager.questioncloud.question.domain.QuestionType;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
 import com.eager.questioncloud.question.dto.QuestionFilter;
+import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
 import com.eager.questioncloud.question.entity.QuestionEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;

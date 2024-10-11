@@ -1,16 +1,16 @@
 package com.eager.questioncloud.library.repository;
 
-import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
-import static com.eager.questioncloud.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.library.domain.UserQuestionLibrary;
 import com.eager.questioncloud.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.library.entity.UserQuestionLibraryEntity;
-import com.eager.questioncloud.question.QQuestionCategoryEntity;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.question.dto.QuestionFilter;
+import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

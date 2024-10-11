@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.repository;
 
-import static com.eager.questioncloud.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
