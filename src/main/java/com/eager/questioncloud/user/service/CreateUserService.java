@@ -49,14 +49,11 @@ public class CreateUserService {
 
     private UserAccountInformation getUserAccountInformation(CreateUserRequest createUserRequest) {
         if (createUserRequest.getAccountType().equals(AccountType.EMAIL)) {
-            return new UserAccountInformation(createUserRequest.getPassword(), null, AccountType.EMAIL);
+            return UserAccountInformation.createEmailAccountInformation(createUserRequest.getPassword());
         }
         CreateSocialUserInformation socialUserInformation = createSocialUserInformationProcessor.use(
             createUserRequest.getSocialRegisterToken(),
             createUserRequest.getAccountType());
-        return new UserAccountInformation(
-            null,
-            socialUserInformation.getSocialUid(),
-            socialUserInformation.getAccountType());
+        return UserAccountInformation.createSocialAccountInformation(socialUserInformation.getSocialUid(), socialUserInformation.getAccountType());
     }
 }

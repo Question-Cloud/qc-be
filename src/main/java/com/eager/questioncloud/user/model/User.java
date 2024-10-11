@@ -4,7 +4,6 @@ import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;
 import com.eager.questioncloud.user.entity.UserEntity;
-import com.eager.questioncloud.user.vo.AccountType;
 import com.eager.questioncloud.user.vo.UserAccountInformation;
 import com.eager.questioncloud.user.vo.UserInformation;
 import com.eager.questioncloud.user.vo.UserStatus;
@@ -52,7 +51,7 @@ public class User implements UserDetails {
         return User.builder()
             .uid(-1L)
             .userInformation(new UserInformation("guest", "guest", "guest", "guest"))
-            .userAccountInformation(new UserAccountInformation("guest", "guest", AccountType.GUEST))
+            .userAccountInformation(UserAccountInformation.getGuestAccountInformation())
             .build();
     }
 
