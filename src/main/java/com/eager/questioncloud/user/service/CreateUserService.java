@@ -30,7 +30,7 @@ public class CreateUserService {
     public User create(CreateUserRequest createUserRequest) {
         UserAccountInformation userAccountInformation = getUserAccountInformation(createUserRequest);
         UserInformation userInformation = UserInformation.from(createUserRequest);
-        return userAppender.create(new User(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
+        return userAppender.create(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {

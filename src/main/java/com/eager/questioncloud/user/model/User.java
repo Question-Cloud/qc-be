@@ -38,11 +38,14 @@ public class User implements UserDetails {
         this.point = point;
     }
 
-    public User(UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType, UserStatus userStatus) {
-        this.userAccountInformation = userAccountInformation;
-        this.userInformation = userInformation;
-        this.userType = userType;
-        this.userStatus = userStatus;
+    public static User create(UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
+        UserStatus userStatus) {
+        return User.builder()
+            .userAccountInformation(userAccountInformation)
+            .userInformation(userInformation)
+            .userType(userType)
+            .userStatus(userStatus)
+            .build();
     }
 
     public static User guest() {
