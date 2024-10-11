@@ -5,7 +5,6 @@ import com.eager.questioncloud.mail.domain.EmailVerification;
 import com.eager.questioncloud.mail.domain.EmailVerificationType;
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
 import com.eager.questioncloud.user.dto.Response.CreateUserResponse;
-import com.eager.questioncloud.user.model.CreateUser;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.service.CreateUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +30,7 @@ public class CreateUserController {
     })
     @Operation(operationId = "회원가입", summary = "회원가입", tags = {"user-register"}, description = "회원가입")
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        User user = createUserService.create(CreateUser.toDomain(createUserRequest));
+        User user = createUserService.create(createUserRequest);
         EmailVerification emailVerification = createUserService.sendCreateUserVerifyMail(user);
         return new CreateUserResponse(emailVerification.getResendToken());
     }

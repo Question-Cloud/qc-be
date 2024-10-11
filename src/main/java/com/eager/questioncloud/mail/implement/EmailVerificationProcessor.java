@@ -27,7 +27,7 @@ public class EmailVerificationProcessor {
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(emailVerificationType, emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
-                user.getEmail(),
+                user.getUserInformation().getEmail(),
                 template.getTitle(),
                 template.getContent()
             ));
@@ -43,7 +43,7 @@ public class EmailVerificationProcessor {
             emailVerification.getToken());
         googleMailSender.sendMail(
             new Email(
-                user.getEmail(),
+                user.getUserInformation().getEmail(),
                 template.getTitle(),
                 template.getContent())
         );

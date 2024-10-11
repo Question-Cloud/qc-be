@@ -13,10 +13,10 @@ public class UserAppender {
     private final UserRepository userRepository;
 
     public User create(User user) {
-        if (checkDuplicateEmail(user.getEmail())) {
+        if (checkDuplicateEmail(user.getUserInformation().getEmail())) {
             throw new CustomException(Error.DUPLICATE_EMAIL);
         }
-        if (checkDuplicatePhone(user.getPhone())) {
+        if (checkDuplicatePhone(user.getUserInformation().getPhone())) {
             throw new CustomException(Error.DUPLICATE_PHONE);
         }
         return userRepository.save(user);

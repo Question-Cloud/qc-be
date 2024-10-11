@@ -42,7 +42,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
         QQuestionReviewEntity profile = new QQuestionReviewEntity("profile");
         List<Tuple> result = jpaQueryFactory.select(
                 questionReviewEntity.id,
-                userEntity.name,
+                userEntity.userInformation.name,
                 userEntity.uid,
                 userEntity.userType,
                 profile.id.count().intValue(),
@@ -63,7 +63,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .stream()
             .map(tuple -> new QuestionReviewItem(
                 tuple.get(questionReviewEntity.id),
-                tuple.get(userEntity.name),
+                tuple.get(userEntity.userInformation.name),
                 UserType.CreatorUser.equals(tuple.get(userEntity.userType)),
                 userId.equals(tuple.get(userEntity.uid)),
                 tuple.get(profile.id.count().intValue()),

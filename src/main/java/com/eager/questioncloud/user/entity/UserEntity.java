@@ -1,10 +1,12 @@
 package com.eager.questioncloud.user.entity;
 
 import com.eager.questioncloud.user.model.User;
-import com.eager.questioncloud.user.vo.AccountType;
+import com.eager.questioncloud.user.model.UserAccountInformation;
+import com.eager.questioncloud.user.vo.UserInformation;
 import com.eager.questioncloud.user.vo.UserStatus;
 import com.eager.questioncloud.user.vo.UserType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,30 +28,11 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @Column
-    private String email;
+    @Embedded
+    private UserAccountInformation userAccountInformation;
 
-    @Column
-    private String password;
-
-    @Column
-    private String socialUid;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
-    @Column
-    private String phone;
-
-    @Column
-    private String name;
-
-    @Column
-    private String profileImage;
-
-    @Column
-    private int point;
+    @Embedded
+    private UserInformation userInformation;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -59,35 +42,28 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    @Column
+    private int point;
+
     @Builder
-    public UserEntity(Long uid, String email, String password, String socialUid, AccountType accountType, String phone, String name,
-        String profileImage, int point, UserType userType, UserStatus userStatus) {
+    public UserEntity(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
+        UserStatus userStatus, int point) {
         this.uid = uid;
-        this.email = email;
-        this.password = password;
-        this.socialUid = socialUid;
-        this.accountType = accountType;
-        this.phone = phone;
-        this.name = name;
-        this.profileImage = profileImage;
-        this.point = point;
+        this.userAccountInformation = userAccountInformation;
+        this.userInformation = userInformation;
         this.userType = userType;
         this.userStatus = userStatus;
+        this.point = point;
     }
 
     public User toDomain() {
         return User.builder()
             .uid(uid)
-            .email(email)
-            .password(password)
-            .socialUid(socialUid)
-            .accountType(accountType)
-            .phone(phone)
-            .name(name)
-            .profileImage(profileImage)
-            .point(point)
+            .userAccountInformation(userAccountInformation)
+            .userInformation(userInformation)
             .userType(userType)
             .userStatus(userStatus)
+            .point(point)
             .build();
     }
 }

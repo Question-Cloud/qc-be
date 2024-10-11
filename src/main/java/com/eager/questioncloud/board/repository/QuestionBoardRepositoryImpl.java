@@ -34,7 +34,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     parent.title,
                     child.title,
                     questionEntity.title,
-                    userEntity.name,
+                    userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionBoardEntity)
@@ -59,7 +59,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     parent.title,
                     child.title,
                     questionEntity.title,
-                    userEntity.name,
+                    userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionEntity)
@@ -102,7 +102,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     parent.title,
                     child.title,
                     questionEntity.title,
-                    userEntity.name,
+                    userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionBoardEntity)

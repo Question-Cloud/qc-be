@@ -17,7 +17,12 @@ public class UserDto {
         private UserType userType;
 
         public static MyInformation of(User user) {
-            return new MyInformation(user.getProfileImage(), user.getName(), user.getEmail(), user.getPhone(), user.getUserType());
+            return new MyInformation(
+                user.getUserInformation().getProfileImage(),
+                user.getUserInformation().getName(),
+                user.getUserInformation().getEmail(),
+                user.getUserInformation().getPhone(),
+                user.getUserType());
         }
     }
 

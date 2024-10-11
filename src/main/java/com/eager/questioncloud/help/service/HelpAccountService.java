@@ -15,7 +15,7 @@ public class HelpAccountService {
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public String recoverForgottenEmail(String phone) {
-        return userReader.getUserByPhone(phone).getEmail();
+        return userReader.getUserByPhone(phone).getUserInformation().getEmail();
     }
 
     public EmailVerification sendRecoverForgottenPasswordMail(String email) {

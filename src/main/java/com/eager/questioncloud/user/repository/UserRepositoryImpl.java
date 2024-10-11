@@ -26,14 +26,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserByEmail(String email) {
-        return userJpaRepository.findByEmail(email)
+        return userJpaRepository.findByUserInformationEmail(email)
             .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
             .toDomain();
     }
 
     @Override
     public User getUserByPhone(String phone) {
-        return userJpaRepository.findByPhone(phone)
+        return userJpaRepository.findByUserInformationPhone(phone)
             .filter(entity -> !entity.getUserStatus().equals(UserStatus.Deleted))
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();
@@ -79,17 +79,18 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
-        Optional<UserEntity> userEntity = userJpaRepository.findByAccountTypeAndSocialUid(accountType, socialUid);
+        Optional<UserEntity> userEntity = userJpaRepository.findByUserAccountInformationAccountTypeAndUserAccountInformationSocialUid(accountType,
+            socialUid);
         return userEntity.map(UserEntity::toDomain);
     }
 
     @Override
     public Boolean checkDuplicatePhone(String phone) {
-        return userJpaRepository.existsByPhone(phone);
+        return userJpaRepository.existsByUserInformationPhone(phone);
     }
 
     @Override
     public Boolean checkDuplicateEmail(String email) {
-        return userJpaRepository.existsByEmail(email);
+        return userJpaRepository.existsByUserInformationEmail(email);
     }
 }

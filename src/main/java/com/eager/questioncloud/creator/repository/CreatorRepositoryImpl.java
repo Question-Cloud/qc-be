@@ -38,10 +38,10 @@ public class CreatorRepositoryImpl implements CreatorRepository {
         Double rate = getCreatorRate(creatorId);
         Tuple result = jpaQueryFactory.select(
                 creatorEntity.id,
-                userEntity.name,
-                userEntity.profileImage,
+                userEntity.userInformation.name,
+                userEntity.userInformation.profileImage,
                 creatorEntity.mainSubject,
-                userEntity.email,
+                userEntity.userInformation.email,
 //                subscribeCount,
                 creatorEntity.introduction)
             .from(creatorEntity)
@@ -56,10 +56,10 @@ public class CreatorRepositoryImpl implements CreatorRepository {
 
         return CreatorInformation.builder()
             .creatorId(result.get(creatorEntity.id))
-            .name(result.get(userEntity.name))
-            .profileImage(result.get(userEntity.profileImage))
+            .name(result.get(userEntity.userInformation.name))
+            .profileImage(result.get(userEntity.userInformation.profileImage))
             .mainSubject(result.get(creatorEntity.mainSubject))
-            .email(result.get(userEntity.email))
+            .email(result.get(userEntity.userInformation.email))
             .salesCount(salesCount)
             .rate(rate)
             .introduction(result.get(creatorEntity.introduction))

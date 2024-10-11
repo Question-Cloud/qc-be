@@ -50,8 +50,8 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
                     subscribeEntity.id,
                     Projections.constructor(CreatorSimpleInformation.class,
                         creatorEntity.id,
-                        userEntity.name,
-                        userEntity.profileImage,
+                        userEntity.userInformation.name,
+                        userEntity.userInformation.profileImage,
                         creatorEntity.mainSubject,
                         creatorEntity.introduction,
                         countCheck.id.count().intValue())))
