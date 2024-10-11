@@ -28,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUserByEmail(String email) {
         return userJpaRepository.findByUserInformationEmail(email)
             .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
-            .toDomain();
+            .toModel();
     }
 
     @Override
@@ -36,14 +36,14 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findByUserInformationPhone(phone)
             .filter(entity -> !entity.getUserStatus().equals(UserStatus.Deleted))
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
     public User getUser(Long uid) {
         return userJpaRepository.findById(uid)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
@@ -66,22 +66,22 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {
-            return new UserWithCreator(user.toDomain(), creator.toModel());
+            return new UserWithCreator(user.toModel(), creator.toModel());
         }
 
-        return new UserWithCreator(user.toDomain(), null);
+        return new UserWithCreator(user.toModel(), null);
     }
 
     @Override
     public User save(User user) {
-        return userJpaRepository.save(user.toEntity()).toDomain();
+        return userJpaRepository.save(user.toEntity()).toModel();
     }
 
     @Override
     public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
         Optional<UserEntity> userEntity = userJpaRepository.findByUserAccountInformationAccountTypeAndUserAccountInformationSocialUid(accountType,
             socialUid);
-        return userEntity.map(UserEntity::toDomain);
+        return userEntity.map(UserEntity::toModel);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
         Tuple result = emailVerificationJpaRepository.findByResendTokenWithUser(resendToken)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
         EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toDomain();
-        User user = result.get("user", UserEntity.class).toDomain();
+        User user = result.get("user", UserEntity.class).toModel();
         return new EmailVerificationWithUser(emailVerification, user);
     }
 

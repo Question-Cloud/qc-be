@@ -56,7 +56,7 @@ public class UserEntity {
         this.point = point;
     }
 
-    public User toDomain() {
+    public User toModel() {
         return User.builder()
             .uid(uid)
             .userAccountInformation(userAccountInformation)
