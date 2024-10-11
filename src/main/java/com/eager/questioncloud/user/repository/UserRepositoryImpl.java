@@ -1,7 +1,7 @@
 package com.eager.questioncloud.user.repository;
 
-import static com.eager.questioncloud.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.creator.entity.CreatorEntity;
 import com.eager.questioncloud.exception.CustomException;

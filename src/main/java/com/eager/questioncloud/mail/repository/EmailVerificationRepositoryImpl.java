@@ -1,6 +1,6 @@
 package com.eager.questioncloud.mail.repository;
 
-import static com.eager.questioncloud.mail.QEmailVerificationEntity.emailVerificationEntity;
+import static com.eager.questioncloud.mail.entity.QEmailVerificationEntity.emailVerificationEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

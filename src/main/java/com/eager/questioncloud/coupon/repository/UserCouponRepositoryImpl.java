@@ -1,7 +1,7 @@
 package com.eager.questioncloud.coupon.repository;
 
-import static com.eager.questioncloud.coupon.QCouponEntity.couponEntity;
-import static com.eager.questioncloud.coupon.QUserCouponEntity.userCouponEntity;
+import static com.eager.questioncloud.coupon.entity.QCouponEntity.couponEntity;
+import static com.eager.questioncloud.coupon.entity.QUserCouponEntity.userCouponEntity;
 
 import com.eager.questioncloud.coupon.domain.UserCoupon;
 import com.eager.questioncloud.coupon.dto.UserCouponDto.AvailableUserCouponItem;
