@@ -5,8 +5,8 @@ import com.eager.questioncloud.authentication.dto.Response.SocialAuthenticateRes
 import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
 import com.eager.questioncloud.social.implement.SocialAuthenticateProcessor;
-import com.eager.questioncloud.user.domain.AccountType;
 import com.eager.questioncloud.user.domain.User;
+import com.eager.questioncloud.user.vo.AccountType;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -8,7 +8,7 @@ import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.review.QQuestionReviewEntity;
 import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
-import com.eager.questioncloud.user.domain.UserType;
+import com.eager.questioncloud.user.vo.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

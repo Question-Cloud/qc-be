@@ -1,6 +1,7 @@
 package com.eager.questioncloud.user.domain;
 
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
+import com.eager.questioncloud.user.vo.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

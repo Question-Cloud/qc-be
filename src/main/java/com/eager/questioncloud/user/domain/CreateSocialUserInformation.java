@@ -1,6 +1,7 @@
 package com.eager.questioncloud.user.domain;
 
 import com.eager.questioncloud.user.entity.CreateSocialUserInformationEntity;
+import com.eager.questioncloud.user.vo.AccountType;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
