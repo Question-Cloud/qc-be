@@ -1,9 +1,9 @@
 package com.eager.questioncloud.subscribe.service;
 
-import com.eager.questioncloud.subscribe.domain.Subscribe;
 import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
 import com.eager.questioncloud.subscribe.implement.SubscribeProcessor;
 import com.eager.questioncloud.subscribe.implement.SubscribeReader;
+import com.eager.questioncloud.subscribe.model.Subscribe;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

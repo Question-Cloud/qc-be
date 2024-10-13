@@ -1,4 +1,4 @@
-package com.eager.questioncloud.subscribe.domain;
+package com.eager.questioncloud.subscribe.model;
 
 import com.eager.questioncloud.subscribe.entity.SubscribeEntity;
 import java.time.LocalDateTime;

@@ -5,9 +5,9 @@ import static com.eager.questioncloud.subscribe.entity.QSubscribeEntity.subscrib
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.creator.dto.CreatorDto.CreatorSimpleInformation;
-import com.eager.questioncloud.subscribe.domain.Subscribe;
 import com.eager.questioncloud.subscribe.dto.SubscribeDto.SubscribeListItem;
 import com.eager.questioncloud.subscribe.entity.QSubscribeEntity;
+import com.eager.questioncloud.subscribe.model.Subscribe;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
