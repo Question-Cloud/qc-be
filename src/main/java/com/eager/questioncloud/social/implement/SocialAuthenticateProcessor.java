@@ -28,15 +28,15 @@ public class SocialAuthenticateProcessor {
         switch (accountType) {
             case KAKAO -> {
                 String accessToken = kakaoProcessor.getAccessToken(code);
-                return kakaoProcessor.getUserInfo(accessToken).getUid();
+                return kakaoProcessor.getUserInfo(accessToken).uid();
             }
             case GOOGLE -> {
                 String accessToken = googleProcessor.getAccessToken(code);
-                return googleProcessor.getUserInfo(accessToken).getUid();
+                return googleProcessor.getUserInfo(accessToken).uid();
             }
             case NAVER -> {
                 String accessToken = naverProcessor.getAccessToken(code);
-                return naverProcessor.getUserInfo(accessToken).getUid();
+                return naverProcessor.getUserInfo(accessToken).uid();
             }
             default -> {
                 throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
