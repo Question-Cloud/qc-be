@@ -2,7 +2,6 @@ package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.social.domain.SocialAccessToken;
 import com.eager.questioncloud.social.domain.SocialUserInfo;
 import com.eager.questioncloud.user.vo.AccountType;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,11 +41,11 @@ public class KakaoAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
             .block();
 
-        if (res == null || res.getAccess_token() == null) {
+        if (res == null || res.access_token() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return res.getAccess_token();
+        return res.access_token();
     }
 
     @Override

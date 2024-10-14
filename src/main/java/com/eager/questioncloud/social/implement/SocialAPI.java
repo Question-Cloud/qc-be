@@ -6,4 +6,7 @@ public interface SocialAPI {
     String getAccessToken(String code);
 
     SocialUserInfo getUserInfo(String accessToken);
+
+    record SocialAccessToken(String access_token) {
+    }
 }
