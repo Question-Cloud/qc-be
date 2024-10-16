@@ -63,7 +63,7 @@ public class QuestionReviewController {
             """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
         QuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
-        return new MyQuestionReviewResponse(MyQuestionReview.of(review));
+        return new MyQuestionReviewResponse(MyQuestionReview.from(review));
     }
 
     @PostMapping
