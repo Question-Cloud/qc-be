@@ -5,7 +5,7 @@ import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.library.implement.UserQuestionLibraryReader;
 import com.eager.questioncloud.question.implement.QuestionReader;
-import com.eager.questioncloud.review.domain.QuestionReview;
+import com.eager.questioncloud.review.model.QuestionReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

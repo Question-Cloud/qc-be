@@ -1,6 +1,6 @@
 package com.eager.questioncloud.review.dto;
 
-import com.eager.questioncloud.review.domain.QuestionReview;
+import com.eager.questioncloud.review.model.QuestionReview;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class QuestionReviewDto {
         private Integer rate;
         private String comment;
 
-        public static MyQuestionReview of(QuestionReview questionReview) {
+        public static MyQuestionReview from(QuestionReview questionReview) {
             return new MyQuestionReview(questionReview.getId(), questionReview.getRate(), questionReview.getComment());
         }
     }

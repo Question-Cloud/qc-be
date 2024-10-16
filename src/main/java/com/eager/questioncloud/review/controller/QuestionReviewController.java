@@ -2,12 +2,12 @@ package com.eager.questioncloud.review.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.MyQuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.review.dto.Request.ModifyQuestionReviewRequest;
 import com.eager.questioncloud.review.dto.Request.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.review.dto.Response.MyQuestionReviewResponse;
+import com.eager.questioncloud.review.model.QuestionReview;
 import com.eager.questioncloud.review.service.QuestionReviewService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,7 +63,7 @@ public class QuestionReviewController {
             """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
         QuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
-        return new MyQuestionReviewResponse(MyQuestionReview.of(review));
+        return new MyQuestionReviewResponse(MyQuestionReview.from(review));
     }
 
     @PostMapping

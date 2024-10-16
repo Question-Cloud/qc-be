@@ -1,6 +1,6 @@
 package com.eager.questioncloud.review.implement;
 
-import com.eager.questioncloud.review.domain.QuestionReviewStatistics;
+import com.eager.questioncloud.review.model.QuestionReviewStatistics;
 import com.eager.questioncloud.review.repository.QuestionReviewStatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

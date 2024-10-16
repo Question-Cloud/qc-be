@@ -1,7 +1,7 @@
 package com.eager.questioncloud.review.repository;
 
-import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.model.QuestionReview;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
