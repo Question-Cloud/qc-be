@@ -2,7 +2,7 @@ package com.eager.questioncloud.point.service;
 
 import com.eager.questioncloud.point.implement.UserPointProcessor;
 import com.eager.questioncloud.point.implement.UserPointReader;
-import com.eager.questioncloud.point.model.ChargePointType;
+import com.eager.questioncloud.point.vo.ChargePointType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

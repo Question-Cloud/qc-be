@@ -1,6 +1,7 @@
 package com.eager.questioncloud.point.model;
 
 import com.eager.questioncloud.point.repository.UserPointPaymentEntity;
+import com.eager.questioncloud.point.vo.ChargePointType;
 import com.eager.questioncloud.portone.dto.PortonePayment;
 import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
 import java.time.LocalDateTime;

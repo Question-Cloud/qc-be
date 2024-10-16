@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point.model;
+package com.eager.questioncloud.point.vo;
 
 import lombok.Getter;
 
