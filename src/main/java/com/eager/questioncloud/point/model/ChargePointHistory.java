@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserPointPayment {
+public class ChargePointHistory {
     private String paymentId;
     private Long userId;
     private PortonePaymentStatus status;
@@ -19,7 +19,7 @@ public class UserPointPayment {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserPointPayment(String paymentId, Long userId, PortonePaymentStatus status, ChargePointType chargePointType, int amount,
+    public ChargePointHistory(String paymentId, Long userId, PortonePaymentStatus status, ChargePointType chargePointType, int amount,
         String receiptUrl,
         LocalDateTime createdAt) {
         this.paymentId = paymentId;
@@ -31,8 +31,8 @@ public class UserPointPayment {
         this.createdAt = createdAt;
     }
 
-    public static UserPointPayment create(Long userId, ChargePointType chargePointType, PortonePayment portonePayment) {
-        return UserPointPayment.builder()
+    public static ChargePointHistory create(Long userId, ChargePointType chargePointType, PortonePayment portonePayment) {
+        return ChargePointHistory.builder()
             .paymentId(portonePayment.getId())
             .userId(userId)
             .status(portonePayment.getStatus())

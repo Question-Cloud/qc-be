@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.repository;
 
-import com.eager.questioncloud.point.model.UserPointPayment;
+import com.eager.questioncloud.point.model.ChargePointHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,8 +10,8 @@ public class UserPointPaymentRepositoryImpl implements UserPointPaymentRepositor
     private final UserPointPaymentJpaRepository userPointPaymentJpaRepository;
 
     @Override
-    public UserPointPayment save(UserPointPayment userPointPayment) {
-        return userPointPaymentJpaRepository.save(userPointPayment.toEntity()).toModel();
+    public ChargePointHistory save(ChargePointHistory chargePointHistory) {
+        return userPointPaymentJpaRepository.save(chargePointHistory.toEntity()).toModel();
     }
 
     @Override

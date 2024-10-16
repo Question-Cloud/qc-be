@@ -3,7 +3,7 @@ package com.eager.questioncloud.point.implement;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.InvalidPaymentException;
-import com.eager.questioncloud.point.model.UserPointPayment;
+import com.eager.questioncloud.point.model.ChargePointHistory;
 import com.eager.questioncloud.point.vo.ChargePointType;
 import com.eager.questioncloud.portone.dto.PortonePayment;
 import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
@@ -29,7 +29,7 @@ public class UserPointProcessor {
         int userPoint = userPointReader.getUserPoint(userId);
         userPointUpdater.updateUserPoint(userId, userPoint + chargePointType.getAmount());
 
-        userPointPaymentAppender.append(UserPointPayment.create(userId, chargePointType, portonePayment));
+        userPointPaymentAppender.append(ChargePointHistory.create(userId, chargePointType, portonePayment));
     }
 
     private void validatePayment(PortonePayment portonePayment, ChargePointType chargePointType) {

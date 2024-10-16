@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.implement;
 
-import com.eager.questioncloud.point.model.UserPointPayment;
+import com.eager.questioncloud.point.model.ChargePointHistory;
 import com.eager.questioncloud.point.repository.UserPointPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserPointPaymentAppender {
     private final UserPointPaymentRepository userPointPaymentRepository;
 
-    public UserPointPayment append(UserPointPayment userPointPayment) {
-        return userPointPaymentRepository.save(userPointPayment);
+    public ChargePointHistory append(ChargePointHistory chargePointHistory) {
+        return userPointPaymentRepository.save(chargePointHistory);
     }
 }

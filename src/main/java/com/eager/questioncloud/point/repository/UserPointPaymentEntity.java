@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.repository;
 
-import com.eager.questioncloud.point.model.UserPointPayment;
+import com.eager.questioncloud.point.model.ChargePointHistory;
 import com.eager.questioncloud.point.vo.ChargePointType;
 import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
 import jakarta.persistence.Column;
@@ -55,8 +55,8 @@ public class UserPointPaymentEntity {
         this.createdAt = createdAt;
     }
 
-    public UserPointPayment toModel() {
-        return UserPointPayment.builder()
+    public ChargePointHistory toModel() {
+        return ChargePointHistory.builder()
             .paymentId(paymentId)
             .userId(userId)
             .status(status)
