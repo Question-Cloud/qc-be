@@ -2,9 +2,6 @@ package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.social.domain.GoogleUserInfo;
-import com.eager.questioncloud.social.domain.SocialAccessToken;
-import com.eager.questioncloud.social.domain.SocialUserInfo;
 import com.eager.questioncloud.user.vo.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -44,11 +41,11 @@ public class GoogleAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
             .block();
 
-        if (res == null || res.getAccess_token() == null) {
+        if (res == null || res.access_token() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return res.getAccess_token();
+        return res.access_token();
     }
 
     @Override
@@ -62,10 +59,13 @@ public class GoogleAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(GoogleUserInfo.class))
             .block();
 
-        if (googleUserInfo == null || googleUserInfo.getId() == null) {
+        if (googleUserInfo == null || googleUserInfo.id() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return new SocialUserInfo(googleUserInfo.getId(), googleUserInfo.getEmail(), googleUserInfo.getName(), AccountType.GOOGLE);
+        return new SocialUserInfo(googleUserInfo.id(), googleUserInfo.email(), googleUserInfo.name(), AccountType.GOOGLE);
+    }
+
+    record GoogleUserInfo(String id, String email, String name, String picture) {
     }
 }

@@ -2,10 +2,6 @@ package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.social.domain.NaverUserInfo;
-import com.eager.questioncloud.social.domain.SocialAccessToken;
-import com.eager.questioncloud.social.domain.SocialUserInfo;
-import com.eager.questioncloud.social.dto.NaverUserInfoAPIResponse;
 import com.eager.questioncloud.user.vo.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,11 +29,11 @@ public class NaverAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
             .block();
 
-        if (res == null || res.getAccess_token() == null) {
+        if (res == null || res.access_token() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return res.getAccess_token();
+        return res.access_token();
     }
 
     @Override
@@ -51,12 +47,18 @@ public class NaverAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(NaverUserInfoAPIResponse.class))
             .block();
 
-        if (apiResponse == null || apiResponse.getResponse() == null || apiResponse.getResponse().getId() == null) {
+        if (apiResponse == null || apiResponse.response() == null || apiResponse.response().id() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        NaverUserInfo naverUserInfo = apiResponse.getResponse();
+        NaverUserInfo naverUserInfo = apiResponse.response();
 
-        return new SocialUserInfo(naverUserInfo.getId(), naverUserInfo.getEmail(), naverUserInfo.getNickname(), AccountType.NAVER);
+        return new SocialUserInfo(naverUserInfo.id(), naverUserInfo.email(), naverUserInfo.nickname(), AccountType.NAVER);
+    }
+
+    record NaverUserInfoAPIResponse(NaverUserInfo response) {
+    }
+
+    record NaverUserInfo(String id, String email, String nickname, String mobile, String profile_image) {
     }
 }

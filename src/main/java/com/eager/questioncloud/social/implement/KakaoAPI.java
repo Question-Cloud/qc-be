@@ -2,9 +2,6 @@ package com.eager.questioncloud.social.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.social.domain.KakaoUserInfo;
-import com.eager.questioncloud.social.domain.SocialAccessToken;
-import com.eager.questioncloud.social.domain.SocialUserInfo;
 import com.eager.questioncloud.user.vo.AccountType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -43,11 +40,11 @@ public class KakaoAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
             .block();
 
-        if (res == null || res.getAccess_token() == null) {
+        if (res == null || res.access_token() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return res.getAccess_token();
+        return res.access_token();
     }
 
     @Override
@@ -60,10 +57,13 @@ public class KakaoAPI implements SocialAPI {
             .exchangeToMono(response -> response.bodyToMono(KakaoUserInfo.class))
             .block();
 
-        if (kakaoUserInfo == null || kakaoUserInfo.getSub() == null) {
+        if (kakaoUserInfo == null || kakaoUserInfo.sub() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return new SocialUserInfo(kakaoUserInfo.getSub(), kakaoUserInfo.getEmail(), kakaoUserInfo.getNickname(), AccountType.KAKAO);
+        return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), AccountType.KAKAO);
+    }
+
+    record KakaoUserInfo(String sub, String email, String nickname) {
     }
 }
