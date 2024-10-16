@@ -5,9 +5,9 @@ import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.review.entity.QQuestionReviewEntity;
+import com.eager.questioncloud.review.model.QuestionReview;
 import com.eager.questioncloud.user.vo.UserType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;

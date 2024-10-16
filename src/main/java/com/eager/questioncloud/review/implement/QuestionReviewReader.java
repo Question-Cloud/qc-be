@@ -1,7 +1,7 @@
 package com.eager.questioncloud.review.implement;
 
-import com.eager.questioncloud.review.domain.QuestionReview;
 import com.eager.questioncloud.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.review.model.QuestionReview;
 import com.eager.questioncloud.review.repository.QuestionReviewRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

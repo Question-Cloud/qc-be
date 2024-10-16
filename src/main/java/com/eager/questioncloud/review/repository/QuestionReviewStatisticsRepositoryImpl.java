@@ -2,7 +2,7 @@ package com.eager.questioncloud.review.repository;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.review.domain.QuestionReviewStatistics;
+import com.eager.questioncloud.review.model.QuestionReviewStatistics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

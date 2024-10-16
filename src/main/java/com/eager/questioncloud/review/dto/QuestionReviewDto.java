@@ -1,6 +1,6 @@
 package com.eager.questioncloud.review.dto;
 
-import com.eager.questioncloud.review.domain.QuestionReview;
+import com.eager.questioncloud.review.model.QuestionReview;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
