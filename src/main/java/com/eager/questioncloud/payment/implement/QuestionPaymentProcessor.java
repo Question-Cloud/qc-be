@@ -5,8 +5,8 @@ import com.eager.questioncloud.library.implement.UserQuestionLibraryAppender;
 import com.eager.questioncloud.payment.domain.QuestionPayment;
 import com.eager.questioncloud.payment.domain.QuestionPaymentOrder;
 import com.eager.questioncloud.point.implement.UserPointProcessor;
-import com.eager.questioncloud.question.domain.Question;
 import com.eager.questioncloud.question.implement.QuestionReader;
+import com.eager.questioncloud.question.model.Question;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class QuestionPaymentProcessor {
     public int getOriginalAmount(List<Question> questions) {
         return questions
             .stream()
-            .mapToInt(Question::getPrice)
+            .mapToInt(question -> question.getQuestionContent().getPrice())
             .sum();
     }
 }

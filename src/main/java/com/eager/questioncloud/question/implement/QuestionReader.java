@@ -2,9 +2,9 @@ package com.eager.questioncloud.question.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.domain.Question;
+import com.eager.questioncloud.question.common.QuestionFilter;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.question.dto.QuestionFilter;
+import com.eager.questioncloud.question.model.Question;
 import com.eager.questioncloud.question.repository.QuestionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

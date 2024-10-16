@@ -1,8 +1,7 @@
-package com.eager.questioncloud.question.dto;
+package com.eager.questioncloud.question.common;
 
-import com.eager.questioncloud.question.domain.QuestionLevel;
-import com.eager.questioncloud.question.domain.QuestionSortType;
-import com.eager.questioncloud.question.domain.QuestionType;
+import com.eager.questioncloud.question.vo.QuestionLevel;
+import com.eager.questioncloud.question.vo.QuestionType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

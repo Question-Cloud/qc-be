@@ -1,8 +1,8 @@
 package com.eager.questioncloud.workspace.service;
 
-import com.eager.questioncloud.question.domain.Question;
-import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
+import com.eager.questioncloud.question.model.Question;
+import com.eager.questioncloud.question.vo.QuestionContent;
 import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionAppender;
 import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionReader;
 import com.eager.questioncloud.workspace.implement.WorkSpaceQuestionRemover;

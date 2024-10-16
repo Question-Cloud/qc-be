@@ -3,7 +3,7 @@ package com.eager.questioncloud.library.controller;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.library.service.UserQuestionLibraryService;
-import com.eager.questioncloud.question.dto.QuestionFilter;
+import com.eager.questioncloud.question.common.QuestionFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
