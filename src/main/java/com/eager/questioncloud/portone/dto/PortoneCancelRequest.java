@@ -1,4 +1,4 @@
-package com.eager.questioncloud.portone;
+package com.eager.questioncloud.portone.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

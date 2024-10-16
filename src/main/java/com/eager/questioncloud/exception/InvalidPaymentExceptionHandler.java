@@ -1,6 +1,6 @@
 package com.eager.questioncloud.exception;
 
-import com.eager.questioncloud.portone.PortoneAPI;
+import com.eager.questioncloud.portone.implement.PortoneAPI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
