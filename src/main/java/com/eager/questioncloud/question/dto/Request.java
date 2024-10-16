@@ -1,9 +1,9 @@
 package com.eager.questioncloud.question.dto;
 
-import com.eager.questioncloud.question.model.QuestionLevel;
-import com.eager.questioncloud.question.model.QuestionStatus;
-import com.eager.questioncloud.question.model.QuestionType;
-import com.eager.questioncloud.question.model.Subject;
+import com.eager.questioncloud.question.vo.QuestionLevel;
+import com.eager.questioncloud.question.vo.QuestionStatus;
+import com.eager.questioncloud.question.vo.QuestionType;
+import com.eager.questioncloud.question.vo.Subject;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

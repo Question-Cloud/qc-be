@@ -1,6 +1,7 @@
 package com.eager.questioncloud.question.model;
 
 import com.eager.questioncloud.question.entity.QuestionCategoryEntity;
+import com.eager.questioncloud.question.vo.Subject;
 import lombok.Builder;
 import lombok.Getter;
 

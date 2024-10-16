@@ -1,10 +1,10 @@
 package com.eager.questioncloud.question.entity;
 
 import com.eager.questioncloud.question.model.Question;
-import com.eager.questioncloud.question.model.QuestionLevel;
-import com.eager.questioncloud.question.model.QuestionStatus;
-import com.eager.questioncloud.question.model.QuestionType;
-import com.eager.questioncloud.question.model.Subject;
+import com.eager.questioncloud.question.vo.QuestionLevel;
+import com.eager.questioncloud.question.vo.QuestionStatus;
+import com.eager.questioncloud.question.vo.QuestionType;
+import com.eager.questioncloud.question.vo.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -2,6 +2,10 @@ package com.eager.questioncloud.question.model;
 
 import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.entity.QuestionEntity;
+import com.eager.questioncloud.question.vo.QuestionLevel;
+import com.eager.questioncloud.question.vo.QuestionStatus;
+import com.eager.questioncloud.question.vo.QuestionType;
+import com.eager.questioncloud.question.vo.Subject;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

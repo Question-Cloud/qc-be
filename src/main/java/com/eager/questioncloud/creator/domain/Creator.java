@@ -1,7 +1,7 @@
 package com.eager.questioncloud.creator.domain;
 
 import com.eager.questioncloud.creator.entity.CreatorEntity;
-import com.eager.questioncloud.question.model.Subject;
+import com.eager.questioncloud.question.vo.Subject;
 import lombok.Builder;
 import lombok.Getter;
 

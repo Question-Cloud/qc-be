@@ -1,6 +1,6 @@
 package com.eager.questioncloud.question.dto;
 
-import com.eager.questioncloud.question.model.Subject;
+import com.eager.questioncloud.question.vo.Subject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
