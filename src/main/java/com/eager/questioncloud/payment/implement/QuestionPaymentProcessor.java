@@ -44,7 +44,7 @@ public class QuestionPaymentProcessor {
     public int getOriginalAmount(List<Question> questions) {
         return questions
             .stream()
-            .mapToInt(Question::getPrice)
+            .mapToInt(question -> question.getQuestionContent().getPrice())
             .sum();
     }
 }

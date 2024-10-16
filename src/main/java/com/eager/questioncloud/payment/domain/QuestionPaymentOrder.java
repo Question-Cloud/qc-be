@@ -28,7 +28,7 @@ public class QuestionPaymentOrder {
             .map(question -> QuestionPaymentOrder.builder()
                 .paymentId(paymentId)
                 .questionId(question.getId())
-                .price(question.getPrice())
+                .price(question.getQuestionContent().getPrice())
                 .build())
             .collect(Collectors.toList());
     }

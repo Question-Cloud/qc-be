@@ -33,14 +33,14 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     questionBoardEntity.title,
                     parent.title,
                     child.title,
-                    questionEntity.title,
+                    questionEntity.questionContent.title,
                     userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionBoardEntity)
             .where(questionBoardEntity.questionId.eq(questionId))
             .leftJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
-            .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContent.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
             .offset(pageable.getOffset())
@@ -58,14 +58,14 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     questionBoardEntity.title,
                     parent.title,
                     child.title,
-                    questionEntity.title,
+                    questionEntity.questionContent.title,
                     userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
             .innerJoin(questionBoardEntity).on(questionBoardEntity.questionId.eq(questionEntity.id))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContent.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
             .offset(pageable.getOffset())
@@ -101,14 +101,14 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                     questionBoardEntity.files,
                     parent.title,
                     child.title,
-                    questionEntity.title,
+                    questionEntity.questionContent.title,
                     userEntity.userInformation.name,
                     questionBoardEntity.createdAt
                 ))
             .from(questionBoardEntity)
             .where(questionBoardEntity.id.eq(boardId))
             .leftJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
-            .leftJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContent.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
             .fetchFirst();

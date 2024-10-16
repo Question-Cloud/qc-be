@@ -2,10 +2,10 @@ package com.eager.questioncloud.workspace.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
 import com.eager.questioncloud.question.model.Question;
 import com.eager.questioncloud.question.repository.QuestionRepository;
+import com.eager.questioncloud.question.vo.QuestionContent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ public class WorkSpaceQuestionReader {
             throw new CustomException(Error.FORBIDDEN);
         }
 
-        return QuestionContent.of(question);
+        return question.getQuestionContent();
     }
 
     private Boolean isCreator(Question question, Long creatorId) {

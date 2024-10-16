@@ -1,11 +1,8 @@
 package com.eager.questioncloud.question.model;
 
-import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.entity.QuestionEntity;
-import com.eager.questioncloud.question.vo.QuestionLevel;
+import com.eager.questioncloud.question.vo.QuestionContent;
 import com.eager.questioncloud.question.vo.QuestionStatus;
-import com.eager.questioncloud.question.vo.QuestionType;
-import com.eager.questioncloud.question.vo.Subject;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,72 +10,34 @@ import lombok.Getter;
 @Getter
 public class Question {
     private Long id;
-    private Long questionCategoryId;
     private Long creatorId;
-    private Subject subject;
-    private String title;
-    private String description;
-    private String thumbnail;
-    private String fileUrl;
-    private String explanationUrl;
-    private QuestionType questionType;
-    private QuestionLevel questionLevel;
+    private QuestionContent questionContent;
     private QuestionStatus questionStatus;
-    private int price;
     private int count;
     private LocalDateTime createdAt;
 
     @Builder
-    public Question(Long id, Long questionCategoryId, Long creatorId, Subject subject, String title, String description, String thumbnail,
-        String fileUrl, String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, QuestionStatus questionStatus, int price,
-        int count, LocalDateTime createdAt) {
+    public Question(Long id, Long creatorId, QuestionContent questionContent, QuestionStatus questionStatus, int count, LocalDateTime createdAt) {
         this.id = id;
-        this.questionCategoryId = questionCategoryId;
         this.creatorId = creatorId;
-        this.subject = subject;
-        this.title = title;
-        this.description = description;
-        this.thumbnail = thumbnail;
-        this.fileUrl = fileUrl;
-        this.explanationUrl = explanationUrl;
-        this.questionType = questionType;
-        this.questionLevel = questionLevel;
+        this.questionContent = questionContent;
         this.questionStatus = questionStatus;
-        this.price = price;
         this.count = count;
         this.createdAt = createdAt;
     }
 
     public static Question create(Long creatorId, QuestionContent questionContent) {
         return Question.builder()
-            .questionCategoryId(questionContent.getQuestionCategoryId())
             .creatorId(creatorId)
-            .subject(questionContent.getSubject())
-            .title(questionContent.getTitle())
-            .description(questionContent.getDescription())
-            .thumbnail(questionContent.getThumbnail())
-            .fileUrl(questionContent.getFileUrl())
-            .explanationUrl(questionContent.getExplanationUrl())
-            .questionType(questionContent.getQuestionType())
-            .questionLevel(questionContent.getQuestionLevel())
+            .questionContent(questionContent)
             .questionStatus(QuestionStatus.Available)
-            .price(questionContent.getPrice())
             .count(0)
             .createdAt(LocalDateTime.now())
             .build();
     }
 
     public void modify(QuestionContent questionContent) {
-        this.questionCategoryId = questionContent.getQuestionCategoryId();
-        this.subject = questionContent.getSubject();
-        this.title = questionContent.getTitle();
-        this.description = questionContent.getDescription();
-        this.thumbnail = questionContent.getThumbnail();
-        this.fileUrl = questionContent.getFileUrl();
-        this.explanationUrl = questionContent.getExplanationUrl();
-        this.questionLevel = questionContent.getQuestionLevel();
-        this.questionStatus = questionContent.getQuestionStatus();
-        this.price = questionContent.getPrice();
+        this.questionContent = questionContent;
     }
 
     public void delete() {
@@ -88,18 +47,9 @@ public class Question {
     public QuestionEntity toEntity() {
         return QuestionEntity.builder()
             .id(id)
-            .questionCategoryId(questionCategoryId)
             .creatorId(creatorId)
-            .subject(subject)
-            .title(title)
-            .description(description)
-            .thumbnail(thumbnail)
-            .fileUrl(fileUrl)
-            .explanationUrl(explanationUrl)
-            .questionType(questionType)
-            .questionLevel(questionLevel)
+            .questionContent(questionContent)
             .questionStatus(questionStatus)
-            .price(price)
             .count(count)
             .createdAt(createdAt)
             .build();

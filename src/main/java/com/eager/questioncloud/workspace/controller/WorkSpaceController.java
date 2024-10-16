@@ -3,11 +3,10 @@ package com.eager.questioncloud.workspace.controller;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
-import com.eager.questioncloud.question.dto.Request.ModifySelfMadeQuestionRequest;
-import com.eager.questioncloud.question.dto.Request.RegisterSelfMadeQuestionRequest;
+import com.eager.questioncloud.question.dto.Request.SelfMadeQuestionRequest;
 import com.eager.questioncloud.question.dto.Response.QuestionContentResponse;
+import com.eager.questioncloud.question.vo.QuestionContent;
 import com.eager.questioncloud.security.UserPrincipal;
 import com.eager.questioncloud.workspace.service.WorkSpaceBoardService;
 import com.eager.questioncloud.workspace.service.WorkSpaceQuestionService;
@@ -69,8 +68,8 @@ public class WorkSpaceController {
     })
     @Operation(operationId = "나의 자작 문제 등록", summary = "나의 자작 문제 등록", tags = {"workspace"}, description = "나의 자작 문제 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid RegisterSelfMadeQuestionRequest request) {
-        workSpaceQuestionService.register(userPrincipal.getCreator().getId(), request.toModel());
+        @RequestBody @Valid SelfMadeQuestionRequest request) {
+        workSpaceQuestionService.register(userPrincipal.getCreator().getId(), QuestionContent.createSelfMadeQuestionContent(request));
         return DefaultResponse.success();
     }
 
@@ -82,8 +81,8 @@ public class WorkSpaceController {
     @Operation(operationId = "나의 자작 문제 수정", summary = "나의 자작 문제 수정", tags = {"workspace"}, description = "나의 자작 문제 수정")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
-        @RequestBody @Valid ModifySelfMadeQuestionRequest request) {
-        workSpaceQuestionService.modify(userPrincipal.getCreator().getId(), questionId, request.toModel());
+        @RequestBody @Valid SelfMadeQuestionRequest request) {
+        workSpaceQuestionService.modify(userPrincipal.getCreator().getId(), questionId, QuestionContent.createSelfMadeQuestionContent(request));
         return DefaultResponse.success();
     }
 

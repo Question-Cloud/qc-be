@@ -49,18 +49,18 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
                     userQuestionLibraryEntity.isUsed,
                     Projections.constructor(QuestionInformationForLibrary.class,
                         questionEntity.id,
-                        questionEntity.title,
+                        questionEntity.questionContent.title,
                         parent.title,
                         child.title,
-                        questionEntity.thumbnail,
+                        questionEntity.questionContent.thumbnail,
                         userEntity.userInformation.name,
-                        questionEntity.questionLevel,
-                        questionEntity.fileUrl,
-                        questionEntity.explanationUrl)))
+                        questionEntity.questionContent.questionLevel,
+                        questionEntity.questionContent.fileUrl,
+                        questionEntity.questionContent.explanationUrl)))
             .from(userQuestionLibraryEntity)
             .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContent.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -75,7 +75,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
             .from(userQuestionLibraryEntity)
             .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContent.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -91,15 +91,15 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     private BooleanBuilder questionEntityJoinCondition(QuestionFilter questionFilter) {
         BooleanBuilder builder = new BooleanBuilder();
         if (questionFilter.getLevels() != null && !questionFilter.getLevels().isEmpty()) {
-            builder.and(questionEntity.questionLevel.in(questionFilter.getLevels()));
+            builder.and(questionEntity.questionContent.questionLevel.in(questionFilter.getLevels()));
         }
 
         if (questionFilter.getCategories() != null && !questionFilter.getCategories().isEmpty()) {
-            builder.and(questionEntity.questionCategoryId.in(questionFilter.getCategories()));
+            builder.and(questionEntity.questionContent.questionCategoryId.in(questionFilter.getCategories()));
         }
 
         if (questionFilter.getQuestionType() != null) {
-            builder.and(questionEntity.questionType.eq(questionFilter.getQuestionType()));
+            builder.and(questionEntity.questionContent.questionType.eq(questionFilter.getQuestionType()));
         }
 
         builder.and(questionEntity.id.eq(userQuestionLibraryEntity.questionId));
