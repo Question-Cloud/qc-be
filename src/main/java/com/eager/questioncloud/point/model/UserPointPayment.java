@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point.domain;
+package com.eager.questioncloud.point.model;
 
 import com.eager.questioncloud.point.repository.UserPointPaymentEntity;
 import com.eager.questioncloud.portone.dto.PortonePayment;

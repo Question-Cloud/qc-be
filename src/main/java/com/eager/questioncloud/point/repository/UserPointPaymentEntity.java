@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.repository;
 
-import com.eager.questioncloud.point.domain.ChargePointType;
-import com.eager.questioncloud.point.domain.UserPointPayment;
+import com.eager.questioncloud.point.model.ChargePointType;
+import com.eager.questioncloud.point.model.UserPointPayment;
 import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
