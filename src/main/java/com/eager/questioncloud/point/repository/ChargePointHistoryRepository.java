@@ -2,7 +2,7 @@ package com.eager.questioncloud.point.repository;
 
 import com.eager.questioncloud.point.model.ChargePointHistory;
 
-public interface UserPointPaymentRepository {
+public interface ChargePointHistoryRepository {
     ChargePointHistory save(ChargePointHistory chargePointHistory);
 
     Boolean existsById(String paymentId);

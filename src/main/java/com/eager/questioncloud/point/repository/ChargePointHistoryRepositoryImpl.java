@@ -6,16 +6,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class UserPointPaymentRepositoryImpl implements UserPointPaymentRepository {
-    private final UserPointPaymentJpaRepository userPointPaymentJpaRepository;
+public class ChargePointHistoryRepositoryImpl implements ChargePointHistoryRepository {
+    private final ChargePointHistoryJpaRepository chargePointHistoryJpaRepository;
 
     @Override
     public ChargePointHistory save(ChargePointHistory chargePointHistory) {
-        return userPointPaymentJpaRepository.save(chargePointHistory.toEntity()).toModel();
+        return chargePointHistoryJpaRepository.save(chargePointHistory.toEntity()).toModel();
     }
 
     @Override
     public Boolean existsById(String paymentId) {
-        return userPointPaymentJpaRepository.existsById(paymentId);
+        return chargePointHistoryJpaRepository.existsById(paymentId);
     }
 }
