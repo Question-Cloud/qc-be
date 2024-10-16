@@ -6,7 +6,7 @@ import com.eager.questioncloud.creator.dto.CreatorDto.MyCreatorInformation;
 import com.eager.questioncloud.creator.implement.CreatorAppender;
 import com.eager.questioncloud.creator.implement.CreatorReader;
 import com.eager.questioncloud.creator.implement.CreatorUpdater;
-import com.eager.questioncloud.question.domain.Subject;
+import com.eager.questioncloud.question.model.Subject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

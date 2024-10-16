@@ -1,6 +1,6 @@
 package com.eager.questioncloud.creator.dto;
 
-import com.eager.questioncloud.question.domain.Subject;
+import com.eager.questioncloud.question.model.Subject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.question.domain;
+package com.eager.questioncloud.question.model;
 
 import com.eager.questioncloud.question.dto.QuestionContent;
 import com.eager.questioncloud.question.entity.QuestionEntity;

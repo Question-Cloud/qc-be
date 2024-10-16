@@ -1,7 +1,7 @@
 package com.eager.questioncloud.workspace.implement;
 
-import com.eager.questioncloud.question.domain.Question;
 import com.eager.questioncloud.question.dto.QuestionContent;
+import com.eager.questioncloud.question.model.Question;
 import com.eager.questioncloud.question.repository.QuestionRepository;
 import com.eager.questioncloud.review.implement.QuestionReviewStatisticsAppender;
 import com.eager.questioncloud.review.model.QuestionReviewStatistics;

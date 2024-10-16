@@ -1,9 +1,9 @@
 package com.eager.questioncloud.resolver;
 
-import com.eager.questioncloud.question.domain.QuestionLevel;
-import com.eager.questioncloud.question.domain.QuestionSortType;
-import com.eager.questioncloud.question.domain.QuestionType;
 import com.eager.questioncloud.question.dto.QuestionFilter;
+import com.eager.questioncloud.question.model.QuestionLevel;
+import com.eager.questioncloud.question.model.QuestionSortType;
+import com.eager.questioncloud.question.model.QuestionType;
 import com.eager.questioncloud.security.UserPrincipal;
 import java.util.Arrays;
 import java.util.List;

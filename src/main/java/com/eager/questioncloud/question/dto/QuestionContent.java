@@ -1,10 +1,10 @@
 package com.eager.questioncloud.question.dto;
 
-import com.eager.questioncloud.question.domain.Question;
-import com.eager.questioncloud.question.domain.QuestionLevel;
-import com.eager.questioncloud.question.domain.QuestionStatus;
-import com.eager.questioncloud.question.domain.QuestionType;
-import com.eager.questioncloud.question.domain.Subject;
+import com.eager.questioncloud.question.model.Question;
+import com.eager.questioncloud.question.model.QuestionLevel;
+import com.eager.questioncloud.question.model.QuestionStatus;
+import com.eager.questioncloud.question.model.QuestionType;
+import com.eager.questioncloud.question.model.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
