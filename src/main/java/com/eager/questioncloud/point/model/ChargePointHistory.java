@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.model;
 
-import com.eager.questioncloud.point.repository.UserPointPaymentEntity;
+import com.eager.questioncloud.point.entity.ChargePointHistoryEntity;
 import com.eager.questioncloud.point.vo.ChargePointType;
 import com.eager.questioncloud.portone.dto.PortonePayment;
 import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
@@ -43,8 +43,8 @@ public class ChargePointHistory {
             .build();
     }
 
-    public UserPointPaymentEntity toEntity() {
-        return UserPointPaymentEntity.builder()
+    public ChargePointHistoryEntity toEntity() {
+        return ChargePointHistoryEntity.builder()
             .paymentId(paymentId)
             .userId(userId)
             .status(status)

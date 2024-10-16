@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point.repository;
+package com.eager.questioncloud.point.entity;
 
 import com.eager.questioncloud.point.model.ChargePointHistory;
 import com.eager.questioncloud.point.vo.ChargePointType;
@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "user_point_payment")
+@Table(name = "charge_point_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserPointPaymentEntity {
+public class ChargePointHistoryEntity {
     @Id
     private String paymentId;
 
@@ -44,7 +44,7 @@ public class UserPointPaymentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserPointPaymentEntity(String paymentId, Long userId, PortonePaymentStatus status, ChargePointType chargePointType, int amount,
+    public ChargePointHistoryEntity(String paymentId, Long userId, PortonePaymentStatus status, ChargePointType chargePointType, int amount,
         String receiptUrl, LocalDateTime createdAt) {
         this.paymentId = paymentId;
         this.userId = userId;
