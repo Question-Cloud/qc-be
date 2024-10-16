@@ -1,5 +1,6 @@
-package com.eager.questioncloud.portone;
+package com.eager.questioncloud.portone.dto;
 
+import com.eager.questioncloud.portone.PortonePaymentStatus;
 import lombok.Getter;
 
 @Getter
