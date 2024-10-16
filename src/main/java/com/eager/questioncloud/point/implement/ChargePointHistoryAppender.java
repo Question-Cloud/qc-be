@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointPaymentAppender {
+public class ChargePointHistoryAppender {
     private final ChargePointHistoryRepository chargePointHistoryRepository;
 
     public ChargePointHistory append(ChargePointHistory chargePointHistory) {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointPaymentReader {
+public class ChargePointHistoryReader {
     private final ChargePointHistoryRepository chargePointHistoryRepository;
 
     public Boolean existsById(String paymentId) {
