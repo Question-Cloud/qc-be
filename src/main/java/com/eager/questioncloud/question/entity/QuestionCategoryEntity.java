@@ -46,7 +46,7 @@ public class QuestionCategoryEntity {
         this.isParent = isParent;
     }
 
-    public QuestionCategory toDomain() {
+    public QuestionCategory toModel() {
         return QuestionCategory.builder()
             .id(id)
             .parentId(parentId)

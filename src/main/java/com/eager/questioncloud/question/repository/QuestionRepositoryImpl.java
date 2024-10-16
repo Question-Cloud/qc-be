@@ -159,7 +159,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .where(questionEntity.id.in(questionIds), questionStatusFilter())
             .fetch()
             .stream()
-            .map(QuestionEntity::toDomain)
+            .map(QuestionEntity::toModel)
             .collect(Collectors.toList());
     }
 
@@ -177,20 +177,20 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public Question getForModifyAndDelete(Long questionId, Long creatorId) {
         return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
     public Question get(Long questionId) {
         return questionJpaRepository.findById(questionId)
             .filter(question -> !question.getQuestionStatus().equals(QuestionStatus.Delete))
-            .map(QuestionEntity::toDomain)
+            .map(QuestionEntity::toModel)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
     }
 
     @Override
     public Question save(Question question) {
-        return questionJpaRepository.save(question.toEntity()).toDomain();
+        return questionJpaRepository.save(question.toEntity()).toModel();
     }
 
     @Override

@@ -54,7 +54,7 @@ public class QuestionEntity {
         this.createdAt = createdAt;
     }
 
-    public Question toDomain() {
+    public Question toModel() {
         return Question.builder()
             .id(id)
             .creatorId(creatorId)
