@@ -1,7 +1,7 @@
 package com.eager.questioncloud.question.service;
 
+import com.eager.questioncloud.question.common.QuestionFilter;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.question.dto.QuestionFilter;
 import com.eager.questioncloud.question.implement.QuestionReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

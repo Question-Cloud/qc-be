@@ -1,8 +1,8 @@
 package com.eager.questioncloud.question.controller;
 
 import com.eager.questioncloud.common.PagingResponse;
+import com.eager.questioncloud.question.common.QuestionFilter;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.question.dto.QuestionFilter;
 import com.eager.questioncloud.question.dto.Response.QuestionInformationResponse;
 import com.eager.questioncloud.question.service.QuestionService;
 import com.eager.questioncloud.security.UserPrincipal;

@@ -9,14 +9,14 @@ import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.question.common.QuestionFilter;
+import com.eager.questioncloud.question.common.QuestionSortType;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForWorkSpace;
-import com.eager.questioncloud.question.dto.QuestionFilter;
 import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
 import com.eager.questioncloud.question.entity.QuestionEntity;
 import com.eager.questioncloud.question.model.Question;
 import com.eager.questioncloud.question.vo.QuestionLevel;
-import com.eager.questioncloud.question.model.QuestionSortType;
 import com.eager.questioncloud.question.vo.QuestionStatus;
 import com.eager.questioncloud.question.vo.QuestionType;
 import com.querydsl.core.Tuple;
