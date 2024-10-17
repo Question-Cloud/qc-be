@@ -14,4 +14,13 @@ public class Request {
         @NotBlank
         private String paymentId;
     }
+
+    @Getter
+    public static class ChargePointOrderRequest {
+        @NotNull
+        private ChargePointType chargePointType;
+
+        @NotBlank
+        private String paymentId;
+    }
 }

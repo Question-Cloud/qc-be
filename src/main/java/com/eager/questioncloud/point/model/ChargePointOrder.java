@@ -27,6 +27,16 @@ public class ChargePointOrder {
         this.createdAt = createdAt;
     }
 
+    public static ChargePointOrder crateOrder(Long userId, String paymentId, ChargePointType chargePointType) {
+        return ChargePointOrder.builder()
+            .userId(userId)
+            .paymentId(paymentId)
+            .chargePointType(chargePointType)
+            .chargePointOrderStatus(ChargePointOrderStatus.ORDERED)
+            .createdAt(LocalDateTime.now())
+            .build();
+    }
+
     public ChargePointOrderEntity toEntity() {
         return ChargePointOrderEntity.builder()
             .id(id)
