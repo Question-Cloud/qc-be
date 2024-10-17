@@ -1,16 +1,16 @@
 package com.eager.questioncloud.point.implement;
 
-import com.eager.questioncloud.point.model.ChargePointHistory;
-import com.eager.questioncloud.point.repository.ChargePointHistoryRepository;
+import com.eager.questioncloud.point.model.ChargePointPayment;
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class ChargePointHistoryAppender {
-    private final ChargePointHistoryRepository chargePointHistoryRepository;
+    private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public ChargePointHistory append(ChargePointHistory chargePointHistory) {
-        return chargePointHistoryRepository.save(chargePointHistory);
+    public ChargePointPayment append(ChargePointPayment chargePointPayment) {
+        return chargePointPaymentRepository.save(chargePointPayment);
     }
 }
