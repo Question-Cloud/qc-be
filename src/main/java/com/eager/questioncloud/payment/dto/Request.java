@@ -11,7 +11,7 @@ public class Request {
     @Getter
     public static class QuestionPaymentRequest implements Validatable {
         private List<Long> questionIds = new ArrayList<>();
-        private Long couponId;
+        private Long userCouponId;
 
         @Override
         public void validate() {

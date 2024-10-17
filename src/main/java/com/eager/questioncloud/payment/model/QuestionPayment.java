@@ -13,23 +13,23 @@ import lombok.Getter;
 public class QuestionPayment {
     private Long id;
     private Long userId;
-    private Long couponId;
+    private Long userCouponId;
     private int amount;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, Long userId, Long couponId, int amount, LocalDateTime createdAt) {
+    public QuestionPayment(Long id, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
-        this.couponId = couponId;
+        this.userCouponId = userCouponId;
         this.amount = amount;
         this.createdAt = createdAt;
     }
 
-    public static QuestionPayment create(Long userId, Long couponId, List<Question> questions) {
+    public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
         return QuestionPayment.builder()
             .userId(userId)
-            .couponId(couponId)
+            .userCouponId(userCouponId)
             .amount(calcOriginalAmount(questions))
             .createdAt(LocalDateTime.now())
             .build();
@@ -43,7 +43,7 @@ public class QuestionPayment {
     }
 
     public Boolean isUsingCoupon() {
-        return couponId != null;
+        return userCouponId != null;
     }
 
     public void useCoupon(Coupon coupon) {
@@ -60,7 +60,7 @@ public class QuestionPayment {
         return QuestionPaymentEntity.builder()
             .id(id)
             .userId(userId)
-            .couponId(couponId)
+            .userCouponId(userCouponId)
             .amount(amount)
             .createdAt(createdAt)
             .build();
