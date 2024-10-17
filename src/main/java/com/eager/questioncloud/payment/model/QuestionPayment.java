@@ -1,4 +1,4 @@
-package com.eager.questioncloud.payment.domain;
+package com.eager.questioncloud.payment.model;
 
 import com.eager.questioncloud.payment.entity.QuestionPaymentEntity;
 import java.time.LocalDateTime;
