@@ -2,8 +2,6 @@ package com.eager.questioncloud.payment.model;
 
 import com.eager.questioncloud.coupon.domain.Coupon;
 import com.eager.questioncloud.coupon.domain.CouponType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.payment.entity.QuestionPaymentEntity;
 import com.eager.questioncloud.question.model.Question;
 import java.time.LocalDateTime;
@@ -56,7 +54,6 @@ public class QuestionPayment {
             int discountAmount = (amount * (coupon.getValue() / 100));
             amount = amount - discountAmount;
         }
-        throw new CustomException(Error.WRONG_COUPON);
     }
 
     public QuestionPaymentEntity toEntity() {
