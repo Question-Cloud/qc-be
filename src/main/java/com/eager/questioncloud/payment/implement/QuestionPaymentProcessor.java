@@ -1,7 +1,6 @@
 package com.eager.questioncloud.payment.implement;
 
 import com.eager.questioncloud.coupon.implement.UserCouponProcessor;
-import com.eager.questioncloud.library.implement.UserQuestionLibraryAppender;
 import com.eager.questioncloud.payment.model.QuestionPayment;
 import com.eager.questioncloud.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.point.implement.UserPointProcessor;
@@ -19,7 +18,6 @@ public class QuestionPaymentProcessor {
     private final QuestionPaymentAppender questionPaymentAppender;
     private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
     private final UserPointProcessor userPointProcessor;
-    private final UserQuestionLibraryAppender userQuestionLibraryAppender;
     private final UserCouponProcessor userCouponProcessor;
 
     @Transactional
@@ -32,8 +30,6 @@ public class QuestionPaymentProcessor {
 
         QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
         questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questions));
-
-        userQuestionLibraryAppender.appendUserQuestion(userId, questionIds);
         return questionPayment;
     }
 
