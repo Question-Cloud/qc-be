@@ -25,7 +25,7 @@ public class QuestionPaymentController {
     })
     @Operation(operationId = "문제 구매", summary = "문제 구매", tags = {"question-payment"}, description = "문제 구매")
     public DefaultResponse questionPayment(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody QuestionPaymentRequest request) {
-        questionPaymentService.payment(userPrincipal.getUser().getUid(), request.getQuestionIds(), request.getCouponId());
+        questionPaymentService.payment(userPrincipal.getUser().getUid(), request.getQuestionIds(), request.getUserCouponId());
         return DefaultResponse.success();
     }
 }

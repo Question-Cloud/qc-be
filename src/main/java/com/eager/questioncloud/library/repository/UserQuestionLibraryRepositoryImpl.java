@@ -30,7 +30,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     }
 
     @Override
-    public Boolean checkDuplicate(Long userId, List<Long> questionIds) {
+    public Boolean isOwned(Long userId, List<Long> questionIds) {
         return userQuestionLibraryJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
     }
 

@@ -1,9 +1,9 @@
 package com.eager.questioncloud.payment.implement;
 
+import com.eager.questioncloud.coupon.domain.Coupon;
 import com.eager.questioncloud.coupon.implement.UserCouponProcessor;
-import com.eager.questioncloud.library.implement.UserQuestionLibraryAppender;
-import com.eager.questioncloud.payment.domain.QuestionPayment;
-import com.eager.questioncloud.payment.domain.QuestionPaymentOrder;
+import com.eager.questioncloud.payment.model.QuestionPayment;
+import com.eager.questioncloud.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.point.implement.UserPointProcessor;
 import com.eager.questioncloud.question.implement.QuestionReader;
 import com.eager.questioncloud.question.model.Question;
@@ -15,36 +15,27 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class QuestionPaymentProcessor {
-    private final QuestionReader questionReader;
     private final QuestionPaymentAppender questionPaymentAppender;
     private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
+    private final QuestionReader questionReader;
     private final UserPointProcessor userPointProcessor;
-    private final UserQuestionLibraryAppender userQuestionLibraryAppender;
     private final UserCouponProcessor userCouponProcessor;
 
     @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long userCouponId) {
         List<Question> questions = questionReader.getQuestions(questionIds);
-        int originalAmount = getOriginalAmount(questions);
-        int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
-        userPointProcessor.usePoint(userId, finalAmount);
+        QuestionPayment questionPayment = QuestionPayment.create(userId, userCouponId, questions);
 
-        QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
+        if (questionPayment.isUsingCoupon()) {
+            Coupon coupon = userCouponProcessor.useCoupon(userId, userCouponId);
+            questionPayment.useCoupon(coupon);
+        }
+
+        userPointProcessor.usePoint(userId, questionPayment.getAmount());
+
+        questionPayment = questionPaymentAppender.append(questionPayment);
         questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questions));
-
-        userQuestionLibraryAppender.appendUserQuestion(userId, questionIds);
         return questionPayment;
-    }
-
-    public Boolean isUsingCoupon(Long couponId) {
-        return couponId != null;
-    }
-
-    public int getOriginalAmount(List<Question> questions) {
-        return questions
-            .stream()
-            .mapToInt(question -> question.getQuestionContent().getPrice())
-            .sum();
     }
 }

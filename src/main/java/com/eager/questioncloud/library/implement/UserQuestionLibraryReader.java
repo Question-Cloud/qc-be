@@ -16,6 +16,10 @@ public class UserQuestionLibraryReader {
         return userQuestionLibraryRepository.isOwned(userId, questionId);
     }
 
+    public Boolean isOwned(Long userId, List<Long> questionId) {
+        return userQuestionLibraryRepository.isOwned(userId, questionId);
+    }
+
     public List<UserQuestionLibraryItem> getUserQuestions(QuestionFilter questionFilter) {
         return userQuestionLibraryRepository.getUserQuestions(questionFilter);
     }

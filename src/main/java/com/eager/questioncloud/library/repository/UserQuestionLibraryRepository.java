@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserQuestionLibraryRepository {
     List<UserQuestionLibrary> saveAll(List<UserQuestionLibrary> userQuestionLibraries);
 
-    Boolean checkDuplicate(Long userId, List<Long> questionIds);
+    Boolean isOwned(Long userId, List<Long> questionIds);
 
     Boolean isOwned(Long userId, Long questionId);
 

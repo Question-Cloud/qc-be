@@ -1,10 +1,7 @@
 package com.eager.questioncloud.coupon.implement;
 
 import com.eager.questioncloud.coupon.domain.Coupon;
-import com.eager.questioncloud.coupon.domain.CouponType;
 import com.eager.questioncloud.coupon.domain.UserCoupon;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,27 +12,10 @@ public class UserCouponProcessor {
     private final UserCouponUpdater userCouponUpdater;
     private final UserCouponReader userCouponReader;
 
-    public int useCoupon(Long userId, Long userCouponId, int originalAmount) {
-        if (originalAmount == 0) {
-            throw new CustomException(Error.WRONG_COUPON);
-        }
-
+    public Coupon useCoupon(Long userId, Long userCouponId) {
         UserCoupon userCoupon = userCouponReader.getUserCoupon(userCouponId, userId);
         Coupon coupon = couponReader.getCoupon(userCoupon.getCouponId());
-
         userCouponUpdater.use(userCoupon);
-
-        return calcAmount(coupon, originalAmount);
-    }
-
-    public int calcAmount(Coupon coupon, int originalAmount) {
-        if (coupon.getCouponType().equals(CouponType.Fixed)) {
-            return Math.max(originalAmount - coupon.getValue(), 0);
-        }
-        if (coupon.getCouponType().equals(CouponType.Percent)) {
-            int discountAmount = (originalAmount * (coupon.getValue() / 100));
-            return originalAmount - discountAmount;
-        }
-        throw new CustomException(Error.WRONG_COUPON);
+        return coupon;
     }
 }
