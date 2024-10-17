@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum PortonePaymentStatus {
-    CANCELLED("CANCELLED"), FAILED("FAILED"), PAID("PAID"), PARTIAL_CANCELLED("PARTIAL_CANCELLED");
+    READY("READY"), CANCELLED("CANCELLED"), FAILED("FAILED"), PAID("PAID"), PARTIAL_CANCELLED("PARTIAL_CANCELLED");
     private final String value;
 
     PortonePaymentStatus(String value) {

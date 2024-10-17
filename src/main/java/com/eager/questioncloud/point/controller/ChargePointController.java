@@ -2,6 +2,7 @@ package com.eager.questioncloud.point.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.point.dto.Request.ChargePointOrderRequest;
+import com.eager.questioncloud.point.dto.Request.ChargePointPaymentRequest;
 import com.eager.questioncloud.point.model.ChargePointOrder;
 import com.eager.questioncloud.point.service.ChargePointService;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -38,6 +39,17 @@ public class ChargePointController {
                 chargePointOrderRequest.getPaymentId(),
                 chargePointOrderRequest.getChargePointType())
         );
+        return DefaultResponse.success();
+    }
+
+    @PostMapping("/payment")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "Portone 포인트 충전 Webhook", summary = "Portone 포인트 충전 Webhook", tags = {"charge-point"},
+        description = "Portone 포인트 충전 Webhook")
+    public DefaultResponse payment(@RequestBody ChargePointPaymentRequest request) {
+        chargePointService.paymentAndCharge(request.getPayment_id());
         return DefaultResponse.success();
     }
 }

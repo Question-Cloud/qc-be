@@ -1,8 +1,12 @@
 package com.eager.questioncloud.point.model;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.exception.InvalidPaymentException;
 import com.eager.questioncloud.point.entity.ChargePointOrderEntity;
 import com.eager.questioncloud.point.vo.ChargePointOrderStatus;
 import com.eager.questioncloud.point.vo.ChargePointType;
+import com.eager.questioncloud.portone.dto.PortonePayment;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +39,18 @@ public class ChargePointOrder {
             .chargePointOrderStatus(ChargePointOrderStatus.ORDERED)
             .createdAt(LocalDateTime.now())
             .build();
+    }
+
+    public void paid(PortonePayment portonePayment) {
+        if (chargePointOrderStatus.equals(ChargePointOrderStatus.PAID)) {
+            throw new CustomException(Error.ALREADY_PROCESSED_PAYMENT);
+        }
+
+        if (portonePayment.getAmount().getTotal() != chargePointType.getAmount()) {
+            throw new InvalidPaymentException(portonePayment);
+        }
+        
+        this.chargePointOrderStatus = ChargePointOrderStatus.PAID;
     }
 
     public ChargePointOrderEntity toEntity() {
