@@ -27,10 +27,9 @@ public class QuestionPaymentProcessor {
 
     @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long userCouponId) {
-        if (userQuestionLibraryReader.isOwned(userId, questionIds)) {
+        if (isAlreadyPurchased(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
-
         List<Question> questions = questionReader.getQuestions(questionIds);
 
         QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, questions));
@@ -45,4 +44,7 @@ public class QuestionPaymentProcessor {
         return questionPayment;
     }
 
+    private Boolean isAlreadyPurchased(Long userId, List<Long> questionIds) {
+        return userQuestionLibraryReader.isOwned(userId, questionIds);
+    }
 }
