@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class QuestionPaymentAppender {
     private final QuestionPaymentRepository questionPaymentRepository;
 
-    public QuestionPayment createQuestionPayment(QuestionPayment questionPayment) {
+    public QuestionPayment append(QuestionPayment questionPayment) {
         return questionPaymentRepository.save(questionPayment);
     }
 }
