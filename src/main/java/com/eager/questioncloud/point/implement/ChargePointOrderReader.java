@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointOrderReader {
     private final ChargePointOrderRepository chargePointOrderRepository;
 
-    public ChargePointOrder get(String paymentId) {
+    public ChargePointOrder findByPaymentId(String paymentId) {
         return chargePointOrderRepository.findByPaymentId(paymentId);
     }
 }

@@ -17,7 +17,7 @@ public class ChargePointPaymentProcessor {
 
     @Transactional
     public ChargePointPaymentResult payment(PortonePayment portonePayment) {
-        ChargePointOrder chargePointOrder = chargePointOrderReader.get(portonePayment.getId());
+        ChargePointOrder chargePointOrder = chargePointOrderReader.findByPaymentId(portonePayment.getId());
         chargePointOrder.paid(portonePayment);
         chargePointOrderUpdater.save(chargePointOrder);
 
