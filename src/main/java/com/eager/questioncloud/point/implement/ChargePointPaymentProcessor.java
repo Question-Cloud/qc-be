@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChargePointPaymentProcessor {
     private final ChargePointOrderReader chargePointOrderReader;
     private final ChargePointOrderUpdater chargePointOrderUpdater;
-    private final ChargePointHistoryAppender chargePointHistoryAppender;
+    private final ChargePointPaymentAppender chargePointPaymentAppender;
 
     @Transactional
     public ChargePointPaymentResult payment(PortonePayment portonePayment) {
@@ -21,7 +21,7 @@ public class ChargePointPaymentProcessor {
         chargePointOrder.paid(portonePayment);
         chargePointOrderUpdater.save(chargePointOrder);
 
-        ChargePointPayment chargePointPayment = chargePointHistoryAppender.append(
+        ChargePointPayment chargePointPayment = chargePointPaymentAppender.append(
             ChargePointPayment.create(
                 chargePointOrder.getUserId(),
                 portonePayment));
