@@ -7,6 +7,7 @@ import com.eager.questioncloud.point.entity.ChargePointOrderEntity;
 import com.eager.questioncloud.point.vo.ChargePointOrderStatus;
 import com.eager.questioncloud.point.vo.ChargePointType;
 import com.eager.questioncloud.portone.dto.PortonePayment;
+import com.eager.questioncloud.portone.enums.PortonePaymentStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,10 +47,14 @@ public class ChargePointOrder {
             throw new CustomException(Error.ALREADY_PROCESSED_PAYMENT);
         }
 
+        if (!portonePayment.getStatus().equals(PortonePaymentStatus.PAID)) {
+            throw new CustomException(Error.NOT_PROCESS_PAYMENT);
+        }
+
         if (portonePayment.getAmount().getTotal() != chargePointType.getAmount()) {
             throw new InvalidPaymentException(portonePayment);
         }
-        
+
         this.chargePointOrderStatus = ChargePointOrderStatus.PAID;
     }
 
