@@ -1,6 +1,9 @@
 package com.eager.questioncloud.payment.implement;
 
 import com.eager.questioncloud.coupon.implement.UserCouponProcessor;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.library.implement.UserQuestionLibraryReader;
 import com.eager.questioncloud.payment.model.QuestionPayment;
 import com.eager.questioncloud.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.point.implement.UserPointProcessor;
@@ -19,9 +22,14 @@ public class QuestionPaymentProcessor {
     private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
     private final UserPointProcessor userPointProcessor;
     private final UserCouponProcessor userCouponProcessor;
+    private final UserQuestionLibraryReader userQuestionLibraryReader;
 
     @Transactional
     public QuestionPayment questionPayment(Long userId, List<Long> questionIds, Long userCouponId) {
+        if (userQuestionLibraryReader.isOwned(userId, questionIds)) {
+            throw new CustomException(Error.ALREADY_OWN_QUESTION);
+        }
+        
         List<Question> questions = questionReader.getQuestions(questionIds);
         int originalAmount = getOriginalAmount(questions);
         int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
