@@ -42,18 +42,14 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @Column
-    private int point;
-
     @Builder
     public UserEntity(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
-        UserStatus userStatus, int point) {
+        UserStatus userStatus) {
         this.uid = uid;
         this.userAccountInformation = userAccountInformation;
         this.userInformation = userInformation;
         this.userType = userType;
         this.userStatus = userStatus;
-        this.point = point;
     }
 
     public User toModel() {
@@ -63,7 +59,6 @@ public class UserEntity {
             .userInformation(userInformation)
             .userType(userType)
             .userStatus(userStatus)
-            .point(point)
             .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.repository;
 
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.point.entity.QUserPointEntity.userPointEntity;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +13,9 @@ public class UserPointRepositoryImpl implements UserPointRepository {
 
     @Override
     public int getPoint(Long userId) {
-        Integer point = jpaQueryFactory.select(userEntity.point.intValue())
-            .from(userEntity)
-            .where(userEntity.uid.eq(userId))
+        Integer point = jpaQueryFactory.select(userPointEntity.point.intValue())
+            .from(userPointEntity)
+            .where(userPointEntity.userId.eq(userId))
             .fetchFirst();
 
         if (point == null) {
@@ -27,9 +27,9 @@ public class UserPointRepositoryImpl implements UserPointRepository {
 
     @Override
     public void updatePoint(Long userId, int point) {
-        jpaQueryFactory.update(userEntity)
-            .set(userEntity.point, point)
-            .where(userEntity.uid.eq(userId))
+        jpaQueryFactory.update(userPointEntity)
+            .set(userPointEntity.point, point)
+            .where(userPointEntity.userId.eq(userId))
             .execute();
     }
 }

@@ -24,17 +24,14 @@ public class User implements UserDetails {
     private UserInformation userInformation;
     private UserType userType;
     private UserStatus userStatus;
-    private int point;
 
     @Builder
-    public User(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType, UserStatus userStatus,
-        int point) {
+    public User(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType, UserStatus userStatus) {
         this.uid = uid;
         this.userAccountInformation = userAccountInformation;
         this.userInformation = userInformation;
         this.userType = userType;
         this.userStatus = userStatus;
-        this.point = point;
     }
 
     public static User create(UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
@@ -127,7 +124,6 @@ public class User implements UserDetails {
             .userInformation(userInformation)
             .userType(userType)
             .userStatus(userStatus)
-            .point(point)
             .build();
     }
 }
