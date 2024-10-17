@@ -5,5 +5,5 @@ import com.eager.questioncloud.point.model.ChargePointPayment;
 public interface ChargePointPaymentRepository {
     ChargePointPayment save(ChargePointPayment chargePointPayment);
 
-    Boolean existsById(String paymentId);
+    Boolean existsByUserIdAndPaymentId(Long userId, String paymentId);
 }

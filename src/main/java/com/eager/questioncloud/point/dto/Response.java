@@ -9,4 +9,10 @@ public class Response {
     public static class GetUserPointResponse {
         private int point;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CheckCompletePaymentResponse {
+        private Boolean isCompleted;
+    }
 }

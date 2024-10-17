@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentReader {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public Boolean existsById(String paymentId) {
-        return chargePointPaymentRepository.existsById(paymentId);
+    public Boolean isCompletePayment(Long userId, String paymentId) {
+        return chargePointPaymentRepository.existsByUserIdAndPaymentId(userId, paymentId);
     }
 }
