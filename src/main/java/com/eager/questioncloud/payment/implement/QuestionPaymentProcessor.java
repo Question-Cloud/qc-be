@@ -1,5 +1,6 @@
 package com.eager.questioncloud.payment.implement;
 
+import com.eager.questioncloud.coupon.domain.Coupon;
 import com.eager.questioncloud.coupon.implement.UserCouponProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
@@ -29,26 +30,19 @@ public class QuestionPaymentProcessor {
         if (userQuestionLibraryReader.isOwned(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
-        
+
         List<Question> questions = questionReader.getQuestions(questionIds);
-        int originalAmount = getOriginalAmount(questions);
-        int finalAmount = isUsingCoupon(userCouponId) ? userCouponProcessor.useCoupon(userId, userCouponId, originalAmount) : originalAmount;
 
-        userPointProcessor.usePoint(userId, finalAmount);
-
-        QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, finalAmount));
+        QuestionPayment questionPayment = questionPaymentAppender.createQuestionPayment(QuestionPayment.create(userId, userCouponId, questions));
         questionPaymentOrderAppender.createQuestionPaymentOrders(QuestionPaymentOrder.createOrders(questionPayment.getId(), questions));
+
+        if (questionPayment.isUsingCoupon()) {
+            Coupon coupon = userCouponProcessor.useCoupon(userId, userCouponId);
+            questionPayment.useCoupon(coupon);
+        }
+
+        userPointProcessor.usePoint(userId, questionPayment.getAmount());
         return questionPayment;
     }
 
-    public Boolean isUsingCoupon(Long couponId) {
-        return couponId != null;
-    }
-
-    public int getOriginalAmount(List<Question> questions) {
-        return questions
-            .stream()
-            .mapToInt(question -> question.getQuestionContent().getPrice())
-            .sum();
-    }
 }
