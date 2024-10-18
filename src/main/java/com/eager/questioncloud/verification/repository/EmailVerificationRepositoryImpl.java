@@ -1,13 +1,13 @@
-package com.eager.questioncloud.mail.repository;
+package com.eager.questioncloud.verification.repository;
 
-import static com.eager.questioncloud.mail.entity.QEmailVerificationEntity.emailVerificationEntity;
+import static com.eager.questioncloud.verification.entity.QEmailVerificationEntity.emailVerificationEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.mail.dto.EmailVerificationWithUser;
-import com.eager.questioncloud.mail.entity.EmailVerificationEntity;
+import com.eager.questioncloud.verification.domain.EmailVerification;
+import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.dto.EmailVerificationWithUser;
+import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
 import com.eager.questioncloud.user.entity.UserEntity;
 import com.eager.questioncloud.user.model.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;

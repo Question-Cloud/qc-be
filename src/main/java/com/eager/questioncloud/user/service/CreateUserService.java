@@ -1,8 +1,8 @@
 package com.eager.questioncloud.user.service;
 
-import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.mail.implement.EmailVerificationProcessor;
+import com.eager.questioncloud.verification.domain.EmailVerification;
+import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.implement.EmailVerificationProcessor;
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
 import com.eager.questioncloud.user.implement.CreateSocialUserInformationProcessor;
 import com.eager.questioncloud.user.implement.UserAppender;

@@ -1,7 +1,7 @@
-package com.eager.questioncloud.mail.repository;
+package com.eager.questioncloud.verification.repository;
 
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.mail.entity.EmailVerificationEntity;
+import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
 import jakarta.persistence.Tuple;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
