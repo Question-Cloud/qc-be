@@ -32,7 +32,8 @@ public enum Error {
     ALREADY_REGISTER_REVIEW(HttpStatus.CONFLICT, "이미 후기를 남긴 문제입니다."),
     NOT_OWNED_QUESTION(HttpStatus.BAD_REQUEST, "보유하고 있는 문제가 아닙니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다."),
-    UNAVAILABLE_QUESTION(HttpStatus.BAD_REQUEST, "현재 이용할 수 없는 문제 입니다.");
+    UNAVAILABLE_QUESTION(HttpStatus.BAD_REQUEST, "현재 이용할 수 없는 문제 입니다."),
+    ALREADY_VERIFIED_EMAIL(HttpStatus.CONFLICT, "이미 인증 완료 된 메일입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

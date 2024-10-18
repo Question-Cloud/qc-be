@@ -1,15 +1,15 @@
-package com.eager.questioncloud.mail.repository;
+package com.eager.questioncloud.verification.repository;
 
-import static com.eager.questioncloud.mail.entity.QEmailVerificationEntity.emailVerificationEntity;
+import static com.eager.questioncloud.verification.entity.QEmailVerificationEntity.emailVerificationEntity;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.mail.dto.EmailVerificationWithUser;
-import com.eager.questioncloud.mail.entity.EmailVerificationEntity;
 import com.eager.questioncloud.user.entity.UserEntity;
 import com.eager.questioncloud.user.model.User;
+import com.eager.questioncloud.verification.dto.EmailVerificationWithUser;
+import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
+import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     public EmailVerification get(String token, EmailVerificationType emailVerificationType) {
         return emailVerificationJpaRepository.findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(token, emailVerificationType)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toDomain();
+            .toModel();
     }
 
     @Override
@@ -42,20 +42,20 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        return result.toDomain();
+        return result.toModel();
     }
 
     @Override
     public EmailVerificationWithUser getForResend(String resendToken) {
         Tuple result = emailVerificationJpaRepository.findByResendTokenWithUser(resendToken)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
-        EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toDomain();
+        EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toModel();
         User user = result.get("user", UserEntity.class).toModel();
         return new EmailVerificationWithUser(emailVerification, user);
     }
 
     @Override
     public EmailVerification save(EmailVerification emailVerification) {
-        return emailVerificationJpaRepository.save(emailVerification.toEntity()).toDomain();
+        return emailVerificationJpaRepository.save(emailVerification.toEntity()).toModel();
     }
 }

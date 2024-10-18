@@ -1,8 +1,5 @@
 package com.eager.questioncloud.user.service;
 
-import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
-import com.eager.questioncloud.mail.implement.EmailVerificationProcessor;
 import com.eager.questioncloud.user.dto.Request.CreateUserRequest;
 import com.eager.questioncloud.user.implement.CreateSocialUserInformationProcessor;
 import com.eager.questioncloud.user.implement.UserAppender;
@@ -15,6 +12,9 @@ import com.eager.questioncloud.user.vo.UserAccountInformation;
 import com.eager.questioncloud.user.vo.UserInformation;
 import com.eager.questioncloud.user.vo.UserStatus;
 import com.eager.questioncloud.user.vo.UserType;
+import com.eager.questioncloud.verification.implement.EmailVerificationProcessor;
+import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

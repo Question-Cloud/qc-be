@@ -1,7 +1,7 @@
-package com.eager.questioncloud.mail.entity;
+package com.eager.questioncloud.verification.entity;
 
-import com.eager.questioncloud.mail.domain.EmailVerification;
-import com.eager.questioncloud.mail.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,7 +43,7 @@ public class EmailVerificationEntity {
         this.isVerified = isVerified;
     }
 
-    public EmailVerification toDomain() {
+    public EmailVerification toModel() {
         return EmailVerification.builder()
             .token(token)
             .resendToken(resendToken)
