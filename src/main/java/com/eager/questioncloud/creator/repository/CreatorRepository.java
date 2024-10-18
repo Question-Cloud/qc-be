@@ -12,5 +12,7 @@ public interface CreatorRepository {
 
     Creator findByUserId(Long userId);
 
+    Creator findById(Long creatorId);
+
     Creator save(Creator creator);
 }

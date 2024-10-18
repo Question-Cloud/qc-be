@@ -2,14 +2,14 @@ package com.eager.questioncloud.creator.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
-import com.eager.questioncloud.creator.dto.CreatorDto.MyCreatorInformation;
 import com.eager.questioncloud.creator.dto.Request.RegisterCreatorRequest;
-import com.eager.questioncloud.creator.dto.Request.UpdateMyCreatorInformationRequest;
+import com.eager.questioncloud.creator.dto.Request.UpdateCreatorProfileRequest;
 import com.eager.questioncloud.creator.dto.Response.CreatorInformationResponse;
-import com.eager.questioncloud.creator.dto.Response.MyCreatorInformationResponse;
+import com.eager.questioncloud.creator.dto.Response.CreatorProfileResponse;
 import com.eager.questioncloud.creator.dto.Response.RegisterCreatorResponse;
 import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.creator.service.CreatorService;
+import com.eager.questioncloud.creator.vo.CreatorProfile;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -35,9 +35,9 @@ public class CreatorController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "크리에이터 정보 조회 (나)", summary = "크리에이터 정보 조회 (나)", tags = {"creator"}, description = "크리에이터 정보 조회 (나)")
-    public MyCreatorInformationResponse getMyCreatorInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        MyCreatorInformation information = creatorService.getMyCreatorInformation(userPrincipal.getUser().getUid());
-        return new MyCreatorInformationResponse(information);
+    public CreatorProfileResponse getMyCreatorInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        CreatorProfile profile = userPrincipal.getCreator().getCreatorProfile();
+        return new CreatorProfileResponse(profile);
     }
 
     @PatchMapping("/me")
@@ -46,8 +46,8 @@ public class CreatorController {
     })
     @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = {"creator"}, description = "크리에이터 정보 수정")
     public DefaultResponse updateMyCreatorInformation(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid UpdateMyCreatorInformationRequest request) {
-        creatorService.updateMyCreatorInformation(userPrincipal.getUser().getUid(), request.getMainSubject(), request.getIntroduction());
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid UpdateCreatorProfileRequest request) {
+        creatorService.updateCreatorProfile(userPrincipal.getCreator(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return DefaultResponse.success();
     }
 
@@ -68,7 +68,9 @@ public class CreatorController {
     @Operation(operationId = "크리에이터 등록 신청", summary = "크리에이터 등록 신청", tags = {"creator"}, description = "크리에이터 등록 신청")
     public RegisterCreatorResponse registerCreator(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCreatorRequest request) {
-        Creator creator = creatorService.register(userPrincipal.getUser().getUid(), request.getMainSubject(), request.getIntroduction());
+        Creator creator = creatorService.register(
+            userPrincipal.getUser().getUid(),
+            new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return new RegisterCreatorResponse(creator.getId());
     }
 }

@@ -1,11 +1,10 @@
 package com.eager.questioncloud.creator.entity;
 
 import com.eager.questioncloud.creator.model.Creator;
-import com.eager.questioncloud.question.vo.Subject;
+import com.eager.questioncloud.creator.vo.CreatorProfile;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,27 +26,21 @@ public class CreatorEntity {
     @Column
     private Long userId;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Subject mainSubject;
-
-    @Column
-    private String introduction;
+    @Embedded
+    private CreatorProfile creatorProfile;
 
     @Builder
-    public CreatorEntity(Long id, Long userId, Subject mainSubject, String introduction) {
+    public CreatorEntity(Long id, Long userId, CreatorProfile creatorProfile) {
         this.id = id;
         this.userId = userId;
-        this.mainSubject = mainSubject;
-        this.introduction = introduction;
+        this.creatorProfile = creatorProfile;
     }
 
     public Creator toModel() {
         return Creator.builder()
             .id(id)
             .userId(userId)
-            .mainSubject(mainSubject)
-            .introduction(introduction)
+            .creatorProfile(creatorProfile)
             .build();
     }
 }

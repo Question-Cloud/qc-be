@@ -1,7 +1,7 @@
 package com.eager.questioncloud.creator.model;
 
 import com.eager.questioncloud.creator.entity.CreatorEntity;
-import com.eager.questioncloud.question.vo.Subject;
+import com.eager.questioncloud.creator.vo.CreatorProfile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,36 +9,31 @@ import lombok.Getter;
 public class Creator {
     private Long id;
     private Long userId;
-    private Subject mainSubject;
-    private String introduction;
+    private CreatorProfile creatorProfile;
 
     @Builder
-    public Creator(Long id, Long userId, Subject mainSubject, String introduction) {
+    public Creator(Long id, Long userId, CreatorProfile creatorProfile) {
         this.id = id;
         this.userId = userId;
-        this.mainSubject = mainSubject;
-        this.introduction = introduction;
+        this.creatorProfile = creatorProfile;
     }
 
-    public static Creator create(Long userId, Subject mainSubject, String introduction) {
+    public static Creator create(Long userId, CreatorProfile creatorProfile) {
         return Creator.builder()
             .userId(userId)
-            .mainSubject(mainSubject)
-            .introduction(introduction)
+            .creatorProfile(creatorProfile)
             .build();
     }
 
-    public void update(Subject mainSubject, String introduction) {
-        this.mainSubject = mainSubject;
-        this.introduction = introduction;
+    public void update(CreatorProfile creatorProfile) {
+        this.creatorProfile = creatorProfile;
     }
 
     public CreatorEntity toEntity() {
         return CreatorEntity.builder()
             .id(id)
             .userId(userId)
-            .mainSubject(mainSubject)
-            .introduction(introduction)
+            .creatorProfile(creatorProfile)
             .build();
     }
 }

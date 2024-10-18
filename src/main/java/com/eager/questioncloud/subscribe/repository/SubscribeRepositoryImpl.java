@@ -52,8 +52,8 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
                         creatorEntity.id,
                         userEntity.userInformation.name,
                         userEntity.userInformation.profileImage,
-                        creatorEntity.mainSubject,
-                        creatorEntity.introduction,
+                        creatorEntity.creatorProfile.mainSubject,
+                        creatorEntity.creatorProfile.introduction,
                         countCheck.id.count().intValue())))
             .from(subscribeEntity)
             .where(subscribeEntity.subscriberId.eq(userId))

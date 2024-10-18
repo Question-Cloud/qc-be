@@ -42,11 +42,4 @@ public class CreatorDto {
         private String introduction;
         private int subscribeCount;
     }
-
-    @Getter
-    @AllArgsConstructor
-    public static class MyCreatorInformation {
-        private Subject mainSubject;
-        private String introduction;
-    }
 }
