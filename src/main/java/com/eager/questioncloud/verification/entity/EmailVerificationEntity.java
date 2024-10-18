@@ -43,7 +43,7 @@ public class EmailVerificationEntity {
         this.isVerified = isVerified;
     }
 
-    public EmailVerification toDomain() {
+    public EmailVerification toModel() {
         return EmailVerification.builder()
             .token(token)
             .resendToken(resendToken)
