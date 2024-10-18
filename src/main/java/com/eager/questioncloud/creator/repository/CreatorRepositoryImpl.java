@@ -6,8 +6,8 @@ import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEn
 import static com.eager.questioncloud.review.entity.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.creator.domain.Creator;
 import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

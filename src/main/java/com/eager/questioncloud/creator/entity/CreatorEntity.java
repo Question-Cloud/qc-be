@@ -1,6 +1,6 @@
 package com.eager.questioncloud.creator.entity;
 
-import com.eager.questioncloud.creator.domain.Creator;
+import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.question.vo.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

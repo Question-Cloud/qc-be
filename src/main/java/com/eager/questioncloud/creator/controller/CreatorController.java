@@ -1,7 +1,6 @@
 package com.eager.questioncloud.creator.controller;
 
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.creator.domain.Creator;
 import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.creator.dto.CreatorDto.MyCreatorInformation;
 import com.eager.questioncloud.creator.dto.Request.RegisterCreatorRequest;
@@ -9,6 +8,7 @@ import com.eager.questioncloud.creator.dto.Request.UpdateMyCreatorInformationReq
 import com.eager.questioncloud.creator.dto.Response.CreatorInformationResponse;
 import com.eager.questioncloud.creator.dto.Response.MyCreatorInformationResponse;
 import com.eager.questioncloud.creator.dto.Response.RegisterCreatorResponse;
+import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.creator.service.CreatorService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
