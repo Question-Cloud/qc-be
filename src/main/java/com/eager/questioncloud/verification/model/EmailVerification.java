@@ -1,6 +1,7 @@
 package com.eager.questioncloud.verification.model;
 
 import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;

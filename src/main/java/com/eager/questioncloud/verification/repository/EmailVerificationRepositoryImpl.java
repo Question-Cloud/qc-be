@@ -9,7 +9,7 @@ import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.verification.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
 import com.eager.questioncloud.verification.model.EmailVerification;
-import com.eager.questioncloud.verification.model.EmailVerificationType;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;

@@ -6,7 +6,7 @@ import com.eager.questioncloud.user.dto.Response.CreateUserResponse;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.service.CreateUserService;
 import com.eager.questioncloud.verification.model.EmailVerification;
-import com.eager.questioncloud.verification.model.EmailVerificationType;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;

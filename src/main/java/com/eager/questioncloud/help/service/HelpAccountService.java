@@ -4,7 +4,7 @@ import com.eager.questioncloud.user.implement.UserReader;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.verification.implement.EmailVerificationProcessor;
 import com.eager.questioncloud.verification.model.EmailVerification;
-import com.eager.questioncloud.verification.model.EmailVerificationType;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

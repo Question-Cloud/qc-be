@@ -14,7 +14,7 @@ import com.eager.questioncloud.user.vo.UserStatus;
 import com.eager.questioncloud.user.vo.UserType;
 import com.eager.questioncloud.verification.implement.EmailVerificationProcessor;
 import com.eager.questioncloud.verification.model.EmailVerification;
-import com.eager.questioncloud.verification.model.EmailVerificationType;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

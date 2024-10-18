@@ -2,7 +2,7 @@ package com.eager.questioncloud.verification.repository;
 
 import com.eager.questioncloud.verification.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.verification.model.EmailVerification;
-import com.eager.questioncloud.verification.model.EmailVerificationType;
+import com.eager.questioncloud.verification.vo.EmailVerificationType;
 
 public interface EmailVerificationRepository {
     EmailVerification get(String token, EmailVerificationType emailVerificationType);

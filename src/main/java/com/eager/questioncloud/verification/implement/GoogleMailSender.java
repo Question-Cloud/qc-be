@@ -2,7 +2,7 @@ package com.eager.questioncloud.verification.implement;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.verification.model.Email;
+import com.eager.questioncloud.verification.vo.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
