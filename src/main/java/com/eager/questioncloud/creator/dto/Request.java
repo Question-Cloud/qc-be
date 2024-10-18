@@ -16,7 +16,7 @@ public class Request {
     }
 
     @Getter
-    public static class UpdateMyCreatorInformationRequest {
+    public static class UpdateCreatorProfileRequest {
         @NotNull
         private Subject mainSubject;
 

@@ -6,8 +6,8 @@ import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEn
 import static com.eager.questioncloud.review.entity.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.creator.domain.Creator;
 import com.eager.questioncloud.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;
@@ -23,11 +23,6 @@ public class CreatorRepositoryImpl implements CreatorRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Boolean existsByUserId(Long userId) {
-        return creatorJpaRepository.existsByUserId(userId);
-    }
-
-    @Override
     public Boolean existsById(Long creatorId) {
         return creatorJpaRepository.existsById(creatorId);
     }
@@ -40,10 +35,9 @@ public class CreatorRepositoryImpl implements CreatorRepository {
                 creatorEntity.id,
                 userEntity.userInformation.name,
                 userEntity.userInformation.profileImage,
-                creatorEntity.mainSubject,
+                creatorEntity.creatorProfile.mainSubject,
                 userEntity.userInformation.email,
-//                subscribeCount,
-                creatorEntity.introduction)
+                creatorEntity.creatorProfile.introduction)
             .from(creatorEntity)
             .where(creatorEntity.id.eq(creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -58,19 +52,12 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .creatorId(result.get(creatorEntity.id))
             .name(result.get(userEntity.userInformation.name))
             .profileImage(result.get(userEntity.userInformation.profileImage))
-            .mainSubject(result.get(creatorEntity.mainSubject))
+            .mainSubject(result.get(creatorEntity.creatorProfile.mainSubject))
             .email(result.get(userEntity.userInformation.email))
             .salesCount(salesCount)
             .rate(rate)
-            .introduction(result.get(creatorEntity.introduction))
+            .introduction(result.get(creatorEntity.creatorProfile.introduction))
             .build();
-    }
-
-    @Override
-    public Creator findByUserId(Long userId) {
-        return creatorJpaRepository.findByUserId(userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
     }
 
     @Override

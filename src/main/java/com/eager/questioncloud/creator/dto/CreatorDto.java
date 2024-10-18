@@ -13,7 +13,6 @@ public class CreatorDto {
         private String profileImage;
         private Subject mainSubject;
         private String email;
-        //        private int subscriberCount;
         private int salesCount;
         private Double rate;
         private String introduction;
@@ -41,12 +40,5 @@ public class CreatorDto {
         private Subject mainSubject;
         private String introduction;
         private int subscribeCount;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class MyCreatorInformation {
-        private Subject mainSubject;
-        private String introduction;
     }
 }
