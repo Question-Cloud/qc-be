@@ -41,6 +41,8 @@ public class EmailVerificationProcessor {
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
             emailVerification.getEmailVerificationType(),
             emailVerification.getToken());
+
+        emailVerification.checkAvailableResend();
         googleMailSender.sendMail(
             new Email(
                 user.getUserInformation().getEmail(),
