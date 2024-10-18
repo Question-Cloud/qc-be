@@ -23,11 +23,6 @@ public class CreatorRepositoryImpl implements CreatorRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Boolean existsByUserId(Long userId) {
-        return creatorJpaRepository.existsByUserId(userId);
-    }
-
-    @Override
     public Boolean existsById(Long creatorId) {
         return creatorJpaRepository.existsById(creatorId);
     }
@@ -42,7 +37,6 @@ public class CreatorRepositoryImpl implements CreatorRepository {
                 userEntity.userInformation.profileImage,
                 creatorEntity.creatorProfile.mainSubject,
                 userEntity.userInformation.email,
-//                subscribeCount,
                 creatorEntity.creatorProfile.introduction)
             .from(creatorEntity)
             .where(creatorEntity.id.eq(creatorId))
@@ -64,20 +58,6 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .rate(rate)
             .introduction(result.get(creatorEntity.creatorProfile.introduction))
             .build();
-    }
-
-    @Override
-    public Creator findByUserId(Long userId) {
-        return creatorJpaRepository.findByUserId(userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
-    }
-
-    @Override
-    public Creator findById(Long creatorId) {
-        return creatorJpaRepository.findById(creatorId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
     }
 
     @Override

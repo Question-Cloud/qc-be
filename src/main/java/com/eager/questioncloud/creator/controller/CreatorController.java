@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,6 +32,7 @@ public class CreatorController {
     private final CreatorService creatorService;
 
     @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
@@ -41,6 +43,7 @@ public class CreatorController {
     }
 
     @PatchMapping("/me")
+    @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
@@ -62,6 +65,7 @@ public class CreatorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_NormalUser')")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
