@@ -16,7 +16,6 @@ public class Response {
     @Getter
     public static class CreatorInformationResponse {
         private CreatorInformation creatorInformation;
-//        private Boolean isSubscribe;
     }
 
     @Getter

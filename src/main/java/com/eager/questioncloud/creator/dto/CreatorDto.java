@@ -13,7 +13,6 @@ public class CreatorDto {
         private String profileImage;
         private Subject mainSubject;
         private String email;
-        //        private int subscriberCount;
         private int salesCount;
         private Double rate;
         private String introduction;
