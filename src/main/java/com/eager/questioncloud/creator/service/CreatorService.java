@@ -25,7 +25,7 @@ public class CreatorService {
     }
 
     public void updateCreatorProfile(Creator creator, CreatorProfile creatorProfile) {
-        creator.update(creatorProfile);
+        creator.updateProfile(creatorProfile);
         creatorUpdater.update(creator);
     }
 }

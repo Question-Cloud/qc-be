@@ -25,7 +25,7 @@ public class Creator {
             .build();
     }
 
-    public void update(CreatorProfile creatorProfile) {
+    public void updateProfile(CreatorProfile creatorProfile) {
         this.creatorProfile = creatorProfile;
     }
 
