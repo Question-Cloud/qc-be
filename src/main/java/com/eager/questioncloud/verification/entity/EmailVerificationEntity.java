@@ -1,7 +1,7 @@
 package com.eager.questioncloud.verification.entity;
 
-import com.eager.questioncloud.verification.domain.EmailVerification;
-import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.verification.model.EmailVerificationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

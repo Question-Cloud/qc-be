@@ -1,4 +1,4 @@
-package com.eager.questioncloud.verification.domain;
+package com.eager.questioncloud.verification.model;
 
 import com.eager.questioncloud.verification.entity.EmailVerificationEntity;
 import java.util.UUID;

@@ -1,12 +1,12 @@
 package com.eager.questioncloud.verification.implement;
 
-import com.eager.questioncloud.verification.domain.Email;
-import com.eager.questioncloud.verification.domain.EmailVerification;
-import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.verification.dto.EmailVerificationWithUser;
+import com.eager.questioncloud.verification.model.Email;
+import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.verification.model.EmailVerificationType;
 import com.eager.questioncloud.verification.template.EmailVerificationTemplate;
 import com.eager.questioncloud.verification.template.EmailVerificationTemplateCreator;
-import com.eager.questioncloud.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

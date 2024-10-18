@@ -2,7 +2,7 @@ package com.eager.questioncloud.verification.template;
 
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.verification.domain.EmailVerificationType;
+import com.eager.questioncloud.verification.model.EmailVerificationType;
 
 public class EmailVerificationTemplateCreator {
     public static EmailVerificationTemplate getTemplate(EmailVerificationType emailVerificationType, String token) {
