@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CouponRepository {
-    Coupon getCoupon(Long id);
+    Coupon findById(Long id);
 
     Coupon findByCode(String code);
 

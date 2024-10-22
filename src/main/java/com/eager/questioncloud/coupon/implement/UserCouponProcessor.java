@@ -14,7 +14,7 @@ public class UserCouponProcessor {
 
     public Coupon useCoupon(Long userId, Long userCouponId) {
         UserCoupon userCoupon = userCouponReader.getUserCoupon(userCouponId, userId);
-        Coupon coupon = couponReader.getCoupon(userCoupon.getCouponId());
+        Coupon coupon = couponReader.findById(userCoupon.getCouponId());
         userCouponUpdater.use(userCoupon);
         return coupon;
     }

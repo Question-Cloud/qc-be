@@ -14,7 +14,7 @@ public class CouponReader {
         return couponRepository.findByCode(code);
     }
 
-    public Coupon getCoupon(Long id) {
-        return couponRepository.getCoupon(id);
+    public Coupon findById(Long id) {
+        return couponRepository.findById(id);
     }
 }

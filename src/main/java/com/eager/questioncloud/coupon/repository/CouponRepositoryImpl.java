@@ -16,7 +16,7 @@ public class CouponRepositoryImpl implements CouponRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Coupon getCoupon(Long id) {
+    public Coupon findById(Long id) {
         return couponJpaRepository.findById(id)
             .orElseThrow(() -> new CustomException(Error.WRONG_COUPON))
             .toDomain();
