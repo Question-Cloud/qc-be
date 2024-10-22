@@ -38,7 +38,7 @@ public class QuestionBoardService {
     }
 
     public void modify(Long boardId, Long userId, QuestionBoardContent questionBoardContent) {
-        questionBoardUpdater.modify(boardId, userId, questionBoardContent);
+        questionBoardUpdater.updateQuestionBoardContent(boardId, userId, questionBoardContent);
     }
 
     public void delete(Long boardId, Long userId) {
