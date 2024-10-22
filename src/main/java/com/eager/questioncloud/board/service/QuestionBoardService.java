@@ -7,7 +7,7 @@ import com.eager.questioncloud.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.board.implement.QuestionBoardRemover;
 import com.eager.questioncloud.board.implement.QuestionBoardUpdater;
 import com.eager.questioncloud.board.model.QuestionBoard;
-import com.eager.questioncloud.board.model.QuestionBoardFile;
+import com.eager.questioncloud.board.vo.QuestionBoardFile;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

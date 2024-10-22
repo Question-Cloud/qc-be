@@ -1,8 +1,8 @@
 package com.eager.questioncloud.board.implement;
 
 import com.eager.questioncloud.board.model.QuestionBoard;
-import com.eager.questioncloud.board.model.QuestionBoardFile;
 import com.eager.questioncloud.board.repository.QuestionBoardRepository;
+import com.eager.questioncloud.board.vo.QuestionBoardFile;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

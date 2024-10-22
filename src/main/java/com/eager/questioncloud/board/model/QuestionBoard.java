@@ -1,6 +1,7 @@
 package com.eager.questioncloud.board.model;
 
 import com.eager.questioncloud.board.entity.QuestionBoardEntity;
+import com.eager.questioncloud.board.vo.QuestionBoardFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

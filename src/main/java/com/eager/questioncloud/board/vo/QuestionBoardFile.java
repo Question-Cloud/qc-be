@@ -1,4 +1,4 @@
-package com.eager.questioncloud.board.model;
+package com.eager.questioncloud.board.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
