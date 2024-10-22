@@ -1,7 +1,7 @@
 package com.eager.questioncloud.comment.implement;
 
 import com.eager.questioncloud.board.implement.QuestionBoardValidator;
-import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.model.QuestionBoardComment;
 import com.eager.questioncloud.comment.repository.QuestionBoardCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
