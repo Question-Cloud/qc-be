@@ -1,7 +1,7 @@
 package com.eager.questioncloud.security;
 
+import com.eager.questioncloud.authentication.dto.AuthenticationDto.UserWithCreator;
 import com.eager.questioncloud.creator.model.Creator;
-import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.model.User;
 import java.io.Serializable;
 import lombok.Getter;

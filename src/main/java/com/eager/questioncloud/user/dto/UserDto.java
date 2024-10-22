@@ -1,6 +1,5 @@
 package com.eager.questioncloud.user.dto;
 
-import com.eager.questioncloud.creator.model.Creator;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.UserType;
 import lombok.AllArgsConstructor;
@@ -24,12 +23,5 @@ public class UserDto {
                 user.getUserInformation().getPhone(),
                 user.getUserType());
         }
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class UserWithCreator {
-        private User user;
-        private Creator creator;
     }
 }

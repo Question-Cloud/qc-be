@@ -3,10 +3,10 @@ package com.eager.questioncloud.user.repository;
 import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
+import com.eager.questioncloud.authentication.dto.AuthenticationDto.UserWithCreator;
 import com.eager.questioncloud.creator.entity.CreatorEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.entity.UserEntity;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;

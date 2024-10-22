@@ -1,9 +1,9 @@
 package com.eager.questioncloud.authentication.implement;
 
+import com.eager.questioncloud.authentication.dto.AuthenticationDto.UserWithCreator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.security.UserPrincipal;
-import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.implement.UserReader;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;
