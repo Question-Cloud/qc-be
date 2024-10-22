@@ -6,8 +6,8 @@ import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntit
 import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.comment.domain.QuestionBoardComment;
 import com.eager.questioncloud.comment.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.comment.model.QuestionBoardComment;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,7 +29,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     }
 
     @Override
-    public QuestionBoardComment getForModifyAndDelete(Long commentId, Long userId) {
+    public QuestionBoardComment findByIdAndWriterId(Long commentId, Long userId) {
         return questionBoardCommentJpaRepository.findByIdAndWriterId(commentId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();

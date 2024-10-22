@@ -128,7 +128,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoard get(Long boardId) {
+    public QuestionBoard findById(Long boardId) {
         return questionBoardJpaRepository.findById(boardId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.comment.domain;
+package com.eager.questioncloud.comment.model;
 
 import com.eager.questioncloud.comment.entity.QuestionBoardCommentEntity;
 import java.time.LocalDateTime;

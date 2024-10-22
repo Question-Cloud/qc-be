@@ -1,6 +1,6 @@
 package com.eager.questioncloud.comment.implement;
 
-import com.eager.questioncloud.comment.domain.QuestionBoardComment;
+import com.eager.questioncloud.comment.model.QuestionBoardComment;
 import com.eager.questioncloud.comment.repository.QuestionBoardCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ public class QuestionBoardCommentUpdater {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
 
     public void modify(Long commentId, Long userId, String comment) {
-        QuestionBoardComment questionBoardComment = questionBoardCommentRepository.getForModifyAndDelete(commentId, userId);
+        QuestionBoardComment questionBoardComment = questionBoardCommentRepository.findByIdAndWriterId(commentId, userId);
         questionBoardComment.modify(comment);
         questionBoardCommentRepository.save(questionBoardComment);
     }
