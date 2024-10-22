@@ -1,6 +1,6 @@
 package com.eager.questioncloud.library.implement;
 
-import com.eager.questioncloud.library.domain.UserQuestionLibrary;
+import com.eager.questioncloud.library.model.UserQuestionLibrary;
 import com.eager.questioncloud.library.repository.UserQuestionLibraryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

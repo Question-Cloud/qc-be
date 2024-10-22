@@ -5,9 +5,9 @@ import static com.eager.questioncloud.library.entity.QUserQuestionLibraryEntity.
 import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.library.domain.UserQuestionLibrary;
 import com.eager.questioncloud.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.library.entity.UserQuestionLibraryEntity;
+import com.eager.questioncloud.library.model.UserQuestionLibrary;
 import com.eager.questioncloud.question.common.QuestionFilter;
 import com.eager.questioncloud.question.dto.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
