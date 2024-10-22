@@ -1,4 +1,4 @@
-package com.eager.questioncloud.coupon.model;
+package com.eager.questioncloud.coupon.vo;
 
 import lombok.Getter;
 
