@@ -16,8 +16,8 @@ public class QuestionBoardReader {
     private final QuestionBoardRepository questionBoardRepository;
     private final QuestionPermissionValidator questionPermissionValidator;
 
-    public QuestionBoard get(Long boardId) {
-        return questionBoardRepository.get(boardId);
+    public QuestionBoard findById(Long boardId) {
+        return questionBoardRepository.findById(boardId);
     }
 
     public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long boardId) {

@@ -13,7 +13,7 @@ public class QuestionBoardValidator {
     private final QuestionPermissionValidator questionPermissionValidator;
 
     public void permissionValidator(Long boardId, Long userId) {
-        QuestionBoard questionBoard = questionBoardReader.get(boardId);
+        QuestionBoard questionBoard = questionBoardReader.findById(boardId);
         questionPermissionValidator.permissionValidator(userId, questionBoard.getQuestionId());
     }
 }
