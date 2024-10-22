@@ -1,9 +1,9 @@
 package com.eager.questioncloud.social.implement;
 
-import com.eager.questioncloud.authentication.domain.AuthenticationToken;
 import com.eager.questioncloud.authentication.dto.Response.SocialAuthenticateResponse;
 import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
+import com.eager.questioncloud.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.user.implement.CreateSocialUserInformationAppender;

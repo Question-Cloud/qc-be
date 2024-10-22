@@ -1,9 +1,9 @@
 package com.eager.questioncloud.authentication.service;
 
-import com.eager.questioncloud.authentication.domain.AuthenticationToken;
 import com.eager.questioncloud.authentication.dto.Response.SocialAuthenticateResponse;
 import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
+import com.eager.questioncloud.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.social.implement.SocialAuthenticateProcessor;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;

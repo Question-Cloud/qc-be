@@ -1,6 +1,6 @@
 package com.eager.questioncloud.authentication.implement;
 
-import com.eager.questioncloud.authentication.domain.AuthenticationToken;
+import com.eager.questioncloud.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import io.jsonwebtoken.Claims;
