@@ -1,8 +1,8 @@
 package com.eager.questioncloud.board.implement;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.question.implement.QuestionPermissionValidator;
 import java.util.List;

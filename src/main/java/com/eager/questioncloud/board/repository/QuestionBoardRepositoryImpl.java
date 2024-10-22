@@ -4,9 +4,9 @@ import static com.eager.questioncloud.board.entity.QQuestionBoardEntity.question
 import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;

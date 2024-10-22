@@ -1,7 +1,7 @@
 package com.eager.questioncloud.board.implement;
 
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.question.implement.QuestionPermissionValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

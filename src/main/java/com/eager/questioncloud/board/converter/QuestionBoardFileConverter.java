@@ -1,6 +1,6 @@
 package com.eager.questioncloud.board.converter;
 
-import com.eager.questioncloud.board.domain.QuestionBoardFile;
+import com.eager.questioncloud.board.model.QuestionBoardFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;

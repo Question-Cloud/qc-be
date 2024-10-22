@@ -1,7 +1,7 @@
 package com.eager.questioncloud.board.implement;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
-import com.eager.questioncloud.board.domain.QuestionBoardFile;
+import com.eager.questioncloud.board.model.QuestionBoard;
+import com.eager.questioncloud.board.model.QuestionBoardFile;
 import com.eager.questioncloud.board.repository.QuestionBoardRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

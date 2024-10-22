@@ -1,11 +1,11 @@
 package com.eager.questioncloud.board.controller;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.board.dto.Request.ModifyQuestionBoardRequest;
 import com.eager.questioncloud.board.dto.Request.RegisterQuestionBoardRequest;
 import com.eager.questioncloud.board.dto.Response.QuestionBoardResponse;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.board.service.QuestionBoardService;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
