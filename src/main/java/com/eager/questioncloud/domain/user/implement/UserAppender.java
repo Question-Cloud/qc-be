@@ -1,0 +1,32 @@
+package com.eager.questioncloud.domain.user.implement;
+
+import com.eager.questioncloud.domain.user.model.User;
+import com.eager.questioncloud.domain.user.repository.UserRepository;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class UserAppender {
+    private final UserRepository userRepository;
+
+    public User create(User user) {
+        if (checkDuplicateEmail(user.getUserInformation().getEmail())) {
+            throw new CustomException(Error.DUPLICATE_EMAIL);
+        }
+        if (checkDuplicatePhone(user.getUserInformation().getPhone())) {
+            throw new CustomException(Error.DUPLICATE_PHONE);
+        }
+        return userRepository.save(user);
+    }
+
+    public Boolean checkDuplicatePhone(String phone) {
+        return userRepository.checkDuplicatePhone(phone);
+    }
+
+    public Boolean checkDuplicateEmail(String email) {
+        return userRepository.checkDuplicateEmail(email);
+    }
+}

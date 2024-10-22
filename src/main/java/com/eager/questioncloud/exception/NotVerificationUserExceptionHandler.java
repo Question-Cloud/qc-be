@@ -1,7 +1,7 @@
 package com.eager.questioncloud.exception;
 
-import com.eager.questioncloud.verification.implement.EmailVerificationReader;
-import com.eager.questioncloud.verification.model.EmailVerification;
+import com.eager.questioncloud.domain.verification.implement.EmailVerificationReader;
+import com.eager.questioncloud.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

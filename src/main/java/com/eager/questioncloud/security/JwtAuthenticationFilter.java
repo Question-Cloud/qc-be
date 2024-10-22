@@ -1,7 +1,7 @@
 package com.eager.questioncloud.security;
 
-import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
-import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
+import com.eager.questioncloud.domain.authentication.implement.AuthenticationProcessor;
+import com.eager.questioncloud.domain.authentication.implement.AuthenticationTokenProcessor;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
