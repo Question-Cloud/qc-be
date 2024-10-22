@@ -1,6 +1,6 @@
 package com.eager.questioncloud.domain.coupon.repository;
 
-import static com.eager.questioncloud.coupon.entity.QCouponEntity.couponEntity;
+import static com.eager.questioncloud.domain.coupon.entity.QCouponEntity.couponEntity;
 
 import com.eager.questioncloud.domain.coupon.model.Coupon;
 import com.eager.questioncloud.exception.CustomException;

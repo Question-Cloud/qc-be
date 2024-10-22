@@ -1,6 +1,6 @@
 package com.eager.questioncloud.domain.point.repository;
 
-import static com.eager.questioncloud.point.entity.QChargePointPaymentEntity.chargePointPaymentEntity;
+import static com.eager.questioncloud.domain.point.entity.QChargePointPaymentEntity.chargePointPaymentEntity;
 
 import com.eager.questioncloud.domain.point.model.ChargePointPayment;
 import com.querydsl.jpa.impl.JPAQueryFactory;

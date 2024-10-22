@@ -1,10 +1,10 @@
 package com.eager.questioncloud.domain.payment.repository;
 
-import static com.eager.questioncloud.payment.entity.QQuestionPaymentEntity.questionPaymentEntity;
-import static com.eager.questioncloud.payment.entity.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
+import static com.eager.questioncloud.domain.payment.entity.QQuestionPaymentEntity.questionPaymentEntity;
+import static com.eager.questioncloud.domain.payment.entity.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
 
-import com.eager.questioncloud.domain.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.domain.payment.entity.QuestionPaymentOrderEntity;
+import com.eager.questioncloud.domain.payment.model.QuestionPaymentOrder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

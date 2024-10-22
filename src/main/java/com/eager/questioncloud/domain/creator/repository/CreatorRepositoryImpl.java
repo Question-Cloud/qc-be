@@ -1,10 +1,10 @@
 package com.eager.questioncloud.domain.creator.repository;
 
-import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
-import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.review.entity.QQuestionReviewEntity.questionReviewEntity;
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.domain.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.domain.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.domain.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.review.entity.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.domain.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.domain.creator.model.Creator;

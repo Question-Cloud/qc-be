@@ -1,15 +1,15 @@
 package com.eager.questioncloud.domain.verification.repository;
 
-import static com.eager.questioncloud.verification.entity.QEmailVerificationEntity.emailVerificationEntity;
+import static com.eager.questioncloud.domain.verification.entity.QEmailVerificationEntity.emailVerificationEntity;
 
 import com.eager.questioncloud.domain.user.entity.UserEntity;
 import com.eager.questioncloud.domain.user.model.User;
 import com.eager.questioncloud.domain.verification.dto.EmailVerificationWithUser;
+import com.eager.questioncloud.domain.verification.entity.EmailVerificationEntity;
 import com.eager.questioncloud.domain.verification.model.EmailVerification;
 import com.eager.questioncloud.domain.verification.vo.EmailVerificationType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.domain.verification.entity.EmailVerificationEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;

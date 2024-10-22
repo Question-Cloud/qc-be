@@ -1,15 +1,15 @@
 package com.eager.questioncloud.domain.board.repository;
 
-import static com.eager.questioncloud.board.entity.QQuestionBoardEntity.questionBoardEntity;
-import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.domain.board.entity.QQuestionBoardEntity.questionBoardEntity;
+import static com.eager.questioncloud.domain.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.domain.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.domain.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.domain.board.model.QuestionBoard;
+import com.eager.questioncloud.domain.question.entity.QQuestionCategoryEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

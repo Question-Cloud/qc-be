@@ -1,14 +1,14 @@
 package com.eager.questioncloud.domain.review.repository;
 
-import static com.eager.questioncloud.review.entity.QQuestionReviewEntity.questionReviewEntity;
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.domain.review.entity.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.domain.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.domain.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.domain.review.entity.QQuestionReviewEntity;
 import com.eager.questioncloud.domain.review.model.QuestionReview;
 import com.eager.questioncloud.domain.user.vo.UserType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.review.entity.QQuestionReviewEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

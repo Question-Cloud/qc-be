@@ -5,7 +5,7 @@ import static com.querydsl.core.group.GroupBy.list;
 
 import com.eager.questioncloud.domain.question.dto.QuestionCategoryDto.QuestionCategoryItem;
 import com.eager.questioncloud.domain.question.dto.QuestionCategoryDto.SubQuestionCategoryItem;
-import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
+import com.eager.questioncloud.domain.question.entity.QQuestionCategoryEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

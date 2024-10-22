@@ -1,24 +1,24 @@
 package com.eager.questioncloud.domain.question.repository;
 
-import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
-import static com.eager.questioncloud.question.entity.QQuestionCategoryEntity.questionCategoryEntity;
-import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.review.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.domain.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.domain.library.entity.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.domain.question.entity.QQuestionCategoryEntity.questionCategoryEntity;
+import static com.eager.questioncloud.domain.question.entity.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.review.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
+import static com.eager.questioncloud.domain.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.domain.question.common.QuestionSortType;
 import com.eager.questioncloud.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.domain.question.dto.QuestionDto.QuestionInformationForWorkSpace;
-import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
+import com.eager.questioncloud.domain.question.entity.QQuestionCategoryEntity;
 import com.eager.questioncloud.domain.question.entity.QuestionEntity;
 import com.eager.questioncloud.domain.question.model.Question;
 import com.eager.questioncloud.domain.question.vo.QuestionLevel;
 import com.eager.questioncloud.domain.question.vo.QuestionStatus;
 import com.eager.questioncloud.domain.question.vo.QuestionType;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;

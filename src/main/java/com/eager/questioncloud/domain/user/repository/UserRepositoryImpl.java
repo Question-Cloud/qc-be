@@ -1,7 +1,7 @@
 package com.eager.questioncloud.domain.user.repository;
 
-import static com.eager.questioncloud.creator.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
+import static com.eager.questioncloud.domain.creator.entity.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.domain.user.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.domain.authentication.dto.AuthenticationDto.UserWithCreator;
 import com.eager.questioncloud.domain.creator.entity.CreatorEntity;
