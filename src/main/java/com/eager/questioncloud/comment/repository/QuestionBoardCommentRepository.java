@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface QuestionBoardCommentRepository {
     QuestionBoardComment save(QuestionBoardComment questionBoardComment);
 
-    QuestionBoardComment getForModifyAndDelete(Long commentId, Long userId);
+    QuestionBoardComment findByIdAndWriterId(Long commentId, Long userId);
 
     List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, Pageable pageable);
 

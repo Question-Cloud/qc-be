@@ -11,7 +11,7 @@ public class QuestionBoardCommentRemover {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
 
     public void delete(Long commentId, Long userId) {
-        QuestionBoardComment questionBoardComment = questionBoardCommentRepository.getForModifyAndDelete(commentId, userId);
+        QuestionBoardComment questionBoardComment = questionBoardCommentRepository.findByIdAndWriterId(commentId, userId);
         questionBoardCommentRepository.delete(questionBoardComment);
     }
 }

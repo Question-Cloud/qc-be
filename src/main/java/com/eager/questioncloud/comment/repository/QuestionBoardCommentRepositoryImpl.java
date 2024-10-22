@@ -29,7 +29,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     }
 
     @Override
-    public QuestionBoardComment getForModifyAndDelete(Long commentId, Long userId) {
+    public QuestionBoardComment findByIdAndWriterId(Long commentId, Long userId) {
         return questionBoardCommentJpaRepository.findByIdAndWriterId(commentId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
