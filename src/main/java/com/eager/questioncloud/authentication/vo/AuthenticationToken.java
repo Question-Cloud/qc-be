@@ -8,4 +8,8 @@ import lombok.Getter;
 public class AuthenticationToken {
     private String accessToken;
     private String refreshToken;
+
+    public static AuthenticationToken create(String accessToken, String refreshToken) {
+        return new AuthenticationToken(accessToken, refreshToken);
+    }
 }

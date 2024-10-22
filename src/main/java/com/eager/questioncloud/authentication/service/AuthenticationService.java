@@ -20,9 +20,9 @@ public class AuthenticationService {
 
     public AuthenticationToken login(String email, String password) {
         User user = authenticationProcessor.getUserByCredentials(email, password);
-        return new AuthenticationToken(
-            authenticationTokenProcessor.generateAccessToken(user.getUid()),
-            authenticationTokenProcessor.generateRefreshToken(user.getUid()));
+        String accessToken = authenticationTokenProcessor.generateAccessToken(user.getUid());
+        String refreshToken = authenticationTokenProcessor.generateRefreshToken(user.getUid());
+        return AuthenticationToken.create(accessToken, refreshToken);
     }
 
     public SocialAuthenticateResponse socialLogin(AccountType accountType, String code) {
