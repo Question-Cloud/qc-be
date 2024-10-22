@@ -14,6 +14,6 @@ public class QuestionPaymentService {
 
     public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
         paymentProcessor.questionPayment(userId, questionIds, userCouponId);
-        userQuestionLibraryAppender.appendUserQuestion(userId, questionIds);
+        userQuestionLibraryAppender.appendUserQuestions(userId, questionIds);
     }
 }

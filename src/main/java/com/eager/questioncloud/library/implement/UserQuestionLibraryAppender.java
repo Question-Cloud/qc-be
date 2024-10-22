@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class UserQuestionLibraryAppender {
     private final UserQuestionLibraryRepository userQuestionLibraryRepository;
 
-    public List<UserQuestionLibrary> appendUserQuestion(Long userId, List<Long> questionIds) {
+    public List<UserQuestionLibrary> appendUserQuestions(Long userId, List<Long> questionIds) {
         return userQuestionLibraryRepository.saveAll(UserQuestionLibrary.create(userId, questionIds));
     }
 }
