@@ -7,7 +7,6 @@ import com.eager.questioncloud.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.social.implement.SocialAuthenticateProcessor;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,18 +30,5 @@ public class AuthenticationService {
 
     public AuthenticationToken refresh(String refreshToken) {
         return authenticationTokenProcessor.refresh(refreshToken);
-    }
-
-    public void authentication(String token) {
-        try {
-            Claims claims = authenticationTokenProcessor.getAccessTokenClaimsWithValidate(token);
-            Long uid = claims.get("uid", Long.class);
-            authenticationProcessor.authentication(uid);
-        } catch (Exception ignored) {
-        }
-    }
-
-    public void guestAuthentication() {
-        authenticationProcessor.setGuest();
     }
 }

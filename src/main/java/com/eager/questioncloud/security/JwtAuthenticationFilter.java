@@ -1,6 +1,8 @@
 package com.eager.questioncloud.security;
 
-import com.eager.questioncloud.authentication.service.AuthenticationService;
+import com.eager.questioncloud.authentication.implement.AuthenticationProcessor;
+import com.eager.questioncloud.authentication.implement.AuthenticationTokenProcessor;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,17 +17,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final AuthenticationService authenticationService;
+    private final AuthenticationTokenProcessor authenticationTokenProcessor;
+    private final AuthenticationProcessor authenticationProcessor;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
-        String token = parseToken(request.getHeader("Authorization"));
-        authenticationService.authentication(token);
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            authenticationService.guestAuthentication();
+        try {
+            String accessToken = parseToken(request.getHeader("Authorization"));
+            Claims claims = authenticationTokenProcessor.getAccessTokenClaimsWithValidate(accessToken);
+            Long uid = claims.get("uid", Long.class);
+            authenticationProcessor.authentication(uid);
+        } catch (Exception e) {
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                authenticationProcessor.setGuest();
+            }
+        } finally {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
     }
 
     private String parseToken(String authorization) {
