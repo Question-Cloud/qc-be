@@ -2,7 +2,7 @@ package com.eager.questioncloud.coupon.repository;
 
 import static com.eager.questioncloud.coupon.entity.QCouponEntity.couponEntity;
 
-import com.eager.questioncloud.coupon.domain.Coupon;
+import com.eager.questioncloud.coupon.model.Coupon;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

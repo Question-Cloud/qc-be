@@ -1,4 +1,4 @@
-package com.eager.questioncloud.coupon.domain;
+package com.eager.questioncloud.coupon.model;
 
 import com.eager.questioncloud.coupon.entity.CouponEntity;
 import java.time.LocalDateTime;

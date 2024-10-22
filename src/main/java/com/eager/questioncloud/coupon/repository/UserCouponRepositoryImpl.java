@@ -3,8 +3,8 @@ package com.eager.questioncloud.coupon.repository;
 import static com.eager.questioncloud.coupon.entity.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.coupon.entity.QUserCouponEntity.userCouponEntity;
 
-import com.eager.questioncloud.coupon.domain.UserCoupon;
 import com.eager.questioncloud.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.coupon.model.UserCoupon;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.types.Projections;
