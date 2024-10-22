@@ -1,9 +1,9 @@
 package com.eager.questioncloud.coupon.service;
 
-import com.eager.questioncloud.coupon.domain.UserCoupon;
 import com.eager.questioncloud.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.coupon.implement.UserCouponReader;
 import com.eager.questioncloud.coupon.implement.UserCouponRegister;
+import com.eager.questioncloud.coupon.model.UserCoupon;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

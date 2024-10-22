@@ -1,6 +1,6 @@
 package com.eager.questioncloud.coupon.implement;
 
-import com.eager.questioncloud.coupon.domain.UserCoupon;
+import com.eager.questioncloud.coupon.model.UserCoupon;
 import com.eager.questioncloud.coupon.repository.UserCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

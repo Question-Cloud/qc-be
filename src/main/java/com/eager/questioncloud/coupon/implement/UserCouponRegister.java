@@ -1,7 +1,7 @@
 package com.eager.questioncloud.coupon.implement;
 
-import com.eager.questioncloud.coupon.domain.Coupon;
-import com.eager.questioncloud.coupon.domain.UserCoupon;
+import com.eager.questioncloud.coupon.model.Coupon;
+import com.eager.questioncloud.coupon.model.UserCoupon;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ public class UserCouponRegister {
 
     @Transactional
     public UserCoupon registerCoupon(Long userId, String couponCode) {
-        Coupon coupon = couponReader.getCoupon(couponCode);
+        Coupon coupon = couponReader.findByCode(couponCode);
 
         if (userCouponReader.isRegistered(userId, coupon.getId())) {
             throw new CustomException(Error.ALREADY_REGISTER_COUPON);

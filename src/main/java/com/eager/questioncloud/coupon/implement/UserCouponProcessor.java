@@ -1,7 +1,7 @@
 package com.eager.questioncloud.coupon.implement;
 
-import com.eager.questioncloud.coupon.domain.Coupon;
-import com.eager.questioncloud.coupon.domain.UserCoupon;
+import com.eager.questioncloud.coupon.model.Coupon;
+import com.eager.questioncloud.coupon.model.UserCoupon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class UserCouponProcessor {
 
     public Coupon useCoupon(Long userId, Long userCouponId) {
         UserCoupon userCoupon = userCouponReader.getUserCoupon(userCouponId, userId);
-        Coupon coupon = couponReader.getCoupon(userCoupon.getCouponId());
+        Coupon coupon = couponReader.findById(userCoupon.getCouponId());
         userCouponUpdater.use(userCoupon);
         return coupon;
     }

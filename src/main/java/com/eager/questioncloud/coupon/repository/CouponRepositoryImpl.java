@@ -2,7 +2,7 @@ package com.eager.questioncloud.coupon.repository;
 
 import static com.eager.questioncloud.coupon.entity.QCouponEntity.couponEntity;
 
-import com.eager.questioncloud.coupon.domain.Coupon;
+import com.eager.questioncloud.coupon.model.Coupon;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,14 +16,14 @@ public class CouponRepositoryImpl implements CouponRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Coupon getCoupon(Long id) {
+    public Coupon findById(Long id) {
         return couponJpaRepository.findById(id)
             .orElseThrow(() -> new CustomException(Error.WRONG_COUPON))
             .toDomain();
     }
 
     @Override
-    public Coupon getCoupon(String code) {
+    public Coupon findByCode(String code) {
         return couponJpaRepository.findByCode(code)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();

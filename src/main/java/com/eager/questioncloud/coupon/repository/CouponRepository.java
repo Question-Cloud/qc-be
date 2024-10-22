@@ -1,13 +1,13 @@
 package com.eager.questioncloud.coupon.repository;
 
-import com.eager.questioncloud.coupon.domain.Coupon;
+import com.eager.questioncloud.coupon.model.Coupon;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CouponRepository {
-    Coupon getCoupon(Long id);
+    Coupon findById(Long id);
 
-    Coupon getCoupon(String code);
+    Coupon findByCode(String code);
 
     Coupon save(Coupon coupon);
 
