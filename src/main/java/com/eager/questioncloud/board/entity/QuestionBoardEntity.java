@@ -1,6 +1,6 @@
 package com.eager.questioncloud.board.entity;
 
-import com.eager.questioncloud.board.converter.QuestionBoardFileConverter;
+import com.eager.questioncloud.board.entity.converter.QuestionBoardFileConverter;
 import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.board.vo.QuestionBoardFile;
 import jakarta.persistence.Column;

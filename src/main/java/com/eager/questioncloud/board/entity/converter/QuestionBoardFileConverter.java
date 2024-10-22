@@ -1,4 +1,4 @@
-package com.eager.questioncloud.board.converter;
+package com.eager.questioncloud.board.entity.converter;
 
 import com.eager.questioncloud.board.vo.QuestionBoardFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
