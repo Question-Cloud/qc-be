@@ -1,6 +1,6 @@
 package com.eager.questioncloud.library.entity;
 
-import com.eager.questioncloud.library.domain.UserQuestionLibrary;
+import com.eager.questioncloud.library.model.UserQuestionLibrary;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
