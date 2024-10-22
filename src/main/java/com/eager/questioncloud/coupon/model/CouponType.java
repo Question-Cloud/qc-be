@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum CouponType {
     Percent("Percent"), Fixed("Fixed");
 
-    private String value;
+    private final String value;
 
     CouponType(String value) {
         this.value = value;
