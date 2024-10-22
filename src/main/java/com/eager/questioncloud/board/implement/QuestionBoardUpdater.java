@@ -12,7 +12,7 @@ public class QuestionBoardUpdater {
     private final QuestionBoardRepository questionBoardRepository;
 
     public void modify(Long boardId, Long userId, QuestionBoardContent questionBoardContent) {
-        QuestionBoard questionBoard = questionBoardRepository.getForModifyAndDelete(boardId, userId);
+        QuestionBoard questionBoard = questionBoardRepository.findByIdAndWriterId(boardId, userId);
         questionBoard.updateQuestionBoardContent(questionBoardContent);
         questionBoardRepository.save(questionBoard);
     }

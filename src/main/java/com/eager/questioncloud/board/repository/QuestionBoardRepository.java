@@ -15,7 +15,7 @@ public interface QuestionBoardRepository {
 
     QuestionBoardDetail getQuestionBoardDetail(Long boardId);
 
-    QuestionBoard getForModifyAndDelete(Long boardId, Long userId);
+    QuestionBoard findByIdAndWriterId(Long boardId, Long userId);
 
     QuestionBoard findById(Long boardId);
 

@@ -121,7 +121,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoard getForModifyAndDelete(Long boardId, Long userId) {
+    public QuestionBoard findByIdAndWriterId(Long boardId, Long userId) {
         return questionBoardJpaRepository.findByIdAndWriterId(boardId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();

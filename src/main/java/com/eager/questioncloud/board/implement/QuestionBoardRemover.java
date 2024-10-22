@@ -11,7 +11,7 @@ public class QuestionBoardRemover {
     private final QuestionBoardRepository questionBoardRepository;
 
     public void delete(Long boardId, Long userId) {
-        QuestionBoard questionBoard = questionBoardRepository.getForModifyAndDelete(boardId, userId);
+        QuestionBoard questionBoard = questionBoardRepository.findByIdAndWriterId(boardId, userId);
         questionBoardRepository.delete(questionBoard);
     }
 }
