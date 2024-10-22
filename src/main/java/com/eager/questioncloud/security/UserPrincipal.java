@@ -1,7 +1,6 @@
 package com.eager.questioncloud.security;
 
 import com.eager.questioncloud.creator.model.Creator;
-import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.model.User;
 import java.io.Serializable;
 import lombok.Getter;
@@ -11,9 +10,13 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
     private final User user;
     private final Creator creator;
 
-    public UserPrincipal(UserWithCreator userWithCreator) {
-        super(userWithCreator.getUser().getUsername(), userWithCreator.getUser().getUsername(), userWithCreator.getUser().getAuthorities());
-        this.user = userWithCreator.getUser();
-        this.creator = userWithCreator.getCreator();
+    private UserPrincipal(User user, Creator creator) {
+        super(user.getUsername(), user.getUsername(), user.getAuthorities());
+        this.user = user;
+        this.creator = creator;
+    }
+
+    public static UserPrincipal create(User user, Creator creator) {
+        return new UserPrincipal(user, creator);
     }
 }

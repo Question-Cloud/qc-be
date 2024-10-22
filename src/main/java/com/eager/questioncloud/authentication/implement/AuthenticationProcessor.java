@@ -1,9 +1,9 @@
 package com.eager.questioncloud.authentication.implement;
 
+import com.eager.questioncloud.authentication.dto.AuthenticationDto.UserWithCreator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.security.UserPrincipal;
-import com.eager.questioncloud.user.dto.UserDto.UserWithCreator;
 import com.eager.questioncloud.user.implement.UserReader;
 import com.eager.questioncloud.user.model.User;
 import com.eager.questioncloud.user.vo.AccountType;
@@ -32,18 +32,18 @@ public class AuthenticationProcessor {
     }
 
     public void authentication(Long uid) {
-        UserWithCreator user = userReader.getUserWithCreator(uid);
-        UserPrincipal userPrincipal = new UserPrincipal(user);
+        UserWithCreator userWithCreator = userReader.getUserWithCreator(uid);
+        UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.getUser(), userWithCreator.getCreator());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
-            user.getUser().getUsername(),
-            user.getUser().getAuthorities());
+            userWithCreator.getUser().getUsername(),
+            userWithCreator.getUser().getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     public void setGuest() {
         User guest = User.guest();
-        UserPrincipal userPrincipal = new UserPrincipal(new UserWithCreator(guest, null));
+        UserPrincipal userPrincipal = UserPrincipal.create(guest, null);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
             guest.getPassword(),
