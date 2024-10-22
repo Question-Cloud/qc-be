@@ -18,7 +18,7 @@ public class UserCouponRegister {
 
     @Transactional
     public UserCoupon registerCoupon(Long userId, String couponCode) {
-        Coupon coupon = couponReader.getCoupon(couponCode);
+        Coupon coupon = couponReader.findByCode(couponCode);
 
         if (userCouponReader.isRegistered(userId, coupon.getId())) {
             throw new CustomException(Error.ALREADY_REGISTER_COUPON);

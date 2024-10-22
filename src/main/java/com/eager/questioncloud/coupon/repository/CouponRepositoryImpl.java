@@ -23,7 +23,7 @@ public class CouponRepositoryImpl implements CouponRepository {
     }
 
     @Override
-    public Coupon getCoupon(String code) {
+    public Coupon findByCode(String code) {
         return couponJpaRepository.findByCode(code)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toDomain();

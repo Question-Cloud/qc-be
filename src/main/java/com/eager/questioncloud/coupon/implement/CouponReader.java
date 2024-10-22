@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class CouponReader {
     private final CouponRepository couponRepository;
 
-    public Coupon getCoupon(String code) {
-        return couponRepository.getCoupon(code);
+    public Coupon findByCode(String code) {
+        return couponRepository.findByCode(code);
     }
 
     public Coupon getCoupon(Long id) {
