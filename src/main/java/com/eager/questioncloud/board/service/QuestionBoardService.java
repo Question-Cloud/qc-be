@@ -1,13 +1,13 @@
 package com.eager.questioncloud.board.service;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
-import com.eager.questioncloud.board.domain.QuestionBoardFile;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.board.implement.QuestionBoardAppender;
 import com.eager.questioncloud.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.board.implement.QuestionBoardRemover;
 import com.eager.questioncloud.board.implement.QuestionBoardUpdater;
+import com.eager.questioncloud.board.model.QuestionBoard;
+import com.eager.questioncloud.board.vo.QuestionBoardContent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -37,8 +37,8 @@ public class QuestionBoardService {
         return questionBoardReader.getQuestionBoardDetail(userId, boardId);
     }
 
-    public void modify(Long boardId, Long userId, String title, String content, List<QuestionBoardFile> files) {
-        questionBoardUpdater.modify(boardId, userId, title, content, files);
+    public void modify(Long boardId, Long userId, QuestionBoardContent questionBoardContent) {
+        questionBoardUpdater.updateQuestionBoardContent(boardId, userId, questionBoardContent);
     }
 
     public void delete(Long boardId, Long userId) {

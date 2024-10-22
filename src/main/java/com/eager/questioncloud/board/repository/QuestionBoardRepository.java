@@ -1,8 +1,8 @@
 package com.eager.questioncloud.board.repository;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +15,7 @@ public interface QuestionBoardRepository {
 
     QuestionBoardDetail getQuestionBoardDetail(Long boardId);
 
-    QuestionBoard getForModifyAndDelete(Long boardId, Long userId);
+    QuestionBoard findByIdAndWriterId(Long boardId, Long userId);
 
     QuestionBoard findById(Long boardId);
 

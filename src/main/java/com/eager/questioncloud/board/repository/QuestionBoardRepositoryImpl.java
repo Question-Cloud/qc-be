@@ -4,9 +4,9 @@ import static com.eager.questioncloud.board.entity.QQuestionBoardEntity.question
 import static com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.user.entity.QUserEntity.userEntity;
 
-import com.eager.questioncloud.board.domain.QuestionBoard;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.question.entity.QQuestionCategoryEntity;
@@ -30,7 +30,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
         return jpaQueryFactory.select(
                 Projections.constructor(QuestionBoardListItem.class,
                     questionBoardEntity.id,
-                    questionBoardEntity.title,
+                    questionBoardEntity.questionBoardContent.title,
                     parent.title,
                     child.title,
                     questionEntity.questionContent.title,
@@ -55,7 +55,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
         return jpaQueryFactory.select(
                 Projections.constructor(QuestionBoardListItem.class,
                     questionBoardEntity.id,
-                    questionBoardEntity.title,
+                    questionBoardEntity.questionBoardContent.title,
                     parent.title,
                     child.title,
                     questionEntity.questionContent.title,
@@ -96,9 +96,9 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
                 Projections.constructor(QuestionBoardDetail.class,
                     questionBoardEntity.id,
                     questionBoardEntity.questionId,
-                    questionBoardEntity.title,
-                    questionBoardEntity.content,
-                    questionBoardEntity.files,
+                    questionBoardEntity.questionBoardContent.title,
+                    questionBoardEntity.questionBoardContent.content,
+                    questionBoardEntity.questionBoardContent.files,
                     parent.title,
                     child.title,
                     questionEntity.questionContent.title,
@@ -121,7 +121,7 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoard getForModifyAndDelete(Long boardId, Long userId) {
+    public QuestionBoard findByIdAndWriterId(Long boardId, Long userId) {
         return questionBoardJpaRepository.findByIdAndWriterId(boardId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
