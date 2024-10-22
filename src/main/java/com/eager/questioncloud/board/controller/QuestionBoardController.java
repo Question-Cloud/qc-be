@@ -7,6 +7,7 @@ import com.eager.questioncloud.board.dto.Request.RegisterQuestionBoardRequest;
 import com.eager.questioncloud.board.dto.Response.QuestionBoardResponse;
 import com.eager.questioncloud.board.model.QuestionBoard;
 import com.eager.questioncloud.board.service.QuestionBoardService;
+import com.eager.questioncloud.board.vo.QuestionBoardContent;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -42,7 +43,10 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId, @RequestBody @Valid ModifyQuestionBoardRequest request) {
-        questionBoardService.modify(boardId, userPrincipal.getUser().getUid(), request.getTitle(), request.getContent(), request.getFiles());
+        questionBoardService.modify(
+            boardId,
+            userPrincipal.getUser().getUid(),
+            QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()));
         return DefaultResponse.success();
     }
 
@@ -91,9 +95,7 @@ public class QuestionBoardController {
             QuestionBoard.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
-                request.getTitle(),
-                request.getContent(),
-                request.getFiles())
+                QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()))
         );
         return DefaultResponse.success();
     }
