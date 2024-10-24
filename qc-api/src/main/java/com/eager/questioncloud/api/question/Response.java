@@ -1,5 +1,6 @@
 package com.eager.questioncloud.api.question;
 
+import com.eager.questioncloud.core.domain.board.dto.QuestionBoardDto.QuestionBoardDetail;
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
@@ -31,5 +32,11 @@ public class Response {
     @AllArgsConstructor
     public static class MyQuestionReviewResponse {
         private MyQuestionReview review;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class QuestionBoardResponse {
+        private QuestionBoardDetail board;
     }
 }
