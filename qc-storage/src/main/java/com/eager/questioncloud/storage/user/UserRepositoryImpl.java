@@ -45,8 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
-
-    //TODO Creator 도메인 추가 후 복구
+    
     @Override
     public UserWithCreator getUserWithCreator(Long uid) {
         Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)
