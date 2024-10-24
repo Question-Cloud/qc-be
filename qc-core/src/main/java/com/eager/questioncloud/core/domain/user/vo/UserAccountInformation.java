@@ -16,7 +16,7 @@ public class UserAccountInformation {
     public static UserAccountInformation guest = new UserAccountInformation("guest", "guest", AccountType.GUEST);
 
     @Builder
-    private UserAccountInformation(String password, String socialUid, AccountType accountType) {
+    public UserAccountInformation(String password, String socialUid, AccountType accountType) {
         this.password = password;
         this.socialUid = socialUid;
         this.accountType = accountType;

@@ -22,7 +22,7 @@ public class QCreatorEntity extends EntityPathBase<CreatorEntity> {
 
     public static final QCreatorEntity creatorEntity = new QCreatorEntity("creatorEntity");
 
-    public final com.eager.questioncloud.core.domain.creator.vo.QCreatorProfile creatorProfile;
+    public final QCreatorProfileEntity creatorProfileEntity;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -46,7 +46,7 @@ public class QCreatorEntity extends EntityPathBase<CreatorEntity> {
 
     public QCreatorEntity(Class<? extends CreatorEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.creatorProfile = inits.isInitialized("creatorProfile") ? new com.eager.questioncloud.core.domain.creator.vo.QCreatorProfile(forProperty("creatorProfile")) : null;
+        this.creatorProfileEntity = inits.isInitialized("creatorProfileEntity") ? new QCreatorProfileEntity(forProperty("creatorProfileEntity")) : null;
     }
 
 }

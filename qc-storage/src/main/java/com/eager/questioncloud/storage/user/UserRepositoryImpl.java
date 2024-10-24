@@ -26,14 +26,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getUserByEmail(String email) {
-        return userJpaRepository.findByUserInformationEmail(email)
+        return userJpaRepository.findByUserInformationEntityEmail(email)
             .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
             .toModel();
     }
 
     @Override
     public User getUserByPhone(String phone) {
-        return userJpaRepository.findByUserInformationPhone(phone)
+        return userJpaRepository.findByUserInformationEntityPhone(phone)
             .filter(entity -> !entity.getUserStatus().equals(UserStatus.Deleted))
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
@@ -80,18 +80,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> getSocialUser(AccountType accountType, String socialUid) {
-        Optional<UserEntity> userEntity = userJpaRepository.findByUserAccountInformationAccountTypeAndUserAccountInformationSocialUid(accountType,
+        Optional<UserEntity> userEntity = userJpaRepository.findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
+            accountType,
             socialUid);
         return userEntity.map(UserEntity::toModel);
     }
 
     @Override
     public Boolean checkDuplicatePhone(String phone) {
-        return userJpaRepository.existsByUserInformationPhone(phone);
+        return userJpaRepository.existsByUserInformationEntityPhone(phone);
     }
 
     @Override
     public Boolean checkDuplicateEmail(String email) {
-        return userJpaRepository.existsByUserInformationEmail(email);
+        return userJpaRepository.existsByUserInformationEntityEmail(email);
     }
 }

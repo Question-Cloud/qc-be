@@ -1,7 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -31,7 +30,7 @@ public class QuestionEntity {
     private Long creatorId;
 
     @Embedded
-    private QuestionContent questionContent;
+    private QuestionContentEntity questionContentEntity;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -44,11 +43,11 @@ public class QuestionEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionEntity(Long id, Long creatorId, QuestionContent questionContent, QuestionStatus questionStatus, int count,
+    public QuestionEntity(Long id, Long creatorId, QuestionContentEntity questionContentEntity, QuestionStatus questionStatus, int count,
         LocalDateTime createdAt) {
         this.id = id;
         this.creatorId = creatorId;
-        this.questionContent = questionContent;
+        this.questionContentEntity = questionContentEntity;
         this.questionStatus = questionStatus;
         this.count = count;
         this.createdAt = createdAt;
@@ -58,7 +57,7 @@ public class QuestionEntity {
         return Question.builder()
             .id(id)
             .creatorId(creatorId)
-            .questionContent(questionContent)
+            .questionContent(questionContentEntity.toModel())
             .questionStatus(questionStatus)
             .count(count)
             .createdAt(createdAt)
@@ -69,7 +68,7 @@ public class QuestionEntity {
         return QuestionEntity.builder()
             .id(question.getId())
             .creatorId(question.getCreatorId())
-            .questionContent(question.getQuestionContent())
+            .questionContentEntity(QuestionContentEntity.from(question.getQuestionContent()))
             .questionStatus(question.getQuestionStatus())
             .count(question.getCount())
             .createdAt(question.getCreatedAt())

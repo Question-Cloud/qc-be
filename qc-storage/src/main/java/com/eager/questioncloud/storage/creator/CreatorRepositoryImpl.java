@@ -30,11 +30,11 @@ public class CreatorRepositoryImpl implements CreatorRepository {
         Double rate = getCreatorRate(creatorId);
         Tuple result = jpaQueryFactory.select(
                 creatorEntity.id,
-                userEntity.userInformation.name,
-                userEntity.userInformation.profileImage,
-                creatorEntity.creatorProfile.mainSubject,
-                userEntity.userInformation.email,
-                creatorEntity.creatorProfile.introduction)
+                userEntity.userInformationEntity.name,
+                userEntity.userInformationEntity.profileImage,
+                creatorEntity.creatorProfileEntity.mainSubject,
+                userEntity.userInformationEntity.email,
+                creatorEntity.creatorProfileEntity.introduction)
             .from(creatorEntity)
             .where(creatorEntity.id.eq(creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -47,13 +47,13 @@ public class CreatorRepositoryImpl implements CreatorRepository {
 
         return CreatorInformation.builder()
             .creatorId(result.get(creatorEntity.id))
-            .name(result.get(userEntity.userInformation.name))
-            .profileImage(result.get(userEntity.userInformation.profileImage))
-            .mainSubject(result.get(creatorEntity.creatorProfile.mainSubject))
-            .email(result.get(userEntity.userInformation.email))
+            .name(result.get(userEntity.userInformationEntity.name))
+            .profileImage(result.get(userEntity.userInformationEntity.profileImage))
+            .mainSubject(result.get(creatorEntity.creatorProfileEntity.mainSubject))
+            .email(result.get(userEntity.userInformationEntity.email))
             .salesCount(salesCount)
             .rate(rate)
-            .introduction(result.get(creatorEntity.creatorProfile.introduction))
+            .introduction(result.get(creatorEntity.creatorProfileEntity.introduction))
             .build();
     }
 

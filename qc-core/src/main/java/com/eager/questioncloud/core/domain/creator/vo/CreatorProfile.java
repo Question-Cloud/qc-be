@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.creator.vo;
 
-import javax.security.auth.Subject;
+import com.eager.questioncloud.core.domain.question.vo.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

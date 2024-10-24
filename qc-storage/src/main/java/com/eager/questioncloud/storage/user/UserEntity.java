@@ -1,8 +1,6 @@
 package com.eager.questioncloud.storage.user;
 
 import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.core.domain.user.vo.UserAccountInformation;
-import com.eager.questioncloud.core.domain.user.vo.UserInformation;
 import com.eager.questioncloud.core.domain.user.vo.UserStatus;
 import com.eager.questioncloud.core.domain.user.vo.UserType;
 import jakarta.persistence.Column;
@@ -29,10 +27,10 @@ public class UserEntity {
     private Long uid;
 
     @Embedded
-    private UserAccountInformation userAccountInformation;
+    private UserAccountInformationEntity userAccountInformationEntity;
 
     @Embedded
-    private UserInformation userInformation;
+    private UserInformationEntity userInformationEntity;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -43,11 +41,12 @@ public class UserEntity {
     private UserStatus userStatus;
 
     @Builder
-    public UserEntity(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
+    public UserEntity(Long uid, UserAccountInformationEntity userAccountInformationEntity, UserInformationEntity userInformationEntity,
+        UserType userType,
         UserStatus userStatus) {
         this.uid = uid;
-        this.userAccountInformation = userAccountInformation;
-        this.userInformation = userInformation;
+        this.userAccountInformationEntity = userAccountInformationEntity;
+        this.userInformationEntity = userInformationEntity;
         this.userType = userType;
         this.userStatus = userStatus;
     }
@@ -55,8 +54,8 @@ public class UserEntity {
     public User toModel() {
         return User.builder()
             .uid(uid)
-            .userAccountInformation(userAccountInformation)
-            .userInformation(userInformation)
+            .userAccountInformation(userAccountInformationEntity.toModel())
+            .userInformation(userInformationEntity.toModel())
             .userType(userType)
             .userStatus(userStatus)
             .build();
@@ -65,8 +64,8 @@ public class UserEntity {
     public static UserEntity from(User user) {
         return UserEntity.builder()
             .uid(user.getUid())
-            .userAccountInformation(user.getUserAccountInformation())
-            .userInformation(user.getUserInformation())
+            .userAccountInformationEntity(UserAccountInformationEntity.from(user.getUserAccountInformation()))
+            .userInformationEntity(UserInformationEntity.from(user.getUserInformation()))
             .userType(user.getUserType())
             .userStatus(user.getUserStatus())
             .build();

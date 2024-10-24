@@ -24,9 +24,9 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public final NumberPath<Long> uid = createNumber("uid", Long.class);
 
-    public final com.eager.questioncloud.core.domain.user.vo.QUserAccountInformation userAccountInformation;
+    public final QUserAccountInformationEntity userAccountInformationEntity;
 
-    public final com.eager.questioncloud.core.domain.user.vo.QUserInformation userInformation;
+    public final QUserInformationEntity userInformationEntity;
 
     public final EnumPath<com.eager.questioncloud.core.domain.user.vo.UserStatus> userStatus = createEnum("userStatus", com.eager.questioncloud.core.domain.user.vo.UserStatus.class);
 
@@ -50,8 +50,8 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public QUserEntity(Class<? extends UserEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.userAccountInformation = inits.isInitialized("userAccountInformation") ? new com.eager.questioncloud.core.domain.user.vo.QUserAccountInformation(forProperty("userAccountInformation")) : null;
-        this.userInformation = inits.isInitialized("userInformation") ? new com.eager.questioncloud.core.domain.user.vo.QUserInformation(forProperty("userInformation")) : null;
+        this.userAccountInformationEntity = inits.isInitialized("userAccountInformationEntity") ? new QUserAccountInformationEntity(forProperty("userAccountInformationEntity")) : null;
+        this.userInformationEntity = inits.isInitialized("userInformationEntity") ? new QUserInformationEntity(forProperty("userInformationEntity")) : null;
     }
 
 }

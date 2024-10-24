@@ -1,7 +1,6 @@
 package com.eager.questioncloud.storage.creator;
 
 import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -27,20 +26,20 @@ public class CreatorEntity {
     private Long userId;
 
     @Embedded
-    private CreatorProfile creatorProfile;
+    private CreatorProfileEntity creatorProfileEntity;
 
     @Builder
-    public CreatorEntity(Long id, Long userId, CreatorProfile creatorProfile) {
+    public CreatorEntity(Long id, Long userId, CreatorProfileEntity creatorProfileEntity) {
         this.id = id;
         this.userId = userId;
-        this.creatorProfile = creatorProfile;
+        this.creatorProfileEntity = creatorProfileEntity;
     }
 
     public Creator toModel() {
         return Creator.builder()
             .id(id)
             .userId(userId)
-            .creatorProfile(creatorProfile)
+            .creatorProfile(creatorProfileEntity.toModel())
             .build();
     }
 
@@ -48,7 +47,7 @@ public class CreatorEntity {
         return CreatorEntity.builder()
             .id(creator.getId())
             .userId(creator.getUserId())
-            .creatorProfile(creator.getCreatorProfile())
+            .creatorProfileEntity(CreatorProfileEntity.from(creator.getCreatorProfile()))
             .build();
     }
 }

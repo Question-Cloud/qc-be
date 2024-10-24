@@ -30,7 +30,7 @@ public class QQuestionEntity extends EntityPathBase<QuestionEntity> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.eager.questioncloud.core.domain.question.vo.QQuestionContent questionContent;
+    public final QQuestionContentEntity questionContentEntity;
 
     public final EnumPath<com.eager.questioncloud.core.domain.question.vo.QuestionStatus> questionStatus = createEnum("questionStatus", com.eager.questioncloud.core.domain.question.vo.QuestionStatus.class);
 
@@ -52,7 +52,7 @@ public class QQuestionEntity extends EntityPathBase<QuestionEntity> {
 
     public QQuestionEntity(Class<? extends QuestionEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.questionContent = inits.isInitialized("questionContent") ? new com.eager.questioncloud.core.domain.question.vo.QQuestionContent(forProperty("questionContent")) : null;
+        this.questionContentEntity = inits.isInitialized("questionContentEntity") ? new QQuestionContentEntity(forProperty("questionContentEntity")) : null;
     }
 
 }

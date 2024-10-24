@@ -5,15 +5,16 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
-    Boolean existsByUserAccountInformationAccountTypeAndUserAccountInformationSocialUid(AccountType accountType, String socialUid);
+    Boolean existsByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(AccountType accountType, String socialUid);
 
-    Boolean existsByUserInformationPhone(String phone);
+    Boolean existsByUserInformationEntityPhone(String phone);
 
-    Boolean existsByUserInformationEmail(String email);
+    Boolean existsByUserInformationEntityEmail(String email);
 
-    Optional<UserEntity> findByUserAccountInformationAccountTypeAndUserAccountInformationSocialUid(AccountType accountType, String socialUid);
+    Optional<UserEntity> findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(AccountType accountType,
+        String socialUid);
 
-    Optional<UserEntity> findByUserInformationEmail(String email);
+    Optional<UserEntity> findByUserInformationEntityEmail(String email);
 
-    Optional<UserEntity> findByUserInformationPhone(String phone);
+    Optional<UserEntity> findByUserInformationEntityPhone(String phone);
 }
