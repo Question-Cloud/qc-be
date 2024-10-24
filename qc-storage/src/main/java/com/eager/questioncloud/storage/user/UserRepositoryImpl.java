@@ -1,5 +1,6 @@
 package com.eager.questioncloud.storage.user;
 
+import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
@@ -7,8 +8,10 @@ import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.domain.user.vo.UserStatus;
+import com.eager.questioncloud.core.domain.user.vo.UserType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.storage.creator.CreatorEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
@@ -45,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     //TODO Creator 도메인 추가 후 복구
     @Override
-    public UserWithCreator getUserWithCreatorId(Long uid) {
+    public UserWithCreator getUserWithCreator(Long uid) {
         Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)
             .from(userEntity)
             .leftJoin(creatorEntity).on(creatorEntity.userId.eq(userEntity.uid))

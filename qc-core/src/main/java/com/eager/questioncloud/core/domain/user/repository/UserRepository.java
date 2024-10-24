@@ -12,7 +12,7 @@ public interface UserRepository {
 
     User getUser(Long uid);
 
-    UserWithCreator getUserWithCreatorId(Long uid);
+    UserWithCreator getUserWithCreator(Long uid);
 
     User save(User user);
 

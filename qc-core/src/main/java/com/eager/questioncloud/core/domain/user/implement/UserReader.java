@@ -22,7 +22,7 @@ public class UserReader {
     }
 
     public UserWithCreator getUserWithCreator(Long uid) {
-        return userRepository.getUserWithCreatorId(uid);
+        return userRepository.getUserWithCreator(uid);
     }
 
     public User getUserByEmail(String email) {
