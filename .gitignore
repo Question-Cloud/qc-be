@@ -27,7 +27,7 @@ out/
 !**/src/test/**/out/
 /src/main/generated
 /src/test/java/com/eager/questioncloud/DummyDataInsert.java
-/qc-storage/src/main/generated
+/qc-storage/src/main/generated/
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
