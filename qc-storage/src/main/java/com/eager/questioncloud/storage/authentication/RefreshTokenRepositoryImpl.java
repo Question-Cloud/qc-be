@@ -1,5 +1,6 @@
 package com.eager.questioncloud.storage.authentication;
 
+import com.eager.questioncloud.core.domain.authentication.repository.RefreshTokenRepository;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
