@@ -23,8 +23,13 @@ public class PagingInformationArgumentResolver implements HandlerMethodArgumentR
     public PagingInformation resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
         WebDataBinderFactory binderFactory) throws Exception {
         try {
-            int page = Integer.parseInt(webRequest.getParameter("page"));
+            int page = Integer.parseInt(webRequest.getParameter("page")) - 1;
             int size = Integer.parseInt(webRequest.getParameter("size"));
+
+            if (page < 0) {
+                throw new CustomException(Error.BAD_REQUEST);
+            }
+            
             return new PagingInformation(page, size);
         } catch (Exception e) {
             throw new CustomException(Error.BAD_REQUEST);

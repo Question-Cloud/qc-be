@@ -1,5 +1,6 @@
 package com.eager.questioncloud.config;
 
+import com.eager.questioncloud.resolver.PagingInformationArgumentResolver;
 import com.eager.questioncloud.resolver.QuestionFilterArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
     private final QuestionFilterArgumentResolver questionFilterArgumentResolver;
+    private final PagingInformationArgumentResolver pagingInformationArgumentResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(questionFilterArgumentResolver);
+        resolvers.add(pagingInformationArgumentResolver);
     }
 
     @Override
