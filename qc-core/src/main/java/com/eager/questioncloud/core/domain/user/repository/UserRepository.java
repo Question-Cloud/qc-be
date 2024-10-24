@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.user.repository;
 
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import java.util.Optional;
@@ -10,8 +11,8 @@ public interface UserRepository {
     User getUserByPhone(String phone);
 
     User getUser(Long uid);
-//TODO Creator 도메인 추가 후 복구
-//    UserWithCreator getUserWithCreatorId(Long uid);
+
+    UserWithCreator getUserWithCreatorId(Long uid);
 
     User save(User user);
 

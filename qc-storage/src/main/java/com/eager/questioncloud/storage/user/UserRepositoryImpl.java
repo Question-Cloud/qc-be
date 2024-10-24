@@ -1,11 +1,15 @@
 package com.eager.questioncloud.storage.user;
 
+import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
+
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.domain.user.vo.UserStatus;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -40,31 +44,31 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     //TODO Creator 도메인 추가 후 복구
-//    @Override
-//    public UserWithCreator getUserWithCreatorId(Long uid) {
-//        Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)
-//            .from(userEntity)
-//            .leftJoin(creatorEntity).on(creatorEntity.userId.eq(userEntity.uid))
-//            .where(userEntity.uid.eq(uid))
-//            .fetchFirst();
-//
-//        if (result == null) {
-//            throw new CustomException(Error.NOT_FOUND);
-//        }
-//
-//        UserEntity user = result.get(userEntity);
-//        CreatorEntity creator = result.get(creatorEntity);
-//
-//        if (user == null) {
-//            throw new CustomException(Error.NOT_FOUND);
-//        }
-//
-//        if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {
-//            return new UserWithCreator(user.toModel(), creator.toModel());
-//        }
-//
-//        return new UserWithCreator(user.toModel(), null);
-//    }
+    @Override
+    public UserWithCreator getUserWithCreatorId(Long uid) {
+        Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)
+            .from(userEntity)
+            .leftJoin(creatorEntity).on(creatorEntity.userId.eq(userEntity.uid))
+            .where(userEntity.uid.eq(uid))
+            .fetchFirst();
+
+        if (result == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        UserEntity user = result.get(userEntity);
+        CreatorEntity creator = result.get(creatorEntity);
+
+        if (user == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {
+            return new UserWithCreator(user.toModel(), creator.toModel());
+        }
+
+        return new UserWithCreator(user.toModel(), null);
+    }
 
     @Override
     public User save(User user) {

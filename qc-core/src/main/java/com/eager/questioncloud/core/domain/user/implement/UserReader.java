@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.user.implement;
 
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
@@ -20,10 +21,9 @@ public class UserReader {
         return userRepository.getUser(uid);
     }
 
-    //TODO Creator 도메인 추가 후 복구
-//    public UserWithCreator getUserWithCreator(Long uid) {
-//        return userRepository.getUserWithCreatorId(uid);
-//    }
+    public UserWithCreator getUserWithCreator(Long uid) {
+        return userRepository.getUserWithCreatorId(uid);
+    }
 
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
