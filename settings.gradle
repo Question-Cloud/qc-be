@@ -1,1 +1,7 @@
 rootProject.name = 'questioncloud'
+include 'qc-api'
+include 'qc-storage'
+include 'qc-core'
+include 'qc-api'
+include 'qc-exception'
+
