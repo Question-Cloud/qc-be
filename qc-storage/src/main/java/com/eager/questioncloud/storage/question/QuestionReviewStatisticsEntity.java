@@ -1,5 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -34,14 +35,21 @@ public class QuestionReviewStatisticsEntity {
         this.averageRate = averageRate;
     }
 
-//TODO question을 위한 임시 처리
-    
-//    public QuestionReviewStatistics toModel() {
-//        return QuestionReviewStatistics.builder()
-//            .questionId(questionId)
-//            .reviewCount(reviewCount)
-//            .totalRate(totalRate)
-//            .averageRate(averageRate)
-//            .build();
-//    }
+    public QuestionReviewStatistics toModel() {
+        return QuestionReviewStatistics.builder()
+            .questionId(questionId)
+            .reviewCount(reviewCount)
+            .totalRate(totalRate)
+            .averageRate(averageRate)
+            .build();
+    }
+
+    public static QuestionReviewStatisticsEntity from(QuestionReviewStatistics questionReviewStatistics) {
+        return QuestionReviewStatisticsEntity.builder()
+            .questionId(questionReviewStatistics.getQuestionId())
+            .reviewCount(questionReviewStatistics.getReviewCount())
+            .totalRate(questionReviewStatistics.getTotalRate())
+            .averageRate(questionReviewStatistics.getAverageRate())
+            .build();
+    }
 }

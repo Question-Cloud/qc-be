@@ -1,5 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
+import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,18 +50,28 @@ public class QuestionReviewEntity {
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
     }
-    
-//TODO question을 위한 임시 처리
 
-//    public QuestionReview toModel() {
-//        return QuestionReview.builder()
-//            .id(id)
-//            .questionId(questionId)
-//            .reviewerId(reviewerId)
-//            .comment(comment)
-//            .rate(rate)
-//            .createdAt(createdAt)
-//            .isDeleted(isDeleted)
-//            .build();
-//    }
+    public QuestionReview toModel() {
+        return QuestionReview.builder()
+            .id(id)
+            .questionId(questionId)
+            .reviewerId(reviewerId)
+            .comment(comment)
+            .rate(rate)
+            .createdAt(createdAt)
+            .isDeleted(isDeleted)
+            .build();
+    }
+
+    public static QuestionReviewEntity from(QuestionReview questionReview) {
+        return QuestionReviewEntity.builder()
+            .id(questionReview.getId())
+            .questionId(questionReview.getQuestionId())
+            .reviewerId(questionReview.getReviewerId())
+            .comment(questionReview.getComment())
+            .rate(questionReview.getRate())
+            .createdAt(questionReview.getCreatedAt())
+            .isDeleted(questionReview.getIsDeleted())
+            .build();
+    }
 }

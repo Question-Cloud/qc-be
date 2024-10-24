@@ -2,6 +2,7 @@ package com.eager.questioncloud.api.question;
 
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.vo.Subject;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -36,5 +37,28 @@ public class Request {
 
         @Min(value = 100)
         private int price;
+    }
+
+    @Getter
+    public static class RegisterQuestionReviewRequest {
+        @NotNull
+        private Long questionId;
+
+        @Min(value = 1)
+        @Max(value = 5)
+        private int rate;
+
+        @NotBlank
+        private String comment;
+    }
+
+    @Getter
+    public static class ModifyQuestionReviewRequest {
+        @Min(value = 1)
+        @Max(value = 5)
+        private int rate;
+
+        @NotBlank
+        private String comment;
     }
 }
