@@ -1,6 +1,9 @@
 package com.eager.questioncloud.storage.creator;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.storage.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
@@ -9,6 +12,7 @@ import com.eager.questioncloud.core.domain.creator.repository.CreatorRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -62,25 +66,22 @@ public class CreatorRepositoryImpl implements CreatorRepository {
         return creatorJpaRepository.save(CreatorEntity.from(creator)).toModel();
     }
 
-    //TODO library 도메인 추가 후 로직 복구
+
     private Integer getCreatorSalesCount(Long creatorId) {
-        return 1;
-//        return jpaQueryFactory
-//            .select(userQuestionLibraryEntity.id.countDistinct().intValue())
-//            .from(questionEntity)
-//            .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionEntity.id))
-//            .where(questionEntity.creatorId.eq(creatorId))
-//            .fetchFirst();
+        return jpaQueryFactory
+            .select(userQuestionLibraryEntity.id.countDistinct().intValue())
+            .from(questionEntity)
+            .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionEntity.id))
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetchFirst();
     }
 
-    //TODO library 도메인 추가 후 로직 복구
     private Double getCreatorRate(Long creatorId) {
-        return 1.0;
-//        return jpaQueryFactory.select(
-//                MathExpressions.round(questionReviewEntity.rate.avg(), 1).coalesce(0.0))
-//            .from(questionEntity)
-//            .leftJoin(questionReviewEntity).on(questionReviewEntity.questionId.eq(questionEntity.id))
-//            .where(questionEntity.creatorId.eq(creatorId))
-//            .fetchFirst();
+        return jpaQueryFactory.select(
+                MathExpressions.round(questionReviewEntity.rate.avg(), 1).coalesce(0.0))
+            .from(questionEntity)
+            .leftJoin(questionReviewEntity).on(questionReviewEntity.questionId.eq(questionEntity.id))
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetchFirst();
     }
 }
