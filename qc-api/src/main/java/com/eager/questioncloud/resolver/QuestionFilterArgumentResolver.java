@@ -21,6 +21,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 @RequiredArgsConstructor
 public class QuestionFilterArgumentResolver implements HandlerMethodArgumentResolver {
+    private final PagingInformationArgumentResolver pagingInformationArgumentResolver;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterType().equals(QuestionFilter.class);
@@ -35,7 +37,7 @@ public class QuestionFilterArgumentResolver implements HandlerMethodArgumentReso
         QuestionType questionType = getQuestionTypeFromRequest(webRequest);
         Long creatorId = getCreatorIdFromRequest(webRequest);
         QuestionSortType sort = getSortFromRequest(webRequest);
-        PagingInformation pagingInformation = getPagingInformation(webRequest);
+        PagingInformation pagingInformation = pagingInformationArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
         return new QuestionFilter(userId, categories, levels, questionType, creatorId, sort, pagingInformation);
     }
 
