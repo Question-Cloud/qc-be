@@ -34,4 +34,12 @@ public class QuestionBoardReader {
     public int count(Long questionId) {
         return questionBoardRepository.count(questionId);
     }
+
+    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+        return questionBoardRepository.getCreatorQuestionBoardList(creatorId, pagingInformation);
+    }
+
+    public int countCreatorQuestionBoard(Long creatorId) {
+        return questionBoardRepository.countCreatorQuestionBoard(creatorId);
+    }
 }
