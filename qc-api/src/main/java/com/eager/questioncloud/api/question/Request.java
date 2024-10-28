@@ -89,4 +89,19 @@ public class Request {
 
         private List<QuestionBoardFile> files = new ArrayList<>();
     }
+
+    @Getter
+    public static class AddQuestionBoardCommentRequest {
+        @NotNull
+        private Long boardId;
+
+        @NotBlank
+        private String comment;
+    }
+
+    @Getter
+    public static class ModifyQuestionBoardCommentRequest {
+        @NotBlank
+        private String comment;
+    }
 }
