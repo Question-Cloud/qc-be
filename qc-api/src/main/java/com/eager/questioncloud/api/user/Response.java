@@ -31,4 +31,10 @@ public class Response {
     public static class CheckCompletePaymentResponse {
         private Boolean isCompleted;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class RecoverForgottenEmailResponse {
+        private String email;
+    }
 }
