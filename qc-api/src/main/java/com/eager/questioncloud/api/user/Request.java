@@ -89,4 +89,10 @@ public class Request {
         private String payment_id;
         private PortoneWebhookStatus status;
     }
+
+    @Getter
+    public static class RegisterCouponRequest {
+        @NotBlank
+        private String code;
+    }
 }

@@ -1,6 +1,8 @@
 package com.eager.questioncloud.api.user;
 
+import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.core.domain.user.dto.MyInformation;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,5 +38,11 @@ public class Response {
     @AllArgsConstructor
     public static class RecoverForgottenEmailResponse {
         private String email;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class GetAvailableUserCouponsResponse {
+        private List<AvailableUserCouponItem> coupons;
     }
 }
