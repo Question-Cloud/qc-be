@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.creator.controller;
+package com.eager.questioncloud.api.creator;
 
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;

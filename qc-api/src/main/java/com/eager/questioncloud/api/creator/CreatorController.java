@@ -1,8 +1,8 @@
-package com.eager.questioncloud.api.creator.controller;
+package com.eager.questioncloud.api.creator;
 
-import com.eager.questioncloud.api.creator.controller.Response.CreatorInformationResponse;
-import com.eager.questioncloud.api.creator.controller.Response.CreatorProfileResponse;
-import com.eager.questioncloud.api.creator.controller.Response.RegisterCreatorResponse;
+import com.eager.questioncloud.api.creator.Response.CreatorInformationResponse;
+import com.eager.questioncloud.api.creator.Response.CreatorProfileResponse;
+import com.eager.questioncloud.api.creator.Response.RegisterCreatorResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.model.Creator;

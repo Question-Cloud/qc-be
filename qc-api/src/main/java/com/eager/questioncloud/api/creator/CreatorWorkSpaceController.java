@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.creator.controller;
+package com.eager.questioncloud.api.creator;
 
 import com.eager.questioncloud.api.question.Response.QuestionContentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceController {
     private final CreatorWorkSpaceService creatorWorkSpaceService;
-    
+
     @GetMapping("/question")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     @ApiResponses(value = {
