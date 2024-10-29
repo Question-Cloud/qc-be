@@ -1,12 +1,15 @@
 package com.eager.questioncloud.api.user;
 
+import com.eager.questioncloud.core.domain.portone.enums.PortoneWebhookStatus;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
+import com.eager.questioncloud.core.domain.user.vo.ChargePointType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.validator.EmailValidator;
 import com.eager.questioncloud.validator.PasswordValidator;
 import com.eager.questioncloud.validator.Validatable;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -61,5 +64,29 @@ public class Request {
         private String profileImage;
         @NotBlank
         private String name;
+    }
+
+    @Getter
+    public static class ChargePointRequest {
+        @NotNull
+        private ChargePointType chargePointType;
+
+        @NotBlank
+        private String paymentId;
+    }
+
+    @Getter
+    public static class ChargePointOrderRequest {
+        @NotNull
+        private ChargePointType chargePointType;
+
+        @NotBlank
+        private String paymentId;
+    }
+
+    @Getter
+    public static class ChargePointPaymentRequest {
+        private String payment_id;
+        private PortoneWebhookStatus status;
     }
 }
