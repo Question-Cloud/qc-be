@@ -1,8 +1,8 @@
 package com.eager.questioncloud.api.question;
 
 import com.eager.questioncloud.api.question.Response.QuestionCategoriesResponse;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
-import com.eager.questioncloud.core.domain.question.service.QuestionCategoryService;
+import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
+import com.eager.questioncloud.core.domain.questionhub.question.service.QuestionCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;

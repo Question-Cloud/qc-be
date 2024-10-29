@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.library.repository;
 
 import com.eager.questioncloud.core.domain.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.core.domain.library.model.UserQuestionLibrary;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.questionhub.question.common.QuestionFilter;
 import java.util.List;
 
 public interface UserQuestionLibraryRepository {

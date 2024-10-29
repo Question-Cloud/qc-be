@@ -1,10 +1,10 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.core.domain.board.dto.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.core.domain.questionhub.board.dto.QuestionBoardDto.QuestionBoardDetail;
+import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
+import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.questionhub.question.vo.QuestionContent;
+import com.eager.questioncloud.core.domain.questionhub.review.dto.QuestionReviewDto.MyQuestionReview;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

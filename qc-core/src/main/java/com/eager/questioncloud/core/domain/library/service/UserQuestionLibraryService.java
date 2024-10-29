@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.library.service;
 
 import com.eager.questioncloud.core.domain.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.core.domain.library.implement.UserQuestionLibraryReader;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.questionhub.question.common.QuestionFilter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

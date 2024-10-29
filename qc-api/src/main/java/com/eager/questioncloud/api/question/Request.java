@@ -1,8 +1,8 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.core.domain.board.vo.QuestionBoardFile;
-import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.vo.Subject;
+import com.eager.questioncloud.core.domain.questionhub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.questionhub.question.vo.QuestionLevel;
+import com.eager.questioncloud.core.domain.questionhub.question.vo.Subject;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

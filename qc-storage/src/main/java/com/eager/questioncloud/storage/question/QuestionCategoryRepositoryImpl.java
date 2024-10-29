@@ -3,9 +3,9 @@ package com.eager.questioncloud.storage.question;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryItem;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.SubQuestionCategoryItem;
-import com.eager.questioncloud.core.domain.question.repository.QuestionCategoryRepository;
+import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionCategoryDto.QuestionCategoryItem;
+import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionCategoryDto.SubQuestionCategoryItem;
+import com.eager.questioncloud.core.domain.questionhub.question.repository.QuestionCategoryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
