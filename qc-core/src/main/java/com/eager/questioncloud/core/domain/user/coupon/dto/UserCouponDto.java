@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon.dto;
+package com.eager.questioncloud.core.domain.user.coupon.dto;
 
 import com.eager.questioncloud.core.domain.questionhub.payment.vo.CouponType;
 import java.time.LocalDateTime;

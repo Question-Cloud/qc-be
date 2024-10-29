@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon.model;
+package com.eager.questioncloud.core.domain.user.coupon.model;
 
 import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
 import com.eager.questioncloud.core.exception.CustomException;
