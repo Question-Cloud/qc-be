@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.coupon.model;
+package com.eager.questioncloud.core.domain.questionhub.payment.model;
 
-import com.eager.questioncloud.core.domain.coupon.vo.CouponType;
+import com.eager.questioncloud.core.domain.questionhub.payment.vo.CouponType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

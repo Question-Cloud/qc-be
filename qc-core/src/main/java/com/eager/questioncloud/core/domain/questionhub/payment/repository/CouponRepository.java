@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.coupon.repository;
+package com.eager.questioncloud.core.domain.questionhub.payment.repository;
 
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
+import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
 import org.springframework.stereotype.Repository;
 
 @Repository

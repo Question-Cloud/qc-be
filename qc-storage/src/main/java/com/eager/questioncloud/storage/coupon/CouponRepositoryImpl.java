@@ -2,8 +2,8 @@ package com.eager.questioncloud.storage.coupon;
 
 import static com.eager.questioncloud.storage.coupon.QCouponEntity.couponEntity;
 
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import com.eager.questioncloud.core.domain.coupon.repository.CouponRepository;
+import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
+import com.eager.questioncloud.core.domain.questionhub.payment.repository.CouponRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
