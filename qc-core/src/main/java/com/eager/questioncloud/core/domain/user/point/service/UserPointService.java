@@ -1,14 +1,14 @@
-package com.eager.questioncloud.core.domain.user.service;
+package com.eager.questioncloud.core.domain.user.point.service;
 
 import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
 import com.eager.questioncloud.core.domain.portone.implement.PortoneAPI;
 import com.eager.questioncloud.core.domain.user.dto.ChargePointPaymentResult;
-import com.eager.questioncloud.core.domain.user.implement.ChargePointOrderAppender;
-import com.eager.questioncloud.core.domain.user.implement.ChargePointPaymentProcessor;
-import com.eager.questioncloud.core.domain.user.implement.ChargePointPaymentReader;
-import com.eager.questioncloud.core.domain.user.implement.UserPointProcessor;
-import com.eager.questioncloud.core.domain.user.implement.UserPointReader;
-import com.eager.questioncloud.core.domain.user.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.user.point.implement.ChargePointOrderAppender;
+import com.eager.questioncloud.core.domain.user.point.implement.ChargePointPaymentProcessor;
+import com.eager.questioncloud.core.domain.user.point.implement.ChargePointPaymentReader;
+import com.eager.questioncloud.core.domain.user.point.implement.UserPointProcessor;
+import com.eager.questioncloud.core.domain.user.point.implement.UserPointReader;
+import com.eager.questioncloud.core.domain.user.point.model.ChargePointOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

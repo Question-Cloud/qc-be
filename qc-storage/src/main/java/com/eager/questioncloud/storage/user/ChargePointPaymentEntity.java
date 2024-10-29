@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.user;
 
-import com.eager.questioncloud.core.domain.user.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.user.point.model.ChargePointPayment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

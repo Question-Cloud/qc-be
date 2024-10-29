@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.user.implement;
+package com.eager.questioncloud.core.domain.user.point.implement;
 
-import com.eager.questioncloud.core.domain.user.vo.ChargePointType;
+import com.eager.questioncloud.core.domain.user.point.vo.ChargePointType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;

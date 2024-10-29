@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.domain.questionhub.payment.model.QuestionPay
 import com.eager.questioncloud.core.domain.questionhub.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.core.domain.questionhub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.questionhub.question.model.Question;
-import com.eager.questioncloud.core.domain.user.implement.UserPointProcessor;
+import com.eager.questioncloud.core.domain.user.point.implement.UserPointProcessor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

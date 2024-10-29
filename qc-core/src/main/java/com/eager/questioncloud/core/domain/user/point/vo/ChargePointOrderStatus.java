@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user.vo;
+package com.eager.questioncloud.core.domain.user.point.vo;
 
 import lombok.Getter;
 

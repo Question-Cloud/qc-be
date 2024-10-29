@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user.implement;
+package com.eager.questioncloud.core.domain.user.point.implement;
 
 import com.eager.questioncloud.core.domain.user.repository.UserPointRepository;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointReader {
+public class UserPointUpdater {
     private final UserPointRepository userPointRepository;
 
-    public int getUserPoint(Long userId) {
-        return userPointRepository.getPoint(userId);
+    public void updateUserPoint(Long userId, int point) {
+        userPointRepository.updatePoint(userId, point);
     }
 }

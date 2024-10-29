@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.user.model;
+package com.eager.questioncloud.core.domain.user.point.model;
 
 import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
 import com.eager.questioncloud.core.domain.portone.enums.PortonePaymentStatus;
-import com.eager.questioncloud.core.domain.user.vo.ChargePointOrderStatus;
-import com.eager.questioncloud.core.domain.user.vo.ChargePointType;
+import com.eager.questioncloud.core.domain.user.point.vo.ChargePointOrderStatus;
+import com.eager.questioncloud.core.domain.user.point.vo.ChargePointType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import java.time.LocalDateTime;

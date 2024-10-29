@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.user.repository;
+package com.eager.questioncloud.core.domain.user.point.repository;
 
-import com.eager.questioncloud.core.domain.user.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.user.point.model.ChargePointOrder;
 
 public interface ChargePointOrderRepository {
     ChargePointOrder append(ChargePointOrder chargePointOrder);

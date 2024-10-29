@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.user.implement;
+package com.eager.questioncloud.core.domain.user.point.implement;
 
 import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
 import com.eager.questioncloud.core.domain.user.dto.ChargePointPaymentResult;
-import com.eager.questioncloud.core.domain.user.model.ChargePointOrder;
-import com.eager.questioncloud.core.domain.user.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.user.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.user.point.model.ChargePointOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
