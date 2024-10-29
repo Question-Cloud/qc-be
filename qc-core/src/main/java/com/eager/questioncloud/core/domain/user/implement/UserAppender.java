@@ -2,8 +2,8 @@ package com.eager.questioncloud.core.domain.user.implement;
 
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.repository.UserRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

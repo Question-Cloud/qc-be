@@ -4,8 +4,8 @@ import static com.eager.questioncloud.storage.coupon.QCouponEntity.couponEntity;
 
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.repository.CouponRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

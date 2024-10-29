@@ -3,8 +3,8 @@ package com.eager.questioncloud.storage.user;
 import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
 import com.eager.questioncloud.core.domain.user.repository.CreateSocialUserInformationRepository;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

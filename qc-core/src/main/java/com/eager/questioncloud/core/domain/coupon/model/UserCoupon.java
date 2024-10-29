@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.coupon.model;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

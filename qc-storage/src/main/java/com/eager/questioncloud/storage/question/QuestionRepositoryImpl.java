@@ -15,8 +15,8 @@ import com.eager.questioncloud.core.domain.question.repository.QuestionRepositor
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
 import com.eager.questioncloud.core.domain.question.vo.QuestionType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;

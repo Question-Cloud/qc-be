@@ -1,5 +1,6 @@
 package com.eager.questioncloud.exception;
 
+import com.eager.questioncloud.core.exception.CustomException;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;

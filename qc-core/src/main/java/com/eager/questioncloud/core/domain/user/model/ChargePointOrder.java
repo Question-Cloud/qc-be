@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
 import com.eager.questioncloud.core.domain.portone.enums.PortonePaymentStatus;
 import com.eager.questioncloud.core.domain.user.vo.ChargePointOrderStatus;
 import com.eager.questioncloud.core.domain.user.vo.ChargePointType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class ChargePointOrder {
             throw new CustomException(Error.NOT_PROCESS_PAYMENT);
         }
 //TODO Exception 처리
-        
+
 //        if (portonePayment.getAmount().getTotal() != chargePointType.getAmount()) {
 //            throw new InvalidPaymentException(portonePayment);
 //        }

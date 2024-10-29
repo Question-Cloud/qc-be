@@ -9,8 +9,8 @@ import com.eager.questioncloud.core.domain.user.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.domain.user.vo.UserStatus;
 import com.eager.questioncloud.core.domain.user.vo.UserType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.storage.creator.CreatorEntity;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -45,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
-    
+
     @Override
     public UserWithCreator getUserWithCreator(Long uid) {
         Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.api.payment;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.validator.Validatable;
 import java.util.ArrayList;
 import java.util.List;

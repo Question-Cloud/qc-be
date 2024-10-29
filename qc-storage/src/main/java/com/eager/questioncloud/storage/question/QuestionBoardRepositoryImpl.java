@@ -9,8 +9,8 @@ import com.eager.questioncloud.core.domain.board.dto.QuestionBoardDto.QuestionBo
 import com.eager.questioncloud.core.domain.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.board.repository.QuestionBoardRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

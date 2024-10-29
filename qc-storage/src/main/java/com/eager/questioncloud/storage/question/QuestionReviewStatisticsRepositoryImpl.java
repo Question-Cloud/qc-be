@@ -2,8 +2,8 @@ package com.eager.questioncloud.storage.question;
 
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewStatisticsRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

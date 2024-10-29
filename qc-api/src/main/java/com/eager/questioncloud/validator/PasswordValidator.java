@@ -1,7 +1,7 @@
 package com.eager.questioncloud.validator;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

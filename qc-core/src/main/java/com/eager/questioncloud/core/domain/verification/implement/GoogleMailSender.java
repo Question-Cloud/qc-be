@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.verification.implement;
 
 import com.eager.questioncloud.core.domain.verification.vo.Email;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

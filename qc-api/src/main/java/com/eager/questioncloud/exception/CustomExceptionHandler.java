@@ -1,5 +1,6 @@
 package com.eager.questioncloud.exception;
 
+import com.eager.questioncloud.core.exception.CustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

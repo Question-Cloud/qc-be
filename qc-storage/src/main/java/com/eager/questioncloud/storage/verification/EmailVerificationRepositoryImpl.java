@@ -7,8 +7,8 @@ import com.eager.questioncloud.core.domain.verification.dto.EmailVerificationWit
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import com.eager.questioncloud.core.domain.verification.repository.EmailVerificationRepository;
 import com.eager.questioncloud.core.domain.verification.vo.EmailVerificationType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.storage.user.UserEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.Tuple;

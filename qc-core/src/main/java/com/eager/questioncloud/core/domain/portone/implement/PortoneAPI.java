@@ -2,8 +2,8 @@ package com.eager.questioncloud.core.domain.portone.implement;
 
 import com.eager.questioncloud.core.domain.portone.dto.PortoneCancelRequest;
 import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

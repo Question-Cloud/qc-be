@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.coupon.implement;
 
 import com.eager.questioncloud.core.domain.coupon.repository.CouponRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

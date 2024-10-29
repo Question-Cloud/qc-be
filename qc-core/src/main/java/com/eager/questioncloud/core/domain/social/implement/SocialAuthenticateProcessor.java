@@ -8,8 +8,8 @@ import com.eager.questioncloud.core.domain.user.implement.CreateSocialUserInform
 import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

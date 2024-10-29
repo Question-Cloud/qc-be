@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.social.implement;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CustomException;
+import com.eager.questioncloud.core.exception.Error;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
