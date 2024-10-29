@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.user.dto;
 
-import com.eager.questioncloud.core.domain.creator.model.Creator;
+import com.eager.questioncloud.core.domain.questionhub.creator.model.Creator;
 import com.eager.questioncloud.core.domain.user.model.User;
 import java.io.Serializable;
 import lombok.Getter;

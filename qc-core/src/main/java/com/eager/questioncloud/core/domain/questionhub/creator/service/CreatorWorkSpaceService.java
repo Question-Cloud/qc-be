@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator.service;
+package com.eager.questioncloud.core.domain.questionhub.creator.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.questionhub.board.dto.QuestionBoardDto.QuestionBoardListItem;

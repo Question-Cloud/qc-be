@@ -1,11 +1,11 @@
-package com.eager.questioncloud.core.domain.creator.service;
+package com.eager.questioncloud.core.domain.questionhub.creator.service;
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
-import com.eager.questioncloud.core.domain.creator.implement.CreatorAppender;
-import com.eager.questioncloud.core.domain.creator.implement.CreatorReader;
-import com.eager.questioncloud.core.domain.creator.implement.CreatorUpdater;
-import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
+import com.eager.questioncloud.core.domain.questionhub.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.questionhub.creator.implement.CreatorAppender;
+import com.eager.questioncloud.core.domain.questionhub.creator.implement.CreatorReader;
+import com.eager.questioncloud.core.domain.questionhub.creator.implement.CreatorUpdater;
+import com.eager.questioncloud.core.domain.questionhub.creator.model.Creator;
+import com.eager.questioncloud.core.domain.questionhub.creator.vo.CreatorProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
