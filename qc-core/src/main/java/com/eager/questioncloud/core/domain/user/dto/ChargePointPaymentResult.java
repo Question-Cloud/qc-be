@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.user.dto;
 
-import com.eager.questioncloud.core.domain.point.model.ChargePointOrder;
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.payment.point.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

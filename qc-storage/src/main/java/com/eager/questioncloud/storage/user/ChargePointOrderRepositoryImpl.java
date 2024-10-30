@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.user;
 
-import com.eager.questioncloud.core.domain.point.model.ChargePointOrder;
-import com.eager.questioncloud.core.domain.point.repository.ChargePointOrderRepository;
+import com.eager.questioncloud.core.domain.payment.point.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointOrderRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
