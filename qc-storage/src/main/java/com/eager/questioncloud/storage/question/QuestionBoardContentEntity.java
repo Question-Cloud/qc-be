@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.questionhub.board.vo.QuestionBoardContent;
-import com.eager.questioncloud.core.domain.questionhub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
+import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardFile;
 import com.eager.questioncloud.storage.question.converter.QuestionBoardFileConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;

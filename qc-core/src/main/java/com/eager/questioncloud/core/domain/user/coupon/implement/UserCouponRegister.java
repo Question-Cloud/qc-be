@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.user.coupon.implement;
 
-import com.eager.questioncloud.core.domain.questionhub.payment.implement.CouponReader;
-import com.eager.questioncloud.core.domain.questionhub.payment.implement.CouponUpdater;
-import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
+import com.eager.questioncloud.core.domain.hub.payment.implement.CouponReader;
+import com.eager.questioncloud.core.domain.hub.payment.implement.CouponUpdater;
+import com.eager.questioncloud.core.domain.hub.payment.model.Coupon;
 import com.eager.questioncloud.core.domain.user.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;

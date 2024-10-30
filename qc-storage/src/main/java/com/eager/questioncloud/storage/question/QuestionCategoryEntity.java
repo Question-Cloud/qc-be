@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.questionhub.question.model.QuestionCategory;
-import com.eager.questioncloud.core.domain.questionhub.question.vo.Subject;
+import com.eager.questioncloud.core.domain.hub.question.model.QuestionCategory;
+import com.eager.questioncloud.core.domain.hub.question.vo.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

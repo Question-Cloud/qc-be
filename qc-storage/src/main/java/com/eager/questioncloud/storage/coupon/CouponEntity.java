@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.coupon;
 
-import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
-import com.eager.questioncloud.core.domain.questionhub.payment.vo.CouponType;
+import com.eager.questioncloud.core.domain.hub.payment.model.Coupon;
+import com.eager.questioncloud.core.domain.hub.payment.vo.CouponType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

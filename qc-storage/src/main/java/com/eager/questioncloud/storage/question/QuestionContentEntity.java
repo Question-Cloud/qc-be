@@ -1,9 +1,9 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.questionhub.question.vo.QuestionContent;
-import com.eager.questioncloud.core.domain.questionhub.question.vo.QuestionLevel;
-import com.eager.questioncloud.core.domain.questionhub.question.vo.QuestionType;
-import com.eager.questioncloud.core.domain.questionhub.question.vo.Subject;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionLevel;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionType;
+import com.eager.questioncloud.core.domain.hub.question.vo.Subject;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

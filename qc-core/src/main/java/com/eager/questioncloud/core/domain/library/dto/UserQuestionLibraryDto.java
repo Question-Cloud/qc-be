@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.library.dto;
 
-import com.eager.questioncloud.core.domain.questionhub.question.dto.QuestionDto.QuestionInformationForLibrary;
+import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformationForLibrary;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

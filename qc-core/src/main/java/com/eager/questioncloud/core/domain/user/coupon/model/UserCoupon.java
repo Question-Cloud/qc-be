@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.user.coupon.model;
 
-import com.eager.questioncloud.core.domain.questionhub.payment.model.Coupon;
+import com.eager.questioncloud.core.domain.hub.payment.model.Coupon;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import java.time.LocalDateTime;
