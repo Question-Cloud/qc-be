@@ -1,7 +1,7 @@
 package com.eager.questioncloud.api.authentication;
 
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
-import com.eager.questioncloud.core.domain.social.dto.SocialAuthenticateResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

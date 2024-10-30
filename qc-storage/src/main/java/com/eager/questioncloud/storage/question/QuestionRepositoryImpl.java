@@ -7,14 +7,14 @@ import static com.eager.questioncloud.storage.question.QQuestionReviewStatistics
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.common.QuestionSortType;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.vo.QuestionType;
+import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.hub.question.common.QuestionSortType;
+import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.hub.question.model.Question;
+import com.eager.questioncloud.core.domain.hub.question.repository.QuestionRepository;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionLevel;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionStatus;
+import com.eager.questioncloud.core.domain.hub.question.vo.QuestionType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;

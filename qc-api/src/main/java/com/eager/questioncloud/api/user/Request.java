@@ -1,8 +1,8 @@
 package com.eager.questioncloud.api.user;
 
+import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointType;
 import com.eager.questioncloud.core.domain.portone.enums.PortoneWebhookStatus;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
-import com.eager.questioncloud.core.domain.user.vo.ChargePointType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.validator.EmailValidator;

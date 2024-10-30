@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.payment;
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.repository.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.question.repository.QuestionPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

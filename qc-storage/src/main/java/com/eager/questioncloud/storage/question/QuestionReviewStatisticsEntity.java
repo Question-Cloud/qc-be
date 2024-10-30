@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
+import com.eager.questioncloud.core.domain.hub.review.model.QuestionReviewStatistics;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

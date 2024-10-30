@@ -1,0 +1,24 @@
+package com.eager.questioncloud.core.domain.hub.board.implement;
+
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardCommentRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class QuestionBoardCommentReader {
+    private final QuestionBoardCommentRepository questionBoardCommentRepository;
+    private final QuestionBoardValidator questionBoardValidator;
+
+    public List<QuestionBoardCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
+        questionBoardValidator.permissionValidator(boardId, userId);
+        return questionBoardCommentRepository.getQuestionBoardCommentDetails(boardId, userId, pagingInformation);
+    }
+
+    public int count(Long boardId) {
+        return questionBoardCommentRepository.count(boardId);
+    }
+}
