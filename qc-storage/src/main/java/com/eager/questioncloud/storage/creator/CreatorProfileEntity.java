@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.creator;
 
-import com.eager.questioncloud.core.domain.questionhub.creator.vo.CreatorProfile;
+import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.questionhub.question.vo.Subject;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;

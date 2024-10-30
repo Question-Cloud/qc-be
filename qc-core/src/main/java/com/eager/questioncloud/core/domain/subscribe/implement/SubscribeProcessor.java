@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.subscribe.implement;
 
-import com.eager.questioncloud.core.domain.questionhub.creator.implement.CreatorReader;
+import com.eager.questioncloud.core.domain.creator.implement.CreatorReader;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;

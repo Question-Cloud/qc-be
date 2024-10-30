@@ -5,7 +5,7 @@ import static com.eager.questioncloud.storage.subscribe.QSubscribeEntity.subscri
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.questionhub.creator.dto.CreatorDto.CreatorSimpleInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorSimpleInformation;
 import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;

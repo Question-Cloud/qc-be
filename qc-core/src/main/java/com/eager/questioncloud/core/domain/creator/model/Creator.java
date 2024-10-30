@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.questionhub.creator.model;
+package com.eager.questioncloud.core.domain.creator.model;
 
-import com.eager.questioncloud.core.domain.questionhub.creator.vo.CreatorProfile;
+import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import lombok.Builder;
 import lombok.Getter;
 

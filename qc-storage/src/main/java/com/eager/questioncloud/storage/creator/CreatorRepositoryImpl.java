@@ -6,9 +6,9 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.questionhub.creator.dto.CreatorDto.CreatorInformation;
-import com.eager.questioncloud.core.domain.questionhub.creator.model.Creator;
-import com.eager.questioncloud.core.domain.questionhub.creator.repository.CreatorRepository;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.model.Creator;
+import com.eager.questioncloud.core.domain.creator.repository.CreatorRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
