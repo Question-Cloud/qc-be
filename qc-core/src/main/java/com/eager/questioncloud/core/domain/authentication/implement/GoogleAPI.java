@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.social.implement;
+package com.eager.questioncloud.core.domain.authentication.implement;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -12,29 +12,30 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class KakaoAPI implements SocialAPI {
-    @Value("${KAKAO_API_KEY}")
-    private String KAKAO_API_KEY;
+public class GoogleAPI implements SocialAPI {
+    @Value("${GOOGLE_CLIENT_ID}")
+    private String GOOGLE_CLIENT_ID;
 
-    @Value("${KAKAO_API_SECRET}")
-    private String KAKAO_API_SECRET;
+    @Value("${GOOGLE_CLIENT_SECRET}")
+    private String GOOGLE_CLIENT_SECRET;
 
     @Value("${CLIENT_URL}")
     private String CLIENT_URL;
 
     @Override
     public String getAccessToken(String code) {
-        WebClient webClient = WebClient.create("https://kauth.kakao.com/oauth/token");
+        WebClient webClient = WebClient.create("https://oauth2.googleapis.com/token");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
-        formData.add("grant_type", "authorization_code");
-        formData.add("client_id", KAKAO_API_KEY);
-        formData.add("redirect_uri", CLIENT_URL + "/user/social/kakao");
+        formData.add("client_id", GOOGLE_CLIENT_ID);
+        formData.add("client_secret", GOOGLE_CLIENT_SECRET);
         formData.add("code", code);
-        formData.add("client_secret", KAKAO_API_SECRET);
+        formData.add("grant_type", "authorization_code");
+        formData.add("redirect_uri", CLIENT_URL + "/user/social/google");
 
         SocialAccessToken res = webClient.post()
-            .headers(headers -> headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8"))
+            .headers(headers -> headers.add("Content-Type",
+                "application/x-www-form-urlencoded;charset=utf-8"))
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .body(BodyInserters.fromFormData(formData))
             .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
@@ -49,21 +50,22 @@ public class KakaoAPI implements SocialAPI {
 
     @Override
     public SocialUserInfo getUserInfo(String accessToken) {
-        WebClient webClient = WebClient.create("https://kapi.kakao.com/v1/oidc/userinfo");
-        KakaoUserInfo kakaoUserInfo = webClient.get()
+        WebClient webClient = WebClient.create("https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
+
+        GoogleUserInfo googleUserInfo = webClient.get()
             .headers(header -> {
                 header.add("Authorization", "Bearer " + accessToken);
             })
-            .exchangeToMono(response -> response.bodyToMono(KakaoUserInfo.class))
+            .exchangeToMono(response -> response.bodyToMono(GoogleUserInfo.class))
             .block();
 
-        if (kakaoUserInfo == null || kakaoUserInfo.sub() == null) {
+        if (googleUserInfo == null || googleUserInfo.id() == null) {
             throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
         }
 
-        return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), AccountType.KAKAO);
+        return new SocialUserInfo(googleUserInfo.id(), googleUserInfo.email(), googleUserInfo.name(), AccountType.GOOGLE);
     }
 
-    record KakaoUserInfo(String sub, String email, String nickname) {
+    record GoogleUserInfo(String id, String email, String name, String picture) {
     }
 }

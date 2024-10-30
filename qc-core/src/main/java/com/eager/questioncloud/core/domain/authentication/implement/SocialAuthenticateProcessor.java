@@ -1,9 +1,7 @@
-package com.eager.questioncloud.core.domain.social.implement;
+package com.eager.questioncloud.core.domain.authentication.implement;
 
-import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationProcessor;
-import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
-import com.eager.questioncloud.core.domain.social.dto.SocialAuthenticateResult;
 import com.eager.questioncloud.core.domain.user.implement.CreateSocialUserInformationAppender;
 import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
 import com.eager.questioncloud.core.domain.user.model.User;

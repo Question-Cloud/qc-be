@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.social.dto;
+package com.eager.questioncloud.core.domain.authentication.dto;
 
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import lombok.AllArgsConstructor;

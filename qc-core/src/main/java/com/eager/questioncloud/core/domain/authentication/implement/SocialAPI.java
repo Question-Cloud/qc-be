@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.social.implement;
+package com.eager.questioncloud.core.domain.authentication.implement;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 
