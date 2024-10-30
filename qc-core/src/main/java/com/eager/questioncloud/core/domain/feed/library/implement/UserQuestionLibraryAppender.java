@@ -1,7 +1,7 @@
-package com.eager.questioncloud.core.domain.library.implement;
+package com.eager.questioncloud.core.domain.feed.library.implement;
 
-import com.eager.questioncloud.core.domain.library.model.UserQuestionLibrary;
-import com.eager.questioncloud.core.domain.library.repository.UserQuestionLibraryRepository;
+import com.eager.questioncloud.core.domain.feed.library.model.UserQuestionLibrary;
+import com.eager.questioncloud.core.domain.feed.library.repository.UserQuestionLibraryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

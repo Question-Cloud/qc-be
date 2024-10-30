@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.library.dto;
+package com.eager.questioncloud.core.domain.feed.library.dto;
 
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformationForLibrary;
 import lombok.AllArgsConstructor;

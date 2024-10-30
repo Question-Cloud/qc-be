@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.subscribe.implement;
+package com.eager.questioncloud.core.domain.feed.subscribe.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
-import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
+import com.eager.questioncloud.core.domain.feed.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.core.domain.feed.subscribe.repository.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

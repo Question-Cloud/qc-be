@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.review.implement;
 
-import com.eager.questioncloud.core.domain.library.implement.UserQuestionLibraryReader;
+import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionLibraryReader;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
 import com.eager.questioncloud.core.exception.CustomException;

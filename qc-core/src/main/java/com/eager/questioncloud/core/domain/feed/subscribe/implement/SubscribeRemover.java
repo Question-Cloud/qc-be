@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.subscribe.implement;
+package com.eager.questioncloud.core.domain.feed.subscribe.implement;
 
-import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
+import com.eager.questioncloud.core.domain.feed.subscribe.repository.SubscribeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

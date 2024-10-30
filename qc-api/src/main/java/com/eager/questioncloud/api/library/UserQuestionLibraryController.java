@@ -1,8 +1,8 @@
 package com.eager.questioncloud.api.library;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.core.domain.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
-import com.eager.questioncloud.core.domain.library.service.UserQuestionLibraryService;
+import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
+import com.eager.questioncloud.core.domain.feed.library.service.UserQuestionLibraryService;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
