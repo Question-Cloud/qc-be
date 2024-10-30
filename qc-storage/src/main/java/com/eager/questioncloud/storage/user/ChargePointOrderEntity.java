@@ -1,8 +1,8 @@
 package com.eager.questioncloud.storage.user;
 
-import com.eager.questioncloud.core.domain.user.point.model.ChargePointOrder;
-import com.eager.questioncloud.core.domain.user.point.vo.ChargePointOrderStatus;
-import com.eager.questioncloud.core.domain.user.point.vo.ChargePointType;
+import com.eager.questioncloud.core.domain.point.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointOrderStatus;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

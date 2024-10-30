@@ -1,12 +1,12 @@
 package com.eager.questioncloud.core.domain.hub.payment.implement;
 
-import com.eager.questioncloud.core.domain.hub.payment.model.Coupon;
+import com.eager.questioncloud.core.domain.coupon.implement.UserCouponProcessor;
+import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.hub.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.hub.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
-import com.eager.questioncloud.core.domain.user.coupon.implement.UserCouponProcessor;
-import com.eager.questioncloud.core.domain.user.point.implement.UserPointProcessor;
+import com.eager.questioncloud.core.domain.point.implement.UserPointProcessor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

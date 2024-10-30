@@ -2,8 +2,8 @@ package com.eager.questioncloud.storage.user;
 
 import static com.eager.questioncloud.storage.user.QChargePointPaymentEntity.chargePointPaymentEntity;
 
-import com.eager.questioncloud.core.domain.user.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.user.point.repository.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.repository.ChargePointPaymentRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
