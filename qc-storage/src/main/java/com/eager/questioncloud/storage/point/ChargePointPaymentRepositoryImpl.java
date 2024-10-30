@@ -1,6 +1,6 @@
-package com.eager.questioncloud.storage.user;
+package com.eager.questioncloud.storage.point;
 
-import static com.eager.questioncloud.storage.user.QChargePointPaymentEntity.chargePointPaymentEntity;
+import static com.eager.questioncloud.storage.point.QChargePointPaymentEntity.chargePointPaymentEntity;
 
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointPaymentRepository;

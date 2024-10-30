@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.user;
+package com.eager.questioncloud.storage.point;
 
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointOrder;
 import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointOrderStatus;

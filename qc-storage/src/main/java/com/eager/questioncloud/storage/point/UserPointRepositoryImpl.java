@@ -1,6 +1,6 @@
-package com.eager.questioncloud.storage.user;
+package com.eager.questioncloud.storage.point;
 
-import static com.eager.questioncloud.storage.user.QUserPointEntity.userPointEntity;
+import static com.eager.questioncloud.storage.point.QUserPointEntity.userPointEntity;
 
 import com.eager.questioncloud.core.domain.user.repository.UserPointRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
