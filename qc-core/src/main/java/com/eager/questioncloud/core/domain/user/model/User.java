@@ -6,6 +6,7 @@ import com.eager.questioncloud.core.domain.user.vo.UserStatus;
 import com.eager.questioncloud.core.domain.user.vo.UserType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.NotVerificationUserException;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -47,12 +48,10 @@ public class User {
     public void active() {
         this.userStatus = UserStatus.Active;
     }
-
-    //TODO Exception 처리
+    
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
-            throw new CustomException(Error.NOT_ACTIVE_USER);
-//            throw new NotVerificationUserException(this);
+            throw new NotVerificationUserException(this);
         }
         if (!userStatus.equals(UserStatus.Active)) {
             throw new CustomException(Error.NOT_ACTIVE_USER);
