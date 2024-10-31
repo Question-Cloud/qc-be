@@ -23,4 +23,9 @@ public class UserUpdater {
         user.changePassword(newPassword);
         return userRepository.save(user);
     }
+
+    public void setCreator(User user) {
+        user.setCreator();
+        userRepository.save(user);
+    }
 }
