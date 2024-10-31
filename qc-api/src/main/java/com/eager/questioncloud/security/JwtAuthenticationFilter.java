@@ -65,10 +65,10 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private void setGuestAuthentication() {
         UserPrincipal userPrincipal = UserPrincipal.guest();
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             userPrincipal,
             userPrincipal.getUser().getUserInformation().getName(),
             userPrincipal.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        super.getAuthenticationManager().authenticate(authentication);
     }
 }
