@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardCommentService;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

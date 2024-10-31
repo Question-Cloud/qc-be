@@ -9,7 +9,7 @@ import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.Questi
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
 import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,7 +1,6 @@
 package com.eager.questioncloud.security;
 
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.model.User;
@@ -54,8 +53,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.user(), userWithCreator.creator());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
-            userWithCreator.user().getUsername(),
-            userWithCreator.user().getAuthorities());
+            userPrincipal.getUser().getUsername(),
+            userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 

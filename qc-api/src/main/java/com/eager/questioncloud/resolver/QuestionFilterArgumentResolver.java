@@ -5,7 +5,7 @@ import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionSortType;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionType;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

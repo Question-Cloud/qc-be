@@ -3,7 +3,7 @@ package com.eager.questioncloud.api.payment;
 import com.eager.questioncloud.api.payment.Request.QuestionPaymentRequest;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.payment.question.service.QuestionPaymentService;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

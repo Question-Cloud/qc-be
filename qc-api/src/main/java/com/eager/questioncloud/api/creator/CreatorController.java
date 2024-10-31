@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInforma
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.service.CreatorService;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
