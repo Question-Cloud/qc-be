@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewDto.MyQu
 import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewDto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.hub.review.service.QuestionReviewService;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -4,7 +4,7 @@ import com.eager.questioncloud.api.user.Response.GetAvailableUserCouponsResponse
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.payment.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.core.domain.payment.coupon.service.UserCouponService;
-import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
