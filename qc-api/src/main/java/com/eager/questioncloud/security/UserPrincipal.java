@@ -25,6 +25,10 @@ public class UserPrincipal implements Serializable {
         return new UserPrincipal(user, creator);
     }
 
+    public static UserPrincipal guest() {
+        return new UserPrincipal(User.guest(), null);
+    }
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (user.getUid().equals(-1L)) {
