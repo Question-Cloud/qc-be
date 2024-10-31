@@ -1,13 +1,17 @@
 package com.eager.questioncloud.security;
 
-import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
+import com.eager.questioncloud.core.domain.user.dto.UserPrincipal;
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
+import com.eager.questioncloud.core.domain.user.implement.UserReader;
+import com.eager.questioncloud.core.domain.user.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -17,7 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
-    private final AuthenticationProcessor authenticationProcessor;
+    private final UserReader userReader;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -25,10 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String accessToken = parseToken(request.getHeader("Authorization"));
             Long uid = authenticationTokenProcessor.parseUidFromAccessToken(accessToken);
-            authenticationProcessor.authentication(uid);
+            authentication(uid);
         } catch (Exception e) {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                authenticationProcessor.setGuest();
+                setGuest();
             }
         } finally {
             filterChain.doFilter(request, response);
@@ -43,5 +47,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return null;
         }
         return authorization.substring(7);
+    }
+
+    private void authentication(Long uid) {
+        UserWithCreator userWithCreator = userReader.getUserWithCreator(uid);
+        UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.user(), userWithCreator.creator());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            userPrincipal,
+            userWithCreator.user().getUsername(),
+            userWithCreator.user().getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
+    private void setGuest() {
+        User guest = User.guest();
+        UserPrincipal userPrincipal = UserPrincipal.create(guest, null);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+            userPrincipal,
+            guest.getPassword(),
+            guest.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 }
