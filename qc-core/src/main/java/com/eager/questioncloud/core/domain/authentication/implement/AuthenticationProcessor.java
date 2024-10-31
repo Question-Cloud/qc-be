@@ -17,7 +17,7 @@ public class AuthenticationProcessor {
 
     public User getUserByCredentials(String email, String password) {
         User user = userReader.getUserByEmail(email);
-        if (!PasswordProcessor.matches(password, user.getPassword())) {
+        if (!PasswordProcessor.matches(password, user.getUserAccountInformation().getPassword())) {
             throw new CustomException(Error.FAIL_LOGIN);
         }
         user.checkUserStatus();

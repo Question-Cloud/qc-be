@@ -53,18 +53,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.user(), userWithCreator.creator());
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
-            userPrincipal.getUser().getUsername(),
+            userPrincipal.getUser().getUserInformation().getName(),
             userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
     private void setGuest() {
-        User guest = User.guest();
-        UserPrincipal userPrincipal = UserPrincipal.create(guest, null);
+        UserPrincipal userPrincipal = UserPrincipal.create(User.guest(), null);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             userPrincipal,
-            guest.getPassword(),
-            guest.getAuthorities());
+            userPrincipal.getUser().getUserInformation().getName(),
+            userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 }
