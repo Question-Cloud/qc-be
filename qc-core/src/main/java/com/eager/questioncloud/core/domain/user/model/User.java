@@ -48,7 +48,7 @@ public class User {
     public void active() {
         this.userStatus = UserStatus.Active;
     }
-    
+
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
             throw new NotVerificationUserException(this);
@@ -65,5 +65,9 @@ public class User {
     public User update(String name, String profileImage) {
         userInformation = userInformation.updateUserInformation(name, profileImage);
         return this;
+    }
+
+    public void setCreator() {
+        this.userType = UserType.CreatorUser;
     }
 }

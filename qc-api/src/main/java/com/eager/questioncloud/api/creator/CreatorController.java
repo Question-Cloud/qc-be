@@ -71,8 +71,7 @@ public class CreatorController {
     public RegisterCreatorResponse registerCreator(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterCreatorRequest request) {
         Creator creator = creatorService.register(
-            userPrincipal.getUser().getUid(),
-            new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
+            userPrincipal.getUser(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return new RegisterCreatorResponse(creator.getId());
     }
 }
