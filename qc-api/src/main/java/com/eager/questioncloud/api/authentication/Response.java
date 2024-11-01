@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.authentication;
 
-import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +15,11 @@ public class Response {
         private String registerToken;
         private AuthenticationToken authenticationToken;
 
-        public static SocialAuthenticateResponse create(SocialAuthenticateResult socialAuthenticateResult) {
+        public static SocialAuthenticateResponse create(SocialAuthenticationResult socialAuthenticationResult) {
             return new SocialAuthenticateResponse(
-                socialAuthenticateResult.getIsRegistered(),
-                socialAuthenticateResult.getRegisterToken(),
-                socialAuthenticateResult.getAuthenticationToken());
+                socialAuthenticationResult.getIsRegistered(),
+                socialAuthenticationResult.getRegisterToken(),
+                socialAuthenticationResult.getAuthenticationToken());
 
         }
     }

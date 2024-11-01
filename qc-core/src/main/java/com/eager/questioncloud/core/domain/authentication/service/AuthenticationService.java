@@ -1,11 +1,9 @@
 package com.eager.questioncloud.core.domain.authentication.service;
 
-import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
-import com.eager.questioncloud.core.domain.authentication.implement.SocialAuthenticateProcessor;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
-import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,19 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final AuthenticationProcessor authenticationProcessor;
-    private final SocialAuthenticateProcessor socialAuthenticateProcessor;
+    private final AuthenticationTokenProcessor authenticationTokenProcessor;
 
     public AuthenticationToken login(String email, String password) {
-        User user = authenticationProcessor.getUserByCredentials(email, password);
-        String accessToken = authenticationTokenProcessor.generateAccessToken(user.getUid());
-        String refreshToken = authenticationTokenProcessor.generateRefreshToken(user.getUid());
-        return AuthenticationToken.create(accessToken, refreshToken);
+        return authenticationProcessor.emailPasswordAuthentication(email, password);
     }
 
-    public SocialAuthenticateResult socialLogin(AccountType accountType, String code) {
-        return socialAuthenticateProcessor.socialLogin(accountType, code);
+    public SocialAuthenticationResult socialLogin(AccountType accountType, String code) {
+        return authenticationProcessor.socialAuthentication(code, accountType);
     }
 
     public AuthenticationToken refresh(String refreshToken) {

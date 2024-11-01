@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.user.model;
 
+import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
 import com.eager.questioncloud.core.domain.user.vo.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.vo.UserInformation;
 import com.eager.questioncloud.core.domain.user.vo.UserStatus;
@@ -60,6 +61,12 @@ public class User {
 
     public void changePassword(String newPassword) {
         userAccountInformation = userAccountInformation.changePassword(newPassword);
+    }
+
+    public void validatePassword(String rawPassword) {
+        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.getPassword())) {
+            throw new CustomException(Error.FAIL_LOGIN);
+        }
     }
 
     public User update(String name, String profileImage) {

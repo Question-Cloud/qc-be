@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.authentication.implement;
+package com.eager.questioncloud.core.domain.social;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class KakaoAPI implements SocialAPI {
+public class KakaoAPI extends SocialAPI {
     @Value("${KAKAO_API_KEY}")
     private String KAKAO_API_KEY;
 
@@ -62,6 +62,11 @@ public class KakaoAPI implements SocialAPI {
         }
 
         return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), AccountType.KAKAO);
+    }
+
+    @Override
+    SocialPlatform getSocialPlatform() {
+        return SocialPlatform.KAKAO;
     }
 
     record KakaoUserInfo(String sub, String email, String nickname) {

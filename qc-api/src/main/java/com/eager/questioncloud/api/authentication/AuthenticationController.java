@@ -4,7 +4,7 @@ import com.eager.questioncloud.api.authentication.Request.LoginRequest;
 import com.eager.questioncloud.api.authentication.Response.LoginResponse;
 import com.eager.questioncloud.api.authentication.Response.RefreshResponse;
 import com.eager.questioncloud.api.authentication.Response.SocialAuthenticateResponse;
-import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.service.AuthenticationService;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
@@ -57,7 +57,7 @@ public class AuthenticationController {
             """
     )
     public SocialAuthenticateResponse socialLogin(@RequestParam AccountType accountType, @RequestParam String code) {
-        SocialAuthenticateResult socialAuthenticateResult = authenticationService.socialLogin(accountType, code);
-        return SocialAuthenticateResponse.create(socialAuthenticateResult);
+        SocialAuthenticationResult socialAuthenticationResult = authenticationService.socialLogin(accountType, code);
+        return SocialAuthenticateResponse.create(socialAuthenticationResult);
     }
 }

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.authentication.implement;
+package com.eager.questioncloud.core.domain.social;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -12,7 +12,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class GoogleAPI implements SocialAPI {
+public class GoogleAPI extends SocialAPI {
     @Value("${GOOGLE_CLIENT_ID}")
     private String GOOGLE_CLIENT_ID;
 
@@ -64,6 +64,11 @@ public class GoogleAPI implements SocialAPI {
         }
 
         return new SocialUserInfo(googleUserInfo.id(), googleUserInfo.email(), googleUserInfo.name(), AccountType.GOOGLE);
+    }
+
+    @Override
+    SocialPlatform getSocialPlatform() {
+        return SocialPlatform.GOOGLE;
     }
 
     record GoogleUserInfo(String id, String email, String name, String picture) {
