@@ -4,9 +4,7 @@ import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticate
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
-import com.eager.questioncloud.core.domain.user.implement.CreateSocialUserInformationAppender;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
-import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import java.util.Optional;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class AuthenticationProcessor {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final SocialAPIManager socialAPIManager;
-    private final CreateSocialUserInformationAppender createSocialUserInformationAppender;
     private final UserReader userReader;
 
     public AuthenticationToken emailPasswordAuthentication(String email, String password) {
@@ -48,10 +45,7 @@ public class AuthenticationProcessor {
                     authenticationTokenProcessor.generateAccessToken(uid),
                     authenticationTokenProcessor.generateRefreshToken(uid)));
         }
-
-        CreateSocialUserInformation createSocialUserInformation = createSocialUserInformationAppender.append(
-            CreateSocialUserInformation.create(accountType, socialUid));
-        return SocialAuthenticateResult.notRegister(createSocialUserInformation.getRegisterToken());
+        return SocialAuthenticateResult.notRegister(socialAccessToken);
     }
 
 }

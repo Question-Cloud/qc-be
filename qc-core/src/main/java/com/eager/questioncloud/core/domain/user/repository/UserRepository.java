@@ -21,4 +21,6 @@ public interface UserRepository {
     Boolean checkDuplicatePhone(String phone);
 
     Boolean checkDuplicateEmail(String email);
+
+    Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType);
 }

@@ -14,6 +14,7 @@ public enum Error {
     NOT_ACTIVE_USER(403, "탈퇴 혹은 정지 된 계정입니다."),
     DUPLICATE_EMAIL(409, "이미 사용중인 이메일입니다."),
     DUPLICATE_PHONE(409, "이미 사용중인 핸드폰입니다."),
+    DUPLICATE_SOCIAL_UID(409, "이미 가입 된 소셜 계정입니다."),
     NOT_FOUND(404, "결과가 존재하지 않습니다."),
     BAD_REQUEST(400, "올바르지 않은 요청입니다."),
     NOT_ENOUGH_POINT(403, "포인트가 부족합니다."),

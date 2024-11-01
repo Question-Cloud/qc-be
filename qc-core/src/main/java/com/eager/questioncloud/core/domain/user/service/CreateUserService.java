@@ -1,11 +1,11 @@
 package com.eager.questioncloud.core.domain.user.service;
 
+import com.eager.questioncloud.core.domain.social.SocialAPIManager;
+import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
-import com.eager.questioncloud.core.domain.user.implement.CreateSocialUserInformationProcessor;
 import com.eager.questioncloud.core.domain.user.implement.UserAppender;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.implement.UserUpdater;
-import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.domain.user.vo.UserAccountInformation;
@@ -24,7 +24,7 @@ public class CreateUserService {
     private final UserAppender userAppender;
     private final UserUpdater userUpdater;
     private final UserReader userReader;
-    private final CreateSocialUserInformationProcessor createSocialUserInformationProcessor;
+    private final SocialAPIManager socialAPIManager;
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public User create(CreateUser createUser) {
@@ -51,9 +51,7 @@ public class CreateUserService {
         if (createUser.accountType().equals(AccountType.EMAIL)) {
             return UserAccountInformation.createEmailAccountInformation(createUser.password());
         }
-        CreateSocialUserInformation socialUserInformation = createSocialUserInformationProcessor.use(
-            createUser.socialRegisterToken(),
-            createUser.accountType());
-        return UserAccountInformation.createSocialAccountInformation(socialUserInformation.getSocialUid(), socialUserInformation.getAccountType());
+        String socialUid = socialAPIManager.getSocialUid(createUser.socialRegisterToken(), SocialPlatform.from(createUser.accountType()));
+        return UserAccountInformation.createSocialAccountInformation(socialUid, createUser.accountType());
     }
 }

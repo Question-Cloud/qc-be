@@ -94,4 +94,15 @@ public class UserRepositoryImpl implements UserRepository {
     public Boolean checkDuplicateEmail(String email) {
         return userJpaRepository.existsByUserInformationEntityEmail(email);
     }
+
+    @Override
+    public Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType) {
+        return jpaQueryFactory.select(userEntity.uid)
+            .from(userEntity)
+            .where(
+                userEntity.userAccountInformationEntity.socialUid.eq(socialUid),
+                userEntity.userAccountInformationEntity.accountType.eq(accountType)
+            )
+            .fetchFirst() != null;
+    }
 }
