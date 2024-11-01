@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.authentication.implement;
 
-import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
@@ -33,19 +33,19 @@ public class AuthenticationProcessor {
         return user;
     }
 
-    public SocialAuthenticateResult socialAuthentication(String code, AccountType accountType) {
+    public SocialAuthenticationResult socialAuthentication(String code, AccountType accountType) {
         String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.from(accountType));
         String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.from(accountType));
         Optional<User> socialUser = userReader.getSocialUser(accountType, socialUid);
 
         if (socialUser.isPresent()) {
             Long uid = socialUser.get().getUid();
-            return SocialAuthenticateResult.success(
+            return SocialAuthenticationResult.success(
                 AuthenticationToken.create(
                     authenticationTokenProcessor.generateAccessToken(uid),
                     authenticationTokenProcessor.generateRefreshToken(uid)));
         }
-        return SocialAuthenticateResult.notRegister(socialAccessToken);
+        return SocialAuthenticationResult.notRegister(socialAccessToken);
     }
 
 }

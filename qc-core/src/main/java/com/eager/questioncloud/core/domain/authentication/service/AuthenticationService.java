@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.authentication.service;
 
-import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
+import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
@@ -18,7 +18,7 @@ public class AuthenticationService {
         return authenticationProcessor.emailPasswordAuthentication(email, password);
     }
 
-    public SocialAuthenticateResult socialLogin(AccountType accountType, String code) {
+    public SocialAuthenticationResult socialLogin(AccountType accountType, String code) {
         return authenticationProcessor.socialAuthentication(code, accountType);
     }
 
