@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class ChargePointPaymentProcessor {
+    private final ChargePointPaymentAppender chargePointPaymentAppender;
     private final ChargePointPaymentReader chargePointPaymentReader;
     private final ChargePointPaymentUpdater chargePointPaymentUpdater;
 
@@ -18,5 +19,13 @@ public class ChargePointPaymentProcessor {
         chargePointPayment.paid(portonePayment);
         chargePointPaymentUpdater.save(chargePointPayment);
         return chargePointPayment;
+    }
+
+    public ChargePointPayment createOrder(ChargePointPayment chargePointPayment) {
+        return chargePointPaymentAppender.append(chargePointPayment);
+    }
+
+    public Boolean isCompletePayment(Long userId, String paymentId) {
+        return chargePointPaymentReader.isCompletePayment(userId, paymentId);
     }
 }
