@@ -1,11 +1,9 @@
 package com.eager.questioncloud.core.domain.authentication.implement;
 
-import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
+import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
-import com.eager.questioncloud.core.exception.CustomException;
-import com.eager.questioncloud.core.exception.Error;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,13 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationProcessor {
+    private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final UserReader userReader;
 
-    public User getUserByCredentials(String email, String password) {
+    public AuthenticationToken emailPasswordAuthentication(String email, String password) {
+        User user = getUserWithValidateCredentials(email, password);
+        return AuthenticationToken.create(
+            authenticationTokenProcessor.generateAccessToken(user.getUid()),
+            authenticationTokenProcessor.generateRefreshToken(user.getUid())
+        );
+    }
+
+    private User getUserWithValidateCredentials(String email, String password) {
         User user = userReader.getUserByEmail(email);
-        if (!PasswordProcessor.matches(password, user.getUserAccountInformation().getPassword())) {
-            throw new CustomException(Error.FAIL_LOGIN);
-        }
+        user.validatePassword(password);
         user.checkUserStatus();
         return user;
     }

@@ -22,10 +22,7 @@ public class AuthenticationService {
     private final CreateSocialUserInformationAppender createSocialUserInformationAppender;
 
     public AuthenticationToken login(String email, String password) {
-        User user = authenticationProcessor.getUserByCredentials(email, password);
-        String accessToken = authenticationTokenProcessor.generateAccessToken(user.getUid());
-        String refreshToken = authenticationTokenProcessor.generateRefreshToken(user.getUid());
-        return AuthenticationToken.create(accessToken, refreshToken);
+        return authenticationProcessor.emailPasswordAuthentication(email, password);
     }
 
     public SocialAuthenticateResult socialLogin(AccountType accountType, String code) {
