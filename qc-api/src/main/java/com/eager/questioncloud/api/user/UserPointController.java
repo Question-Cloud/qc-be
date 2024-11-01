@@ -5,7 +5,7 @@ import com.eager.questioncloud.api.user.Request.ChargePointPaymentRequest;
 import com.eager.questioncloud.api.user.Response.CheckCompletePaymentResponse;
 import com.eager.questioncloud.api.user.Response.GetUserPointResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointOrder;
+import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.payment.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,9 +58,9 @@ public class UserPointController {
         @AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody ChargePointOrderRequest chargePointOrderRequest) {
         userPointService.createOrder(
-            ChargePointOrder.crateOrder(
-                userPrincipal.getCreator().getUserId(),
+            ChargePointPayment.order(
                 chargePointOrderRequest.getPaymentId(),
+                userPrincipal.getCreator().getUserId(),
                 chargePointOrderRequest.getChargePointType())
         );
         return DefaultResponse.success();

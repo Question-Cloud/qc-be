@@ -7,14 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ChargePointPaymentReader {
+public class ChargePointPaymentUpdater {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public Boolean isCompletePayment(Long userId, String paymentId) {
-        return chargePointPaymentRepository.existsByUserIdAndPaymentId(userId, paymentId);
-    }
-
-    public ChargePointPayment getChargePointPayment(String paymentId) {
-        return chargePointPaymentRepository.findByPaymentId(paymentId);
+    public void save(ChargePointPayment chargePointPayment) {
+        chargePointPaymentRepository.save(chargePointPayment);
     }
 }

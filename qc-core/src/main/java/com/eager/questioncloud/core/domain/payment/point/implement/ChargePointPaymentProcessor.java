@@ -1,9 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.point.implement;
 
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointOrder;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
-import com.eager.questioncloud.core.domain.user.dto.ChargePointPaymentResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,21 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class ChargePointPaymentProcessor {
-    private final ChargePointOrderReader chargePointOrderReader;
-    private final ChargePointOrderUpdater chargePointOrderUpdater;
-    private final ChargePointPaymentAppender chargePointPaymentAppender;
+    private final ChargePointPaymentReader chargePointPaymentReader;
+    private final ChargePointPaymentUpdater chargePointPaymentUpdater;
 
     @Transactional
-    public ChargePointPaymentResult payment(PortonePayment portonePayment) {
-        ChargePointOrder chargePointOrder = chargePointOrderReader.findByPaymentId(portonePayment.getId());
-        chargePointOrder.paid(portonePayment);
-        chargePointOrderUpdater.save(chargePointOrder);
-
-        ChargePointPayment chargePointPayment = chargePointPaymentAppender.append(
-            ChargePointPayment.create(
-                chargePointOrder.getUserId(),
-                portonePayment));
-
-        return new ChargePointPaymentResult(chargePointOrder, chargePointPayment);
+    public ChargePointPayment payment(PortonePayment portonePayment) {
+        ChargePointPayment chargePointPayment = chargePointPaymentReader.getChargePointPayment(portonePayment.getId());
+        chargePointPayment.paid(portonePayment);
+        chargePointPaymentUpdater.save(chargePointPayment);
+        return chargePointPayment;
     }
 }
