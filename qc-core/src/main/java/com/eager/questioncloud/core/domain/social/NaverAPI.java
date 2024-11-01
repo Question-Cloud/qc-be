@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.authentication.implement;
+package com.eager.questioncloud.core.domain.social;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
-public class NaverAPI implements SocialAPI {
+public class NaverAPI extends SocialAPI {
     @Value("${NAVER_CLIENT_ID}")
     private String NAVER_CLIENT_ID;
 
@@ -54,6 +54,11 @@ public class NaverAPI implements SocialAPI {
         NaverUserInfo naverUserInfo = apiResponse.response();
 
         return new SocialUserInfo(naverUserInfo.id(), naverUserInfo.email(), naverUserInfo.nickname(), AccountType.NAVER);
+    }
+
+    @Override
+    SocialPlatform getSocialPlatform() {
+        return SocialPlatform.NAVER;
     }
 
     record NaverUserInfoAPIResponse(NaverUserInfo response) {

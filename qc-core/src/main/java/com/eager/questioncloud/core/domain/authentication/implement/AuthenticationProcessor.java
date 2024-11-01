@@ -2,6 +2,8 @@ package com.eager.questioncloud.core.domain.authentication.implement;
 
 import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticateResult;
 import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
+import com.eager.questioncloud.core.domain.social.SocialAPIManager;
+import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.implement.CreateSocialUserInformationAppender;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.model.CreateSocialUserInformation;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationProcessor {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
-    private final SocialAuthenticateProcessor socialAuthenticateProcessor;
+    private final SocialAPIManager socialAPIManager;
     private final CreateSocialUserInformationAppender createSocialUserInformationAppender;
     private final UserReader userReader;
 
@@ -35,8 +37,8 @@ public class AuthenticationProcessor {
     }
 
     public SocialAuthenticateResult socialAuthentication(String code, AccountType accountType) {
-        String socialAccessToken = socialAuthenticateProcessor.getAccessToken(accountType, code);
-        String socialUid = socialAuthenticateProcessor.getSocialUid(accountType, socialAccessToken);
+        String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.from(accountType));
+        String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.from(accountType));
         Optional<User> socialUser = userReader.getSocialUser(accountType, socialUid);
 
         if (socialUser.isPresent()) {
