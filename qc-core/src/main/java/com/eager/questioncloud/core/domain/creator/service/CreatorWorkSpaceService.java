@@ -4,14 +4,12 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.hub.question.implement.QuestionAppender;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
+import com.eager.questioncloud.core.domain.hub.question.implement.QuestionRegister;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionRemover;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionUpdater;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
-import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewStatisticsAppender;
-import com.eager.questioncloud.core.domain.hub.review.model.QuestionReviewStatistics;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,11 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CreatorWorkSpaceService {
-    private final QuestionAppender questionAppender;
+    private final QuestionRegister questionRegister;
     private final QuestionReader questionReader;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
-    private final QuestionReviewStatisticsAppender questionReviewStatisticsAppender;
     private final QuestionBoardReader questionBoardReader;
 
     public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
@@ -40,9 +37,7 @@ public class CreatorWorkSpaceService {
     }
 
     public Question registerQuestion(Long creatorId, QuestionContent questionContent) {
-        Question question = questionAppender.append(Question.create(creatorId, questionContent));
-        questionReviewStatisticsAppender.append(QuestionReviewStatistics.create(question.getId()));
-        return question;
+        return questionRegister.register(creatorId, questionContent);
     }
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
