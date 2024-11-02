@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.question.implement;
 
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionLibraryReader;
+import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionPermissionValidator {
     private final QuestionReader questionReader;
-    private final UserQuestionLibraryReader userQuestionLibraryReader;
+    private final UserQuestionReader userQuestionReader;
 
     public void permissionValidator(Long userId, Long questionId) {
         if (!questionReader.isAvailable(questionId)) {
             throw new CustomException(Error.NOT_FOUND);
         }
-        if (!userQuestionLibraryReader.isOwned(userId, questionId)) {
+        if (!userQuestionReader.isOwned(userId, questionId)) {
             throw new CustomException(Error.NOT_OWNED_QUESTION);
         }
     }

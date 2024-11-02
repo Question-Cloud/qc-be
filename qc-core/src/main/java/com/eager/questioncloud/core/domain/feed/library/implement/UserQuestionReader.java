@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserQuestionLibraryReader {
+public class UserQuestionReader {
     private final UserQuestionLibraryRepository userQuestionLibraryRepository;
 
     public Boolean isOwned(Long userId, Long questionId) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserQuestionLibraryAppender {
+public class UserQuestionAppender {
     private final UserQuestionLibraryRepository userQuestionLibraryRepository;
 
     public List<UserQuestion> appendUserQuestions(Long userId, List<Long> questionIds) {
