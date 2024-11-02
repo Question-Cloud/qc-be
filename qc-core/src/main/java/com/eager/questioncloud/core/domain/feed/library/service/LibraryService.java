@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 public class LibraryService {
     private final UserQuestionReader userQuestionReader;
 
-    public Boolean isOwned(Long userId, Long questionId) {
-        return userQuestionReader.isOwned(userId, questionId);
-    }
-
     public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
         return userQuestionReader.getUserQuestions(questionFilter);
     }
