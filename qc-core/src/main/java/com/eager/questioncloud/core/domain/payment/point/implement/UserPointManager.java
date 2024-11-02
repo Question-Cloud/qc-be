@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class UserPointProcessor {
+public class UserPointManager {
     private final UserPointReader userPointReader;
     private final UserPointUpdater userPointUpdater;
 
