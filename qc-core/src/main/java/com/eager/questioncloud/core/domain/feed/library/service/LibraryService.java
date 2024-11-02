@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.feed.library.service;
 
-import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
+import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import java.util.List;

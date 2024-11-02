@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.Question
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class UserQuestionLibraryDto {
+public class UserQuestionDto {
     @Getter
     @AllArgsConstructor
     public static class UserQuestionLibraryItem {

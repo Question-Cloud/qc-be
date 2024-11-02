@@ -5,7 +5,7 @@ import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEnti
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
+import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.core.domain.feed.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.feed.library.repository.LibraryRepository;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
