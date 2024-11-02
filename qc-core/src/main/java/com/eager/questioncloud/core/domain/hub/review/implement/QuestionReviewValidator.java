@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.review.implement;
 
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionLibraryReader;
+import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionReviewValidator {
     private final QuestionReviewReader questionReviewReader;
-    private final UserQuestionLibraryReader userQuestionLibraryReader;
+    private final UserQuestionReader userQuestionReader;
     private final QuestionReader questionReader;
 
     //    @DistributedLock(key = "'REVIEW-APPEND:' + #questionReview.getReviewerId()")
@@ -22,7 +22,7 @@ public class QuestionReviewValidator {
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        if (!userQuestionLibraryReader.isOwned(questionReview.getReviewerId(), questionReview.getQuestionId())) {
+        if (!userQuestionReader.isOwned(questionReview.getReviewerId(), questionReview.getQuestionId())) {
             throw new CustomException(Error.NOT_OWNED_QUESTION);
         }
 

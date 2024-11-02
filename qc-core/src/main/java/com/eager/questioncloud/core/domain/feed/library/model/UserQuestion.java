@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class UserQuestionLibrary {
+public class UserQuestion {
     private Long id;
     private Long userId;
     private Long questionId;
@@ -15,7 +15,7 @@ public class UserQuestionLibrary {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserQuestionLibrary(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
+    public UserQuestion(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.questionId = questionId;
@@ -23,11 +23,11 @@ public class UserQuestionLibrary {
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestionLibrary> create(Long userId, List<Long> questionIds) {
+    public static List<UserQuestion> create(Long userId, List<Long> questionIds) {
         LocalDateTime now = LocalDateTime.now();
         return questionIds
             .stream()
-            .map(questionId -> UserQuestionLibrary
+            .map(questionId -> UserQuestion
                 .builder()
                 .userId(userId)
                 .questionId(questionId)

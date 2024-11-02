@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.question;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.question.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
@@ -65,7 +65,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 userEntity.userInformationEntity.name,
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.price,
-                userQuestionLibraryEntity.id.isNotNull(),
+                libraryEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate)
             .from(questionEntity)
             .offset(questionFilter.getPagingInformation().getPage())
@@ -74,8 +74,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(userQuestionLibraryEntity)
-            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
+            .leftJoin(libraryEntity)
+            .on(libraryEntity.questionId.eq(questionEntity.id), libraryEntity.userId.eq(questionFilter.getUserId()))
             .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .groupBy(questionEntity.id)
             .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
@@ -98,7 +98,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
                 .price(tuple.get(questionEntity.questionContentEntity.price))
                 .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-                .isOwned(tuple.get(userQuestionLibraryEntity.id.isNotNull()))
+                .isOwned(tuple.get(libraryEntity.id.isNotNull()))
                 .build())
             .collect(Collectors.toList());
     }
@@ -117,15 +117,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 userEntity.userInformationEntity.name,
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.price,
-                userQuestionLibraryEntity.id.isNotNull(),
+                libraryEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate)
             .from(questionEntity)
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(userQuestionLibraryEntity)
-            .on(userQuestionLibraryEntity.questionId.eq(questionEntity.id), userQuestionLibraryEntity.userId.eq(userId))
+            .leftJoin(libraryEntity)
+            .on(libraryEntity.questionId.eq(questionEntity.id), libraryEntity.userId.eq(userId))
             .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .where(questionEntity.id.eq(questionId))
             .fetchFirst();
@@ -144,7 +144,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
             .price(tuple.get(questionEntity.questionContentEntity.price))
             .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-            .isOwned(tuple.get(userQuestionLibraryEntity.id.isNotNull()))
+            .isOwned(tuple.get(libraryEntity.id.isNotNull()))
             .build();
     }
 
