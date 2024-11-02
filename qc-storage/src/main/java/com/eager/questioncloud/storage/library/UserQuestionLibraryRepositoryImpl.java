@@ -6,7 +6,7 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
-import com.eager.questioncloud.core.domain.feed.library.model.UserQuestionLibrary;
+import com.eager.questioncloud.core.domain.feed.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.feed.library.repository.UserQuestionLibraryRepository;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformationForLibrary;
@@ -25,7 +25,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     private final UserQuestionLibraryJpaRepository userQuestionLibraryJpaRepository;
 
     @Override
-    public List<UserQuestionLibrary> saveAll(List<UserQuestionLibrary> userQuestionLibraries) {
+    public List<UserQuestion> saveAll(List<UserQuestion> userQuestionLibraries) {
         return UserQuestionLibraryEntity.toModel(userQuestionLibraryJpaRepository.saveAll(UserQuestionLibraryEntity.from(userQuestionLibraries)));
     }
 

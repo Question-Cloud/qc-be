@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.library;
 
-import com.eager.questioncloud.core.domain.feed.library.model.UserQuestionLibrary;
+import com.eager.questioncloud.core.domain.feed.library.model.UserQuestion;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,15 +45,15 @@ public class UserQuestionLibraryEntity {
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestionLibrary> toModel(List<UserQuestionLibraryEntity> userQuestionLibraryEntities) {
+    public static List<UserQuestion> toModel(List<UserQuestionLibraryEntity> userQuestionLibraryEntities) {
         return userQuestionLibraryEntities
             .stream()
             .map(UserQuestionLibraryEntity::toModel)
             .collect(Collectors.toList());
     }
 
-    public UserQuestionLibrary toModel() {
-        return UserQuestionLibrary.builder()
+    public UserQuestion toModel() {
+        return UserQuestion.builder()
             .id(id)
             .userId(userId)
             .questionId(questionId)
@@ -62,19 +62,19 @@ public class UserQuestionLibraryEntity {
             .build();
     }
 
-    public static List<UserQuestionLibraryEntity> from(List<UserQuestionLibrary> userQuestionLibraries) {
+    public static List<UserQuestionLibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
         return userQuestionLibraries.stream()
             .map(UserQuestionLibraryEntity::from)
             .collect(Collectors.toList());
     }
 
-    public static UserQuestionLibraryEntity from(UserQuestionLibrary userQuestionLibrary) {
+    public static UserQuestionLibraryEntity from(UserQuestion userQuestion) {
         return UserQuestionLibraryEntity.builder()
-            .id(userQuestionLibrary.getId())
-            .userId(userQuestionLibrary.getUserId())
-            .questionId(userQuestionLibrary.getQuestionId())
-            .isUsed(userQuestionLibrary.getIsUsed())
-            .createdAt(userQuestionLibrary.getCreatedAt())
+            .id(userQuestion.getId())
+            .userId(userQuestion.getUserId())
+            .questionId(userQuestion.getQuestionId())
+            .isUsed(userQuestion.getIsUsed())
+            .createdAt(userQuestion.getCreatedAt())
             .build();
     }
 }
