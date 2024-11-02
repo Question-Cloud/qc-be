@@ -5,7 +5,7 @@ import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEnti
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionLibraryItem;
+import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionItem;
 import com.eager.questioncloud.core.domain.feed.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.feed.library.repository.LibraryRepository;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
@@ -40,11 +40,11 @@ public class LibraryRepositoryImpl implements LibraryRepository {
     }
 
     @Override
-    public List<UserQuestionLibraryItem> getUserQuestions(QuestionFilter questionFilter) {
+    public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
-                Projections.constructor(UserQuestionLibraryItem.class,
+                Projections.constructor(UserQuestionItem.class,
                     libraryEntity.id,
                     libraryEntity.isUsed,
                     Projections.constructor(QuestionInformationForLibrary.class,

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.feed.library.implement;
 
-import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionLibraryItem;
+import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionItem;
 import com.eager.questioncloud.core.domain.feed.library.repository.LibraryRepository;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import java.util.List;
@@ -20,7 +20,7 @@ public class UserQuestionReader {
         return libraryRepository.isOwned(userId, questionId);
     }
 
-    public List<UserQuestionLibraryItem> getUserQuestions(QuestionFilter questionFilter) {
+    public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
         return libraryRepository.getUserQuestions(questionFilter);
     }
 
