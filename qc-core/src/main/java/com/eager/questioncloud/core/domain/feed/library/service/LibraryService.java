@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserQuestionLibraryService {
+public class LibraryService {
     private final UserQuestionReader userQuestionReader;
 
     public Boolean isOwned(Long userId, Long questionId) {

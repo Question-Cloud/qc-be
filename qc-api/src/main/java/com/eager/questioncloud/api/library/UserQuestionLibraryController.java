@@ -2,7 +2,7 @@ package com.eager.questioncloud.api.library;
 
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
-import com.eager.questioncloud.core.domain.feed.library.service.UserQuestionLibraryService;
+import com.eager.questioncloud.core.domain.feed.library.service.LibraryService;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/library")
 @RequiredArgsConstructor
 public class UserQuestionLibraryController {
-    private final UserQuestionLibraryService userQuestionLibraryService;
+    private final LibraryService libraryService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -29,8 +29,8 @@ public class UserQuestionLibraryController {
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<UserQuestionLibraryItem> getUserQuestionLibraryList(@ParameterObject QuestionFilter questionFilter) {
-        int total = userQuestionLibraryService.countUserQuestions(questionFilter);
-        List<UserQuestionLibraryItem> userQuestions = userQuestionLibraryService.getUserQuestions(questionFilter);
+        int total = libraryService.countUserQuestions(questionFilter);
+        List<UserQuestionLibraryItem> userQuestions = libraryService.getUserQuestions(questionFilter);
         return new PagingResponse<>(total, userQuestions);
     }
 }
