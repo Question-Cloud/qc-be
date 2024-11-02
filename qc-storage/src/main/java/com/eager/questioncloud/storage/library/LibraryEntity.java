@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "user_question_library")
+@Table(name = "library")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserQuestionLibraryEntity {
+public class LibraryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,7 @@ public class UserQuestionLibraryEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserQuestionLibraryEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
+    public LibraryEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.questionId = questionId;
@@ -45,10 +45,10 @@ public class UserQuestionLibraryEntity {
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestion> toModel(List<UserQuestionLibraryEntity> userQuestionLibraryEntities) {
+    public static List<UserQuestion> toModel(List<LibraryEntity> userQuestionLibraryEntities) {
         return userQuestionLibraryEntities
             .stream()
-            .map(UserQuestionLibraryEntity::toModel)
+            .map(LibraryEntity::toModel)
             .collect(Collectors.toList());
     }
 
@@ -62,14 +62,14 @@ public class UserQuestionLibraryEntity {
             .build();
     }
 
-    public static List<UserQuestionLibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
+    public static List<LibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
         return userQuestionLibraries.stream()
-            .map(UserQuestionLibraryEntity::from)
+            .map(LibraryEntity::from)
             .collect(Collectors.toList());
     }
 
-    public static UserQuestionLibraryEntity from(UserQuestion userQuestion) {
-        return UserQuestionLibraryEntity.builder()
+    public static LibraryEntity from(UserQuestion userQuestion) {
+        return LibraryEntity.builder()
             .id(userQuestion.getId())
             .userId(userQuestion.getUserId())
             .questionId(userQuestion.getQuestionId())

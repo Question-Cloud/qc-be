@@ -1,13 +1,13 @@
 package com.eager.questioncloud.storage.library;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionLibraryDto.UserQuestionLibraryItem;
 import com.eager.questioncloud.core.domain.feed.library.model.UserQuestion;
-import com.eager.questioncloud.core.domain.feed.library.repository.UserQuestionLibraryRepository;
+import com.eager.questioncloud.core.domain.feed.library.repository.LibraryRepository;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
@@ -20,23 +20,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRepository {
+public class LibraryRepositoryImpl implements LibraryRepository {
     private final JPAQueryFactory jpaQueryFactory;
-    private final UserQuestionLibraryJpaRepository userQuestionLibraryJpaRepository;
+    private final LibraryJpaRepository libraryJpaRepository;
 
     @Override
     public List<UserQuestion> saveAll(List<UserQuestion> userQuestionLibraries) {
-        return UserQuestionLibraryEntity.toModel(userQuestionLibraryJpaRepository.saveAll(UserQuestionLibraryEntity.from(userQuestionLibraries)));
+        return LibraryEntity.toModel(libraryJpaRepository.saveAll(LibraryEntity.from(userQuestionLibraries)));
     }
 
     @Override
     public Boolean isOwned(Long userId, List<Long> questionIds) {
-        return userQuestionLibraryJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
+        return libraryJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
     }
 
     @Override
     public Boolean isOwned(Long userId, Long questionId) {
-        return userQuestionLibraryJpaRepository.existsByUserIdAndQuestionId(userId, questionId);
+        return libraryJpaRepository.existsByUserIdAndQuestionId(userId, questionId);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(UserQuestionLibraryItem.class,
-                    userQuestionLibraryEntity.id,
-                    userQuestionLibraryEntity.isUsed,
+                    libraryEntity.id,
+                    libraryEntity.isUsed,
                     Projections.constructor(QuestionInformationForLibrary.class,
                         questionEntity.id,
                         questionEntity.questionContentEntity.title,
@@ -57,8 +57,8 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
                         questionEntity.questionContentEntity.questionLevel,
                         questionEntity.questionContentEntity.fileUrl,
                         questionEntity.questionContentEntity.explanationUrl)))
-            .from(userQuestionLibraryEntity)
-            .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
+            .from(libraryEntity)
+            .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
@@ -71,9 +71,9 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
     public int countUserQuestions(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        Integer count = jpaQueryFactory.select(userQuestionLibraryEntity.id.count().intValue())
-            .from(userQuestionLibraryEntity)
-            .where(userQuestionLibraryEntity.userId.eq(questionFilter.getUserId()))
+        Integer count = jpaQueryFactory.select(libraryEntity.id.count().intValue())
+            .from(libraryEntity)
+            .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
@@ -104,7 +104,7 @@ public class UserQuestionLibraryRepositoryImpl implements UserQuestionLibraryRep
             builder.and(questionEntity.questionContentEntity.questionType.eq(questionFilter.getQuestionType()));
         }
 
-        builder.and(questionEntity.id.eq(userQuestionLibraryEntity.questionId));
+        builder.and(questionEntity.id.eq(libraryEntity.questionId));
 
         return builder;
     }

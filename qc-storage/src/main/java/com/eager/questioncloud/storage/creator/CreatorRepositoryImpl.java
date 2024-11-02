@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.creator;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QUserQuestionLibraryEntity.userQuestionLibraryEntity;
+import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
@@ -69,9 +69,9 @@ public class CreatorRepositoryImpl implements CreatorRepository {
 
     private Integer getCreatorSalesCount(Long creatorId) {
         return jpaQueryFactory
-            .select(userQuestionLibraryEntity.id.countDistinct().intValue())
+            .select(libraryEntity.id.countDistinct().intValue())
             .from(questionEntity)
-            .leftJoin(userQuestionLibraryEntity).on(userQuestionLibraryEntity.questionId.eq(questionEntity.id))
+            .leftJoin(libraryEntity).on(libraryEntity.questionId.eq(questionEntity.id))
             .where(questionEntity.creatorId.eq(creatorId))
             .fetchFirst();
     }
