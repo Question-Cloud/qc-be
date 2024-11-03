@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
-import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardCommentService;
+import com.eager.questioncloud.core.domain.hub.board.service.PostCommentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/comment")
 @RequiredArgsConstructor
 public class QuestionBoardCommentController {
-    private final QuestionBoardCommentService questionBoardCommentService;
+    private final PostCommentService postCommentService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -40,8 +40,8 @@ public class QuestionBoardCommentController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<PostCommentDetail> getQuestionBoardComments(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long boardId, PagingInformation pagingInformation) {
-        int total = questionBoardCommentService.count(boardId);
-        List<PostCommentDetail> comments = questionBoardCommentService.getQuestionBoardComments(
+        int total = postCommentService.count(boardId);
+        List<PostCommentDetail> comments = postCommentService.getPostComments(
             boardId,
             userPrincipal.getUser().getUid(),
             pagingInformation);
@@ -55,7 +55,7 @@ public class QuestionBoardCommentController {
     @Operation(operationId = "문제 게시글 댓글 작성", summary = "문제 게시글 댓글 작성", tags = {"question-board-comment"}, description = "문제 게시글 댓글 작성")
     public DefaultResponse addQuestionBoardComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddQuestionBoardCommentRequest request) {
-        questionBoardCommentService.addQuestionBoardComment(
+        postCommentService.addPostComment(
             PostComment.create(
                 request.getBoardId(),
                 userPrincipal.getUser().getUid(),
@@ -71,7 +71,7 @@ public class QuestionBoardCommentController {
     public DefaultResponse modifyQuestionBoardComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
         @RequestBody @Valid Request.ModifyQuestionBoardCommentRequest request) {
-        questionBoardCommentService.modifyQuestionBoardComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
+        postCommentService.modifyPostComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
         return DefaultResponse.success();
     }
 
@@ -81,7 +81,7 @@ public class QuestionBoardCommentController {
     })
     @Operation(operationId = "문제 게시글 댓글 삭제", summary = "문제 게시글 댓글 삭제", tags = {"question-board-comment"}, description = "문제 게시글 댓글 삭제")
     public DefaultResponse deleteQuestionBoardComment(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId) {
-        questionBoardCommentService.deleteQuestionBoardComment(commentId, userPrincipal.getUser().getUid());
+        postCommentService.deletePostComment(commentId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 }

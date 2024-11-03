@@ -13,25 +13,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionBoardCommentService {
+public class PostCommentService {
     private final PostCommentAppender postCommentAppender;
     private final PostCommentUpdater postCommentUpdater;
     private final PostCommentRemover postCommentRemover;
     private final PostCommentReader postCommentReader;
 
-    public PostComment addQuestionBoardComment(PostComment postComment) {
+    public PostComment addPostComment(PostComment postComment) {
         return postCommentAppender.append(postComment);
     }
 
-    public void modifyQuestionBoardComment(Long commentId, Long userId, String comment) {
+    public void modifyPostComment(Long commentId, Long userId, String comment) {
         postCommentUpdater.modify(commentId, userId, comment);
     }
 
-    public void deleteQuestionBoardComment(Long commentId, Long userId) {
+    public void deletePostComment(Long commentId, Long userId) {
         postCommentRemover.delete(commentId, userId);
     }
 
-    public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
+    public List<PostCommentDetail> getPostComments(Long boardId, Long userId, PagingInformation pagingInformation) {
         return postCommentReader.getPostComments(boardId, userId, pagingInformation);
     }
 
