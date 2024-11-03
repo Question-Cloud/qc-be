@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "question_board_comment")
+@Table(name = "post_comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionBoardCommentEntity {
+public class PostCommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,7 +35,7 @@ public class QuestionBoardCommentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardCommentEntity(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
+    public PostCommentEntity(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
         this.postId = postId;
         this.writerId = writerId;
@@ -43,8 +43,8 @@ public class QuestionBoardCommentEntity {
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoardCommentEntity from(PostComment postComment) {
-        return QuestionBoardCommentEntity.builder()
+    public static PostCommentEntity from(PostComment postComment) {
+        return PostCommentEntity.builder()
             .id(postComment.getId())
             .postId(postComment.getPostId())
             .writerId(postComment.getWriterId())
