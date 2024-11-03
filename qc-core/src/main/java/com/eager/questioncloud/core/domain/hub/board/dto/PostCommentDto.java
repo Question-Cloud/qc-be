@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
-public class QuestionBoardCommentDto {
+public class PostCommentDto {
     @Getter
     @Builder
     public static class QuestionBoardCommentDetail {

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.hub.board.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
