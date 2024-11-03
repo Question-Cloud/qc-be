@@ -12,7 +12,7 @@ public class QuestionBoardCommentAppender {
     private final QuestionBoardValidator questionBoardValidator;
 
     public PostComment append(PostComment postComment) {
-        questionBoardValidator.permissionValidator(postComment.getBoardId(), postComment.getWriterId());
+        questionBoardValidator.permissionValidator(postComment.getPostId(), postComment.getWriterId());
         return questionBoardCommentRepository.save(postComment);
     }
 }

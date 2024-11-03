@@ -23,7 +23,7 @@ public class QuestionBoardCommentEntity {
     private Long id;
 
     @Column
-    private Long boardId;
+    private Long postId;
 
     @Column
     private Long writerId;
@@ -35,9 +35,9 @@ public class QuestionBoardCommentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardCommentEntity(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
+    public QuestionBoardCommentEntity(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
-        this.boardId = boardId;
+        this.postId = postId;
         this.writerId = writerId;
         this.comment = comment;
         this.createdAt = createdAt;
@@ -46,7 +46,7 @@ public class QuestionBoardCommentEntity {
     public static QuestionBoardCommentEntity from(PostComment postComment) {
         return QuestionBoardCommentEntity.builder()
             .id(postComment.getId())
-            .boardId(postComment.getBoardId())
+            .postId(postComment.getPostId())
             .writerId(postComment.getWriterId())
             .comment(postComment.getComment())
             .createdAt(postComment.getCreatedAt())
@@ -56,7 +56,7 @@ public class QuestionBoardCommentEntity {
     public PostComment toModel() {
         return PostComment.builder()
             .id(id)
-            .boardId(boardId)
+            .postId(postId)
             .writerId(writerId)
             .comment(comment)
             .createdAt(createdAt)

@@ -48,7 +48,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
                 questionBoardCommentEntity.createdAt
             )
             .from(questionBoardCommentEntity)
-            .where(questionBoardCommentEntity.boardId.eq(boardId))
+            .where(questionBoardCommentEntity.postId.eq(boardId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardCommentEntity.writerId))
             .offset(pagingInformation.getPage())
             .limit(pagingInformation.getSize())
@@ -74,7 +74,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     public int count(Long boardId) {
         Integer result = jpaQueryFactory.select(questionBoardCommentEntity.id.count().intValue())
             .from(questionBoardCommentEntity)
-            .where(questionBoardCommentEntity.boardId.eq(boardId))
+            .where(questionBoardCommentEntity.postId.eq(boardId))
             .fetchFirst();
 
         if (result == null) {
