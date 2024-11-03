@@ -13,9 +13,9 @@ public class PostCommentReader {
     private final PostCommentRepository postCommentRepository;
     private final PostValidator postValidator;
 
-    public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
-        postValidator.permissionValidator(boardId, userId);
-        return postCommentRepository.getQuestionBoardCommentDetails(boardId, userId, pagingInformation);
+    public List<PostCommentDetail> getPostComments(Long postId, Long userId, PagingInformation pagingInformation) {
+        postValidator.permissionValidator(postId, userId);
+        return postCommentRepository.getQuestionBoardCommentDetails(postId, userId, pagingInformation);
     }
 
     public int count(Long boardId) {

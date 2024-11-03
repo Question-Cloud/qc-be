@@ -20,13 +20,13 @@ public class PostReader {
         return postRepository.findById(boardId);
     }
 
-    public PostDetail getQuestionBoardDetail(Long userId, Long boardId) {
+    public PostDetail getPostDetail(Long userId, Long boardId) {
         PostDetail questionBoard = postRepository.getQuestionBoardDetail(boardId);
         questionPermissionValidator.permissionValidator(userId, questionBoard.getQuestionId());
         return questionBoard;
     }
 
-    public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
+    public List<PostListItem> getPosts(Long userId, Long questionId, PagingInformation pagingInformation) {
         questionPermissionValidator.permissionValidator(userId, questionId);
         return postRepository.getQuestionBoardList(questionId, pagingInformation);
     }
@@ -35,11 +35,11 @@ public class PostReader {
         return postRepository.count(questionId);
     }
 
-    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+    public List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation) {
         return postRepository.getCreatorQuestionBoardList(creatorId, pagingInformation);
     }
 
-    public int countCreatorQuestionBoard(Long creatorId) {
+    public int countCreatorPost(Long creatorId) {
         return postRepository.countCreatorQuestionBoard(creatorId);
     }
 }

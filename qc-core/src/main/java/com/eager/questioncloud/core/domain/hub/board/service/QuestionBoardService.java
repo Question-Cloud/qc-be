@@ -26,7 +26,7 @@ public class QuestionBoardService {
     }
 
     public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
-        return postReader.getQuestionBoardList(userId, questionId, pagingInformation);
+        return postReader.getPosts(userId, questionId, pagingInformation);
     }
 
     public int countQuestionBoard(Long questionId) {
@@ -34,11 +34,11 @@ public class QuestionBoardService {
     }
 
     public PostDetail getQuestionBoardDetail(Long userId, Long boardId) {
-        return postReader.getQuestionBoardDetail(userId, boardId);
+        return postReader.getPostDetail(userId, boardId);
     }
 
     public void modify(Long boardId, Long userId, PostContent postContent) {
-        postUpdater.updateQuestionBoardContent(boardId, userId, postContent);
+        postUpdater.updatePost(boardId, userId, postContent);
     }
 
     public void delete(Long boardId, Long userId) {

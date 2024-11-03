@@ -51,10 +51,10 @@ public class CreatorWorkSpaceService {
     }
 
     public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
-        return postReader.getCreatorQuestionBoardList(creatorId, pagingInformation);
+        return postReader.getCreatorPostList(creatorId, pagingInformation);
     }
 
     public int countCreatorQuestionBoardList(Long creatorId) {
-        return postReader.countCreatorQuestionBoard(creatorId);
+        return postReader.countCreatorPost(creatorId);
     }
 }

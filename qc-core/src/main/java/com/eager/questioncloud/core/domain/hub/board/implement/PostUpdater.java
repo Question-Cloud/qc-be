@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class PostUpdater {
     private final PostRepository postRepository;
 
-    public void updateQuestionBoardContent(Long boardId, Long userId, PostContent postContent) {
+    public void updatePost(Long boardId, Long userId, PostContent postContent) {
         Post post = postRepository.findByIdAndWriterId(boardId, userId);
         post.updateQuestionBoardContent(postContent);
         postRepository.save(post);

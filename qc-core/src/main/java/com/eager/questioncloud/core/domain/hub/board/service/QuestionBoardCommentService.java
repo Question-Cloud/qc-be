@@ -32,7 +32,7 @@ public class QuestionBoardCommentService {
     }
 
     public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
-        return postCommentReader.getQuestionBoardComments(boardId, userId, pagingInformation);
+        return postCommentReader.getPostComments(boardId, userId, pagingInformation);
     }
 
     public int count(Long boardId) {
