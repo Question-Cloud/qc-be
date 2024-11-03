@@ -7,17 +7,17 @@ import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import java.util.List;
 
 public interface PostRepository {
-    List<PostListItem> getQuestionBoardList(Long questionId, PagingInformation pagingInformation);
+    List<PostListItem> getPostList(Long questionId, PagingInformation pagingInformation);
 
-    List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation);
+    List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation);
 
-    int countCreatorQuestionBoard(Long creatorId);
+    int countCreatorPost(Long creatorId);
 
-    PostDetail getQuestionBoardDetail(Long boardId);
+    PostDetail getPostDetail(Long postId);
 
-    Post findByIdAndWriterId(Long boardId, Long userId);
+    Post findByIdAndWriterId(Long postId, Long userId);
 
-    Post findById(Long boardId);
+    Post findById(Long postId);
 
     int count(Long questionId);
 

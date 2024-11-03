@@ -10,7 +10,7 @@ public interface PostCommentRepository {
 
     PostComment findByIdAndWriterId(Long commentId, Long userId);
 
-    List<PostCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation);
+    List<PostCommentDetail> getPostCommentDetails(Long postId, Long userId, PagingInformation pagingInformation);
 
     void delete(PostComment postComment);
 

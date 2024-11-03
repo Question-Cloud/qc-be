@@ -37,8 +37,8 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
     }
 
     @Override
-    public List<PostCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation) {
-        Long questionCreatorUserId = getQuestionCreatorUserId(boardId);
+    public List<PostCommentDetail> getPostCommentDetails(Long postId, Long userId, PagingInformation pagingInformation) {
+        Long questionCreatorUserId = getQuestionCreatorUserId(postId);
         return jpaQueryFactory.select(
                 questionBoardCommentEntity.id,
                 userEntity.uid,
@@ -48,7 +48,7 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
                 questionBoardCommentEntity.createdAt
             )
             .from(questionBoardCommentEntity)
-            .where(questionBoardCommentEntity.postId.eq(boardId))
+            .where(questionBoardCommentEntity.postId.eq(postId))
             .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardCommentEntity.writerId))
             .offset(pagingInformation.getPage())
             .limit(pagingInformation.getSize())
