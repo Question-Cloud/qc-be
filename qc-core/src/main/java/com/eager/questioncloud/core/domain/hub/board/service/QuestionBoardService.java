@@ -7,7 +7,7 @@ import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardAppe
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardRemover;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardUpdater;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class QuestionBoardService {
     private final QuestionBoardUpdater questionBoardUpdater;
     private final QuestionBoardRemover questionBoardRemover;
 
-    public QuestionBoard register(QuestionBoard questionBoard) {
-        return questionBoardAppender.append(questionBoard);
+    public Post register(Post post) {
+        return questionBoardAppender.append(post);
     }
 
     public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {

@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.hub.board.repository;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import java.util.List;
 
 public interface QuestionBoardRepository {
@@ -15,13 +15,13 @@ public interface QuestionBoardRepository {
 
     PostDetail getQuestionBoardDetail(Long boardId);
 
-    QuestionBoard findByIdAndWriterId(Long boardId, Long userId);
+    Post findByIdAndWriterId(Long boardId, Long userId);
 
-    QuestionBoard findById(Long boardId);
+    Post findById(Long boardId);
 
     int count(Long questionId);
 
-    QuestionBoard save(QuestionBoard questionBoard);
+    Post save(Post post);
 
-    void delete(QuestionBoard questionBoard);
+    void delete(Post post);
 }

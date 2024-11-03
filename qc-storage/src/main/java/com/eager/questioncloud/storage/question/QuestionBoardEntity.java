@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -45,8 +45,8 @@ public class QuestionBoardEntity {
         this.createdAt = createdAt;
     }
 
-    public QuestionBoard toModel() {
-        return QuestionBoard.builder()
+    public Post toModel() {
+        return Post.builder()
             .id(id)
             .questionId(questionId)
             .writerId(writerId)
@@ -55,13 +55,13 @@ public class QuestionBoardEntity {
             .build();
     }
 
-    public static QuestionBoardEntity from(QuestionBoard questionBoard) {
+    public static QuestionBoardEntity from(Post post) {
         return QuestionBoardEntity.builder()
-            .id(questionBoard.getId())
-            .questionId(questionBoard.getQuestionId())
-            .writerId(questionBoard.getWriterId())
-            .questionBoardContentEntity(QuestionBoardContentEntity.from(questionBoard.getQuestionBoardContent()))
-            .createdAt(questionBoard.getCreatedAt())
+            .id(post.getId())
+            .questionId(post.getQuestionId())
+            .writerId(post.getWriterId())
+            .questionBoardContentEntity(QuestionBoardContentEntity.from(post.getQuestionBoardContent()))
+            .createdAt(post.getCreatedAt())
             .build();
     }
 }

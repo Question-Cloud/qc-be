@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.hub.board.implement;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionPermissionValidator;
 import java.util.List;
@@ -16,7 +16,7 @@ public class QuestionBoardReader {
     private final QuestionBoardRepository questionBoardRepository;
     private final QuestionPermissionValidator questionPermissionValidator;
 
-    public QuestionBoard findById(Long boardId) {
+    public Post findById(Long boardId) {
         return questionBoardRepository.findById(boardId);
     }
 

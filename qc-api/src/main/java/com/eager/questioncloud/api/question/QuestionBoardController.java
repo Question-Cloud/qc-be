@@ -6,7 +6,7 @@ import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
 import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -95,7 +95,7 @@ public class QuestionBoardController {
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid Request.RegisterQuestionBoardRequest request) {
         questionBoardService.register(
-            QuestionBoard.create(
+            Post.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
                 QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()))

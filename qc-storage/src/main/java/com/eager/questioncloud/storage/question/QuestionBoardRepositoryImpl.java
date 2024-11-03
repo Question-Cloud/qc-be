@@ -7,7 +7,7 @@ import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
@@ -121,14 +121,14 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoard findByIdAndWriterId(Long boardId, Long userId) {
+    public Post findByIdAndWriterId(Long boardId, Long userId) {
         return questionBoardJpaRepository.findByIdAndWriterId(boardId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
 
     @Override
-    public QuestionBoard findById(Long boardId) {
+    public Post findById(Long boardId) {
         return questionBoardJpaRepository.findById(boardId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
@@ -149,12 +149,12 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoard save(QuestionBoard questionBoard) {
-        return questionBoardJpaRepository.save(QuestionBoardEntity.from(questionBoard)).toModel();
+    public Post save(Post post) {
+        return questionBoardJpaRepository.save(QuestionBoardEntity.from(post)).toModel();
     }
 
     @Override
-    public void delete(QuestionBoard questionBoard) {
-        questionBoardJpaRepository.delete(QuestionBoardEntity.from(questionBoard));
+    public void delete(Post post) {
+        questionBoardJpaRepository.delete(QuestionBoardEntity.from(post));
     }
 }

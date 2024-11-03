@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class QuestionBoard {
+public class Post {
     private Long id;
     private Long questionId;
     private Long writerId;
@@ -14,7 +14,7 @@ public class QuestionBoard {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoard(Long id, Long questionId, Long writerId, QuestionBoardContent questionBoardContent, LocalDateTime createdAt) {
+    public Post(Long id, Long questionId, Long writerId, QuestionBoardContent questionBoardContent, LocalDateTime createdAt) {
         this.id = id;
         this.questionId = questionId;
         this.writerId = writerId;
@@ -22,8 +22,8 @@ public class QuestionBoard {
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoard create(Long questionId, Long writerId, QuestionBoardContent questionBoardContent) {
-        return QuestionBoard.builder()
+    public static Post create(Long questionId, Long writerId, QuestionBoardContent questionBoardContent) {
+        return Post.builder()
             .questionId(questionId)
             .writerId(writerId)
             .questionBoardContent(questionBoardContent)
