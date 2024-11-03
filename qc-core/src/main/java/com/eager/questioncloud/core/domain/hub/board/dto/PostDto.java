@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class QuestionBoardDto {
+public class PostDto {
     @Getter
     @AllArgsConstructor
     public static class QuestionBoardListItem {

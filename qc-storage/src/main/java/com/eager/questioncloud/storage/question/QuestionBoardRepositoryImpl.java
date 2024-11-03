@@ -5,8 +5,8 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.exception.CustomException;

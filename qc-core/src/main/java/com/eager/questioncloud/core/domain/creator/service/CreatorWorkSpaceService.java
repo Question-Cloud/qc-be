@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.creator.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;

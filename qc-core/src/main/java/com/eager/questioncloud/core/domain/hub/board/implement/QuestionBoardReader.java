@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.hub.board.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionPermissionValidator;

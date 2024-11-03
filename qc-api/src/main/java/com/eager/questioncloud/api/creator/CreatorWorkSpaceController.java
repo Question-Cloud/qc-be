@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.service.CreatorWorkSpaceService;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
 import com.eager.questioncloud.security.UserPrincipal;
