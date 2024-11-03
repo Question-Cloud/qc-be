@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.hub.board.implement;
 
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
+import com.eager.questioncloud.core.domain.hub.board.repository.PostRepository;
 import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PostUpdater {
-    private final QuestionBoardRepository questionBoardRepository;
+    private final PostRepository postRepository;
 
     public void updateQuestionBoardContent(Long boardId, Long userId, PostContent postContent) {
-        Post post = questionBoardRepository.findByIdAndWriterId(boardId, userId);
+        Post post = postRepository.findByIdAndWriterId(boardId, userId);
         post.updateQuestionBoardContent(postContent);
-        questionBoardRepository.save(post);
+        postRepository.save(post);
     }
 }

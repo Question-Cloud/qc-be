@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import java.util.List;
 
-public interface QuestionBoardRepository {
+public interface PostRepository {
     List<PostListItem> getQuestionBoardList(Long questionId, PagingInformation pagingInformation);
 
     List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation);

@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
+import com.eager.questioncloud.core.domain.hub.board.repository.PostRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
+public class PostRepositoryImpl implements PostRepository {
     private final QuestionBoardJpaRepository questionBoardJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
 

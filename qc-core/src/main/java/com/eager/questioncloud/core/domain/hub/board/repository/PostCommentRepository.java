@@ -5,7 +5,7 @@ import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostComm
 import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import java.util.List;
 
-public interface QuestionBoardCommentRepository {
+public interface PostCommentRepository {
     PostComment save(PostComment postComment);
 
     PostComment findByIdAndWriterId(Long commentId, Long userId);
