@@ -36,7 +36,7 @@ public class Response {
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardResponse {
+    public static class PostResponse {
         private PostDetail board;
     }
 }

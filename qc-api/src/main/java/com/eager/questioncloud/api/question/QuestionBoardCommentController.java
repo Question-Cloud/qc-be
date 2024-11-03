@@ -54,10 +54,10 @@ public class QuestionBoardCommentController {
     })
     @Operation(operationId = "문제 게시글 댓글 작성", summary = "문제 게시글 댓글 작성", tags = {"question-board-comment"}, description = "문제 게시글 댓글 작성")
     public DefaultResponse addQuestionBoardComment(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddQuestionBoardCommentRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddPostCommentRequest request) {
         postCommentService.addPostComment(
             PostComment.create(
-                request.getBoardId(),
+                request.getPostId(),
                 userPrincipal.getUser().getUid(),
                 request.getComment()));
         return DefaultResponse.success();
@@ -70,7 +70,7 @@ public class QuestionBoardCommentController {
     @Operation(operationId = "문제 게시글 댓글 수정", summary = "문제 게시글 댓글 수정", tags = {"question-board-comment"}, description = "문제 게시글 댓글 수정")
     public DefaultResponse modifyQuestionBoardComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
-        @RequestBody @Valid Request.ModifyQuestionBoardCommentRequest request) {
+        @RequestBody @Valid Request.ModifyPostCommentRequest request) {
         postCommentService.modifyPostComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
         return DefaultResponse.success();
     }

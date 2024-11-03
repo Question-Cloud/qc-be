@@ -66,7 +66,7 @@ public class Request {
     }
 
     @Getter
-    public static class RegisterQuestionBoardRequest {
+    public static class RegisterPostRequest {
         @NotNull
         private Long questionId;
 
@@ -80,7 +80,7 @@ public class Request {
     }
 
     @Getter
-    public static class ModifyQuestionBoardRequest {
+    public static class ModifyPostRequest {
         @NotBlank
         private String title;
 
@@ -91,16 +91,16 @@ public class Request {
     }
 
     @Getter
-    public static class AddQuestionBoardCommentRequest {
+    public static class AddPostCommentRequest {
         @NotNull
-        private Long boardId;
+        private Long postId;
 
         @NotBlank
         private String comment;
     }
 
     @Getter
-    public static class ModifyQuestionBoardCommentRequest {
+    public static class ModifyPostCommentRequest {
         @NotBlank
         private String comment;
     }

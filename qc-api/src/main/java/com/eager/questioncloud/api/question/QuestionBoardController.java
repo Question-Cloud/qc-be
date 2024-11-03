@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.api.question.Response.QuestionBoardResponse;
+import com.eager.questioncloud.api.question.Response.PostResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
@@ -41,7 +41,7 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId,
-        @RequestBody @Valid Request.ModifyQuestionBoardRequest request) {
+        @RequestBody @Valid Request.ModifyPostRequest request) {
         postService.modify(
             boardId,
             userPrincipal.getUser().getUid(),
@@ -64,10 +64,10 @@ public class QuestionBoardController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
-    public QuestionBoardResponse getQuestionBoard(
+    public PostResponse getQuestionBoard(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
         PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), boardId);
-        return new QuestionBoardResponse(board);
+        return new PostResponse(board);
     }
 
     @GetMapping
@@ -93,7 +93,7 @@ public class QuestionBoardController {
     })
     @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid Request.RegisterQuestionBoardRequest request) {
+        @RequestBody @Valid Request.RegisterPostRequest request) {
         postService.register(
             Post.create(
                 request.getQuestionId(),
