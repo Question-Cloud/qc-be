@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionBoardCommentReader {
+public class PostCommentReader {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
     private final PostValidator postValidator;
 

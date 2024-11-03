@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionBoardCommentUpdater {
+public class PostCommentAppender {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
+    private final PostValidator postValidator;
 
-    public void modify(Long commentId, Long userId, String comment) {
-        PostComment postComment = questionBoardCommentRepository.findByIdAndWriterId(commentId, userId);
-        postComment.modify(comment);
-        questionBoardCommentRepository.save(postComment);
+    public PostComment append(PostComment postComment) {
+        postValidator.permissionValidator(postComment.getPostId(), postComment.getWriterId());
+        return questionBoardCommentRepository.save(postComment);
     }
 }

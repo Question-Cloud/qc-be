@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionBoardCommentRemover {
+public class PostCommentRemover {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
 
     public void delete(Long commentId, Long userId) {
