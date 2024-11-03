@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.service.CreatorWorkSpaceService;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -104,10 +104,10 @@ public class CreatorWorkSpaceController {
         description = """
                 나의 자작 문제 게시판에 등록된 게시글들을 통합 조회 합니다.
             """)
-    public PagingResponse<QuestionBoardListItem> creatorQuestionBoardList(
+    public PagingResponse<PostListItem> creatorQuestionBoardList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
         int total = creatorWorkSpaceService.countCreatorQuestionBoardList(userPrincipal.getCreator().getId());
-        List<QuestionBoardListItem> boards = creatorWorkSpaceService.getCreatorQuestionBoardList(
+        List<PostListItem> boards = creatorWorkSpaceService.getCreatorQuestionBoardList(
             userPrincipal.getCreator().getId(),
             pagingInformation);
         return new PagingResponse<>(total, boards);

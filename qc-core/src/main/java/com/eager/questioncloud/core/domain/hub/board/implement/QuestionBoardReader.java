@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.hub.board.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionPermissionValidator;
@@ -20,13 +20,13 @@ public class QuestionBoardReader {
         return questionBoardRepository.findById(boardId);
     }
 
-    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long boardId) {
-        QuestionBoardDetail questionBoard = questionBoardRepository.getQuestionBoardDetail(boardId);
+    public PostDetail getQuestionBoardDetail(Long userId, Long boardId) {
+        PostDetail questionBoard = questionBoardRepository.getQuestionBoardDetail(boardId);
         questionPermissionValidator.permissionValidator(userId, questionBoard.getQuestionId());
         return questionBoard;
     }
 
-    public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
+    public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
         questionPermissionValidator.permissionValidator(userId, questionId);
         return questionBoardRepository.getQuestionBoardList(questionId, pagingInformation);
     }
@@ -35,7 +35,7 @@ public class QuestionBoardReader {
         return questionBoardRepository.count(questionId);
     }
 
-    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
         return questionBoardRepository.getCreatorQuestionBoardList(creatorId, pagingInformation);
     }
 

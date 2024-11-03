@@ -5,8 +5,8 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardRepository;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -24,11 +24,11 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<QuestionBoardListItem> getQuestionBoardList(Long questionId, PagingInformation pagingInformation) {
+    public List<PostListItem> getQuestionBoardList(Long questionId, PagingInformation pagingInformation) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
-                Projections.constructor(QuestionBoardListItem.class,
+                Projections.constructor(PostListItem.class,
                     questionBoardEntity.id,
                     questionBoardEntity.questionBoardContentEntity.title,
                     parent.title,
@@ -49,11 +49,11 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
-                Projections.constructor(QuestionBoardListItem.class,
+                Projections.constructor(PostListItem.class,
                     questionBoardEntity.id,
                     questionBoardEntity.questionBoardContentEntity.title,
                     parent.title,
@@ -89,11 +89,11 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
     }
 
     @Override
-    public QuestionBoardDetail getQuestionBoardDetail(Long boardId) {
+    public PostDetail getQuestionBoardDetail(Long boardId) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        QuestionBoardDetail questionBoardDetail = jpaQueryFactory.select(
-                Projections.constructor(QuestionBoardDetail.class,
+        PostDetail postDetail = jpaQueryFactory.select(
+                Projections.constructor(PostDetail.class,
                     questionBoardEntity.id,
                     questionBoardEntity.questionId,
                     questionBoardEntity.questionBoardContentEntity.title,
@@ -113,11 +113,11 @@ public class QuestionBoardRepositoryImpl implements QuestionBoardRepository {
             .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
             .fetchFirst();
 
-        if (questionBoardDetail == null) {
+        if (postDetail == null) {
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        return questionBoardDetail;
+        return postDetail;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.creator.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
@@ -50,7 +50,7 @@ public class CreatorWorkSpaceService {
         questionRemover.delete(question);
     }
 
-    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
         return questionBoardReader.getCreatorQuestionBoardList(creatorId, pagingInformation);
     }
 

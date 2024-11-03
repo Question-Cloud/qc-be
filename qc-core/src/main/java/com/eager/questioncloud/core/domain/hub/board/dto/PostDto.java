@@ -9,7 +9,7 @@ import lombok.Getter;
 public class PostDto {
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardListItem {
+    public static class PostListItem {
         private Long id;
         private String title;
         private String parentCategory;
@@ -21,7 +21,7 @@ public class PostDto {
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardDetail {
+    public static class PostDetail {
         private Long id;
         private Long questionId;
         private String title;

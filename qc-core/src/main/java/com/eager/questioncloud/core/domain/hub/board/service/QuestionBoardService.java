@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.hub.board.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardAppender;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardRemover;
@@ -25,7 +25,7 @@ public class QuestionBoardService {
         return questionBoardAppender.append(questionBoard);
     }
 
-    public List<QuestionBoardListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
+    public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
         return questionBoardReader.getQuestionBoardList(userId, questionId, pagingInformation);
     }
 
@@ -33,7 +33,7 @@ public class QuestionBoardService {
         return questionBoardReader.count(questionId);
     }
 
-    public QuestionBoardDetail getQuestionBoardDetail(Long userId, Long boardId) {
+    public PostDetail getQuestionBoardDetail(Long userId, Long boardId) {
         return questionBoardReader.getQuestionBoardDetail(userId, boardId);
     }
 

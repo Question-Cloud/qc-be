@@ -4,8 +4,8 @@ import com.eager.questioncloud.api.question.Response.QuestionBoardResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.QuestionBoardListItem;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
 import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
@@ -66,7 +66,7 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
     public QuestionBoardResponse getQuestionBoard(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
+        PostDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
         return new QuestionBoardResponse(board);
     }
 
@@ -77,10 +77,10 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 목록 조회", summary = "문제 게시판 글 목록 조회", tags = {"question-board"}, description = "문제 게시판 글 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<QuestionBoardListItem> getQuestionBoards(
+    public PagingResponse<PostListItem> getQuestionBoards(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
         int total = questionBoardService.countQuestionBoard(questionId);
-        List<QuestionBoardListItem> boards = questionBoardService.getQuestionBoardList(
+        List<PostListItem> boards = questionBoardService.getQuestionBoardList(
             userPrincipal.getUser().getUid(),
             questionId,
             pagingInformation);
