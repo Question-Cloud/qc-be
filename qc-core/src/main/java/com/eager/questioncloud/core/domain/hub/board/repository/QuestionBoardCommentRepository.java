@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.hub.board.repository;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface QuestionBoardCommentRepository {
 
     QuestionBoardComment findByIdAndWriterId(Long commentId, Long userId);
 
-    List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation);
+    List<PostCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation);
 
     void delete(QuestionBoardComment questionBoardComment);
 

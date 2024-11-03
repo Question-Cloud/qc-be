@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.hub.board.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ public class QuestionBoardCommentReader {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
     private final QuestionBoardValidator questionBoardValidator;
 
-    public List<QuestionBoardCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
+    public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
         questionBoardValidator.permissionValidator(boardId, userId);
         return questionBoardCommentRepository.getQuestionBoardCommentDetails(boardId, userId, pagingInformation);
     }

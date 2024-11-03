@@ -3,7 +3,7 @@ package com.eager.questioncloud.api.question;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardCommentService;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -38,10 +38,10 @@ public class QuestionBoardCommentController {
     @Operation(operationId = "문제 게시글 댓글 조회", summary = "문제 게시글 댓글 조회", tags = {"question-board-comment"}, description = "문제 게시글 댓글 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<QuestionBoardCommentDetail> getQuestionBoardComments(
+    public PagingResponse<PostCommentDetail> getQuestionBoardComments(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long boardId, PagingInformation pagingInformation) {
         int total = questionBoardCommentService.count(boardId);
-        List<QuestionBoardCommentDetail> comments = questionBoardCommentService.getQuestionBoardComments(
+        List<PostCommentDetail> comments = questionBoardCommentService.getQuestionBoardComments(
             boardId,
             userPrincipal.getUser().getUid(),
             pagingInformation);

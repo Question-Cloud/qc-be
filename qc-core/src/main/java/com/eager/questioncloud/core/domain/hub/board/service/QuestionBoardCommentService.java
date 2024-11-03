@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.hub.board.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentAppender;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentReader;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentRemover;
@@ -31,7 +31,7 @@ public class QuestionBoardCommentService {
         questionBoardCommentRemover.delete(commentId, userId);
     }
 
-    public List<QuestionBoardCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
+    public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
         return questionBoardCommentReader.getQuestionBoardComments(boardId, userId, pagingInformation);
     }
 

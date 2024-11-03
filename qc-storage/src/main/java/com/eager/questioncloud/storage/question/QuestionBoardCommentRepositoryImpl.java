@@ -7,7 +7,7 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.QuestionBoardCommentDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardCommentRepository;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -37,7 +37,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     }
 
     @Override
-    public List<QuestionBoardCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation) {
+    public List<PostCommentDetail> getQuestionBoardCommentDetails(Long boardId, Long userId, PagingInformation pagingInformation) {
         Long questionCreatorUserId = getQuestionCreatorUserId(boardId);
         return jpaQueryFactory.select(
                 questionBoardCommentEntity.id,
@@ -53,7 +53,7 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
             .offset(pagingInformation.getPage())
             .limit(pagingInformation.getSize())
             .stream()
-            .map(tuple -> QuestionBoardCommentDetail.builder()
+            .map(tuple -> PostCommentDetail.builder()
                 .id(tuple.get(questionBoardCommentEntity.id))
                 .writerName(tuple.get(userEntity.userInformationEntity.name))
                 .profileImage(tuple.get(userEntity.userInformationEntity.profileImage))
