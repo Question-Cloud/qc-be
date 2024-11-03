@@ -1,15 +1,15 @@
 package com.eager.questioncloud.core.domain.hub.board.dto;
 
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class QuestionBoardDto {
+public class PostDto {
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardListItem {
+    public static class PostListItem {
         private Long id;
         private String title;
         private String parentCategory;
@@ -21,12 +21,12 @@ public class QuestionBoardDto {
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardDetail {
+    public static class PostDetail {
         private Long id;
         private Long questionId;
         private String title;
         private String content;
-        private List<QuestionBoardFile> files;
+        private List<PostFile> files;
         private String parentCategory;
         private String childCategory;
         private String questionTitle;

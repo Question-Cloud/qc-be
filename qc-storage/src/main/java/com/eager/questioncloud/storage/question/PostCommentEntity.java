@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
+import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,15 +15,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "question_board_comment")
+@Table(name = "post_comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionBoardCommentEntity {
+public class PostCommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private Long boardId;
+    private Long postId;
 
     @Column
     private Long writerId;
@@ -35,28 +35,28 @@ public class QuestionBoardCommentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardCommentEntity(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
+    public PostCommentEntity(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
-        this.boardId = boardId;
+        this.postId = postId;
         this.writerId = writerId;
         this.comment = comment;
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoardCommentEntity from(QuestionBoardComment questionBoardComment) {
-        return QuestionBoardCommentEntity.builder()
-            .id(questionBoardComment.getId())
-            .boardId(questionBoardComment.getBoardId())
-            .writerId(questionBoardComment.getWriterId())
-            .comment(questionBoardComment.getComment())
-            .createdAt(questionBoardComment.getCreatedAt())
+    public static PostCommentEntity from(PostComment postComment) {
+        return PostCommentEntity.builder()
+            .id(postComment.getId())
+            .postId(postComment.getPostId())
+            .writerId(postComment.getWriterId())
+            .comment(postComment.getComment())
+            .createdAt(postComment.getCreatedAt())
             .build();
     }
 
-    public QuestionBoardComment toModel() {
-        return QuestionBoardComment.builder()
+    public PostComment toModel() {
+        return PostComment.builder()
             .id(id)
-            .boardId(boardId)
+            .postId(postId)
             .writerId(writerId)
             .comment(comment)
             .createdAt(createdAt)

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "question_board")
+@Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionBoardEntity {
+public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,38 +30,37 @@ public class QuestionBoardEntity {
     private Long writerId;
 
     @Embedded
-    private QuestionBoardContentEntity questionBoardContentEntity;
+    private PostContentEntity postContentEntity;
 
     @Column
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardEntity(Long id, Long questionId, Long writerId, QuestionBoardContentEntity questionBoardContentEntity,
-        LocalDateTime createdAt) {
+    public PostEntity(Long id, Long questionId, Long writerId, PostContentEntity postContentEntity, LocalDateTime createdAt) {
         this.id = id;
         this.questionId = questionId;
         this.writerId = writerId;
-        this.questionBoardContentEntity = questionBoardContentEntity;
+        this.postContentEntity = postContentEntity;
         this.createdAt = createdAt;
     }
 
-    public QuestionBoard toModel() {
-        return QuestionBoard.builder()
+    public Post toModel() {
+        return Post.builder()
             .id(id)
             .questionId(questionId)
             .writerId(writerId)
-            .questionBoardContent(questionBoardContentEntity.toModel())
+            .postContent(postContentEntity.toModel())
             .createdAt(createdAt)
             .build();
     }
 
-    public static QuestionBoardEntity from(QuestionBoard questionBoard) {
-        return QuestionBoardEntity.builder()
-            .id(questionBoard.getId())
-            .questionId(questionBoard.getQuestionId())
-            .writerId(questionBoard.getWriterId())
-            .questionBoardContentEntity(QuestionBoardContentEntity.from(questionBoard.getQuestionBoardContent()))
-            .createdAt(questionBoard.getCreatedAt())
+    public static PostEntity from(Post post) {
+        return PostEntity.builder()
+            .id(post.getId())
+            .questionId(post.getQuestionId())
+            .writerId(post.getWriterId())
+            .postContentEntity(PostContentEntity.from(post.getPostContent()))
+            .createdAt(post.getCreatedAt())
             .build();
     }
 }

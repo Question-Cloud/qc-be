@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
@@ -36,7 +36,7 @@ public class Response {
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionBoardResponse {
-        private QuestionBoardDetail board;
+    public static class PostResponse {
+        private PostDetail board;
     }
 }

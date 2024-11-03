@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.hub.question.vo.Subject;
 import jakarta.validation.constraints.Max;
@@ -66,7 +66,7 @@ public class Request {
     }
 
     @Getter
-    public static class RegisterQuestionBoardRequest {
+    public static class RegisterPostRequest {
         @NotNull
         private Long questionId;
 
@@ -76,31 +76,31 @@ public class Request {
         @NotBlank
         private String content;
 
-        private List<QuestionBoardFile> files = new ArrayList<>();
+        private List<PostFile> files = new ArrayList<>();
     }
 
     @Getter
-    public static class ModifyQuestionBoardRequest {
+    public static class ModifyPostRequest {
         @NotBlank
         private String title;
 
         @NotBlank
         private String content;
 
-        private List<QuestionBoardFile> files = new ArrayList<>();
+        private List<PostFile> files = new ArrayList<>();
     }
 
     @Getter
-    public static class AddQuestionBoardCommentRequest {
+    public static class AddPostCommentRequest {
         @NotNull
-        private Long boardId;
+        private Long postId;
 
         @NotBlank
         private String comment;
     }
 
     @Getter
-    public static class ModifyQuestionBoardCommentRequest {
+    public static class ModifyPostCommentRequest {
         @NotBlank
         private String comment;
     }

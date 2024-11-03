@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.creator.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
-import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardReader;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.hub.board.implement.PostReader;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionRegister;
@@ -21,7 +21,7 @@ public class CreatorWorkSpaceService {
     private final QuestionReader questionReader;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
-    private final QuestionBoardReader questionBoardReader;
+    private final PostReader postReader;
 
     public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
         return questionReader.getCreatorQuestions(creatorId, pagingInformation);
@@ -50,11 +50,11 @@ public class CreatorWorkSpaceService {
         questionRemover.delete(question);
     }
 
-    public List<QuestionBoardListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
-        return questionBoardReader.getCreatorQuestionBoardList(creatorId, pagingInformation);
+    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+        return postReader.getCreatorPostList(creatorId, pagingInformation);
     }
 
     public int countCreatorQuestionBoardList(Long creatorId) {
-        return questionBoardReader.countCreatorQuestionBoard(creatorId);
+        return postReader.countCreatorPost(creatorId);
     }
 }

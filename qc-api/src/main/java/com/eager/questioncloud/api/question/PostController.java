@@ -1,14 +1,14 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.api.question.Response.QuestionBoardResponse;
+import com.eager.questioncloud.api.question.Response.PostResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.QuestionBoardDto.QuestionBoardListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoard;
-import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.hub.board.model.Post;
+import com.eager.questioncloud.core.domain.hub.board.service.PostService;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,45 +29,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/post")
 @RequiredArgsConstructor
-public class QuestionBoardController {
-    private final QuestionBoardService questionBoardService;
+public class PostController {
+    private final PostService postService;
 
-    @PatchMapping("/{boardId}")
+    @PatchMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId,
-        @RequestBody @Valid Request.ModifyQuestionBoardRequest request) {
-        questionBoardService.modify(
-            boardId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId, @RequestBody @Valid Request.ModifyPostRequest request) {
+        postService.modify(
+            postId,
             userPrincipal.getUser().getUid(),
-            QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()));
+            PostContent.create(request.getTitle(), request.getContent(), request.getFiles()));
         return DefaultResponse.success();
     }
 
-    @DeleteMapping("/{boardId}")
+    @DeleteMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 삭제", summary = "문제 게시판 글 삭제", tags = {"question-board"}, description = "문제 게시판 글 삭제")
-    public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        questionBoardService.delete(boardId, userPrincipal.getUser().getUid());
+    public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
+        postService.delete(postId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 
-    @GetMapping("/{boardId}")
+    @GetMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
-    public QuestionBoardResponse getQuestionBoard(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        QuestionBoardDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
-        return new QuestionBoardResponse(board);
+    public PostResponse getPost(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
+        PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), postId);
+        return new PostResponse(board);
     }
 
     @GetMapping
@@ -77,13 +75,10 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 목록 조회", summary = "문제 게시판 글 목록 조회", tags = {"question-board"}, description = "문제 게시판 글 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<QuestionBoardListItem> getQuestionBoards(
+    public PagingResponse<PostListItem> getPosts(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
-        int total = questionBoardService.countQuestionBoard(questionId);
-        List<QuestionBoardListItem> boards = questionBoardService.getQuestionBoardList(
-            userPrincipal.getUser().getUid(),
-            questionId,
-            pagingInformation);
+        int total = postService.countPost(questionId);
+        List<PostListItem> boards = postService.getPostList(userPrincipal.getUser().getUid(), questionId, pagingInformation);
         return new PagingResponse<>(total, boards);
     }
 
@@ -92,13 +87,12 @@ public class QuestionBoardController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid Request.RegisterQuestionBoardRequest request) {
-        questionBoardService.register(
-            QuestionBoard.create(
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterPostRequest request) {
+        postService.register(
+            Post.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
-                QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()))
+                PostContent.create(request.getTitle(), request.getContent(), request.getFiles()))
         );
         return DefaultResponse.success();
     }

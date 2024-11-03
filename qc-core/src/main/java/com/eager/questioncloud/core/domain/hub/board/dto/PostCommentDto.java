@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
-public class QuestionBoardCommentDto {
+public class PostCommentDto {
     @Getter
     @Builder
-    public static class QuestionBoardCommentDetail {
+    public static class PostCommentDetail {
         private Long id;
         private String writerName;
         private String profileImage;
