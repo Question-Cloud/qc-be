@@ -71,10 +71,10 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
     }
 
     @Override
-    public int count(Long boardId) {
+    public int count(Long postId) {
         Integer result = jpaQueryFactory.select(postCommentEntity.id.count().intValue())
             .from(postCommentEntity)
-            .where(postCommentEntity.postId.eq(boardId))
+            .where(postCommentEntity.postId.eq(postId))
             .fetchFirst();
 
         if (result == null) {
@@ -84,13 +84,13 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
         return result;
     }
 
-    private Long getQuestionCreatorUserId(Long boardId) {
+    private Long getQuestionCreatorUserId(Long postId) {
         Long questionCreatorUserId = jpaQueryFactory.select(userEntity.uid)
             .from(postEntity)
             .innerJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .where(postEntity.id.eq(boardId))
+            .where(postEntity.id.eq(postId))
             .fetchFirst();
 
         if (questionCreatorUserId == null) {

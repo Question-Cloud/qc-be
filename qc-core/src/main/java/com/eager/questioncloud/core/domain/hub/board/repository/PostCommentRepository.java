@@ -14,5 +14,5 @@ public interface PostCommentRepository {
 
     void delete(PostComment postComment);
 
-    int count(Long boardId);
+    int count(Long postId);
 }

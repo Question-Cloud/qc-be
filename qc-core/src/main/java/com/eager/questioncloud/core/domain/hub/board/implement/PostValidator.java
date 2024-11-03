@@ -11,8 +11,8 @@ public class PostValidator {
     private final PostReader postReader;
     private final QuestionPermissionValidator questionPermissionValidator;
 
-    public void permissionValidator(Long boardId, Long userId) {
-        Post post = postReader.findById(boardId);
+    public void permissionValidator(Long postId, Long userId) {
+        Post post = postReader.findById(postId);
         questionPermissionValidator.permissionValidator(userId, post.getQuestionId());
     }
 }

@@ -18,7 +18,7 @@ public class PostCommentReader {
         return postCommentRepository.getPostCommentDetails(postId, userId, pagingInformation);
     }
 
-    public int count(Long boardId) {
-        return postCommentRepository.count(boardId);
+    public int count(Long postId) {
+        return postCommentRepository.count(postId);
     }
 }

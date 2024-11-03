@@ -16,12 +16,12 @@ public class PostReader {
     private final PostRepository postRepository;
     private final QuestionPermissionValidator questionPermissionValidator;
 
-    public Post findById(Long boardId) {
-        return postRepository.findById(boardId);
+    public Post findById(Long postId) {
+        return postRepository.findById(postId);
     }
 
-    public PostDetail getPostDetail(Long userId, Long boardId) {
-        PostDetail questionBoard = postRepository.getPostDetail(boardId);
+    public PostDetail getPostDetail(Long userId, Long postId) {
+        PostDetail questionBoard = postRepository.getPostDetail(postId);
         questionPermissionValidator.permissionValidator(userId, questionBoard.getQuestionId());
         return questionBoard;
     }

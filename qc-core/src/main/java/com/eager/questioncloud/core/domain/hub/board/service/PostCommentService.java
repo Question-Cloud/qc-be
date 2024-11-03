@@ -31,11 +31,11 @@ public class PostCommentService {
         postCommentRemover.delete(commentId, userId);
     }
 
-    public List<PostCommentDetail> getPostComments(Long boardId, Long userId, PagingInformation pagingInformation) {
-        return postCommentReader.getPostComments(boardId, userId, pagingInformation);
+    public List<PostCommentDetail> getPostComments(Long postId, Long userId, PagingInformation pagingInformation) {
+        return postCommentReader.getPostComments(postId, userId, pagingInformation);
     }
 
-    public int count(Long boardId) {
-        return postCommentReader.count(boardId);
+    public int count(Long postId) {
+        return postCommentReader.count(postId);
     }
 }
