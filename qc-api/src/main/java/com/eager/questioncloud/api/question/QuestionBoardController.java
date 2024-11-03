@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,7 +45,7 @@ public class QuestionBoardController {
         questionBoardService.modify(
             boardId,
             userPrincipal.getUser().getUid(),
-            QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()));
+            PostContent.create(request.getTitle(), request.getContent(), request.getFiles()));
         return DefaultResponse.success();
     }
 
@@ -98,7 +98,7 @@ public class QuestionBoardController {
             Post.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
-                QuestionBoardContent.create(request.getTitle(), request.getContent(), request.getFiles()))
+                PostContent.create(request.getTitle(), request.getContent(), request.getFiles()))
         );
         return DefaultResponse.success();
     }

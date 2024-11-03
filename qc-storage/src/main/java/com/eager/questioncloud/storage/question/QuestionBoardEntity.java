@@ -50,7 +50,7 @@ public class QuestionBoardEntity {
             .id(id)
             .questionId(questionId)
             .writerId(writerId)
-            .questionBoardContent(questionBoardContentEntity.toModel())
+            .postContent(questionBoardContentEntity.toModel())
             .createdAt(createdAt)
             .build();
     }
@@ -60,7 +60,7 @@ public class QuestionBoardEntity {
             .id(post.getId())
             .questionId(post.getQuestionId())
             .writerId(post.getWriterId())
-            .questionBoardContentEntity(QuestionBoardContentEntity.from(post.getQuestionBoardContent()))
+            .questionBoardContentEntity(QuestionBoardContentEntity.from(post.getPostContent()))
             .createdAt(post.getCreatedAt())
             .build();
     }

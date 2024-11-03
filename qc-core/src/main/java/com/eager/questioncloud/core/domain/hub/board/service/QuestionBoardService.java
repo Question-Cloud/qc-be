@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardRead
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardRemover;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardUpdater;
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardContent;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,8 +37,8 @@ public class QuestionBoardService {
         return questionBoardReader.getQuestionBoardDetail(userId, boardId);
     }
 
-    public void modify(Long boardId, Long userId, QuestionBoardContent questionBoardContent) {
-        questionBoardUpdater.updateQuestionBoardContent(boardId, userId, questionBoardContent);
+    public void modify(Long boardId, Long userId, PostContent postContent) {
+        questionBoardUpdater.updateQuestionBoardContent(boardId, userId, postContent);
     }
 
     public void delete(Long boardId, Long userId) {
