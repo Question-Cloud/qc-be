@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.question;
 
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.hub.question.vo.Subject;
 import jakarta.validation.constraints.Max;
@@ -76,7 +76,7 @@ public class Request {
         @NotBlank
         private String content;
 
-        private List<QuestionBoardFile> files = new ArrayList<>();
+        private List<PostFile> files = new ArrayList<>();
     }
 
     @Getter
@@ -87,7 +87,7 @@ public class Request {
         @NotBlank
         private String content;
 
-        private List<QuestionBoardFile> files = new ArrayList<>();
+        private List<PostFile> files = new ArrayList<>();
     }
 
     @Getter

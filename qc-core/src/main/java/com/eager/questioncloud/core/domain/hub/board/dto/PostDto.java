@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.board.dto;
 
-import com.eager.questioncloud.core.domain.hub.board.vo.QuestionBoardFile;
+import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class PostDto {
         private Long questionId;
         private String title;
         private String content;
-        private List<QuestionBoardFile> files;
+        private List<PostFile> files;
         private String parentCategory;
         private String childCategory;
         private String questionTitle;

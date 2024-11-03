@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionBoardFile {
+public class PostFile {
     private String fileName;
     private String url;
 }
