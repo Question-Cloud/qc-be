@@ -38,7 +38,7 @@ public class PostCommentController {
     @Operation(operationId = "문제 게시글 댓글 조회", summary = "문제 게시글 댓글 조회", tags = {"question-board-comment"}, description = "문제 게시글 댓글 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<PostCommentDetail> getQuestionBoardComments(
+    public PagingResponse<PostCommentDetail> getPostComments(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long postId, PagingInformation pagingInformation) {
         int total = postCommentService.count(postId);
         List<PostCommentDetail> comments = postCommentService.getPostComments(
@@ -53,7 +53,7 @@ public class PostCommentController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시글 댓글 작성", summary = "문제 게시글 댓글 작성", tags = {"question-board-comment"}, description = "문제 게시글 댓글 작성")
-    public DefaultResponse addQuestionBoardComment(
+    public DefaultResponse addPostComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddPostCommentRequest request) {
         postCommentService.addPostComment(
             PostComment.create(
@@ -68,7 +68,7 @@ public class PostCommentController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시글 댓글 수정", summary = "문제 게시글 댓글 수정", tags = {"question-board-comment"}, description = "문제 게시글 댓글 수정")
-    public DefaultResponse modifyQuestionBoardComment(
+    public DefaultResponse modifyPostComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
         @RequestBody @Valid Request.ModifyPostCommentRequest request) {
         postCommentService.modifyPostComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
@@ -80,7 +80,7 @@ public class PostCommentController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시글 댓글 삭제", summary = "문제 게시글 댓글 삭제", tags = {"question-board-comment"}, description = "문제 게시글 댓글 삭제")
-    public DefaultResponse deleteQuestionBoardComment(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId) {
+    public DefaultResponse deletePostComment(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId) {
         postCommentService.deletePostComment(commentId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }

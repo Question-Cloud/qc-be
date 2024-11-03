@@ -40,8 +40,7 @@ public class PostController {
     })
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId,
-        @RequestBody @Valid Request.ModifyPostRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId, @RequestBody @Valid Request.ModifyPostRequest request) {
         postService.modify(
             postId,
             userPrincipal.getUser().getUid(),
@@ -64,8 +63,7 @@ public class PostController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
-    public PostResponse getQuestionBoard(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
+    public PostResponse getPost(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
         PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), postId);
         return new PostResponse(board);
     }
@@ -77,13 +75,10 @@ public class PostController {
     @Operation(operationId = "문제 게시판 글 목록 조회", summary = "문제 게시판 글 목록 조회", tags = {"question-board"}, description = "문제 게시판 글 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<PostListItem> getQuestionBoards(
+    public PagingResponse<PostListItem> getPosts(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
         int total = postService.countPost(questionId);
-        List<PostListItem> boards = postService.getPostList(
-            userPrincipal.getUser().getUid(),
-            questionId,
-            pagingInformation);
+        List<PostListItem> boards = postService.getPostList(userPrincipal.getUser().getUid(), questionId, pagingInformation);
         return new PagingResponse<>(total, boards);
     }
 
@@ -92,8 +87,7 @@ public class PostController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid Request.RegisterPostRequest request) {
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterPostRequest request) {
         postService.register(
             Post.create(
                 request.getQuestionId(),
