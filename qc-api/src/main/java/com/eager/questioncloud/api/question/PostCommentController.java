@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/comment")
+@RequestMapping("/api/post/comment")
 @RequiredArgsConstructor
-public class QuestionBoardCommentController {
+public class PostCommentController {
     private final PostCommentService postCommentService;
 
     @GetMapping
@@ -39,10 +39,10 @@ public class QuestionBoardCommentController {
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<PostCommentDetail> getQuestionBoardComments(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long boardId, PagingInformation pagingInformation) {
-        int total = postCommentService.count(boardId);
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long postId, PagingInformation pagingInformation) {
+        int total = postCommentService.count(postId);
         List<PostCommentDetail> comments = postCommentService.getPostComments(
-            boardId,
+            postId,
             userPrincipal.getUser().getUid(),
             pagingInformation);
         return new PagingResponse<>(total, comments);
