@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "question_board")
+@Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionBoardEntity {
+public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,18 +30,17 @@ public class QuestionBoardEntity {
     private Long writerId;
 
     @Embedded
-    private QuestionBoardContentEntity questionBoardContentEntity;
+    private PostContentEntity postContentEntity;
 
     @Column
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardEntity(Long id, Long questionId, Long writerId, QuestionBoardContentEntity questionBoardContentEntity,
-        LocalDateTime createdAt) {
+    public PostEntity(Long id, Long questionId, Long writerId, PostContentEntity postContentEntity, LocalDateTime createdAt) {
         this.id = id;
         this.questionId = questionId;
         this.writerId = writerId;
-        this.questionBoardContentEntity = questionBoardContentEntity;
+        this.postContentEntity = postContentEntity;
         this.createdAt = createdAt;
     }
 
@@ -50,17 +49,17 @@ public class QuestionBoardEntity {
             .id(id)
             .questionId(questionId)
             .writerId(writerId)
-            .postContent(questionBoardContentEntity.toModel())
+            .postContent(postContentEntity.toModel())
             .createdAt(createdAt)
             .build();
     }
 
-    public static QuestionBoardEntity from(Post post) {
-        return QuestionBoardEntity.builder()
+    public static PostEntity from(Post post) {
+        return PostEntity.builder()
             .id(post.getId())
             .questionId(post.getQuestionId())
             .writerId(post.getWriterId())
-            .questionBoardContentEntity(QuestionBoardContentEntity.from(post.getPostContent()))
+            .postContentEntity(PostContentEntity.from(post.getPostContent()))
             .createdAt(post.getCreatedAt())
             .build();
     }

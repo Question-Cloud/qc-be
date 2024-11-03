@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import static com.eager.questioncloud.storage.question.QQuestionBoardEntity.questionBoardEntity;
+import static com.eager.questioncloud.storage.question.QPostEntity.postEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepository {
-    private final QuestionBoardJpaRepository questionBoardJpaRepository;
+    private final PostJpaRepository postJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
@@ -29,20 +29,20 @@ public class PostRepositoryImpl implements PostRepository {
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(PostListItem.class,
-                    questionBoardEntity.id,
-                    questionBoardEntity.questionBoardContentEntity.title,
+                    postEntity.id,
+                    postEntity.postContentEntity.title,
                     parent.title,
                     child.title,
                     questionEntity.questionContentEntity.title,
                     userEntity.userInformationEntity.name,
-                    questionBoardEntity.createdAt
+                    postEntity.createdAt
                 ))
-            .from(questionBoardEntity)
-            .where(questionBoardEntity.questionId.eq(questionId))
-            .leftJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
+            .from(postEntity)
+            .where(postEntity.questionId.eq(questionId))
+            .leftJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
+            .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
             .offset(pagingInformation.getPage())
             .limit(pagingInformation.getSize())
             .fetch();
@@ -54,20 +54,20 @@ public class PostRepositoryImpl implements PostRepository {
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(PostListItem.class,
-                    questionBoardEntity.id,
-                    questionBoardEntity.questionBoardContentEntity.title,
+                    postEntity.id,
+                    postEntity.postContentEntity.title,
                     parent.title,
                     child.title,
                     questionEntity.questionContentEntity.title,
                     userEntity.userInformationEntity.name,
-                    questionBoardEntity.createdAt
+                    postEntity.createdAt
                 ))
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
-            .innerJoin(questionBoardEntity).on(questionBoardEntity.questionId.eq(questionEntity.id))
+            .innerJoin(postEntity).on(postEntity.questionId.eq(questionEntity.id))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
             .offset(pagingInformation.getPage())
             .limit(pagingInformation.getSize())
             .fetch();
@@ -75,10 +75,10 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public int countCreatorPost(Long creatorId) {
-        Integer result = jpaQueryFactory.select(questionBoardEntity.id.count().intValue())
+        Integer result = jpaQueryFactory.select(postEntity.id.count().intValue())
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
-            .innerJoin(questionBoardEntity).on(questionBoardEntity.questionId.eq(questionEntity.id))
+            .innerJoin(postEntity).on(postEntity.questionId.eq(questionEntity.id))
             .fetchFirst();
 
         if (result == null) {
@@ -94,23 +94,23 @@ public class PostRepositoryImpl implements PostRepository {
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         PostDetail postDetail = jpaQueryFactory.select(
                 Projections.constructor(PostDetail.class,
-                    questionBoardEntity.id,
-                    questionBoardEntity.questionId,
-                    questionBoardEntity.questionBoardContentEntity.title,
-                    questionBoardEntity.questionBoardContentEntity.content,
-                    questionBoardEntity.questionBoardContentEntity.files,
+                    postEntity.id,
+                    postEntity.questionId,
+                    postEntity.postContentEntity.title,
+                    postEntity.postContentEntity.content,
+                    postEntity.postContentEntity.files,
                     parent.title,
                     child.title,
                     questionEntity.questionContentEntity.title,
                     userEntity.userInformationEntity.name,
-                    questionBoardEntity.createdAt
+                    postEntity.createdAt
                 ))
-            .from(questionBoardEntity)
-            .where(questionBoardEntity.id.eq(postId))
-            .leftJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
+            .from(postEntity)
+            .where(postEntity.id.eq(postId))
+            .leftJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(questionBoardEntity.writerId))
+            .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
             .fetchFirst();
 
         if (postDetail == null) {
@@ -122,23 +122,23 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post findByIdAndWriterId(Long postId, Long userId) {
-        return questionBoardJpaRepository.findByIdAndWriterId(postId, userId)
+        return postJpaRepository.findByIdAndWriterId(postId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
 
     @Override
     public Post findById(Long postId) {
-        return questionBoardJpaRepository.findById(postId)
+        return postJpaRepository.findById(postId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
 
     @Override
     public int count(Long questionId) {
-        Integer result = jpaQueryFactory.select(questionBoardEntity.id.count().intValue())
-            .from(questionBoardEntity)
-            .where(questionBoardEntity.questionId.eq(questionId))
+        Integer result = jpaQueryFactory.select(postEntity.id.count().intValue())
+            .from(postEntity)
+            .where(postEntity.questionId.eq(questionId))
             .fetchFirst();
 
         if (result == null) {
@@ -150,11 +150,11 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        return questionBoardJpaRepository.save(QuestionBoardEntity.from(post)).toModel();
+        return postJpaRepository.save(PostEntity.from(post)).toModel();
     }
 
     @Override
     public void delete(Post post) {
-        questionBoardJpaRepository.delete(QuestionBoardEntity.from(post));
+        postJpaRepository.delete(PostEntity.from(post));
     }
 }

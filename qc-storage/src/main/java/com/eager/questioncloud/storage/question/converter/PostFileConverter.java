@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QuestionBoardFileConverter implements AttributeConverter<List<PostFile>, String> {
+public class PostFileConverter implements AttributeConverter<List<PostFile>, String> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

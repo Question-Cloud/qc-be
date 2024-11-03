@@ -1,8 +1,8 @@
 package com.eager.questioncloud.storage.question;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.storage.question.QPostEntity.postEntity;
 import static com.eager.questioncloud.storage.question.QQuestionBoardCommentEntity.questionBoardCommentEntity;
-import static com.eager.questioncloud.storage.question.QQuestionBoardEntity.questionBoardEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
@@ -86,11 +86,11 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
 
     private Long getQuestionCreatorUserId(Long boardId) {
         Long questionCreatorUserId = jpaQueryFactory.select(userEntity.uid)
-            .from(questionBoardEntity)
-            .innerJoin(questionEntity).on(questionEntity.id.eq(questionBoardEntity.questionId))
+            .from(postEntity)
+            .innerJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .where(questionBoardEntity.id.eq(boardId))
+            .where(postEntity.id.eq(boardId))
             .fetchFirst();
 
         if (questionCreatorUserId == null) {

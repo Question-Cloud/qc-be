@@ -2,7 +2,7 @@ package com.eager.questioncloud.storage.question;
 
 import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
-import com.eager.questioncloud.storage.question.converter.QuestionBoardFileConverter;
+import com.eager.questioncloud.storage.question.converter.PostFileConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import java.util.List;
@@ -14,14 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class QuestionBoardContentEntity {
+public class PostContentEntity {
     private String title;
     private String content;
-    @Convert(converter = QuestionBoardFileConverter.class)
+    @Convert(converter = PostFileConverter.class)
     private List<PostFile> files;
 
-    public static QuestionBoardContentEntity from(PostContent postContent) {
-        return new QuestionBoardContentEntity(postContent.getTitle(), postContent.getTitle(), postContent.getFiles());
+    public static PostContentEntity from(PostContent postContent) {
+        return new PostContentEntity(postContent.getTitle(), postContent.getTitle(), postContent.getFiles());
     }
 
     public PostContent toModel() {
