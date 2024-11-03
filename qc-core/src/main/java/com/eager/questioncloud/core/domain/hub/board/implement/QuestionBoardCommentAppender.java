@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionBoardCommentAppender {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
-    private final QuestionBoardValidator questionBoardValidator;
+    private final PostValidator postValidator;
 
     public PostComment append(PostComment postComment) {
-        questionBoardValidator.permissionValidator(postComment.getPostId(), postComment.getWriterId());
+        postValidator.permissionValidator(postComment.getPostId(), postComment.getWriterId());
         return questionBoardCommentRepository.save(postComment);
     }
 }

@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionBoardCommentReader {
     private final QuestionBoardCommentRepository questionBoardCommentRepository;
-    private final QuestionBoardValidator questionBoardValidator;
+    private final PostValidator postValidator;
 
     public List<PostCommentDetail> getQuestionBoardComments(Long boardId, Long userId, PagingInformation pagingInformation) {
-        questionBoardValidator.permissionValidator(boardId, userId);
+        postValidator.permissionValidator(boardId, userId);
         return questionBoardCommentRepository.getQuestionBoardCommentDetails(boardId, userId, pagingInformation);
     }
 

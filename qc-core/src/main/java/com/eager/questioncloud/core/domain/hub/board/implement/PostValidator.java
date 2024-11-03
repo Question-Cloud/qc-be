@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionBoardValidator {
-    private final QuestionBoardReader questionBoardReader;
+public class PostValidator {
+    private final PostReader postReader;
     private final QuestionPermissionValidator questionPermissionValidator;
 
     public void permissionValidator(Long boardId, Long userId) {
-        Post post = questionBoardReader.findById(boardId);
+        Post post = postReader.findById(boardId);
         questionPermissionValidator.permissionValidator(userId, post.getQuestionId());
     }
 }
