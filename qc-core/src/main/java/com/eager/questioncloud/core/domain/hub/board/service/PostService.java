@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionBoardService {
+public class PostService {
     private final PostAppender postAppender;
     private final PostReader postReader;
     private final PostUpdater postUpdater;
@@ -25,23 +25,23 @@ public class QuestionBoardService {
         return postAppender.append(post);
     }
 
-    public List<PostListItem> getQuestionBoardList(Long userId, Long questionId, PagingInformation pagingInformation) {
+    public List<PostListItem> getPostList(Long userId, Long questionId, PagingInformation pagingInformation) {
         return postReader.getPosts(userId, questionId, pagingInformation);
     }
 
-    public int countQuestionBoard(Long questionId) {
+    public int countPost(Long questionId) {
         return postReader.count(questionId);
     }
 
-    public PostDetail getQuestionBoardDetail(Long userId, Long boardId) {
-        return postReader.getPostDetail(userId, boardId);
+    public PostDetail getPostDetail(Long userId, Long postId) {
+        return postReader.getPostDetail(userId, postId);
     }
 
-    public void modify(Long boardId, Long userId, PostContent postContent) {
-        postUpdater.updatePost(boardId, userId, postContent);
+    public void modify(Long postId, Long userId, PostContent postContent) {
+        postUpdater.updatePost(postId, userId, postContent);
     }
 
-    public void delete(Long boardId, Long userId) {
-        postRemover.delete(boardId, userId);
+    public void delete(Long postId, Long userId) {
+        postRemover.delete(postId, userId);
     }
 }

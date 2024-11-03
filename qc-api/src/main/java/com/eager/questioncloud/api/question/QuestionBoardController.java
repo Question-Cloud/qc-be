@@ -7,7 +7,7 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardService;
+import com.eager.questioncloud.core.domain.hub.board.service.PostService;
 import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/board")
 @RequiredArgsConstructor
 public class QuestionBoardController {
-    private final QuestionBoardService questionBoardService;
+    private final PostService postService;
 
     @PatchMapping("/{boardId}")
     @ApiResponses(value = {
@@ -42,7 +42,7 @@ public class QuestionBoardController {
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId,
         @RequestBody @Valid Request.ModifyQuestionBoardRequest request) {
-        questionBoardService.modify(
+        postService.modify(
             boardId,
             userPrincipal.getUser().getUid(),
             PostContent.create(request.getTitle(), request.getContent(), request.getFiles()));
@@ -55,7 +55,7 @@ public class QuestionBoardController {
     })
     @Operation(operationId = "문제 게시판 글 삭제", summary = "문제 게시판 글 삭제", tags = {"question-board"}, description = "문제 게시판 글 삭제")
     public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        questionBoardService.delete(boardId, userPrincipal.getUser().getUid());
+        postService.delete(boardId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 
@@ -66,7 +66,7 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
     public QuestionBoardResponse getQuestionBoard(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        PostDetail board = questionBoardService.getQuestionBoardDetail(userPrincipal.getUser().getUid(), boardId);
+        PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), boardId);
         return new QuestionBoardResponse(board);
     }
 
@@ -79,8 +79,8 @@ public class QuestionBoardController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<PostListItem> getQuestionBoards(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
-        int total = questionBoardService.countQuestionBoard(questionId);
-        List<PostListItem> boards = questionBoardService.getQuestionBoardList(
+        int total = postService.countPost(questionId);
+        List<PostListItem> boards = postService.getPostList(
             userPrincipal.getUser().getUid(),
             questionId,
             pagingInformation);
@@ -94,7 +94,7 @@ public class QuestionBoardController {
     @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid Request.RegisterQuestionBoardRequest request) {
-        questionBoardService.register(
+        postService.register(
             Post.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
