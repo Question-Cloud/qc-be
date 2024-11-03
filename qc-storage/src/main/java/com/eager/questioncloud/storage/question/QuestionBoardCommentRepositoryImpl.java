@@ -8,7 +8,7 @@ import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
+import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import com.eager.questioncloud.core.domain.hub.board.repository.QuestionBoardCommentRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
@@ -25,12 +25,12 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public QuestionBoardComment save(QuestionBoardComment questionBoardComment) {
-        return questionBoardCommentJpaRepository.save(QuestionBoardCommentEntity.from(questionBoardComment)).toModel();
+    public PostComment save(PostComment postComment) {
+        return questionBoardCommentJpaRepository.save(QuestionBoardCommentEntity.from(postComment)).toModel();
     }
 
     @Override
-    public QuestionBoardComment findByIdAndWriterId(Long commentId, Long userId) {
+    public PostComment findByIdAndWriterId(Long commentId, Long userId) {
         return questionBoardCommentJpaRepository.findByIdAndWriterId(commentId, userId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
@@ -66,8 +66,8 @@ public class QuestionBoardCommentRepositoryImpl implements QuestionBoardCommentR
     }
 
     @Override
-    public void delete(QuestionBoardComment questionBoardComment) {
-        questionBoardCommentJpaRepository.delete(QuestionBoardCommentEntity.from(questionBoardComment));
+    public void delete(PostComment postComment) {
+        questionBoardCommentJpaRepository.delete(QuestionBoardCommentEntity.from(postComment));
     }
 
     @Override

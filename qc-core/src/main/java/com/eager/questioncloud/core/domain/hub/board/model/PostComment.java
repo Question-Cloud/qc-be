@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class QuestionBoardComment {
+public class PostComment {
     private Long id;
     private Long boardId;
     private Long writerId;
@@ -13,7 +13,7 @@ public class QuestionBoardComment {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionBoardComment(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
+    public PostComment(Long id, Long boardId, Long writerId, String comment, LocalDateTime createdAt) {
         this.id = id;
         this.boardId = boardId;
         this.writerId = writerId;
@@ -21,8 +21,8 @@ public class QuestionBoardComment {
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoardComment create(Long boardId, Long writerId, String comment) {
-        return QuestionBoardComment.builder()
+    public static PostComment create(Long boardId, Long writerId, String comment) {
+        return PostComment.builder()
             .boardId(boardId)
             .writerId(writerId)
             .comment(comment)

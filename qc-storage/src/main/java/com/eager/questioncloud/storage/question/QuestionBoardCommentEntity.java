@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
+import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,18 +43,18 @@ public class QuestionBoardCommentEntity {
         this.createdAt = createdAt;
     }
 
-    public static QuestionBoardCommentEntity from(QuestionBoardComment questionBoardComment) {
+    public static QuestionBoardCommentEntity from(PostComment postComment) {
         return QuestionBoardCommentEntity.builder()
-            .id(questionBoardComment.getId())
-            .boardId(questionBoardComment.getBoardId())
-            .writerId(questionBoardComment.getWriterId())
-            .comment(questionBoardComment.getComment())
-            .createdAt(questionBoardComment.getCreatedAt())
+            .id(postComment.getId())
+            .boardId(postComment.getBoardId())
+            .writerId(postComment.getWriterId())
+            .comment(postComment.getComment())
+            .createdAt(postComment.getCreatedAt())
             .build();
     }
 
-    public QuestionBoardComment toModel() {
-        return QuestionBoardComment.builder()
+    public PostComment toModel() {
+        return PostComment.builder()
             .id(id)
             .boardId(boardId)
             .writerId(writerId)

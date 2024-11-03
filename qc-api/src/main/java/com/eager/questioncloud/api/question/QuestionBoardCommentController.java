@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
+import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import com.eager.questioncloud.core.domain.hub.board.service.QuestionBoardCommentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +56,7 @@ public class QuestionBoardCommentController {
     public DefaultResponse addQuestionBoardComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddQuestionBoardCommentRequest request) {
         questionBoardCommentService.addQuestionBoardComment(
-            QuestionBoardComment.create(
+            PostComment.create(
                 request.getBoardId(),
                 userPrincipal.getUser().getUid(),
                 request.getComment()));

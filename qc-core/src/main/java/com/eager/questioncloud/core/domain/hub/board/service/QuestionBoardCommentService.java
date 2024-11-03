@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardComm
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentReader;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentRemover;
 import com.eager.questioncloud.core.domain.hub.board.implement.QuestionBoardCommentUpdater;
-import com.eager.questioncloud.core.domain.hub.board.model.QuestionBoardComment;
+import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class QuestionBoardCommentService {
     private final QuestionBoardCommentRemover questionBoardCommentRemover;
     private final QuestionBoardCommentReader questionBoardCommentReader;
 
-    public QuestionBoardComment addQuestionBoardComment(QuestionBoardComment questionBoardComment) {
-        return questionBoardCommentAppender.append(questionBoardComment);
+    public PostComment addQuestionBoardComment(PostComment postComment) {
+        return questionBoardCommentAppender.append(postComment);
     }
 
     public void modifyQuestionBoardComment(Long commentId, Long userId, String comment) {
