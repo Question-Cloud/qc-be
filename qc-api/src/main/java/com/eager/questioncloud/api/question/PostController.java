@@ -29,44 +29,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/post")
 @RequiredArgsConstructor
-public class QuestionBoardController {
+public class PostController {
     private final PostService postService;
 
-    @PatchMapping("/{boardId}")
+    @PatchMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId,
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId,
         @RequestBody @Valid Request.ModifyPostRequest request) {
         postService.modify(
-            boardId,
+            postId,
             userPrincipal.getUser().getUid(),
             PostContent.create(request.getTitle(), request.getContent(), request.getFiles()));
         return DefaultResponse.success();
     }
 
-    @DeleteMapping("/{boardId}")
+    @DeleteMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 삭제", summary = "문제 게시판 글 삭제", tags = {"question-board"}, description = "문제 게시판 글 삭제")
-    public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        postService.delete(boardId, userPrincipal.getUser().getUid());
+    public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
+        postService.delete(postId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 
-    @GetMapping("/{boardId}")
+    @GetMapping("/{postId}")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 조회", summary = "문제 게시판 글 조회", tags = {"question-board"}, description = "문제 게시판 글 조회")
     public PostResponse getQuestionBoard(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long boardId) {
-        PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), boardId);
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId) {
+        PostDetail board = postService.getPostDetail(userPrincipal.getUser().getUid(), postId);
         return new PostResponse(board);
     }
 
