@@ -7,7 +7,7 @@ import com.eager.questioncloud.api.user.Response.GetUserPointResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
-import com.eager.questioncloud.core.domain.payment.point.service.ChargePointService;
+import com.eager.questioncloud.core.domain.payment.point.service.ChargePointPaymentService;
 import com.eager.questioncloud.core.domain.payment.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserPointController {
     private final UserPointService userPointService;
-    private final ChargePointService chargePointService;
+    private final ChargePointPaymentService chargePointPaymentService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -44,7 +44,7 @@ public class UserPointController {
     })
     @Operation(operationId = "포인트 충전 완료 여부 조회", summary = "포인트 충전 완료 여부 조회", tags = {"charge-point"}, description = "포인트 충전 완료 여부 조회")
     public CheckCompletePaymentResponse isCompletePayment(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable String paymentId) {
-        Boolean isCompletePayment = chargePointService.isCompletePayment(userPrincipal.getUser().getUid(), paymentId);
+        Boolean isCompletePayment = chargePointPaymentService.isCompletePayment(userPrincipal.getUser().getUid(), paymentId);
         return new CheckCompletePaymentResponse(isCompletePayment);
     }
 
@@ -60,7 +60,7 @@ public class UserPointController {
     public DefaultResponse createOrder(
         @AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody ChargePointOrderRequest chargePointOrderRequest) {
-        chargePointService.createOrder(
+        chargePointPaymentService.createOrder(
             ChargePointPayment.order(
                 chargePointOrderRequest.getPaymentId(),
                 userPrincipal.getCreator().getUserId(),
@@ -76,7 +76,7 @@ public class UserPointController {
     @Operation(operationId = "Portone 포인트 충전 Webhook", summary = "Portone 포인트 충전 Webhook", tags = {"charge-point"},
         description = "Portone 포인트 충전 Webhook")
     public DefaultResponse payment(@RequestBody ChargePointPaymentRequest request) {
-        chargePointService.paymentAndCharge(request.getPayment_id());
+        chargePointPaymentService.paymentAndCharge(request.getPayment_id());
         return DefaultResponse.success();
     }
 }

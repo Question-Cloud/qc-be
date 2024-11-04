@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ChargePointService {
+public class ChargePointPaymentService {
     private final ChargePointPaymentProcessor chargePointPaymentProcessor;
     private final UserPointManager userPointManager;
     private final PortoneAPI portoneAPI;
