@@ -7,14 +7,12 @@ import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class ChargePointPaymentProcessor {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    @Transactional
     public ChargePointPayment payment(PortonePayment portonePayment) {
         ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(portonePayment.getId());
         chargePointPayment.paid(portonePayment);
