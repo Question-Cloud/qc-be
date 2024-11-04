@@ -76,7 +76,7 @@ public class UserPointController {
     @Operation(operationId = "Portone 포인트 충전 Webhook", summary = "Portone 포인트 충전 Webhook", tags = {"charge-point"},
         description = "Portone 포인트 충전 Webhook")
     public DefaultResponse payment(@RequestBody ChargePointPaymentRequest request) {
-        chargePointPaymentService.payment(request.getPayment_id());
+        chargePointPaymentService.approvePayment(request.getPayment_id());
         return DefaultResponse.success();
     }
 }

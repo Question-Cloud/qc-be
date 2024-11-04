@@ -20,9 +20,9 @@ public class ChargePointPaymentService {
         chargePointPaymentProcessor.createOrder(chargePointPayment);
     }
 
-    public void payment(String paymentId) {
+    public void approvePayment(String paymentId) {
         PortonePayment portonePayment = portoneAPI.getPaymentResult(paymentId);
-        ChargePointPayment chargePointPayment = chargePointPaymentProcessor.payment(portonePayment);
+        ChargePointPayment chargePointPayment = chargePointPaymentProcessor.approve(portonePayment);
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }
 
