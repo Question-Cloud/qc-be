@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class UserPointUpdater {
     private final UserPointRepository userPointRepository;
 
-    public void updateUserPoint(Long userId, int point) {
+    public void chargeUserPoint(Long userId, int point) {
         userPointRepository.updatePoint(userId, point);
     }
 }

@@ -13,4 +13,12 @@ public class UserPoint {
         this.userId = userId;
         this.point = point;
     }
+
+    public void charge(int amount) {
+        this.point += amount;
+    }
+
+    public void use(int amount) {
+        this.point -= amount;
+    }
 }

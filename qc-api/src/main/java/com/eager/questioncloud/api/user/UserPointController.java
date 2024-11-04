@@ -6,6 +6,7 @@ import com.eager.questioncloud.api.user.Response.CheckCompletePaymentResponse;
 import com.eager.questioncloud.api.user.Response.GetUserPointResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
 import com.eager.questioncloud.core.domain.payment.point.service.ChargePointService;
 import com.eager.questioncloud.core.domain.payment.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -33,8 +34,8 @@ public class UserPointController {
     })
     @Operation(operationId = "보유중인 포인트 조회", summary = "보유중인 포인트 조회", tags = {"point"}, description = "보유중인 포인트 조회")
     public GetUserPointResponse getUserPoint(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        int userPoint = userPointService.getUserPoint(userPrincipal.getUser().getUid());
-        return new GetUserPointResponse(userPoint);
+        UserPoint userPoint = userPointService.getUserPoint(userPrincipal.getUser().getUid());
+        return new GetUserPointResponse(userPoint.getPoint());
     }
 
     @GetMapping("/charge/{paymentId}")
