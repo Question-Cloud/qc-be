@@ -7,7 +7,6 @@ import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +14,6 @@ public class UserPointManager {
     private final UserPointReader userPointReader;
     private final UserPointRepository userPointRepository;
 
-    @Transactional
     public void chargePoint(Long userId, ChargePointType chargePointType) {
         UserPoint userPoint = userPointReader.getUserPoint(userId);
         userPoint.charge(chargePointType.getAmount());
