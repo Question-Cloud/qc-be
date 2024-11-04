@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.payment.coupon.implement;
 
 import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.coupon.model.UserCoupon;
+import com.eager.questioncloud.core.domain.payment.coupon.repository.UserCouponRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
@@ -13,19 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCouponRegister {
     private final CouponReader couponReader;
     private final CouponUpdater couponUpdater;
-    private final UserCouponReader userCouponReader;
-    private final UserCouponAppender userCouponAppender;
+    private final UserCouponRepository userCouponRepository;
 
     @Transactional
     public UserCoupon registerCoupon(Long userId, String couponCode) {
         Coupon coupon = couponReader.findByCode(couponCode);
 
-        if (userCouponReader.isRegistered(userId, coupon.getId())) {
+        if (userCouponRepository.isRegistered(userId, coupon.getId())) {
             throw new CustomException(Error.ALREADY_REGISTER_COUPON);
         }
 
         couponUpdater.decreaseCount(coupon.getId());
 
-        return userCouponAppender.append(UserCoupon.create(userId, coupon));
+        return userCouponRepository.save(UserCoupon.create(userId, coupon));
     }
 }
