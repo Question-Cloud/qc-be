@@ -4,6 +4,7 @@ import static com.eager.questioncloud.storage.point.QChargePointPaymentEntity.ch
 
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,10 +23,13 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     }
 
     @Override
-    public Boolean existsByUserIdAndPaymentId(Long userId, String paymentId) {
+    public Boolean isCompletedPayment(Long userId, String paymentId) {
         return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
             .from(chargePointPaymentEntity)
-            .where(chargePointPaymentEntity.paymentId.eq(paymentId), chargePointPaymentEntity.userId.eq(userId))
+            .where(
+                chargePointPaymentEntity.paymentId.eq(paymentId),
+                chargePointPaymentEntity.userId.eq(userId),
+                chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.PAID))
             .fetchFirst() != null;
     }
 
