@@ -39,4 +39,12 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
+
+    @Override
+    public Boolean existsByPaymentId(String paymentId) {
+        return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
+            .from(chargePointPaymentEntity)
+            .where(chargePointPaymentEntity.paymentId.eq(paymentId))
+            .fetchFirst() != null;
+    }
 }
