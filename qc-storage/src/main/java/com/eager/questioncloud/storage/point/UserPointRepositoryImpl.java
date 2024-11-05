@@ -3,7 +3,7 @@ package com.eager.questioncloud.storage.point;
 import static com.eager.questioncloud.storage.point.QUserPointEntity.userPointEntity;
 
 import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
-import com.eager.questioncloud.core.domain.user.repository.UserPointRepository;
+import com.eager.questioncloud.core.domain.payment.point.repository.UserPointRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

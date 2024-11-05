@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user.repository;
+package com.eager.questioncloud.core.domain.payment.point.repository;
 
 import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
 import org.springframework.stereotype.Repository;
