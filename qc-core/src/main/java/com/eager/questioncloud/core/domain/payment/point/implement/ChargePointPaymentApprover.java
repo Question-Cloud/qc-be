@@ -17,12 +17,11 @@ public class ChargePointPaymentApprover {
         try {
             chargePointPayment.approve(portonePayment);
             chargePointPaymentRepository.save(chargePointPayment);
-        } catch (Exception e) {
-            if (e instanceof CustomException) {
-                throw e;
-            }
+        } catch (CustomException customException) {
+            throw customException;
+        } catch (Exception unknownException) {
             chargePointPaymentExceptionHandler.failHandler(chargePointPayment);
-            throw e;
+            throw unknownException;
         }
     }
 }
