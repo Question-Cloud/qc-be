@@ -43,7 +43,7 @@ public class ChargePointPayment {
             .build();
     }
 
-    public void paid(PortonePayment payment) {
+    public void approve(PortonePayment payment) {
         validatePayment(payment);
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID;
         this.receiptUrl = payment.getReceiptUrl();

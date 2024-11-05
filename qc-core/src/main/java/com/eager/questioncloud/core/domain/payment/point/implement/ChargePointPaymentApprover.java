@@ -12,7 +12,7 @@ public class ChargePointPaymentApprover {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
     public ChargePointPayment approve(ChargePointPayment chargePointPayment, PortonePayment portonePayment) {
-        chargePointPayment.paid(portonePayment);
+        chargePointPayment.approve(portonePayment);
         chargePointPaymentRepository.save(chargePointPayment);
         return chargePointPayment;
     }
