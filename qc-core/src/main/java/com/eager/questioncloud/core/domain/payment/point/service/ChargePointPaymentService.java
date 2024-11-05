@@ -26,7 +26,7 @@ public class ChargePointPaymentService {
 
     public void approvePayment(String paymentId) {
         PortonePayment portonePayment = portoneAPI.getPaymentResult(paymentId);
-        ChargePointPayment chargePointPayment = chargePointPaymentReader.getChargePointPayment(paymentId);
+        ChargePointPayment chargePointPayment = chargePointPaymentReader.getNotApproveChargePointPayment(paymentId);
         chargePointPaymentApprover.approve(chargePointPayment, portonePayment);
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentReader {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public ChargePointPayment getChargePointPayment(String paymentId) {
-        return chargePointPaymentRepository.findByPaymentId(paymentId);
+    public ChargePointPayment getNotApproveChargePointPayment(String paymentId) {
+        return chargePointPaymentRepository.getChargePointPaymentForApprove(paymentId);
     }
 
     public Boolean isCompletedPayment(Long userId, String paymentId) {

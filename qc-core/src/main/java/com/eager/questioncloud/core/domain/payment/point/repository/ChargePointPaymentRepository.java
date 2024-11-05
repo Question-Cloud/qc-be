@@ -7,7 +7,7 @@ public interface ChargePointPaymentRepository {
 
     Boolean isCompletedPayment(Long userId, String paymentId);
 
-    ChargePointPayment findByPaymentId(String paymentId);
+    ChargePointPayment getChargePointPaymentForApprove(String paymentId);
 
     Boolean existsByPaymentId(String paymentId);
 }
