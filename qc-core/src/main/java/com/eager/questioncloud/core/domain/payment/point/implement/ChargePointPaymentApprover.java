@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChargePointPaymentApprover {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
-    private final ChargePointPaymentExceptionHandler chargePointPaymentExceptionHandler;
+    private final ChargePointPaymentFailHandler chargePointPaymentFailHandler;
 
     public void approve(ChargePointPayment chargePointPayment, PortonePayment portonePayment) {
         try {
@@ -20,7 +20,7 @@ public class ChargePointPaymentApprover {
         } catch (CustomException customException) {
             throw customException;
         } catch (Exception unknownException) {
-            chargePointPaymentExceptionHandler.failHandler(chargePointPayment.getPaymentId());
+            chargePointPaymentFailHandler.failHandler(chargePointPayment.getPaymentId());
             throw unknownException;
         }
     }

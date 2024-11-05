@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.point.event;
 
-import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentExceptionHandler;
+import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentFailHandler;
 import com.eager.questioncloud.core.domain.payment.point.implement.UserPointManager;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChargePointEventListener {
     private final UserPointManager userPointManager;
-    private final ChargePointPaymentExceptionHandler chargePointPaymentExceptionHandler;
+    private final ChargePointPaymentFailHandler chargePointPaymentFailHandler;
 
     @EventListener
     public void chargePointEvent(ChargePointEvent chargePointEvent) {
         try {
             userPointManager.chargePoint(chargePointEvent.getUserId(), chargePointEvent.getChargePointType());
         } catch (Exception e) {
-            chargePointPaymentExceptionHandler.failHandler(chargePointEvent.getPaymentId());
+            chargePointPaymentFailHandler.failHandler(chargePointEvent.getPaymentId());
             throw new CustomException(Error.PAYMENT_ERROR);
         }
     }

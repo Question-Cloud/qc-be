@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ChargePointPaymentExceptionHandler {
+public class ChargePointPaymentFailHandler {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final PortoneAPI portoneAPI;
 
