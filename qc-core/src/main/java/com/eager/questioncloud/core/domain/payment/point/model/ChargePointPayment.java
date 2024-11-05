@@ -50,6 +50,10 @@ public class ChargePointPayment {
         this.paidAt = LocalDateTime.now();
     }
 
+    public void fail() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail;
+    }
+
     private void validatePayment(PortonePayment payment) {
         validateStatus();
         validateAmount(payment);
