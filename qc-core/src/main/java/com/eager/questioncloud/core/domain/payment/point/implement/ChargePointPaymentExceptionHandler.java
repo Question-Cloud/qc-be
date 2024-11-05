@@ -12,7 +12,8 @@ public class ChargePointPaymentExceptionHandler {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final PortoneAPI portoneAPI;
 
-    public void failHandler(ChargePointPayment chargePointPayment) {
+    public void failHandler(String paymentId) {
+        ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(paymentId);
         chargePointPayment.fail();
         chargePointPaymentRepository.save(chargePointPayment);
 

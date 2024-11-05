@@ -9,5 +9,7 @@ public interface ChargePointPaymentRepository {
 
     ChargePointPayment getChargePointPaymentForApprove(String paymentId);
 
+    ChargePointPayment findByPaymentId(String paymentId);
+
     Boolean existsByPaymentId(String paymentId);
 }

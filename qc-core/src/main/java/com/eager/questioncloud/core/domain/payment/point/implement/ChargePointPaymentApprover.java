@@ -20,7 +20,7 @@ public class ChargePointPaymentApprover {
         } catch (CustomException customException) {
             throw customException;
         } catch (Exception unknownException) {
-            chargePointPaymentExceptionHandler.failHandler(chargePointPayment);
+            chargePointPaymentExceptionHandler.failHandler(chargePointPayment.getPaymentId());
             throw unknownException;
         }
     }
