@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentProcessor {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public ChargePointPayment approve(PortonePayment portonePayment) {
-        ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(portonePayment.getId());
+    public ChargePointPayment approve(ChargePointPayment chargePointPayment, PortonePayment portonePayment) {
         chargePointPayment.paid(portonePayment);
         chargePointPaymentRepository.save(chargePointPayment);
         return chargePointPayment;
