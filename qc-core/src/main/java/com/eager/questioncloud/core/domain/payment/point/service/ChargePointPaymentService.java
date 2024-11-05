@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.point.service;
 
 import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentApprover;
+import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentCreator;
 import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentReader;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
@@ -15,11 +16,12 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentService {
     private final ChargePointPaymentApprover chargePointPaymentApprover;
     private final ChargePointPaymentReader chargePointPaymentReader;
-    private final PortoneAPI portoneAPI;
+    private final ChargePointPaymentCreator chargePointPaymentCreator;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final PortoneAPI portoneAPI;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
-        chargePointPaymentApprover.createOrder(chargePointPayment);
+        chargePointPaymentCreator.createOrder(chargePointPayment);
     }
 
     public void approvePayment(String paymentId) {
@@ -30,6 +32,6 @@ public class ChargePointPaymentService {
     }
 
     public Boolean isCompletePayment(Long userId, String paymentId) {
-        return chargePointPaymentApprover.isCompletePayment(userId, paymentId);
+        return chargePointPaymentReader.isCompletedPayment(userId, paymentId);
     }
 }

@@ -13,4 +13,8 @@ public class ChargePointPaymentReader {
     public ChargePointPayment getChargePointPayment(String paymentId) {
         return chargePointPaymentRepository.findByPaymentId(paymentId);
     }
+
+    public Boolean isCompletedPayment(Long userId, String paymentId) {
+        return chargePointPaymentRepository.isCompletedPayment(userId, paymentId);
+    }
 }
