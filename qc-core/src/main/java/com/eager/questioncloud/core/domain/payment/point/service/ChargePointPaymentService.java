@@ -5,8 +5,6 @@ import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPa
 import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentReader;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.pg.PGAPI;
-import com.eager.questioncloud.core.domain.pg.PGPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -18,16 +16,13 @@ public class ChargePointPaymentService {
     private final ChargePointPaymentReader chargePointPaymentReader;
     private final ChargePointPaymentCreator chargePointPaymentCreator;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final PGAPI pgAPI;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
         chargePointPaymentCreator.createOrder(chargePointPayment);
     }
 
     public void approvePayment(String paymentId) {
-        PGPayment pgPayment = pgAPI.getPayment(paymentId);
-        ChargePointPayment chargePointPayment = chargePointPaymentReader.getChargePointPaymentForApprove(paymentId);
-        chargePointPaymentApprover.approve(chargePointPayment, pgPayment);
+        ChargePointPayment chargePointPayment = chargePointPaymentApprover.approve(paymentId);
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }
 
