@@ -4,3 +4,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     compileOnly(project(":qc-core"))
 }
+
+bootJar.enabled = false
+jar.enabled = true
