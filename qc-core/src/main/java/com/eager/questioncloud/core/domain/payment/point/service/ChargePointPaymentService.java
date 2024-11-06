@@ -5,8 +5,8 @@ import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPa
 import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentReader;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
-import com.eager.questioncloud.core.domain.portone.implement.PortoneAPI;
+import com.eager.questioncloud.core.domain.pg.PGAPI;
+import com.eager.questioncloud.core.domain.pg.PGPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -18,16 +18,16 @@ public class ChargePointPaymentService {
     private final ChargePointPaymentReader chargePointPaymentReader;
     private final ChargePointPaymentCreator chargePointPaymentCreator;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final PortoneAPI portoneAPI;
+    private final PGAPI pgAPI;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
         chargePointPaymentCreator.createOrder(chargePointPayment);
     }
 
     public void approvePayment(String paymentId) {
-        PortonePayment portonePayment = portoneAPI.getPaymentResult(paymentId);
+        PGPayment pgPayment = pgAPI.getPayment(paymentId);
         ChargePointPayment chargePointPayment = chargePointPaymentReader.getNotApproveChargePointPayment(paymentId);
-        chargePointPaymentApprover.approve(chargePointPayment, portonePayment);
+        chargePointPaymentApprover.approve(chargePointPayment, pgPayment);
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }
 

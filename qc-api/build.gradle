@@ -7,5 +7,6 @@ dependencies {
 
     runtimeOnly(project(":qc-storage"))
     implementation(project(":qc-core"))
+    implementation(project(":qc-external-pg-api"))
 }
 
