@@ -26,7 +26,7 @@ public class ChargePointPaymentService {
 
     public void approvePayment(String paymentId) {
         PGPayment pgPayment = pgAPI.getPayment(paymentId);
-        ChargePointPayment chargePointPayment = chargePointPaymentReader.getNotApproveChargePointPayment(paymentId);
+        ChargePointPayment chargePointPayment = chargePointPaymentReader.getChargePointPaymentForApprove(paymentId);
         chargePointPaymentApprover.approve(chargePointPayment, pgPayment);
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentReader {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
 
-    public ChargePointPayment getNotApproveChargePointPayment(String paymentId) {
+    public ChargePointPayment getChargePointPaymentForApprove(String paymentId) {
         return chargePointPaymentRepository.getChargePointPaymentForApprove(paymentId);
     }
 
