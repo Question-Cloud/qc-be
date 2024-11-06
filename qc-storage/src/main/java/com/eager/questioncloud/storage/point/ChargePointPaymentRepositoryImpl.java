@@ -4,6 +4,7 @@ import static com.eager.questioncloud.storage.point.QChargePointPaymentEntity.ch
 
 import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,11 +23,31 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     }
 
     @Override
-    public Boolean existsByUserIdAndPaymentId(Long userId, String paymentId) {
+    public Boolean isCompletedPayment(Long userId, String paymentId) {
         return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
             .from(chargePointPaymentEntity)
-            .where(chargePointPaymentEntity.paymentId.eq(paymentId), chargePointPaymentEntity.userId.eq(userId))
+            .where(
+                chargePointPaymentEntity.paymentId.eq(paymentId),
+                chargePointPaymentEntity.userId.eq(userId),
+                chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.PAID))
             .fetchFirst() != null;
+    }
+
+    @Override
+    public ChargePointPayment getChargePointPaymentForApprove(String paymentId) {
+        ChargePointPaymentEntity resultEntity =
+            jpaQueryFactory.select(chargePointPaymentEntity)
+                .from(chargePointPaymentEntity)
+                .where(
+                    chargePointPaymentEntity.paymentId.eq(paymentId),
+                    chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.ORDERED))
+                .fetchFirst();
+
+        if (resultEntity == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return resultEntity.toModel();
     }
 
     @Override
@@ -34,5 +55,13 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
         return chargePointPaymentJpaRepository.findById(paymentId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
+    }
+
+    @Override
+    public Boolean existsByPaymentId(String paymentId) {
+        return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
+            .from(chargePointPaymentEntity)
+            .where(chargePointPaymentEntity.paymentId.eq(paymentId))
+            .fetchFirst() != null;
     }
 }

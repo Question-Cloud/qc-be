@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.payment.point.model;
 
 import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointType;
-import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
+import com.eager.questioncloud.core.domain.pg.PGPayment;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.core.exception.InvalidPaymentException;
@@ -43,21 +43,25 @@ public class ChargePointPayment {
             .build();
     }
 
-    public void paid(PortonePayment payment) {
-        validatePayment(payment);
+    public void approve(PGPayment pgPayment) {
+        validatePayment(pgPayment);
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID;
-        this.receiptUrl = payment.getReceiptUrl();
+        this.receiptUrl = pgPayment.getReceiptUrl();
         this.paidAt = LocalDateTime.now();
     }
 
-    private void validatePayment(PortonePayment payment) {
-        validateStatus();
-        validateAmount(payment);
+    public void fail() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail;
     }
 
-    private void validateAmount(PortonePayment payment) {
-        if (chargePointType.getAmount() != payment.getAmount().getTotal()) {
-            throw new InvalidPaymentException(payment);
+    private void validatePayment(PGPayment pgPayment) {
+        validateStatus();
+        validateAmount(pgPayment);
+    }
+
+    private void validateAmount(PGPayment pgPayment) {
+        if (chargePointType.getAmount() != pgPayment.getAmount()) {
+            throw new InvalidPaymentException(pgPayment);
         }
     }
 

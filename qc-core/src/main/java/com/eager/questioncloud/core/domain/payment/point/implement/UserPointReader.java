@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.point.implement;
 
-import com.eager.questioncloud.core.domain.user.repository.UserPointRepository;
+import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
+import com.eager.questioncloud.core.domain.payment.point.repository.UserPointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserPointReader {
     private final UserPointRepository userPointRepository;
 
-    public int getUserPoint(Long userId) {
-        return userPointRepository.getPoint(userId);
+    public UserPoint getUserPoint(Long userId) {
+        return userPointRepository.getUserPoint(userId);
     }
 }

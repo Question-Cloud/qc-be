@@ -5,7 +5,11 @@ import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPaymen
 public interface ChargePointPaymentRepository {
     ChargePointPayment save(ChargePointPayment chargePointPayment);
 
-    Boolean existsByUserIdAndPaymentId(Long userId, String paymentId);
+    Boolean isCompletedPayment(Long userId, String paymentId);
+
+    ChargePointPayment getChargePointPaymentForApprove(String paymentId);
 
     ChargePointPayment findByPaymentId(String paymentId);
+
+    Boolean existsByPaymentId(String paymentId);
 }

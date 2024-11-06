@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ChargePointPaymentStatus {
-    ORDERED("ORDERED"), PAID("PAID");
+    ORDERED("ORDERED"), PAID("PAID"), Fail("Fail");
 
     private final String value;
 

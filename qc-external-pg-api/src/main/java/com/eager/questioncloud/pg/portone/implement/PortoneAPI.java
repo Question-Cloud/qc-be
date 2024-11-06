@@ -1,23 +1,25 @@
-package com.eager.questioncloud.core.domain.portone.implement;
+package com.eager.questioncloud.pg.portone.implement;
 
-import com.eager.questioncloud.core.domain.portone.dto.PortoneCancelRequest;
-import com.eager.questioncloud.core.domain.portone.dto.PortonePayment;
+import com.eager.questioncloud.core.domain.pg.PGAPI;
+import com.eager.questioncloud.core.domain.pg.PGPayment;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.pg.portone.enums.PortonePaymentStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
 @Component
 @RequiredArgsConstructor
-public class PortoneAPI {
+public class PortoneAPI implements PGAPI {
     @Value("${PORT_ONE_SECRET_KEY}")
     private String PORT_ONE_SECRET_KEY;
 
-    public PortonePayment getPaymentResult(String paymentId) {
+    public PGPayment getPayment(String paymentId) {
         WebClient webClient = WebClient.create("https://api.portone.io");
 
         PortonePayment portonePayment = webClient.get()
@@ -35,7 +37,7 @@ public class PortoneAPI {
             throw new CustomException(Error.PAYMENT_ERROR);
         }
 
-        return portonePayment;
+        return new PGPayment(portonePayment.getId(), portonePayment.getAmount().getTotal(), portonePayment.getReceiptUrl());
     }
 
     public void cancel(String paymentId) {
@@ -47,4 +49,25 @@ public class PortoneAPI {
             .exchangeToMono(response -> response.bodyToMono(Void.class))
             .subscribe();
     }
+}
+
+@Getter
+class PortonePayment {
+    private String id;
+    private PortonePaymentStatus status;
+    private PortonePaymentAmount amount;
+    private String receiptUrl;
+
+    @Getter
+    public static class PortonePaymentAmount {
+        private int total;
+        private int taxFree;
+        private int vat;
+    }
+}
+
+@Getter
+@AllArgsConstructor
+class PortoneCancelRequest {
+    private String reason;
 }
