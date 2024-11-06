@@ -17,8 +17,8 @@ public class ChargePointPaymentApprover {
 
     public ChargePointPayment approve(String paymentId) {
         try {
-            PGPayment pgPayment = pgAPI.getPayment(paymentId);
             ChargePointPayment chargePointPayment = chargePointPaymentRepository.getChargePointPaymentForApprove(paymentId);
+            PGPayment pgPayment = pgAPI.getPayment(paymentId);
             chargePointPayment.approve(pgPayment);
             return chargePointPaymentRepository.save(chargePointPayment);
         } catch (CustomException customException) {
