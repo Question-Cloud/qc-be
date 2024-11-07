@@ -4,6 +4,8 @@ import com.eager.questioncloud.core.domain.payment.coupon.implement.UserCouponPr
 import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.point.implement.UserPointManager;
 import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.question.repository.QuestionPaymentOrderRepository;
+import com.eager.questioncloud.core.domain.payment.question.repository.QuestionPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class QuestionPaymentProcessor {
-    private final QuestionPaymentAppender questionPaymentAppender;
-    private final QuestionPaymentOrderAppender questionPaymentOrderAppender;
+    private final QuestionPaymentRepository questionPaymentRepository;
+    private final QuestionPaymentOrderRepository questionPaymentOrderRepository;
     private final UserPointManager userPointManager;
     private final UserCouponProcessor userCouponProcessor;
 
@@ -32,7 +34,7 @@ public class QuestionPaymentProcessor {
     }
 
     private void savePaymentInformation(QuestionPayment questionPayment) {
-        questionPaymentAppender.append(questionPayment);
-        questionPaymentOrderAppender.createQuestionPaymentOrders(questionPayment.getOrders());
+        questionPaymentRepository.save(questionPayment);
+        questionPaymentOrderRepository.saveAll(questionPayment.getOrders());
     }
 }
