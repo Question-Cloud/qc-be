@@ -3,6 +3,7 @@ package com.eager.questioncloud.core.domain.payment.question.model;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
 import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.coupon.vo.CouponType;
+import com.eager.questioncloud.core.domain.payment.question.vo.QuestionPaymentStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -17,17 +18,19 @@ public class QuestionPayment {
     private Long userId;
     private Long userCouponId;
     private int amount;
+    private QuestionPaymentStatus status;
     private LocalDateTime createdAt;
 
     @Builder
     public QuestionPayment(Long id, String paymentId, List<QuestionPaymentOrder> orders, Long userId, Long userCouponId, int amount,
-        LocalDateTime createdAt) {
+        QuestionPaymentStatus status, LocalDateTime createdAt) {
         this.id = id;
         this.paymentId = paymentId;
         this.orders = orders;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
@@ -42,6 +45,7 @@ public class QuestionPayment {
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(originalAmount)
+            .status(QuestionPaymentStatus.SUCCESS)
             .createdAt(LocalDateTime.now())
             .build();
     }
