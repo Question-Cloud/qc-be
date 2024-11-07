@@ -5,20 +5,23 @@ import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.coupon.vo.CouponType;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class QuestionPayment {
     private Long id;
+    private String paymentId;
     private Long userId;
     private Long userCouponId;
     private int amount;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
+    public QuestionPayment(Long id, String paymentId, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
         this.id = id;
+        this.paymentId = paymentId;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
@@ -27,6 +30,7 @@ public class QuestionPayment {
 
     public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
         return QuestionPayment.builder()
+            .paymentId(UUID.randomUUID().toString())
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(calcOriginalAmount(questions))

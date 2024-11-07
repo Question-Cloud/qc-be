@@ -9,19 +9,19 @@ import lombok.Getter;
 @Getter
 public class QuestionPaymentOrder {
     private Long id;
-    private Long paymentId;
+    private String paymentId;
     private Long questionId;
     private int price;
 
     @Builder
-    public QuestionPaymentOrder(Long id, Long paymentId, Long questionId, int price) {
+    public QuestionPaymentOrder(Long id, String paymentId, Long questionId, int price) {
         this.id = id;
         this.paymentId = paymentId;
         this.questionId = questionId;
         this.price = price;
     }
 
-    public static List<QuestionPaymentOrder> createOrders(Long paymentId, List<Question> questions) {
+    public static List<QuestionPaymentOrder> createOrders(String paymentId, List<Question> questions) {
         return questions
             .stream()
             .map(question -> QuestionPaymentOrder.builder()

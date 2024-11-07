@@ -35,7 +35,9 @@ public class QuestionPaymentProcessor {
         userPointManager.usePoint(userId, questionPayment.getAmount());
 
         questionPayment = questionPaymentAppender.append(questionPayment);
-        questionPaymentOrderAppender.createQuestionPaymentOrders(userId, QuestionPaymentOrder.createOrders(questionPayment.getId(), questions));
+        questionPaymentOrderAppender.createQuestionPaymentOrders(
+            userId,
+            QuestionPaymentOrder.createOrders(questionPayment.getPaymentId(), questions));
         return questionPayment;
     }
 }

@@ -21,7 +21,7 @@ public class QuestionPaymentOrderRepositoryImpl implements QuestionPaymentOrderR
         return jpaQueryFactory.select(questionPaymentOrderEntity.id, questionPaymentEntity.userId)
             .from(questionPaymentOrderEntity)
             .leftJoin(questionPaymentEntity)
-            .on(questionPaymentOrderEntity.paymentId.eq(questionPaymentEntity.id), questionPaymentEntity.userId.eq(userId))
+            .on(questionPaymentOrderEntity.paymentId.eq(questionPaymentEntity.paymentId), questionPaymentEntity.userId.eq(userId))
             .where(questionPaymentOrderEntity.questionId.in(questionIds))
             .fetchFirst() != null;
     }

@@ -24,7 +24,7 @@ public class QuestionPaymentOrderEntity {
     private Long id;
 
     @Column
-    private Long paymentId;
+    private String paymentId;
 
     @Column
     private Long questionId;
@@ -33,7 +33,7 @@ public class QuestionPaymentOrderEntity {
     private int price;
 
     @Builder
-    public QuestionPaymentOrderEntity(Long id, Long paymentId, Long questionId, int price) {
+    public QuestionPaymentOrderEntity(Long id, String paymentId, Long questionId, int price) {
         this.id = id;
         this.paymentId = paymentId;
         this.questionId = questionId;
