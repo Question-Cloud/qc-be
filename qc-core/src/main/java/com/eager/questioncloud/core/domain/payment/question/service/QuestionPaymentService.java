@@ -24,8 +24,8 @@ public class QuestionPaymentService {
     public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
         checkAlreadyOwn(userId, questionIds);
         List<Question> questions = questionReader.getQuestions(questionIds);
-        paymentProcessor.questionPayment(QuestionPayment.create(userId, userCouponId, questions));
-        applicationEventPublisher.publishEvent(AppendUserQuestionEvent.create(userId, questionIds));
+        QuestionPayment questionPayment = paymentProcessor.questionPayment(QuestionPayment.create(userId, userCouponId, questions));
+        applicationEventPublisher.publishEvent(AppendUserQuestionEvent.create(userId, questionIds, questionPayment));
     }
 
     private void checkAlreadyOwn(Long userId, List<Long> questionIds) {

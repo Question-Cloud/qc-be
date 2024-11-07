@@ -70,4 +70,8 @@ public class QuestionPayment {
             amount = amount - discountAmount;
         }
     }
+
+    public void fail() {
+        this.status = QuestionPaymentStatus.FAIL;
+    }
 }
