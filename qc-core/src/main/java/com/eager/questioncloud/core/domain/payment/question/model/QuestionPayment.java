@@ -33,12 +33,15 @@ public class QuestionPayment {
 
     public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
         String paymentId = UUID.randomUUID().toString();
+        int originalAmount = calcOriginalAmount(questions);
+        List<QuestionPaymentOrder> orders = QuestionPaymentOrder.createOrders(paymentId, questions);
+
         return QuestionPayment.builder()
             .paymentId(paymentId)
-            .orders(QuestionPaymentOrder.createOrders(paymentId, questions))
+            .orders(orders)
             .userId(userId)
             .userCouponId(userCouponId)
-            .amount(calcOriginalAmount(questions))
+            .amount(originalAmount)
             .createdAt(LocalDateTime.now())
             .build();
     }
