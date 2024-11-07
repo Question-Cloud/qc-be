@@ -18,15 +18,21 @@ public class QuestionPaymentProcessor {
 
     @Transactional
     public QuestionPayment questionPayment(QuestionPayment questionPayment) {
+        applyCoupon(questionPayment);
+        userPointManager.usePoint(questionPayment.getUserId(), questionPayment.getAmount());
+        savePaymentInformation(questionPayment);
+        return questionPayment;
+    }
+
+    private void applyCoupon(QuestionPayment questionPayment) {
         if (questionPayment.isUsingCoupon()) {
             Coupon coupon = userCouponProcessor.useCoupon(questionPayment.getUserId(), questionPayment.getUserCouponId());
             questionPayment.useCoupon(coupon);
         }
+    }
 
-        userPointManager.usePoint(questionPayment.getUserId(), questionPayment.getAmount());
-
-        questionPayment = questionPaymentAppender.append(questionPayment);
+    private void savePaymentInformation(QuestionPayment questionPayment) {
+        questionPaymentAppender.append(questionPayment);
         questionPaymentOrderAppender.createQuestionPaymentOrders(questionPayment.getOrders());
-        return questionPayment;
     }
 }
