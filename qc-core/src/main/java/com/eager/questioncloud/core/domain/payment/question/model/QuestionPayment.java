@@ -13,15 +13,18 @@ import lombok.Getter;
 public class QuestionPayment {
     private Long id;
     private String paymentId;
+    private List<QuestionPaymentOrder> orders;
     private Long userId;
     private Long userCouponId;
     private int amount;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, String paymentId, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
+    public QuestionPayment(Long id, String paymentId, List<QuestionPaymentOrder> orders, Long userId, Long userCouponId, int amount,
+        LocalDateTime createdAt) {
         this.id = id;
         this.paymentId = paymentId;
+        this.orders = orders;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
@@ -29,8 +32,10 @@ public class QuestionPayment {
     }
 
     public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
+        String paymentId = UUID.randomUUID().toString();
         return QuestionPayment.builder()
-            .paymentId(UUID.randomUUID().toString())
+            .paymentId(paymentId)
+            .orders(QuestionPaymentOrder.createOrders(paymentId, questions))
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(calcOriginalAmount(questions))
