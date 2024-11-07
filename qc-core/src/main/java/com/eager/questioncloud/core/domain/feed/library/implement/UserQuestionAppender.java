@@ -12,6 +12,9 @@ public class UserQuestionAppender {
     private final LibraryRepository libraryRepository;
 
     public List<UserQuestion> appendUserQuestions(Long userId, List<Long> questionIds) {
+        if (true) {
+            throw new RuntimeException();
+        }
         return libraryRepository.saveAll(UserQuestion.create(userId, questionIds));
     }
 }

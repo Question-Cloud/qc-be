@@ -32,6 +32,10 @@ public class UserCoupon {
         this.isUsed = true;
     }
 
+    public void rollback() {
+        this.isUsed = false;
+    }
+
     public static UserCoupon create(Long userId, Coupon coupon) {
         if (coupon.getEndAt().isBefore(LocalDateTime.now())) {
             throw new CustomException(Error.EXPIRED_COUPON);
