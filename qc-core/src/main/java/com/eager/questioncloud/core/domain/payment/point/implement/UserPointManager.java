@@ -28,4 +28,10 @@ public class UserPointManager {
         userPoint.use(amount);
         userPointRepository.save(userPoint);
     }
+
+    public void chargePoint(Long userId, int amount) {
+        UserPoint userPoint = userPointReader.getUserPoint(userId);
+        userPoint.charge(amount);
+        userPointRepository.save(userPoint);
+    }
 }

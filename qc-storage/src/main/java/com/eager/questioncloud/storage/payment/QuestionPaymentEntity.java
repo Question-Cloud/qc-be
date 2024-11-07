@@ -1,8 +1,11 @@
 package com.eager.questioncloud.storage.payment;
 
 import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.question.vo.QuestionPaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +26,9 @@ public class QuestionPaymentEntity {
     private Long id;
 
     @Column
+    private String paymentId;
+
+    @Column
     private Long userId;
 
     @Column
@@ -32,23 +38,32 @@ public class QuestionPaymentEntity {
     private int amount;
 
     @Column
+    @Enumerated(EnumType.STRING)
+    private QuestionPaymentStatus status;
+
+    @Column
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPaymentEntity(Long id, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
+    public QuestionPaymentEntity(Long id, String paymentId, Long userId, Long userCouponId, int amount, QuestionPaymentStatus status,
+        LocalDateTime createdAt) {
         this.id = id;
+        this.paymentId = paymentId;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
     public QuestionPayment toModel() {
         return QuestionPayment.builder()
             .id(id)
+            .paymentId(paymentId)
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(amount)
+            .status(status)
             .createdAt(createdAt)
             .build();
     }
@@ -56,9 +71,11 @@ public class QuestionPaymentEntity {
     public static QuestionPaymentEntity from(QuestionPayment questionPayment) {
         return QuestionPaymentEntity.builder()
             .id(questionPayment.getId())
+            .paymentId(questionPayment.getPaymentId())
             .userId(questionPayment.getUserId())
             .userCouponId(questionPayment.getUserCouponId())
             .amount(questionPayment.getAmount())
+            .status(questionPayment.getStatus())
             .createdAt(questionPayment.getCreatedAt())
             .build();
     }

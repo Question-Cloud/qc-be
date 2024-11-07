@@ -3,33 +3,49 @@ package com.eager.questioncloud.core.domain.payment.question.model;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
 import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.coupon.vo.CouponType;
+import com.eager.questioncloud.core.domain.payment.question.vo.QuestionPaymentStatus;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class QuestionPayment {
     private Long id;
+    private String paymentId;
+    private List<QuestionPaymentOrder> orders;
     private Long userId;
     private Long userCouponId;
     private int amount;
+    private QuestionPaymentStatus status;
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, Long userId, Long userCouponId, int amount, LocalDateTime createdAt) {
+    public QuestionPayment(Long id, String paymentId, List<QuestionPaymentOrder> orders, Long userId, Long userCouponId, int amount,
+        QuestionPaymentStatus status, LocalDateTime createdAt) {
         this.id = id;
+        this.paymentId = paymentId;
+        this.orders = orders;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
     public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
+        String paymentId = UUID.randomUUID().toString();
+        int originalAmount = calcOriginalAmount(questions);
+        List<QuestionPaymentOrder> orders = QuestionPaymentOrder.createOrders(paymentId, questions);
+
         return QuestionPayment.builder()
+            .paymentId(paymentId)
+            .orders(orders)
             .userId(userId)
             .userCouponId(userCouponId)
-            .amount(calcOriginalAmount(questions))
+            .amount(originalAmount)
+            .status(QuestionPaymentStatus.SUCCESS)
             .createdAt(LocalDateTime.now())
             .build();
     }
@@ -53,5 +69,9 @@ public class QuestionPayment {
             int discountAmount = (amount * (coupon.getValue() / 100));
             amount = amount - discountAmount;
         }
+    }
+
+    public void fail() {
+        this.status = QuestionPaymentStatus.FAIL;
     }
 }

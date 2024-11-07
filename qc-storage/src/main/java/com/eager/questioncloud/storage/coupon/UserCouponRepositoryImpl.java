@@ -29,6 +29,13 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
+    public UserCoupon getUserCoupon(Long userCouponId) {
+        return userCouponJpaRepository.findById(userCouponId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
     public Boolean isRegistered(Long userId, Long couponId) {
         return userCouponJpaRepository.existsByUserIdAndCouponId(userId, couponId);
     }
