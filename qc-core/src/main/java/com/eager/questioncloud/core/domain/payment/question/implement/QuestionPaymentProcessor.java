@@ -22,8 +22,7 @@ public class QuestionPaymentProcessor {
     public QuestionPayment questionPayment(QuestionPayment questionPayment) {
         applyCoupon(questionPayment);
         userPointManager.usePoint(questionPayment.getUserId(), questionPayment.getAmount());
-        savePaymentInformation(questionPayment);
-        return questionPayment;
+        return savePaymentInformation(questionPayment);
     }
 
     private void applyCoupon(QuestionPayment questionPayment) {
@@ -33,8 +32,8 @@ public class QuestionPaymentProcessor {
         }
     }
 
-    private void savePaymentInformation(QuestionPayment questionPayment) {
-        questionPaymentRepository.save(questionPayment);
+    private QuestionPayment savePaymentInformation(QuestionPayment questionPayment) {
         questionPaymentOrderRepository.saveAll(questionPayment.getOrders());
+        return questionPaymentRepository.save(questionPayment);
     }
 }
