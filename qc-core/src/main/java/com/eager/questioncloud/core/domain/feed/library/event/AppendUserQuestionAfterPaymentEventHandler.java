@@ -10,16 +10,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AppendUserQuestionEventHandler {
+public class AppendUserQuestionAfterPaymentEventHandler {
     private final UserQuestionAppender userQuestionAppender;
     private final QuestionPaymentFailHandler questionPaymentFailHandler;
 
     @EventListener
-    public void appendUserQuestionAfterPayment(AppendUserQuestionEvent appendUserQuestionEvent) {
+    public void appendUserQuestionAfterPayment(AppendUserQuestionAfterPaymentEvent appendUserQuestionAfterPaymentEvent) {
         try {
-            userQuestionAppender.appendUserQuestions(appendUserQuestionEvent.getUserId(), appendUserQuestionEvent.getQuestionIds());
+            userQuestionAppender.appendUserQuestions(
+                appendUserQuestionAfterPaymentEvent.getUserId(),
+                appendUserQuestionAfterPaymentEvent.getQuestionIds());
         } catch (Exception e) {
-            questionPaymentFailHandler.failHandler(appendUserQuestionEvent.getQuestionPayment());
+            questionPaymentFailHandler.failHandler(appendUserQuestionAfterPaymentEvent.getQuestionPayment());
             throw new CustomException(Error.INTERNAL_SERVER_ERROR);
         }
     }

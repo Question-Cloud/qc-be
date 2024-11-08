@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.question.service;
 
-import com.eager.questioncloud.core.domain.feed.library.event.AppendUserQuestionEvent;
+import com.eager.questioncloud.core.domain.feed.library.event.AppendUserQuestionAfterPaymentEvent;
 import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
@@ -25,7 +25,7 @@ public class QuestionPaymentService {
         checkAlreadyOwn(userId, questionIds);
         List<Question> questions = questionReader.getQuestions(questionIds);
         QuestionPayment questionPayment = paymentProcessor.questionPayment(QuestionPayment.create(userId, userCouponId, questions));
-        applicationEventPublisher.publishEvent(AppendUserQuestionEvent.create(userId, questionIds, questionPayment));
+        applicationEventPublisher.publishEvent(AppendUserQuestionAfterPaymentEvent.create(userId, questionIds, questionPayment));
     }
 
     private void checkAlreadyOwn(Long userId, List<Long> questionIds) {
