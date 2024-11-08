@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UserRegister {
     private final UserRepository userRepository;
 
-    public User create(User user) {
+    public User register(User user) {
         if (checkDuplicateEmail(user.getUserInformation().getEmail())) {
             throw new CustomException(Error.DUPLICATE_EMAIL);
         }
