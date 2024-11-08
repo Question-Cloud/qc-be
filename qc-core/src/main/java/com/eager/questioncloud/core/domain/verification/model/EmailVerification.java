@@ -1,8 +1,6 @@
 package com.eager.questioncloud.core.domain.verification.model;
 
 import com.eager.questioncloud.core.domain.verification.vo.EmailVerificationType;
-import com.eager.questioncloud.core.exception.CustomException;
-import com.eager.questioncloud.core.exception.Error;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,12 +24,6 @@ public class EmailVerification {
 
     public void verify() {
         this.isVerified = true;
-    }
-
-    public void checkAvailableResend() {
-        if (this.isVerified) {
-            throw new CustomException(Error.ALREADY_VERIFIED_EMAIL);
-        }
     }
 
     public static EmailVerification create(Long uid, EmailVerificationType emailVerificationType) {
