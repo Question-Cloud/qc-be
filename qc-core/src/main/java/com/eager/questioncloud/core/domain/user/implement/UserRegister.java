@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserAppender {
+public class UserRegister {
     private final UserRepository userRepository;
 
     public User create(User user) {
