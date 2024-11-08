@@ -10,18 +10,19 @@ import org.springframework.stereotype.Component;
 public class UserUpdater {
     private final UserRepository userRepository;
 
-    public User verifyUser(User user) {
+    public void verifyUser(User user) {
         user.active();
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public User updateUser(User user, String name, String profileImage) {
-        return userRepository.save(user.update(name, profileImage));
+    public void updateUserInformation(User user, String name, String profileImage) {
+        user.updateUserInformation(name, profileImage);
+        userRepository.save(user);
     }
 
-    public User changePassword(User user, String newPassword) {
+    public void changePassword(User user, String newPassword) {
         user.changePassword(newPassword);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public void setCreator(User user) {

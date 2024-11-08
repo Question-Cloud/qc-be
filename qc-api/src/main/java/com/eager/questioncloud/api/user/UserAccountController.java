@@ -3,10 +3,15 @@ package com.eager.questioncloud.api.user;
 import com.eager.questioncloud.api.user.Response.RecoverForgottenEmailResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.user.service.UserAccountService;
+import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +39,18 @@ public class UserAccountController {
     @Operation(operationId = "비밀번호 찾기", summary = "비밀번호 찾기", tags = {"help"}, description = "비밀번호 찾기")
     public DefaultResponse sendRecoverForgottenPasswordMail(@RequestParam String email) {
         userAccountService.sendRecoverForgottenPasswordMail(email);
+        return DefaultResponse.success();
+    }
+
+    @GetMapping("/change-password-mail")
+    public DefaultResponse requestChangePasswordMail(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userAccountService.sendChangePasswordMail(userPrincipal.getUser());
+        return new DefaultResponse(true);
+    }
+
+    @PostMapping("/change-password")
+    public DefaultResponse changePassword(@RequestBody @Valid Request.ChangePasswordRequest changePasswordRequest) {
+        userAccountService.changePassword(changePasswordRequest.getToken(), changePasswordRequest.getNewPassword());
         return DefaultResponse.success();
     }
 }

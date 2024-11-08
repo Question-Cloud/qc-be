@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.user.service;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
-import com.eager.questioncloud.core.domain.user.implement.UserAppender;
+import com.eager.questioncloud.core.domain.user.implement.UserCreator;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.implement.UserUpdater;
 import com.eager.questioncloud.core.domain.user.model.User;
@@ -21,16 +21,16 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CreateUserService {
-    private final UserAppender userAppender;
+    private final UserCreator userCreator;
     private final UserUpdater userUpdater;
     private final UserReader userReader;
     private final SocialAPIManager socialAPIManager;
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public User create(CreateUser createUser) {
-        UserAccountInformation userAccountInformation = getUserAccountInformation(createUser);
+        UserAccountInformation userAccountInformation = createUserAccountInformation(createUser);
         UserInformation userInformation = UserInformation.create(createUser);
-        return userAppender.create(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
+        return userCreator.create(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
@@ -47,7 +47,7 @@ public class CreateUserService {
         userUpdater.verifyUser(user);
     }
 
-    private UserAccountInformation getUserAccountInformation(CreateUser createUser) {
+    private UserAccountInformation createUserAccountInformation(CreateUser createUser) {
         if (createUser.accountType().equals(AccountType.EMAIL)) {
             return UserAccountInformation.createEmailAccountInformation(createUser.password());
         }
