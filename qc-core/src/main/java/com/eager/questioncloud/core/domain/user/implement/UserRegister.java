@@ -28,15 +28,15 @@ public class UserRegister {
         return userRepository.save(user);
     }
 
-    public Boolean checkDuplicatePhone(String phone) {
+    private Boolean checkDuplicatePhone(String phone) {
         return userRepository.checkDuplicatePhone(phone);
     }
 
-    public Boolean checkDuplicateEmail(String email) {
+    private Boolean checkDuplicateEmail(String email) {
         return userRepository.checkDuplicateEmail(email);
     }
 
-    public Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType) {
+    private Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType) {
         return userRepository.checkDuplicateSocialUidAndAccountType(socialUid, accountType);
     }
 }
