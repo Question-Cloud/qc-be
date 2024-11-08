@@ -14,29 +14,27 @@ public class UserRegister {
     private final UserRepository userRepository;
 
     public User register(User user) {
-        if (checkDuplicateEmail(user.getUserInformation().getEmail())) {
-            throw new CustomException(Error.DUPLICATE_EMAIL);
-        }
-        if (checkDuplicatePhone(user.getUserInformation().getPhone())) {
-            throw new CustomException(Error.DUPLICATE_PHONE);
-        }
-        if (checkDuplicateSocialUidAndAccountType(
-            user.getUserAccountInformation().getSocialUid(),
-            user.getUserAccountInformation().getAccountType())) {
-            throw new CustomException(Error.DUPLICATE_SOCIAL_UID);
-        }
+        checkDuplicateEmail(user.getUserInformation().getEmail());
+        checkDuplicatePhone(user.getUserInformation().getPhone());
+        checkDuplicateSocialUidAndAccountType(user.getUserAccountInformation().getSocialUid(), user.getUserAccountInformation().getAccountType());
         return userRepository.save(user);
     }
 
-    private Boolean checkDuplicatePhone(String phone) {
-        return userRepository.checkDuplicatePhone(phone);
+    private void checkDuplicatePhone(String phone) {
+        if (userRepository.checkDuplicatePhone(phone)) {
+            throw new CustomException(Error.DUPLICATE_EMAIL);
+        }
     }
 
-    private Boolean checkDuplicateEmail(String email) {
-        return userRepository.checkDuplicateEmail(email);
+    private void checkDuplicateEmail(String email) {
+        if (userRepository.checkDuplicateEmail(email)) {
+            throw new CustomException(Error.DUPLICATE_PHONE);
+        }
     }
 
-    private Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType) {
-        return userRepository.checkDuplicateSocialUidAndAccountType(socialUid, accountType);
+    private void checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType) {
+        if (userRepository.checkDuplicateSocialUidAndAccountType(socialUid, accountType)) {
+            throw new CustomException(Error.DUPLICATE_SOCIAL_UID);
+        }
     }
 }
