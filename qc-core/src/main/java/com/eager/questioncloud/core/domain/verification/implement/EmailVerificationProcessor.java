@@ -3,6 +3,7 @@ package com.eager.questioncloud.core.domain.verification.implement;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.verification.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
+import com.eager.questioncloud.core.domain.verification.repository.EmailVerificationRepository;
 import com.eager.questioncloud.core.domain.verification.template.EmailVerificationTemplate;
 import com.eager.questioncloud.core.domain.verification.template.EmailVerificationTemplateCreator;
 import com.eager.questioncloud.core.domain.verification.vo.Email;
@@ -13,13 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class EmailVerificationProcessor {
-    private final EmailVerificationAppender emailVerificationAppender;
-    private final EmailVerificationReader emailVerificationReader;
-    private final EmailVerificationUpdater emailVerificationUpdater;
+    private final EmailVerificationRepository emailVerificationRepository;
     private final GoogleMailSender googleMailSender;
 
     public EmailVerification sendVerificationMail(User user, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationAppender.append(
+        EmailVerification emailVerification = emailVerificationRepository.save(
             EmailVerification.create(
                 user.getUid(),
                 emailVerificationType)
@@ -35,7 +34,7 @@ public class EmailVerificationProcessor {
     }
 
     public void resendVerificationMail(String resendToken) {
-        EmailVerificationWithUser emailVerificationWithUser = emailVerificationReader.getForResend(resendToken);
+        EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.getForResend(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
         User user = emailVerificationWithUser.getUser();
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
@@ -52,8 +51,9 @@ public class EmailVerificationProcessor {
     }
 
     public EmailVerification verify(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationReader.get(token, emailVerificationType);
-        emailVerificationUpdater.verify(emailVerification);
+        EmailVerification emailVerification = emailVerificationRepository.get(token, emailVerificationType);
+        emailVerification.verify();
+        emailVerificationRepository.save(emailVerification);
         return emailVerification;
     }
 }
