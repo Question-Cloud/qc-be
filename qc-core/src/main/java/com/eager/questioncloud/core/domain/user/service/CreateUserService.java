@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.user.service;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
+import com.eager.questioncloud.core.domain.user.implement.UserCreator;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
-import com.eager.questioncloud.core.domain.user.implement.UserRegister;
 import com.eager.questioncloud.core.domain.user.implement.UserUpdater;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CreateUserService {
-    private final UserRegister userRegister;
+    private final UserCreator userCreator;
     private final UserUpdater userUpdater;
     private final UserReader userReader;
     private final SocialAPIManager socialAPIManager;
@@ -30,7 +30,7 @@ public class CreateUserService {
     public User create(CreateUser createUser) {
         UserAccountInformation userAccountInformation = createUserAccountInformation(createUser);
         UserInformation userInformation = UserInformation.create(createUser);
-        return userRegister.register(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
+        return userCreator.register(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
