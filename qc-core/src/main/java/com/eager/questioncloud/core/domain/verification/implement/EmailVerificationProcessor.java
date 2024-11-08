@@ -34,7 +34,7 @@ public class EmailVerificationProcessor {
     }
 
     public void resendVerificationMail(String resendToken) {
-        EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.getForResend(resendToken);
+        EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.findByResendToken(resendToken);
         EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
         User user = emailVerificationWithUser.getUser();
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(

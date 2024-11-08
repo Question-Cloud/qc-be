@@ -29,7 +29,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
-    public EmailVerification getForNotVerifiedUser(Long userId) {
+    public EmailVerification getCreateUserVerification(Long userId) {
         EmailVerificationEntity result = jpaQueryFactory.select(emailVerificationEntity)
             .from(emailVerificationEntity)
             .where(
@@ -46,7 +46,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
-    public EmailVerificationWithUser getForResend(String resendToken) {
+    public EmailVerificationWithUser findByResendToken(String resendToken) {
         Tuple result = emailVerificationJpaRepository.findByResendTokenWithUser(resendToken)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
         EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toModel();

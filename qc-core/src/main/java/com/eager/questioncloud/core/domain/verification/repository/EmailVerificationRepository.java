@@ -8,9 +8,9 @@ import com.eager.questioncloud.core.domain.verification.vo.EmailVerificationType
 public interface EmailVerificationRepository {
     EmailVerification get(String token, EmailVerificationType emailVerificationType);
 
-    EmailVerification getForNotVerifiedUser(Long userId);
+    EmailVerification getCreateUserVerification(Long userId);
 
-    EmailVerificationWithUser getForResend(String resendToken);
+    EmailVerificationWithUser findByResendToken(String resendToken);
 
     EmailVerification save(EmailVerification emailVerification);
 }
