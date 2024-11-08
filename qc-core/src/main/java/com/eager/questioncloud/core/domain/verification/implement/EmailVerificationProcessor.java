@@ -18,7 +18,7 @@ public class EmailVerificationProcessor {
     private final UserReader userReader;
     private final GoogleMailSender googleMailSender;
 
-    public void sendVerificationMail(User user, EmailVerificationType emailVerificationType) {
+    public EmailVerification sendVerificationMail(User user, EmailVerificationType emailVerificationType) {
         EmailVerification emailVerification = emailVerificationRepository.save(
             EmailVerification.create(
                 user.getUid(),
@@ -31,6 +31,7 @@ public class EmailVerificationProcessor {
                 template.getTitle(),
                 template.getContent()
             ));
+        return emailVerification;
     }
 
     public void resendVerificationMail(String resendToken) {
@@ -50,7 +51,6 @@ public class EmailVerificationProcessor {
     public EmailVerification verify(String token, EmailVerificationType emailVerificationType) {
         EmailVerification emailVerification = emailVerificationRepository.get(token, emailVerificationType);
         emailVerification.verify();
-        emailVerificationRepository.save(emailVerification);
         return emailVerification;
     }
 }
