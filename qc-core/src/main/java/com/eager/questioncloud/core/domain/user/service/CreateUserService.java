@@ -28,7 +28,7 @@ public class CreateUserService {
     private final EmailVerificationProcessor emailVerificationProcessor;
 
     public User create(CreateUser createUser) {
-        UserAccountInformation userAccountInformation = getUserAccountInformation(createUser);
+        UserAccountInformation userAccountInformation = createUserAccountInformation(createUser);
         UserInformation userInformation = UserInformation.create(createUser);
         return userRegister.register(User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification));
     }
@@ -47,7 +47,7 @@ public class CreateUserService {
         userUpdater.verifyUser(user);
     }
 
-    private UserAccountInformation getUserAccountInformation(CreateUser createUser) {
+    private UserAccountInformation createUserAccountInformation(CreateUser createUser) {
         if (createUser.accountType().equals(AccountType.EMAIL)) {
             return UserAccountInformation.createEmailAccountInformation(createUser.password());
         }
