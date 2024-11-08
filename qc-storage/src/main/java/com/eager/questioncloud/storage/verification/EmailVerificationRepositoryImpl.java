@@ -42,10 +42,17 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
-    public EmailVerification findByResendToken(String resendToken) {
-        return emailVerificationJpaRepository.findByResendToken(resendToken)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
+    public EmailVerification getForResend(String resendToken) {
+        EmailVerificationEntity result = jpaQueryFactory.select(emailVerificationEntity)
+            .from(emailVerificationEntity)
+            .where(emailVerificationEntity.isVerified.isFalse(), emailVerificationEntity.resendToken.eq(resendToken))
+            .fetchFirst();
+
+        if (result == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return result.toModel();
     }
 
     @Override
