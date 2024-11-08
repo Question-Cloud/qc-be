@@ -20,9 +20,9 @@ public class UserAccountService {
         return userReader.getUserByPhone(phone).getUserInformation().getEmail();
     }
 
-    public EmailVerification sendRecoverForgottenPasswordMail(String email) {
+    public void sendRecoverForgottenPasswordMail(String email) {
         User user = userReader.getUserByEmail(email);
-        return emailVerificationProcessor.sendVerificationMail(user, EmailVerificationType.ChangePassword);
+        emailVerificationProcessor.sendVerificationMail(user, EmailVerificationType.ChangePassword);
     }
 
     public void sendChangePasswordMail(User user) {
