@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class UserCreator {
     private final UserRepository userRepository;
 
-    public User register(User user) {
+    public User create(User user) {
         checkDuplicateEmail(user.getUserInformation().getEmail());
         checkDuplicatePhone(user.getUserInformation().getPhone());
         checkDuplicateSocialUidAndAccountType(user.getUserAccountInformation().getSocialUid(), user.getUserAccountInformation().getAccountType());
