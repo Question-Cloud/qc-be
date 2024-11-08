@@ -15,8 +15,9 @@ public class UserUpdater {
         userRepository.save(user);
     }
 
-    public void updateUser(User user, String name, String profileImage) {
-        userRepository.save(user.update(name, profileImage));
+    public void updateUserInformation(User user, String name, String profileImage) {
+        user.updateUserInformation(name, profileImage);
+        userRepository.save(user);
     }
 
     public void changePassword(User user, String newPassword) {

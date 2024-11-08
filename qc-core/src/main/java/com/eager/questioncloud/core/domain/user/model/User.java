@@ -69,9 +69,8 @@ public class User {
         }
     }
 
-    public User update(String name, String profileImage) {
+    public void updateUserInformation(String name, String profileImage) {
         userInformation = userInformation.updateUserInformation(name, profileImage);
-        return this;
     }
 
     public void setCreator() {

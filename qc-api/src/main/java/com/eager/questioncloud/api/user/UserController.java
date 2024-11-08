@@ -28,7 +28,7 @@ public class UserController {
     @PatchMapping("/me")
     public DefaultResponse updateMyInformation(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.UpdateMyInformationRequest request) {
-        userService.updateUser(userPrincipal.getUser(), request.getName(), request.getProfileImage());
+        userService.updateUserInformation(userPrincipal.getUser(), request.getName(), request.getProfileImage());
         return DefaultResponse.success();
     }
 }

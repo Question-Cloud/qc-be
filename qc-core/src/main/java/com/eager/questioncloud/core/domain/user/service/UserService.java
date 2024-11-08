@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserUpdater userUpdater;
 
-    public void updateUser(User user, String name, String profileImage) {
-        userUpdater.updateUser(user, name, profileImage);
+    public void updateUserInformation(User user, String name, String profileImage) {
+        userUpdater.updateUserInformation(user, name, profileImage);
     }
 }
