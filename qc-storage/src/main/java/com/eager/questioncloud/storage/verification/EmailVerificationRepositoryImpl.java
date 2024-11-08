@@ -2,16 +2,12 @@ package com.eager.questioncloud.storage.verification;
 
 import static com.eager.questioncloud.storage.verification.QEmailVerificationEntity.emailVerificationEntity;
 
-import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.core.domain.verification.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import com.eager.questioncloud.core.domain.verification.repository.EmailVerificationRepository;
 import com.eager.questioncloud.core.domain.verification.vo.EmailVerificationType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
-import com.eager.questioncloud.storage.user.UserEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -46,12 +42,10 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     }
 
     @Override
-    public EmailVerificationWithUser findByResendToken(String resendToken) {
-        Tuple result = emailVerificationJpaRepository.findByResendTokenWithUser(resendToken)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
-        EmailVerification emailVerification = result.get("emailVerification", EmailVerificationEntity.class).toModel();
-        User user = result.get("user", UserEntity.class).toModel();
-        return new EmailVerificationWithUser(emailVerification, user);
+    public EmailVerification findByResendToken(String resendToken) {
+        return emailVerificationJpaRepository.findByResendToken(resendToken)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
     }
 
     @Override

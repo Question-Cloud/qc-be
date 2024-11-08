@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.verification.implement;
 
+import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.core.domain.verification.dto.EmailVerificationWithUser;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import com.eager.questioncloud.core.domain.verification.repository.EmailVerificationRepository;
 import com.eager.questioncloud.core.domain.verification.template.EmailVerificationTemplate;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EmailVerificationProcessor {
     private final EmailVerificationRepository emailVerificationRepository;
+    private final UserReader userReader;
     private final GoogleMailSender googleMailSender;
 
     public EmailVerification sendVerificationMail(User user, EmailVerificationType emailVerificationType) {
@@ -34,9 +35,8 @@ public class EmailVerificationProcessor {
     }
 
     public void resendVerificationMail(String resendToken) {
-        EmailVerificationWithUser emailVerificationWithUser = emailVerificationRepository.findByResendToken(resendToken);
-        EmailVerification emailVerification = emailVerificationWithUser.getEmailVerification();
-        User user = emailVerificationWithUser.getUser();
+        EmailVerification emailVerification = emailVerificationRepository.findByResendToken(resendToken);
+        User user = userReader.getUser(emailVerification.getUid());
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
             emailVerification.getEmailVerificationType(),
             emailVerification.getToken());
