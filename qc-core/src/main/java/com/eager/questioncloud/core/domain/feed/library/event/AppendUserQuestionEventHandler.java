@@ -15,7 +15,7 @@ public class AppendUserQuestionEventHandler {
     private final QuestionPaymentFailHandler questionPaymentFailHandler;
 
     @EventListener
-    public void appendUserQuestion(AppendUserQuestionEvent appendUserQuestionEvent) {
+    public void appendUserQuestionAfterPayment(AppendUserQuestionEvent appendUserQuestionEvent) {
         try {
             userQuestionAppender.appendUserQuestions(appendUserQuestionEvent.getUserId(), appendUserQuestionEvent.getQuestionIds());
         } catch (Exception e) {
