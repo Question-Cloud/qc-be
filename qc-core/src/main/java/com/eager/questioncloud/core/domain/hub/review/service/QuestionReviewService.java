@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.hub.review.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewUpdateResult;
 import com.eager.questioncloud.core.domain.hub.review.event.UpdateReviewStatisticsEvent;
 import com.eager.questioncloud.core.domain.hub.review.event.UpdateReviewType;
 import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewAppender;
@@ -44,7 +45,13 @@ public class QuestionReviewService {
     }
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
-        questionReviewUpdater.update(reviewId, userId, comment, rate);
+        QuestionReviewUpdateResult questionReviewUpdateResult = questionReviewUpdater.update(reviewId, userId, comment, rate);
+        applicationEventPublisher.publishEvent(
+            UpdateReviewStatisticsEvent.create(
+                questionReviewUpdateResult.getQuestionId(),
+                questionReviewUpdateResult.getVarianceRate(),
+                UpdateReviewType.MODIFY)
+        );
     }
 
     public void delete(Long reviewId, Long userId) {
