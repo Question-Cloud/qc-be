@@ -5,8 +5,8 @@ import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewDto.Ques
 import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewUpdateResult;
 import com.eager.questioncloud.core.domain.hub.review.event.UpdateReviewStatisticsEvent;
 import com.eager.questioncloud.core.domain.hub.review.event.UpdateReviewType;
-import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewAppender;
 import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewReader;
+import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewRegister;
 import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewRemover;
 import com.eager.questioncloud.core.domain.hub.review.implement.QuestionReviewUpdater;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionReviewService {
     private final QuestionReviewReader questionReviewReader;
-    private final QuestionReviewAppender questionReviewAppender;
+    private final QuestionReviewRegister questionReviewRegister;
     private final QuestionReviewUpdater questionReviewUpdater;
     private final QuestionReviewRemover questionReviewRemover;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -37,7 +37,7 @@ public class QuestionReviewService {
     }
 
     public QuestionReview register(QuestionReview questionReview) {
-        questionReviewAppender.append(questionReview);
+        questionReviewRegister.append(questionReview);
         applicationEventPublisher.publishEvent(
             UpdateReviewStatisticsEvent.create(questionReview.getQuestionId(), questionReview.getRate(), UpdateReviewType.REGISTER)
         );

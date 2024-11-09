@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionReviewAppender {
+public class QuestionReviewRegister {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionReviewValidator questionReviewValidator;
 
