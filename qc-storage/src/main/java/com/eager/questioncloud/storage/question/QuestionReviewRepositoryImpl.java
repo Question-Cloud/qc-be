@@ -83,7 +83,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public QuestionReview getForModifyAndDelete(Long reviewId, Long userId) {
+    public QuestionReview findByIdAndUserId(Long reviewId, Long userId) {
         QuestionReviewEntity result = jpaQueryFactory.select(questionReviewEntity)
             .from(questionReviewEntity)
             .where(questionReviewEntity.id.eq(reviewId), questionReviewEntity.reviewerId.eq(userId))

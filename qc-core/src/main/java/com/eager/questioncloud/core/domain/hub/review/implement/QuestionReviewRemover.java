@@ -12,7 +12,7 @@ public class QuestionReviewRemover {
     private final QuestionReviewRepository questionReviewRepository;
 
     public QuestionReviewUpdateResult delete(Long reviewId, Long userId) {
-        QuestionReview review = questionReviewRepository.getForModifyAndDelete(reviewId, userId);
+        QuestionReview review = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         review.delete();
         questionReviewRepository.save(review);
         return new QuestionReviewUpdateResult(review.getQuestionId(), review.getRate());

@@ -12,7 +12,7 @@ public class QuestionReviewUpdater {
     private final QuestionReviewRepository questionReviewRepository;
 
     public QuestionReviewUpdateResult update(Long reviewId, Long userId, String comment, int rate) {
-        QuestionReview questionReview = questionReviewRepository.getForModifyAndDelete(reviewId, userId);
+        QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         int varianceRate = rate - questionReview.getRate();
         questionReview.modify(comment, rate);
         questionReviewRepository.save(questionReview);
