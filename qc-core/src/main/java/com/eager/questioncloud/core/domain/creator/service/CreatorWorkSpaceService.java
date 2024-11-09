@@ -10,8 +10,10 @@ import com.eager.questioncloud.core.domain.hub.question.implement.QuestionRemove
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionUpdater;
 import com.eager.questioncloud.core.domain.hub.question.model.Question;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
+import com.eager.questioncloud.core.domain.hub.review.event.InitReviewStatisticsEvent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +24,7 @@ public class CreatorWorkSpaceService {
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
     private final PostReader postReader;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
         return questionReader.getCreatorQuestions(creatorId, pagingInformation);
@@ -37,7 +40,9 @@ public class CreatorWorkSpaceService {
     }
 
     public Question registerQuestion(Long creatorId, QuestionContent questionContent) {
-        return questionRegister.register(creatorId, questionContent);
+        Question question = questionRegister.register(creatorId, questionContent);
+        applicationEventPublisher.publishEvent(InitReviewStatisticsEvent.create(question.getId()));
+        return question;
     }
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {

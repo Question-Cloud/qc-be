@@ -12,7 +12,7 @@ public interface QuestionReviewRepository {
 
     QuestionReview getMyQuestionReview(Long questionId, Long userId);
 
-    QuestionReview getForModifyAndDelete(Long reviewId, Long userId);
+    QuestionReview findByIdAndUserId(Long reviewId, Long userId);
 
     Boolean isWritten(Long questionId, Long userId);
 

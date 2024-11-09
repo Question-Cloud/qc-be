@@ -83,13 +83,17 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public QuestionReview getForModifyAndDelete(Long reviewId, Long userId) {
-        return questionReviewJpaRepository.findByIdAndReviewerIdAndIsDeletedFalse(reviewId, userId)
-            .stream()
-            .filter(item -> !item.getIsDeleted())
-            .findFirst()
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
+    public QuestionReview findByIdAndUserId(Long reviewId, Long userId) {
+        QuestionReviewEntity result = jpaQueryFactory.select(questionReviewEntity)
+            .from(questionReviewEntity)
+            .where(questionReviewEntity.id.eq(reviewId), questionReviewEntity.reviewerId.eq(userId), questionReviewEntity.isDeleted.isFalse())
+            .fetchFirst();
+
+        if (result == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return result.toModel();
     }
 
     @Override

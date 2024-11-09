@@ -4,21 +4,16 @@ import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.hub.review.repository.QuestionReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionReviewAppender {
+public class QuestionReviewRegister {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionReviewValidator questionReviewValidator;
-    private final QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public QuestionReview append(QuestionReview questionReview) {
+    public QuestionReview register(QuestionReview questionReview) {
         questionReviewValidator.validate(questionReview);
         questionReviewRepository.save(questionReview);
-        questionReviewStatisticsUpdater.updateByNewReview(questionReview.getQuestionId(), questionReview.getRate());
         return questionReview;
     }
 }
