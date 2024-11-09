@@ -45,11 +45,14 @@ public class QuestionReviewService {
     }
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
-        QuestionReviewUpdateResult questionReviewUpdateResult = questionReviewUpdater.update(reviewId, userId, comment, rate);
+        QuestionReview questionReview = questionReviewReader.findByIdAndUserId(reviewId, userId);
+        int varianceRate = rate - questionReview.getRate();
+        
+        questionReviewUpdater.update(questionReview, comment, rate);
         applicationEventPublisher.publishEvent(
             UpdateReviewStatisticsEvent.create(
-                questionReviewUpdateResult.getQuestionId(),
-                questionReviewUpdateResult.getVarianceRate(),
+                questionReview.getQuestionId(),
+                varianceRate,
                 UpdateReviewType.MODIFY)
         );
     }
