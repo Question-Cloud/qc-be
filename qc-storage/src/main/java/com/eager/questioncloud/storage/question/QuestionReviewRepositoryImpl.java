@@ -86,7 +86,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     public QuestionReview findByIdAndUserId(Long reviewId, Long userId) {
         QuestionReviewEntity result = jpaQueryFactory.select(questionReviewEntity)
             .from(questionReviewEntity)
-            .where(questionReviewEntity.id.eq(reviewId), questionReviewEntity.reviewerId.eq(userId))
+            .where(questionReviewEntity.id.eq(reviewId), questionReviewEntity.reviewerId.eq(userId), questionReviewEntity.isDeleted.isFalse())
             .fetchFirst();
 
         if (result == null) {
