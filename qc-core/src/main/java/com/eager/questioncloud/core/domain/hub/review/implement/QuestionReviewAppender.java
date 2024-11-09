@@ -12,13 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionReviewAppender {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionReviewValidator questionReviewValidator;
-    private final QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public QuestionReview append(QuestionReview questionReview) {
         questionReviewValidator.validate(questionReview);
         questionReviewRepository.save(questionReview);
-        questionReviewStatisticsUpdater.updateByNewReview(questionReview.getQuestionId(), questionReview.getRate());
         return questionReview;
     }
 }
