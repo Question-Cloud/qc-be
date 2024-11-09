@@ -37,7 +37,7 @@ public class QuestionReviewService {
     }
 
     public QuestionReview register(QuestionReview questionReview) {
-        questionReviewRegister.append(questionReview);
+        questionReviewRegister.register(questionReview);
         applicationEventPublisher.publishEvent(
             UpdateReviewStatisticsEvent.create(questionReview.getQuestionId(), questionReview.getRate(), UpdateReviewType.REGISTER)
         );

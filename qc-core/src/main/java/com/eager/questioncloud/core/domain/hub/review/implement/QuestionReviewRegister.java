@@ -11,7 +11,7 @@ public class QuestionReviewRegister {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionReviewValidator questionReviewValidator;
 
-    public QuestionReview append(QuestionReview questionReview) {
+    public QuestionReview register(QuestionReview questionReview) {
         questionReviewValidator.validate(questionReview);
         questionReviewRepository.save(questionReview);
         return questionReview;
