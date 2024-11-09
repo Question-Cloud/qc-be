@@ -55,6 +55,12 @@ public class QuestionReviewService {
     }
 
     public void delete(Long reviewId, Long userId) {
-        questionReviewRemover.delete(reviewId, userId);
+        QuestionReviewUpdateResult questionReviewUpdateResult = questionReviewRemover.delete(reviewId, userId);
+        applicationEventPublisher.publishEvent(
+            UpdateReviewStatisticsEvent.create(
+                questionReviewUpdateResult.getQuestionId(),
+                questionReviewUpdateResult.getVarianceRate(),
+                UpdateReviewType.DELETE)
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.review.implement;
 
+import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewUpdateResult;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.hub.review.repository.QuestionReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,15 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuestionReviewRemover {
     private final QuestionReviewRepository questionReviewRepository;
-    private final QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
     //TODO 분산락 로직 추가 시 복구
     @Transactional(isolation = Isolation.READ_COMMITTED)
 //    @DistributedLock(key = "'REVIEW:' + #reviewId")
-    public void delete(Long reviewId, Long userId) {
+    public QuestionReviewUpdateResult delete(Long reviewId, Long userId) {
         QuestionReview review = questionReviewRepository.getForModifyAndDelete(reviewId, userId);
         review.delete();
         questionReviewRepository.save(review);
-        questionReviewStatisticsUpdater.updateByDeleteReview(review.getQuestionId(), review.getRate());
+        return new QuestionReviewUpdateResult(review.getQuestionId(), review.getRate());
     }
 }
