@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.question;
+package com.eager.questioncloud.api.workspace;
 
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
 import lombok.AllArgsConstructor;

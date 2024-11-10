@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.creator;
+package com.eager.questioncloud.api.workspace;
 
-import com.eager.questioncloud.api.question.Response.QuestionContentResponse;
+import com.eager.questioncloud.api.workspace.Response.QuestionContentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
