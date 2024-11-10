@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.payment.point.repository;
+package com.eager.questioncloud.core.domain.point.repository;
 
-import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import org.springframework.stereotype.Repository;
 
 @Repository

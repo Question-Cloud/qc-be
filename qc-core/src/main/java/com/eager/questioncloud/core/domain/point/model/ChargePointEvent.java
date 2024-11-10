@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.payment.point.model;
+package com.eager.questioncloud.core.domain.point.model;
 
-import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointType;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointType;
 import lombok.Getter;
 
 @Getter

@@ -2,9 +2,9 @@ package com.eager.questioncloud.storage.point;
 
 import static com.eager.questioncloud.storage.point.QChargePointPaymentEntity.chargePointPaymentEntity;
 
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointPaymentRepository;
-import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointPaymentStatus;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.repository.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -1,7 +1,7 @@
-package com.eager.questioncloud.core.domain.payment.point.service;
+package com.eager.questioncloud.core.domain.point.service;
 
-import com.eager.questioncloud.core.domain.payment.point.implement.UserPointReader;
-import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
+import com.eager.questioncloud.core.domain.point.implement.UserPointReader;
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

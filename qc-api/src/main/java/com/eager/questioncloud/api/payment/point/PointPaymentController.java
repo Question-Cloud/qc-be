@@ -4,8 +4,8 @@ import com.eager.questioncloud.api.payment.point.Request.ChargePointOrderRequest
 import com.eager.questioncloud.api.payment.point.Request.ChargePointPaymentRequest;
 import com.eager.questioncloud.api.payment.point.Response.CheckCompletePaymentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.payment.point.service.ChargePointPaymentService;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.service.ChargePointPaymentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

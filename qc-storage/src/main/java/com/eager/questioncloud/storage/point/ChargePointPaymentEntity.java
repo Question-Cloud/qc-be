@@ -1,8 +1,8 @@
 package com.eager.questioncloud.storage.point;
 
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointPaymentStatus;
-import com.eager.questioncloud.core.domain.payment.point.vo.ChargePointType;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointPaymentStatus;
+import com.eager.questioncloud.core.domain.point.vo.ChargePointType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

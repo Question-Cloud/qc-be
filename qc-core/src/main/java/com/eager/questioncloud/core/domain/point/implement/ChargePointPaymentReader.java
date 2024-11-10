@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.payment.point.implement;
+package com.eager.questioncloud.core.domain.point.implement;
 
-import com.eager.questioncloud.core.domain.payment.point.repository.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.repository.ChargePointPaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.payment.point.repository;
+package com.eager.questioncloud.core.domain.point.repository;
 
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 
 public interface ChargePointPaymentRepository {
     ChargePointPayment save(ChargePointPayment chargePointPayment);

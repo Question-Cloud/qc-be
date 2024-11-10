@@ -1,8 +1,8 @@
 package com.eager.questioncloud.api.user.point;
 
 import com.eager.questioncloud.api.user.point.Response.GetUserPointResponse;
-import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
-import com.eager.questioncloud.core.domain.payment.point.service.UserPointService;
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
+import com.eager.questioncloud.core.domain.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

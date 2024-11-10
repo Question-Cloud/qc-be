@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.payment.point.event;
+package com.eager.questioncloud.core.domain.point.event;
 
-import com.eager.questioncloud.core.domain.payment.point.implement.ChargePointPaymentFailHandler;
-import com.eager.questioncloud.core.domain.payment.point.implement.UserPointManager;
-import com.eager.questioncloud.core.domain.payment.point.model.ChargePointEvent;
+import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentFailHandler;
+import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
+import com.eager.questioncloud.core.domain.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
