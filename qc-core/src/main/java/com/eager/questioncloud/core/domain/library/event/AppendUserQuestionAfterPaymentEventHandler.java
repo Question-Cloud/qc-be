@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.feed.library.event;
+package com.eager.questioncloud.core.domain.library.event;
 
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionAppender;
+import com.eager.questioncloud.core.domain.library.implement.UserQuestionAppender;
 import com.eager.questioncloud.core.domain.payment.question.implement.QuestionPaymentFailHandler;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;

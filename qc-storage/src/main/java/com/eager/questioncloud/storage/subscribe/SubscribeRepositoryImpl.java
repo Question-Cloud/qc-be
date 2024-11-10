@@ -6,9 +6,9 @@ import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorSimpleInformation;
-import com.eager.questioncloud.core.domain.feed.subscribe.dto.SubscribeDto.SubscribeListItem;
-import com.eager.questioncloud.core.domain.feed.subscribe.model.Subscribe;
-import com.eager.questioncloud.core.domain.feed.subscribe.repository.SubscribeRepository;
+import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
+import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.feed.subscribe.dto;
+package com.eager.questioncloud.core.domain.subscribe.dto;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorSimpleInformation;
 import lombok.AllArgsConstructor;

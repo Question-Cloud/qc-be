@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.hub.review.implement;
 
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
+import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;

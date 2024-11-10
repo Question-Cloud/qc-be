@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.feed.library.event;
+package com.eager.questioncloud.core.domain.library.event;
 
 import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
 import java.util.List;

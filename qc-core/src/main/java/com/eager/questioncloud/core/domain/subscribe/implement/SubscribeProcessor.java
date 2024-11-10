@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.feed.subscribe.implement;
+package com.eager.questioncloud.core.domain.subscribe.implement;
 
 import com.eager.questioncloud.core.domain.creator.implement.CreatorReader;
-import com.eager.questioncloud.core.domain.feed.subscribe.model.Subscribe;
-import com.eager.questioncloud.core.domain.feed.subscribe.repository.SubscribeRepository;
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
+import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class SubscribeProcessor {
     private final SubscribeRepository subscribeRepository;
     private final CreatorReader creatorReader;
-    
+
     public Subscribe subscribe(Long userId, Long creatorId) {
         if (!creatorReader.isExistsCreator(creatorId)) {
             throw new CustomException(Error.NOT_FOUND);

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.hub.question.implement;
 
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
+import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;

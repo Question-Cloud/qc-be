@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.feed.library.service;
+package com.eager.questioncloud.core.domain.library.service;
 
-import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionItem;
-import com.eager.questioncloud.core.domain.feed.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
+import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
