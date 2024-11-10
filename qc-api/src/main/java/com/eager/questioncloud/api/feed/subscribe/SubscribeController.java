@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.subscribe;
+package com.eager.questioncloud.api.feed.subscribe;
 
-import com.eager.questioncloud.api.subscribe.Response.CreatorSubscribeInformationResponse;
+import com.eager.questioncloud.api.feed.subscribe.Response.CreatorSubscribeInformationResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/subscribe")
+@RequestMapping("/api/feed/subscribe")
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscribeService subscribeService;

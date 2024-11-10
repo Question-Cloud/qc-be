@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.library;
+package com.eager.questioncloud.api.feed.library;
 
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.domain.feed.library.dto.UserQuestionDto.UserQuestionItem;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/library")
+@RequestMapping("/api/feed/library")
 @RequiredArgsConstructor
 public class UserQuestionLibraryController {
     private final LibraryService libraryService;

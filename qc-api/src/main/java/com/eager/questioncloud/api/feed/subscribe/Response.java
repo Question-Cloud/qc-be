@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.subscribe;
+package com.eager.questioncloud.api.feed.subscribe;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
