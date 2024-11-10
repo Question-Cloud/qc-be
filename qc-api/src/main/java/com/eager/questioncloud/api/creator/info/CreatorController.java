@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.creator;
+package com.eager.questioncloud.api.creator.info;
 
-import com.eager.questioncloud.api.creator.Response.CreatorInformationResponse;
+import com.eager.questioncloud.api.creator.info.Response.CreatorInformationResponse;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.service.CreatorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/creator")
+@RequestMapping("/api/creator/info")
 @RequiredArgsConstructor
 public class CreatorController {
     private final CreatorService creatorService;
