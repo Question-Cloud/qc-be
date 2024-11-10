@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user/register")
 @RequiredArgsConstructor
 public class CreateUserController {
     private final CreateUserService createUserService;
