@@ -1,16 +1,16 @@
-package com.eager.questioncloud.api.hub.board;
+package com.eager.questioncloud.api.hub.post;
 
-import com.eager.questioncloud.api.hub.board.Request.ModifyPostRequest;
-import com.eager.questioncloud.api.hub.board.Request.RegisterPostRequest;
-import com.eager.questioncloud.api.hub.board.Response.PostResponse;
+import com.eager.questioncloud.api.hub.post.Request.ModifyPostRequest;
+import com.eager.questioncloud.api.hub.post.Request.RegisterPostRequest;
+import com.eager.questioncloud.api.hub.post.Response.PostResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostDetail;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.service.PostService;
-import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.hub.post.model.Post;
+import com.eager.questioncloud.core.domain.hub.post.service.PostService;
+import com.eager.questioncloud.core.domain.hub.post.vo.PostContent;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.hub.board.vo;
+package com.eager.questioncloud.core.domain.hub.post.vo;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

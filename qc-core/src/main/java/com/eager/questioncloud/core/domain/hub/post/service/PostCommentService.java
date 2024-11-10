@@ -1,12 +1,12 @@
-package com.eager.questioncloud.core.domain.hub.board.service;
+package com.eager.questioncloud.core.domain.hub.post.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.implement.PostCommentAppender;
-import com.eager.questioncloud.core.domain.hub.board.implement.PostCommentReader;
-import com.eager.questioncloud.core.domain.hub.board.implement.PostCommentRemover;
-import com.eager.questioncloud.core.domain.hub.board.implement.PostCommentUpdater;
-import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.hub.post.implement.PostCommentAppender;
+import com.eager.questioncloud.core.domain.hub.post.implement.PostCommentReader;
+import com.eager.questioncloud.core.domain.hub.post.implement.PostCommentRemover;
+import com.eager.questioncloud.core.domain.hub.post.implement.PostCommentUpdater;
+import com.eager.questioncloud.core.domain.hub.post.model.PostComment;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

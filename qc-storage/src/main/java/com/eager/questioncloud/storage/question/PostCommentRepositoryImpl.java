@@ -7,9 +7,9 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
-import com.eager.questioncloud.core.domain.hub.board.repository.PostCommentRepository;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.hub.post.model.PostComment;
+import com.eager.questioncloud.core.domain.hub.post.repository.PostCommentRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

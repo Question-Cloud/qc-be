@@ -1,13 +1,13 @@
-package com.eager.questioncloud.api.hub.board;
+package com.eager.questioncloud.api.hub.post;
 
-import com.eager.questioncloud.api.hub.board.Request.AddPostCommentRequest;
-import com.eager.questioncloud.api.hub.board.Request.ModifyPostCommentRequest;
+import com.eager.questioncloud.api.hub.post.Request.AddPostCommentRequest;
+import com.eager.questioncloud.api.hub.post.Request.ModifyPostCommentRequest;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.model.PostComment;
-import com.eager.questioncloud.core.domain.hub.board.service.PostCommentService;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.hub.post.model.PostComment;
+import com.eager.questioncloud.core.domain.hub.post.service.PostCommentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

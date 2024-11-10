@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.hub.board;
+package com.eager.questioncloud.api.hub.post;
 
-import com.eager.questioncloud.core.domain.hub.board.vo.PostFile;
+import com.eager.questioncloud.core.domain.hub.post.vo.PostFile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;

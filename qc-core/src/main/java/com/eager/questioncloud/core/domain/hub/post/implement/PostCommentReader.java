@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.hub.board.implement;
+package com.eager.questioncloud.core.domain.hub.post.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.board.dto.PostCommentDto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.hub.board.repository.PostCommentRepository;
+import com.eager.questioncloud.core.domain.hub.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.hub.post.repository.PostCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

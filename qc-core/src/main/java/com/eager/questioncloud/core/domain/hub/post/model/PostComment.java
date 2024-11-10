@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.hub.board.model;
+package com.eager.questioncloud.core.domain.hub.post.model;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

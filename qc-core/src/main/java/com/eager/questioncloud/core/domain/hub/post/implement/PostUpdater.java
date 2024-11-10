@@ -1,8 +1,8 @@
-package com.eager.questioncloud.core.domain.hub.board.implement;
+package com.eager.questioncloud.core.domain.hub.post.implement;
 
-import com.eager.questioncloud.core.domain.hub.board.model.Post;
-import com.eager.questioncloud.core.domain.hub.board.repository.PostRepository;
-import com.eager.questioncloud.core.domain.hub.board.vo.PostContent;
+import com.eager.questioncloud.core.domain.hub.post.model.Post;
+import com.eager.questioncloud.core.domain.hub.post.repository.PostRepository;
+import com.eager.questioncloud.core.domain.hub.post.vo.PostContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
