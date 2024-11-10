@@ -8,12 +8,12 @@ import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.implement.QuestionRemover;
-import com.eager.questioncloud.core.domain.question.implement.QuestionUpdater;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionReader;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRegister;
+import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class CreatorWorkSpaceService {
     private final CreatorQuestionRegister creatorQuestionRegister;
     private final CreatorQuestionReader creatorQuestionReader;
-    private final QuestionUpdater questionUpdater;
+    private final CreatorQuestionUpdater creatorQuestionUpdater;
     private final QuestionRemover questionRemover;
     private final PostReader postReader;
     private final CreatorUpdater creatorUpdater;
@@ -50,7 +50,7 @@ public class CreatorWorkSpaceService {
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
         Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
-        questionUpdater.modifyQuestionContent(question, questionContent);
+        creatorQuestionUpdater.modifyQuestionContent(question, questionContent);
     }
 
     public void deleteQuestion(Long creatorId, Long questionId) {
