@@ -5,7 +5,6 @@ import com.eager.questioncloud.api.workspace.Response.QuestionContentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.service.CreatorService;
 import com.eager.questioncloud.core.domain.creator.service.CreatorWorkSpaceService;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceController {
     private final CreatorWorkSpaceService creatorWorkSpaceService;
-    private final CreatorService creatorService;
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
@@ -57,7 +55,9 @@ public class CreatorWorkSpaceController {
     public DefaultResponse updateMyCreatorInformation(
         @AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid Request.UpdateCreatorProfileRequest request) {
-        creatorService.updateCreatorProfile(userPrincipal.getCreator(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
+        creatorWorkSpaceService.updateCreatorProfile(
+            userPrincipal.getCreator(),
+            new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return DefaultResponse.success();
     }
 
