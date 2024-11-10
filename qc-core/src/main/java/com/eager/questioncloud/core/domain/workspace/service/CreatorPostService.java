@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class CreatorPostService {
     private final CreatorPostReader creatorPostReader;
 
-    public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
+    public List<PostListItem> getCreatorPosts(Long creatorId, PagingInformation pagingInformation) {
         return creatorPostReader.getCreatorPosts(creatorId, pagingInformation);
     }
 
-    public int countCreatorQuestionBoardList(Long creatorId) {
+    public int countCreatorPost(Long creatorId) {
         return creatorPostReader.countCreatorPost(creatorId);
     }
 }

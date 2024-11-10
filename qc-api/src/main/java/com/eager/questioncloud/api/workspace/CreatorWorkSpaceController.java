@@ -138,8 +138,8 @@ public class CreatorWorkSpaceController {
             """)
     public PagingResponse<PostListItem> creatorQuestionBoardList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
-        int total = creatorPostService.countCreatorQuestionBoardList(userPrincipal.getCreator().getId());
-        List<PostListItem> boards = creatorPostService.getCreatorQuestionBoardList(
+        int total = creatorPostService.countCreatorPost(userPrincipal.getCreator().getId());
+        List<PostListItem> boards = creatorPostService.getCreatorPosts(
             userPrincipal.getCreator().getId(),
             pagingInformation);
         return new PagingResponse<>(total, boards);
