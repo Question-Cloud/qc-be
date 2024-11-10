@@ -5,11 +5,11 @@ import com.eager.questioncloud.core.domain.creator.implement.CreatorUpdater;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
+import com.eager.questioncloud.core.domain.workspace.implement.CreatorPostReader;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionReader;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRegister;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRemover;
@@ -26,7 +26,7 @@ public class CreatorWorkSpaceService {
     private final CreatorQuestionReader creatorQuestionReader;
     private final CreatorQuestionUpdater creatorQuestionUpdater;
     private final CreatorQuestionRemover creatorQuestionRemover;
-    private final PostReader postReader;
+    private final CreatorPostReader countCreatorPost;
     private final CreatorUpdater creatorUpdater;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -59,11 +59,11 @@ public class CreatorWorkSpaceService {
     }
 
     public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
-        return postReader.getCreatorPostList(creatorId, pagingInformation);
+        return countCreatorPost.getCreatorPosts(creatorId, pagingInformation);
     }
 
     public int countCreatorQuestionBoardList(Long creatorId) {
-        return postReader.countCreatorPost(creatorId);
+        return countCreatorPost.countCreatorPost(creatorId);
     }
 
     public void updateCreatorProfile(Creator creator, CreatorProfile creatorProfile) {

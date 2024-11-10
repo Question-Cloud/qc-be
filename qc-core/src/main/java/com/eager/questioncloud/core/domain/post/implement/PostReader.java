@@ -34,12 +34,4 @@ public class PostReader {
     public int count(Long questionId) {
         return postRepository.count(questionId);
     }
-
-    public List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation) {
-        return postRepository.getCreatorPostList(creatorId, pagingInformation);
-    }
-
-    public int countCreatorPost(Long creatorId) {
-        return postRepository.countCreatorPost(creatorId);
-    }
 }
