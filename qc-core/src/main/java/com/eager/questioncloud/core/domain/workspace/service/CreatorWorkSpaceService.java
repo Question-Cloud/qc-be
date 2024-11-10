@@ -30,15 +30,15 @@ public class CreatorWorkSpaceService {
     private final CreatorUpdater creatorUpdater;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
+    public List<QuestionInformation> getMyQuestions(Long creatorId, PagingInformation pagingInformation) {
         return creatorQuestionReader.getMyQuestions(creatorId, pagingInformation);
     }
 
-    public int countCreatorQuestionCount(Long creatorId) {
+    public int countMyQuestions(Long creatorId) {
         return creatorQuestionReader.countMyQuestions(creatorId);
     }
 
-    public QuestionContent getQuestionContent(Long creatorId, Long questionId) {
+    public QuestionContent getMyQuestionContent(Long creatorId, Long questionId) {
         Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
         return question.getQuestionContent();
     }

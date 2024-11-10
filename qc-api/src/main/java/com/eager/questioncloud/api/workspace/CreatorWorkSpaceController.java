@@ -71,8 +71,8 @@ public class CreatorWorkSpaceController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionInformation> getQuestions(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
-        int total = creatorWorkSpaceService.countCreatorQuestionCount(userPrincipal.getCreator().getId());
-        List<QuestionInformation> questions = creatorWorkSpaceService.getCreatorQuestions(userPrincipal.getCreator().getId(), pagingInformation);
+        int total = creatorWorkSpaceService.countMyQuestions(userPrincipal.getCreator().getId());
+        List<QuestionInformation> questions = creatorWorkSpaceService.getMyQuestions(userPrincipal.getCreator().getId(), pagingInformation);
         return new PagingResponse<>(total, questions);
     }
 
@@ -83,7 +83,7 @@ public class CreatorWorkSpaceController {
     })
     @Operation(operationId = "나의 자작 문제 상세 조회", summary = "나의 자작 문제 상세 조회", tags = {"workspace"}, description = "나의 자작 문제 상세 조회")
     public QuestionContentResponse getQuestion(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionContent questionContent = creatorWorkSpaceService.getQuestionContent(userPrincipal.getCreator().getId(), questionId);
+        QuestionContent questionContent = creatorWorkSpaceService.getMyQuestionContent(userPrincipal.getCreator().getId(), questionId);
         return new QuestionContentResponse(questionContent);
     }
 
