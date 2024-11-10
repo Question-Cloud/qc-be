@@ -9,6 +9,7 @@ import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
+import com.eager.questioncloud.core.domain.workspace.service.CreatorQuestionService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorWorkSpaceService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceController {
     private final CreatorWorkSpaceService creatorWorkSpaceService;
+    private final CreatorQuestionService creatorQuestionService;
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
@@ -71,8 +73,8 @@ public class CreatorWorkSpaceController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionInformation> getQuestions(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
-        int total = creatorWorkSpaceService.countMyQuestions(userPrincipal.getCreator().getId());
-        List<QuestionInformation> questions = creatorWorkSpaceService.getMyQuestions(userPrincipal.getCreator().getId(), pagingInformation);
+        int total = creatorQuestionService.countMyQuestions(userPrincipal.getCreator().getId());
+        List<QuestionInformation> questions = creatorQuestionService.getMyQuestions(userPrincipal.getCreator().getId(), pagingInformation);
         return new PagingResponse<>(total, questions);
     }
 
@@ -83,7 +85,7 @@ public class CreatorWorkSpaceController {
     })
     @Operation(operationId = "나의 자작 문제 상세 조회", summary = "나의 자작 문제 상세 조회", tags = {"workspace"}, description = "나의 자작 문제 상세 조회")
     public QuestionContentResponse getQuestion(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionContent questionContent = creatorWorkSpaceService.getMyQuestionContent(userPrincipal.getCreator().getId(), questionId);
+        QuestionContent questionContent = creatorQuestionService.getMyQuestionContent(userPrincipal.getCreator().getId(), questionId);
         return new QuestionContentResponse(questionContent);
     }
 
@@ -95,7 +97,7 @@ public class CreatorWorkSpaceController {
     @Operation(operationId = "나의 자작 문제 등록", summary = "나의 자작 문제 등록", tags = {"workspace"}, description = "나의 자작 문제 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid Request.RegisterQuestionRequest request) {
-        creatorWorkSpaceService.registerQuestion(userPrincipal.getCreator().getId(), request.toQuestionContent());
+        creatorQuestionService.registerQuestion(userPrincipal.getCreator().getId(), request.toQuestionContent());
         return DefaultResponse.success();
     }
 
@@ -108,7 +110,7 @@ public class CreatorWorkSpaceController {
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
         @RequestBody @Valid Request.ModifyQuestionRequest request) {
-        creatorWorkSpaceService.modifyQuestion(userPrincipal.getCreator().getId(), questionId, request.toQuestionContent());
+        creatorQuestionService.modifyQuestion(userPrincipal.getCreator().getId(), questionId, request.toQuestionContent());
         return DefaultResponse.success();
     }
 
@@ -119,7 +121,7 @@ public class CreatorWorkSpaceController {
     })
     @Operation(operationId = "나의 자작 문제 삭제", summary = "나의 자작 문제 삭제", tags = {"workspace"}, description = "나의 자작 문제 삭제")
     public DefaultResponse delete(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        creatorWorkSpaceService.deleteQuestion(userPrincipal.getCreator().getId(), questionId);
+        creatorQuestionService.deleteQuestion(userPrincipal.getCreator().getId(), questionId);
         return DefaultResponse.success();
     }
 
