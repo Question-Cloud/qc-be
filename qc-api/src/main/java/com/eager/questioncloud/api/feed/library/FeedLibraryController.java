@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/feed/library")
 @RequiredArgsConstructor
-public class UserQuestionLibraryController {
+public class FeedLibraryController {
     private final LibraryService libraryService;
 
     @GetMapping

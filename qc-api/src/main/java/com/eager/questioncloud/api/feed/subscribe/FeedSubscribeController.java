@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/feed/subscribe")
 @RequiredArgsConstructor
-public class SubscribeController {
+public class FeedSubscribeController {
     private final SubscribeService subscribeService;
 
     @GetMapping("/my-subscribe")
