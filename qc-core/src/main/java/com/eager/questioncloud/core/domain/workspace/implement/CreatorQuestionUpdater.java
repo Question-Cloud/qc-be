@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.question.implement;
+package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionUpdater {
+public class CreatorQuestionUpdater {
     private final QuestionRepository questionRepository;
 
     public void modifyQuestionContent(Question question, QuestionContent questionContent) {

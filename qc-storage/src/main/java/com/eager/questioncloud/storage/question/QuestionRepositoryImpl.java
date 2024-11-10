@@ -170,7 +170,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public Question findByIdAndCreatorId(Long questionId, Long creatorId) {
+    public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
         return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
@@ -190,7 +190,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
+    public List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         List<Tuple> tuples = jpaQueryFactory.select(
@@ -230,7 +230,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public int countCreatorQuestion(Long creatorId) {
+    public int countByCreatorId(Long creatorId) {
         Integer result = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))

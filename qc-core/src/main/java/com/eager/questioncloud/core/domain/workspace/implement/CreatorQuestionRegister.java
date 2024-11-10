@@ -1,20 +1,18 @@
-package com.eager.questioncloud.core.domain.question.implement;
+package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionRegister {
+public class CreatorQuestionRegister {
     private final QuestionRepository questionRepository;
 
     @Transactional
-    public Question register(Long creatorId, QuestionContent questionContent) {
-        Question question = questionRepository.save(Question.create(creatorId, questionContent));
-        return question;
+    public Question register(Question question) {
+        return questionRepository.save(question);
     }
 }

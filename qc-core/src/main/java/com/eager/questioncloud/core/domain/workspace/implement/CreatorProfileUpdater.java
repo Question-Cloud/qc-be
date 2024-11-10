@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator.implement;
+package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.repository.CreatorRepository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreatorUpdater {
+public class CreatorProfileUpdater {
     private final CreatorRepository creatorRepository;
 
     public void updateCreatorProfile(Creator creator, CreatorProfile creatorProfile) {

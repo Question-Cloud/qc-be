@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.question.implement;
+package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionRemover {
+public class CreatorQuestionRemover {
     private final QuestionRepository questionRepository;
 
     public void delete(Question question) {
@@ -15,4 +15,3 @@ public class QuestionRemover {
         questionRepository.save(question);
     }
 }
-
