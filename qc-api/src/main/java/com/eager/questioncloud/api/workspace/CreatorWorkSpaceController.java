@@ -9,6 +9,7 @@ import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
+import com.eager.questioncloud.core.domain.workspace.service.CreatorPostService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorQuestionService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorWorkSpaceService;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceController {
     private final CreatorWorkSpaceService creatorWorkSpaceService;
+    private final CreatorPostService creatorPostService;
     private final CreatorQuestionService creatorQuestionService;
 
     @GetMapping("/me")
@@ -136,8 +138,8 @@ public class CreatorWorkSpaceController {
             """)
     public PagingResponse<PostListItem> creatorQuestionBoardList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
-        int total = creatorWorkSpaceService.countCreatorQuestionBoardList(userPrincipal.getCreator().getId());
-        List<PostListItem> boards = creatorWorkSpaceService.getCreatorQuestionBoardList(
+        int total = creatorPostService.countCreatorQuestionBoardList(userPrincipal.getCreator().getId());
+        List<PostListItem> boards = creatorPostService.getCreatorQuestionBoardList(
             userPrincipal.getCreator().getId(),
             pagingInformation);
         return new PagingResponse<>(total, boards);
