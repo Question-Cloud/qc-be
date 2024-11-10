@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.question.implement;
 
-import com.eager.questioncloud.core.domain.payment.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.coupon.repository.UserCouponRepository;
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
+import com.eager.questioncloud.core.domain.coupon.repository.UserCouponRepository;
 import com.eager.questioncloud.core.domain.payment.point.implement.UserPointManager;
 import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.payment.question.repository.QuestionPaymentRepository;

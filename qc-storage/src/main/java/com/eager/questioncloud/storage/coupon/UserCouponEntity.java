@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.coupon;
 
-import com.eager.questioncloud.core.domain.payment.coupon.model.UserCoupon;
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

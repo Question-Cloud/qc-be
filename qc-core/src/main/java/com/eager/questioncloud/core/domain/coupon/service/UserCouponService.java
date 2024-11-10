@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.payment.coupon.service;
+package com.eager.questioncloud.core.domain.coupon.service;
 
-import com.eager.questioncloud.core.domain.payment.coupon.dto.UserCouponDto.AvailableUserCouponItem;
-import com.eager.questioncloud.core.domain.payment.coupon.implement.UserCouponReader;
-import com.eager.questioncloud.core.domain.payment.coupon.implement.UserCouponRegister;
-import com.eager.questioncloud.core.domain.payment.coupon.model.UserCoupon;
+import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.core.domain.coupon.implement.UserCouponReader;
+import com.eager.questioncloud.core.domain.coupon.implement.UserCouponRegister;
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

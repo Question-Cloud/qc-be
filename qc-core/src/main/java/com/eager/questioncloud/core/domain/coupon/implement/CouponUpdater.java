@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.payment.coupon.implement;
+package com.eager.questioncloud.core.domain.coupon.implement;
 
-import com.eager.questioncloud.core.domain.payment.coupon.repository.CouponRepository;
+import com.eager.questioncloud.core.domain.coupon.repository.CouponRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;

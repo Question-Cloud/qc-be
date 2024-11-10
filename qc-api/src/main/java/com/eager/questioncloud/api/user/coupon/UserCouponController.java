@@ -2,8 +2,8 @@ package com.eager.questioncloud.api.user.coupon;
 
 import com.eager.questioncloud.api.user.coupon.Response.GetAvailableUserCouponsResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.payment.coupon.dto.UserCouponDto.AvailableUserCouponItem;
-import com.eager.questioncloud.core.domain.payment.coupon.service.UserCouponService;
+import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.core.domain.coupon.service.UserCouponService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
