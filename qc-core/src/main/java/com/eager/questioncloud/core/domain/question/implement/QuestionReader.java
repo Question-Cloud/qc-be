@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.question.implement;
 
-import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
@@ -40,17 +39,5 @@ public class QuestionReader {
 
     public Boolean isAvailable(Long questionId) {
         return questionRepository.isAvailable(questionId);
-    }
-
-    public Question findByIdAndCreatorId(Long questionId, Long creatorId) {
-        return questionRepository.findByIdAndCreatorId(questionId, creatorId);
-    }
-
-    public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
-        return questionRepository.getCreatorQuestions(creatorId, pagingInformation);
-    }
-
-    public int countCreatorQuestion(Long creatorId) {
-        return questionRepository.countCreatorQuestion(creatorId);
     }
 }

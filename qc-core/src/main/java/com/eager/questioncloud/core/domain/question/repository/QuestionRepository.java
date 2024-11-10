@@ -17,13 +17,13 @@ public interface QuestionRepository {
 
     Boolean isAvailable(Long questionId);
 
-    Question findByIdAndCreatorId(Long questionId, Long creatorId);
+    Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId);
 
     Question get(Long questionId);
 
     Question save(Question question);
 
-    List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation);
+    List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
 
-    int countCreatorQuestion(Long creatorId);
+    int countByCreatorId(Long creatorId);
 }

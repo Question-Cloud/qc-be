@@ -7,12 +7,12 @@ import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.implement.QuestionReader;
 import com.eager.questioncloud.core.domain.question.implement.QuestionRemover;
 import com.eager.questioncloud.core.domain.question.implement.QuestionUpdater;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
+import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionReader;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRegister;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceService {
     private final CreatorQuestionRegister creatorQuestionRegister;
-    private final QuestionReader questionReader;
+    private final CreatorQuestionReader creatorQuestionReader;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
     private final PostReader postReader;
@@ -31,15 +31,15 @@ public class CreatorWorkSpaceService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public List<QuestionInformation> getCreatorQuestions(Long creatorId, PagingInformation pagingInformation) {
-        return questionReader.getCreatorQuestions(creatorId, pagingInformation);
+        return creatorQuestionReader.getMyQuestions(creatorId, pagingInformation);
     }
 
     public int countCreatorQuestionCount(Long creatorId) {
-        return questionReader.countCreatorQuestion(creatorId);
+        return creatorQuestionReader.countMyQuestions(creatorId);
     }
 
     public QuestionContent getQuestionContent(Long creatorId, Long questionId) {
-        Question question = questionReader.findByIdAndCreatorId(questionId, creatorId);
+        Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
         return question.getQuestionContent();
     }
 
@@ -49,12 +49,12 @@ public class CreatorWorkSpaceService {
     }
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
-        Question question = questionReader.findByIdAndCreatorId(questionId, creatorId);
+        Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
         questionUpdater.modifyQuestionContent(question, questionContent);
     }
 
     public void deleteQuestion(Long creatorId, Long questionId) {
-        Question question = questionReader.findByIdAndCreatorId(questionId, creatorId);
+        Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
         questionRemover.delete(question);
     }
 
