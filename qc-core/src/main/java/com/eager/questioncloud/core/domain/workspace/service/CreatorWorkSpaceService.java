@@ -7,12 +7,12 @@ import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.implement.QuestionRemover;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionReader;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRegister;
+import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRemover;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionUpdater;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class CreatorWorkSpaceService {
     private final CreatorQuestionRegister creatorQuestionRegister;
     private final CreatorQuestionReader creatorQuestionReader;
     private final CreatorQuestionUpdater creatorQuestionUpdater;
-    private final QuestionRemover questionRemover;
+    private final CreatorQuestionRemover creatorQuestionRemover;
     private final PostReader postReader;
     private final CreatorUpdater creatorUpdater;
     private final ApplicationEventPublisher applicationEventPublisher;
@@ -55,7 +55,7 @@ public class CreatorWorkSpaceService {
 
     public void deleteQuestion(Long creatorId, Long questionId) {
         Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
-        questionRemover.delete(question);
+        creatorQuestionRemover.delete(question);
     }
 
     public List<PostListItem> getCreatorQuestionBoardList(Long creatorId, PagingInformation pagingInformation) {
