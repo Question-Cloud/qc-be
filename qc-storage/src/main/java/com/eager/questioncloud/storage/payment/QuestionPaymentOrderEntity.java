@@ -1,6 +1,6 @@
 package com.eager.questioncloud.storage.payment;
 
-import com.eager.questioncloud.core.domain.payment.question.model.QuestionPaymentOrder;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

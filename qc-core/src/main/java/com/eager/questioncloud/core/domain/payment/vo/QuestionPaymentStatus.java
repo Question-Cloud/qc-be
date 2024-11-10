@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.payment.question.vo;
+package com.eager.questioncloud.core.domain.payment.vo;
 
 import lombok.Getter;
 

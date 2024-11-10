@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.payment;
 
-import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.question.vo.QuestionPaymentStatus;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.vo.QuestionPaymentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

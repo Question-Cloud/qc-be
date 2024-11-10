@@ -1,11 +1,11 @@
-package com.eager.questioncloud.core.domain.payment.question.service;
+package com.eager.questioncloud.core.domain.payment.service;
 
-import com.eager.questioncloud.core.domain.question.implement.QuestionReader;
-import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.library.event.AppendUserQuestionAfterPaymentEvent;
 import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
-import com.eager.questioncloud.core.domain.payment.question.implement.QuestionPaymentProcessor;
-import com.eager.questioncloud.core.domain.payment.question.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.implement.QuestionPaymentProcessor;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.question.implement.QuestionReader;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import java.util.List;

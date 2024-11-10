@@ -2,7 +2,7 @@ package com.eager.questioncloud.api.payment.question;
 
 import com.eager.questioncloud.api.payment.question.Request.QuestionPaymentRequest;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.payment.question.service.QuestionPaymentService;
+import com.eager.questioncloud.core.domain.payment.service.QuestionPaymentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
