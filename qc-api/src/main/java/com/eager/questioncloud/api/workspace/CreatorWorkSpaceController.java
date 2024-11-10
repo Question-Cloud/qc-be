@@ -1,10 +1,13 @@
 package com.eager.questioncloud.api.workspace;
 
+import com.eager.questioncloud.api.workspace.Response.CreatorProfileResponse;
 import com.eager.questioncloud.api.workspace.Response.QuestionContentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.creator.service.CreatorService;
 import com.eager.questioncloud.core.domain.creator.service.CreatorWorkSpaceService;
+import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.hub.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.hub.question.vo.QuestionContent;
@@ -32,6 +35,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CreatorWorkSpaceController {
     private final CreatorWorkSpaceService creatorWorkSpaceService;
+    private final CreatorService creatorService;
+
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "크리에이터 정보 조회 (나)", summary = "크리에이터 정보 조회 (나)", tags = {"creator"}, description = "크리에이터 정보 조회 (나)")
+    public CreatorProfileResponse getMyCreatorInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        CreatorProfile profile = userPrincipal.getCreator().getCreatorProfile();
+        return new CreatorProfileResponse(profile);
+    }
+
+    @PatchMapping("/me")
+    @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = {"creator"}, description = "크리에이터 정보 수정")
+    public DefaultResponse updateMyCreatorInformation(
+        @AuthenticationPrincipal UserPrincipal userPrincipal,
+        @RequestBody @Valid Request.UpdateCreatorProfileRequest request) {
+        creatorService.updateCreatorProfile(userPrincipal.getCreator(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
+        return DefaultResponse.success();
+    }
 
     @GetMapping("/question")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")

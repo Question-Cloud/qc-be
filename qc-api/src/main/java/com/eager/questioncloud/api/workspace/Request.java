@@ -99,4 +99,13 @@ public class Request {
                 .build();
         }
     }
+
+    @Getter
+    public static class UpdateCreatorProfileRequest {
+        @NotNull
+        private Subject mainSubject;
+
+        @NotBlank
+        private String introduction;
+    }
 }
