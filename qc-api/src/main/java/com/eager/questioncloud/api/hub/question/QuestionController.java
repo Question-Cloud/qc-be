@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.question;
+package com.eager.questioncloud.api.hub.question;
 
-import com.eager.questioncloud.api.question.Response.QuestionInformationResponse;
+import com.eager.questioncloud.api.hub.question.Response.QuestionInformationResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;

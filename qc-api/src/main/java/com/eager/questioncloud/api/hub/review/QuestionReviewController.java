@@ -1,6 +1,8 @@
-package com.eager.questioncloud.api.question;
+package com.eager.questioncloud.api.hub.review;
 
-import com.eager.questioncloud.api.question.Response.MyQuestionReviewResponse;
+import com.eager.questioncloud.api.hub.review.Request.ModifyQuestionReviewRequest;
+import com.eager.questioncloud.api.hub.review.Request.RegisterQuestionReviewRequest;
+import com.eager.questioncloud.api.hub.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
@@ -70,7 +72,7 @@ public class QuestionReviewController {
     })
     @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = {"question-review"}, description = "문제 리뷰 등록")
     public DefaultResponse registerQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterQuestionReviewRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionReviewRequest request) {
         questionReviewService.register(
             QuestionReview.create(
                 request.getQuestionId(),
@@ -88,7 +90,7 @@ public class QuestionReviewController {
     @Operation(operationId = "문제 리뷰 수정", summary = "문제 리뷰 수정", tags = {"question-review"}, description = "문제 리뷰 수정")
     public DefaultResponse modifyQuestionReview(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId,
-        @RequestBody @Valid Request.ModifyQuestionReviewRequest request) {
+        @RequestBody @Valid ModifyQuestionReviewRequest request) {
         questionReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
         return DefaultResponse.success();
     }

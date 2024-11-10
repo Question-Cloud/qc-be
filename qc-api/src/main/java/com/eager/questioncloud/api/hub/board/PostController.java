@@ -1,6 +1,8 @@
-package com.eager.questioncloud.api.question;
+package com.eager.questioncloud.api.hub.board;
 
-import com.eager.questioncloud.api.question.Response.PostResponse;
+import com.eager.questioncloud.api.hub.board.Request.ModifyPostRequest;
+import com.eager.questioncloud.api.hub.board.Request.RegisterPostRequest;
+import com.eager.questioncloud.api.hub.board.Response.PostResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
@@ -40,7 +42,7 @@ public class PostController {
     })
     @Operation(operationId = "문제 게시판 글 수정", summary = "문제 게시판 글 수정", tags = {"question-board"}, description = "문제 게시판 글 수정")
     public DefaultResponse modify(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId, @RequestBody @Valid Request.ModifyPostRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long postId, @RequestBody @Valid ModifyPostRequest request) {
         postService.modify(
             postId,
             userPrincipal.getUser().getUid(),
@@ -87,7 +89,7 @@ public class PostController {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
     @Operation(operationId = "문제 게시판 글 등록", summary = "문제 게시판 글 등록", tags = {"question-board"}, description = "문제 게시판 글 등록")
-    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterPostRequest request) {
+    public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterPostRequest request) {
         postService.register(
             Post.create(
                 request.getQuestionId(),
