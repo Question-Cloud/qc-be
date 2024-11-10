@@ -8,12 +8,12 @@ import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.implement.QuestionReader;
-import com.eager.questioncloud.core.domain.question.implement.QuestionRegister;
 import com.eager.questioncloud.core.domain.question.implement.QuestionRemover;
 import com.eager.questioncloud.core.domain.question.implement.QuestionUpdater;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
+import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionRegister;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CreatorWorkSpaceService {
-    private final QuestionRegister questionRegister;
+    private final CreatorQuestionRegister creatorQuestionRegister;
     private final QuestionReader questionReader;
     private final QuestionUpdater questionUpdater;
     private final QuestionRemover questionRemover;
@@ -43,10 +43,9 @@ public class CreatorWorkSpaceService {
         return question.getQuestionContent();
     }
 
-    public Question registerQuestion(Long creatorId, QuestionContent questionContent) {
-        Question question = questionRegister.register(creatorId, questionContent);
+    public void registerQuestion(Long creatorId, QuestionContent questionContent) {
+        Question question = creatorQuestionRegister.register(Question.create(creatorId, questionContent));
         applicationEventPublisher.publishEvent(InitReviewStatisticsEvent.create(question.getId()));
-        return question;
     }
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
