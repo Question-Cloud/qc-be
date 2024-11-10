@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator.service;
+package com.eager.questioncloud.core.domain.workspace.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.implement.CreatorUpdater;
