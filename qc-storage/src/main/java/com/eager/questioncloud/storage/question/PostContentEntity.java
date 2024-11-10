@@ -1,7 +1,7 @@
 package com.eager.questioncloud.storage.question;
 
-import com.eager.questioncloud.core.domain.hub.post.vo.PostContent;
-import com.eager.questioncloud.core.domain.hub.post.vo.PostFile;
+import com.eager.questioncloud.core.domain.post.vo.PostContent;
+import com.eager.questioncloud.core.domain.post.vo.PostFile;
 import com.eager.questioncloud.storage.question.converter.PostFileConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;

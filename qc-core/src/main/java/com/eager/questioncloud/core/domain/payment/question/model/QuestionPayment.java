@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.question.model;
 
-import com.eager.questioncloud.core.domain.hub.question.model.Question;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.payment.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.coupon.vo.CouponType;
 import com.eager.questioncloud.core.domain.payment.question.vo.QuestionPaymentStatus;

@@ -5,10 +5,10 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.post.dto.PostDto.PostDetail;
-import com.eager.questioncloud.core.domain.hub.post.dto.PostDto.PostListItem;
-import com.eager.questioncloud.core.domain.hub.post.model.Post;
-import com.eager.questioncloud.core.domain.hub.post.repository.PostRepository;
+import com.eager.questioncloud.core.domain.post.dto.PostDto.PostDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.post.model.Post;
+import com.eager.questioncloud.core.domain.post.repository.PostRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;

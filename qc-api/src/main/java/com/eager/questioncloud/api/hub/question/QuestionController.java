@@ -2,9 +2,9 @@ package com.eager.questioncloud.api.hub.question;
 
 import com.eager.questioncloud.api.hub.question.Response.QuestionInformationResponse;
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.core.domain.hub.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.hub.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.hub.question.service.QuestionService;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.service.QuestionService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

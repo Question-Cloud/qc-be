@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.question.service;
 
-import com.eager.questioncloud.core.domain.hub.question.implement.QuestionReader;
-import com.eager.questioncloud.core.domain.hub.question.model.Question;
+import com.eager.questioncloud.core.domain.question.implement.QuestionReader;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.library.event.AppendUserQuestionAfterPaymentEvent;
 import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.payment.question.implement.QuestionPaymentProcessor;

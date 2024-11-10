@@ -4,9 +4,9 @@ import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.que
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.hub.review.dto.QuestionReviewDto.QuestionReviewItem;
-import com.eager.questioncloud.core.domain.hub.review.model.QuestionReview;
-import com.eager.questioncloud.core.domain.hub.review.repository.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.model.QuestionReview;
+import com.eager.questioncloud.core.domain.review.repository.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.user.vo.UserType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
