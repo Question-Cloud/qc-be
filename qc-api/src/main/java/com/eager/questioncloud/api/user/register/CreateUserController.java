@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.user;
+package com.eager.questioncloud.api.user.register;
 
-import com.eager.questioncloud.api.user.Response.CreateUserResponse;
+import com.eager.questioncloud.api.user.register.Response.CreateUserResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.model.User;

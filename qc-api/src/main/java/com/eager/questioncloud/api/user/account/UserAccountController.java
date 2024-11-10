@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.user;
+package com.eager.questioncloud.api.user.account;
 
-import com.eager.questioncloud.api.user.Response.RecoverForgottenEmailResponse;
+import com.eager.questioncloud.api.user.account.Response.RecoverForgottenEmailResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.user.service.UserAccountService;
 import com.eager.questioncloud.security.UserPrincipal;

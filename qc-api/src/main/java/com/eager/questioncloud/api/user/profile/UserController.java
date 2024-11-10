@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.user;
+package com.eager.questioncloud.api.user.profile;
 
-import com.eager.questioncloud.api.user.Response.MyInformationResponse;
+import com.eager.questioncloud.api.user.profile.Response.MyInformationResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.core.domain.user.dto.MyInformation;
 import com.eager.questioncloud.core.domain.user.service.UserService;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.api.user;
+package com.eager.questioncloud.api.user.register;
 
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -43,30 +43,5 @@ public class Request {
                 throw new CustomException(Error.BAD_REQUEST);
             }
         }
-    }
-
-    @Getter
-    public static class ChangePasswordRequest implements Validatable {
-        @NotBlank
-        private String token;
-        private String newPassword;
-
-        public void validate() {
-            PasswordValidator.validate(newPassword);
-        }
-    }
-
-    @Getter
-    public static class UpdateMyInformationRequest {
-        private String profileImage;
-        @NotBlank
-        private String name;
-    }
-
-
-    @Getter
-    public static class RegisterCouponRequest {
-        @NotBlank
-        private String code;
     }
 }

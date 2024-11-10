@@ -1,6 +1,6 @@
-package com.eager.questioncloud.api.user;
+package com.eager.questioncloud.api.user.point;
 
-import com.eager.questioncloud.api.user.Response.GetUserPointResponse;
+import com.eager.questioncloud.api.user.point.Response.GetUserPointResponse;
 import com.eager.questioncloud.core.domain.payment.point.model.UserPoint;
 import com.eager.questioncloud.core.domain.payment.point.service.UserPointService;
 import com.eager.questioncloud.security.UserPrincipal;
