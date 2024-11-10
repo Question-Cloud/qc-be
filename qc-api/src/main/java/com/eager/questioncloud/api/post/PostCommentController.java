@@ -1,7 +1,5 @@
-package com.eager.questioncloud.api.hub.post;
+package com.eager.questioncloud.api.post;
 
-import com.eager.questioncloud.api.hub.post.Request.AddPostCommentRequest;
-import com.eager.questioncloud.api.hub.post.Request.ModifyPostCommentRequest;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
@@ -56,7 +54,7 @@ public class PostCommentController {
     })
     @Operation(operationId = "문제 게시글 댓글 작성", summary = "문제 게시글 댓글 작성", tags = {"question-board-comment"}, description = "문제 게시글 댓글 작성")
     public DefaultResponse addPostComment(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid AddPostCommentRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.AddPostCommentRequest request) {
         postCommentService.addPostComment(
             PostComment.create(
                 request.getPostId(),
@@ -72,7 +70,7 @@ public class PostCommentController {
     @Operation(operationId = "문제 게시글 댓글 수정", summary = "문제 게시글 댓글 수정", tags = {"question-board-comment"}, description = "문제 게시글 댓글 수정")
     public DefaultResponse modifyPostComment(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long commentId,
-        @RequestBody @Valid ModifyPostCommentRequest request) {
+        @RequestBody @Valid Request.ModifyPostCommentRequest request) {
         postCommentService.modifyPostComment(commentId, userPrincipal.getUser().getUid(), request.getComment());
         return DefaultResponse.success();
     }

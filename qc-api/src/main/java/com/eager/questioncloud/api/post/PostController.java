@@ -1,8 +1,8 @@
-package com.eager.questioncloud.api.hub.post;
+package com.eager.questioncloud.api.post;
 
-import com.eager.questioncloud.api.hub.post.Request.ModifyPostRequest;
-import com.eager.questioncloud.api.hub.post.Request.RegisterPostRequest;
-import com.eager.questioncloud.api.hub.post.Response.PostResponse;
+import com.eager.questioncloud.api.post.Request.ModifyPostRequest;
+import com.eager.questioncloud.api.post.Request.RegisterPostRequest;
+import com.eager.questioncloud.api.post.Response.PostResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
