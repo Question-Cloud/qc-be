@@ -2,7 +2,7 @@ package com.eager.questioncloud.api.creator.register;
 
 import com.eager.questioncloud.api.creator.register.Response.RegisterCreatorResponse;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.creator.service.CreatorService;
+import com.eager.questioncloud.core.domain.creator.service.CreatorRegisterService;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/creator/register")
 @RequiredArgsConstructor
 public class RegisterCreatorController {
-    private final CreatorService creatorService;
+    private final CreatorRegisterService creatorRegisterService;
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_NormalUser')")
@@ -30,7 +30,7 @@ public class RegisterCreatorController {
     @Operation(operationId = "크리에이터 등록 신청", summary = "크리에이터 등록 신청", tags = {"creator"}, description = "크리에이터 등록 신청")
     public RegisterCreatorResponse registerCreator(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid Request.RegisterCreatorRequest request) {
-        Creator creator = creatorService.register(
+        Creator creator = creatorRegisterService.register(
             userPrincipal.getUser(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return new RegisterCreatorResponse(creator.getId());
     }
