@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.point.service;
 
+import com.eager.questioncloud.core.domain.point.event.ChargePointEvent;
 import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentCreator;
 import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentReader;
-import com.eager.questioncloud.core.domain.point.model.ChargePointEvent;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
