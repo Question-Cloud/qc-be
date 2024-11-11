@@ -8,4 +8,8 @@ public class LockKeyGenerator {
     public static String generateChargePointPaymentKey(String paymentId) {
         return "CHARGE-POINT-PAYMENT-" + paymentId;
     }
+
+    public static String generateQuestionPaymentKey(Long userId) {
+        return "QUESTION-PAYMENT-" + userId;
+    }
 }
