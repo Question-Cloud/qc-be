@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/question/review")
+@RequestMapping("/api/hub/question/review")
 @RequiredArgsConstructor
 public class QuestionReviewController {
     private final QuestionReviewService questionReviewService;
