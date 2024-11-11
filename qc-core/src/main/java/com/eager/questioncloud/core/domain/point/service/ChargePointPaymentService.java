@@ -1,5 +1,7 @@
 package com.eager.questioncloud.core.domain.point.service;
 
+import com.eager.questioncloud.core.common.LockKeyGenerator;
+import com.eager.questioncloud.core.common.LockManager;
 import com.eager.questioncloud.core.domain.point.event.ChargePointEvent;
 import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.core.domain.point.implement.ChargePointPaymentCreator;
@@ -16,13 +18,17 @@ public class ChargePointPaymentService {
     private final ChargePointPaymentReader chargePointPaymentReader;
     private final ChargePointPaymentCreator chargePointPaymentCreator;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final LockManager lockManager;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
         chargePointPaymentCreator.createOrder(chargePointPayment);
     }
 
     public void approvePayment(String paymentId) {
-        ChargePointPayment chargePointPayment = chargePointPaymentApprover.approve(paymentId);
+        ChargePointPayment chargePointPayment = lockManager.executeWithLock(
+            LockKeyGenerator.generateChargePointPaymentKey(paymentId),
+            () -> chargePointPaymentApprover.approve(paymentId)
+        );
         applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }
 
