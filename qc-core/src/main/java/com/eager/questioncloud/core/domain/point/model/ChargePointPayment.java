@@ -12,6 +12,7 @@ import lombok.Getter;
 
 @Getter
 public class ChargePointPayment {
+    private final Long id;
     private final String paymentId;
     private final Long userId;
     private String receiptUrl;
@@ -21,8 +22,9 @@ public class ChargePointPayment {
     private LocalDateTime paidAt;
 
     @Builder
-    public ChargePointPayment(String paymentId, Long userId, String receiptUrl, ChargePointType chargePointType,
+    public ChargePointPayment(Long id, String paymentId, Long userId, String receiptUrl, ChargePointType chargePointType,
         ChargePointPaymentStatus chargePointPaymentStatus, LocalDateTime createdAt, LocalDateTime paidAt) {
+        this.id = id;
         this.paymentId = paymentId;
         this.userId = userId;
         this.receiptUrl = receiptUrl;

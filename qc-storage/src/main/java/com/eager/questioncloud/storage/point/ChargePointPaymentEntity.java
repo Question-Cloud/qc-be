@@ -7,6 +7,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -21,6 +23,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChargePointPaymentEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
     private String paymentId;
 
     @Column
@@ -44,8 +50,9 @@ public class ChargePointPaymentEntity {
     private LocalDateTime paidAt;
 
     @Builder
-    public ChargePointPaymentEntity(String paymentId, Long userId, String receiptUrl, ChargePointType chargePointType,
+    public ChargePointPaymentEntity(Long id, String paymentId, Long userId, String receiptUrl, ChargePointType chargePointType,
         ChargePointPaymentStatus chargePointPaymentStatus, LocalDateTime createdAt, LocalDateTime paidAt) {
+        this.id = id;
         this.paymentId = paymentId;
         this.userId = userId;
         this.receiptUrl = receiptUrl;
@@ -57,6 +64,7 @@ public class ChargePointPaymentEntity {
 
     public ChargePointPayment toModel() {
         return ChargePointPayment.builder()
+            .id(id)
             .paymentId(paymentId)
             .userId(userId)
             .receiptUrl(receiptUrl)
@@ -69,6 +77,7 @@ public class ChargePointPaymentEntity {
 
     public static ChargePointPaymentEntity from(ChargePointPayment chargePointPayment) {
         return ChargePointPaymentEntity.builder()
+            .id(chargePointPayment.getId())
             .paymentId(chargePointPayment.getPaymentId())
             .userId(chargePointPayment.getUserId())
             .receiptUrl(chargePointPayment.getReceiptUrl())
