@@ -17,7 +17,7 @@ public class UserCouponRegister {
     private final UserCouponRepository userCouponRepository;
 
     @Transactional
-    public UserCoupon registerCoupon(Long userId, String couponCode) {
+    public void registerCoupon(Long userId, String couponCode) {
         Coupon coupon = couponReader.findByCode(couponCode);
 
         if (userCouponRepository.isRegistered(userId, coupon.getId())) {
@@ -25,7 +25,6 @@ public class UserCouponRegister {
         }
 
         couponUpdater.decreaseCount(coupon.getId());
-
-        return userCouponRepository.save(UserCoupon.create(userId, coupon));
+        userCouponRepository.save(UserCoupon.create(userId, coupon));
     }
 }
