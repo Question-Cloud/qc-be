@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/question/category")
+@RequestMapping("/api/hub/question/category")
 @RequiredArgsConstructor
 public class QuestionCategoryController {
     private final QuestionCategoryService questionCategoryService;
