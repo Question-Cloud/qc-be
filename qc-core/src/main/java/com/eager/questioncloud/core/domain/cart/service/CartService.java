@@ -28,7 +28,7 @@ public class CartService {
         cartItemAppender.append(cartItem);
     }
 
-    public void removeCartItem(Long userId, Long cartItemId) {
-        cartItemRemover.remove(userId, cartItemId);
+    public void removeCartItem(List<Long> ids, Long userId) {
+        cartItemRemover.remove(ids, userId);
     }
 }
