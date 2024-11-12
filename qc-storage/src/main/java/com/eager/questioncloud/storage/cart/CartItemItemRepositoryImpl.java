@@ -6,7 +6,7 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
-import com.eager.questioncloud.core.domain.cart.repository.CartRepository;
+import com.eager.questioncloud.core.domain.cart.repository.CartItemRepository;
 import com.eager.questioncloud.core.domain.cart.vo.CartItemInformation;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CartItemRepositoryImpl implements CartRepository {
+public class CartItemItemRepositoryImpl implements CartItemRepository {
     private final CartItemJpaRepository cartItemJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
 
