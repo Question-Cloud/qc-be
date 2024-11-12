@@ -13,7 +13,7 @@ public class CartItemInformation {
     private Subject subject;
     private int price;
 
-    private CartItemInformation(Long questionId, String title, String thumbnail, String creatorName, Subject subject, int price) {
+    public CartItemInformation(Long questionId, String title, String thumbnail, String creatorName, Subject subject, int price) {
         this.questionId = questionId;
         this.title = title;
         this.thumbnail = thumbnail;
