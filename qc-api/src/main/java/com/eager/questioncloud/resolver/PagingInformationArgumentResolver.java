@@ -30,7 +30,7 @@ public class PagingInformationArgumentResolver implements HandlerMethodArgumentR
                 throw new CustomException(Error.BAD_REQUEST);
             }
 
-            return new PagingInformation(page, size);
+            return new PagingInformation(page * size, size);
         } catch (Exception e) {
             throw new CustomException(Error.BAD_REQUEST);
         }
