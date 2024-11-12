@@ -14,4 +14,11 @@ public class Cart {
         this.userId = userId;
         this.items = items;
     }
+
+    public static Cart create(Long userId, List<CartItem> items) {
+        return Cart.builder()
+            .userId(userId)
+            .items(items)
+            .build();
+    }
 }
