@@ -55,7 +55,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .leftJoin(profile).on(profile.reviewerId.eq(questionReviewEntity.reviewerId), profile.isDeleted.isFalse())
             .leftJoin(userEntity).on(userEntity.uid.eq(questionReviewEntity.reviewerId))
             .groupBy(questionReviewEntity.id)
-            .offset(pagingInformation.getPage())
+            .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .fetch();
 

@@ -68,7 +68,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 libraryEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate)
             .from(questionEntity)
-            .offset(questionFilter.getPagingInformation().getPage())
+            .offset(questionFilter.getPagingInformation().getOffset())
             .limit(questionFilter.getPagingInformation().getSize())
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
