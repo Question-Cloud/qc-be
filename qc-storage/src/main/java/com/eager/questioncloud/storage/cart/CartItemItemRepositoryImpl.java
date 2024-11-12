@@ -50,8 +50,8 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        cartItemJpaRepository.deleteById(id);
+    public void deleteByIdAndUserId(Long id, Long userId) {
+        cartItemJpaRepository.deleteByIdAndUserId(id, userId);
     }
 
     @Override
