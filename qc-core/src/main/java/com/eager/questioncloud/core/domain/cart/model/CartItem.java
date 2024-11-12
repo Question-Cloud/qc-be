@@ -12,7 +12,7 @@ public class CartItem {
     private CartItemInformation itemInformation;
 
     @Builder
-    private CartItem(Long id, Long userId, CartItemInformation itemInformation) {
+    public CartItem(Long id, Long userId, CartItemInformation itemInformation) {
         this.id = id;
         this.userId = userId;
         this.itemInformation = itemInformation;
