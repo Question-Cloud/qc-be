@@ -150,12 +150,22 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<Question> getQuestionListInIds(List<Long> questionIds) {
-        return jpaQueryFactory.select(questionEntity)
+        return jpaQueryFactory.select(questionEntity, creatorEntity)
             .from(questionEntity)
             .where(questionEntity.id.in(questionIds), questionStatusFilter())
+            .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .fetch()
             .stream()
-            .map(QuestionEntity::toModel)
+            .map(tuple ->
+                Question.builder()
+                    .id(tuple.get(questionEntity).getId())
+                    .creator(tuple.get(creatorEntity).toModel())
+                    .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
+                    .questionStatus(tuple.get(questionEntity).getQuestionStatus())
+                    .count(tuple.get(questionEntity).getCount())
+                    .createdAt(tuple.get(questionEntity).getCreatedAt())
+                    .build()
+            )
             .collect(Collectors.toList());
     }
 
@@ -171,22 +181,60 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
-        return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
+            .from(questionEntity)
+            .where(questionEntity.id.eq(questionId), questionEntity.creatorId.eq(creatorId), questionStatusFilter())
+            .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .fetchFirst();
+
+        if (tuple == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return Question.builder()
+            .id(tuple.get(questionEntity).getId())
+            .creator(tuple.get(creatorEntity).toModel())
+            .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
+            .questionStatus(tuple.get(questionEntity).getQuestionStatus())
+            .count(tuple.get(questionEntity).getCount())
+            .createdAt(tuple.get(questionEntity).getCreatedAt())
+            .build();
     }
 
     @Override
     public Question get(Long questionId) {
-        return questionJpaRepository.findById(questionId)
-            .filter(question -> !question.getQuestionStatus().equals(QuestionStatus.Delete))
-            .map(QuestionEntity::toModel)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
+            .from(questionEntity)
+            .where(questionEntity.id.eq(questionId), questionStatusFilter())
+            .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .fetchFirst();
+
+        if (tuple == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return Question.builder()
+            .id(tuple.get(questionEntity).getId())
+            .creator(tuple.get(creatorEntity).toModel())
+            .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
+            .questionStatus(tuple.get(questionEntity).getQuestionStatus())
+            .count(tuple.get(questionEntity).getCount())
+            .createdAt(tuple.get(questionEntity).getCreatedAt())
+            .build();
     }
 
     @Override
     public Question save(Question question) {
-        return questionJpaRepository.save(QuestionEntity.from(question)).toModel();
+        QuestionEntity questionEntity = questionJpaRepository.save(QuestionEntity.from(question));
+
+        return Question.builder()
+            .id(questionEntity.getId())
+            .creator(question.getCreator())
+            .questionContent(question.getQuestionContent())
+            .questionStatus(question.getQuestionStatus())
+            .count(question.getCount())
+            .createdAt(question.getCreatedAt())
+            .build();
     }
 
     @Override
