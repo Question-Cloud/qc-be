@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.cart.implement;
 
-import com.eager.questioncloud.core.domain.cart.model.Cart;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import com.eager.questioncloud.core.domain.cart.repository.CartItemRepository;
 import java.util.List;
@@ -9,11 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CartReader {
+public class CartItemReader {
     private final CartItemRepository cartItemRepository;
 
-    public Cart getUserCart(Long userId) {
-        List<CartItem> items = cartItemRepository.findByUserId(userId);
-        return Cart.create(userId, items);
+    public List<CartItem> getCartItems(Long userId) {
+        return cartItemRepository.findByUserId(userId);
     }
 }
