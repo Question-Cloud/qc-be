@@ -37,6 +37,10 @@ public class QuestionReader {
         return questions;
     }
 
+    public Question getQuestion(Long questionId) {
+        return questionRepository.get(questionId);
+    }
+
     public Boolean isAvailable(Long questionId) {
         return questionRepository.isAvailable(questionId);
     }

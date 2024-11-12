@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.payment.service;
 
 import com.eager.questioncloud.core.common.LockKeyGenerator;
 import com.eager.questioncloud.core.common.LockManager;
+import com.eager.questioncloud.core.domain.cart.event.ClearCartItemEvent;
 import com.eager.questioncloud.core.domain.library.event.AppendUserQuestionAfterPaymentEvent;
 import com.eager.questioncloud.core.domain.library.implement.UserQuestionReader;
 import com.eager.questioncloud.core.domain.payment.implement.QuestionPaymentProcessor;
@@ -32,6 +33,7 @@ public class QuestionPaymentService {
                 List<Question> questions = questionReader.getQuestions(questionIds);
                 QuestionPayment questionPayment = paymentProcessor.questionPayment(QuestionPayment.create(userId, userCouponId, questions));
                 applicationEventPublisher.publishEvent(AppendUserQuestionAfterPaymentEvent.create(userId, questionIds, questionPayment));
+                applicationEventPublisher.publishEvent(ClearCartItemEvent.create(userId, questionIds));
             }
         );
     }
