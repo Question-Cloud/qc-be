@@ -61,7 +61,7 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(countCheck).on(countCheck.creatorId.eq(creatorEntity.id))
             .groupBy(subscribeEntity.id)
-            .offset(pagingInformation.getPage())
+            .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .fetch();
     }

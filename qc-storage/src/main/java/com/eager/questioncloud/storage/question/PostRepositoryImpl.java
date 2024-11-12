@@ -43,7 +43,7 @@ public class PostRepositoryImpl implements PostRepository {
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
-            .offset(pagingInformation.getPage())
+            .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .fetch();
     }
@@ -68,7 +68,7 @@ public class PostRepositoryImpl implements PostRepository {
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
-            .offset(pagingInformation.getPage())
+            .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .fetch();
     }

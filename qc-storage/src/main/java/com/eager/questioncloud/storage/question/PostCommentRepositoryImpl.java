@@ -50,7 +50,7 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
             .from(postCommentEntity)
             .where(postCommentEntity.postId.eq(postId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postCommentEntity.writerId))
-            .offset(pagingInformation.getPage())
+            .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .stream()
             .map(tuple -> PostCommentDetail.builder()
