@@ -38,8 +38,7 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
                     cartItemEntity.userId,
                     Projections.constructor(CartItemInformation.class, questionEntity.id, questionEntity.questionContentEntity.title,
                         questionEntity.questionContentEntity.thumbnail, userEntity.userInformationEntity.name,
-                        questionEntity.questionContentEntity.subject,
-                        questionEntity.questionContentEntity.price)
+                        questionEntity.questionContentEntity.subject, questionEntity.questionContentEntity.price)
                 )
             )
             .from(cartItemEntity)
@@ -50,8 +49,8 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
     }
 
     @Override
-    public void deleteByIdAndUserId(Long id, Long userId) {
-        cartItemJpaRepository.deleteByIdAndUserId(id, userId);
+    public void deleteByIdInAndUserId(List<Long> ids, Long userId) {
+        cartItemJpaRepository.deleteByIdInAndUserId(ids, userId);
     }
 
     @Override

@@ -8,7 +8,7 @@ public interface CartItemRepository {
 
     List<CartItem> findByUserId(Long userId);
 
-    void deleteByIdAndUserId(Long id, Long userId);
+    void deleteByIdInAndUserId(List<Long> ids, Long userId);
 
     void deleteAllByUserid(Long userId);
 }
