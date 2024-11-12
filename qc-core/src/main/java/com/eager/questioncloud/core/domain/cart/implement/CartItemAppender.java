@@ -15,10 +15,14 @@ public class CartItemAppender {
     private final LibraryRepository libraryRepository;
 
     public void append(CartItem cartItem) {
+        if (cartItemRepository.isExistsInCart(cartItem.getUserId(), cartItem.getItemInformation().getQuestionId())) {
+            throw new CustomException(Error.ALREADY_IN_CART);
+        }
+
         if (libraryRepository.isOwned(cartItem.getUserId(), cartItem.getItemInformation().getQuestionId())) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
-
+        
         cartItemRepository.save(cartItem);
     }
 }

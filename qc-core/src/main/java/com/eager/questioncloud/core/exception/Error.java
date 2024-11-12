@@ -20,6 +20,7 @@ public enum Error {
     NOT_ENOUGH_POINT(403, "포인트가 부족합니다."),
     ALREADY_OWN_QUESTION(409, "이미 보유하고 있는 문제입니다."),
     ALREADY_REGISTER_COUPON(409, "이미 등록한 쿠폰입니다."),
+    ALREADY_IN_CART(409, "이미 장바구니에 담겨 있는 문제입니다."),
     EXPIRED_COUPON(400, "등록 기간이 지난 쿠폰입니다."),
     LIMITED_COUPON(400, "쿠폰 물량이 전부 소진되었습니다."),
     WRONG_COUPON(400, "잘못된 쿠폰 사용입니다."),

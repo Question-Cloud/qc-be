@@ -54,7 +54,10 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
     }
 
     @Override
-    public void deleteAllByUserid(Long userId) {
-        cartItemJpaRepository.deleteAllByUserId(userId);
+    public Boolean isExistsInCart(Long userId, Long questionId) {
+        return jpaQueryFactory.select(cartItemEntity.id)
+            .from(cartItemEntity)
+            .where(cartItemEntity.userId.eq(userId), cartItemEntity.questionId.eq(questionId))
+            .fetchFirst() != null;
     }
 }
