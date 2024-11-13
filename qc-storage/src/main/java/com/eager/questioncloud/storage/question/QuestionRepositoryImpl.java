@@ -70,7 +70,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .from(questionEntity)
             .offset(questionFilter.getPagingInformation().getOffset())
             .limit(questionFilter.getPagingInformation().getSize())
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -120,7 +120,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 libraryEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate)
             .from(questionEntity)
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -230,6 +230,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return Question.builder()
             .id(questionEntity.getId())
             .creator(question.getCreator())
+            .category(question.getCategory())
             .questionContent(question.getQuestionContent())
             .questionStatus(question.getQuestionStatus())
             .count(question.getCount())
@@ -253,7 +254,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionEntity.questionContentEntity.price,
                 questionReviewStatisticsEntity.averageRate)
             .from(questionEntity)
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -322,7 +323,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         if (categories == null || categories.isEmpty()) {
             return null;
         }
-        return questionEntity.questionContentEntity.questionCategoryId.in(categories);
+        return questionEntity.questionCategoryId.in(categories);
     }
 
     private BooleanExpression questionTypeFilter(QuestionType questionType) {

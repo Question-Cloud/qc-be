@@ -29,9 +29,10 @@ public class Question {
         this.createdAt = createdAt;
     }
 
-    public static Question create(Creator creator, QuestionContent questionContent) {
+    public static Question create(Creator creator, QuestionContent questionContent, QuestionCategoryInformation category) {
         return Question.builder()
             .creator(creator)
+            .category(category)
             .questionContent(questionContent)
             .questionStatus(QuestionStatus.Available)
             .count(0)

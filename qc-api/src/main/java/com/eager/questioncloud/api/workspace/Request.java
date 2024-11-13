@@ -41,8 +41,6 @@ public class Request {
 
         public QuestionContent toQuestionContent() {
             return QuestionContent.builder()
-                .questionCategoryId(questionCategoryId)
-                .subject(subject)
                 .title(title)
                 .description(description)
                 .thumbnail(thumbnail)
@@ -86,8 +84,6 @@ public class Request {
 
         public QuestionContent toQuestionContent() {
             return QuestionContent.builder()
-                .questionCategoryId(questionCategoryId)
-                .subject(subject)
                 .title(title)
                 .description(description)
                 .thumbnail(thumbnail)

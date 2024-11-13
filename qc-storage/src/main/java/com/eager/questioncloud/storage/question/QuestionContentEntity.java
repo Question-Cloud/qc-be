@@ -3,7 +3,6 @@ package com.eager.questioncloud.storage.question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.vo.QuestionType;
-import com.eager.questioncloud.core.domain.question.vo.Subject;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,11 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class QuestionContentEntity {
-    private Long questionCategoryId;
-
-    @Enumerated(EnumType.STRING)
-    private Subject subject;
-
     private String title;
 
     private String description;
@@ -44,8 +38,6 @@ public class QuestionContentEntity {
     public static QuestionContentEntity from(QuestionContent questionContent) {
         return QuestionContentEntity
             .builder()
-            .questionCategoryId(questionContent.getQuestionCategoryId())
-            .subject(questionContent.getSubject())
             .title(questionContent.getTitle())
             .description(questionContent.getDescription())
             .thumbnail(questionContent.getThumbnail())
@@ -59,8 +51,6 @@ public class QuestionContentEntity {
 
     public QuestionContent toModel() {
         return QuestionContent.builder()
-            .questionCategoryId(questionCategoryId)
-            .subject(subject)
             .title(title)
             .description(description)
             .thumbnail(thumbnail)

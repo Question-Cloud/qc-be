@@ -8,6 +8,7 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.model.RegisterQuestion;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorPostService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorProfileService;
@@ -99,7 +100,12 @@ public class CreatorWorkSpaceController {
     @Operation(operationId = "나의 자작 문제 등록", summary = "나의 자작 문제 등록", tags = {"workspace"}, description = "나의 자작 문제 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid Request.RegisterQuestionRequest request) {
-        creatorQuestionService.registerQuestion(userPrincipal.getCreator(), request.toQuestionContent());
+        creatorQuestionService.registerQuestion(
+            new RegisterQuestion(
+                userPrincipal.getCreator(),
+                request.toQuestionContent(),
+                request.getQuestionCategoryId())
+        );
         return DefaultResponse.success();
     }
 
