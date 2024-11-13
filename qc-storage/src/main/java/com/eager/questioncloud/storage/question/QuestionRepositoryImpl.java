@@ -80,7 +80,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
-        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, userEntity)
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, userEntity, parent, child)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionEntity.creatorId.eq(creatorId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
