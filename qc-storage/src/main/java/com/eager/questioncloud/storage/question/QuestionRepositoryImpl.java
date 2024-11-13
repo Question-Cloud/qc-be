@@ -311,6 +311,39 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return result;
     }
 
+    @Override
+    public List<Question> getQuestionsByFilter(QuestionFilter questionFilter) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+
+        return jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
+            .from(questionEntity)
+            .where(
+                questionLevelFilter(questionFilter.getLevels()),
+                questionCategoryFilter(questionFilter.getCategories()),
+                questionTypeFilter(questionFilter.getQuestionType()),
+                questionCreatorFilter(questionFilter.getCreatorId()),
+                questionStatusFilter())
+            .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .orderBy(sort(questionFilter.getSort()))
+            .fetch()
+            .stream()
+            .map(tuple ->
+                Question.builder()
+                    .id(tuple.get(questionEntity).getId())
+                    .creator(tuple.get(creatorEntity).toModel())
+                    .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
+                    .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
+                    .questionStatus(tuple.get(questionEntity).getQuestionStatus())
+                    .count(tuple.get(questionEntity).getCount())
+                    .createdAt(tuple.get(questionEntity).getCreatedAt())
+                    .build()
+            )
+            .collect(Collectors.toList());
+    }
+
     private OrderSpecifier<?> sort(QuestionSortType sort) {
         switch (sort) {
             case Popularity -> {

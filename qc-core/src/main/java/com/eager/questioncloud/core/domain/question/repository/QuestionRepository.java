@@ -26,4 +26,6 @@ public interface QuestionRepository {
     List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
 
     int countByCreatorId(Long creatorId);
+
+    List<Question> getQuestionsByFilter(QuestionFilter questionFilter);
 }
