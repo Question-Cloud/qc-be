@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.question;
+package com.eager.questioncloud.storage.review;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
