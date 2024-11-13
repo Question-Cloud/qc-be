@@ -7,11 +7,7 @@ import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
-    int getTotalFiltering(QuestionFilter questionFilter);
-
-    List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter);
-
-    QuestionInformation getQuestionInformation(Long questionId, Long userId);
+    int countByQuestionFilter(QuestionFilter questionFilter);
 
     List<Question> getQuestionListInIds(List<Long> questionIds);
 
@@ -26,4 +22,6 @@ public interface QuestionRepository {
     List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
 
     int countByCreatorId(Long creatorId);
+
+    List<Question> getQuestionsByFilter(QuestionFilter questionFilter);
 }

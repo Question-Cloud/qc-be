@@ -29,7 +29,7 @@ public class CartItemInformation {
             question.getQuestionContent().getTitle(),
             question.getQuestionContent().getThumbnail(),
             "creatorName",
-            question.getQuestionContent().getSubject(),
+            question.getCategory().getChildCategory().getSubject(),
             question.getQuestionContent().getPrice());
     }
 }

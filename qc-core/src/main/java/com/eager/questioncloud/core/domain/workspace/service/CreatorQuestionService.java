@@ -2,7 +2,9 @@ package com.eager.questioncloud.core.domain.workspace.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.model.ModifyQuestion;
 import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.question.model.RegisterQuestion;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.review.event.InitReviewStatisticsEvent;
 import com.eager.questioncloud.core.domain.workspace.implement.CreatorQuestionReader;
@@ -36,14 +38,13 @@ public class CreatorQuestionService {
         return question.getQuestionContent();
     }
 
-    public void registerQuestion(Long creatorId, QuestionContent questionContent) {
-        Question question = creatorQuestionRegister.register(Question.create(creatorId, questionContent));
+    public void registerQuestion(RegisterQuestion registerQuestion) {
+        Question question = creatorQuestionRegister.register(registerQuestion);
         applicationEventPublisher.publishEvent(InitReviewStatisticsEvent.create(question.getId()));
     }
 
-    public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
-        Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
-        creatorQuestionUpdater.modifyQuestionContent(question, questionContent);
+    public void modifyQuestion(ModifyQuestion modifyQuestion) {
+        creatorQuestionUpdater.modifyQuestionContent(modifyQuestion);
     }
 
     public void deleteQuestion(Long creatorId, Long questionId) {

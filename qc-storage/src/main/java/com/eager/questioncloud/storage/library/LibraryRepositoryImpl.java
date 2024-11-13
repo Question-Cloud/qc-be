@@ -14,7 +14,9 @@ import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -60,7 +62,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
             .from(libraryEntity)
             .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -75,7 +77,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
             .from(libraryEntity)
             .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -90,6 +92,16 @@ public class LibraryRepositoryImpl implements LibraryRepository {
         return count;
     }
 
+    @Override
+    public Set<Long> checkIsOwned(Long userId, List<Long> questionIds) {
+        List<Long> result = jpaQueryFactory.select(libraryEntity.questionId)
+            .from(libraryEntity)
+            .where(libraryEntity.userId.eq(userId), libraryEntity.questionId.in(questionIds))
+            .fetch();
+
+        return new HashSet<>(result);
+    }
+
     private BooleanBuilder questionEntityJoinCondition(QuestionFilter questionFilter) {
         BooleanBuilder builder = new BooleanBuilder();
         if (questionFilter.getLevels() != null && !questionFilter.getLevels().isEmpty()) {
@@ -97,7 +109,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
         }
 
         if (questionFilter.getCategories() != null && !questionFilter.getCategories().isEmpty()) {
-            builder.and(questionEntity.questionContentEntity.questionCategoryId.in(questionFilter.getCategories()));
+            builder.and(questionEntity.questionCategoryId.in(questionFilter.getCategories()));
         }
 
         if (questionFilter.getQuestionType() != null) {
