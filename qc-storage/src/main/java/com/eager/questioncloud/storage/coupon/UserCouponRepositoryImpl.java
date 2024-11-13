@@ -25,7 +25,7 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     public UserCoupon getUserCoupon(Long userCouponId, Long userId) {
         Tuple tuple = jpaQueryFactory.select(userCouponEntity, couponEntity)
             .from(userCouponEntity)
-            .where(userCouponEntity.id.eq(userCouponId), userCouponEntity.userId.eq(userCouponId))
+            .where(userCouponEntity.id.eq(userCouponId), userCouponEntity.userId.eq(userId), userCouponEntity.isUsed.isFalse())
             .innerJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
             .fetchFirst();
 

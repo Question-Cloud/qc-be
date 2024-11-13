@@ -1,7 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.implement;
 
 import com.eager.questioncloud.core.domain.coupon.implement.UserCouponProcessor;
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.payment.repository.QuestionPaymentOrderRepository;
 import com.eager.questioncloud.core.domain.payment.repository.QuestionPaymentRepository;
@@ -27,8 +26,8 @@ public class QuestionPaymentProcessor {
 
     private void applyCoupon(QuestionPayment questionPayment) {
         if (questionPayment.isUsingCoupon()) {
-            Coupon coupon = userCouponProcessor.useCoupon(questionPayment.getUserId(), questionPayment.getUserCouponId());
-            questionPayment.useCoupon(coupon);
+            userCouponProcessor.useCoupon(questionPayment.getUserCoupon());
+            questionPayment.useCoupon();
         }
     }
 
