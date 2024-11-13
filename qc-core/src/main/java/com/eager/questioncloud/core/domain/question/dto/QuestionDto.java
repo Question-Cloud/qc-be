@@ -44,6 +44,21 @@ public class QuestionDto {
                     .build())
                 .collect(Collectors.toList());
         }
+
+        public static QuestionInformation forHubDetail(Question question, Boolean isOwned, QuestionReviewStatistics questionReviewStatistics) {
+            return QuestionInformation.builder()
+                .id(question.getId())
+                .title(question.getQuestionContent().getTitle())
+                .parentCategory(question.getCategory().getParentCategory().getTitle())
+                .childCategory(question.getCategory().getChildCategory().getTitle())
+                .thumbnail(question.getQuestionContent().getThumbnail())
+                .creatorName("creatorName")
+                .questionLevel(question.getQuestionContent().getQuestionLevel())
+                .price(question.getQuestionContent().getPrice())
+                .rate(questionReviewStatistics.getAverageRate())
+                .isOwned(isOwned)
+                .build();
+        }
     }
 
     @Getter
