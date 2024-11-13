@@ -1,7 +1,6 @@
 package com.eager.questioncloud.storage.question;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.question.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
@@ -50,103 +49,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         }
 
         return total;
-    }
-
-    @Override
-    public List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        List<Tuple> tuples = jpaQueryFactory.select(
-                questionEntity.id,
-                questionEntity.questionContentEntity.title,
-                questionEntity.count,
-                parent.title,
-                child.title,
-                questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
-                questionEntity.questionContentEntity.questionLevel,
-                questionEntity.questionContentEntity.price,
-                libraryEntity.id.isNotNull(),
-                questionReviewStatisticsEntity.averageRate)
-            .from(questionEntity)
-            .offset(questionFilter.getPagingInformation().getOffset())
-            .limit(questionFilter.getPagingInformation().getSize())
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(libraryEntity)
-            .on(libraryEntity.questionId.eq(questionEntity.id), libraryEntity.userId.eq(questionFilter.getUserId()))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .groupBy(questionEntity.id)
-            .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
-            .where(
-                questionLevelFilter(questionFilter.getLevels()),
-                questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()),
-                questionCreatorFilter(questionFilter.getCreatorId()),
-                questionStatusFilter())
-            .fetch();
-
-        return tuples.stream()
-            .map(tuple -> QuestionInformation.builder()
-                .id(tuple.get(questionEntity.id))
-                .title(tuple.get(questionEntity.questionContentEntity.title))
-                .parentCategory(tuple.get(parent.title))
-                .childCategory(tuple.get(child.title))
-                .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-                .creatorName(tuple.get(userEntity.userInformationEntity.name))
-                .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-                .price(tuple.get(questionEntity.questionContentEntity.price))
-                .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-                .isOwned(tuple.get(libraryEntity.id.isNotNull()))
-                .build())
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        Tuple tuple = jpaQueryFactory.select(
-                questionEntity.id,
-                questionEntity.questionContentEntity.title,
-                questionEntity.count,
-                parent.title,
-                child.title,
-                questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
-                questionEntity.questionContentEntity.questionLevel,
-                questionEntity.questionContentEntity.price,
-                libraryEntity.id.isNotNull(),
-                questionReviewStatisticsEntity.averageRate)
-            .from(questionEntity)
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(libraryEntity)
-            .on(libraryEntity.questionId.eq(questionEntity.id), libraryEntity.userId.eq(userId))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .where(questionEntity.id.eq(questionId))
-            .fetchFirst();
-
-        if (tuple == null || tuple.get(questionEntity.id) == null) {
-            throw new CustomException(Error.NOT_FOUND);
-        }
-
-        return QuestionInformation.builder()
-            .id(tuple.get(questionEntity.id))
-            .title(tuple.get(questionEntity.questionContentEntity.title))
-            .parentCategory(tuple.get(parent.title))
-            .childCategory(tuple.get(child.title))
-            .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-            .creatorName(tuple.get(userEntity.userInformationEntity.name))
-            .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-            .price(tuple.get(questionEntity.questionContentEntity.price))
-            .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-            .isOwned(tuple.get(libraryEntity.id.isNotNull()))
-            .build();
     }
 
     @Override
