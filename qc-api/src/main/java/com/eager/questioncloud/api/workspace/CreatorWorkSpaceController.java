@@ -8,6 +8,7 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.model.ModifyQuestion;
 import com.eager.questioncloud.core.domain.question.model.RegisterQuestion;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorPostService;
@@ -118,7 +119,13 @@ public class CreatorWorkSpaceController {
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
         @RequestBody @Valid Request.ModifyQuestionRequest request) {
-        creatorQuestionService.modifyQuestion(userPrincipal.getCreator().getId(), questionId, request.toQuestionContent());
+        creatorQuestionService.modifyQuestion(
+            new ModifyQuestion(
+                questionId,
+                userPrincipal.getCreator(),
+                request.toQuestionContent(),
+                request.getQuestionCategoryId())
+        );
         return DefaultResponse.success();
     }
 

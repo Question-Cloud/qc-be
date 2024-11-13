@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.workspace.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.model.ModifyQuestion;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.model.RegisterQuestion;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
@@ -42,9 +43,8 @@ public class CreatorQuestionService {
         applicationEventPublisher.publishEvent(InitReviewStatisticsEvent.create(question.getId()));
     }
 
-    public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
-        Question question = creatorQuestionReader.getMyQuestion(questionId, creatorId);
-        creatorQuestionUpdater.modifyQuestionContent(question, questionContent);
+    public void modifyQuestion(ModifyQuestion modifyQuestion) {
+        creatorQuestionUpdater.modifyQuestionContent(modifyQuestion);
     }
 
     public void deleteQuestion(Long creatorId, Long questionId) {
