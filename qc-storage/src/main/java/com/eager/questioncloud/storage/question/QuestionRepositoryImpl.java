@@ -11,6 +11,7 @@ import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.common.QuestionSortType;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.question.model.QuestionCategoryInformation;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
@@ -150,16 +151,22 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<Question> getQuestionListInIds(List<Long> questionIds) {
-        return jpaQueryFactory.select(questionEntity, creatorEntity)
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+
+        return jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
             .from(questionEntity)
             .where(questionEntity.id.in(questionIds), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetch()
             .stream()
             .map(tuple ->
                 Question.builder()
                     .id(tuple.get(questionEntity).getId())
                     .creator(tuple.get(creatorEntity).toModel())
+                    .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
                     .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
                     .questionStatus(tuple.get(questionEntity).getQuestionStatus())
                     .count(tuple.get(questionEntity).getCount())
@@ -181,10 +188,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+
         Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionEntity.creatorId.eq(creatorId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
 
         if (tuple == null) {
@@ -194,6 +206,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return Question.builder()
             .id(tuple.get(questionEntity).getId())
             .creator(tuple.get(creatorEntity).toModel())
+            .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
             .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
             .questionStatus(tuple.get(questionEntity).getQuestionStatus())
             .count(tuple.get(questionEntity).getCount())
@@ -203,10 +216,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question get(Long questionId) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+
         Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
 
         if (tuple == null) {
@@ -216,6 +234,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return Question.builder()
             .id(tuple.get(questionEntity).getId())
             .creator(tuple.get(creatorEntity).toModel())
+            .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
             .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
             .questionStatus(tuple.get(questionEntity).getQuestionStatus())
             .count(tuple.get(questionEntity).getCount())
