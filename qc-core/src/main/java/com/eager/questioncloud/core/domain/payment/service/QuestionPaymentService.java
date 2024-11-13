@@ -32,7 +32,7 @@ public class QuestionPaymentService {
                 checkAlreadyOwn(userId, questionIds);
                 List<Question> questions = questionReader.getQuestions(questionIds);
                 QuestionPayment questionPayment = paymentProcessor.questionPayment(QuestionPayment.create(userId, userCouponId, questions));
-                applicationEventPublisher.publishEvent(AppendUserQuestionAfterPaymentEvent.create(userId, questionIds, questionPayment));
+                applicationEventPublisher.publishEvent(AppendUserQuestionAfterPaymentEvent.create(userId, questions, questionPayment));
                 applicationEventPublisher.publishEvent(ClearCartItemEvent.create(userId, questionIds));
             }
         );

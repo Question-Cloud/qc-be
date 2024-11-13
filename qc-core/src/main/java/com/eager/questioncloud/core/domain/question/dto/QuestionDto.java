@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.question.dto;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.vo.Subject;
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +64,11 @@ public class QuestionDto {
 
     @Getter
     @AllArgsConstructor
+    @Builder
     public static class QuestionInformationForLibrary {
         private Long id;
         private String title;
+        private Subject subject;
         private String parentCategory;
         private String childCategory;
         private String thumbnail;
@@ -73,5 +76,20 @@ public class QuestionDto {
         private QuestionLevel questionLevel;
         private String fileUrl;
         private String explanationUrl;
+
+        public static QuestionInformationForLibrary forLibraryDetail(Question question) {
+            return QuestionInformationForLibrary.builder()
+                .id(question.getId())
+                .title(question.getQuestionContent().getTitle())
+                .subject(question.getCategory().getChildCategory().getSubject())
+                .parentCategory(question.getCategory().getParentCategory().getTitle())
+                .childCategory(question.getCategory().getChildCategory().getTitle())
+                .thumbnail(question.getQuestionContent().getThumbnail())
+                .creatorName(question.getCreator().getUser().getUserInformation().getName())
+                .questionLevel(question.getQuestionContent().getQuestionLevel())
+                .fileUrl(question.getQuestionContent().getFileUrl())
+                .explanationUrl(question.getQuestionContent().getExplanationUrl())
+                .build();
+        }
     }
 }
