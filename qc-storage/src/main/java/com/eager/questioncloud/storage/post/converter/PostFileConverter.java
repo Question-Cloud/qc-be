@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.question.converter;
+package com.eager.questioncloud.storage.post.converter;
 
 import com.eager.questioncloud.core.domain.post.vo.PostFile;
 import com.fasterxml.jackson.core.JsonProcessingException;

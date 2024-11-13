@@ -1,8 +1,8 @@
-package com.eager.questioncloud.storage.question;
+package com.eager.questioncloud.storage.post;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.question.QPostCommentEntity.postCommentEntity;
-import static com.eager.questioncloud.storage.question.QPostEntity.postEntity;
+import static com.eager.questioncloud.storage.post.QPostCommentEntity.postCommentEntity;
+import static com.eager.questioncloud.storage.post.QPostEntity.postEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 

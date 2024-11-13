@@ -1,6 +1,6 @@
-package com.eager.questioncloud.storage.question;
+package com.eager.questioncloud.storage.post;
 
-import static com.eager.questioncloud.storage.question.QPostEntity.postEntity;
+import static com.eager.questioncloud.storage.post.QPostEntity.postEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
@@ -11,6 +11,7 @@ import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.post.repository.PostRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
