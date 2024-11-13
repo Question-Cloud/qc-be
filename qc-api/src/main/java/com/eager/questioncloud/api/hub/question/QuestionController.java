@@ -33,7 +33,7 @@ public class QuestionController {
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionInformation> getQuestionListByFiltering(@ParameterObject QuestionFilter questionFilter) {
-        int total = questionHubService.getTotalFiltering(questionFilter);
+        int total = questionHubService.countByQuestionFilter(questionFilter);
         List<QuestionInformation> questionInformation = questionHubService.getQuestionListByFiltering(questionFilter);
         return new PagingResponse<>(total, questionInformation);
     }
