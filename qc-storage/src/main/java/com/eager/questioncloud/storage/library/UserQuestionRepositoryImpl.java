@@ -1,13 +1,13 @@
 package com.eager.questioncloud.storage.library;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
+import static com.eager.questioncloud.storage.library.QUserQuestionEntity.userQuestionEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
-import com.eager.questioncloud.core.domain.library.repository.LibraryRepository;
+import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
@@ -22,23 +22,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class LibraryRepositoryImpl implements LibraryRepository {
+public class UserQuestionRepositoryImpl implements UserQuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
-    private final LibraryJpaRepository libraryJpaRepository;
+    private final UserQuestionJpaRepository userQuestionJpaRepository;
 
     @Override
     public void saveAll(List<UserQuestion> userQuestionLibraries) {
-        libraryJpaRepository.saveAll(LibraryEntity.from(userQuestionLibraries));
+        userQuestionJpaRepository.saveAll(UserQuestionEntity.from(userQuestionLibraries));
     }
 
     @Override
     public Boolean isOwned(Long userId, List<Long> questionIds) {
-        return libraryJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
+        return userQuestionJpaRepository.existsByUserIdAndQuestionIdIn(userId, questionIds);
     }
 
     @Override
     public Boolean isOwned(Long userId, Long questionId) {
-        return libraryJpaRepository.existsByUserIdAndQuestionId(userId, questionId);
+        return userQuestionJpaRepository.existsByUserIdAndQuestionId(userId, questionId);
     }
 
     @Override
@@ -47,8 +47,8 @@ public class LibraryRepositoryImpl implements LibraryRepository {
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(UserQuestionItem.class,
-                    libraryEntity.id,
-                    libraryEntity.isUsed,
+                    userQuestionEntity.id,
+                    userQuestionEntity.isUsed,
                     Projections.constructor(QuestionInformationForLibrary.class,
                         questionEntity.id,
                         questionEntity.questionContentEntity.title,
@@ -59,8 +59,8 @@ public class LibraryRepositoryImpl implements LibraryRepository {
                         questionEntity.questionContentEntity.questionLevel,
                         questionEntity.questionContentEntity.fileUrl,
                         questionEntity.questionContentEntity.explanationUrl)))
-            .from(libraryEntity)
-            .where(libraryEntity.userId.eq(questionFilter.getUserId()))
+            .from(userQuestionEntity)
+            .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
@@ -73,9 +73,9 @@ public class LibraryRepositoryImpl implements LibraryRepository {
     public int countUserQuestions(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        Integer count = jpaQueryFactory.select(libraryEntity.id.count().intValue())
-            .from(libraryEntity)
-            .where(libraryEntity.userId.eq(questionFilter.getUserId()))
+        Integer count = jpaQueryFactory.select(userQuestionEntity.id.count().intValue())
+            .from(userQuestionEntity)
+            .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
@@ -94,9 +94,9 @@ public class LibraryRepositoryImpl implements LibraryRepository {
 
     @Override
     public Set<Long> checkIsOwned(Long userId, List<Long> questionIds) {
-        List<Long> result = jpaQueryFactory.select(libraryEntity.questionId)
-            .from(libraryEntity)
-            .where(libraryEntity.userId.eq(userId), libraryEntity.questionId.in(questionIds))
+        List<Long> result = jpaQueryFactory.select(userQuestionEntity.questionId)
+            .from(userQuestionEntity)
+            .where(userQuestionEntity.userId.eq(userId), userQuestionEntity.questionId.in(questionIds))
             .fetch();
 
         return new HashSet<>(result);
@@ -116,7 +116,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
             builder.and(questionEntity.questionContentEntity.questionType.eq(questionFilter.getQuestionType()));
         }
 
-        builder.and(questionEntity.id.eq(libraryEntity.questionId));
+        builder.and(questionEntity.id.eq(userQuestionEntity.questionId));
 
         return builder;
     }

@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import java.util.List;
 import java.util.Set;
 
-public interface LibraryRepository {
+public interface UserQuestionRepository {
     void saveAll(List<UserQuestion> userQuestionLibraries);
 
     Boolean isOwned(Long userId, List<Long> questionIds);
