@@ -55,6 +55,8 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .offset(questionFilter.getPagingInformation().getOffset())
+            .limit(questionFilter.getPagingInformation().getSize())
             .fetch();
 
         if (tuples.isEmpty()) {
@@ -72,12 +74,6 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .offset(questionFilter.getPagingInformation().getOffset())
-            .limit(questionFilter.getPagingInformation().getSize())
             .fetchFirst();
 
         if (count == null) {
@@ -127,5 +123,4 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
             .createdAt(tuple.get(questionEntity).getCreatedAt())
             .build();
     }
-
 }
