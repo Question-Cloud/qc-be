@@ -34,7 +34,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private final QuestionJpaRepository questionJpaRepository;
 
     @Override
-    public int getTotalFiltering(QuestionFilter questionFilter) {
+    public int countByQuestionFilter(QuestionFilter questionFilter) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .where(
