@@ -3,16 +3,15 @@ package com.eager.questioncloud.storage.coupon;
 import static com.eager.questioncloud.storage.coupon.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.storage.coupon.QUserCouponEntity.userCouponEntity;
 
-import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.coupon.repository.UserCouponRepository;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -71,18 +70,15 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
-    public List<AvailableUserCouponItem> getAvailableUserCoupons(Long userId) {
-        return jpaQueryFactory.select(
-                Projections.constructor(
-                    AvailableUserCouponItem.class,
-                    userCouponEntity.id,
-                    couponEntity.title,
-                    couponEntity.couponType,
-                    couponEntity.value,
-                    couponEntity.endAt))
+    public List<UserCoupon> getUserCoupons(Long userId) {
+        List<Tuple> tuples = jpaQueryFactory.select(userCouponEntity, couponEntity)
             .from(userCouponEntity)
-            .leftJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
             .where(userCouponEntity.userId.eq(userId), userCouponEntity.isUsed.isFalse(), couponEntity.endAt.after(LocalDateTime.now()))
+            .innerJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
             .fetch();
+
+        return tuples.stream()
+            .map(tuple -> tuple.get(userCouponEntity).toModel(tuple.get(couponEntity)))
+            .collect(Collectors.toList());
     }
 }

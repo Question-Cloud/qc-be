@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.coupon.repository;
 
-import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import java.util.List;
 
@@ -13,5 +12,5 @@ public interface UserCouponRepository {
 
     UserCoupon save(UserCoupon userCoupon);
 
-    List<AvailableUserCouponItem> getAvailableUserCoupons(Long userId);
+    List<UserCoupon> getUserCoupons(Long userId);
 }
