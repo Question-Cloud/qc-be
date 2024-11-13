@@ -40,27 +40,11 @@ public class QuestionPaymentOrderEntity {
         this.price = price;
     }
 
-    public static List<QuestionPaymentOrder> toModel(List<QuestionPaymentOrderEntity> orders) {
-        return orders
-            .stream()
-            .map(QuestionPaymentOrderEntity::toModel)
-            .collect(Collectors.toList());
-    }
-
-    public QuestionPaymentOrder toModel() {
-        return QuestionPaymentOrder.builder()
-            .id(id)
-            .paymentId(paymentId)
-            .questionId(questionId)
-            .price(price)
-            .build();
-    }
-
     public static QuestionPaymentOrderEntity from(QuestionPaymentOrder questionPaymentOrder) {
         return QuestionPaymentOrderEntity.builder()
             .id(questionPaymentOrder.getId())
             .paymentId(questionPaymentOrder.getPaymentId())
-            .questionId(questionPaymentOrder.getQuestionId())
+            .questionId(questionPaymentOrder.getQuestion().getId())
             .price(questionPaymentOrder.getPrice())
             .build();
     }
