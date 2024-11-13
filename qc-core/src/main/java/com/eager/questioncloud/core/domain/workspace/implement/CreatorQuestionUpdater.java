@@ -23,7 +23,7 @@ public class CreatorQuestionUpdater {
         QuestionCategoryInformation questionCategoryInformation = new QuestionCategoryInformation(parentCategory, childCategory);
 
         question.modify(modifyQuestion.getQuestionContent(), questionCategoryInformation);
-        
+
         questionRepository.save(question);
     }
 }
