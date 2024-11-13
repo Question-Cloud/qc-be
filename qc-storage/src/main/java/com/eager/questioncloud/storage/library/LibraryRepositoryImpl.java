@@ -27,8 +27,8 @@ public class LibraryRepositoryImpl implements LibraryRepository {
     private final LibraryJpaRepository libraryJpaRepository;
 
     @Override
-    public List<UserQuestion> saveAll(List<UserQuestion> userQuestionLibraries) {
-        return LibraryEntity.toModel(libraryJpaRepository.saveAll(LibraryEntity.from(userQuestionLibraries)));
+    public void saveAll(List<UserQuestion> userQuestionLibraries) {
+        libraryJpaRepository.saveAll(LibraryEntity.from(userQuestionLibraries));
     }
 
     @Override

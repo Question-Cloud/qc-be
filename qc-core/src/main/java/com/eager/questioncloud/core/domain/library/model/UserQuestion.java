@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.library.model;
 
+import com.eager.questioncloud.core.domain.question.model.Question;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,27 +11,27 @@ import lombok.Getter;
 public class UserQuestion {
     private Long id;
     private Long userId;
-    private Long questionId;
+    private Question question;
     private Boolean isUsed;
     private LocalDateTime createdAt;
 
     @Builder
-    public UserQuestion(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
+    public UserQuestion(Long id, Long userId, Question question, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
-        this.questionId = questionId;
+        this.question = question;
         this.isUsed = isUsed;
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestion> create(Long userId, List<Long> questionIds) {
+    public static List<UserQuestion> create(Long userId, List<Question> questions) {
         LocalDateTime now = LocalDateTime.now();
-        return questionIds
+        return questions
             .stream()
-            .map(questionId -> UserQuestion
+            .map(question -> UserQuestion
                 .builder()
                 .userId(userId)
-                .questionId(questionId)
+                .question(question)
                 .isUsed(false)
                 .createdAt(now)
                 .build())

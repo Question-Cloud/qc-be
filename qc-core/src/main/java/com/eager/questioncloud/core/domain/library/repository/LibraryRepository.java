@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface LibraryRepository {
-    List<UserQuestion> saveAll(List<UserQuestion> userQuestionLibraries);
+    void saveAll(List<UserQuestion> userQuestionLibraries);
 
     Boolean isOwned(Long userId, List<Long> questionIds);
 

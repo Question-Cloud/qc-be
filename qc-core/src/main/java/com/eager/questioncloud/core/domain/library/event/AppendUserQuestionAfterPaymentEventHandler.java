@@ -19,7 +19,7 @@ public class AppendUserQuestionAfterPaymentEventHandler {
         try {
             userQuestionAppender.appendUserQuestions(
                 appendUserQuestionAfterPaymentEvent.getUserId(),
-                appendUserQuestionAfterPaymentEvent.getQuestionIds());
+                appendUserQuestionAfterPaymentEvent.getQuestions());
         } catch (Exception e) {
             questionPaymentFailHandler.failHandler(appendUserQuestionAfterPaymentEvent.getQuestionPayment());
             throw new CustomException(Error.INTERNAL_SERVER_ERROR);
