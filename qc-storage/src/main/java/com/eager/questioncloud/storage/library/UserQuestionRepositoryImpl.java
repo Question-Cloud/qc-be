@@ -5,18 +5,20 @@ import static com.eager.questioncloud.storage.library.QUserQuestionEntity.userQu
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformationForLibrary;
+import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.question.model.QuestionCategoryInformation;
 import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Repository;
 public class UserQuestionRepositoryImpl implements UserQuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final UserQuestionJpaRepository userQuestionJpaRepository;
+    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
     @Override
     public void saveAll(List<UserQuestion> userQuestionLibraries) {
@@ -42,37 +46,28 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
     }
 
     @Override
-    public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        return jpaQueryFactory.select(
-                Projections.constructor(UserQuestionItem.class,
-                    userQuestionEntity.id,
-                    userQuestionEntity.isUsed,
-                    Projections.constructor(QuestionInformationForLibrary.class,
-                        questionEntity.id,
-                        questionEntity.questionContentEntity.title,
-                        parent.title,
-                        child.title,
-                        questionEntity.questionContentEntity.thumbnail,
-                        userEntity.userInformationEntity.name,
-                        questionEntity.questionContentEntity.questionLevel,
-                        questionEntity.questionContentEntity.fileUrl,
-                        questionEntity.questionContentEntity.explanationUrl)))
+    public List<UserQuestion> getUserQuestions(QuestionFilter questionFilter) {
+        List<Tuple> tuples = jpaQueryFactory.select(userQuestionEntity, questionEntity, creatorEntity, userEntity, parent, child)
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetch();
+
+        if (tuples.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return tuples.stream()
+            .map(tuple -> tuple.get(userQuestionEntity).toModel(parseQuestionTuple(tuple)))
+            .collect(Collectors.toList());
     }
 
     @Override
     public int countUserQuestions(QuestionFilter questionFilter) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         Integer count = jpaQueryFactory.select(userQuestionEntity.id.count().intValue())
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
@@ -120,4 +115,17 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
 
         return builder;
     }
+
+    private Question parseQuestionTuple(Tuple tuple) {
+        return Question.builder()
+            .id(tuple.get(questionEntity).getId())
+            .creator(tuple.get(creatorEntity).toModel(tuple.get(userEntity)))
+            .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
+            .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
+            .questionStatus(tuple.get(questionEntity).getQuestionStatus())
+            .count(tuple.get(questionEntity).getCount())
+            .createdAt(tuple.get(questionEntity).getCreatedAt())
+            .build();
+    }
+
 }

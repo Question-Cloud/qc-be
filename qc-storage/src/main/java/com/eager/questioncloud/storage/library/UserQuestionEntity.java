@@ -1,6 +1,7 @@
 package com.eager.questioncloud.storage.library;
 
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -58,6 +59,16 @@ public class UserQuestionEntity {
             .questionId(userQuestion.getQuestion().getId())
             .isUsed(userQuestion.getIsUsed())
             .createdAt(userQuestion.getCreatedAt())
+            .build();
+    }
+
+    public UserQuestion toModel(Question question) {
+        return UserQuestion.builder()
+            .id(id)
+            .userId(userId)
+            .question(question)
+            .isUsed(isUsed)
+            .createdAt(createdAt)
             .build();
     }
 }
