@@ -10,23 +10,21 @@ import lombok.Getter;
 public class UserCoupon {
     private Long id;
     private Long userId;
-    private Long couponId;
+    private Coupon coupon;
     private Boolean isUsed;
     private LocalDateTime createdAt;
-    private LocalDateTime endAt;
 
     @Builder
-    public UserCoupon(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt, LocalDateTime endAt) {
+    public UserCoupon(Long id, Long userId, Coupon coupon, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
-        this.couponId = couponId;
+        this.coupon = coupon;
         this.isUsed = isUsed;
         this.createdAt = createdAt;
-        this.endAt = endAt;
     }
 
     public void use() {
-        if (endAt.isBefore(LocalDateTime.now())) {
+        if (coupon.getEndAt().isBefore(LocalDateTime.now())) {
             throw new CustomException(Error.EXPIRED_COUPON);
         }
         this.isUsed = true;
@@ -45,10 +43,9 @@ public class UserCoupon {
         }
         return UserCoupon.builder()
             .userId(userId)
-            .couponId(coupon.getId())
+            .coupon(coupon)
             .isUsed(false)
             .createdAt(LocalDateTime.now())
-            .endAt(coupon.getEndAt())
             .build();
     }
 }
