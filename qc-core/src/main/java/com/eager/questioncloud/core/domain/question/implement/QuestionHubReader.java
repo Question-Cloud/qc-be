@@ -44,8 +44,4 @@ public class QuestionHubReader {
 
         return QuestionInformation.forHubDetail(question, isOwned, reviewStatistics);
     }
-
-    public int countByQuestionFilter(QuestionFilter questionFilter) {
-        return questionRepository.getTotalFiltering(questionFilter);
-    }
 }
