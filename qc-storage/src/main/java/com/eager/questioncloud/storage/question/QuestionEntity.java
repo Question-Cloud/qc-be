@@ -53,10 +53,21 @@ public class QuestionEntity {
         this.createdAt = createdAt;
     }
 
+    public Question toModel() {
+        return Question.builder()
+            .id(id)
+            .creatorId(creatorId)
+            .questionContent(questionContentEntity.toModel())
+            .questionStatus(questionStatus)
+            .count(count)
+            .createdAt(createdAt)
+            .build();
+    }
+
     public static QuestionEntity from(Question question) {
         return QuestionEntity.builder()
             .id(question.getId())
-            .creatorId(question.getCreator().getId())
+            .creatorId(question.getCreatorId())
             .questionContentEntity(QuestionContentEntity.from(question.getQuestionContent()))
             .questionStatus(question.getQuestionStatus())
             .count(question.getCount())
