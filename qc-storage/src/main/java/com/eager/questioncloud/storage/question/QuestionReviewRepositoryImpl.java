@@ -1,6 +1,6 @@
-package com.eager.questioncloud.storage.review;
+package com.eager.questioncloud.storage.question;
 
-import static com.eager.questioncloud.storage.review.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;

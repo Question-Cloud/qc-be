@@ -3,7 +3,7 @@ package com.eager.questioncloud.storage.creator;
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.storage.review.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
@@ -70,7 +70,7 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .creatorProfile(creator.getCreatorProfile())
             .build();
     }
-
+    
     private Integer getCreatorSalesCount(Long creatorId) {
         return jpaQueryFactory
             .select(libraryEntity.id.countDistinct().intValue())

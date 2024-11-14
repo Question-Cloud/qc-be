@@ -2,7 +2,7 @@ package com.eager.questioncloud.storage.question;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.storage.review.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
+import static com.eager.questioncloud.storage.question.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
