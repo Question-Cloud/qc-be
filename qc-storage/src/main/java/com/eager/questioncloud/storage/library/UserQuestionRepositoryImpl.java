@@ -81,8 +81,6 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .offset(questionFilter.getPagingInformation().getOffset())
-            .limit(questionFilter.getPagingInformation().getSize())
             .fetchFirst();
 
         if (count == null) {
