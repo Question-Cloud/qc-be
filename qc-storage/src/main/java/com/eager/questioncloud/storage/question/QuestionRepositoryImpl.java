@@ -33,7 +33,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     private final QuestionJpaRepository questionJpaRepository;
 
     @Override
-    public int getTotalFiltering(QuestionFilter questionFilter) {
+    public int countByQuestionFilter(QuestionFilter questionFilter) {
         Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .where(
@@ -52,7 +52,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
+    public List<QuestionInformation> getQuestionInformation(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         List<Tuple> tuples = jpaQueryFactory.select(
@@ -149,7 +149,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public List<Question> getQuestionListInIds(List<Long> questionIds) {
+    public List<Question> getQuestionsByQuestionIds(List<Long> questionIds) {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
             .where(questionEntity.id.in(questionIds), questionStatusFilter())

@@ -7,13 +7,13 @@ import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
-    int getTotalFiltering(QuestionFilter questionFilter);
+    int countByQuestionFilter(QuestionFilter questionFilter);
 
-    List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter);
+    List<QuestionInformation> getQuestionInformation(QuestionFilter questionFilter);
 
     QuestionInformation getQuestionInformation(Long questionId, Long userId);
 
-    List<Question> getQuestionListInIds(List<Long> questionIds);
+    List<Question> getQuestionsByQuestionIds(List<Long> questionIds);
 
     Boolean isAvailable(Long questionId);
 
