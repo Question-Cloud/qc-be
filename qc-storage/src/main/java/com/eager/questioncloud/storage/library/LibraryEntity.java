@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "user_question")
+@Table(name = "library")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserQuestionEntity {
+public class LibraryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,7 @@ public class UserQuestionEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserQuestionEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
+    public LibraryEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.questionId = questionId;
@@ -45,14 +45,14 @@ public class UserQuestionEntity {
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestionEntity> from(List<UserQuestion> userQuestionLibraries) {
+    public static List<LibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
         return userQuestionLibraries.stream()
-            .map(UserQuestionEntity::from)
+            .map(LibraryEntity::from)
             .collect(Collectors.toList());
     }
 
-    public static UserQuestionEntity from(UserQuestion userQuestion) {
-        return UserQuestionEntity.builder()
+    public static LibraryEntity from(UserQuestion userQuestion) {
+        return LibraryEntity.builder()
             .id(userQuestion.getId())
             .userId(userQuestion.getUserId())
             .questionId(userQuestion.getQuestion().getId())

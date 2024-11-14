@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.question.implement;
 
-import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.library.repository.LibraryRepository;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionHubReader {
     private final QuestionRepository questionRepository;
-    private final UserQuestionRepository userQuestionRepository;
+    private final LibraryRepository libraryRepository;
     private final QuestionReviewStatisticsRepository questionReviewStatisticsRepository;
 
     public List<QuestionInformation> getQuestions(QuestionFilter questionFilter) {
@@ -29,7 +29,7 @@ public class QuestionHubReader {
 
         Map<Long, QuestionReviewStatistics> reviewStatistics = questionReviewStatisticsRepository.findByQuestionIdIn(questionIds);
 
-        Set<Long> alreadyOwnedQuestionIds = userQuestionRepository.checkIsOwned(
+        Set<Long> alreadyOwnedQuestionIds = libraryRepository.checkIsOwned(
             questionFilter.getUserId(),
             questionIds
         );
@@ -40,7 +40,7 @@ public class QuestionHubReader {
     public QuestionInformation getQuestion(Long questionId, Long userId) {
         Question question = questionRepository.get(questionId);
         QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(questionId);
-        Boolean isOwned = userQuestionRepository.isOwned(userId, questionId);
+        Boolean isOwned = libraryRepository.isOwned(userId, questionId);
 
         return QuestionInformation.forHubDetail(question, isOwned, reviewStatistics);
     }
