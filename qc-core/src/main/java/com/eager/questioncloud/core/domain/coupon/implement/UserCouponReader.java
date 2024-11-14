@@ -16,4 +16,8 @@ public class UserCouponReader {
         List<UserCoupon> userCoupons = userCouponRepository.getUserCoupons(userId);
         return AvailableUserCouponItem.from(userCoupons);
     }
+
+    public UserCoupon getUserCoupon(Long userId, Long userCouponId) {
+        return userCouponRepository.getUserCoupon(userCouponId, userId);
+    }
 }
