@@ -14,9 +14,7 @@ import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -90,16 +88,6 @@ public class LibraryRepositoryImpl implements LibraryRepository {
         }
 
         return count;
-    }
-
-    @Override
-    public Set<Long> checkIsOwned(Long userId, List<Long> questionIds) {
-        List<Long> result = jpaQueryFactory.select(libraryEntity.questionId)
-            .from(libraryEntity)
-            .where(libraryEntity.userId.eq(userId), libraryEntity.questionId.in(questionIds))
-            .fetch();
-
-        return new HashSet<>(result);
     }
 
     private BooleanBuilder questionEntityJoinCondition(QuestionFilter questionFilter) {
