@@ -11,18 +11,15 @@ import lombok.Getter;
 public class Question {
     private Long id;
     private Creator creator;
-    private QuestionCategoryInformation category;
     private QuestionContent questionContent;
     private QuestionStatus questionStatus;
     private int count;
     private LocalDateTime createdAt;
 
     @Builder
-    public Question(Long id, Creator creator, QuestionCategoryInformation category, QuestionContent questionContent, QuestionStatus questionStatus,
-        int count, LocalDateTime createdAt) {
+    public Question(Long id, Creator creator, QuestionContent questionContent, QuestionStatus questionStatus, int count, LocalDateTime createdAt) {
         this.id = id;
         this.creator = creator;
-        this.category = category;
         this.questionContent = questionContent;
         this.questionStatus = questionStatus;
         this.count = count;
