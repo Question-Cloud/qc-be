@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.post;
+package com.eager.questioncloud.storage.question;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

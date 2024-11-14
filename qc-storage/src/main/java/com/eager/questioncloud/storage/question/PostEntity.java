@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.post;
+package com.eager.questioncloud.storage.question;
 
 import com.eager.questioncloud.core.domain.post.model.Post;
 import jakarta.persistence.Column;
