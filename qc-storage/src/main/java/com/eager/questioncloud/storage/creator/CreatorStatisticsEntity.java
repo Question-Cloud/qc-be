@@ -43,4 +43,8 @@ public class CreatorStatisticsEntity {
             .averageRateOfReview(creatorStatistics.getAverageRateOfReview())
             .build();
     }
+
+    public CreatorStatistics toModel() {
+        return new CreatorStatistics(creatorId, subscribeCount, salesCount, averageRateOfReview);
+    }
 }

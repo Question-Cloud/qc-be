@@ -19,4 +19,8 @@ public class CreatorStatistics {
     public static CreatorStatistics create(Long creatorId) {
         return new CreatorStatistics(creatorId, 0, 0, 0.0);
     }
+
+    public void addSaleCount(int count) {
+        this.saleCount += count;
+    }
 }
