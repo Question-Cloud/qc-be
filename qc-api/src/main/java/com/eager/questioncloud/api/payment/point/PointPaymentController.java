@@ -49,7 +49,7 @@ public class PointPaymentController {
         chargePointPaymentService.createOrder(
             ChargePointPayment.order(
                 chargePointOrderRequest.getPaymentId(),
-                userPrincipal.getUser().getUid(),
+                userPrincipal.getCreator().getUserId(),
                 chargePointOrderRequest.getChargePointType())
         );
         return DefaultResponse.success();
