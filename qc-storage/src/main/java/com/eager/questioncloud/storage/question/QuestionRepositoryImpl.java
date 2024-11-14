@@ -56,11 +56,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
-        return jpaQueryFactory.select(questionEntity, creatorEntity, userEntity, parent, child)
+        return jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
             .from(questionEntity)
             .where(questionEntity.id.in(questionIds), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetch()
@@ -68,7 +67,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .map(tuple ->
                 Question.builder()
                     .id(tuple.get(questionEntity).getId())
-                    .creator(tuple.get(creatorEntity).toModel(tuple.get(userEntity)))
+                    .creator(tuple.get(creatorEntity).toModel())
                     .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
                     .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
                     .questionStatus(tuple.get(questionEntity).getQuestionStatus())
@@ -94,11 +93,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
-        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, userEntity)
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionEntity.creatorId.eq(creatorId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
@@ -109,7 +107,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
         return Question.builder()
             .id(tuple.get(questionEntity).getId())
-            .creator(tuple.get(creatorEntity).toModel(tuple.get(userEntity)))
+            .creator(tuple.get(creatorEntity).toModel())
             .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
             .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
             .questionStatus(tuple.get(questionEntity).getQuestionStatus())
@@ -123,11 +121,10 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
-        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, userEntity, parent, child)
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst();
@@ -138,7 +135,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
         return Question.builder()
             .id(tuple.get(questionEntity).getId())
-            .creator(tuple.get(creatorEntity).toModel(tuple.get(userEntity)))
+            .creator(tuple.get(creatorEntity).toModel())
             .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
             .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
             .questionStatus(tuple.get(questionEntity).getQuestionStatus())
@@ -221,7 +218,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
-        return jpaQueryFactory.select(questionEntity, creatorEntity, userEntity, parent, child)
+        return jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
             .from(questionEntity)
             .where(
                 questionLevelFilter(questionFilter.getLevels()),
@@ -230,7 +227,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionCreatorFilter(questionFilter.getCreatorId()),
                 questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .orderBy(sort(questionFilter.getSort()))
@@ -239,7 +235,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .map(tuple ->
                 Question.builder()
                     .id(tuple.get(questionEntity).getId())
-                    .creator(tuple.get(creatorEntity).toModel(tuple.get(userEntity)))
+                    .creator(tuple.get(creatorEntity).toModel())
                     .category(new QuestionCategoryInformation(tuple.get(parent).toModel(), tuple.get(child).toModel()))
                     .questionContent(tuple.get(questionEntity).getQuestionContentEntity().toModel())
                     .questionStatus(tuple.get(questionEntity).getQuestionStatus())

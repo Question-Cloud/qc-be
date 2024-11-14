@@ -18,6 +18,6 @@ public class CreatorRegister {
     @Transactional
     public Creator register(User user, CreatorProfile creatorProfile) {
         userUpdater.setCreator(user);
-        return creatorRepository.save(Creator.create(user, creatorProfile));
+        return creatorRepository.save(Creator.create(user.getUid(), creatorProfile));
     }
 }

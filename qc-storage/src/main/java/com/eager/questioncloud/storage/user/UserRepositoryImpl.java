@@ -3,7 +3,6 @@ package com.eager.questioncloud.storage.user;
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.repository.UserRepository;
@@ -47,7 +46,6 @@ public class UserRepositoryImpl implements UserRepository {
             .toModel();
     }
 
-    //TODO 메서드 분할하기
     @Override
     public UserWithCreator getUserWithCreator(Long uid) {
         Tuple result = jpaQueryFactory.select(userEntity, creatorEntity)
@@ -68,13 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {
-            return new UserWithCreator(
-                user.toModel(),
-                Creator.builder()
-                    .id(creator.getId())
-                    .user(user.toModel())
-                    .creatorProfile(creator.getCreatorProfileEntity().toModel())
-                    .build());
+            return new UserWithCreator(user.toModel(), creator.toModel());
         }
 
         return new UserWithCreator(user.toModel(), null);
