@@ -1,4 +1,4 @@
-package com.eager.questioncloud.storage.question;
+package com.eager.questioncloud.storage.review;
 
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewStatisticsRepository;
