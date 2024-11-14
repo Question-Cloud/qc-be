@@ -91,7 +91,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .leftJoin(userQuestionEntity)
             .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userId))
             .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .where(questionEntity.id.eq(questionId))
+            .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst();
 
         if (tuple == null || tuple.get(questionEntity.id) == null) {
@@ -116,7 +116,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public Boolean isAvailable(Long questionId) {
         Long result = jpaQueryFactory.select(questionEntity.id)
             .from(questionEntity)
-            .where(questionEntity.id.eq(questionId))
+            .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst();
 
         return result != null;
@@ -124,17 +124,30 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
-        return questionJpaRepository.findByIdAndCreatorId(questionId, creatorId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
-            .toModel();
+        QuestionEntity result = jpaQueryFactory.select(questionEntity)
+            .from(questionEntity)
+            .where(questionEntity.creatorId.eq(creatorId), questionEntity.id.eq(questionId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
+            .fetchFirst();
+
+        if (result == null) {
+            throw new CustomException(Error.NOT_FOUND);
+        }
+
+        return result.toModel();
     }
 
     @Override
     public Question get(Long questionId) {
-        return questionJpaRepository.findById(questionId)
-            .filter(question -> !question.getQuestionStatus().equals(QuestionStatus.Delete))
-            .map(QuestionEntity::toModel)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND));
+        QuestionEntity result = jpaQueryFactory.select(questionEntity)
+            .from(questionEntity)
+            .where(questionEntity.id.eq(questionId), questionStatusFilter())
+            .fetchFirst();
+
+        if (result == null) {
+            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+        }
+
+        return result.toModel();
     }
 
     @Override
@@ -145,7 +158,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     @Override
     public List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation) {
         List<Tuple> tuples = questionInformationSelectFrom()
-            .where(questionEntity.creatorId.eq(creatorId))
+            .where(questionEntity.creatorId.eq(creatorId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
@@ -164,7 +177,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     public int countByCreatorId(Long creatorId) {
         Integer result = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
-            .where(questionEntity.creatorId.eq(creatorId))
+            .where(questionEntity.creatorId.eq(creatorId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
             .fetchFirst();
 
         if (result == null) {
