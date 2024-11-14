@@ -7,7 +7,7 @@ import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
-    int countByQuestionFilter(QuestionFilter questionFilter);
+    int getTotalFiltering(QuestionFilter questionFilter);
 
     List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter);
 

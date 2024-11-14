@@ -46,6 +46,6 @@ public class QuestionHubReader {
     }
 
     public int countByQuestionFilter(QuestionFilter questionFilter) {
-        return questionRepository.countByQuestionFilter(questionFilter);
+        return questionRepository.getTotalFiltering(questionFilter);
     }
 }
