@@ -20,6 +20,7 @@ import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Repository;
 public class QuestionRepositoryImpl implements QuestionRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final QuestionJpaRepository questionJpaRepository;
+    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
     @Override
     public int countByQuestionFilter(QuestionFilter questionFilter) {
@@ -53,21 +56,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<QuestionInformation> getQuestionInformation(QuestionFilter questionFilter) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        List<Tuple> tuples = jpaQueryFactory.select(
-                questionEntity.id,
-                questionEntity.questionContentEntity.title,
-                questionEntity.count,
-                parent.title,
-                child.title,
-                questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
-                questionEntity.questionContentEntity.questionLevel,
-                questionEntity.questionContentEntity.price,
-                userQuestionEntity.id.isNotNull(),
-                questionReviewStatisticsEntity.averageRate)
-            .from(questionEntity)
+        List<Tuple> tuples = questionInformationSelectFrom()
             .offset(questionFilter.getPagingInformation().getOffset())
             .limit(questionFilter.getPagingInformation().getSize())
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
@@ -88,38 +77,13 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .fetch();
 
         return tuples.stream()
-            .map(tuple -> QuestionInformation.builder()
-                .id(tuple.get(questionEntity.id))
-                .title(tuple.get(questionEntity.questionContentEntity.title))
-                .parentCategory(tuple.get(parent.title))
-                .childCategory(tuple.get(child.title))
-                .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-                .creatorName(tuple.get(userEntity.userInformationEntity.name))
-                .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-                .price(tuple.get(questionEntity.questionContentEntity.price))
-                .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-                .isOwned(tuple.get(userQuestionEntity.id.isNotNull()))
-                .build())
+            .map(this::parseQuestionInformationTuple)
             .collect(Collectors.toList());
     }
 
     @Override
     public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        Tuple tuple = jpaQueryFactory.select(
-                questionEntity.id,
-                questionEntity.questionContentEntity.title,
-                questionEntity.count,
-                parent.title,
-                child.title,
-                questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
-                questionEntity.questionContentEntity.questionLevel,
-                questionEntity.questionContentEntity.price,
-                userQuestionEntity.id.isNotNull(),
-                questionReviewStatisticsEntity.averageRate)
-            .from(questionEntity)
+        Tuple tuple = questionInformationSelectFrom()
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
@@ -134,18 +98,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             throw new CustomException(Error.NOT_FOUND);
         }
 
-        return QuestionInformation.builder()
-            .id(tuple.get(questionEntity.id))
-            .title(tuple.get(questionEntity.questionContentEntity.title))
-            .parentCategory(tuple.get(parent.title))
-            .childCategory(tuple.get(child.title))
-            .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-            .creatorName(tuple.get(userEntity.userInformationEntity.name))
-            .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-            .price(tuple.get(questionEntity.questionContentEntity.price))
-            .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-            .isOwned(tuple.get(userQuestionEntity.id.isNotNull()))
-            .build();
+        return parseQuestionInformationTuple(tuple);
     }
 
     @Override
@@ -191,41 +144,19 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     @Override
     public List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
-        List<Tuple> tuples = jpaQueryFactory.select(
-                questionEntity.id,
-                questionEntity.questionContentEntity.title,
-                questionEntity.count,
-                parent.title,
-                child.title,
-                questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
-                questionEntity.questionContentEntity.questionLevel,
-                questionEntity.questionContentEntity.price,
-                questionReviewStatisticsEntity.averageRate)
-            .from(questionEntity)
+        List<Tuple> tuples = questionInformationSelectFrom()
+            .where(questionEntity.creatorId.eq(creatorId))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .where(questionEntity.creatorId.eq(creatorId))
+            .leftJoin(userQuestionEntity)
+            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userEntity.uid))
             .fetch();
 
         return tuples.stream()
-            .map(tuple -> QuestionInformation.builder()
-                .id(tuple.get(questionEntity.id))
-                .title(tuple.get(questionEntity.questionContentEntity.title))
-                .parentCategory(tuple.get(parent.title))
-                .childCategory(tuple.get(child.title))
-                .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-                .creatorName(tuple.get(userEntity.userInformationEntity.name))
-                .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-                .price(tuple.get(questionEntity.questionContentEntity.price))
-                .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-                .isOwned(true)
-                .build())
+            .map(this::parseQuestionInformationTuple)
             .collect(Collectors.toList());
     }
 
@@ -293,5 +224,37 @@ public class QuestionRepositoryImpl implements QuestionRepository {
 
     private BooleanExpression questionStatusFilter() {
         return questionEntity.questionStatus.ne(QuestionStatus.Delete).and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable));
+    }
+
+    private QuestionInformation parseQuestionInformationTuple(Tuple tuple) {
+        return QuestionInformation.builder()
+            .id(tuple.get(questionEntity.id))
+            .title(tuple.get(questionEntity.questionContentEntity.title))
+            .parentCategory(tuple.get(parent.title))
+            .childCategory(tuple.get(child.title))
+            .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
+            .creatorName(tuple.get(userEntity.userInformationEntity.name))
+            .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
+            .price(tuple.get(questionEntity.questionContentEntity.price))
+            .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
+            .isOwned(tuple.get(userQuestionEntity.id.isNotNull()))
+            .build();
+    }
+
+    private JPAQuery<Tuple> questionInformationSelectFrom() {
+        return jpaQueryFactory.query()
+            .select(
+                questionEntity.id,
+                questionEntity.questionContentEntity.title,
+                questionEntity.count,
+                parent.title,
+                child.title,
+                questionEntity.questionContentEntity.thumbnail,
+                userEntity.userInformationEntity.name,
+                questionEntity.questionContentEntity.questionLevel,
+                questionEntity.questionContentEntity.price,
+                userQuestionEntity.id.isNotNull(),
+                questionReviewStatisticsEntity.averageRate)
+            .from(questionEntity);
     }
 }
