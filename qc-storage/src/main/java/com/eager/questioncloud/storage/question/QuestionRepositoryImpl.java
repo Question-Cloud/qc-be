@@ -208,9 +208,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     private OrderSpecifier<?> sort(QuestionSortType sort) {
-        if (sort == null) {
-            return questionEntity.id.desc();
-        }
         switch (sort) {
             case Popularity -> {
                 return questionEntity.count.desc();
@@ -224,7 +221,9 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             case LEVEL -> {
                 return questionEntity.questionContentEntity.questionLevel.desc();
             }
-            default -> throw new CustomException(Error.BAD_REQUEST);
+            default -> {
+                return null;
+            }
         }
     }
 

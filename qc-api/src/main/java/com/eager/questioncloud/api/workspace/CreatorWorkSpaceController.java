@@ -7,10 +7,10 @@ import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.vo.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.ModifyQuestion;
 import com.eager.questioncloud.core.domain.question.model.RegisterQuestion;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
-import com.eager.questioncloud.core.domain.workspace.dto.CreatorQuestion;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorPostService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorProfileService;
 import com.eager.questioncloud.core.domain.workspace.service.CreatorQuestionService;
@@ -75,10 +75,10 @@ public class CreatorWorkSpaceController {
     @Operation(operationId = "나의 자작 문제 목록 조회", summary = "나의 자작 문제 목록 조회", tags = {"workspace"}, description = "나의 자작 문제 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<CreatorQuestion> getQuestions(
+    public PagingResponse<QuestionInformation> getQuestions(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
         int total = creatorQuestionService.countMyQuestions(userPrincipal.getCreator().getId());
-        List<CreatorQuestion> questions = creatorQuestionService.getMyQuestions(userPrincipal.getCreator().getId(), pagingInformation);
+        List<QuestionInformation> questions = creatorQuestionService.getMyQuestions(userPrincipal.getCreator().getId(), pagingInformation);
         return new PagingResponse<>(total, questions);
     }
 
