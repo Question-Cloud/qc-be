@@ -1,5 +1,7 @@
 package com.eager.questioncloud.core.domain.question.implement;
 
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -12,6 +14,18 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionReader {
     private final QuestionRepository questionRepository;
+
+    public int getTotalFiltering(QuestionFilter questionFilter) {
+        return questionRepository.getTotalFiltering(questionFilter);
+    }
+
+    public List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter) {
+        return questionRepository.getQuestionListByFiltering(questionFilter);
+    }
+
+    public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
+        return questionRepository.getQuestionInformation(questionId, userId);
+    }
 
     public List<Question> getQuestions(List<Long> questionIds) {
         List<Question> questions = questionRepository.getQuestionListInIds(questionIds);
