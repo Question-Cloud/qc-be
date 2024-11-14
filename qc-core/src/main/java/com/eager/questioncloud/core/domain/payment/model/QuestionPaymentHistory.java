@@ -15,6 +15,7 @@ public class QuestionPaymentHistory {
     private List<OrderQuestion> orders;
     private QuestionPaymentCoupon coupon;
     private int amount;
+    private Boolean isUsedCoupon;
     private QuestionPaymentStatus status;
     private LocalDateTime createdAt;
 
