@@ -5,8 +5,10 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.question.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
+import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.common.QuestionSortType;
+import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.model.QuestionCategoryInformation;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
@@ -128,6 +130,46 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .count(question.getCount())
             .createdAt(question.getCreatedAt())
             .build();
+    }
+
+    @Override
+    public List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation) {
+        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+        List<Tuple> tuples = jpaQueryFactory.select(
+                questionEntity.id,
+                questionEntity.questionContentEntity.title,
+                questionEntity.count,
+                parent.title,
+                child.title,
+                questionEntity.questionContentEntity.thumbnail,
+                userEntity.userInformationEntity.name,
+                questionEntity.questionContentEntity.questionLevel,
+                questionEntity.questionContentEntity.price,
+                questionReviewStatisticsEntity.averageRate)
+            .from(questionEntity)
+            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetch();
+
+        return tuples.stream()
+            .map(tuple -> QuestionInformation.builder()
+                .id(tuple.get(questionEntity.id))
+                .title(tuple.get(questionEntity.questionContentEntity.title))
+                .parentCategory(tuple.get(parent.title))
+                .childCategory(tuple.get(child.title))
+                .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
+                .creatorName(tuple.get(userEntity.userInformationEntity.name))
+                .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
+                .price(tuple.get(questionEntity.questionContentEntity.price))
+                .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
+                .isOwned(true)
+                .build())
+            .collect(Collectors.toList());
     }
 
     @Override
