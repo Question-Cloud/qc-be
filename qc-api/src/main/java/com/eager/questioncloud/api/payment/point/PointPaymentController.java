@@ -4,7 +4,11 @@ import com.eager.questioncloud.api.payment.point.Request.ChargePointOrderRequest
 import com.eager.questioncloud.api.payment.point.Request.ChargePointPaymentRequest;
 import com.eager.questioncloud.api.payment.point.Response.CheckCompletePaymentResponse;
 import com.eager.questioncloud.common.DefaultResponse;
+import com.eager.questioncloud.common.PagingResponse;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.service.ChargePointPaymentHistoryService;
 import com.eager.questioncloud.core.domain.point.service.ChargePointPaymentService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PointPaymentController {
     private final ChargePointPaymentService chargePointPaymentService;
+    private final ChargePointPaymentHistoryService chargePointPaymentHistoryService;
 
     @GetMapping("/status/{paymentId}")
     @ApiResponses(value = {
@@ -49,7 +54,7 @@ public class PointPaymentController {
         chargePointPaymentService.createOrder(
             ChargePointPayment.order(
                 chargePointOrderRequest.getPaymentId(),
-                userPrincipal.getCreator().getUserId(),
+                userPrincipal.getUser().getUid(),
                 chargePointOrderRequest.getChargePointType())
         );
         return DefaultResponse.success();
@@ -64,5 +69,20 @@ public class PointPaymentController {
     public DefaultResponse payment(@RequestBody ChargePointPaymentRequest request) {
         chargePointPaymentService.approvePayment(request.getPayment_id());
         return DefaultResponse.success();
+    }
+
+    @GetMapping("/history")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "포인트 충전 내역 조회", summary = "포인트 충전 내역 조회", tags = {"charge-point"}, description = "포인트 충전 내역 조회")
+    public PagingResponse<ChargePointPaymentHistory> getChargePointHistory(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
+        return new PagingResponse<>(
+            chargePointPaymentHistoryService.countChargePointPayment(userPrincipal.getUser().getUid()),
+            ChargePointPaymentHistory.from(
+                chargePointPaymentHistoryService.getChargePointPayments(userPrincipal.getUser().getUid(), pagingInformation)
+            )
+        );
     }
 }
