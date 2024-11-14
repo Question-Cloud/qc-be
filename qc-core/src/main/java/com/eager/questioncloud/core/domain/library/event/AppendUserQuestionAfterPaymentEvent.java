@@ -1,23 +1,22 @@
 package com.eager.questioncloud.core.domain.library.event;
 
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 import lombok.Getter;
 
 @Getter
 public class AppendUserQuestionAfterPaymentEvent {
     private Long userId;
-    private List<Question> questions;
+    private List<Long> questionIds;
     private QuestionPayment questionPayment;
 
-    private AppendUserQuestionAfterPaymentEvent(Long userId, List<Question> questions, QuestionPayment questionPayment) {
+    private AppendUserQuestionAfterPaymentEvent(Long userId, List<Long> questionIds, QuestionPayment questionPayment) {
         this.userId = userId;
-        this.questions = questions;
+        this.questionIds = questionIds;
         this.questionPayment = questionPayment;
     }
 
-    public static AppendUserQuestionAfterPaymentEvent create(Long userId, List<Question> questions, QuestionPayment questionPayment) {
-        return new AppendUserQuestionAfterPaymentEvent(userId, questions, questionPayment);
+    public static AppendUserQuestionAfterPaymentEvent create(Long userId, List<Long> questionIds, QuestionPayment questionPayment) {
+        return new AppendUserQuestionAfterPaymentEvent(userId, questionIds, questionPayment);
     }
 }

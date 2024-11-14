@@ -22,17 +22,19 @@ public class QuestionPaymentFailHandler {
         questionPaymentRepository.save(questionPayment);
 
         rollbackPoint(questionPayment.getUserId(), questionPayment.getAmount());
-        rollbackCoupon(questionPayment.getUserCoupon());
+        rollbackCoupon(questionPayment.getUserCouponId());
     }
 
     private void rollbackPoint(Long userId, int amount) {
         userPointManager.chargePoint(userId, amount);
     }
 
-    private void rollbackCoupon(UserCoupon userCoupon) {
-        if (userCoupon == null) {
+    private void rollbackCoupon(Long userCouponId) {
+        if (userCouponId == null) {
             return;
         }
+
+        UserCoupon userCoupon = userCouponRepository.getUserCoupon(userCouponId);
         userCoupon.rollback();
         userCouponRepository.save(userCoupon);
     }

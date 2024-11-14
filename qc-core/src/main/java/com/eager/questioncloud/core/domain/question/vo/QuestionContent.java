@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class QuestionContent {
+    private Long questionCategoryId;
+    private Subject subject;
     private String title;
     private String description;
     private String thumbnail;
@@ -17,8 +19,10 @@ public class QuestionContent {
     private int price;
 
     @Builder
-    public QuestionContent(String title, String description, String thumbnail, String fileUrl, String explanationUrl, QuestionType questionType,
-        QuestionLevel questionLevel, int price) {
+    public QuestionContent(Long questionCategoryId, Subject subject, String title, String description, String thumbnail, String fileUrl,
+        String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, int price) {
+        this.questionCategoryId = questionCategoryId;
+        this.subject = subject;
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;

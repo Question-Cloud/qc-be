@@ -4,7 +4,7 @@ import com.eager.questioncloud.api.hub.question.Response.QuestionInformationResp
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.service.QuestionHubService;
+import com.eager.questioncloud.core.domain.question.service.QuestionService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/hub/question")
 @RequiredArgsConstructor
 public class QuestionController {
-    private final QuestionHubService questionHubService;
+    private final QuestionService questionService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -33,8 +33,8 @@ public class QuestionController {
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionInformation> getQuestionListByFiltering(@ParameterObject QuestionFilter questionFilter) {
-        int total = questionHubService.countByQuestionFilter(questionFilter);
-        List<QuestionInformation> questionInformation = questionHubService.getQuestionListByFiltering(questionFilter);
+        int total = questionService.getTotalFiltering(questionFilter);
+        List<QuestionInformation> questionInformation = questionService.getQuestionListByFiltering(questionFilter);
         return new PagingResponse<>(total, questionInformation);
     }
 
@@ -44,7 +44,7 @@ public class QuestionController {
     })
     @Operation(operationId = "문제 상세 조회", summary = "문제 상세 조회", tags = {"question"}, description = "문제 상세 조회")
     public QuestionInformationResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionInformation questionInformation = questionHubService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
+        QuestionInformation questionInformation = questionService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
         return new QuestionInformationResponse(questionInformation);
     }
 }

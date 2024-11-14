@@ -1,8 +1,7 @@
 package com.eager.questioncloud.core.domain.library.implement;
 
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
-import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.library.repository.LibraryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UserQuestionAppender {
-    private final UserQuestionRepository userQuestionRepository;
+    private final LibraryRepository libraryRepository;
 
-    public void appendUserQuestions(Long userId, List<Question> questions) {
-        userQuestionRepository.saveAll(UserQuestion.create(userId, questions));
+    public List<UserQuestion> appendUserQuestions(Long userId, List<Long> questionIds) {
+        return libraryRepository.saveAll(UserQuestion.create(userId, questionIds));
     }
 }

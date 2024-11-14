@@ -1,9 +1,9 @@
 package com.eager.questioncloud.storage.creator;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.storage.library.QUserQuestionEntity.userQuestionEntity;
+import static com.eager.questioncloud.storage.library.QLibraryEntity.libraryEntity;
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.storage.review.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.storage.question.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
@@ -63,19 +63,15 @@ public class CreatorRepositoryImpl implements CreatorRepository {
 
     @Override
     public Creator save(Creator creator) {
-        CreatorEntity result = creatorJpaRepository.save(CreatorEntity.from(creator));
-        return Creator.builder()
-            .id(result.getId())
-            .user(creator.getUser())
-            .creatorProfile(creator.getCreatorProfile())
-            .build();
+        return creatorJpaRepository.save(CreatorEntity.from(creator)).toModel();
     }
+
 
     private Integer getCreatorSalesCount(Long creatorId) {
         return jpaQueryFactory
-            .select(userQuestionEntity.id.countDistinct().intValue())
+            .select(libraryEntity.id.countDistinct().intValue())
             .from(questionEntity)
-            .leftJoin(userQuestionEntity).on(userQuestionEntity.questionId.eq(questionEntity.id))
+            .leftJoin(libraryEntity).on(libraryEntity.questionId.eq(questionEntity.id))
             .where(questionEntity.creatorId.eq(creatorId))
             .fetchFirst();
     }

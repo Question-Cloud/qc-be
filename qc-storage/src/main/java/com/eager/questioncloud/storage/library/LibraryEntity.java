@@ -1,7 +1,6 @@
 package com.eager.questioncloud.storage.library;
 
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
-import com.eager.questioncloud.core.domain.question.model.Question;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,9 +17,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "user_question")
+@Table(name = "library")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserQuestionEntity {
+public class LibraryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +37,7 @@ public class UserQuestionEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public UserQuestionEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
+    public LibraryEntity(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.questionId = questionId;
@@ -46,29 +45,36 @@ public class UserQuestionEntity {
         this.createdAt = createdAt;
     }
 
-    public static List<UserQuestionEntity> from(List<UserQuestion> userQuestionLibraries) {
-        return userQuestionLibraries.stream()
-            .map(UserQuestionEntity::from)
+    public static List<UserQuestion> toModel(List<LibraryEntity> userQuestionLibraryEntities) {
+        return userQuestionLibraryEntities
+            .stream()
+            .map(LibraryEntity::toModel)
             .collect(Collectors.toList());
     }
 
-    public static UserQuestionEntity from(UserQuestion userQuestion) {
-        return UserQuestionEntity.builder()
-            .id(userQuestion.getId())
-            .userId(userQuestion.getUserId())
-            .questionId(userQuestion.getQuestion().getId())
-            .isUsed(userQuestion.getIsUsed())
-            .createdAt(userQuestion.getCreatedAt())
-            .build();
-    }
-
-    public UserQuestion toModel(Question question) {
+    public UserQuestion toModel() {
         return UserQuestion.builder()
             .id(id)
             .userId(userId)
-            .question(question)
+            .questionId(questionId)
             .isUsed(isUsed)
             .createdAt(createdAt)
+            .build();
+    }
+
+    public static List<LibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
+        return userQuestionLibraries.stream()
+            .map(LibraryEntity::from)
+            .collect(Collectors.toList());
+    }
+
+    public static LibraryEntity from(UserQuestion userQuestion) {
+        return LibraryEntity.builder()
+            .id(userQuestion.getId())
+            .userId(userQuestion.getUserId())
+            .questionId(userQuestion.getQuestionId())
+            .isUsed(userQuestion.getIsUsed())
+            .createdAt(userQuestion.getCreatedAt())
             .build();
     }
 }

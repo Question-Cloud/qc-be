@@ -2,7 +2,6 @@ package com.eager.questioncloud.storage.question;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.vo.Subject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,13 +29,6 @@ public class QuestionEntity {
     @Column
     private Long creatorId;
 
-    @Column
-    private Long questionCategoryId;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Subject subject;
-
     @Embedded
     private QuestionContentEntity questionContentEntity;
 
@@ -51,24 +43,31 @@ public class QuestionEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionEntity(Long id, Long creatorId, Long questionCategoryId, Subject subject, QuestionContentEntity questionContentEntity,
-        QuestionStatus questionStatus, int count, LocalDateTime createdAt) {
+    public QuestionEntity(Long id, Long creatorId, QuestionContentEntity questionContentEntity, QuestionStatus questionStatus, int count,
+        LocalDateTime createdAt) {
         this.id = id;
         this.creatorId = creatorId;
-        this.questionCategoryId = questionCategoryId;
-        this.subject = subject;
         this.questionContentEntity = questionContentEntity;
         this.questionStatus = questionStatus;
         this.count = count;
         this.createdAt = createdAt;
     }
 
+    public Question toModel() {
+        return Question.builder()
+            .id(id)
+            .creatorId(creatorId)
+            .questionContent(questionContentEntity.toModel())
+            .questionStatus(questionStatus)
+            .count(count)
+            .createdAt(createdAt)
+            .build();
+    }
+
     public static QuestionEntity from(Question question) {
         return QuestionEntity.builder()
             .id(question.getId())
-            .creatorId(question.getCreator().getId())
-            .questionCategoryId(question.getCategory().getChildCategory().getId())
-            .subject(question.getCategory().getChildCategory().getSubject())
+            .creatorId(question.getCreatorId())
             .questionContentEntity(QuestionContentEntity.from(question.getQuestionContent()))
             .questionStatus(question.getQuestionStatus())
             .count(question.getCount())

@@ -10,26 +10,25 @@ import lombok.Getter;
 public class QuestionPaymentOrder {
     private Long id;
     private String paymentId;
-    private Question question;
+    private Long questionId;
     private int price;
 
     @Builder
-    public QuestionPaymentOrder(Long id, String paymentId, Question question, int price) {
+    public QuestionPaymentOrder(Long id, String paymentId, Long questionId, int price) {
         this.id = id;
         this.paymentId = paymentId;
-        this.question = question;
+        this.questionId = questionId;
         this.price = price;
     }
 
     public static List<QuestionPaymentOrder> createOrders(String paymentId, List<Question> questions) {
         return questions
             .stream()
-            .map(question ->
-                QuestionPaymentOrder.builder()
-                    .paymentId(paymentId)
-                    .question(question)
-                    .price(question.getQuestionContent().getPrice())
-                    .build())
+            .map(question -> QuestionPaymentOrder.builder()
+                .paymentId(paymentId)
+                .questionId(question.getId())
+                .price(question.getQuestionContent().getPrice())
+                .build())
             .collect(Collectors.toList());
     }
 }

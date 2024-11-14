@@ -1,11 +1,17 @@
 package com.eager.questioncloud.core.domain.question.repository;
 
+import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
-    int countByQuestionFilter(QuestionFilter questionFilter);
+    int getTotalFiltering(QuestionFilter questionFilter);
+
+    List<QuestionInformation> getQuestionListByFiltering(QuestionFilter questionFilter);
+
+    QuestionInformation getQuestionInformation(Long questionId, Long userId);
 
     List<Question> getQuestionListInIds(List<Long> questionIds);
 
@@ -17,7 +23,7 @@ public interface QuestionRepository {
 
     Question save(Question question);
 
-    int countByCreatorId(Long creatorId);
+    List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
 
-    List<Question> getQuestionsByFilter(QuestionFilter questionFilter);
+    int countByCreatorId(Long creatorId);
 }

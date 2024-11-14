@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.question.model;
 
-import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.question.vo.QuestionContent;
 import com.eager.questioncloud.core.domain.question.vo.QuestionStatus;
 import java.time.LocalDateTime;
@@ -10,29 +9,25 @@ import lombok.Getter;
 @Getter
 public class Question {
     private Long id;
-    private Creator creator;
-    private QuestionCategoryInformation category;
+    private Long creatorId;
     private QuestionContent questionContent;
     private QuestionStatus questionStatus;
     private int count;
     private LocalDateTime createdAt;
 
     @Builder
-    public Question(Long id, Creator creator, QuestionCategoryInformation category, QuestionContent questionContent, QuestionStatus questionStatus,
-        int count, LocalDateTime createdAt) {
+    public Question(Long id, Long creatorId, QuestionContent questionContent, QuestionStatus questionStatus, int count, LocalDateTime createdAt) {
         this.id = id;
-        this.creator = creator;
-        this.category = category;
+        this.creatorId = creatorId;
         this.questionContent = questionContent;
         this.questionStatus = questionStatus;
         this.count = count;
         this.createdAt = createdAt;
     }
 
-    public static Question create(Creator creator, QuestionContent questionContent, QuestionCategoryInformation category) {
+    public static Question create(Long creatorId, QuestionContent questionContent) {
         return Question.builder()
-            .creator(creator)
-            .category(category)
+            .creatorId(creatorId)
             .questionContent(questionContent)
             .questionStatus(QuestionStatus.Available)
             .count(0)
@@ -40,9 +35,8 @@ public class Question {
             .build();
     }
 
-    public void modify(QuestionContent questionContent, QuestionCategoryInformation category) {
+    public void modify(QuestionContent questionContent) {
         this.questionContent = questionContent;
-        this.category = category;
     }
 
     public void delete() {
