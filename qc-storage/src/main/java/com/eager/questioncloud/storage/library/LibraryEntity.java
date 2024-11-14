@@ -45,6 +45,23 @@ public class LibraryEntity {
         this.createdAt = createdAt;
     }
 
+    public static List<UserQuestion> toModel(List<LibraryEntity> userQuestionLibraryEntities) {
+        return userQuestionLibraryEntities
+            .stream()
+            .map(LibraryEntity::toModel)
+            .collect(Collectors.toList());
+    }
+
+    public UserQuestion toModel() {
+        return UserQuestion.builder()
+            .id(id)
+            .userId(userId)
+            .questionId(questionId)
+            .isUsed(isUsed)
+            .createdAt(createdAt)
+            .build();
+    }
+
     public static List<LibraryEntity> from(List<UserQuestion> userQuestionLibraries) {
         return userQuestionLibraries.stream()
             .map(LibraryEntity::from)
@@ -55,7 +72,7 @@ public class LibraryEntity {
         return LibraryEntity.builder()
             .id(userQuestion.getId())
             .userId(userQuestion.getUserId())
-            .questionId(userQuestion.getQuestion().getId())
+            .questionId(userQuestion.getQuestionId())
             .isUsed(userQuestion.getIsUsed())
             .createdAt(userQuestion.getCreatedAt())
             .build();
