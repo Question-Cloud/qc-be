@@ -40,9 +40,8 @@ public class Question {
             .build();
     }
 
-    public void modify(QuestionContent questionContent, QuestionCategoryInformation category) {
+    public void modify(QuestionContent questionContent) {
         this.questionContent = questionContent;
-        this.category = category;
     }
 
     public void delete() {
