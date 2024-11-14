@@ -2,15 +2,12 @@ package com.eager.questioncloud.storage.point;
 
 import static com.eager.questioncloud.storage.point.QChargePointPaymentEntity.chargePointPaymentEntity;
 
-import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.domain.point.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.vo.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -66,28 +63,5 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
             .from(chargePointPaymentEntity)
             .where(chargePointPaymentEntity.paymentId.eq(paymentId))
             .fetchFirst() != null;
-    }
-
-    @Override
-    public List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation) {
-        return jpaQueryFactory.select(chargePointPaymentEntity)
-            .from(chargePointPaymentEntity)
-            .where(chargePointPaymentEntity.userId.eq(userId))
-            .offset(pagingInformation.getOffset())
-            .limit(pagingInformation.getSize())
-            .orderBy(chargePointPaymentEntity.id.desc())
-            .fetch()
-            .stream()
-            .map(ChargePointPaymentEntity::toModel)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public int countByUserId(Long userId) {
-        return jpaQueryFactory.select(chargePointPaymentEntity.id.count())
-            .from(chargePointPaymentEntity)
-            .where(chargePointPaymentEntity.userId.eq(userId))
-            .fetchFirst()
-            .intValue();
     }
 }
