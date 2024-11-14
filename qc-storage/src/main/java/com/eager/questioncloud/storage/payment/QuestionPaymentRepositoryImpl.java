@@ -83,7 +83,6 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
                         couponEntity.value
                     ),
                     questionPaymentEntity.amount,
-                    questionPaymentEntity.userCouponId.isNotNull(),
                     questionPaymentEntity.status,
                     questionPaymentEntity.createdAt
                 )
