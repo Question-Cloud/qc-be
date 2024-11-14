@@ -60,7 +60,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
             .from(libraryEntity)
             .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -75,7 +75,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
             .from(libraryEntity)
             .where(libraryEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionCategoryId))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -97,7 +97,7 @@ public class LibraryRepositoryImpl implements LibraryRepository {
         }
 
         if (questionFilter.getCategories() != null && !questionFilter.getCategories().isEmpty()) {
-            builder.and(questionEntity.questionCategoryId.in(questionFilter.getCategories()));
+            builder.and(questionEntity.questionContentEntity.questionCategoryId.in(questionFilter.getCategories()));
         }
 
         if (questionFilter.getQuestionType() != null) {

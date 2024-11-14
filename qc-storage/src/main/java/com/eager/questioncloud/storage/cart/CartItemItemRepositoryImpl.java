@@ -38,7 +38,7 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
                     cartItemEntity.userId,
                     Projections.constructor(CartItemInformation.class, questionEntity.id, questionEntity.questionContentEntity.title,
                         questionEntity.questionContentEntity.thumbnail, userEntity.userInformationEntity.name,
-                        questionEntity.subject, questionEntity.questionContentEntity.price)
+                        questionEntity.questionContentEntity.subject, questionEntity.questionContentEntity.price)
                 )
             )
             .from(cartItemEntity)
