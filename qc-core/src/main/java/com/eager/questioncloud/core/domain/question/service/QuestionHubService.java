@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class QuestionHubService {
     private final QuestionHubReader questionHubReader;
 
-    public int countByQuestionFilter(QuestionFilter questionFilter) {
+    public int getTotalFiltering(QuestionFilter questionFilter) {
         return questionHubReader.countByQuestionFilter(questionFilter);
     }
 
