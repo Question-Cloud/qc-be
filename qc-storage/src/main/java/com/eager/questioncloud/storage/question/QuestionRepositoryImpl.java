@@ -219,7 +219,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
-        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity, parent, child)
+        Tuple tuple = jpaQueryFactory.select(questionEntity, creatorEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))

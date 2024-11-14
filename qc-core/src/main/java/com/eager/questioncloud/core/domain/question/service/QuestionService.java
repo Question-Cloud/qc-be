@@ -23,6 +23,6 @@ public class QuestionService {
     }
 
     public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
-        return questionHubReader.getQuestion(questionId, userId);
+        return questionReader.getQuestionInformation(questionId, userId);
     }
 }

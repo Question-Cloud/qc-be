@@ -36,12 +36,4 @@ public class QuestionHubReader {
 
         return QuestionInformation.of(questions, alreadyOwnedQuestionIds, reviewStatistics);
     }
-
-    public QuestionInformation getQuestion(Long questionId, Long userId) {
-        Question question = questionRepository.get(questionId);
-        QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(questionId);
-        Boolean isOwned = libraryRepository.isOwned(userId, questionId);
-
-        return QuestionInformation.forHubDetail(question, isOwned, reviewStatistics);
-    }
 }
