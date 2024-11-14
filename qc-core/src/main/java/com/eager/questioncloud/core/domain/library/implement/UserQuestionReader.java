@@ -1,7 +1,6 @@
 package com.eager.questioncloud.core.domain.library.implement;
 
 import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
-import com.eager.questioncloud.core.domain.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import java.util.List;
@@ -22,8 +21,7 @@ public class UserQuestionReader {
     }
 
     public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
-        List<UserQuestion> userQuestions = userQuestionRepository.getUserQuestions(questionFilter);
-        return UserQuestionItem.from(userQuestions);
+        return userQuestionRepository.getUserQuestions(questionFilter);
     }
 
     public int countUserQuestions(QuestionFilter questionFilter) {
