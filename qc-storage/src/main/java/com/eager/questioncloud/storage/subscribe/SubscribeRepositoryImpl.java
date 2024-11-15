@@ -42,7 +42,7 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     }
 
     @Override
-    public List<SubscribeListItem> getMySubscribeList(Long userId, PagingInformation pagingInformation) {
+    public List<SubscribeListItem> getSubscribeCreators(Long userId, PagingInformation pagingInformation) {
         QSubscribeEntity countCheck = new QSubscribeEntity("count");
         return jpaQueryFactory.select(
                 Projections.constructor(

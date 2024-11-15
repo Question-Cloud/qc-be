@@ -14,7 +14,7 @@ public interface SubscribeRepository {
 
     int countSubscriber(Long creatorId);
 
-    List<SubscribeListItem> getMySubscribeList(Long userId, PagingInformation pagingInformation);
+    List<SubscribeListItem> getSubscribeCreators(Long userId, PagingInformation pagingInformation);
 
     int countMySubscribe(Long userId);
 }

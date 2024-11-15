@@ -21,7 +21,7 @@ public class SubscribeReader {
     }
 
     public List<SubscribeListItem> getMySubscribeList(Long userId, PagingInformation pagingInformation) {
-        return subscribeRepository.getMySubscribeList(userId, pagingInformation);
+        return subscribeRepository.getSubscribeCreators(userId, pagingInformation);
     }
 
     public int countMySubscribe(Long userId) {
