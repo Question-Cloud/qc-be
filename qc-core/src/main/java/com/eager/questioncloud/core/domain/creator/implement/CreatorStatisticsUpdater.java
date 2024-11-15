@@ -5,6 +5,9 @@ import com.eager.questioncloud.core.domain.creator.repository.CreatorStatisticsR
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
 import java.util.ArrayList;
@@ -47,6 +50,30 @@ public class CreatorStatisticsUpdater {
     public void decreaseSubscribeCount(UnsubscribedEvent event) {
         CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(event.getCreatorId());
         creatorStatistics.decreaseSubscribeCount();
+        creatorStatisticsRepository.save(creatorStatistics);
+    }
+
+    @EventListener
+    public void updateCreatorReviewStatistics(RegisteredReviewEvent event) {
+        Question question = questionRepository.get(event.getQuestionId());
+        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+        creatorStatistics.updateReviewStatisticsByRegisteredReview(event.getRate());
+        creatorStatisticsRepository.save(creatorStatistics);
+    }
+
+    @EventListener
+    public void updateCreatorReviewStatistics(ModifiedReviewEvent event) {
+        Question question = questionRepository.get(event.getQuestionId());
+        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+        creatorStatistics.updateReviewStatisticsByModifiedReview(event.getVarianceRate());
+        creatorStatisticsRepository.save(creatorStatistics);
+    }
+
+    @EventListener
+    public void updateCreatorReviewStatistics(DeletedReviewEvent event) {
+        Question question = questionRepository.get(event.getQuestionId());
+        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+        creatorStatistics.updateReviewStatisticsByDeletedReview(event.getRate());
         creatorStatisticsRepository.save(creatorStatistics);
     }
 }

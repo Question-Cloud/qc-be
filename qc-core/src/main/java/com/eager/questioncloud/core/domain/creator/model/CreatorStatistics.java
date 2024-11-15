@@ -35,4 +35,24 @@ public class CreatorStatistics {
     public void decreaseSubscribeCount() {
         this.subscribeCount -= 1;
     }
+
+    public void updateReviewStatisticsByRegisteredReview(int newRate) {
+        this.reviewCount = this.reviewCount + 1;
+        this.totalReviewRate = this.totalReviewRate + newRate;
+        double value = (double) totalReviewRate / (double) reviewCount;
+        this.averageRateOfReview = Math.round(value * 10.0) / 10.0;
+    }
+
+    public void updateReviewStatisticsByModifiedReview(int varianceRate) {
+        this.totalReviewRate = this.totalReviewRate + varianceRate;
+        double value = (double) totalReviewRate / (double) reviewCount;
+        this.averageRateOfReview = Math.round(value * 10.0) / 10.0;
+    }
+
+    public void updateReviewStatisticsByDeletedReview(int rate) {
+        this.reviewCount = this.reviewCount - 1;
+        this.totalReviewRate = this.totalReviewRate - rate;
+        double value = (double) totalReviewRate / (double) reviewCount;
+        this.averageRateOfReview = Math.round(value * 10.0) / 10.0;
+    }
 }
