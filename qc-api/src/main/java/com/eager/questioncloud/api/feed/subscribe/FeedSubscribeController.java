@@ -32,7 +32,7 @@ public class FeedSubscribeController {
     public PagingResponse<CreatorInformation> getMySubscribeList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
         int total = subscribeService.countMySubscribe(userPrincipal.getUser().getUid());
-        List<CreatorInformation> subscribeCreators = subscribeService.getSubscribeCreators(userPrincipal.getUser().getUid(), pagingInformation);
+        List<CreatorInformation> subscribeCreators = subscribeService.getMySubscribeCreators(userPrincipal.getUser().getUid(), pagingInformation);
         return new PagingResponse<>(total, subscribeCreators);
     }
 }

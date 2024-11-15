@@ -31,8 +31,8 @@ public class SubscribeService {
         return subscribeReader.countSubscriber(creatorId);
     }
 
-    public List<CreatorInformation> getSubscribeCreators(Long userId, PagingInformation pagingInformation) {
-        return subscribeReader.getSubscribeCreators(userId, pagingInformation);
+    public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {
+        return subscribeReader.getMySubscribeCreators(userId, pagingInformation);
     }
 
     public int countMySubscribe(Long userId) {

@@ -42,7 +42,7 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     }
 
     @Override
-    public List<CreatorInformation> getSubscribeCreators(Long userId, PagingInformation pagingInformation) {
+    public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {
         return jpaQueryFactory.select(
                 Projections.constructor(
                     CreatorInformation.class,
