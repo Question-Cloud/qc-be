@@ -25,13 +25,22 @@ public class CreatorStatisticsEntity {
     private int salesCount;
 
     @Column
+    private int reviewCount;
+
+    @Column
+    private int totalReviewRate;
+
+    @Column
     private Double averageRateOfReview;
 
     @Builder
-    public CreatorStatisticsEntity(Long creatorId, int subscribeCount, int salesCount, Double averageRateOfReview) {
+    public CreatorStatisticsEntity(Long creatorId, int subscribeCount, int salesCount, int reviewCount, int totalReviewRate,
+        Double averageRateOfReview) {
         this.creatorId = creatorId;
         this.subscribeCount = subscribeCount;
         this.salesCount = salesCount;
+        this.reviewCount = reviewCount;
+        this.totalReviewRate = totalReviewRate;
         this.averageRateOfReview = averageRateOfReview;
     }
 
@@ -40,11 +49,13 @@ public class CreatorStatisticsEntity {
             .creatorId(creatorStatistics.getCreatorId())
             .subscribeCount(creatorStatistics.getSubscribeCount())
             .salesCount(creatorStatistics.getSaleCount())
+            .reviewCount(creatorStatistics.getReviewCount())
+            .totalReviewRate(creatorStatistics.getTotalReviewRate())
             .averageRateOfReview(creatorStatistics.getAverageRateOfReview())
             .build();
     }
 
     public CreatorStatistics toModel() {
-        return new CreatorStatistics(creatorId, subscribeCount, salesCount, averageRateOfReview);
+        return new CreatorStatistics(creatorId, subscribeCount, salesCount, reviewCount, totalReviewRate, averageRateOfReview);
     }
 }
