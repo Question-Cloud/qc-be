@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.subscribe.repository;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface SubscribeRepository {
 
     int countSubscriber(Long creatorId);
 
-    List<SubscribeListItem> getSubscribeCreators(Long userId, PagingInformation pagingInformation);
+    List<CreatorInformation> getSubscribeCreators(Long userId, PagingInformation pagingInformation);
 
     int countMySubscribe(Long userId);
 }

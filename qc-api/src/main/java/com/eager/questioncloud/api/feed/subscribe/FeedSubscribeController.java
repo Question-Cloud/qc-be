@@ -2,7 +2,7 @@ package com.eager.questioncloud.api.feed.subscribe;
 
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.subscribe.service.SubscribeService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,10 +29,10 @@ public class FeedSubscribeController {
     @Operation(operationId = "나의 구독 목록 조회", summary = "나의 구독 목록 조회", tags = {"subscribe"}, description = "나의 구독 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<SubscribeListItem> getMySubscribeList(
+    public PagingResponse<CreatorInformation> getMySubscribeList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
         int total = subscribeService.countMySubscribe(userPrincipal.getUser().getUid());
-        List<SubscribeListItem> mySubscribeList = subscribeService.getMySubscribeList(userPrincipal.getUser().getUid(), pagingInformation);
-        return new PagingResponse<>(total, mySubscribeList);
+        List<CreatorInformation> subscribeCreators = subscribeService.getSubscribeCreators(userPrincipal.getUser().getUid(), pagingInformation);
+        return new PagingResponse<>(total, subscribeCreators);
     }
 }

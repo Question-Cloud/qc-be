@@ -1,12 +1,12 @@
 package com.eager.questioncloud.storage.subscribe;
 
 import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.storage.creator.QCreatorStatisticsEntity.creatorStatisticsEntity;
 import static com.eager.questioncloud.storage.subscribe.QSubscribeEntity.subscribeEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorSimpleInformation;
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
 import com.querydsl.core.types.Projections;
@@ -42,25 +42,23 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     }
 
     @Override
-    public List<SubscribeListItem> getSubscribeCreators(Long userId, PagingInformation pagingInformation) {
-        QSubscribeEntity countCheck = new QSubscribeEntity("count");
+    public List<CreatorInformation> getSubscribeCreators(Long userId, PagingInformation pagingInformation) {
         return jpaQueryFactory.select(
                 Projections.constructor(
-                    SubscribeListItem.class,
-                    subscribeEntity.id,
-                    Projections.constructor(CreatorSimpleInformation.class,
-                        creatorEntity.id,
-                        userEntity.userInformationEntity.name,
-                        userEntity.userInformationEntity.profileImage,
-                        creatorEntity.creatorProfileEntity.mainSubject,
-                        creatorEntity.creatorProfileEntity.introduction,
-                        countCheck.id.count().intValue())))
+                    CreatorInformation.class,
+                    creatorEntity.id,
+                    userEntity.userInformationEntity.name,
+                    userEntity.userInformationEntity.profileImage,
+                    creatorEntity.creatorProfileEntity.mainSubject,
+                    userEntity.userInformationEntity.email,
+                    creatorStatisticsEntity.salesCount,
+                    creatorStatisticsEntity.averageRateOfReview,
+                    creatorEntity.creatorProfileEntity.introduction))
             .from(subscribeEntity)
             .where(subscribeEntity.subscriberId.eq(userId))
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(subscribeEntity.creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(countCheck).on(countCheck.creatorId.eq(creatorEntity.id))
-            .groupBy(subscribeEntity.id)
+            .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
             .fetch();
