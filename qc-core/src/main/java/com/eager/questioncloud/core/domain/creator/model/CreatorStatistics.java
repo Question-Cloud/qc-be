@@ -23,4 +23,12 @@ public class CreatorStatistics {
     public void addSaleCount(int count) {
         this.saleCount += count;
     }
+
+    public void increaseSubscribeCount() {
+        this.subscribeCount += 1;
+    }
+
+    public void decreaseSubscribeCount() {
+        this.subscribeCount -= 1;
+    }
 }
