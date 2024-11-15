@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.subscribe.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDto.SubscribeListItem;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
 import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class SubscribeReader {
         return subscribeRepository.countSubscriber(creatorId);
     }
 
-    public List<SubscribeListItem> getMySubscribeList(Long userId, PagingInformation pagingInformation) {
-        return subscribeRepository.getMySubscribeList(userId, pagingInformation);
+    public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {
+        return subscribeRepository.getMySubscribeCreators(userId, pagingInformation);
     }
 
     public int countMySubscribe(Long userId) {

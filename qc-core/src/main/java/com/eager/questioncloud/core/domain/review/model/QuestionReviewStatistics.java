@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.review.model;
 
-import com.eager.questioncloud.core.domain.review.event.UpdateReviewStatisticsEvent;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,14 +25,6 @@ public class QuestionReviewStatistics {
             .totalRate(0)
             .averageRate(0.0)
             .build();
-    }
-
-    public void update(UpdateReviewStatisticsEvent updateReviewStatisticsEvent) {
-        switch (updateReviewStatisticsEvent.getUpdateReviewType()) {
-            case REGISTER -> updateByNewReview(updateReviewStatisticsEvent.getVarianceRate());
-            case MODIFY -> updateByModifyReview(updateReviewStatisticsEvent.getVarianceRate());
-            case DELETE -> updateByDeleteReview(updateReviewStatisticsEvent.getVarianceRate());
-        }
     }
 
     public void updateByNewReview(int newRate) {

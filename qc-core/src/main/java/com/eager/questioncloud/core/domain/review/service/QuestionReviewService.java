@@ -2,8 +2,9 @@ package com.eager.questioncloud.core.domain.review.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.QuestionReviewItem;
-import com.eager.questioncloud.core.domain.review.event.UpdateReviewStatisticsEvent;
-import com.eager.questioncloud.core.domain.review.event.UpdateReviewType;
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
 import com.eager.questioncloud.core.domain.review.implement.QuestionReviewReader;
 import com.eager.questioncloud.core.domain.review.implement.QuestionReviewRegister;
 import com.eager.questioncloud.core.domain.review.implement.QuestionReviewRemover;
@@ -37,34 +38,23 @@ public class QuestionReviewService {
 
     public QuestionReview register(QuestionReview questionReview) {
         questionReviewRegister.register(questionReview);
-        applicationEventPublisher.publishEvent(
-            UpdateReviewStatisticsEvent.create(questionReview.getQuestionId(), questionReview.getRate(), UpdateReviewType.REGISTER)
-        );
+
+        applicationEventPublisher.publishEvent(RegisteredReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
         return questionReview;
     }
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
         QuestionReview questionReview = questionReviewReader.findByIdAndUserId(reviewId, userId);
         int varianceRate = rate - questionReview.getRate();
-
         questionReviewUpdater.update(questionReview, comment, rate);
-        applicationEventPublisher.publishEvent(
-            UpdateReviewStatisticsEvent.create(
-                questionReview.getQuestionId(),
-                varianceRate,
-                UpdateReviewType.MODIFY)
-        );
+        
+        applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
 
     public void delete(Long reviewId, Long userId) {
         QuestionReview questionReview = questionReviewReader.findByIdAndUserId(reviewId, userId);
         questionReviewRemover.delete(questionReview);
 
-        applicationEventPublisher.publishEvent(
-            UpdateReviewStatisticsEvent.create(
-                questionReview.getQuestionId(),
-                questionReview.getRate(),
-                UpdateReviewType.DELETE)
-        );
+        applicationEventPublisher.publishEvent(DeletedReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
     }
 }
