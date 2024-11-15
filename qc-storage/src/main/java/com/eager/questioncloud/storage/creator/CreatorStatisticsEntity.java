@@ -48,7 +48,7 @@ public class CreatorStatisticsEntity {
         return CreatorStatisticsEntity.builder()
             .creatorId(creatorStatistics.getCreatorId())
             .subscribeCount(creatorStatistics.getSubscribeCount())
-            .salesCount(creatorStatistics.getSaleCount())
+            .salesCount(creatorStatistics.getSalesCount())
             .reviewCount(creatorStatistics.getReviewCount())
             .totalReviewRate(creatorStatistics.getTotalReviewRate())
             .averageRateOfReview(creatorStatistics.getAverageRateOfReview())

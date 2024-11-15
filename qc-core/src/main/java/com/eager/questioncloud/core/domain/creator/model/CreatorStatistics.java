@@ -6,15 +6,15 @@ import lombok.Getter;
 public class CreatorStatistics {
     private Long creatorId;
     private int subscribeCount;
-    private int saleCount;
+    private int salesCount;
     private int reviewCount;
     private int totalReviewRate;
     private Double averageRateOfReview;
 
-    public CreatorStatistics(Long creatorId, int subscribeCount, int saleCount, int reviewCount, int totalReviewRate, Double averageRateOfReview) {
+    public CreatorStatistics(Long creatorId, int subscribeCount, int salesCount, int reviewCount, int totalReviewRate, Double averageRateOfReview) {
         this.creatorId = creatorId;
         this.subscribeCount = subscribeCount;
-        this.saleCount = saleCount;
+        this.salesCount = salesCount;
         this.reviewCount = reviewCount;
         this.totalReviewRate = totalReviewRate;
         this.averageRateOfReview = averageRateOfReview;
@@ -25,7 +25,7 @@ public class CreatorStatistics {
     }
 
     public void addSaleCount(int count) {
-        this.saleCount += count;
+        this.salesCount += count;
     }
 
     public void increaseSubscribeCount() {
