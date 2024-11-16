@@ -26,23 +26,15 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostListItem> getPostList(Long questionId, PagingInformation pagingInformation) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(PostListItem.class,
                     postEntity.id,
                     postEntity.postContentEntity.title,
-                    parent.title,
-                    child.title,
-                    questionEntity.questionContentEntity.title,
                     userEntity.userInformationEntity.name,
                     postEntity.createdAt
                 ))
             .from(postEntity)
             .where(postEntity.questionId.eq(questionId))
-            .leftJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
-            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
@@ -51,23 +43,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
                 Projections.constructor(PostListItem.class,
                     postEntity.id,
                     postEntity.postContentEntity.title,
-                    parent.title,
-                    child.title,
-                    questionEntity.questionContentEntity.title,
                     userEntity.userInformationEntity.name,
                     postEntity.createdAt
                 ))
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
             .innerJoin(postEntity).on(postEntity.questionId.eq(questionEntity.id))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())

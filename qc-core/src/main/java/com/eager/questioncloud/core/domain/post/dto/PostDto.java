@@ -12,9 +12,6 @@ public class PostDto {
     public static class PostListItem {
         private Long id;
         private String title;
-        private String parentCategory;
-        private String childCategory;
-        private String questionTitle;
         private String writer;
         private LocalDateTime createdAt;
     }
