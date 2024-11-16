@@ -9,16 +9,16 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MainQuestionCategoryList {
+public class QuestionCategoryGroupBySubject {
     private Subject subject;
     private List<MainQuestionCategory> list;
 
-    public static List<MainQuestionCategoryList> create(List<MainQuestionCategory> mainQuestionCategoryList) {
-        List<MainQuestionCategoryList> result = new ArrayList<>();
+    public static List<QuestionCategoryGroupBySubject> create(List<MainQuestionCategory> mainQuestionCategoryList) {
+        List<QuestionCategoryGroupBySubject> result = new ArrayList<>();
         mainQuestionCategoryList
             .stream()
             .collect(Collectors.groupingBy(mainQuestionCategory -> mainQuestionCategory.subject))
-            .forEach((subject, items) -> result.add(new MainQuestionCategoryList(subject, items)));
+            .forEach((subject, items) -> result.add(new QuestionCategoryGroupBySubject(subject, items)));
         return result;
     }
 
