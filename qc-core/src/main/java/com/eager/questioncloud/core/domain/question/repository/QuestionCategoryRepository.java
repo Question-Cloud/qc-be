@@ -4,5 +4,5 @@ import com.eager.questioncloud.core.domain.question.dto.MainQuestionCategoryList
 import java.util.List;
 
 public interface QuestionCategoryRepository {
-    List<MainQuestionCategory> getQuestionCategories();
+    List<MainQuestionCategory> getMainQuestionCategories();
 }

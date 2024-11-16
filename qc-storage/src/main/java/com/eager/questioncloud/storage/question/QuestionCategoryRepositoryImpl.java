@@ -18,7 +18,7 @@ public class QuestionCategoryRepositoryImpl implements QuestionCategoryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<MainQuestionCategory> getQuestionCategories() {
+    public List<MainQuestionCategory> getMainQuestionCategories() {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(parent, child)

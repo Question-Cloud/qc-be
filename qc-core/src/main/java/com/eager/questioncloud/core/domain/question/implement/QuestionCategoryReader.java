@@ -12,6 +12,6 @@ public class QuestionCategoryReader {
     private final QuestionCategoryRepository questionCategoryRepository;
 
     public List<MainQuestionCategory> getQuestionCategories() {
-        return questionCategoryRepository.getQuestionCategories();
+        return questionCategoryRepository.getMainQuestionCategories();
     }
 }
