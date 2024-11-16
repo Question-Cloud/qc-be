@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.hub.question;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ public class Response {
     @Getter
     @AllArgsConstructor
     public static class QuestionCategoriesResponse {
-        private List<QuestionCategoryListItem> categories;
+        private List<QuestionCategoryGroupBySubject> categories;
     }
 }

@@ -3,8 +3,8 @@ package com.eager.questioncloud.storage.question;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryItem;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.SubQuestionCategoryItem;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.SubQuestionCategory;
 import com.eager.questioncloud.core.domain.question.repository.QuestionCategoryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,7 +18,7 @@ public class QuestionCategoryRepositoryImpl implements QuestionCategoryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<QuestionCategoryItem> getQuestionCategories() {
+    public List<MainQuestionCategory> getMainQuestionCategories() {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(parent, child)
@@ -29,11 +29,11 @@ public class QuestionCategoryRepositoryImpl implements QuestionCategoryRepositor
                 groupBy(parent.id)
                     .list(
                         Projections.constructor(
-                            QuestionCategoryItem.class,
+                            MainQuestionCategory.class,
                             parent.title,
                             parent.subject,
                             list(
-                                Projections.constructor(SubQuestionCategoryItem.class,
+                                Projections.constructor(SubQuestionCategory.class,
                                     child.id,
                                     child.title))
                         )

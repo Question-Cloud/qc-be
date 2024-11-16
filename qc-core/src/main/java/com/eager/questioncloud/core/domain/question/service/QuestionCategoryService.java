@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.question.service;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryListItem;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;
 import com.eager.questioncloud.core.domain.question.implement.QuestionCategoryReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class QuestionCategoryService {
     private final QuestionCategoryReader questionCategoryReader;
 
-    public List<QuestionCategoryListItem> getQuestionCategories() {
-        return QuestionCategoryListItem.groupBy(questionCategoryReader.getQuestionCategories());
+    public List<QuestionCategoryGroupBySubject> getQuestionCategories() {
+        return questionCategoryReader.getQuestionCategories();
     }
 }
