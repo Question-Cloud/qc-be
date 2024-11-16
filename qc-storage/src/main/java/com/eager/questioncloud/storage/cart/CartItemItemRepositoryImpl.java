@@ -5,7 +5,7 @@ import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEnti
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.cart.dto.CartItemInformation;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import com.eager.questioncloud.core.domain.cart.repository.CartItemRepository;
 import com.querydsl.core.types.Projections;
@@ -26,10 +26,10 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
     }
 
     @Override
-    public List<CartItemInformation> findByUserId(Long userId) {
+    public List<CartItemDetail> findByUserId(Long userId) {
         return jpaQueryFactory.select(
                 Projections.constructor(
-                    CartItemInformation.class,
+                    CartItemDetail.class,
                     questionEntity.id, questionEntity.id, questionEntity.questionContentEntity.title,
                     questionEntity.questionContentEntity.thumbnail, userEntity.userInformationEntity.name,
                     questionEntity.questionContentEntity.subject, questionEntity.questionContentEntity.price)

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.cart;
 
-import com.eager.questioncloud.core.domain.cart.dto.CartItemInformation;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ public class Response {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class GetCartResponse {
         private Boolean success;
-        private List<CartItemInformation> items;
+        private List<CartItemDetail> items;
 
-        public static GetCartResponse create(List<CartItemInformation> items) {
+        public static GetCartResponse create(List<CartItemDetail> items) {
             return new GetCartResponse(true, items);
         }
     }

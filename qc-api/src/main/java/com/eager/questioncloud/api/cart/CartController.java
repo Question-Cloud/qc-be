@@ -4,7 +4,7 @@ import com.eager.questioncloud.api.cart.Request.AddCartItemRequest;
 import com.eager.questioncloud.api.cart.Request.RemoveCartItemRequest;
 import com.eager.questioncloud.api.cart.Response.GetCartResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.cart.dto.CartItemInformation;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import com.eager.questioncloud.core.domain.cart.service.CartService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,7 @@ public class CartController {
     })
     @Operation(operationId = "장바구니 조회", summary = "장바구니 조회", tags = {"cart"}, description = "장바구니 조회")
     public GetCartResponse getCart(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<CartItemInformation> items = cartService.getCartItems(userPrincipal.getUser().getUid());
+        List<CartItemDetail> items = cartService.getCartItems(userPrincipal.getUser().getUid());
         return GetCartResponse.create(items);
     }
 
