@@ -6,7 +6,7 @@ import com.eager.questioncloud.api.hub.review.Response.MyQuestionReviewResponse;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.MyQuestionReview;
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.service.QuestionReviewService;
