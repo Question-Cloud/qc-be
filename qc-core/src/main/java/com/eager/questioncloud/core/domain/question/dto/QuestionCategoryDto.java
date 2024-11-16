@@ -29,12 +29,12 @@ public class QuestionCategoryDto {
     public static class QuestionCategoryItem {
         private String title;
         private Subject subject;
-        private List<SubQuestionCategoryItem> sub;
+        private List<SubQuestionCategory> sub;
     }
 
     @Getter
     @AllArgsConstructor
-    public static class SubQuestionCategoryItem {
+    public static class SubQuestionCategory {
         private Long id;
         private String title;
     }

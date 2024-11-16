@@ -4,7 +4,7 @@ import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.QuestionCategoryItem;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.SubQuestionCategoryItem;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.SubQuestionCategory;
 import com.eager.questioncloud.core.domain.question.repository.QuestionCategoryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,7 +33,7 @@ public class QuestionCategoryRepositoryImpl implements QuestionCategoryRepositor
                             parent.title,
                             parent.subject,
                             list(
-                                Projections.constructor(SubQuestionCategoryItem.class,
+                                Projections.constructor(SubQuestionCategory.class,
                                     child.id,
                                     child.title))
                         )
