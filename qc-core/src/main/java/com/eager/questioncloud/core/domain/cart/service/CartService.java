@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.cart.service;
 
+import com.eager.questioncloud.core.domain.cart.dto.CartItemInformation;
 import com.eager.questioncloud.core.domain.cart.implement.CartItemAppender;
 import com.eager.questioncloud.core.domain.cart.implement.CartItemReader;
 import com.eager.questioncloud.core.domain.cart.implement.CartItemRemover;
@@ -18,13 +19,13 @@ public class CartService {
     private final CartItemRemover cartItemRemover;
     private final QuestionReader questionReader;
 
-    public List<CartItem> getCartItems(Long userId) {
+    public List<CartItemInformation> getCartItems(Long userId) {
         return cartItemReader.getCartItems(userId);
     }
 
     public void appendCartItem(Long userId, Long questionId) {
         Question question = questionReader.getQuestion(questionId);
-        CartItem cartItem = CartItem.create(userId, question);
+        CartItem cartItem = CartItem.create(userId, question.getId());
         cartItemAppender.append(cartItem);
     }
 

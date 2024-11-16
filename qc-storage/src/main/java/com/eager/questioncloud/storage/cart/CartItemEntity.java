@@ -38,7 +38,11 @@ public class CartItemEntity {
         return CartItemEntity.builder()
             .id(cartItem.getId())
             .userId(cartItem.getUserId())
-            .questionId(cartItem.getItemInformation().getQuestionId())
+            .questionId(cartItem.getQuestionId())
             .build();
+    }
+
+    public CartItem toModel() {
+        return new CartItem(this.id, this.userId, this.questionId);
     }
 }
