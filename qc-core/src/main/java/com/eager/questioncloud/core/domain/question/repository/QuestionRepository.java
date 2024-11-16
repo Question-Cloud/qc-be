@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.question.repository;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 

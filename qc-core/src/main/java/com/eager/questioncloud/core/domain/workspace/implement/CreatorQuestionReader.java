@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.repository.QuestionRepository;
 import java.util.List;
