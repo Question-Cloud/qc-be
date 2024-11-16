@@ -12,6 +12,6 @@ public class QuestionCategoryService {
     private final QuestionCategoryReader questionCategoryReader;
 
     public List<MainQuestionCategoryList> getQuestionCategories() {
-        return MainQuestionCategoryList.groupBy(questionCategoryReader.getQuestionCategories());
+        return questionCategoryReader.getQuestionCategories();
     }
 }
