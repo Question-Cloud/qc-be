@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.hub.question;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.MainQuestionCategoryList;
+import com.eager.questioncloud.core.domain.question.dto.MainQuestionCategoryList;
 import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformation;
 import java.util.List;
 import lombok.AllArgsConstructor;

@@ -3,8 +3,8 @@ package com.eager.questioncloud.storage.question;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.MainQuestionCategory;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryDto.SubQuestionCategory;
+import com.eager.questioncloud.core.domain.question.dto.MainQuestionCategoryList.MainQuestionCategory;
+import com.eager.questioncloud.core.domain.question.dto.MainQuestionCategoryList.SubQuestionCategory;
 import com.eager.questioncloud.core.domain.question.repository.QuestionCategoryRepository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
