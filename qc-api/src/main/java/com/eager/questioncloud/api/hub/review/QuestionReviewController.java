@@ -62,8 +62,8 @@ public class QuestionReviewController {
                 작성한 리뷰가 없다면 null를 반환합니다.
             """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
-        QuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
-        return new MyQuestionReviewResponse(MyQuestionReview.from(review));
+        MyQuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
+        return new MyQuestionReviewResponse(review);
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.review.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewRepository;
@@ -21,8 +22,9 @@ public class QuestionReviewReader {
         return questionReviewRepository.getQuestionReviews(questionId, userId, pagingInformation);
     }
 
-    public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
-        return questionReviewRepository.getMyQuestionReview(questionId, userId);
+    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
+        QuestionReview questionReview = questionReviewRepository.getMyQuestionReview(questionId, userId);
+        return MyQuestionReview.from(questionReview);
     }
 
     public Boolean isWritten(Long questionId, Long userId) {

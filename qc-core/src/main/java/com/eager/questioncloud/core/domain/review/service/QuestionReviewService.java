@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.review.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
@@ -32,7 +33,7 @@ public class QuestionReviewService {
         return questionReviewReader.getQuestionReviews(questionId, userId, pagingInformation);
     }
 
-    public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
+    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
         return questionReviewReader.getMyQuestionReview(questionId, userId);
     }
 
