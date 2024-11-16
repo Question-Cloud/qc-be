@@ -12,13 +12,13 @@ public class QuestionCategoryDto {
     @AllArgsConstructor
     public static class QuestionCategoryListItem {
         private Subject subject;
-        private List<QuestionCategoryItem> list;
+        private List<MainQuestionCategory> list;
 
-        public static List<QuestionCategoryListItem> groupBy(List<QuestionCategoryItem> questionCategoryItemList) {
+        public static List<QuestionCategoryListItem> groupBy(List<MainQuestionCategory> mainQuestionCategoryList) {
             List<QuestionCategoryListItem> result = new ArrayList<>();
-            questionCategoryItemList
+            mainQuestionCategoryList
                 .stream()
-                .collect(Collectors.groupingBy(questionCategoryItem -> questionCategoryItem.subject))
+                .collect(Collectors.groupingBy(mainQuestionCategory -> mainQuestionCategory.subject))
                 .forEach((subject, items) -> result.add(new QuestionCategoryListItem(subject, items)));
             return result;
         }
@@ -26,7 +26,7 @@ public class QuestionCategoryDto {
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionCategoryItem {
+    public static class MainQuestionCategory {
         private String title;
         private Subject subject;
         private List<SubQuestionCategory> sub;
