@@ -14,6 +14,6 @@ public class QuestionCategoryReader {
 
     public List<MainQuestionCategoryList> getQuestionCategories() {
         List<MainQuestionCategory> mainQuestionCategories = questionCategoryRepository.getMainQuestionCategories();
-        return MainQuestionCategoryList.groupBy(mainQuestionCategories);
+        return MainQuestionCategoryList.create(mainQuestionCategories);
     }
 }

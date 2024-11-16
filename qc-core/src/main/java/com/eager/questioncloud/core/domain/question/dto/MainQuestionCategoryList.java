@@ -13,7 +13,7 @@ public class MainQuestionCategoryList {
     private Subject subject;
     private List<MainQuestionCategory> list;
 
-    public static List<MainQuestionCategoryList> groupBy(List<MainQuestionCategory> mainQuestionCategoryList) {
+    public static List<MainQuestionCategoryList> create(List<MainQuestionCategory> mainQuestionCategoryList) {
         List<MainQuestionCategoryList> result = new ArrayList<>();
         mainQuestionCategoryList
             .stream()
