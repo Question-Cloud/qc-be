@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.review.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewRepository;
 import java.util.List;

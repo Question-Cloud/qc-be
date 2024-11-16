@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.review.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
@@ -47,7 +47,7 @@ public class QuestionReviewService {
         QuestionReview questionReview = questionReviewReader.findByIdAndUserId(reviewId, userId);
         int varianceRate = rate - questionReview.getRate();
         questionReviewUpdater.update(questionReview, comment, rate);
-        
+
         applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
 
