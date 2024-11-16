@@ -7,7 +7,7 @@ import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.service.QuestionReviewService;
 import com.eager.questioncloud.security.UserPrincipal;
@@ -42,14 +42,14 @@ public class QuestionReviewController {
     @Operation(operationId = "문제 리뷰 목록 조회", summary = "문제 리뷰 목록 조회", tags = {"question-review"}, description = "문제 리뷰 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<QuestionReviewItem> getQuestionReviews(
+    public PagingResponse<QuestionReviewDetail> getQuestionReviews(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
         int total = questionReviewService.getTotal(questionId);
-        List<QuestionReviewItem> questionReviewItems = questionReviewService.getQuestionReviews(
+        List<QuestionReviewDetail> questionReviewDetails = questionReviewService.getQuestionReviews(
             questionId,
             userPrincipal.getUser().getUid(),
             pagingInformation);
-        return new PagingResponse<>(total, questionReviewItems);
+        return new PagingResponse<>(total, questionReviewDetails);
     }
 
     @GetMapping("/me")

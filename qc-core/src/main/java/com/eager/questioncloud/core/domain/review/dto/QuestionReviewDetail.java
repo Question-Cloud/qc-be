@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class QuestionReviewItem {
+public class QuestionReviewDetail {
     private Long id;
     private String name;
     private Boolean isCreator;

@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.review.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewRepository;
 import java.util.List;
@@ -18,7 +18,7 @@ public class QuestionReviewReader {
         return questionReviewRepository.getTotal(questionId);
     }
 
-    public List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
+    public List<QuestionReviewDetail> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
         return questionReviewRepository.getQuestionReviews(questionId, userId, pagingInformation);
     }
 

@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.review.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
@@ -29,7 +29,7 @@ public class QuestionReviewService {
         return questionReviewReader.getTotal(questionId);
     }
 
-    public List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
+    public List<QuestionReviewDetail> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
         return questionReviewReader.getQuestionReviews(questionId, userId, pagingInformation);
     }
 

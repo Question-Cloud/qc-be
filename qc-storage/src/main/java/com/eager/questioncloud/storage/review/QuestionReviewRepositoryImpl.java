@@ -4,7 +4,7 @@ import static com.eager.questioncloud.storage.review.QQuestionReviewEntity.quest
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewItem;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.review.repository.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.user.vo.UserType;
@@ -38,7 +38,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public List<QuestionReviewItem> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
+    public List<QuestionReviewDetail> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
         QQuestionReviewEntity profile = new QQuestionReviewEntity("profile");
         List<Tuple> result = jpaQueryFactory.select(
                 questionReviewEntity.id,
@@ -61,7 +61,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
 
         return result
             .stream()
-            .map(tuple -> new QuestionReviewItem(
+            .map(tuple -> new QuestionReviewDetail(
                 tuple.get(questionReviewEntity.id),
                 tuple.get(userEntity.userInformationEntity.name),
                 UserType.CreatorUser.equals(tuple.get(userEntity.userType)),
