@@ -2,6 +2,7 @@ package com.eager.questioncloud.core.domain.question.dto;
 
 import com.eager.questioncloud.core.domain.question.vo.Subject;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,9 @@ public class QuestionCategoryGroupBySubject {
             .stream()
             .collect(Collectors.groupingBy(mainQuestionCategory -> mainQuestionCategory.subject))
             .forEach((subject, items) -> result.add(new QuestionCategoryGroupBySubject(subject, items)));
+
+        result.sort(Comparator.comparing(data -> data.getSubject().getValue()));
+        
         return result;
     }
 
