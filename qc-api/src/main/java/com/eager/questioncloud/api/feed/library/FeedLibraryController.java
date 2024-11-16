@@ -1,9 +1,9 @@
 package com.eager.questioncloud.api.feed.library;
 
 import com.eager.questioncloud.common.PagingResponse;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
+import com.eager.questioncloud.core.domain.library.dto.UserQuestionDetail;
 import com.eager.questioncloud.core.domain.library.service.LibraryService;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,9 +28,9 @@ public class FeedLibraryController {
     @Operation(operationId = "나의 문제 목록 조회", summary = "나의 문제 목록 조회", tags = {"library"}, description = "나의 문제 목록 조회")
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<UserQuestionItem> getUserQuestionLibraryList(@ParameterObject QuestionFilter questionFilter) {
+    public PagingResponse<UserQuestionDetail> getUserQuestionLibraryList(@ParameterObject QuestionFilter questionFilter) {
         int total = libraryService.countUserQuestions(questionFilter);
-        List<UserQuestionItem> userQuestions = libraryService.getUserQuestions(questionFilter);
+        List<UserQuestionDetail> userQuestions = libraryService.getUserQuestions(questionFilter);
         return new PagingResponse<>(total, userQuestions);
     }
 }

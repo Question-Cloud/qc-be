@@ -5,11 +5,10 @@ import static com.eager.questioncloud.storage.library.QUserQuestionEntity.userQu
 import static com.eager.questioncloud.storage.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.library.dto.UserQuestionDto.UserQuestionItem;
+import com.eager.questioncloud.core.domain.library.dto.UserQuestionDetail;
 import com.eager.questioncloud.core.domain.library.model.UserQuestion;
 import com.eager.questioncloud.core.domain.library.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.dto.QuestionDto.QuestionInformationForLibrary;
 import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -40,23 +39,20 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
     }
 
     @Override
-    public List<UserQuestionItem> getUserQuestions(QuestionFilter questionFilter) {
+    public List<UserQuestionDetail> getUserQuestions(QuestionFilter questionFilter) {
         QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
         QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         return jpaQueryFactory.select(
-                Projections.constructor(UserQuestionItem.class,
-                    userQuestionEntity.id,
-                    userQuestionEntity.isUsed,
-                    Projections.constructor(QuestionInformationForLibrary.class,
-                        questionEntity.id,
-                        questionEntity.questionContentEntity.title,
-                        parent.title,
-                        child.title,
-                        questionEntity.questionContentEntity.thumbnail,
-                        userEntity.userInformationEntity.name,
-                        questionEntity.questionContentEntity.questionLevel,
-                        questionEntity.questionContentEntity.fileUrl,
-                        questionEntity.questionContentEntity.explanationUrl)))
+                Projections.constructor(UserQuestionDetail.class,
+                    questionEntity.id,
+                    questionEntity.questionContentEntity.title,
+                    parent.title,
+                    child.title,
+                    questionEntity.questionContentEntity.thumbnail,
+                    userEntity.userInformationEntity.name,
+                    questionEntity.questionContentEntity.questionLevel,
+                    questionEntity.questionContentEntity.fileUrl,
+                    questionEntity.questionContentEntity.explanationUrl))
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.getUserId()))
             .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
