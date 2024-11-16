@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.creator.repository;
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 
 public interface CreatorRepository {

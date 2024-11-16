@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.creator.implement;
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.repository.CreatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

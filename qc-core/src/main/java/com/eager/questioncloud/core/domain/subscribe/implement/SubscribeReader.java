@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.subscribe.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.subscribe.repository.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

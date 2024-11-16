@@ -4,7 +4,7 @@ import static com.eager.questioncloud.storage.creator.QCreatorEntity.creatorEnti
 import static com.eager.questioncloud.storage.creator.QCreatorStatisticsEntity.creatorStatisticsEntity;
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.repository.CreatorRepository;
 import com.eager.questioncloud.core.exception.CustomException;

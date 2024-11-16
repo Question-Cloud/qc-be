@@ -1,6 +1,6 @@
 package com.eager.questioncloud.api.creator.info;
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorDto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
