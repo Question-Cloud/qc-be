@@ -3,7 +3,7 @@ package com.eager.questioncloud.storage.coupon;
 import static com.eager.questioncloud.storage.coupon.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.storage.coupon.QUserCouponEntity.userCouponEntity;
 
-import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.coupon.repository.UserCouponRepository;
 import com.eager.questioncloud.core.exception.CustomException;
@@ -46,10 +46,10 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
-    public List<AvailableUserCouponItem> getAvailableUserCoupons(Long userId) {
+    public List<AvailableUserCoupon> getAvailableUserCoupons(Long userId) {
         return jpaQueryFactory.select(
                 Projections.constructor(
-                    AvailableUserCouponItem.class,
+                    AvailableUserCoupon.class,
                     userCouponEntity.id,
                     couponEntity.title,
                     couponEntity.couponType,

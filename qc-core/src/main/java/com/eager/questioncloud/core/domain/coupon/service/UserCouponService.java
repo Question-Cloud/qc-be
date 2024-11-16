@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.coupon.service;
 
 import com.eager.questioncloud.core.common.LockKeyGenerator;
 import com.eager.questioncloud.core.common.LockManager;
-import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import com.eager.questioncloud.core.domain.coupon.implement.UserCouponReader;
 import com.eager.questioncloud.core.domain.coupon.implement.UserCouponRegister;
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserCouponService {
             () -> userCouponRegister.registerCoupon(userId, couponCode));
     }
 
-    public List<AvailableUserCouponItem> getAvailableUserCoupons(Long userId) {
+    public List<AvailableUserCoupon> getAvailableUserCoupons(Long userId) {
         return userCouponReader.getAvailableUserCoupons(userId);
     }
 }

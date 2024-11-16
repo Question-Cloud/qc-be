@@ -2,7 +2,7 @@ package com.eager.questioncloud.api.user.coupon;
 
 import com.eager.questioncloud.api.user.coupon.Response.GetAvailableUserCouponsResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.coupon.dto.UserCouponDto.AvailableUserCouponItem;
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import com.eager.questioncloud.core.domain.coupon.service.UserCouponService;
 import com.eager.questioncloud.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +29,7 @@ public class UserCouponController {
     })
     @Operation(operationId = "사용 가능한 쿠폰 목록 조회", summary = "사용 가능한 쿠폰 목록 조회", tags = {"coupon"}, description = "사용 가능한 쿠폰 목록 조회")
     public GetAvailableUserCouponsResponse getAvailableUserCoupons(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<AvailableUserCouponItem> coupons = userCouponService.getAvailableUserCoupons(userPrincipal.getUser().getUid());
+        List<AvailableUserCoupon> coupons = userCouponService.getAvailableUserCoupons(userPrincipal.getUser().getUid());
         return new GetAvailableUserCouponsResponse(coupons);
     }
 
