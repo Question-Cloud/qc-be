@@ -9,8 +9,8 @@ import static com.eager.questioncloud.storage.question.QQuestionEntity.questionE
 import static com.eager.questioncloud.storage.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.payment.repository.QuestionPaymentRepository;
 import com.eager.questioncloud.storage.question.QQuestionCategoryEntity;
 import com.querydsl.core.group.GroupBy;

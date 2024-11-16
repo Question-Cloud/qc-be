@@ -4,7 +4,7 @@ import com.eager.questioncloud.api.payment.question.Request.QuestionPaymentReque
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
+import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.payment.service.QuestionPaymentHistoryService;
 import com.eager.questioncloud.core.domain.payment.service.QuestionPaymentService;
 import com.eager.questioncloud.security.UserPrincipal;

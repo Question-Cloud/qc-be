@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.payment.model;
+package com.eager.questioncloud.core.domain.payment.dto;
 
 import com.eager.questioncloud.core.domain.coupon.vo.CouponType;
 import com.eager.questioncloud.core.domain.payment.vo.QuestionPaymentStatus;
