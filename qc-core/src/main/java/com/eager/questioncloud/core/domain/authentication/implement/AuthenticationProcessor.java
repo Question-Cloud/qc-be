@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.authentication.implement;
 
+import com.eager.questioncloud.core.domain.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
-import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;

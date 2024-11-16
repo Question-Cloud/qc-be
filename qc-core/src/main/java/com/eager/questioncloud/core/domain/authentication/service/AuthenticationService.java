@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.authentication.service;
 
+import com.eager.questioncloud.core.domain.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.core.domain.authentication.dto.SocialAuthenticationResult;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.core.domain.authentication.implement.AuthenticationTokenProcessor;
-import com.eager.questioncloud.core.domain.authentication.vo.AuthenticationToken;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

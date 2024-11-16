@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.authentication.vo;
+package com.eager.questioncloud.core.domain.authentication.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
