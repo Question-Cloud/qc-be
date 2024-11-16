@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.post.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostDto.PostDetail;
-import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.post.dto.PostDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.post.implement.PostAppender;
 import com.eager.questioncloud.core.domain.post.implement.PostReader;
 import com.eager.questioncloud.core.domain.post.implement.PostRemover;

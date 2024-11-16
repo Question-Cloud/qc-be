@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.post.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.post.implement.PostCommentAppender;
 import com.eager.questioncloud.core.domain.post.implement.PostCommentReader;
 import com.eager.questioncloud.core.domain.post.implement.PostCommentRemover;

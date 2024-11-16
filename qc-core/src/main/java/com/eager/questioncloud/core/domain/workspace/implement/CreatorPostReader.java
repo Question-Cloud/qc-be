@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.workspace.implement;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostDto.PostListItem;
+import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.post.repository.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

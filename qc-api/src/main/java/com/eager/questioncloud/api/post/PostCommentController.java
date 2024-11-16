@@ -3,7 +3,7 @@ package com.eager.questioncloud.api.post;
 import com.eager.questioncloud.common.DefaultResponse;
 import com.eager.questioncloud.common.PagingResponse;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.post.model.PostComment;
 import com.eager.questioncloud.core.domain.post.service.PostCommentService;
 import com.eager.questioncloud.security.UserPrincipal;
