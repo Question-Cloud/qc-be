@@ -1,5 +1,6 @@
 package com.eager.questioncloud.api.user.register;
 
+import com.eager.questioncloud.core.domain.user.model.CreateUser;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
@@ -42,6 +43,10 @@ public class Request {
             if (!StringUtils.hasText(socialRegisterToken)) {
                 throw new CustomException(Error.BAD_REQUEST);
             }
+        }
+
+        public CreateUser toCreateUser() {
+            return new CreateUser(email, password, socialRegisterToken, accountType, phone, name);
         }
     }
 }

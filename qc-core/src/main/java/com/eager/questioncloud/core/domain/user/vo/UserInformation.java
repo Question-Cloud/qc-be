@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.user.vo;
 
-import com.eager.questioncloud.core.domain.user.dto.CreateUser;
+import com.eager.questioncloud.core.domain.user.model.CreateUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +13,11 @@ public class UserInformation {
     private String phone;
     private String name;
     private String profileImage;
-    
+
     public static UserInformation guest = new UserInformation("guest", "guest", "guest", null);
 
     public static UserInformation create(CreateUser createUser) {
-        return new UserInformation(createUser.email(), createUser.phone(), createUser.name(), null);
+        return new UserInformation(createUser.getEmail(), createUser.getPhone(), createUser.getName(), null);
     }
 
     public static UserInformation getGuestInformation() {

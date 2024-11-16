@@ -2,7 +2,6 @@ package com.eager.questioncloud.api.user.register;
 
 import com.eager.questioncloud.api.user.register.Response.CreateUserResponse;
 import com.eager.questioncloud.common.DefaultResponse;
-import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.service.CreateUserService;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
@@ -30,10 +29,7 @@ public class CreateUserController {
     })
     @Operation(operationId = "회원가입", summary = "회원가입", tags = {"user-register"}, description = "회원가입")
     public CreateUserResponse createUser(@RequestBody @Valid Request.CreateUserRequest request) {
-        User user = createUserService.create(
-            new CreateUser(request.getEmail(), request.getPassword(), request.getSocialRegisterToken(), request.getAccountType(), request.getPhone(),
-                request.getName())
-        );
+        User user = createUserService.create(request.toCreateUser());
         EmailVerification emailVerification = createUserService.sendCreateUserVerifyMail(user);
         return new CreateUserResponse(emailVerification.getResendToken());
     }

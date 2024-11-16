@@ -2,10 +2,10 @@ package com.eager.questioncloud.core.domain.user.service;
 
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
-import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.implement.UserCreator;
 import com.eager.questioncloud.core.domain.user.implement.UserReader;
 import com.eager.questioncloud.core.domain.user.implement.UserUpdater;
+import com.eager.questioncloud.core.domain.user.model.CreateUser;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.vo.AccountType;
 import com.eager.questioncloud.core.domain.user.vo.UserAccountInformation;
@@ -48,10 +48,10 @@ public class CreateUserService {
     }
 
     private UserAccountInformation createUserAccountInformation(CreateUser createUser) {
-        if (createUser.accountType().equals(AccountType.EMAIL)) {
-            return UserAccountInformation.createEmailAccountInformation(createUser.password());
+        if (createUser.getAccountType().equals(AccountType.EMAIL)) {
+            return UserAccountInformation.createEmailAccountInformation(createUser.getPassword());
         }
-        String socialUid = socialAPIManager.getSocialUid(createUser.socialRegisterToken(), SocialPlatform.from(createUser.accountType()));
-        return UserAccountInformation.createSocialAccountInformation(socialUid, createUser.accountType());
+        String socialUid = socialAPIManager.getSocialUid(createUser.getSocialRegisterToken(), SocialPlatform.from(createUser.getAccountType()));
+        return UserAccountInformation.createSocialAccountInformation(socialUid, createUser.getAccountType());
     }
 }
