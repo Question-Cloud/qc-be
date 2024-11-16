@@ -59,7 +59,7 @@ public class QuestionReviewController {
     @Operation(operationId = "내가 작성한 리뷰 조회", summary = "내가 작성한 리뷰 조회", tags = {"question-review"},
         description = """
                 작성한 리뷰가 있다면 review 정보를 응답으로 반환하며
-                작성한 리뷰가 없다면 null를 반환합니다.
+                작성한 리뷰가 없다면 404를 반환합니다.
             """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
         MyQuestionReview review = questionReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
