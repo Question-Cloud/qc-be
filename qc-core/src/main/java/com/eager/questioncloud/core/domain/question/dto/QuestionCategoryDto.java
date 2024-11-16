@@ -10,16 +10,16 @@ import lombok.Getter;
 public class QuestionCategoryDto {
     @Getter
     @AllArgsConstructor
-    public static class QuestionCategoryListItem {
+    public static class MainQuestionCategoryList {
         private Subject subject;
         private List<MainQuestionCategory> list;
 
-        public static List<QuestionCategoryListItem> groupBy(List<MainQuestionCategory> mainQuestionCategoryList) {
-            List<QuestionCategoryListItem> result = new ArrayList<>();
+        public static List<MainQuestionCategoryList> groupBy(List<MainQuestionCategory> mainQuestionCategoryList) {
+            List<MainQuestionCategoryList> result = new ArrayList<>();
             mainQuestionCategoryList
                 .stream()
                 .collect(Collectors.groupingBy(mainQuestionCategory -> mainQuestionCategory.subject))
-                .forEach((subject, items) -> result.add(new QuestionCategoryListItem(subject, items)));
+                .forEach((subject, items) -> result.add(new MainQuestionCategoryList(subject, items)));
             return result;
         }
     }
