@@ -1,10 +1,15 @@
 package com.eager.questioncloud.domain.payment;
 
+import static com.eager.questioncloud.domain.coupon.QCouponEntity.couponEntity;
+import static com.eager.questioncloud.domain.coupon.QUserCouponEntity.userCouponEntity;
 import static com.eager.questioncloud.domain.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.domain.payment.QQuestionPaymentEntity.questionPaymentEntity;
 import static com.eager.questioncloud.domain.payment.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
+import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.common.PagingInformation;
+import com.eager.questioncloud.domain.question.QQuestionCategoryEntity;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +24,8 @@ import org.springframework.stereotype.Repository;
 public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository {
     private final QuestionPaymentJpaRepository questionPaymentJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
     @Override
     public QuestionPayment save(QuestionPayment questionPayment) {
@@ -27,8 +34,6 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
 
     @Override
     public List<QuestionPaymentHistory> getQuestionPaymentHistory(Long userId, PagingInformation pagingInformation) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         Map<String, QuestionPaymentHistory> resultMap = jpaQueryFactory
             .from(questionPaymentEntity)
             .offset(pagingInformation.getOffset())

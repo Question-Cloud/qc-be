@@ -1,5 +1,7 @@
 package com.eager.questioncloud.domain.point;
 
+import static com.eager.questioncloud.domain.point.QUserPointEntity.userPointEntity;
+
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

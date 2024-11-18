@@ -3,6 +3,8 @@ package com.eager.questioncloud.domain.post;
 import static com.eager.questioncloud.domain.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.domain.post.QPostCommentEntity.postCommentEntity;
 import static com.eager.questioncloud.domain.post.QPostEntity.postEntity;
+import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.common.PagingInformation;
 import com.eager.questioncloud.exception.CustomException;

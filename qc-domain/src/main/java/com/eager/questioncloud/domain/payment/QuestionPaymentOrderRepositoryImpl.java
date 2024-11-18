@@ -1,5 +1,8 @@
 package com.eager.questioncloud.domain.payment;
 
+import static com.eager.questioncloud.domain.payment.QQuestionPaymentEntity.questionPaymentEntity;
+import static com.eager.questioncloud.domain.payment.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

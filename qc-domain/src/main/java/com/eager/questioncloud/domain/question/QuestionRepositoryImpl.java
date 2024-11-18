@@ -2,6 +2,8 @@ package com.eager.questioncloud.domain.question;
 
 import static com.eager.questioncloud.domain.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.review.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 import static com.eager.questioncloud.domain.userquestion.QUserQuestionEntity.userQuestionEntity;
 
 import com.eager.questioncloud.common.PagingInformation;

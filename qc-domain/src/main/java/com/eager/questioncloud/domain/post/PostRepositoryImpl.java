@@ -1,6 +1,13 @@
 package com.eager.questioncloud.domain.post;
 
+import static com.eager.questioncloud.domain.post.QPostEntity.postEntity;
+import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
+
 import com.eager.questioncloud.common.PagingInformation;
+import com.eager.questioncloud.domain.question.QQuestionCategoryEntity;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -12,6 +19,8 @@ import org.springframework.stereotype.Repository;
 public class PostRepositoryImpl implements PostRepository {
     private final PostJpaRepository postJpaRepository;
     private final JPAQueryFactory jpaQueryFactory;
+    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
+    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
 
     @Override
     public List<PostListItem> getPostList(Long questionId, PagingInformation pagingInformation) {
@@ -65,8 +74,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public PostDetail getPostDetail(Long postId) {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
         PostDetail postDetail = jpaQueryFactory.select(
                 Projections.constructor(PostDetail.class,
                     postEntity.id,

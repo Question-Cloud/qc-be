@@ -1,8 +1,10 @@
 package com.eager.questioncloud.domain.review;
 
 import static com.eager.questioncloud.domain.review.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.common.PagingInformation;
+import com.eager.questioncloud.domain.user.UserType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

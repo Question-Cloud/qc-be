@@ -2,6 +2,9 @@ package com.eager.questioncloud.domain.cart;
 
 
 import static com.eager.questioncloud.domain.cart.QCartItemEntity.cartItemEntity;
+import static com.eager.questioncloud.domain.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

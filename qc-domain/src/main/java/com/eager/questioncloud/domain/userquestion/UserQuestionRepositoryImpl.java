@@ -2,6 +2,7 @@ package com.eager.questioncloud.domain.userquestion;
 
 import static com.eager.questioncloud.domain.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 import static com.eager.questioncloud.domain.userquestion.QUserQuestionEntity.userQuestionEntity;
 
 import com.eager.questioncloud.domain.question.QQuestionCategoryEntity;
