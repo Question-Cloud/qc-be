@@ -1,4 +1,4 @@
-package com.eager.questioncloud.config;
+package com.eager.questioncloud.lock;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
