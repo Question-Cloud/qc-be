@@ -1,6 +1,5 @@
 package com.eager.questioncloud.domain.point;
 
-import com.eager.questioncloud.domain.pg.PGPayment;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.InvalidPaymentException;
