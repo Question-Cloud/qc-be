@@ -1,7 +1,5 @@
 package com.eager.questioncloud.pg.portone;
 
-import com.eager.questioncloud.core.domain.pg.PGAPI;
-import com.eager.questioncloud.core.domain.pg.PGPayment;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.AllArgsConstructor;
@@ -14,11 +12,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 @RequiredArgsConstructor
-public class PortoneAPI implements PGAPI {
+public class PortoneAPI {
     @Value("${PORT_ONE_SECRET_KEY}")
     private String PORT_ONE_SECRET_KEY;
 
-    public PGPayment getPayment(String paymentId) {
+    public PortonePayment getPayment(String paymentId) {
         WebClient webClient = WebClient.create("https://api.portone.io");
 
         PortonePayment portonePayment = webClient.get()
@@ -36,7 +34,7 @@ public class PortoneAPI implements PGAPI {
             throw new CustomException(Error.PAYMENT_ERROR);
         }
 
-        return new PGPayment(portonePayment.getId(), portonePayment.getAmount().getTotal(), portonePayment.getReceiptUrl());
+        return portonePayment;
     }
 
     public void cancel(String paymentId) {
