@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.payment.repository;
+package com.eager.questioncloud.domain.payment;
 
-import com.eager.questioncloud.domain.payment.model.QuestionPaymentOrder;
 import java.util.List;
 
 public interface QuestionPaymentOrderRepository {

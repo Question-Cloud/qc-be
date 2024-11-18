@@ -1,4 +1,4 @@
-package com.eager.questioncloud.domain.payment.model;
+package com.eager.questioncloud.domain.payment;
 
 import com.eager.questioncloud.domain.question.model.Question;
 import java.util.List;

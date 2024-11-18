@@ -1,7 +1,6 @@
-package com.eager.questioncloud.domain.payment.dto;
+package com.eager.questioncloud.domain.payment;
 
 import com.eager.questioncloud.domain.coupon.CouponType;
-import com.eager.questioncloud.domain.payment.vo.QuestionPaymentStatus;
 import com.eager.questioncloud.domain.question.vo.Subject;
 import java.time.LocalDateTime;
 import java.util.List;
