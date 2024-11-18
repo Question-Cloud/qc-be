@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.verification.template;
+package com.eager.questioncloud.domain.verification;
 
-import com.eager.questioncloud.domain.verification.template.EmailVerificationTemplate;
 import lombok.Getter;
 
 @Getter

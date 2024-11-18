@@ -1,4 +1,4 @@
-package com.eager.questioncloud.domain.verification.vo;
+package com.eager.questioncloud.domain.verification;
 
 import lombok.Getter;
 
