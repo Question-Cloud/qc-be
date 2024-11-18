@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.coupon.model;
+package com.eager.questioncloud.domain.coupon;
 
-import com.eager.questioncloud.domain.coupon.vo.CouponType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
