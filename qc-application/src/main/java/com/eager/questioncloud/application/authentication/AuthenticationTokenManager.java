@@ -26,46 +26,10 @@ public class AuthenticationTokenManager {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public Claims getClaims(String token) {
-        try {
-            return Jwts
-                .parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        } catch (Exception e) {
-            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
-        }
-    }
-
-    public String generateAccessToken(Long uid) {
-        Claims claims = Jwts.claims().setSubject("accessToken");
-        claims.put("uid", uid);
-        Date currentTime = new Date();
-
-        return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(currentTime)
-            .setExpiration(new Date(currentTime.getTime() + ACCESS_TOKEN_VALID_TIME))
-            .signWith(secretKey, SignatureAlgorithm.HS256)
-            .compact();
-    }
-
-    public String generateRefreshToken(Long uid) {
-        Claims claims = Jwts.claims().setSubject("refreshToken");
-        claims.put("uid", uid);
-        Date currentTime = new Date();
-
-        String refreshToken = Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(currentTime)
-            .setExpiration(new Date(currentTime.getTime() + REFRESH_TOKEN_VALID_TIME))
-            .signWith(secretKey, SignatureAlgorithm.HS256)
-            .compact();
-
-        refreshTokenRepository.save(refreshToken, uid);
-        return refreshToken;
+    public AuthenticationToken create(Long uid) {
+        String accessToken = generateAccessToken(uid);
+        String refreshToken = generateRefreshToken(uid);
+        return AuthenticationToken.create(accessToken, refreshToken);
     }
 
     public AuthenticationToken refresh(String refreshToken) {
@@ -88,7 +52,49 @@ public class AuthenticationTokenManager {
         return claims.get("uid", Long.class);
     }
 
-    public Claims getRefreshTokenClaimsWithValidate(String refreshToken) {
+    public Claims getClaims(String token) {
+        try {
+            return Jwts
+                .parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        } catch (Exception e) {
+            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+        }
+    }
+
+    private String generateAccessToken(Long uid) {
+        Claims claims = Jwts.claims().setSubject("accessToken");
+        claims.put("uid", uid);
+        Date currentTime = new Date();
+
+        return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(currentTime)
+            .setExpiration(new Date(currentTime.getTime() + ACCESS_TOKEN_VALID_TIME))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    private String generateRefreshToken(Long uid) {
+        Claims claims = Jwts.claims().setSubject("refreshToken");
+        claims.put("uid", uid);
+        Date currentTime = new Date();
+
+        String refreshToken = Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(currentTime)
+            .setExpiration(new Date(currentTime.getTime() + REFRESH_TOKEN_VALID_TIME))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+
+        refreshTokenRepository.save(refreshToken, uid);
+        return refreshToken;
+    }
+
+    private Claims getRefreshTokenClaimsWithValidate(String refreshToken) {
         Claims claims = getClaims(refreshToken);
 
         if (!claims.getSubject().equals("refreshToken")) {
@@ -105,7 +111,7 @@ public class AuthenticationTokenManager {
         return claims;
     }
 
-    public Boolean isExpireSoon(Date expireDate) {
+    private Boolean isExpireSoon(Date expireDate) {
         Date now = new Date();
         long differenceInMillis = expireDate.getTime() - now.getTime();
         long differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24);

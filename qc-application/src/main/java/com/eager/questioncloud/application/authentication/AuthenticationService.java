@@ -13,17 +13,13 @@ public class AuthenticationService {
 
     public AuthenticationToken login(String email, String password) {
         User user = authenticationProcessor.emailPasswordAuthentication(email, password);
-        String accessToken = authenticationTokenManager.generateAccessToken(user.getUid());
-        String refreshToken = authenticationTokenManager.generateRefreshToken(user.getUid());
-        return AuthenticationToken.create(accessToken, refreshToken);
+        return authenticationTokenManager.create(user.getUid());
     }
 
     public SocialAuthenticationResult socialLogin(AccountType accountType, String code) {
         SocialAuthentication socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType);
         if (socialAuthentication.isRegistered()) {
-            String accessToken = authenticationTokenManager.generateAccessToken(socialAuthentication.getUser().getUid());
-            String refreshToken = authenticationTokenManager.generateRefreshToken(socialAuthentication.getUser().getUid());
-            return SocialAuthenticationResult.success(AuthenticationToken.create(accessToken, refreshToken));
+            return SocialAuthenticationResult.success(authenticationTokenManager.create(socialAuthentication.getUser().getUid()));
         }
         return SocialAuthenticationResult.notRegister(socialAuthentication.getSocialAccessToken());
     }
