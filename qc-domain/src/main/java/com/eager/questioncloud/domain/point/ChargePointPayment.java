@@ -1,8 +1,6 @@
-package com.eager.questioncloud.domain.point.model;
+package com.eager.questioncloud.domain.point;
 
 import com.eager.questioncloud.domain.pg.PGPayment;
-import com.eager.questioncloud.domain.point.vo.ChargePointPaymentStatus;
-import com.eager.questioncloud.domain.point.vo.ChargePointType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.InvalidPaymentException;

@@ -1,7 +1,6 @@
-package com.eager.questioncloud.domain.point.repository;
+package com.eager.questioncloud.domain.point;
 
 import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.point.model.ChargePointPayment;
 import java.util.List;
 
 public interface ChargePointPaymentRepository {
