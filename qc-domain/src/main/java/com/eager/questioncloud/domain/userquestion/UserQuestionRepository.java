@@ -1,7 +1,5 @@
-package com.eager.questioncloud.domain.library.repository;
+package com.eager.questioncloud.domain.userquestion;
 
-import com.eager.questioncloud.domain.library.dto.UserQuestionDetail;
-import com.eager.questioncloud.domain.library.model.UserQuestion;
 import com.eager.questioncloud.domain.question.common.QuestionFilter;
 import java.util.List;
 
