@@ -1,6 +1,5 @@
 package com.eager.questioncloud.domain.subscribe;
 
-import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
