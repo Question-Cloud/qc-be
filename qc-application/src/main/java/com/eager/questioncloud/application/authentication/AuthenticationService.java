@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.authentication;
 
 import com.eager.questioncloud.domain.user.AccountType;
+import com.eager.questioncloud.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,20 @@ public class AuthenticationService {
     private final AuthenticationTokenProcessor authenticationTokenProcessor;
 
     public AuthenticationToken login(String email, String password) {
-        return authenticationProcessor.emailPasswordAuthentication(email, password);
+        User user = authenticationProcessor.emailPasswordAuthentication(email, password);
+        String accessToken = authenticationTokenProcessor.generateAccessToken(user.getUid());
+        String refreshToken = authenticationTokenProcessor.generateRefreshToken(user.getUid());
+        return AuthenticationToken.create(accessToken, refreshToken);
     }
 
     public SocialAuthenticationResult socialLogin(AccountType accountType, String code) {
-        return authenticationProcessor.socialAuthentication(code, accountType);
+        SocialAuthentication socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType);
+        if (socialAuthentication.isRegistered()) {
+            String accessToken = authenticationTokenProcessor.generateAccessToken(socialAuthentication.getUser().getUid());
+            String refreshToken = authenticationTokenProcessor.generateRefreshToken(socialAuthentication.getUser().getUid());
+            return SocialAuthenticationResult.success(AuthenticationToken.create(accessToken, refreshToken));
+        }
+        return SocialAuthenticationResult.notRegister(socialAuthentication.getSocialAccessToken());
     }
 
     public AuthenticationToken refresh(String refreshToken) {

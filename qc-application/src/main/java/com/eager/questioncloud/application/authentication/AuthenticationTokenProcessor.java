@@ -75,9 +75,9 @@ public class AuthenticationTokenProcessor {
         Long uid = claims.get("uid", Long.class);
         String accessToken = generateAccessToken(uid);
         if (isExpireSoon(claims.getExpiration())) {
-            return new AuthenticationToken(accessToken, generateRefreshToken(uid));
+            return AuthenticationToken.create(accessToken, generateRefreshToken(uid));
         }
-        return new AuthenticationToken(accessToken, refreshToken);
+        return AuthenticationToken.create(accessToken, refreshToken);
     }
 
     public Long parseUidFromAccessToken(String accessToken) {

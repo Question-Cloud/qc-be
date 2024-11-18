@@ -12,38 +12,23 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationProcessor {
-    private final AuthenticationTokenProcessor authenticationTokenProcessor;
     private final SocialAPIManager socialAPIManager;
     private final UserRepository userRepository;
 
-    public AuthenticationToken emailPasswordAuthentication(String email, String password) {
-        User user = getUserWithValidateCredentials(email, password);
-        return AuthenticationToken.create(
-            authenticationTokenProcessor.generateAccessToken(user.getUid()),
-            authenticationTokenProcessor.generateRefreshToken(user.getUid())
-        );
-    }
-
-    private User getUserWithValidateCredentials(String email, String password) {
+    public User emailPasswordAuthentication(String email, String password) {
         User user = userRepository.getUserByEmail(email);
         user.validatePassword(password);
         user.checkUserStatus();
         return user;
     }
 
-    public SocialAuthenticationResult socialAuthentication(String code, AccountType accountType) {
+    public SocialAuthentication socialAuthentication(String code, AccountType accountType) {
         String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.from(accountType));
         String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.from(accountType));
-        Optional<User> socialUser = userRepository.getSocialUser(accountType, socialUid);
-
-        if (socialUser.isPresent()) {
-            Long uid = socialUser.get().getUid();
-            return SocialAuthenticationResult.success(
-                AuthenticationToken.create(
-                    authenticationTokenProcessor.generateAccessToken(uid),
-                    authenticationTokenProcessor.generateRefreshToken(uid)));
-        }
-        return SocialAuthenticationResult.notRegister(socialAccessToken);
+        Optional<User> user = userRepository.getSocialUser(accountType, socialUid);
+        return user
+            .map(value -> SocialAuthentication.create(value, socialAccessToken))
+            .orElseGet(() -> SocialAuthentication.create(null, socialAccessToken));
     }
 
 }
