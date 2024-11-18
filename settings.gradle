@@ -3,4 +3,5 @@ include 'qc-api'
 include 'qc-storage'
 include 'qc-core'
 include 'qc-external-pg-api'
+include 'qc-domain'
 
