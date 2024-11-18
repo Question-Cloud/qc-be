@@ -2,8 +2,6 @@ package com.eager.questioncloud.pg.portone;
 
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -46,10 +44,4 @@ public class PortoneAPI {
             .exchangeToMono(response -> response.bodyToMono(Void.class))
             .subscribe();
     }
-}
-
-@Getter
-@AllArgsConstructor
-class PortoneCancelRequest {
-    private String reason;
 }
