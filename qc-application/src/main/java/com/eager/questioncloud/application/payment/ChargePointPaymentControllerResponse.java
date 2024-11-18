@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.payment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class QuestionPaymentControllerResponse {
+public class ChargePointPaymentControllerResponse {
 
     @Getter
     @AllArgsConstructor

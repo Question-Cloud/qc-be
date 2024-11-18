@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-public class QuestionPaymentControllerRequest {
+public class ChargePointPaymentControllerRequest {
     @Getter
     public static class ChargePointRequest {
         @NotNull

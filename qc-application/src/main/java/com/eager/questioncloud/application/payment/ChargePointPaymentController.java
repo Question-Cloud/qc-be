@@ -2,9 +2,9 @@ package com.eager.questioncloud.application.payment;
 
 import com.eager.questioncloud.application.common.DefaultResponse;
 import com.eager.questioncloud.application.common.PagingResponse;
-import com.eager.questioncloud.application.payment.QuestionPaymentControllerRequest.ChargePointOrderRequest;
-import com.eager.questioncloud.application.payment.QuestionPaymentControllerRequest.ChargePointPaymentRequest;
-import com.eager.questioncloud.application.payment.QuestionPaymentControllerResponse.CheckCompletePaymentResponse;
+import com.eager.questioncloud.application.payment.ChargePointPaymentControllerRequest.ChargePointOrderRequest;
+import com.eager.questioncloud.application.payment.ChargePointPaymentControllerRequest.ChargePointPaymentRequest;
+import com.eager.questioncloud.application.payment.ChargePointPaymentControllerResponse.CheckCompletePaymentResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.common.PagingInformation;
 import com.eager.questioncloud.domain.point.ChargePointPayment;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/payment/point")
 @RequiredArgsConstructor
-public class PointPaymentController {
+public class ChargePointPaymentController {
     private final ChargePointPaymentService chargePointPaymentService;
     private final ChargePointPaymentHistoryService chargePointPaymentHistoryService;
 
