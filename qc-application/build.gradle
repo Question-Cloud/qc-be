@@ -13,6 +13,7 @@ dependencies {
 
     implementation(project(":qc-domain"))
     implementation(project(":qc-lock-manager"))
+    implementation(project(":qc-external-pg-api"))
 }
 
 test {
