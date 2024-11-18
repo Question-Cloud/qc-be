@@ -1,4 +1,4 @@
-package com.eager.questioncloud.domain.authentication.repository;
+package com.eager.questioncloud.domain.token.repository;
 
 public interface RefreshTokenRepository {
     String getByUserId(Long uid);
