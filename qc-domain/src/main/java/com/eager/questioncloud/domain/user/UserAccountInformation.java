@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.user.vo;
+package com.eager.questioncloud.domain.user;
 
-import com.eager.questioncloud.domain.user.model.PasswordProcessor;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.Builder;

@@ -1,7 +1,6 @@
 package com.eager.questioncloud.domain.social;
 
-import com.eager.questioncloud.domain.social.SocialPlatform;
-import com.eager.questioncloud.domain.user.vo.AccountType;
+import com.eager.questioncloud.domain.user.AccountType;
 
 public abstract class SocialAPI {
     abstract String getAccessToken(String code);

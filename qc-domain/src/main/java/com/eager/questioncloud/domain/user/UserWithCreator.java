@@ -1,7 +1,6 @@
-package com.eager.questioncloud.domain.user.dto;
+package com.eager.questioncloud.domain.user;
 
 import com.eager.questioncloud.domain.creator.Creator;
-import com.eager.questioncloud.domain.user.model.User;
 
 public record UserWithCreator(User user, Creator creator) {
 }

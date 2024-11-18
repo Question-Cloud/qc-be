@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.user.model;
+package com.eager.questioncloud.domain.user;
 
-import com.eager.questioncloud.domain.user.vo.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

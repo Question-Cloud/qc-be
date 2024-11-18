@@ -1,9 +1,5 @@
-package com.eager.questioncloud.domain.user.model;
+package com.eager.questioncloud.domain.user;
 
-import com.eager.questioncloud.domain.user.vo.UserAccountInformation;
-import com.eager.questioncloud.domain.user.vo.UserInformation;
-import com.eager.questioncloud.domain.user.vo.UserStatus;
-import com.eager.questioncloud.domain.user.vo.UserType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.NotVerificationUserException;
