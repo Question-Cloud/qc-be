@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class Response {
+public class CartResponse {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class GetCartResponse {

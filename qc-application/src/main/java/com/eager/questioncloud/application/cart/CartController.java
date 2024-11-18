@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.cart;
 
-import com.eager.questioncloud.application.cart.Request.AddCartItemRequest;
-import com.eager.questioncloud.application.cart.Request.RemoveCartItemRequest;
-import com.eager.questioncloud.application.cart.Response.GetCartResponse;
+import com.eager.questioncloud.application.cart.CartRequest.AddCartItemRequest;
+import com.eager.questioncloud.application.cart.CartRequest.RemoveCartItemRequest;
+import com.eager.questioncloud.application.cart.CartResponse.GetCartResponse;
 import com.eager.questioncloud.application.common.DefaultResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.domain.cart.CartItemDetail;

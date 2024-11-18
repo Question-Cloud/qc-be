@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Response {
+public class AuthenticationResponse {
     @Getter
     @Setter
     @AllArgsConstructor

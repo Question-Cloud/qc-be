@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.cart;
 import java.util.List;
 import lombok.Getter;
 
-public class Request {
+public class CartRequest {
     @Getter
     public static class AddCartItemRequest {
         private Long questionId;

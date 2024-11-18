@@ -5,7 +5,7 @@ import com.eager.questioncloud.application.validator.PasswordValidator;
 import com.eager.questioncloud.application.validator.Validatable;
 import lombok.Getter;
 
-public class Request {
+public class AuthenticationRequest {
     @Getter
     public static class LoginRequest implements Validatable {
         private String email;
