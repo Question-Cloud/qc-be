@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.authentication;
 
+import com.eager.questioncloud.domain.token.RefreshTokenRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import io.jsonwebtoken.Claims;
@@ -15,17 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationTokenProcessor {
     private final Key secretKey;
-    private final RefreshTokenAppender refreshTokenAppender;
-    private final RefreshTokenReader refreshTokenReader;
+    private final RefreshTokenRepository refreshTokenRepository;
     public static final Long ACCESS_TOKEN_VALID_TIME = 1000 * 60L * 60L * 24L;
     public static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
 
-    public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey,
-        RefreshTokenAppender refreshTokenAppender, RefreshTokenReader refreshTokenReader) {
+    public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey, RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-        this.refreshTokenAppender = refreshTokenAppender;
-        this.refreshTokenReader = refreshTokenReader;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public Claims getClaims(String token) {
@@ -66,7 +64,7 @@ public class AuthenticationTokenProcessor {
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
 
-        refreshTokenAppender.append(refreshToken, uid);
+        refreshTokenRepository.save(refreshToken, uid);
         return refreshToken;
     }
 
@@ -98,7 +96,7 @@ public class AuthenticationTokenProcessor {
         }
 
         Long uid = claims.get("uid", Long.class);
-        String refreshTokenInStore = refreshTokenReader.getByUserId(uid);
+        String refreshTokenInStore = refreshTokenRepository.getByUserId(uid);
 
         if (!refreshToken.equals(refreshTokenInStore)) {
             throw new CustomException(Error.UNAUTHORIZED_TOKEN);
