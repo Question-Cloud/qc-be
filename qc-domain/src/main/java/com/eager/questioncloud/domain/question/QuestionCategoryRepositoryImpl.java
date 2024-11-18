@@ -1,6 +1,7 @@
 package com.eager.questioncloud.domain.question;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 import com.eager.questioncloud.domain.question.QuestionCategoryGroupBySubject.MainQuestionCategory;
 import com.eager.questioncloud.domain.question.QuestionCategoryGroupBySubject.SubQuestionCategory;
