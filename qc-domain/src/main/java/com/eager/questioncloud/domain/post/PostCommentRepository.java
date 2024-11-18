@@ -1,8 +1,6 @@
-package com.eager.questioncloud.domain.post.repository;
+package com.eager.questioncloud.domain.post;
 
 import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.post.dto.PostCommentDetail;
-import com.eager.questioncloud.domain.post.model.PostComment;
 import java.util.List;
 
 public interface PostCommentRepository {

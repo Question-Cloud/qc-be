@@ -1,4 +1,4 @@
-package com.eager.questioncloud.domain.post.dto;
+package com.eager.questioncloud.domain.post;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

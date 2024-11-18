@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.post.dto;
+package com.eager.questioncloud.domain.post;
 
-import com.eager.questioncloud.domain.post.vo.PostFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
