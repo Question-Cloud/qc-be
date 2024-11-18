@@ -1,7 +1,7 @@
 package com.eager.questioncloud.domain.subscribe.repository;
 
 import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.creator.dto.CreatorInformation;
+import com.eager.questioncloud.domain.creator.CreatorInformation;
 import com.eager.questioncloud.domain.subscribe.model.Subscribe;
 import java.util.List;
 

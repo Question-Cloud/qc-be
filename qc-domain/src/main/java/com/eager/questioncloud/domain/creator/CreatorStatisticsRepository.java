@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.creator.repository;
+package com.eager.questioncloud.domain.creator;
 
-import com.eager.questioncloud.domain.creator.model.CreatorStatistics;
 import java.util.List;
 
 public interface CreatorStatisticsRepository {
