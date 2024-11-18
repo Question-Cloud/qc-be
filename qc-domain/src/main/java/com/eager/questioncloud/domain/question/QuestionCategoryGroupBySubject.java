@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.question.dto;
+package com.eager.questioncloud.domain.question;
 
-import com.eager.questioncloud.domain.question.vo.Subject;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

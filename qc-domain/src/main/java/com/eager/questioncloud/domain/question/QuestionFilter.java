@@ -1,8 +1,6 @@
-package com.eager.questioncloud.domain.question.common;
+package com.eager.questioncloud.domain.question;
 
 import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.question.vo.QuestionLevel;
-import com.eager.questioncloud.domain.question.vo.QuestionType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

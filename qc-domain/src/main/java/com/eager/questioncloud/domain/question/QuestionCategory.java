@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.question.model;
+package com.eager.questioncloud.domain.question;
 
-import com.eager.questioncloud.domain.question.vo.Subject;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.domain.userquestion;
 
-import com.eager.questioncloud.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.domain.question.QuestionFilter;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

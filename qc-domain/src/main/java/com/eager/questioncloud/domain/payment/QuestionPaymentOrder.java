@@ -1,6 +1,6 @@
 package com.eager.questioncloud.domain.payment;
 
-import com.eager.questioncloud.domain.question.model.Question;
+import com.eager.questioncloud.domain.question.Question;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Builder;

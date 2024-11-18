@@ -1,7 +1,7 @@
 package com.eager.questioncloud.domain.payment;
 
 import com.eager.questioncloud.domain.coupon.CouponType;
-import com.eager.questioncloud.domain.question.vo.Subject;
+import com.eager.questioncloud.domain.question.Subject;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;

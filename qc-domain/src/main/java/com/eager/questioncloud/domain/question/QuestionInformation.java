@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.question.dto;
+package com.eager.questioncloud.domain.question;
 
-import com.eager.questioncloud.domain.question.vo.QuestionLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
