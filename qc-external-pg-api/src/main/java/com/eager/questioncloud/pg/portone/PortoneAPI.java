@@ -1,10 +1,9 @@
-package com.eager.questioncloud.pg.portone.implement;
+package com.eager.questioncloud.pg.portone;
 
 import com.eager.questioncloud.core.domain.pg.PGAPI;
 import com.eager.questioncloud.core.domain.pg.PGPayment;
 import com.eager.questioncloud.core.exception.CustomException;
 import com.eager.questioncloud.core.exception.Error;
-import com.eager.questioncloud.pg.portone.enums.PortonePaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -48,21 +47,6 @@ public class PortoneAPI implements PGAPI {
             .body(BodyInserters.fromValue(new PortoneCancelRequest("Invalid Payment")))
             .exchangeToMono(response -> response.bodyToMono(Void.class))
             .subscribe();
-    }
-}
-
-@Getter
-class PortonePayment {
-    private String id;
-    private PortonePaymentStatus status;
-    private PortonePaymentAmount amount;
-    private String receiptUrl;
-
-    @Getter
-    public static class PortonePaymentAmount {
-        private int total;
-        private int taxFree;
-        private int vat;
     }
 }
 

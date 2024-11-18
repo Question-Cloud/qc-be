@@ -1,4 +1,4 @@
-package com.eager.questioncloud.pg.portone.enums;
+package com.eager.questioncloud.pg.portone;
 
 import lombok.Getter;
 
