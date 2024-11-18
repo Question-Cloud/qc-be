@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.security;
 
-import com.eager.questioncloud.application.authentication.AuthenticationTokenProcessor;
+import com.eager.questioncloud.application.authentication.AuthenticationTokenManager;
 import com.eager.questioncloud.domain.user.UserRepository;
 import com.eager.questioncloud.domain.user.UserWithCreator;
 import jakarta.servlet.FilterChain;
@@ -17,13 +17,13 @@ import org.springframework.util.StringUtils;
 
 @Component
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-    private final AuthenticationTokenProcessor authenticationTokenProcessor;
+    private final AuthenticationTokenManager authenticationTokenManager;
     private final UserRepository userRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationTokenProcessor authenticationTokenProcessor,
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationTokenManager authenticationTokenManager,
         UserRepository userRepository) {
         super(authenticationManager);
-        this.authenticationTokenProcessor = authenticationTokenProcessor;
+        this.authenticationTokenManager = authenticationTokenManager;
         this.userRepository = userRepository;
     }
 
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     }
 
     private void authentication(String accessToken) {
-        Long uid = authenticationTokenProcessor.parseUidFromAccessToken(accessToken);
+        Long uid = authenticationTokenManager.parseUidFromAccessToken(accessToken);
         UserWithCreator userWithCreator = userRepository.getUserWithCreator(uid);
         UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.user(), userWithCreator.creator());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

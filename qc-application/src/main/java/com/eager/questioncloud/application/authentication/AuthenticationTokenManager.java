@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationTokenProcessor {
+public class AuthenticationTokenManager {
     private final Key secretKey;
     private final RefreshTokenRepository refreshTokenRepository;
     public static final Long ACCESS_TOKEN_VALID_TIME = 1000 * 60L * 60L * 24L;
     public static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60L * 60L * 24L * 30L;
 
-    public AuthenticationTokenProcessor(@Value("${JWT_SECRET_KEY}") String secretKey, RefreshTokenRepository refreshTokenRepository) {
+    public AuthenticationTokenManager(@Value("${JWT_SECRET_KEY}") String secretKey, RefreshTokenRepository refreshTokenRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         this.refreshTokenRepository = refreshTokenRepository;
