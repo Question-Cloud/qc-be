@@ -1,6 +1,5 @@
-package com.eager.questioncloud.domain.review.dto;
+package com.eager.questioncloud.domain.review;
 
-import com.eager.questioncloud.domain.review.model.QuestionReview;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
