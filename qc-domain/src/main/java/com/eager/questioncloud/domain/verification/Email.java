@@ -13,4 +13,12 @@ public class Email {
         this.subject = subject;
         this.content = content;
     }
+
+    public static Email of(String to, EmailVerification emailVerification) {
+        EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
+            emailVerification.getEmailVerificationType(),
+            emailVerification.getToken());
+
+        return new Email(to, template.getTitle(), template.getContent());
+    }
 }
