@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserAccountService {
+    //TODO 이메일 인증 관련 로직 및 Repository 별도 클래스로 분리
     private final UserRepository userRepository;
     private final EmailVerificationRepository emailVerificationRepository;
     private final EmailSender emailSender;
