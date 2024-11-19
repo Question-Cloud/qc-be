@@ -13,11 +13,13 @@ public class SubscribeService {
     private final SubscribeRepository subscribeRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
 
+    //TODO Event 처리
     public void subscribe(Long userId, Long creatorId) {
         Subscribe subscribe = subscribeProcessor.subscribe(userId, creatorId);
 //        applicationEventPublisher.publishEvent(SubscribedEvent.create(subscribe));
     }
 
+    //TODO Event 처리
     public void unSubscribe(Long userId, Long creatorId) {
         subscribeProcessor.unSubscribe(userId, creatorId);
 //        applicationEventPublisher.publishEvent(UnsubscribedEvent.create(creatorId));
