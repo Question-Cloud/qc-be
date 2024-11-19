@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.cart;
 
 import com.eager.questioncloud.domain.cart.CartItemDetail;
+import com.eager.questioncloud.domain.cart.CartItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,12 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CartService {
-    private final CartItemReader cartItemReader;
     private final CartItemAppender cartItemAppender;
-    private final CartItemRemover cartItemRemover;
+    private final CartItemRepository cartItemRepository;
 
     public List<CartItemDetail> getCartItems(Long userId) {
-        return cartItemReader.getCartItems(userId);
+        return cartItemRepository.findByUserId(userId);
     }
 
     public void appendCartItem(Long userId, Long questionId) {
@@ -21,6 +21,6 @@ public class CartService {
     }
 
     public void removeCartItem(List<Long> ids, Long userId) {
-        cartItemRemover.remove(ids, userId);
+        cartItemRepository.deleteByIdInAndUserId(ids, userId);
     }
 }
