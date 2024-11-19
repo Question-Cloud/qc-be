@@ -20,7 +20,7 @@ public class ChargePointPaymentService {
         chargePointPaymentCreator.createOrder(chargePointPayment);
     }
 
-    //TODO Event 처리
+    //TODO Event 처리, PG API lock 분리
     public void approvePayment(String paymentId) {
         ChargePointPayment chargePointPayment = lockManager.executeWithLock(
             LockKeyGenerator.generateChargePointPaymentKey(paymentId),
