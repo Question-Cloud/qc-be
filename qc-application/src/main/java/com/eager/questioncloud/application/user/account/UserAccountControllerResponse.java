@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.user;
+package com.eager.questioncloud.application.user.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

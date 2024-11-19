@@ -1,8 +1,8 @@
-package com.eager.questioncloud.application.user;
+package com.eager.questioncloud.application.user.account;
 
 import com.eager.questioncloud.application.common.DefaultResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.application.user.UserAccountControllerResponse.RecoverForgottenEmailResponse;
+import com.eager.questioncloud.application.user.account.UserAccountControllerResponse.RecoverForgottenEmailResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
