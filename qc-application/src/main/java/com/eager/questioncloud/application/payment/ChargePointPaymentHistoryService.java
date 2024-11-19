@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.payment;
 
 import com.eager.questioncloud.common.PagingInformation;
 import com.eager.questioncloud.domain.point.ChargePointPayment;
+import com.eager.questioncloud.domain.point.ChargePointPaymentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ChargePointPaymentHistoryService {
-    private final ChargePointPaymentReader chargePointPaymentReader;
+    private final ChargePointPaymentRepository chargePointPaymentRepository;
 
     public List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation) {
-        return chargePointPaymentReader.getChargePointPayments(userId, pagingInformation);
+        return chargePointPaymentRepository.getChargePointPayments(userId, pagingInformation);
     }
 
     public int countChargePointPayment(Long userId) {
-        return chargePointPaymentReader.countChargePointPayment(userId);
+        return chargePointPaymentRepository.countByUserId(userId);
     }
 }

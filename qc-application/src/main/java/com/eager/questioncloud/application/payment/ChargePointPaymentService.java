@@ -1,6 +1,9 @@
 package com.eager.questioncloud.application.payment;
 
 import com.eager.questioncloud.domain.point.ChargePointPayment;
+import com.eager.questioncloud.domain.point.ChargePointPaymentRepository;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +14,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChargePointPaymentService {
     private final ChargePointPaymentApprover chargePointPaymentApprover;
-    private final ChargePointPaymentReader chargePointPaymentReader;
-    private final ChargePointPaymentCreator chargePointPaymentCreator;
+    private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final LockManager lockManager;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
-        chargePointPaymentCreator.createOrder(chargePointPayment);
+        if (isAlreadyCreatedOrder(chargePointPayment.getPaymentId())) {
+            throw new CustomException(Error.ALREADY_ORDERED);
+        }
+        chargePointPaymentRepository.save(chargePointPayment);
     }
 
     //TODO Event 처리, PG API lock 분리
@@ -30,6 +35,10 @@ public class ChargePointPaymentService {
     }
 
     public Boolean isCompletePayment(Long userId, String paymentId) {
-        return chargePointPaymentReader.isCompletedPayment(userId, paymentId);
+        return chargePointPaymentRepository.isCompletedPayment(userId, paymentId);
+    }
+
+    private Boolean isAlreadyCreatedOrder(String paymentId) {
+        return chargePointPaymentRepository.existsByPaymentId(paymentId);
     }
 }
