@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SubscribeService {
+public class FeedSubscribeService {
     private final SubscribeRepository subscribeRepository;
 
     public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {

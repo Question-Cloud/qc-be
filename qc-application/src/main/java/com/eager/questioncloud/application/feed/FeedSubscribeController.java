@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/feed/subscribe")
 @RequiredArgsConstructor
 public class FeedSubscribeController {
-    private final SubscribeService subscribeService;
+    private final FeedSubscribeService feedSubscribeService;
 
     @GetMapping("/my-subscribe")
     @ApiResponses(value = {
@@ -30,8 +30,8 @@ public class FeedSubscribeController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<CreatorInformation> getMySubscribeList(
         @AuthenticationPrincipal UserPrincipal userPrincipal, PagingInformation pagingInformation) {
-        int total = subscribeService.countMySubscribe(userPrincipal.getUser().getUid());
-        List<CreatorInformation> subscribeCreators = subscribeService.getMySubscribeCreators(userPrincipal.getUser().getUid(), pagingInformation);
+        int total = feedSubscribeService.countMySubscribe(userPrincipal.getUser().getUid());
+        List<CreatorInformation> subscribeCreators = feedSubscribeService.getMySubscribeCreators(userPrincipal.getUser().getUid(), pagingInformation);
         return new PagingResponse<>(total, subscribeCreators);
     }
 }
