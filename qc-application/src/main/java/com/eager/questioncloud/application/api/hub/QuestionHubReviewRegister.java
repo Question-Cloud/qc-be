@@ -21,7 +21,7 @@ public class QuestionHubReviewRegister {
             throw new CustomException(Error.UNAVAILABLE_QUESTION);
         }
 
-        if (isOwnedQuestion(questionReview.getReviewerId(), questionReview.getQuestionId())) {
+        if (isNotOwnedQuestion(questionReview.getReviewerId(), questionReview.getQuestionId())) {
             throw new CustomException(Error.NOT_OWNED_QUESTION);
         }
 
@@ -36,8 +36,8 @@ public class QuestionHubReviewRegister {
         return !questionRepository.isAvailable(questionId);
     }
 
-    private Boolean isOwnedQuestion(Long userId, Long questionId) {
-        return userQuestionRepository.isOwned(userId, questionId);
+    private Boolean isNotOwnedQuestion(Long userId, Long questionId) {
+        return !userQuestionRepository.isOwned(userId, questionId);
     }
 
     private Boolean isAlreadyWrittenReview(Long userId, Long questionId) {
