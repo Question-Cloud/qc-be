@@ -5,7 +5,7 @@ import com.eager.questioncloud.domain.user.User;
 import com.eager.questioncloud.domain.user.UserRepository;
 import com.eager.questioncloud.domain.verification.Email;
 import com.eager.questioncloud.domain.verification.EmailVerification;
-import com.eager.questioncloud.domain.verification.EmailVerificationRepository;
+import com.eager.questioncloud.domain.verification.EmailVerificationProcessor;
 import com.eager.questioncloud.domain.verification.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserAccountService {
-    //TODO 이메일 인증 관련 로직 및 Repository 별도 클래스로 분리
     private final UserRepository userRepository;
-    private final EmailVerificationRepository emailVerificationRepository;
+    private final EmailVerificationProcessor emailVerificationProcessor;
     private final EmailSender emailSender;
 
     public String recoverForgottenEmail(String phone) {
@@ -26,25 +25,18 @@ public class UserAccountService {
 
     public void sendRecoverForgottenPasswordMail(String email) {
         User user = userRepository.getUserByEmail(email);
-        EmailVerification emailVerification = EmailVerification.create(user.getUid(), EmailVerificationType.ChangePassword);
-        emailVerificationRepository.save(emailVerification);
-
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.ChangePassword);
         emailSender.sendMail(Email.of(email, emailVerification));
     }
 
     public void sendChangePasswordMail(User user) {
-        EmailVerification emailVerification = EmailVerification.create(user.getUid(), EmailVerificationType.ChangePassword);
-        emailVerificationRepository.save(emailVerification);
-
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.ChangePassword);
         emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
     }
 
     @Transactional
     public void changePassword(String token, String newPassword) {
-        EmailVerification emailVerification = emailVerificationRepository.get(token, EmailVerificationType.ChangePassword);
-        emailVerification.verify();
-        emailVerificationRepository.save(emailVerification);
-
+        EmailVerification emailVerification = emailVerificationProcessor.verifyEmailVerification(token, EmailVerificationType.ChangePassword);
         User user = userRepository.getUser(emailVerification.getUid());
         user.changePassword(newPassword);
         userRepository.save(user);
