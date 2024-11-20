@@ -1,10 +1,15 @@
 package com.eager.questioncloud.domain.creator;
 
+import com.eager.questioncloud.domain.payment.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.domain.question.Question;
 import com.eager.questioncloud.domain.question.QuestionRepository;
 import com.eager.questioncloud.domain.review.DeletedReviewEvent;
 import com.eager.questioncloud.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.domain.review.RegisteredReviewEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -37,5 +42,21 @@ public class CreatorStatisticsUpdater {
         CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
         creatorStatistics.updateReviewStatisticsByDeletedReview(event.getRate());
         creatorStatisticsRepository.save(creatorStatistics);
+    }
+
+    //TODO 문제 결제는 실패인데 이 이벤트만 성공하면 어떻게 처리해야할지 고민해보기
+    @EventListener
+    public void updateSalesCount(CompletedQuestionPaymentEvent event) {
+        List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionIds());
+        Map<Long, Long> countQuestionByCreator = questions.stream().collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
+        List<CreatorStatistics> updateStatistics = new ArrayList<>();
+
+        countQuestionByCreator.forEach((creatorId, count) -> {
+            CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creatorId);
+            creatorStatistics.addSaleCount(count.intValue());
+            updateStatistics.add(creatorStatistics);
+        });
+
+        creatorStatisticsRepository.saveAll(updateStatistics);
     }
 }
