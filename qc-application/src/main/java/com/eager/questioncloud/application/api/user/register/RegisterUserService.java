@@ -38,14 +38,13 @@ public class RegisterUserService {
             user.getUid(),
             user.getUserInformation().getEmail(),
             EmailVerificationType.CreateUser);
-        emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
+        emailSender.sendMail(Email.of(emailVerification));
         return emailVerification;
     }
 
     public void resend(String resendToken) {
         EmailVerification emailVerification = emailVerificationProcessor.getByResendToken(resendToken);
-        User user = userRepository.getUser(emailVerification.getUid());
-        emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
+        emailSender.sendMail(Email.of(emailVerification));
     }
 
     public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {

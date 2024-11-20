@@ -14,11 +14,11 @@ public class Email {
         this.content = content;
     }
 
-    public static Email of(String to, EmailVerification emailVerification) {
+    public static Email of(EmailVerification emailVerification) {
         EmailVerificationTemplate template = EmailVerificationTemplateCreator.getTemplate(
             emailVerification.getEmailVerificationType(),
             emailVerification.getToken());
 
-        return new Email(to, template.getTitle(), template.getContent());
+        return new Email(emailVerification.getEmail(), template.getTitle(), template.getContent());
     }
 }

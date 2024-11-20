@@ -30,7 +30,6 @@ public class RegisterUserController {
     @Operation(operationId = "회원가입", summary = "회원가입", tags = {"user-register"}, description = "회원가입")
     public CreateUserResponse createUser(@RequestBody @Valid CreateUserRequest request) {
         User user = registerUserService.create(request.toCreateUser());
-        //TODO 이메일 전송 로직 처리하기
         EmailVerification emailVerification = registerUserService.sendCreateUserVerifyMail(user);
         return new CreateUserResponse(emailVerification.getResendToken());
     }

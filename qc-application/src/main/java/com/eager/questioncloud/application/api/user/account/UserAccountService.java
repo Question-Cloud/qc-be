@@ -29,7 +29,7 @@ public class UserAccountService {
             user.getUid(),
             email,
             EmailVerificationType.ChangePassword);
-        emailSender.sendMail(Email.of(email, emailVerification));
+        emailSender.sendMail(Email.of(emailVerification));
     }
 
     public void sendChangePasswordMail(User user) {
@@ -37,7 +37,7 @@ public class UserAccountService {
             user.getUid(),
             user.getUserInformation().getEmail(),
             EmailVerificationType.ChangePassword);
-        emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
+        emailSender.sendMail(Email.of(emailVerification));
     }
 
     @Transactional
