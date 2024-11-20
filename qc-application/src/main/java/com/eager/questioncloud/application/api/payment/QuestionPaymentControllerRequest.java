@@ -13,6 +13,12 @@ public class QuestionPaymentControllerRequest {
         private List<Long> questionIds = new ArrayList<>();
         private Long userCouponId;
 
+        public QuestionPaymentRequest(List<Long> questionIds, Long userCouponId) {
+            this.questionIds = questionIds;
+            this.userCouponId = userCouponId;
+            validate();
+        }
+
         @Override
         public void validate() {
             if (questionIds == null || questionIds.isEmpty()) {

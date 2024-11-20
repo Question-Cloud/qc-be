@@ -30,6 +30,17 @@ public class RegisterUserControllerRequest {
         @Size(min = 2)
         private String name;
 
+        public CreateUserRequest(String email, String password, String socialRegisterToken, AccountType accountType, String phone, String name) {
+            this.email = email;
+            this.password = password;
+            this.socialRegisterToken = socialRegisterToken;
+            this.accountType = accountType;
+            this.phone = phone;
+            this.name = name;
+            validate();
+        }
+
+        @Override
         public void validate() {
             if (accountType.equals(AccountType.EMAIL)) {
                 EmailValidator.validate(email);

@@ -12,6 +12,12 @@ public class UserAccountControllerRequest {
         private String token;
         private String newPassword;
 
+        public ChangePasswordRequest(String token, String newPassword) {
+            this.token = token;
+            this.newPassword = newPassword;
+            validate();
+        }
+
         public void validate() {
             PasswordValidator.validate(newPassword);
         }

@@ -11,6 +11,13 @@ public class AuthenticationRequest {
         private String email;
         private String password;
 
+        public LoginRequest(String email, String password) {
+            this.email = email;
+            this.password = password;
+            validate();
+        }
+
+        @Override
         public void validate() {
             EmailValidator.validate(email);
             PasswordValidator.validate(password);
