@@ -1,13 +1,13 @@
 package com.eager.questioncloud.lock;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
-
-//TODO Exception throw 리팩토링
 
 @Component
 @RequiredArgsConstructor
@@ -23,14 +23,19 @@ public class LockManager {
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
             if (!lock.isLocked()) {
-                throw new RuntimeException();
+                throw new CustomException(Error.INTERNAL_SERVER_ERROR);
             }
             task.run();
         } catch (InterruptedException e) {
             if (lock.isLocked()) {
                 lock.unlock();
             }
-            throw new RuntimeException();
+            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+        } catch (CustomException e) {
+            if (lock.isLocked()) {
+                lock.unlock();
+            }
+            throw e;
         } finally {
             if (lock.isLocked()) {
                 lock.unlock();
@@ -44,14 +49,19 @@ public class LockManager {
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
             if (!lock.isLocked()) {
-                throw new RuntimeException();
+                throw new CustomException(Error.INTERNAL_SERVER_ERROR);
             }
             return task.call();
+        } catch (CustomException e) {
+            if (lock.isLocked()) {
+                lock.unlock();
+            }
+            throw e;
         } catch (Exception e) {
             if (lock.isLocked()) {
                 lock.unlock();
             }
-            throw new RuntimeException();
+            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
         } finally {
             if (lock.isLocked()) {
                 lock.unlock();

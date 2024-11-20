@@ -1,6 +1,7 @@
 dependencies {
     implementation("org.redisson:redisson:3.36.0")
     implementation "org.springframework:spring-context"
+    implementation(project(":qc-exception"))
 }
 
 bootJar.enabled = false
