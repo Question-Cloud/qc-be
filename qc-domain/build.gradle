@@ -1,0 +1,34 @@
+dependencies {
+    implementation "org.springframework:spring-context"
+    implementation("org.springframework.security:spring-security-crypto:6.3.4")
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    compileOnly("org.springframework:spring-tx")
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+    implementation(project(":qc-exception"))
+}
+
+def querydslDir = "src/main/generated"
+
+sourceSets {
+    main.java.srcDirs += [querydslDir]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
+bootJar.enabled = false
+jar.enabled = true

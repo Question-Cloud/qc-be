@@ -1,0 +1,24 @@
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+    compileOnly("org.springframework:spring-tx")
+
+    implementation('io.jsonwebtoken:jjwt-api:0.11.1')
+    runtimeOnly('io.jsonwebtoken:jjwt-impl:0.11.1', 'io.jsonwebtoken:jjwt-jackson:0.11.1')
+
+    implementation(project(":qc-domain"))
+    implementation(project(":qc-lock-manager"))
+    implementation(project(":qc-external-pg-api"))
+    implementation(project(":qc-exception"))
+}
+
+test {
+    useJUnitPlatform()
+}
+
