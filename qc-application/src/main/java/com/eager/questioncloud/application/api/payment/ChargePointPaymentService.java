@@ -25,8 +25,7 @@ public class ChargePointPaymentService {
         }
         chargePointPaymentRepository.save(chargePointPayment);
     }
-
-    //TODO PG API lock 분리
+    
     public void approvePayment(String paymentId) {
         ChargePointPayment chargePointPayment = lockManager.executeWithLock(
             LockKeyGenerator.generateChargePointPaymentKey(paymentId),
