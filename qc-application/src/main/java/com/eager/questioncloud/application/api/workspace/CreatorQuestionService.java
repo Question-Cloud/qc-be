@@ -5,6 +5,7 @@ import com.eager.questioncloud.domain.question.Question;
 import com.eager.questioncloud.domain.question.QuestionContent;
 import com.eager.questioncloud.domain.question.QuestionInformation;
 import com.eager.questioncloud.domain.question.QuestionRepository;
+import com.eager.questioncloud.domain.question.RegisteredQuestionEvent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,10 +30,9 @@ public class CreatorQuestionService {
         return question.getQuestionContent();
     }
 
-    //TODO Event 처리
     public void registerQuestion(Long creatorId, QuestionContent questionContent) {
         Question question = questionRepository.save(Question.create(creatorId, questionContent));
-//        applicationEventPublisher.publishEvent(RegisteredQuestionEvent.create(question));
+        applicationEventPublisher.publishEvent(RegisteredQuestionEvent.create(question));
     }
 
     public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
