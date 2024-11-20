@@ -25,12 +25,18 @@ public class UserAccountService {
 
     public void sendRecoverForgottenPasswordMail(String email) {
         User user = userRepository.getUserByEmail(email);
-        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.ChangePassword);
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(
+            user.getUid(),
+            email,
+            EmailVerificationType.ChangePassword);
         emailSender.sendMail(Email.of(email, emailVerification));
     }
 
     public void sendChangePasswordMail(User user) {
-        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.ChangePassword);
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(
+            user.getUid(),
+            user.getUserInformation().getEmail(),
+            EmailVerificationType.ChangePassword);
         emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
     }
 

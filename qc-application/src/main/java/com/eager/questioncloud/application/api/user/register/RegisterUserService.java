@@ -34,7 +34,10 @@ public class RegisterUserService {
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
-        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.CreateUser);
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(
+            user.getUid(),
+            user.getUserInformation().getEmail(),
+            EmailVerificationType.CreateUser);
         emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
         return emailVerification;
     }

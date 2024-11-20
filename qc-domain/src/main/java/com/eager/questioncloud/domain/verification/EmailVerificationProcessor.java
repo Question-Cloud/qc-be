@@ -12,8 +12,8 @@ public class EmailVerificationProcessor {
         return emailVerificationRepository.getForResend(resendToken);
     }
 
-    public EmailVerification createEmailVerification(Long userId, EmailVerificationType emailVerificationType) {
-        return emailVerificationRepository.save(EmailVerification.create(userId, emailVerificationType));
+    public EmailVerification createEmailVerification(Long userId, String email, EmailVerificationType emailVerificationType) {
+        return emailVerificationRepository.save(EmailVerification.create(userId, email, emailVerificationType));
     }
 
     public EmailVerification verifyEmailVerification(String token, EmailVerificationType emailVerificationType) {

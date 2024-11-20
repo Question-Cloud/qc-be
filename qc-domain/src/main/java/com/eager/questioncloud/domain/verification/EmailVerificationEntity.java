@@ -26,6 +26,9 @@ public class EmailVerificationEntity {
     private Long uid;
 
     @Column
+    private String email;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private EmailVerificationType emailVerificationType;
 
@@ -33,10 +36,12 @@ public class EmailVerificationEntity {
     private Boolean isVerified;
 
     @Builder
-    public EmailVerificationEntity(String token, String resendToken, Long uid, EmailVerificationType emailVerificationType, Boolean isVerified) {
+    public EmailVerificationEntity(String token, String resendToken, Long uid, String email, EmailVerificationType emailVerificationType,
+        Boolean isVerified) {
         this.token = token;
         this.resendToken = resendToken;
         this.uid = uid;
+        this.email = email;
         this.emailVerificationType = emailVerificationType;
         this.isVerified = isVerified;
     }
@@ -46,6 +51,7 @@ public class EmailVerificationEntity {
             .token(token)
             .resendToken(resendToken)
             .uid(uid)
+            .email(email)
             .emailVerificationType(emailVerificationType)
             .isVerified(isVerified)
             .build();
@@ -56,6 +62,7 @@ public class EmailVerificationEntity {
             .token(emailVerification.getToken())
             .resendToken(emailVerification.getResendToken())
             .uid(emailVerification.getUid())
+            .email(emailVerification.getEmail())
             .emailVerificationType(emailVerification.getEmailVerificationType())
             .isVerified(emailVerification.getIsVerified())
             .build();
