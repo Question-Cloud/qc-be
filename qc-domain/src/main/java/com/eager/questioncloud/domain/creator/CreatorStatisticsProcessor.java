@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CreatorStatisticsUpdater {
+public class CreatorStatisticsProcessor {
     private final CreatorStatisticsRepository creatorStatisticsRepository;
     private final QuestionRepository questionRepository;
 
