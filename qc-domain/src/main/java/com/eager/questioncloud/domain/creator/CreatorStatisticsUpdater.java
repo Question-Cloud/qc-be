@@ -6,6 +6,8 @@ import com.eager.questioncloud.domain.question.QuestionRepository;
 import com.eager.questioncloud.domain.review.DeletedReviewEvent;
 import com.eager.questioncloud.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.domain.review.RegisteredReviewEvent;
+import com.eager.questioncloud.domain.subscribe.SubscribedEvent;
+import com.eager.questioncloud.domain.subscribe.UnsubscribedEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,5 +60,19 @@ public class CreatorStatisticsUpdater {
         });
 
         creatorStatisticsRepository.saveAll(updateStatistics);
+    }
+
+    @EventListener
+    public void increaseSubscribeCount(SubscribedEvent event) {
+        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(event.getSubscribe().getCreatorId());
+        creatorStatistics.increaseSubscribeCount();
+        creatorStatisticsRepository.save(creatorStatistics);
+    }
+
+    @EventListener
+    public void decreaseSubscribeCount(UnsubscribedEvent event) {
+        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(event.getCreatorId());
+        creatorStatistics.decreaseSubscribeCount();
+        creatorStatisticsRepository.save(creatorStatistics);
     }
 }
