@@ -15,7 +15,7 @@ public class NotVerificationUserExceptionHandler {
 
     @ExceptionHandler(NotVerificationUserException.class)
     protected ResponseEntity<NotVerificationUserResponse> handleCustomException(NotVerificationUserException e) {
-        EmailVerification emailVerification = emailVerificationRepository.getCreateUserVerification(e.getUser().getUid());
+        EmailVerification emailVerification = emailVerificationRepository.getCreateUserVerification(e.getUserId());
         return NotVerificationUserResponse.toResponse(emailVerification.getResendToken());
     }
 }

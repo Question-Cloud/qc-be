@@ -60,7 +60,7 @@ public class ChargePointPayment {
 
     private void validateAmount(PGPayment pgPayment) {
         if (chargePointType.getAmount() != pgPayment.getAmount()) {
-            throw new InvalidPaymentException(pgPayment);
+            throw new InvalidPaymentException();
         }
     }
 

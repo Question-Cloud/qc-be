@@ -47,7 +47,7 @@ public class User {
 
     public void checkUserStatus() {
         if (userStatus.equals(UserStatus.PendingEmailVerification)) {
-            throw new NotVerificationUserException(this);
+            throw new NotVerificationUserException(uid);
         }
         if (!userStatus.equals(UserStatus.Active)) {
             throw new CustomException(Error.NOT_ACTIVE_USER);

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @RequiredArgsConstructor
 public class InvalidPaymentExceptionHandler {
     @ExceptionHandler(InvalidPaymentException.class)
-    protected ResponseEntity<InvalidPaymentExceptionResponse> handleInvalidPaymentException(InvalidPaymentException e) {
+    protected ResponseEntity<InvalidPaymentExceptionResponse> handleInvalidPaymentException() {
         return InvalidPaymentExceptionResponse.toResponse();
     }
 }
