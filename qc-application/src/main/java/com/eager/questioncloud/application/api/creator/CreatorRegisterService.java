@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 public class CreatorRegisterService {
     private final CreatorRegister creatorRegister;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    //TODO Event 처리 (Handler)
+    
     public Creator register(User user, CreatorProfile creatorProfile) {
         Creator creator = creatorRegister.register(user, creatorProfile);
         applicationEventPublisher.publishEvent(RegisteredCreatorEvent.create(creator));

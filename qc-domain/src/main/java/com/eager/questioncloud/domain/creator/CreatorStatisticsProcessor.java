@@ -23,6 +23,11 @@ public class CreatorStatisticsProcessor {
     private final QuestionRepository questionRepository;
 
     @EventListener
+    public void appendCreatorStatistics(RegisteredCreatorEvent event) {
+        creatorStatisticsRepository.save(CreatorStatistics.create(event.getCreator().getId()));
+    }
+
+    @EventListener
     public void updateCreatorReviewStatistics(RegisteredReviewEvent event) {
         Question question = questionRepository.get(event.getQuestionId());
         CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
