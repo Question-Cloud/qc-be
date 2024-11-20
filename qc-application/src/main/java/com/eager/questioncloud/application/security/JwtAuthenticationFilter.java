@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.security;
 
-import com.eager.questioncloud.application.authentication.AuthenticationTokenManager;
+import com.eager.questioncloud.application.api.authentication.AuthenticationTokenManager;
 import com.eager.questioncloud.domain.user.UserRepository;
 import com.eager.questioncloud.domain.user.UserWithCreator;
 import jakarta.servlet.FilterChain;
