@@ -9,4 +9,6 @@ public interface QuestionPaymentRepository {
     List<QuestionPaymentHistory> getQuestionPaymentHistory(Long userId, PagingInformation pagingInformation);
 
     int countQuestionPaymentHistory(Long userId);
+
+    QuestionPayment findByPaymentId(String paymentId);
 }

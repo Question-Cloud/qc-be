@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment;
 
+import com.eager.questioncloud.domain.payment.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.domain.payment.QuestionPayment;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
@@ -15,15 +16,14 @@ public class QuestionPaymentService {
     private final QuestionPaymentGenerator questionPaymentGenerator;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final LockManager lockManager;
-
-    //TODO Event 처리
+    
     public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
         lockManager.executeWithLock(
             LockKeyGenerator.generateQuestionPaymentKey(userId),
             () -> {
                 QuestionPayment questionPayment = questionPaymentGenerator.generateQuestionPayment(userId, questionIds, userCouponId);
                 questionPaymentProcessor.processQuestionPayment(questionPayment);
-//                applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(questionPayment, questionIds));
+                applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(questionPayment, questionIds));
             }
         );
     }

@@ -10,6 +10,8 @@ import static com.eager.questioncloud.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.common.PagingInformation;
 import com.eager.questioncloud.domain.question.QQuestionCategoryEntity;
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -85,5 +87,12 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
             .where(questionPaymentEntity.userId.eq(userId))
             .fetchFirst()
             .intValue();
+    }
+
+    @Override
+    public QuestionPayment findByPaymentId(String paymentId) {
+        return questionPaymentJpaRepository.findByPaymentId(paymentId)
+            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .toModel();
     }
 }
