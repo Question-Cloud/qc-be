@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 public class EmailVerificationProcessor {
     private final EmailVerificationRepository emailVerificationRepository;
 
+    public EmailVerification getByResendToken(String resendToken) {
+        return emailVerificationRepository.getForResend(resendToken);
+    }
+
     public EmailVerification createEmailVerification(Long userId, EmailVerificationType emailVerificationType) {
         return emailVerificationRepository.save(EmailVerification.create(userId, emailVerificationType));
     }

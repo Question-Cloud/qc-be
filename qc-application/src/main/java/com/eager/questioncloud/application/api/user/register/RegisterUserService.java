@@ -13,7 +13,7 @@ import com.eager.questioncloud.domain.user.UserStatus;
 import com.eager.questioncloud.domain.user.UserType;
 import com.eager.questioncloud.domain.verification.Email;
 import com.eager.questioncloud.domain.verification.EmailVerification;
-import com.eager.questioncloud.domain.verification.EmailVerificationRepository;
+import com.eager.questioncloud.domain.verification.EmailVerificationProcessor;
 import com.eager.questioncloud.domain.verification.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RegisterUserService {
-    //TODO 이메일 인증 관련 로직 및 Repository 별도 클래스로 분리
     private final UserRepository userRepository;
-    private final EmailVerificationRepository emailVerificationRepository;
+    private final EmailVerificationProcessor emailVerificationProcessor;
     private final SocialAPIManager socialAPIManager;
     private final EmailSender emailSender;
 
@@ -35,24 +34,19 @@ public class RegisterUserService {
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
-        EmailVerification emailVerification = emailVerificationRepository.save(
-            EmailVerification.create(user.getUid(), EmailVerificationType.CreateUser)
-        );
+        EmailVerification emailVerification = emailVerificationProcessor.createEmailVerification(user.getUid(), EmailVerificationType.CreateUser);
         emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
         return emailVerification;
     }
 
     public void resend(String resendToken) {
-        EmailVerification emailVerification = emailVerificationRepository.getForResend(resendToken);
+        EmailVerification emailVerification = emailVerificationProcessor.getByResendToken(resendToken);
         User user = userRepository.getUser(emailVerification.getUid());
         emailSender.sendMail(Email.of(user.getUserInformation().getEmail(), emailVerification));
     }
 
     public void verifyCreateUser(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationRepository.get(token, emailVerificationType);
-        emailVerification.verify();
-        emailVerificationRepository.save(emailVerification);
-
+        EmailVerification emailVerification = emailVerificationProcessor.verifyEmailVerification(token, emailVerificationType);
         User user = userRepository.getUser(emailVerification.getUid());
         user.active();
         userRepository.save(user);
