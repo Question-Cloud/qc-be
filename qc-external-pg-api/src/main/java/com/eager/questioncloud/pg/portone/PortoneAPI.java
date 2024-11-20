@@ -1,5 +1,7 @@
 package com.eager.questioncloud.pg.portone;
 
+import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,7 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 @RequiredArgsConstructor
-//TODO Exception 처리
 public class PortoneAPI {
     @Value("${PORT_ONE_SECRET_KEY}")
     private String PORT_ONE_SECRET_KEY;
@@ -23,12 +24,12 @@ public class PortoneAPI {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(PortonePayment.class);
                 }
-                throw new RuntimeException();
+                throw new CustomException(Error.PAYMENT_ERROR);
             })
             .block();
 
         if (portonePayment == null || portonePayment.getId() == null) {
-            throw new RuntimeException();
+            throw new CustomException(Error.PAYMENT_ERROR);
         }
 
         return portonePayment;
