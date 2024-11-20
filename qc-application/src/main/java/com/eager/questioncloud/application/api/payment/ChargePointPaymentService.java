@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment;
 
+import com.eager.questioncloud.domain.point.ChargePointEvent;
 import com.eager.questioncloud.domain.point.ChargePointPayment;
 import com.eager.questioncloud.domain.point.ChargePointPaymentRepository;
 import com.eager.questioncloud.exception.CustomException;
@@ -25,13 +26,13 @@ public class ChargePointPaymentService {
         chargePointPaymentRepository.save(chargePointPayment);
     }
 
-    //TODO Event 처리, PG API lock 분리
+    //TODO PG API lock 분리
     public void approvePayment(String paymentId) {
         ChargePointPayment chargePointPayment = lockManager.executeWithLock(
             LockKeyGenerator.generateChargePointPaymentKey(paymentId),
             () -> chargePointPaymentApprover.approve(paymentId)
         );
-//        applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
+        applicationEventPublisher.publishEvent(ChargePointEvent.from(chargePointPayment));
     }
 
     public Boolean isCompletePayment(Long userId, String paymentId) {
