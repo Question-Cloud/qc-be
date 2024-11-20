@@ -1,10 +1,13 @@
 package com.eager.questioncloud.application.api.hub;
 
 import com.eager.questioncloud.common.PagingInformation;
+import com.eager.questioncloud.domain.review.DeletedReviewEvent;
+import com.eager.questioncloud.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.domain.review.MyQuestionReview;
 import com.eager.questioncloud.domain.review.QuestionReview;
 import com.eager.questioncloud.domain.review.QuestionReviewDetail;
 import com.eager.questioncloud.domain.review.QuestionReviewRepository;
+import com.eager.questioncloud.domain.review.RegisteredReviewEvent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,26 +33,23 @@ public class QuestionHubReviewService {
         return MyQuestionReview.from(questionReview);
     }
 
-    //TODO Event 처리
     public void register(QuestionReview questionReview) {
         questionHubReviewRegister.register(questionReview);
-//        applicationEventPublisher.publishEvent(RegisteredReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
+        applicationEventPublisher.publishEvent(RegisteredReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
     }
 
-    //TODO Event 처리
     public void modify(Long reviewId, Long userId, String comment, int rate) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         int varianceRate = rate - questionReview.getRate();
         questionReview.modify(comment, rate);
         questionReviewRepository.save(questionReview);
-//        applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
+        applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
-
-    //TODO Event 처리
+    
     public void delete(Long reviewId, Long userId) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         questionReview.delete();
         questionReviewRepository.save(questionReview);
-//        applicationEventPublisher.publishEvent(DeletedReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
+        applicationEventPublisher.publishEvent(DeletedReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
     }
 }
