@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.user.point;
 
-import com.eager.questioncloud.domain.point.UserPoint;
-import com.eager.questioncloud.domain.point.UserPointRepository;
+import com.eager.questioncloud.core.domain.point.UserPoint;
+import com.eager.questioncloud.core.domain.point.UserPointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

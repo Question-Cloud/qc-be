@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.payment.QuestionPayment;
-import com.eager.questioncloud.domain.question.Question;
-import com.eager.questioncloud.domain.question.QuestionRepository;
-import com.eager.questioncloud.domain.userquestion.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.question.Question;
+import com.eager.questioncloud.core.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.util.List;

@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.post;
 
-import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.post.Post;
-import com.eager.questioncloud.domain.post.PostContent;
-import com.eager.questioncloud.domain.post.PostDetail;
-import com.eager.questioncloud.domain.post.PostListItem;
-import com.eager.questioncloud.domain.post.PostRepository;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.post.Post;
+import com.eager.questioncloud.core.domain.post.PostContent;
+import com.eager.questioncloud.core.domain.post.PostDetail;
+import com.eager.questioncloud.core.domain.post.PostListItem;
+import com.eager.questioncloud.core.domain.post.PostRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.util.List;

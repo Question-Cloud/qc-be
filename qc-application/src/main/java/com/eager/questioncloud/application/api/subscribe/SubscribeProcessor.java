@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.subscribe;
 
-import com.eager.questioncloud.domain.creator.CreatorRepository;
-import com.eager.questioncloud.domain.subscribe.Subscribe;
-import com.eager.questioncloud.domain.subscribe.SubscribeRepository;
+import com.eager.questioncloud.core.domain.creator.CreatorRepository;
+import com.eager.questioncloud.core.domain.subscribe.Subscribe;
+import com.eager.questioncloud.core.domain.subscribe.SubscribeRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

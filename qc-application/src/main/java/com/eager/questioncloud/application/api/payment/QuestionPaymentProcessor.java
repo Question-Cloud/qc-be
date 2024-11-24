@@ -1,14 +1,14 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.coupon.Coupon;
-import com.eager.questioncloud.domain.coupon.CouponRepository;
-import com.eager.questioncloud.domain.coupon.UserCoupon;
-import com.eager.questioncloud.domain.coupon.UserCouponRepository;
-import com.eager.questioncloud.domain.payment.QuestionPayment;
-import com.eager.questioncloud.domain.payment.QuestionPaymentOrderRepository;
-import com.eager.questioncloud.domain.payment.QuestionPaymentRepository;
-import com.eager.questioncloud.domain.point.UserPoint;
-import com.eager.questioncloud.domain.point.UserPointRepository;
+import com.eager.questioncloud.core.domain.coupon.Coupon;
+import com.eager.questioncloud.core.domain.coupon.CouponRepository;
+import com.eager.questioncloud.core.domain.coupon.UserCoupon;
+import com.eager.questioncloud.core.domain.coupon.UserCouponRepository;
+import com.eager.questioncloud.core.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.QuestionPaymentOrderRepository;
+import com.eager.questioncloud.core.domain.payment.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.point.UserPoint;
+import com.eager.questioncloud.core.domain.point.UserPointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

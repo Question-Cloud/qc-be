@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.hub;
 
-import com.eager.questioncloud.domain.question.QuestionCategoryGroupBySubject;
-import com.eager.questioncloud.domain.question.QuestionCategoryGroupBySubject.MainQuestionCategory;
-import com.eager.questioncloud.domain.question.QuestionCategoryRepository;
-import com.eager.questioncloud.domain.question.QuestionFilter;
-import com.eager.questioncloud.domain.question.QuestionInformation;
-import com.eager.questioncloud.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.QuestionCategoryGroupBySubject;
+import com.eager.questioncloud.core.domain.question.QuestionCategoryGroupBySubject.MainQuestionCategory;
+import com.eager.questioncloud.core.domain.question.QuestionCategoryRepository;
+import com.eager.questioncloud.core.domain.question.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.QuestionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

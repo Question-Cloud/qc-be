@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.creator;
 
-import com.eager.questioncloud.domain.creator.Creator;
-import com.eager.questioncloud.domain.creator.CreatorProfile;
-import com.eager.questioncloud.domain.user.User;
+import com.eager.questioncloud.core.domain.creator.Creator;
+import com.eager.questioncloud.core.domain.creator.CreatorProfile;
+import com.eager.questioncloud.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

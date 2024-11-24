@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.cart;
 
-import com.eager.questioncloud.domain.cart.CartItem;
-import com.eager.questioncloud.domain.cart.CartItemRepository;
-import com.eager.questioncloud.domain.question.QuestionRepository;
-import com.eager.questioncloud.domain.userquestion.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.cart.CartItem;
+import com.eager.questioncloud.core.domain.cart.CartItemRepository;
+import com.eager.questioncloud.core.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

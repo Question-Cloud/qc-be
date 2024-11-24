@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.resolver;
 
-import com.eager.questioncloud.common.PagingInformation;
+import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

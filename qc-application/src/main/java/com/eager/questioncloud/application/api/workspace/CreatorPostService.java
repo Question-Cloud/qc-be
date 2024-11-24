@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.workspace;
 
-import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.post.PostListItem;
-import com.eager.questioncloud.domain.post.PostRepository;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.post.PostListItem;
+import com.eager.questioncloud.core.domain.post.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

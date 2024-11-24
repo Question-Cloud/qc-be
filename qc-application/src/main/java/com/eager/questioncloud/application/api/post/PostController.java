@@ -6,11 +6,11 @@ import com.eager.questioncloud.application.api.post.PostControllerRequest.Modify
 import com.eager.questioncloud.application.api.post.PostControllerRequest.RegisterPostRequest;
 import com.eager.questioncloud.application.api.post.PostControllerResponse.PostResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.post.Post;
-import com.eager.questioncloud.domain.post.PostContent;
-import com.eager.questioncloud.domain.post.PostDetail;
-import com.eager.questioncloud.domain.post.PostListItem;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.post.Post;
+import com.eager.questioncloud.core.domain.post.PostContent;
+import com.eager.questioncloud.core.domain.post.PostDetail;
+import com.eager.questioncloud.core.domain.post.PostListItem;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

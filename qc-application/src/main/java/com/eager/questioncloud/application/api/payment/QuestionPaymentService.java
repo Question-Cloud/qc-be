@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.payment.CompletedQuestionPaymentEvent;
-import com.eager.questioncloud.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.CompletedQuestionPaymentEvent;
+import com.eager.questioncloud.core.domain.payment.QuestionPayment;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import java.util.List;

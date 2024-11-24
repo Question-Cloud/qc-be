@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.workspace;
 
-import com.eager.questioncloud.domain.question.QuestionContent;
-import com.eager.questioncloud.domain.question.QuestionLevel;
-import com.eager.questioncloud.domain.question.QuestionType;
-import com.eager.questioncloud.domain.question.Subject;
+import com.eager.questioncloud.core.domain.question.QuestionContent;
+import com.eager.questioncloud.core.domain.question.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.QuestionType;
+import com.eager.questioncloud.core.domain.question.Subject;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

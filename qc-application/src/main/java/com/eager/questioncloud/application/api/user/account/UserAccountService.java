@@ -1,12 +1,12 @@
 package com.eager.questioncloud.application.api.user.account;
 
 import com.eager.questioncloud.application.mail.EmailSender;
-import com.eager.questioncloud.domain.user.User;
-import com.eager.questioncloud.domain.user.UserRepository;
-import com.eager.questioncloud.domain.verification.Email;
-import com.eager.questioncloud.domain.verification.EmailVerification;
-import com.eager.questioncloud.domain.verification.EmailVerificationProcessor;
-import com.eager.questioncloud.domain.verification.EmailVerificationType;
+import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.UserRepository;
+import com.eager.questioncloud.core.domain.verification.Email;
+import com.eager.questioncloud.core.domain.verification.EmailVerification;
+import com.eager.questioncloud.core.domain.verification.EmailVerificationProcessor;
+import com.eager.questioncloud.core.domain.verification.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

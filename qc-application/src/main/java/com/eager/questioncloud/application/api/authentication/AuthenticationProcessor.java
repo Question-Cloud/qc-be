@@ -1,10 +1,10 @@
 package com.eager.questioncloud.application.api.authentication;
 
-import com.eager.questioncloud.domain.social.SocialAPIManager;
-import com.eager.questioncloud.domain.social.SocialPlatform;
-import com.eager.questioncloud.domain.user.AccountType;
-import com.eager.questioncloud.domain.user.User;
-import com.eager.questioncloud.domain.user.UserRepository;
+import com.eager.questioncloud.core.domain.social.SocialAPIManager;
+import com.eager.questioncloud.core.domain.social.SocialPlatform;
+import com.eager.questioncloud.core.domain.user.AccountType;
+import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.UserRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

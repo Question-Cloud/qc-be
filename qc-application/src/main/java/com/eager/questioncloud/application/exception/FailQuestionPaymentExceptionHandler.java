@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.exception;
 
-import com.eager.questioncloud.domain.coupon.UserCoupon;
-import com.eager.questioncloud.domain.coupon.UserCouponRepository;
-import com.eager.questioncloud.domain.payment.QuestionPayment;
-import com.eager.questioncloud.domain.payment.QuestionPaymentRepository;
-import com.eager.questioncloud.domain.point.UserPoint;
-import com.eager.questioncloud.domain.point.UserPointRepository;
+import com.eager.questioncloud.core.domain.coupon.UserCoupon;
+import com.eager.questioncloud.core.domain.coupon.UserCouponRepository;
+import com.eager.questioncloud.core.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.point.UserPoint;
+import com.eager.questioncloud.core.domain.point.UserPointRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.exception.FailQuestionPaymentException;

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.user.coupon;
 
-import com.eager.questioncloud.domain.coupon.AvailableUserCoupon;
+import com.eager.questioncloud.core.domain.coupon.AvailableUserCoupon;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

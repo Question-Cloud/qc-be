@@ -1,20 +1,20 @@
 package com.eager.questioncloud.application.api.user.register;
 
 import com.eager.questioncloud.application.mail.EmailSender;
-import com.eager.questioncloud.domain.social.SocialAPIManager;
-import com.eager.questioncloud.domain.social.SocialPlatform;
-import com.eager.questioncloud.domain.user.AccountType;
-import com.eager.questioncloud.domain.user.CreateUser;
-import com.eager.questioncloud.domain.user.User;
-import com.eager.questioncloud.domain.user.UserAccountInformation;
-import com.eager.questioncloud.domain.user.UserInformation;
-import com.eager.questioncloud.domain.user.UserRepository;
-import com.eager.questioncloud.domain.user.UserStatus;
-import com.eager.questioncloud.domain.user.UserType;
-import com.eager.questioncloud.domain.verification.Email;
-import com.eager.questioncloud.domain.verification.EmailVerification;
-import com.eager.questioncloud.domain.verification.EmailVerificationProcessor;
-import com.eager.questioncloud.domain.verification.EmailVerificationType;
+import com.eager.questioncloud.core.domain.social.SocialAPIManager;
+import com.eager.questioncloud.core.domain.social.SocialPlatform;
+import com.eager.questioncloud.core.domain.user.AccountType;
+import com.eager.questioncloud.core.domain.user.CreateUser;
+import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.UserAccountInformation;
+import com.eager.questioncloud.core.domain.user.UserInformation;
+import com.eager.questioncloud.core.domain.user.UserRepository;
+import com.eager.questioncloud.core.domain.user.UserStatus;
+import com.eager.questioncloud.core.domain.user.UserType;
+import com.eager.questioncloud.core.domain.verification.Email;
+import com.eager.questioncloud.core.domain.verification.EmailVerification;
+import com.eager.questioncloud.core.domain.verification.EmailVerificationProcessor;
+import com.eager.questioncloud.core.domain.verification.EmailVerificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

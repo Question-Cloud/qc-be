@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.feed;
 
-import com.eager.questioncloud.domain.question.QuestionFilter;
-import com.eager.questioncloud.domain.userquestion.UserQuestionDetail;
-import com.eager.questioncloud.domain.userquestion.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.question.QuestionFilter;
+import com.eager.questioncloud.core.domain.userquestion.UserQuestionDetail;
+import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

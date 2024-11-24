@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.point.ChargePointType;
+import com.eager.questioncloud.core.domain.point.ChargePointType;
 import com.eager.questioncloud.pg.portone.PortoneWebhookStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

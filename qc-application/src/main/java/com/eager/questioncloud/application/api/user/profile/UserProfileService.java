@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.user.profile;
 
-import com.eager.questioncloud.domain.user.User;
-import com.eager.questioncloud.domain.user.UserRepository;
+import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

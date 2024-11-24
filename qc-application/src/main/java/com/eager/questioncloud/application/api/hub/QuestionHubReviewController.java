@@ -6,10 +6,10 @@ import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerRe
 import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerRequest.RegisterQuestionReviewRequest;
 import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerResponse.MyQuestionReviewResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.review.MyQuestionReview;
-import com.eager.questioncloud.domain.review.QuestionReview;
-import com.eager.questioncloud.domain.review.QuestionReviewDetail;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.review.MyQuestionReview;
+import com.eager.questioncloud.core.domain.review.QuestionReview;
+import com.eager.questioncloud.core.domain.review.QuestionReviewDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

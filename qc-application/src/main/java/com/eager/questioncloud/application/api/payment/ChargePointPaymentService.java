@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.point.ChargePointEvent;
-import com.eager.questioncloud.domain.point.ChargePointPayment;
-import com.eager.questioncloud.domain.point.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.ChargePointEvent;
+import com.eager.questioncloud.core.domain.point.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.ChargePointPaymentRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.lock.LockKeyGenerator;

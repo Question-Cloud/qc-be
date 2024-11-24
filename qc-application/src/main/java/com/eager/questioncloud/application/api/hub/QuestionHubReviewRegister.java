@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.hub;
 
-import com.eager.questioncloud.domain.question.QuestionRepository;
-import com.eager.questioncloud.domain.review.QuestionReview;
-import com.eager.questioncloud.domain.review.QuestionReviewRepository;
-import com.eager.questioncloud.domain.userquestion.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.review.QuestionReview;
+import com.eager.questioncloud.core.domain.review.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

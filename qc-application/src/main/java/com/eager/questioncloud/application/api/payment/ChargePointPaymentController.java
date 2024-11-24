@@ -6,9 +6,9 @@ import com.eager.questioncloud.application.api.payment.ChargePointPaymentControl
 import com.eager.questioncloud.application.api.payment.ChargePointPaymentControllerRequest.ChargePointPaymentRequest;
 import com.eager.questioncloud.application.api.payment.ChargePointPaymentControllerResponse.CheckCompletePaymentResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.common.PagingInformation;
-import com.eager.questioncloud.domain.point.ChargePointPayment;
-import com.eager.questioncloud.domain.point.ChargePointPaymentHistory;
+import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.point.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.ChargePointPaymentHistory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

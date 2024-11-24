@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.domain.point.ChargePointPayment;
-import com.eager.questioncloud.domain.point.ChargePointPaymentRepository;
-import com.eager.questioncloud.domain.point.PGPayment;
+import com.eager.questioncloud.core.domain.point.ChargePointPayment;
+import com.eager.questioncloud.core.domain.point.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.PGPayment;
 import com.eager.questioncloud.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
