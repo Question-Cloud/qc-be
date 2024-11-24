@@ -10,7 +10,7 @@ dependencies {
     implementation('io.jsonwebtoken:jjwt-api:0.11.1')
     runtimeOnly('io.jsonwebtoken:jjwt-impl:0.11.1', 'io.jsonwebtoken:jjwt-jackson:0.11.1')
 
-    implementation(project(":qc-domain"))
+    implementation(project(":qc-core"))
     implementation(project(":qc-lock-manager"))
     implementation(project(":qc-external-pg-api"))
     implementation(project(":qc-exception"))

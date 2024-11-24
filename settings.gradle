@@ -1,6 +1,6 @@
 rootProject.name = 'questioncloud'
 include 'qc-external-pg-api'
-include 'qc-domain'
+include 'qc-core'
 include 'qc-application'
 include 'qc-lock-manager'
 include 'qc-exception'
