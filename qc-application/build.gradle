@@ -20,6 +20,14 @@ dependencies {
     testImplementation("org.springframework:spring-tx")
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir '../qc-config'
+        }
+    }
+}
+
 test {
     useJUnitPlatform()
 }

@@ -1,0 +1,4 @@
+[submodule "qc-config"]
+	path = qc-config
+	url = https://github.com/Question-Cloud/qc-config.git
+  branch = main
