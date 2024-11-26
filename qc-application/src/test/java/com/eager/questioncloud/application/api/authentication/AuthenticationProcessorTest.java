@@ -17,7 +17,7 @@ import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -118,8 +118,8 @@ class AuthenticationProcessorTest {
         String socialAccessToken = "socialAccessToken";
         String socialUid = "socialUid";
 
-        Mockito.when(socialAPIManager.getAccessToken(any(), any())).thenReturn(socialAccessToken);
-        Mockito.when(socialAPIManager.getSocialUid(any(), any())).thenReturn(socialUid);
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken);
+        BDDMockito.given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid);
 
         CreateUser createUser = new CreateUser(email, null, null, accountType, "01012345678", "김승환");
         UserAccountInformation userAccountInformation = UserAccountInformation.createSocialAccountInformation(socialUid, accountType);
@@ -146,8 +146,8 @@ class AuthenticationProcessorTest {
         String socialAccessToken = "socialAccessToken";
         String socialUid = "socialUid";
 
-        Mockito.when(socialAPIManager.getAccessToken(any(), any())).thenReturn(socialAccessToken);
-        Mockito.when(socialAPIManager.getSocialUid(any(), any())).thenReturn(socialUid);
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken);
+        BDDMockito.given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid);
 
         //when
         SocialAuthentication socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType);
