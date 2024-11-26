@@ -22,6 +22,14 @@ sourceSets {
     main.java.srcDirs += [querydslDir]
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir '../qc-config'
+        }
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 }
