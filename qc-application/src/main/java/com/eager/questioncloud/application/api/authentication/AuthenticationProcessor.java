@@ -25,9 +25,12 @@ public class AuthenticationProcessor {
     public SocialAuthentication socialAuthentication(String code, AccountType accountType) {
         String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.from(accountType));
         String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.from(accountType));
-        Optional<User> user = userRepository.getSocialUser(accountType, socialUid);
-        return user
-            .map(value -> SocialAuthentication.create(value, socialAccessToken))
+        Optional<User> optionalUser = userRepository.getSocialUser(accountType, socialUid);
+        return optionalUser
+            .map(user -> {
+                user.checkUserStatus();
+                return SocialAuthentication.create(user, socialAccessToken);
+            })
             .orElseGet(() -> SocialAuthentication.create(null, socialAccessToken));
     }
 
