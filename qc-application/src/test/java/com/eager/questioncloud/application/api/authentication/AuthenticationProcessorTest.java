@@ -162,4 +162,18 @@ class AuthenticationProcessorTest {
             .extracting("user")
             .isNull();
     }
+
+    @Test
+    @DisplayName("올바르지 않은 social code가 전달되면 소셜 로그인 실패 예외를 던진다.")
+    void 올바르지_않은_social_code가_전달되면_소셜_로그인_실패_예외를_던진다() {
+        //given
+        String wrongCode = "socialCode";
+        AccountType accountType = AccountType.KAKAO;
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any())).willThrow(new CustomException(Error.FAIL_SOCIAL_LOGIN));
+
+        //when then
+        assertThatThrownBy(() -> authenticationProcessor.socialAuthentication(wrongCode, accountType))
+            .isInstanceOf(CustomException.class)
+            .hasFieldOrPropertyWithValue("error", Error.FAIL_SOCIAL_LOGIN);
+    }
 }
