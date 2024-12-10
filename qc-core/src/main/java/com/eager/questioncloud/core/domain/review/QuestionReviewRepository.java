@@ -12,7 +12,7 @@ public interface QuestionReviewRepository {
 
     QuestionReview findByIdAndUserId(Long reviewId, Long userId);
 
-    Boolean isWritten(Long questionId, Long userId);
+    Boolean isWritten(Long userId, Long questionId);
 
     QuestionReview save(QuestionReview questionReview);
 }

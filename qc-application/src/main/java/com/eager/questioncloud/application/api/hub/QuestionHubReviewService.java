@@ -45,7 +45,7 @@ public class QuestionHubReviewService {
         questionReviewRepository.save(questionReview);
         applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
-    
+
     public void delete(Long reviewId, Long userId) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         questionReview.delete();

@@ -10,6 +10,8 @@ import com.eager.questioncloud.core.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.RegisteredReviewEvent;
 import com.eager.questioncloud.core.domain.subscribe.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.UnsubscribedEvent;
+import com.eager.questioncloud.lock.LockKeyGenerator;
+import com.eager.questioncloud.lock.LockManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 public class CreatorStatisticsProcessor {
     private final CreatorStatisticsRepository creatorStatisticsRepository;
     private final QuestionRepository questionRepository;
+    private final LockManager lockManager;
 
     @EventListener
     public void appendCreatorStatistics(RegisteredCreatorEvent event) {
@@ -32,9 +35,14 @@ public class CreatorStatisticsProcessor {
     @EventListener
     public void updateCreatorReviewStatistics(RegisteredReviewEvent event) {
         Question question = questionRepository.get(event.getQuestionId());
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
-        creatorStatistics.updateReviewStatisticsByRegisteredReview(event.getRate());
-        creatorStatisticsRepository.save(creatorStatistics);
+        lockManager.executeWithLock(
+            LockKeyGenerator.generateCreatorStatistics(question.getCreatorId()),
+            () -> {
+                CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+                creatorStatistics.updateReviewStatisticsByRegisteredReview(event.getRate());
+                creatorStatisticsRepository.save(creatorStatistics);
+            }
+        );
     }
 
     @EventListener
