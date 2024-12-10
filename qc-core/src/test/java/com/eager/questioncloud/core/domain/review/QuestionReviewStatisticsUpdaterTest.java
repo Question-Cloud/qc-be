@@ -65,4 +65,39 @@ class QuestionReviewStatisticsUpdaterTest {
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
         assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(400);
     }
+
+    @Test
+    @DisplayName("리뷰 수정 시 평점 통계 업데이트 동시성 테스트")
+    void concurrencyTestWhenModifiedReview() throws InterruptedException {
+        //given
+        Question question = questionJpaRepository.save(QuestionEntity.from(Question.create(1L, QuestionContent.builder().build()))).toModel();
+        questionReviewStatisticsJpaRepository.save(
+            QuestionReviewStatisticsEntity.from(new QuestionReviewStatistics(question.getId(), 100, 0, 0.0))
+        );
+        ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
+
+        //when
+        int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    questionReviewStatisticsUpdater.updateByModifiedReview(event);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        //then
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(300);
+        assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
+        assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(3.0);
+    }
 }
