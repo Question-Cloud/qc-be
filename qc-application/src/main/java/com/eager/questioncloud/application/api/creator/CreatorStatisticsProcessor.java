@@ -48,9 +48,14 @@ public class CreatorStatisticsProcessor {
     @EventListener
     public void updateCreatorReviewStatistics(ModifiedReviewEvent event) {
         Question question = questionRepository.get(event.getQuestionId());
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
-        creatorStatistics.updateReviewStatisticsByModifiedReview(event.getVarianceRate());
-        creatorStatisticsRepository.save(creatorStatistics);
+        lockManager.executeWithLock(
+            LockKeyGenerator.generateCreatorStatistics(question.getCreatorId()),
+            () -> {
+                CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+                creatorStatistics.updateReviewStatisticsByModifiedReview(event.getVarianceRate());
+                creatorStatisticsRepository.save(creatorStatistics);
+            }
+        );
     }
 
     @EventListener
