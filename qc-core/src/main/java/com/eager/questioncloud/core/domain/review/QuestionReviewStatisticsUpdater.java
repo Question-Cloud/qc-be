@@ -26,11 +26,15 @@ public class QuestionReviewStatisticsUpdater {
     }
 
     @EventListener
-    @Transactional
     public void updateByModifiedReview(ModifiedReviewEvent event) {
-        QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(event.getQuestionId());
-        reviewStatistics.updateByModifyReview(event.getVarianceRate());
-        questionReviewStatisticsRepository.save(reviewStatistics);
+        lockManager.executeWithLock(
+            LockKeyGenerator.generateReviewStatistics(event.getQuestionId()),
+            () -> {
+                QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(event.getQuestionId());
+                reviewStatistics.updateByModifyReview(event.getVarianceRate());
+                questionReviewStatisticsRepository.save(reviewStatistics);
+            }
+        );
     }
 
     @EventListener
