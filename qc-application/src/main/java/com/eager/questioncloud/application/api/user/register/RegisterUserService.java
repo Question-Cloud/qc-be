@@ -26,6 +26,7 @@ public class RegisterUserService {
     private final SocialAPIManager socialAPIManager;
     private final EmailSender emailSender;
 
+    //TODO UserPoint 초기화
     public User create(CreateUser createUser) {
         UserAccountInformation userAccountInformation = createUserAccountInformation(createUser);
         UserInformation userInformation = UserInformation.create(createUser);
