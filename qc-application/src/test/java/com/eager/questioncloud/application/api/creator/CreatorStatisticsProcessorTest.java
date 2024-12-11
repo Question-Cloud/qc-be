@@ -179,4 +179,71 @@ class CreatorStatisticsProcessorTest {
         assertThat(creatorStatistics.getReviewCount()).isEqualTo(20);
         assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(4.0);
     }
+
+    @Test
+    @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 크리에이터 통계 업데이트 동시성 테스트")
+    void creatorStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
+        //given
+        Creator creator = creatorJpaRepository.save(
+            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
+        ).toModel();
+
+        creatorStatisticsJpaRepository.save(
+            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 100, 1.0))
+        ).toModel();
+
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
+        ).toModel();
+
+        RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
+        ModifiedReviewEvent modifiedReviewEvent = ModifiedReviewEvent.create(question.getId(), 1);
+        DeletedReviewEvent deletedReviewEvent = DeletedReviewEvent.create(question.getId(), 1);
+
+        //when
+        int threadCount = 120;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(registeredReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(modifiedReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(deletedReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        //then
+        CreatorStatistics creatorStatistics = creatorStatisticsJpaRepository.findByCreatorId(creator.getId()).get().toModel();
+        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(140);
+        assertThat(creatorStatistics.getReviewCount()).isEqualTo(100);
+        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(1.4);
+    }
 }
