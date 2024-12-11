@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.hub;
+package com.eager.questioncloud.application.api.hub.review.implement;
 
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;

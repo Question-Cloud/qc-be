@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.hub;
+package com.eager.questioncloud.application.api.hub.question.dto;
 
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;

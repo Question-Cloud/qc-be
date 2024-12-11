@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.hub;
+package com.eager.questioncloud.application.api.hub.review.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

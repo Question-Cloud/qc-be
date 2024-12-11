@@ -1,10 +1,11 @@
-package com.eager.questioncloud.application.api.hub;
+package com.eager.questioncloud.application.api.hub.review.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerRequest.ModifyQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerRequest.RegisterQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.QuestionHubReviewControllerResponse.MyQuestionReviewResponse;
+import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerRequest.ModifyQuestionReviewRequest;
+import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerRequest.RegisterQuestionReviewRequest;
+import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerResponse.MyQuestionReviewResponse;
+import com.eager.questioncloud.application.api.hub.review.service.QuestionHubReviewService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
