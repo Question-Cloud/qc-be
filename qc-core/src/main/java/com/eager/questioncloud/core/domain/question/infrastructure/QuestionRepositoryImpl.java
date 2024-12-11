@@ -4,7 +4,7 @@ import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreato
 import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.review.infrastructure.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
-import static com.eager.questioncloud.core.domain.userquestion.QUserQuestionEntity.userQuestionEntity;
+import static com.eager.questioncloud.core.domain.userquestion.infrastructure.QUserQuestionEntity.userQuestionEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;

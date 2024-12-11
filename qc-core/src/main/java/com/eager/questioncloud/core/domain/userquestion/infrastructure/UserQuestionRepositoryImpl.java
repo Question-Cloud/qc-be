@@ -1,12 +1,14 @@
-package com.eager.questioncloud.core.domain.userquestion;
+package com.eager.questioncloud.core.domain.userquestion.infrastructure;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
-import static com.eager.questioncloud.core.domain.userquestion.QUserQuestionEntity.userQuestionEntity;
+import static com.eager.questioncloud.core.domain.userquestion.infrastructure.QUserQuestionEntity.userQuestionEntity;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.infrastructure.QQuestionCategoryEntity;
+import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;
+import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

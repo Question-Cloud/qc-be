@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.hub;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
-import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.lock.LockKeyGenerator;

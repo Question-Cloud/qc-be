@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.userquestion;
+package com.eager.questioncloud.core.domain.userquestion.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
