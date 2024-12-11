@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.point.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

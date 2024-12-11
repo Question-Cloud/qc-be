@@ -1,10 +1,12 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.point.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.payment.ChargePointPaymentControllerRequest.ChargePointOrderRequest;
-import com.eager.questioncloud.application.api.payment.ChargePointPaymentControllerRequest.ChargePointPaymentRequest;
-import com.eager.questioncloud.application.api.payment.ChargePointPaymentControllerResponse.CheckCompletePaymentResponse;
+import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaymentControllerRequest.ChargePointOrderRequest;
+import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaymentControllerRequest.ChargePointPaymentRequest;
+import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaymentControllerResponse.CheckCompletePaymentResponse;
+import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentHistoryService;
+import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory;

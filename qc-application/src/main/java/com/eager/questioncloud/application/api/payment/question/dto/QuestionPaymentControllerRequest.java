@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.question.dto;
 
 import com.eager.questioncloud.application.validator.Validatable;
 import com.eager.questioncloud.exception.CustomException;

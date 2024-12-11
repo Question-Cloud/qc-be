@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.point.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;

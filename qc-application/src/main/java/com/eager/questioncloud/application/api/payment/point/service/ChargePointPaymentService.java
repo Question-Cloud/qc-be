@@ -1,5 +1,6 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.point.service;
 
+import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.core.domain.point.event.ChargePointEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;

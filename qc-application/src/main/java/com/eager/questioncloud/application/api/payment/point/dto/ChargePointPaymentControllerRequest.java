@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment;
+package com.eager.questioncloud.application.api.payment.point.dto;
 
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.pg.portone.PortoneWebhookStatus;
