@@ -1,5 +1,6 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.api.authentication.implement;
 
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;

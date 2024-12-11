@@ -1,5 +1,6 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.api.authentication.implement;
 
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.core.domain.token.RefreshTokenRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

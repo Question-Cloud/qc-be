@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.api.authentication.dto;
 
 import com.eager.questioncloud.core.domain.user.model.User;
 import lombok.Getter;

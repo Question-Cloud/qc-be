@@ -1,9 +1,12 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.api.authentication.controller;
 
-import com.eager.questioncloud.application.api.authentication.AuthenticationRequest.LoginRequest;
-import com.eager.questioncloud.application.api.authentication.AuthenticationResponse.LoginResponse;
-import com.eager.questioncloud.application.api.authentication.AuthenticationResponse.RefreshResponse;
-import com.eager.questioncloud.application.api.authentication.AuthenticationResponse.SocialAuthenticateResponse;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationRequest.LoginRequest;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationResponse.LoginResponse;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationResponse.RefreshResponse;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationResponse.SocialAuthenticateResponse;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult;
+import com.eager.questioncloud.application.api.authentication.service.AuthenticationService;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

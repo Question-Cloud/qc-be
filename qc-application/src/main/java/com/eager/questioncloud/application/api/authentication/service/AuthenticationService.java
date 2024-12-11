@@ -1,5 +1,10 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.api.authentication.service;
 
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult;
+import com.eager.questioncloud.application.api.authentication.implement.AuthenticationProcessor;
+import com.eager.questioncloud.application.api.authentication.implement.AuthenticationTokenManager;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.model.User;
 import lombok.RequiredArgsConstructor;

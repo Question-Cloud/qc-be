@@ -3,6 +3,9 @@ package com.eager.questioncloud.application.api.authentication;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult;
+import com.eager.questioncloud.application.api.authentication.service.AuthenticationService;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
