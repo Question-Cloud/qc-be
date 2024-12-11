@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionHubReviewRegister {
+public class HubReviewRegister {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionRepository questionRepository;
     private final UserQuestionRepository userQuestionRepository;

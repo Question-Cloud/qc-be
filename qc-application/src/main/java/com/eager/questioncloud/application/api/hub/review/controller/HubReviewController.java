@@ -2,10 +2,10 @@ package com.eager.questioncloud.application.api.hub.review.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerRequest.ModifyQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerRequest.RegisterQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.review.dto.QuestionHubReviewControllerResponse.MyQuestionReviewResponse;
-import com.eager.questioncloud.application.api.hub.review.service.QuestionHubReviewService;
+import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerRequest.ModifyQuestionReviewRequest;
+import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerRequest.RegisterQuestionReviewRequest;
+import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerResponse.MyQuestionReviewResponse;
+import com.eager.questioncloud.application.api.hub.review.service.HubReviewService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
@@ -32,8 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/hub/question/review")
 @RequiredArgsConstructor
-public class QuestionHubReviewController {
-    private final QuestionHubReviewService questionHubReviewService;
+public class HubReviewController {
+    private final HubReviewService hubReviewService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -44,8 +44,8 @@ public class QuestionHubReviewController {
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionReviewDetail> getQuestionReviews(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
-        int total = questionHubReviewService.getTotal(questionId);
-        List<QuestionReviewDetail> questionReviewDetails = questionHubReviewService.getQuestionReviews(
+        int total = hubReviewService.getTotal(questionId);
+        List<QuestionReviewDetail> questionReviewDetails = hubReviewService.getQuestionReviews(
             questionId,
             userPrincipal.getUser().getUid(),
             pagingInformation);
@@ -62,7 +62,7 @@ public class QuestionHubReviewController {
                 작성한 리뷰가 없다면 404를 반환합니다.
             """)
     public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
-        MyQuestionReview review = questionHubReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
+        MyQuestionReview review = hubReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
         return new MyQuestionReviewResponse(review);
     }
 
@@ -73,7 +73,7 @@ public class QuestionHubReviewController {
     @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = {"question-review"}, description = "문제 리뷰 등록")
     public DefaultResponse registerQuestionReview(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionReviewRequest request) {
-        questionHubReviewService.register(
+        hubReviewService.register(
             QuestionReview.create(
                 request.getQuestionId(),
                 userPrincipal.getUser().getUid(),
@@ -91,7 +91,7 @@ public class QuestionHubReviewController {
     public DefaultResponse modifyQuestionReview(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId,
         @RequestBody @Valid ModifyQuestionReviewRequest request) {
-        questionHubReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
+        hubReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
         return DefaultResponse.success();
     }
 
@@ -101,7 +101,7 @@ public class QuestionHubReviewController {
     })
     @Operation(operationId = "문제 리뷰 삭제", summary = "문제 리뷰 삭제", tags = {"question-review"}, description = "문제 리뷰 삭제")
     public DefaultResponse deleteQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId) {
-        questionHubReviewService.delete(reviewId, userPrincipal.getUser().getUid());
+        hubReviewService.delete(reviewId, userPrincipal.getUser().getUid());
         return DefaultResponse.success();
     }
 }

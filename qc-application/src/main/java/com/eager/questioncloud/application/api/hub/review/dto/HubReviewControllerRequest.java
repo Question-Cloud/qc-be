@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
-public class QuestionHubReviewControllerRequest {
+public class HubReviewControllerRequest {
     @Getter
     public static class RegisterQuestionReviewRequest {
         @NotNull

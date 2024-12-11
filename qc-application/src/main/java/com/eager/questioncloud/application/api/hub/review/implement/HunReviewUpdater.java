@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionHunReviewUpdater {
+public class HunReviewUpdater {
     private final QuestionReviewRepository questionReviewRepository;
 
     public int modifyQuestionReview(QuestionReview questionReview, String comment, int rate) {

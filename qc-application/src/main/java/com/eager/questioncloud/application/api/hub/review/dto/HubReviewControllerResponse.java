@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class QuestionHubReviewControllerResponse {
+public class HubReviewControllerResponse {
     @Getter
     @AllArgsConstructor
     public static class MyQuestionReviewResponse {

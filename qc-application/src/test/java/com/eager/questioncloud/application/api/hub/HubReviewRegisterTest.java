@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.hub;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.eager.questioncloud.application.api.hub.review.implement.QuestionHubReviewRegister;
+import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionEntity;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionJpaRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
@@ -25,9 +25,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class QuestionHubReviewRegisterTest {
+class HubReviewRegisterTest {
     @Autowired
-    private QuestionHubReviewRegister questionHubReviewRegister;
+    private HubReviewRegister hubReviewRegister;
 
     @Autowired
     private QuestionJpaRepository questionJpaRepository;
@@ -62,7 +62,7 @@ class QuestionHubReviewRegisterTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.execute(() -> {
                 try {
-                    questionHubReviewRegister.register(questionReview);
+                    hubReviewRegister.register(questionReview);
                 } catch (Exception ignored) {
                 } finally {
                     latch.countDown();
