@@ -5,7 +5,6 @@ import com.eager.questioncloud.lock.LockManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -38,10 +37,14 @@ public class QuestionReviewStatisticsUpdater {
     }
 
     @EventListener
-    @Transactional
     public void updateByDeletedReview(DeletedReviewEvent event) {
-        QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(event.getQuestionId());
-        reviewStatistics.updateByDeleteReview(event.getRate());
-        questionReviewStatisticsRepository.save(reviewStatistics);
+        lockManager.executeWithLock(
+            LockKeyGenerator.generateReviewStatistics(event.getQuestionId()),
+            () -> {
+                QuestionReviewStatistics reviewStatistics = questionReviewStatisticsRepository.get(event.getQuestionId());
+                reviewStatistics.updateByDeleteReview(event.getRate());
+                questionReviewStatisticsRepository.save(reviewStatistics);
+            }
+        );
     }
 }

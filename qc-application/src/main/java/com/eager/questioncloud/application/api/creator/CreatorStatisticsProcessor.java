@@ -61,9 +61,14 @@ public class CreatorStatisticsProcessor {
     @EventListener
     public void updateCreatorReviewStatistics(DeletedReviewEvent event) {
         Question question = questionRepository.get(event.getQuestionId());
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
-        creatorStatistics.updateReviewStatisticsByDeletedReview(event.getRate());
-        creatorStatisticsRepository.save(creatorStatistics);
+        lockManager.executeWithLock(
+            LockKeyGenerator.generateCreatorStatistics(question.getCreatorId()),
+            () -> {
+                CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.getCreatorId());
+                creatorStatistics.updateReviewStatisticsByDeletedReview(event.getRate());
+                creatorStatisticsRepository.save(creatorStatistics);
+            }
+        );
     }
 
     //TODO 문제 결제는 실패인데 이 이벤트만 성공하면 어떻게 처리해야할지 고민해보기
