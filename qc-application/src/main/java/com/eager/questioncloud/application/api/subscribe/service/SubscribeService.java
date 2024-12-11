@@ -1,5 +1,6 @@
-package com.eager.questioncloud.application.api.subscribe;
+package com.eager.questioncloud.application.api.subscribe.service;
 
+import com.eager.questioncloud.application.api.subscribe.implement.SubscribeProcessor;
 import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.SubscribeRepository;
