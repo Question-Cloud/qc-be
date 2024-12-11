@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.userquestion;
 
-import com.eager.questioncloud.core.domain.payment.CompletedQuestionPaymentEvent;
+import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.exception.FailQuestionPaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

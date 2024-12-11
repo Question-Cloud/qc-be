@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.creator.implement;
 import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import com.eager.questioncloud.core.domain.payment.CompletedQuestionPaymentEvent;
+import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionRepository;
 import com.eager.questioncloud.core.domain.review.DeletedReviewEvent;

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.core.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;

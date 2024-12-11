@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.core.domain.payment.CompletedQuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.payment.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import java.util.List;
@@ -16,7 +16,7 @@ public class QuestionPaymentService {
     private final QuestionPaymentGenerator questionPaymentGenerator;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final LockManager lockManager;
-    
+
     public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
         lockManager.executeWithLock(
             LockKeyGenerator.generateQuestionPaymentKey(userId),

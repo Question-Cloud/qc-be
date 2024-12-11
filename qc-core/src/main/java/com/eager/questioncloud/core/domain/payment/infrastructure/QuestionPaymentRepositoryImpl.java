@@ -1,14 +1,16 @@
-package com.eager.questioncloud.core.domain.payment;
+package com.eager.questioncloud.core.domain.payment.infrastructure;
 
 import static com.eager.questioncloud.core.domain.coupon.infrastructure.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.core.domain.coupon.infrastructure.QUserCouponEntity.userCouponEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentEntity.questionPaymentEntity;
-import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
+import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentEntity.questionPaymentEntity;
+import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
 import static com.eager.questioncloud.core.domain.question.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.question.QQuestionCategoryEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

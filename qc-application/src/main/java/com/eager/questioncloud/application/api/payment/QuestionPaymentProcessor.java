@@ -4,9 +4,9 @@ import com.eager.questioncloud.core.domain.coupon.infrastructure.CouponRepositor
 import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.QuestionPaymentOrderRepository;
-import com.eager.questioncloud.core.domain.payment.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentOrderRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.point.UserPoint;
 import com.eager.questioncloud.core.domain.point.UserPointRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
-package com.eager.questioncloud.core.domain.payment;
+package com.eager.questioncloud.core.domain.payment.infrastructure;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import java.util.List;
 
 public interface QuestionPaymentRepository {

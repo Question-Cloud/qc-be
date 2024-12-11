@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.payment;
+package com.eager.questioncloud.core.domain.payment.enums;
 
 import lombok.Getter;
 

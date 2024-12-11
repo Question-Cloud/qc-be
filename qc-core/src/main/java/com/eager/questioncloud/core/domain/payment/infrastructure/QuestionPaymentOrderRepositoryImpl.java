@@ -1,8 +1,9 @@
-package com.eager.questioncloud.core.domain.payment;
+package com.eager.questioncloud.core.domain.payment.infrastructure;
 
-import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentEntity.questionPaymentEntity;
-import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
+import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentEntity.questionPaymentEntity;
+import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
 
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

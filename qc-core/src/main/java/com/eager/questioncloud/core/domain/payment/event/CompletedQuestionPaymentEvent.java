@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.payment;
+package com.eager.questioncloud.core.domain.payment.event;
 
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import java.util.List;
 import lombok.Getter;
 
