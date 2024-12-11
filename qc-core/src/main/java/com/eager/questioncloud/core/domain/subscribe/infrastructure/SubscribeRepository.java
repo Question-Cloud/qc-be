@@ -1,7 +1,8 @@
-package com.eager.questioncloud.core.domain.subscribe;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import java.util.List;
 
 public interface SubscribeRepository {

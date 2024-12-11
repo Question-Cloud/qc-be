@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.subscribe;
+package com.eager.questioncloud.core.domain.subscribe.event;
 
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

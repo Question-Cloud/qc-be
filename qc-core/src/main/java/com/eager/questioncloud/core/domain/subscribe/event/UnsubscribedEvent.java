@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.subscribe;
+package com.eager.questioncloud.core.domain.subscribe.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

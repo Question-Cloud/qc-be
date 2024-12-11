@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.feed;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
-import com.eager.questioncloud.core.domain.subscribe.SubscribeRepository;
+import com.eager.questioncloud.core.domain.subscribe.infrastructure.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

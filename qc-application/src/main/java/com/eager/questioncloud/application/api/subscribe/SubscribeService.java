@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.subscribe;
 
-import com.eager.questioncloud.core.domain.subscribe.Subscribe;
-import com.eager.questioncloud.core.domain.subscribe.SubscribeRepository;
-import com.eager.questioncloud.core.domain.subscribe.SubscribedEvent;
-import com.eager.questioncloud.core.domain.subscribe.UnsubscribedEvent;
+import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
+import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
+import com.eager.questioncloud.core.domain.subscribe.infrastructure.SubscribeRepository;
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
