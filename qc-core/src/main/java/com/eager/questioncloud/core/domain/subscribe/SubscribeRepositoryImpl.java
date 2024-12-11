@@ -1,12 +1,12 @@
 package com.eager.questioncloud.core.domain.subscribe;
 
-import static com.eager.questioncloud.core.domain.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.creator.QCreatorStatisticsEntity.creatorStatisticsEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorStatisticsEntity.creatorStatisticsEntity;
 import static com.eager.questioncloud.core.domain.subscribe.QSubscribeEntity.subscribeEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

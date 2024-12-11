@@ -1,9 +1,11 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator.infrastructure;
 
-import static com.eager.questioncloud.core.domain.creator.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.creator.QCreatorStatisticsEntity.creatorStatisticsEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorStatisticsEntity.creatorStatisticsEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
+import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.types.Projections;

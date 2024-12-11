@@ -1,5 +1,7 @@
 package com.eager.questioncloud.core.domain.creator;
 
+import com.eager.questioncloud.core.domain.creator.model.Creator;
+import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
 import com.eager.questioncloud.core.domain.question.Subject;
 import lombok.Builder;
 

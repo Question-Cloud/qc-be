@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

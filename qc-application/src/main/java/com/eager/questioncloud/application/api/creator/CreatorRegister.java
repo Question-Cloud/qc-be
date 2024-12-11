@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.creator;
 
-import com.eager.questioncloud.core.domain.creator.Creator;
-import com.eager.questioncloud.core.domain.creator.CreatorProfile;
-import com.eager.questioncloud.core.domain.creator.CreatorRepository;
+import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorRepository;
+import com.eager.questioncloud.core.domain.creator.model.Creator;
+import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
 import com.eager.questioncloud.core.domain.user.User;
 import com.eager.questioncloud.core.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;

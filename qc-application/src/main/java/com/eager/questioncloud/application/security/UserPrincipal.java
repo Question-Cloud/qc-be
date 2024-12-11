@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.security;
 
-import com.eager.questioncloud.core.domain.creator.Creator;
+import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.user.User;
 import com.eager.questioncloud.core.domain.user.UserType;
 import java.io.Serializable;

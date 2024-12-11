@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.post;
 
-import static com.eager.questioncloud.core.domain.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.post.QPostCommentEntity.postCommentEntity;
 import static com.eager.questioncloud.core.domain.post.QPostEntity.postEntity;
 import static com.eager.questioncloud.core.domain.question.QQuestionEntity.questionEntity;

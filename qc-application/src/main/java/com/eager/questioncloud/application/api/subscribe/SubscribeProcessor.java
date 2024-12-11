@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.subscribe;
 
-import com.eager.questioncloud.core.domain.creator.CreatorRepository;
+import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorRepository;
 import com.eager.questioncloud.core.domain.subscribe.Subscribe;
 import com.eager.questioncloud.core.domain.subscribe.SubscribeRepository;
 import com.eager.questioncloud.exception.CustomException;

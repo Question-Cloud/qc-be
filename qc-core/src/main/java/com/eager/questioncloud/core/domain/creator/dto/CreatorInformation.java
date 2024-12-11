@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator.dto;
 
 import com.eager.questioncloud.core.domain.question.Subject;
 import lombok.AllArgsConstructor;

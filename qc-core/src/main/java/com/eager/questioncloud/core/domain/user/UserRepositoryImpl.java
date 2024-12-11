@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.user;
 
-import static com.eager.questioncloud.core.domain.creator.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.creator.CreatorEntity;
+import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

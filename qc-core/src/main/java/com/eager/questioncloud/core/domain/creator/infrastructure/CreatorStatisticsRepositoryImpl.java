@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator.infrastructure;
 
+import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.util.List;

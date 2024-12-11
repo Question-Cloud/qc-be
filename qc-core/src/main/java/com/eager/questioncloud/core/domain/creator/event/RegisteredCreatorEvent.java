@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator.event;
 
+import com.eager.questioncloud.core.domain.creator.model.Creator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
