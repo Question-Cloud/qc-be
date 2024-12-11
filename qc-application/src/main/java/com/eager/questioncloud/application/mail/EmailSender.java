@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.mail;
 
-import com.eager.questioncloud.core.domain.verification.Email;
+import com.eager.questioncloud.core.domain.verification.model.Email;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import jakarta.mail.MessagingException;

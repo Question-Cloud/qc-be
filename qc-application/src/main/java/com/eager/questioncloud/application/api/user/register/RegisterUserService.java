@@ -11,10 +11,10 @@ import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;
-import com.eager.questioncloud.core.domain.verification.Email;
-import com.eager.questioncloud.core.domain.verification.EmailVerification;
-import com.eager.questioncloud.core.domain.verification.EmailVerificationProcessor;
-import com.eager.questioncloud.core.domain.verification.EmailVerificationType;
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
+import com.eager.questioncloud.core.domain.verification.implement.EmailVerificationProcessor;
+import com.eager.questioncloud.core.domain.verification.model.Email;
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

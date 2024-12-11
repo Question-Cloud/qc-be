@@ -1,5 +1,8 @@
-package com.eager.questioncloud.core.domain.verification;
+package com.eager.questioncloud.core.domain.verification.infrastructure;
 
+
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 
 public interface EmailVerificationRepository {
     EmailVerification get(String token, EmailVerificationType emailVerificationType);

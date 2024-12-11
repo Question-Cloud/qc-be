@@ -1,7 +1,9 @@
-package com.eager.questioncloud.core.domain.verification;
+package com.eager.questioncloud.core.domain.verification.infrastructure;
 
-import static com.eager.questioncloud.core.domain.verification.QEmailVerificationEntity.emailVerificationEntity;
+import static com.eager.questioncloud.core.domain.verification.infrastructure.QEmailVerificationEntity.emailVerificationEntity;
 
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

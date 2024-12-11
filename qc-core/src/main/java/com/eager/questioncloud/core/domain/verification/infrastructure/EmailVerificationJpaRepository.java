@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.verification;
+package com.eager.questioncloud.core.domain.verification.infrastructure;
 
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

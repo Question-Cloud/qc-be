@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.verification;
+package com.eager.questioncloud.core.domain.verification.template;
 
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 
