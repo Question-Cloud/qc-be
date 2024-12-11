@@ -135,4 +135,64 @@ class QuestionReviewStatisticsUpdaterTest {
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(20);
         assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(4.0);
     }
+
+    @Test
+    @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 리뷰 통계 평점 업데이트 동시성 테스트")
+    void reviewStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
+        //given
+        Question question = questionJpaRepository.save(QuestionEntity.from(Question.create(1L, QuestionContent.builder().build()))).toModel();
+        questionReviewStatisticsJpaRepository.save(
+            QuestionReviewStatisticsEntity.from(new QuestionReviewStatistics(question.getId(), 100, 100, 1.0))
+        );
+
+        RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
+        ModifiedReviewEvent modifiedReviewEvent = ModifiedReviewEvent.create(question.getId(), 1);
+        DeletedReviewEvent deletedReviewEvent = DeletedReviewEvent.create(question.getId(), 1);
+
+        //when
+        int threadCount = 120;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    questionReviewStatisticsUpdater.updateByRegisteredReview(registeredReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    questionReviewStatisticsUpdater.updateByModifiedReview(modifiedReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        for (int i = 0; i < 40; i++) {
+            executorService.execute(() -> {
+                try {
+                    questionReviewStatisticsUpdater.updateByDeletedReview(deletedReviewEvent);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        //then
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(140);
+        assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
+        assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(1.4);
+    }
 }
