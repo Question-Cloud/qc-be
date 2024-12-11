@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.post;
+package com.eager.questioncloud.application.api.post.dto;
 
 import com.eager.questioncloud.core.domain.post.model.PostFile;
 import jakarta.validation.constraints.NotBlank;

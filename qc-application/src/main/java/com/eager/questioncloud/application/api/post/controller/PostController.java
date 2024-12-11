@@ -1,10 +1,11 @@
-package com.eager.questioncloud.application.api.post;
+package com.eager.questioncloud.application.api.post.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.post.PostControllerRequest.ModifyPostRequest;
-import com.eager.questioncloud.application.api.post.PostControllerRequest.RegisterPostRequest;
-import com.eager.questioncloud.application.api.post.PostControllerResponse.PostResponse;
+import com.eager.questioncloud.application.api.post.dto.PostControllerRequest.ModifyPostRequest;
+import com.eager.questioncloud.application.api.post.dto.PostControllerRequest.RegisterPostRequest;
+import com.eager.questioncloud.application.api.post.dto.PostControllerResponse.PostResponse;
+import com.eager.questioncloud.application.api.post.service.PostService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostDetail;
