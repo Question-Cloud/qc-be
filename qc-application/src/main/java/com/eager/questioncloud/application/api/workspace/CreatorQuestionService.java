@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.workspace;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.Question;
-import com.eager.questioncloud.core.domain.question.QuestionContent;
-import com.eager.questioncloud.core.domain.question.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.RegisteredQuestionEvent;
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent;
+import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.question.model.QuestionContent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

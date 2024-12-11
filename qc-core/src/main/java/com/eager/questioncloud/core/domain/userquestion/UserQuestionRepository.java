@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.userquestion;
 
-import com.eager.questioncloud.core.domain.question.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import java.util.List;
 
 public interface UserQuestionRepository {

@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.cart;
 
 import com.eager.questioncloud.core.domain.cart.infrastructure.CartItemRepository;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
-import com.eager.questioncloud.core.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;

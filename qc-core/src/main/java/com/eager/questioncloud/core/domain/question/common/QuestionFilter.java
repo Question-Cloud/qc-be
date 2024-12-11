@@ -1,6 +1,9 @@
-package com.eager.questioncloud.core.domain.question;
+package com.eager.questioncloud.core.domain.question.common;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
+import com.eager.questioncloud.core.domain.question.enums.QuestionType;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,14 +1,14 @@
 package com.eager.questioncloud.core.domain.post.infrastructure;
 
-import static com.eager.questioncloud.core.domain.post.QPostEntity.postEntity;
-import static com.eager.questioncloud.core.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.core.domain.post.infrastructure.QPostEntity.postEntity;
+import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostDetail;
 import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.post.model.Post;
-import com.eager.questioncloud.core.domain.question.QQuestionCategoryEntity;
+import com.eager.questioncloud.core.domain.question.infrastructure.QQuestionCategoryEntity;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.types.Projections;

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.workspace;
 
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.question.QuestionContent;
+import com.eager.questioncloud.core.domain.question.model.QuestionContent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

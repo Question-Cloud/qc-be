@@ -1,5 +1,7 @@
-package com.eager.questioncloud.core.domain.question;
+package com.eager.questioncloud.core.domain.question.infrastructure;
 
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

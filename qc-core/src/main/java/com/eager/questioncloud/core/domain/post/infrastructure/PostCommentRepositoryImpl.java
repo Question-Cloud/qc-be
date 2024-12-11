@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.post.infrastructure;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.post.QPostCommentEntity.postCommentEntity;
-import static com.eager.questioncloud.core.domain.post.QPostEntity.postEntity;
-import static com.eager.questioncloud.core.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.core.domain.post.infrastructure.QPostCommentEntity.postCommentEntity;
+import static com.eager.questioncloud.core.domain.post.infrastructure.QPostEntity.postEntity;
+import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;

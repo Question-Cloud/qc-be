@@ -1,12 +1,19 @@
-package com.eager.questioncloud.core.domain.question;
+package com.eager.questioncloud.core.domain.question.infrastructure;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.question.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.review.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
 import static com.eager.questioncloud.core.domain.userquestion.QUserQuestionEntity.userQuestionEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
+import com.eager.questioncloud.core.domain.question.enums.QuestionType;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.review;
 
-import com.eager.questioncloud.core.domain.question.RegisteredQuestionEvent;
+import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

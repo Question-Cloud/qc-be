@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.creator.infrastructure;
 
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.question.Subject;
+import com.eager.questioncloud.core.domain.question.enums.Subject;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

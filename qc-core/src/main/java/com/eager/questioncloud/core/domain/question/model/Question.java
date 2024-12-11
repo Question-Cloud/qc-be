@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.question;
+package com.eager.questioncloud.core.domain.question.model;
 
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;

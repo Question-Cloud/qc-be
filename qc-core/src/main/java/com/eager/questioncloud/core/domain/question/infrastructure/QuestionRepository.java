@@ -1,6 +1,9 @@
-package com.eager.questioncloud.core.domain.question;
+package com.eager.questioncloud.core.domain.question.infrastructure;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
+import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
 
 public interface QuestionRepository {
