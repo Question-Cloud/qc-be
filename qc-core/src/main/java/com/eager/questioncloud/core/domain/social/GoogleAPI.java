@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.social;
 
-import com.eager.questioncloud.core.domain.user.AccountType;
+import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import org.springframework.beans.factory.annotation.Value;

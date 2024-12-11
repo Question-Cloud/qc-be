@@ -2,9 +2,15 @@ package com.eager.questioncloud.core.domain.review;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionBuilder;
-import com.eager.questioncloud.core.domain.question.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
+import com.eager.questioncloud.core.domain.review.implement.QuestionReviewStatisticsUpdater;
+import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewStatisticsRepository;
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

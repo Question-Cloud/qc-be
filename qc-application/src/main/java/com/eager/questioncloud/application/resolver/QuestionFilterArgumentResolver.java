@@ -2,10 +2,10 @@ package com.eager.questioncloud.application.resolver;
 
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.QuestionSortType;
-import com.eager.questioncloud.core.domain.question.QuestionType;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
+import com.eager.questioncloud.core.domain.question.enums.QuestionType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.review;
 
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import lombok.Builder;
 
 @Builder
