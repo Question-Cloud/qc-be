@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.creator;
+package com.eager.questioncloud.application.api.creator.dto;
 
 import com.eager.questioncloud.core.domain.question.enums.Subject;
 import jakarta.validation.constraints.NotBlank;
