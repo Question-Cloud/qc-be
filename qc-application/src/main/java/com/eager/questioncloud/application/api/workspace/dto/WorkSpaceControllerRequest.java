@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.workspace;
+package com.eager.questioncloud.application.api.workspace.dto;
 
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.enums.QuestionType;

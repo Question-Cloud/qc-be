@@ -1,9 +1,13 @@
-package com.eager.questioncloud.application.api.workspace;
+package com.eager.questioncloud.application.api.workspace.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.workspace.WorkSpaceControllerResponse.CreatorProfileResponse;
-import com.eager.questioncloud.application.api.workspace.WorkSpaceControllerResponse.QuestionContentResponse;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.CreatorProfileResponse;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.QuestionContentResponse;
+import com.eager.questioncloud.application.api.workspace.service.CreatorPostService;
+import com.eager.questioncloud.application.api.workspace.service.CreatorProfileService;
+import com.eager.questioncloud.application.api.workspace.service.CreatorQuestionService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
