@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionBuilder;
-import com.eager.questioncloud.core.domain.question.QuestionEntity;
-import com.eager.questioncloud.core.domain.question.QuestionJpaRepository;
+import com.eager.questioncloud.core.domain.question.QuestionRepository;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,23 +22,30 @@ class QuestionReviewStatisticsUpdaterTest {
     private QuestionReviewStatisticsUpdater questionReviewStatisticsUpdater;
 
     @Autowired
-    private QuestionJpaRepository questionJpaRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private QuestionReviewStatisticsJpaRepository questionReviewStatisticsJpaRepository;
+    private QuestionReviewStatisticsRepository questionReviewStatisticsRepository;
 
     @AfterEach
     void tearDown() {
-        questionJpaRepository.deleteAllInBatch();
-        questionReviewStatisticsJpaRepository.deleteAllInBatch();
+        questionRepository.deleteAllInBatch();
+        questionReviewStatisticsRepository.deleteAllInBatch();
     }
 
     @Test
     @DisplayName("리뷰 작성 시 평점 통계 업데이트 동시성 테스트")
     void reviewStatisticsConcurrencyTestWhenRegisteredReview() throws InterruptedException {
         //given
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
-        questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.from(QuestionReviewStatistics.create(question.getId())));
+        Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
+        questionReviewStatisticsRepository.save(
+            QuestionReviewStatisticsBuilder
+                .builder()
+                .questionId(question.getId())
+                .build()
+                .toQuestionReviewStatistics()
+        );
+        
         RegisteredReviewEvent event = RegisteredReviewEvent.create(question.getId(), 4);
 
         //when
@@ -61,7 +67,7 @@ class QuestionReviewStatisticsUpdaterTest {
         latch.await();
 
         //then
-        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(question.getId());
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
         assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(400);
     }
@@ -70,9 +76,14 @@ class QuestionReviewStatisticsUpdaterTest {
     @DisplayName("리뷰 수정 시 평점 통계 업데이트 동시성 테스트")
     void reviewStatisticsConcurrencyTestWhenModifiedReview() throws InterruptedException {
         //given
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
-        questionReviewStatisticsJpaRepository.save(
-            QuestionReviewStatisticsEntity.from(new QuestionReviewStatistics(question.getId(), 100, 0, 0.0))
+        Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
+        questionReviewStatisticsRepository.save(
+            QuestionReviewStatisticsBuilder
+                .builder()
+                .questionId(question.getId())
+                .reviewCount(100)
+                .build()
+                .toQuestionReviewStatistics()
         );
         ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
 
@@ -95,7 +106,7 @@ class QuestionReviewStatisticsUpdaterTest {
         latch.await();
 
         //then
-        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(question.getId());
         assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(300);
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
         assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(3.0);
@@ -105,9 +116,16 @@ class QuestionReviewStatisticsUpdaterTest {
     @DisplayName("리뷰 삭제 시 평점 통계 업데이트 동시성 테스트")
     void reviewStatisticsConcurrencyTestWhenDeletedReview() throws InterruptedException {
         //given
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
-        questionReviewStatisticsJpaRepository.save(
-            QuestionReviewStatisticsEntity.from(new QuestionReviewStatistics(question.getId(), 100, 400, 4.0))
+        Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
+        questionReviewStatisticsRepository.save(
+            QuestionReviewStatisticsBuilder
+                .builder()
+                .questionId(question.getId())
+                .reviewCount(100)
+                .totalRate(400)
+                .averageRate(4.0)
+                .build()
+                .toQuestionReviewStatistics()
         );
         DeletedReviewEvent event = DeletedReviewEvent.create(question.getId(), 4);
 
@@ -130,7 +148,7 @@ class QuestionReviewStatisticsUpdaterTest {
         latch.await();
 
         //then
-        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(question.getId());
         assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(80);
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(20);
         assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(4.0);
@@ -140,9 +158,16 @@ class QuestionReviewStatisticsUpdaterTest {
     @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 리뷰 통계 평점 업데이트 동시성 테스트")
     void reviewStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
         //given
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
-        questionReviewStatisticsJpaRepository.save(
-            QuestionReviewStatisticsEntity.from(new QuestionReviewStatistics(question.getId(), 100, 100, 1.0))
+        Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
+        questionReviewStatisticsRepository.save(
+            QuestionReviewStatisticsBuilder
+                .builder()
+                .questionId(question.getId())
+                .totalRate(100)
+                .reviewCount(100)
+                .averageRate(1.0)
+                .build()
+                .toQuestionReviewStatistics()
         );
 
         RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
@@ -190,7 +215,7 @@ class QuestionReviewStatisticsUpdaterTest {
         latch.await();
 
         //then
-        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsJpaRepository.findById(question.getId()).get().toModel();
+        QuestionReviewStatistics questionReviewStatistics = questionReviewStatisticsRepository.get(question.getId());
         assertThat(questionReviewStatistics.getTotalRate()).isEqualTo(140);
         assertThat(questionReviewStatistics.getReviewCount()).isEqualTo(100);
         assertThat(questionReviewStatistics.getAverageRate()).isEqualTo(1.4);
