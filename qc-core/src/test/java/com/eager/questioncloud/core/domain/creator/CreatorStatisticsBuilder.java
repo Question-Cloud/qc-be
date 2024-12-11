@@ -7,15 +7,15 @@ public class CreatorStatisticsBuilder {
     @Builder.Default
     private Long creatorId = 1L;
     @Builder.Default
-    private int subscribeCount = 100;
+    private int subscribeCount = 0;
     @Builder.Default
-    private int salesCount = 100;
+    private int salesCount = 0;
     @Builder.Default
-    private int reviewCount = 100;
+    private int reviewCount = 0;
     @Builder.Default
-    private int totalReviewRate = 100;
+    private int totalReviewRate = 0;
     @Builder.Default
-    private Double averageRateOfReview = 1.0;
+    private Double averageRateOfReview = 0.0;
 
     public CreatorStatistics toCreatorStatistics() {
         return CreatorStatistics.builder()

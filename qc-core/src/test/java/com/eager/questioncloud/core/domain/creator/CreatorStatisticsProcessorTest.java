@@ -6,7 +6,6 @@ import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionBuilder;
 import com.eager.questioncloud.core.domain.question.QuestionEntity;
 import com.eager.questioncloud.core.domain.question.QuestionJpaRepository;
-import com.eager.questioncloud.core.domain.question.Subject;
 import com.eager.questioncloud.core.domain.review.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.RegisteredReviewEvent;
@@ -46,15 +45,23 @@ class CreatorStatisticsProcessorTest {
     @DisplayName("리뷰 등록 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
     void creatorStatisticsConcurrencyTestWhenRegisteredReview() throws InterruptedException {
         //given
-        Creator creator = creatorJpaRepository.save(
-            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
-        ).toModel();
+        Creator creator = creatorJpaRepository.save(CreatorEntity.from(CreatorBuilder.builder().build().toCreator())).toModel();
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(
+            CreatorStatisticsBuilder
+                .builder()
+                .creatorId(creator.getId())
+                .build()
+                .toCreatorStatistics()
+        )).toModel();
 
-        creatorStatisticsJpaRepository.save(
-            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 0, 0, 0.0))
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(
+                QuestionBuilder
+                    .builder()
+                    .creatorId(creator.getId())
+                    .build()
+                    .toQuestion())
         ).toModel();
-
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         RegisteredReviewEvent event = RegisteredReviewEvent.create(question.getId(), 4);
 
@@ -77,8 +84,7 @@ class CreatorStatisticsProcessorTest {
         latch.await();
 
         //then
-        CreatorStatistics creatorStatistics = creatorStatisticsJpaRepository.findByCreatorId(creator.getId())
-            .get().toModel();
+        CreatorStatistics creatorStatistics = creatorStatisticsJpaRepository.findByCreatorId(creator.getId()).get().toModel();
 
         assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(400);
         assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(4.0);
@@ -87,15 +93,24 @@ class CreatorStatisticsProcessorTest {
     @Test
     @DisplayName("리뷰 수정 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
     void creatorStatisticsConcurrencyTestWhenModifiedReview() throws InterruptedException {
-        Creator creator = creatorJpaRepository.save(
-            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
-        ).toModel();
+        Creator creator = creatorJpaRepository.save(CreatorEntity.from(CreatorBuilder.builder().build().toCreator())).toModel();
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(
+            CreatorStatisticsBuilder
+                .builder()
+                .creatorId(creator.getId())
+                .reviewCount(100)
+                .build()
+                .toCreatorStatistics()
+        )).toModel();
 
-        creatorStatisticsJpaRepository.save(
-            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 0, 0.0))
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(
+                QuestionBuilder
+                    .builder()
+                    .creatorId(creator.getId())
+                    .build()
+                    .toQuestion())
         ).toModel();
-
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
 
@@ -128,15 +143,25 @@ class CreatorStatisticsProcessorTest {
     @Test
     @DisplayName("리뷰 삭제 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
     void creatorStatisticsConcurrencyTestWhenDeletedReview() throws InterruptedException {
-        Creator creator = creatorJpaRepository.save(
-            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
-        ).toModel();
+        Creator creator = creatorJpaRepository.save(CreatorEntity.from(CreatorBuilder.builder().build().toCreator())).toModel();
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(
+            CreatorStatisticsBuilder
+                .builder()
+                .creatorId(creator.getId())
+                .reviewCount(100)
+                .totalReviewRate(400)
+                .build()
+                .toCreatorStatistics()
+        )).toModel();
 
-        creatorStatisticsJpaRepository.save(
-            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 400, 4.0))
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(
+                QuestionBuilder
+                    .builder()
+                    .creatorId(creator.getId())
+                    .build()
+                    .toQuestion())
         ).toModel();
-
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         DeletedReviewEvent event = DeletedReviewEvent.create(question.getId(), 4);
 
@@ -171,15 +196,26 @@ class CreatorStatisticsProcessorTest {
     @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 크리에이터 통계 업데이트 동시성 테스트")
     void creatorStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
         //given
-        Creator creator = creatorJpaRepository.save(
-            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
-        ).toModel();
+        Creator creator = creatorJpaRepository.save(CreatorEntity.from(CreatorBuilder.builder().build().toCreator())).toModel();
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(
+            CreatorStatisticsBuilder
+                .builder()
+                .creatorId(creator.getId())
+                .reviewCount(100)
+                .totalReviewRate(100)
+                .averageRateOfReview(1.0)
+                .build()
+                .toCreatorStatistics()
+        )).toModel();
 
-        creatorStatisticsJpaRepository.save(
-            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 100, 1.0))
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(
+                QuestionBuilder
+                    .builder()
+                    .creatorId(creator.getId())
+                    .build()
+                    .toQuestion())
         ).toModel();
-
-        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
         ModifiedReviewEvent modifiedReviewEvent = ModifiedReviewEvent.create(question.getId(), 1);
