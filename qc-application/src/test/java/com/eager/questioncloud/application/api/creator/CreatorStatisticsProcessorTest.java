@@ -14,6 +14,7 @@ import com.eager.questioncloud.core.domain.question.QuestionContent;
 import com.eager.questioncloud.core.domain.question.QuestionEntity;
 import com.eager.questioncloud.core.domain.question.QuestionJpaRepository;
 import com.eager.questioncloud.core.domain.question.Subject;
+import com.eager.questioncloud.core.domain.review.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.RegisteredReviewEvent;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -89,5 +90,48 @@ class CreatorStatisticsProcessorTest {
 
         assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(400);
         assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(4.0);
+    }
+
+    @Test
+    @DisplayName("리뷰 수정 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
+    void creatorStatisticsConcurrencyTestWhenModifiedReview() throws InterruptedException {
+        Creator creator = creatorJpaRepository.save(
+            CreatorEntity.from(Creator.create(1L, CreatorProfile.create(Subject.Mathematics, "tt")))
+        ).toModel();
+
+        creatorStatisticsJpaRepository.save(
+            CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 0, 0.0))
+        ).toModel();
+
+        Question question = questionJpaRepository.save(
+            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
+        ).toModel();
+
+        ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
+
+        //when
+        int threadCount = 100;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.execute(() -> {
+                try {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event);
+                } catch (Exception ignored) {
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        //then
+        CreatorStatistics creatorStatistics = creatorStatisticsJpaRepository.findByCreatorId(creator.getId())
+            .get().toModel();
+
+        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(300);
+        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(3.0);
     }
 }
