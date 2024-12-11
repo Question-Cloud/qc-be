@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.review;
+package com.eager.questioncloud.core.domain.review.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

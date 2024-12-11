@@ -1,4 +1,6 @@
-package com.eager.questioncloud.core.domain.review;
+package com.eager.questioncloud.core.domain.review.infrastructure;
+
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 
 public interface QuestionReviewStatisticsRepository {
     QuestionReviewStatistics get(Long questionId);

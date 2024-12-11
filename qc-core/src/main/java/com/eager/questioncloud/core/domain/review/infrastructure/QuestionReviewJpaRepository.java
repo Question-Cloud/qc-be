@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.review;
+package com.eager.questioncloud.core.domain.review.infrastructure;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

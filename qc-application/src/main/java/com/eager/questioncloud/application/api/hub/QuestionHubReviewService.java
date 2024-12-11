@@ -1,13 +1,13 @@
 package com.eager.questioncloud.application.api.hub;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.DeletedReviewEvent;
-import com.eager.questioncloud.core.domain.review.ModifiedReviewEvent;
-import com.eager.questioncloud.core.domain.review.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.QuestionReview;
-import com.eager.questioncloud.core.domain.review.QuestionReviewDetail;
-import com.eager.questioncloud.core.domain.review.QuestionReviewRepository;
-import com.eager.questioncloud.core.domain.review.RegisteredReviewEvent;
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
+import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

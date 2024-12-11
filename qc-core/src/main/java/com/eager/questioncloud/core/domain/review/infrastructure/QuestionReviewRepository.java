@@ -1,6 +1,8 @@
-package com.eager.questioncloud.core.domain.review;
+package com.eager.questioncloud.core.domain.review.infrastructure;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
+import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import java.util.List;
 
 public interface QuestionReviewRepository {

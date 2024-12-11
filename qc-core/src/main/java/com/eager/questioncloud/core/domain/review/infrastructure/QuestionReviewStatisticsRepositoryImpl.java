@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.review;
+package com.eager.questioncloud.core.domain.review.infrastructure;
 
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
