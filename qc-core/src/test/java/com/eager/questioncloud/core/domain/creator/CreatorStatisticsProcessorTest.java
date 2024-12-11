@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.creator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.eager.questioncloud.core.domain.question.Question;
-import com.eager.questioncloud.core.domain.question.QuestionContent;
+import com.eager.questioncloud.core.domain.question.QuestionBuilder;
 import com.eager.questioncloud.core.domain.question.QuestionEntity;
 import com.eager.questioncloud.core.domain.question.QuestionJpaRepository;
 import com.eager.questioncloud.core.domain.question.Subject;
@@ -54,9 +54,7 @@ class CreatorStatisticsProcessorTest {
             CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 0, 0, 0.0))
         ).toModel();
 
-        Question question = questionJpaRepository.save(
-            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
-        ).toModel();
+        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         RegisteredReviewEvent event = RegisteredReviewEvent.create(question.getId(), 4);
 
@@ -97,9 +95,7 @@ class CreatorStatisticsProcessorTest {
             CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 0, 0.0))
         ).toModel();
 
-        Question question = questionJpaRepository.save(
-            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
-        ).toModel();
+        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
 
@@ -140,9 +136,7 @@ class CreatorStatisticsProcessorTest {
             CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 400, 4.0))
         ).toModel();
 
-        Question question = questionJpaRepository.save(
-            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
-        ).toModel();
+        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         DeletedReviewEvent event = DeletedReviewEvent.create(question.getId(), 4);
 
@@ -185,9 +179,7 @@ class CreatorStatisticsProcessorTest {
             CreatorStatisticsEntity.from(new CreatorStatistics(creator.getId(), 0, 0, 100, 100, 1.0))
         ).toModel();
 
-        Question question = questionJpaRepository.save(
-            QuestionEntity.from(Question.create(creator.getId(), QuestionContent.builder().build()))
-        ).toModel();
+        Question question = questionJpaRepository.save(QuestionEntity.from(QuestionBuilder.builder().build().toQuestion())).toModel();
 
         RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
         ModifiedReviewEvent modifiedReviewEvent = ModifiedReviewEvent.create(question.getId(), 1);
