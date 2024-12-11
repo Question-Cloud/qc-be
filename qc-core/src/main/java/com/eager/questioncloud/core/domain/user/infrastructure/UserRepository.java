@@ -1,5 +1,8 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.infrastructure;
 
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
+import com.eager.questioncloud.core.domain.user.enums.AccountType;
+import com.eager.questioncloud.core.domain.user.model.User;
 import java.util.Optional;
 
 public interface UserRepository {

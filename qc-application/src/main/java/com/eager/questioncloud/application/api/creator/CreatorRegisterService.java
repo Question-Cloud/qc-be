@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.creator;
 import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

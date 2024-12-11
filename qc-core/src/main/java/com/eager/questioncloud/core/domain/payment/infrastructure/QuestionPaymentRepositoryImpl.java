@@ -6,7 +6,7 @@ import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreato
 import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentEntity.questionPaymentEntity;
 import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
 import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;

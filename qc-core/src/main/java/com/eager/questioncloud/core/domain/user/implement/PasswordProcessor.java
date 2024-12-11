@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.implement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,9 +1,14 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.infrastructure;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorEntity;
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
+import com.eager.questioncloud.core.domain.user.enums.AccountType;
+import com.eager.questioncloud.core.domain.user.enums.UserStatus;
+import com.eager.questioncloud.core.domain.user.enums.UserType;
+import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.core.Tuple;

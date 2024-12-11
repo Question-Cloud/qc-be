@@ -1,5 +1,7 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.infrastructure;
 
+import com.eager.questioncloud.core.domain.user.enums.AccountType;
+import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

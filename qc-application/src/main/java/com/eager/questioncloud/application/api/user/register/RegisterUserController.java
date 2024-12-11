@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.user.register;
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.user.register.RegisterUserControllerRequest.CreateUserRequest;
 import com.eager.questioncloud.application.api.user.register.RegisterUserControllerResponse.CreateUserResponse;
-import com.eager.questioncloud.core.domain.user.User;
+import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.verification.EmailVerification;
 import com.eager.questioncloud.core.domain.verification.EmailVerificationType;
 import io.swagger.v3.oas.annotations.Operation;

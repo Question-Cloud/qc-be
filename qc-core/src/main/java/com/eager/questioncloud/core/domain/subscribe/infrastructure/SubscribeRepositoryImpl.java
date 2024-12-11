@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.subscribe.infrastructure;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorStatisticsEntity.creatorStatisticsEntity;
 import static com.eager.questioncloud.core.domain.subscribe.infrastructure.QSubscribeEntity.subscribeEntity;
-import static com.eager.questioncloud.core.domain.user.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;

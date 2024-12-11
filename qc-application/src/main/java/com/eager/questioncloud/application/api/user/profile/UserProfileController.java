@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.user.profile.UserPointControllerRequest.UpdateMyInformationRequest;
 import com.eager.questioncloud.application.api.user.profile.UserPointControllerResponse.MyInformationResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.core.domain.user.MyInformation;
+import com.eager.questioncloud.core.domain.user.dto.MyInformation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

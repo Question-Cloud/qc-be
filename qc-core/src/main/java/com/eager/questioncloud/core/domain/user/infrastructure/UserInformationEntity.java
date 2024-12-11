@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.infrastructure;
 
+import com.eager.questioncloud.core.domain.user.model.UserInformation;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

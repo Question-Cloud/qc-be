@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user;
+package com.eager.questioncloud.core.domain.user.enums;
 
 import lombok.Getter;
 

@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.user.account;
 
 import com.eager.questioncloud.application.mail.EmailSender;
-import com.eager.questioncloud.core.domain.user.User;
-import com.eager.questioncloud.core.domain.user.UserRepository;
+import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
+import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.verification.Email;
 import com.eager.questioncloud.core.domain.verification.EmailVerification;
 import com.eager.questioncloud.core.domain.verification.EmailVerificationProcessor;

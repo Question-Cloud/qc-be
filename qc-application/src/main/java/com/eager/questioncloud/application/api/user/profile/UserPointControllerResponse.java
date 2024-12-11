@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.user.profile;
 
-import com.eager.questioncloud.core.domain.user.MyInformation;
+import com.eager.questioncloud.core.domain.user.dto.MyInformation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
