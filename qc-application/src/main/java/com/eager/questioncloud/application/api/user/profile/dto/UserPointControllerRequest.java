@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.profile;
+package com.eager.questioncloud.application.api.user.profile.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

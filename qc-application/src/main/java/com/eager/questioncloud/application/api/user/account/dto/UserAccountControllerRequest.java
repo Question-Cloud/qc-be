@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.account;
+package com.eager.questioncloud.application.api.user.account.dto;
 
 import com.eager.questioncloud.application.validator.PasswordValidator;
 import com.eager.questioncloud.application.validator.Validatable;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.register;
+package com.eager.questioncloud.application.api.user.register.dto;
 
 import com.eager.questioncloud.application.validator.EmailValidator;
 import com.eager.questioncloud.application.validator.PasswordValidator;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.register;
+package com.eager.questioncloud.application.api.user.register.service;
 
 import com.eager.questioncloud.application.mail.EmailSender;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;

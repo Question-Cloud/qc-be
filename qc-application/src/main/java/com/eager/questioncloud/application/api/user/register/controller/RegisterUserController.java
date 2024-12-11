@@ -1,8 +1,9 @@
-package com.eager.questioncloud.application.api.user.register;
+package com.eager.questioncloud.application.api.user.register.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
-import com.eager.questioncloud.application.api.user.register.RegisterUserControllerRequest.CreateUserRequest;
-import com.eager.questioncloud.application.api.user.register.RegisterUserControllerResponse.CreateUserResponse;
+import com.eager.questioncloud.application.api.user.register.dto.RegisterUserControllerRequest.CreateUserRequest;
+import com.eager.questioncloud.application.api.user.register.dto.RegisterUserControllerResponse.CreateUserResponse;
+import com.eager.questioncloud.application.api.user.register.service.RegisterUserService;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;

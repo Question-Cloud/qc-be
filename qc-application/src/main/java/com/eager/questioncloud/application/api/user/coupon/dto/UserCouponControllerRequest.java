@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.coupon;
+package com.eager.questioncloud.application.api.user.coupon.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

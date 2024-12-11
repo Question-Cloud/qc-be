@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.point;
+package com.eager.questioncloud.application.api.user.point.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

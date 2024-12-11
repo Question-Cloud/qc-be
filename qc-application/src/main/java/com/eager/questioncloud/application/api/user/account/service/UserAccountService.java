@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.account;
+package com.eager.questioncloud.application.api.user.account.service;
 
 import com.eager.questioncloud.application.mail.EmailSender;
 import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.coupon;
+package com.eager.questioncloud.application.api.user.coupon.dto;
 
 import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import java.util.List;

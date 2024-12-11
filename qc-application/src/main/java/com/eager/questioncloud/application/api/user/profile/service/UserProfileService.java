@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.profile;
+package com.eager.questioncloud.application.api.user.profile.service;
 
 import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;

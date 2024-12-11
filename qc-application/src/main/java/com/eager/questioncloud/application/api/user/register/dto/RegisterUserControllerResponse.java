@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.register;
+package com.eager.questioncloud.application.api.user.register.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
