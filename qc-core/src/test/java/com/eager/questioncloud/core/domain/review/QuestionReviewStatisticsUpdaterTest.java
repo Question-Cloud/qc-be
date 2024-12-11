@@ -34,8 +34,8 @@ class QuestionReviewStatisticsUpdaterTest {
     }
 
     @Test
-    @DisplayName("리뷰 작성 시 평점 통계 업데이트 동시성 테스트")
-    void reviewStatisticsConcurrencyTestWhenRegisteredReview() throws InterruptedException {
+    @DisplayName("리뷰 작성 이벤트 평점 통계 업데이트 동시성 테스트")
+    void reviewStatisticsConcurrencyTestWhenRegisteredReviewEvent() throws InterruptedException {
         //given
         Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
         questionReviewStatisticsRepository.save(
@@ -45,7 +45,7 @@ class QuestionReviewStatisticsUpdaterTest {
                 .build()
                 .toQuestionReviewStatistics()
         );
-        
+
         RegisteredReviewEvent event = RegisteredReviewEvent.create(question.getId(), 4);
 
         //when
@@ -73,8 +73,8 @@ class QuestionReviewStatisticsUpdaterTest {
     }
 
     @Test
-    @DisplayName("리뷰 수정 시 평점 통계 업데이트 동시성 테스트")
-    void reviewStatisticsConcurrencyTestWhenModifiedReview() throws InterruptedException {
+    @DisplayName("리뷰 수정 이벤트 평점 통계 업데이트 동시성 테스트")
+    void reviewStatisticsConcurrencyTestWhenModifiedReviewEvent() throws InterruptedException {
         //given
         Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
         questionReviewStatisticsRepository.save(
@@ -113,8 +113,8 @@ class QuestionReviewStatisticsUpdaterTest {
     }
 
     @Test
-    @DisplayName("리뷰 삭제 시 평점 통계 업데이트 동시성 테스트")
-    void reviewStatisticsConcurrencyTestWhenDeletedReview() throws InterruptedException {
+    @DisplayName("리뷰 삭제 이벤트 평점 통계 업데이트 동시성 테스트")
+    void reviewStatisticsConcurrencyTestWhenDeletedReviewEvent() throws InterruptedException {
         //given
         Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
         questionReviewStatisticsRepository.save(
@@ -155,7 +155,7 @@ class QuestionReviewStatisticsUpdaterTest {
     }
 
     @Test
-    @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 리뷰 통계 평점 업데이트 동시성 테스트")
+    @DisplayName("리뷰 추가, 수정, 삭제 이벤트가 동시에 일어나는 경우 리뷰 통계 평점 업데이트 동시성 테스트")
     void reviewStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
         //given
         Question question = questionRepository.save(QuestionBuilder.builder().build().toQuestion());
