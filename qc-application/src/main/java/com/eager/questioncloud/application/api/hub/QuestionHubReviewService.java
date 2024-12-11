@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class QuestionHubReviewService {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionHubReviewRegister questionHubReviewRegister;
+    private final QuestionHunReviewUpdater questionHubReviewUpdater;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public int getTotal(Long questionId) {
@@ -40,12 +41,10 @@ public class QuestionHubReviewService {
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
-        int varianceRate = rate - questionReview.getRate();
-        questionReview.modify(comment, rate);
-        questionReviewRepository.save(questionReview);
+        int varianceRate = questionHubReviewUpdater.modifyQuestionReview(questionReview, comment, rate);
         applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
-    
+
     public void delete(Long reviewId, Long userId) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
         questionReview.delete();

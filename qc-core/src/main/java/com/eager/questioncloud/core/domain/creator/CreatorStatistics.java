@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.creator;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -11,6 +12,7 @@ public class CreatorStatistics {
     private int totalReviewRate;
     private Double averageRateOfReview;
 
+    @Builder
     public CreatorStatistics(Long creatorId, int subscribeCount, int salesCount, int reviewCount, int totalReviewRate, Double averageRateOfReview) {
         this.creatorId = creatorId;
         this.subscribeCount = subscribeCount;

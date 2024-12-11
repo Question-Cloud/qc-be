@@ -21,4 +21,9 @@ public class QuestionReviewStatisticsRepositoryImpl implements QuestionReviewSta
     public QuestionReviewStatistics save(QuestionReviewStatistics questionReviewStatistics) {
         return questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.from(questionReviewStatistics)).toModel();
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        questionReviewStatisticsJpaRepository.deleteAllInBatch();
+    }
 }

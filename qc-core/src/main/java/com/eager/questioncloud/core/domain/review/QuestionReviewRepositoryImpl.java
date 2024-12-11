@@ -94,7 +94,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     }
 
     @Override
-    public Boolean isWritten(Long questionId, Long userId) {
+    public Boolean isWritten(Long userId, Long questionId) {
         Long reviewId = jpaQueryFactory.select(questionReviewEntity.id)
             .from(questionReviewEntity)
             .where(

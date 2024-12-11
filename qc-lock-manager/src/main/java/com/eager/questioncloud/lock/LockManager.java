@@ -27,17 +27,17 @@ public class LockManager {
             }
             task.run();
         } catch (InterruptedException e) {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
             throw new CustomException(Error.INTERNAL_SERVER_ERROR);
         } catch (CustomException e) {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
             throw e;
         } finally {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
         }

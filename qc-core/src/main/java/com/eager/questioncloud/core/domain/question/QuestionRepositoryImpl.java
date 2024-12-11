@@ -179,6 +179,11 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return result;
     }
 
+    @Override
+    public void deleteAllInBatch() {
+        questionJpaRepository.deleteAllInBatch();
+    }
+
     private OrderSpecifier<?> sort(QuestionSortType sort) {
         switch (sort) {
             case Popularity -> {

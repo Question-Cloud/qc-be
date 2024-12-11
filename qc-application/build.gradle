@@ -18,6 +18,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testImplementation("org.springframework:spring-tx")
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 sourceSets {

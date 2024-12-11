@@ -51,4 +51,9 @@ public class CreatorRepositoryImpl implements CreatorRepository {
     public Creator save(Creator creator) {
         return creatorJpaRepository.save(CreatorEntity.from(creator)).toModel();
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        creatorJpaRepository.deleteAllInBatch();
+    }
 }

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core;
+package com.eager.questioncloud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
