@@ -1,6 +1,7 @@
-package com.eager.questioncloud.application.api.feed;
+package com.eager.questioncloud.application.api.feed.subscribe.controller;
 
 import com.eager.questioncloud.application.api.common.PagingResponse;
+import com.eager.questioncloud.application.api.feed.subscribe.service.FeedSubscribeService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;

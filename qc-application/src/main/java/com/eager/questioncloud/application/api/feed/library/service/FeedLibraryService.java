@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.feed;
+package com.eager.questioncloud.application.api.feed.library.service;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;
