@@ -6,4 +6,6 @@ public interface CreatorRepository {
     CreatorInformation getCreatorInformation(Long creatorId);
 
     Creator save(Creator creator);
+
+    void deleteAllInBatch();
 }

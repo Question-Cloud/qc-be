@@ -8,4 +8,6 @@ public interface CreatorStatisticsRepository {
     void saveAll(List<CreatorStatistics> creatorStatistics);
 
     CreatorStatistics findByCreatorId(Long creatorId);
+
+    void deleteAllInBatch();
 }

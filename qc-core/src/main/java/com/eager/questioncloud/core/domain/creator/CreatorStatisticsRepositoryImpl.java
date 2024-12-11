@@ -30,4 +30,9 @@ public class CreatorStatisticsRepositoryImpl implements CreatorStatisticsReposit
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        creatorStatisticsJpaRepository.deleteAllInBatch();
+    }
 }
