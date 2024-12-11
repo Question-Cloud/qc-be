@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class QuestionHubService {
+public class HubQuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionCategoryRepository questionCategoryRepository;
 

@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.hub.question.controller;
 
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.hub.question.dto.QuestionHubControllerResponse.QuestionCategoriesResponse;
-import com.eager.questioncloud.application.api.hub.question.dto.QuestionHubControllerResponse.QuestionInformationResponse;
-import com.eager.questioncloud.application.api.hub.question.service.QuestionHubService;
+import com.eager.questioncloud.application.api.hub.question.dto.HubQuestionControllerResponse.QuestionCategoriesResponse;
+import com.eager.questioncloud.application.api.hub.question.dto.HubQuestionControllerResponse.QuestionInformationResponse;
+import com.eager.questioncloud.application.api.hub.question.service.HubQuestionService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/hub/question")
 @RequiredArgsConstructor
-public class QuestionHubController {
-    private final QuestionHubService questionHubService;
+public class HubQuestionController {
+    private final HubQuestionService hubQuestionService;
 
     @GetMapping
     @ApiResponses(value = {
@@ -35,8 +35,8 @@ public class QuestionHubController {
     @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
     @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
     public PagingResponse<QuestionInformation> getQuestionListByFiltering(@ParameterObject QuestionFilter questionFilter) {
-        int total = questionHubService.getTotalFiltering(questionFilter);
-        List<QuestionInformation> questionInformation = questionHubService.getQuestionListByFiltering(questionFilter);
+        int total = hubQuestionService.getTotalFiltering(questionFilter);
+        List<QuestionInformation> questionInformation = hubQuestionService.getQuestionListByFiltering(questionFilter);
         return new PagingResponse<>(total, questionInformation);
     }
 
@@ -46,7 +46,7 @@ public class QuestionHubController {
     })
     @Operation(operationId = "문제 카테고리 목록 조회", summary = "문제 카테고리 목록 조회", tags = {"question"}, description = "문제 카테고리 목록 조회")
     public QuestionCategoriesResponse getQuestionCategories() {
-        List<QuestionCategoryGroupBySubject> categories = questionHubService.getQuestionCategories();
+        List<QuestionCategoryGroupBySubject> categories = hubQuestionService.getQuestionCategories();
         return new QuestionCategoriesResponse(categories);
     }
 
@@ -56,7 +56,7 @@ public class QuestionHubController {
     })
     @Operation(operationId = "문제 상세 조회", summary = "문제 상세 조회", tags = {"question"}, description = "문제 상세 조회")
     public QuestionInformationResponse getQuestionDetail(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId) {
-        QuestionInformation questionInformation = questionHubService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
+        QuestionInformation questionInformation = hubQuestionService.getQuestionInformation(questionId, userPrincipal.getUser().getUid());
         return new QuestionInformationResponse(questionInformation);
     }
 }

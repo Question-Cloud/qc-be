@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class QuestionHubControllerResponse {
+public class HubQuestionControllerResponse {
     @Getter
     @AllArgsConstructor
     public static class QuestionInformationResponse {
