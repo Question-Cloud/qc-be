@@ -1,5 +1,7 @@
-package com.eager.questioncloud.core.domain.coupon;
+package com.eager.questioncloud.core.domain.coupon.infrastructure;
 
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import java.util.List;
 
 public interface UserCouponRepository {

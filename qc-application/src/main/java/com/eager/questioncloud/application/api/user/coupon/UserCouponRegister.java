@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.user.coupon;
 
-import com.eager.questioncloud.core.domain.coupon.Coupon;
-import com.eager.questioncloud.core.domain.coupon.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.UserCoupon;
-import com.eager.questioncloud.core.domain.coupon.UserCouponRepository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.CouponRepository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
+import com.eager.questioncloud.core.domain.coupon.model.Coupon;
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon;
+package com.eager.questioncloud.core.domain.coupon.enums;
 
 import lombok.Getter;
 

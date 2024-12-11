@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.payment;
 
-import com.eager.questioncloud.core.domain.coupon.Coupon;
-import com.eager.questioncloud.core.domain.coupon.CouponType;
+import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
+import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.question.Question;
 import java.time.LocalDateTime;
 import java.util.List;

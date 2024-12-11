@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.payment;
 
-import static com.eager.questioncloud.core.domain.coupon.QCouponEntity.couponEntity;
-import static com.eager.questioncloud.core.domain.coupon.QUserCouponEntity.userCouponEntity;
+import static com.eager.questioncloud.core.domain.coupon.infrastructure.QCouponEntity.couponEntity;
+import static com.eager.questioncloud.core.domain.coupon.infrastructure.QUserCouponEntity.userCouponEntity;
 import static com.eager.questioncloud.core.domain.creator.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentEntity.questionPaymentEntity;
 import static com.eager.questioncloud.core.domain.payment.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;

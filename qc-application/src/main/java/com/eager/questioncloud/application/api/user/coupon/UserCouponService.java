@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.user.coupon;
 
-import com.eager.questioncloud.core.domain.coupon.AvailableUserCoupon;
-import com.eager.questioncloud.core.domain.coupon.UserCouponRepository;
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import java.util.List;
