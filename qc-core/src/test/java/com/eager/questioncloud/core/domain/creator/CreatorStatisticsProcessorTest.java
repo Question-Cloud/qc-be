@@ -41,8 +41,8 @@ class CreatorStatisticsProcessorTest {
     }
 
     @Test
-    @DisplayName("리뷰 등록 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenRegisteredReview() throws InterruptedException {
+    @DisplayName("리뷰 등록 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
+    void creatorStatisticsConcurrencyTestWhenRegisteredReviewEvent() throws InterruptedException {
         //given
         Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
         creatorStatisticsRepository.save(
@@ -89,8 +89,8 @@ class CreatorStatisticsProcessorTest {
     }
 
     @Test
-    @DisplayName("리뷰 수정 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenModifiedReview() throws InterruptedException {
+    @DisplayName("리뷰 수정 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
+    void creatorStatisticsConcurrencyTestWhenModifiedReviewEvent() throws InterruptedException {
         Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
         creatorStatisticsRepository.save(
             CreatorStatisticsBuilder
@@ -137,8 +137,8 @@ class CreatorStatisticsProcessorTest {
     }
 
     @Test
-    @DisplayName("리뷰 삭제 시 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenDeletedReview() throws InterruptedException {
+    @DisplayName("리뷰 삭제 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
+    void creatorStatisticsConcurrencyTestWhenDeletedReviewEvent() throws InterruptedException {
         Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
         creatorStatisticsRepository.save(
             CreatorStatisticsBuilder
@@ -187,7 +187,7 @@ class CreatorStatisticsProcessorTest {
     }
 
     @Test
-    @DisplayName("리뷰 추가, 수정, 삭제가 동시에 일어나는 경우 크리에이터 통계 업데이트 동시성 테스트")
+    @DisplayName("리뷰 추가, 수정, 삭제 이벤트가 동시에 일어나는 경우 크리에이터 통계 업데이트 동시성 테스트")
     void creatorStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
         //given
         Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
