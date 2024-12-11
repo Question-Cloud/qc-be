@@ -1,14 +1,7 @@
-package com.eager.questioncloud.application.api.creator;
+package com.eager.questioncloud.core.domain.creator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.eager.questioncloud.core.domain.creator.Creator;
-import com.eager.questioncloud.core.domain.creator.CreatorEntity;
-import com.eager.questioncloud.core.domain.creator.CreatorJpaRepository;
-import com.eager.questioncloud.core.domain.creator.CreatorProfile;
-import com.eager.questioncloud.core.domain.creator.CreatorStatistics;
-import com.eager.questioncloud.core.domain.creator.CreatorStatisticsEntity;
-import com.eager.questioncloud.core.domain.creator.CreatorStatisticsJpaRepository;
 import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionContent;
 import com.eager.questioncloud.core.domain.question.QuestionEntity;

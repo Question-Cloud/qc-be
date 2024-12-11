@@ -1,7 +1,5 @@
-package com.eager.questioncloud.application.api.creator;
+package com.eager.questioncloud.core.domain.creator;
 
-import com.eager.questioncloud.core.domain.creator.CreatorStatistics;
-import com.eager.questioncloud.core.domain.creator.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.payment.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.question.Question;
 import com.eager.questioncloud.core.domain.question.QuestionRepository;

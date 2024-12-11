@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.api.creator;
 
 import com.eager.questioncloud.core.domain.creator.Creator;
 import com.eager.questioncloud.core.domain.creator.CreatorProfile;
+import com.eager.questioncloud.core.domain.creator.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CreatorRegisterService {
     private final CreatorRegister creatorRegister;
     private final ApplicationEventPublisher applicationEventPublisher;
-    
+
     public Creator register(User user, CreatorProfile creatorProfile) {
         Creator creator = creatorRegister.register(user, creatorProfile);
         applicationEventPublisher.publishEvent(RegisteredCreatorEvent.create(creator));
