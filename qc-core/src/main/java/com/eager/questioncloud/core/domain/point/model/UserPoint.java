@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.model;
 
 import lombok.Builder;
 import lombok.Getter;

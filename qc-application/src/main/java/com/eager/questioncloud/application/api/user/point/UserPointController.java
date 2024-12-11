@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.user.point;
 
-import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.application.api.user.point.UserPointControllerResponse.GetUserPointResponse;
-import com.eager.questioncloud.core.domain.point.UserPoint;
+import com.eager.questioncloud.application.security.UserPrincipal;
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

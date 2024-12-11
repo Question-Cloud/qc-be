@@ -1,7 +1,8 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.infrastructure;
 
-import static com.eager.questioncloud.core.domain.point.QUserPointEntity.userPointEntity;
+import static com.eager.questioncloud.core.domain.point.infrastructure.QUserPointEntity.userPointEntity;
 
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;

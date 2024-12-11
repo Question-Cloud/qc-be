@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.enums;
 
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.infrastructure;
 
+import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import org.springframework.stereotype.Repository;
 
 @Repository

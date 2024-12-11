@@ -1,5 +1,8 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.infrastructure;
 
+import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

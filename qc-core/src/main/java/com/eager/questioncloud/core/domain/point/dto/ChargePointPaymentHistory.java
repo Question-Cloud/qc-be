@@ -1,5 +1,7 @@
-package com.eager.questioncloud.core.domain.point;
+package com.eager.questioncloud.core.domain.point.dto;
 
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

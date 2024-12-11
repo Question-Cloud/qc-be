@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment;
 
-import com.eager.questioncloud.core.domain.point.ChargePointEvent;
-import com.eager.questioncloud.core.domain.point.ChargePointPayment;
-import com.eager.questioncloud.core.domain.point.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.event.ChargePointEvent;
+import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import com.eager.questioncloud.lock.LockKeyGenerator;
@@ -25,7 +25,7 @@ public class ChargePointPaymentService {
         }
         chargePointPaymentRepository.save(chargePointPayment);
     }
-    
+
     public void approvePayment(String paymentId) {
         ChargePointPayment chargePointPayment = lockManager.executeWithLock(
             LockKeyGenerator.generateChargePointPaymentKey(paymentId),
