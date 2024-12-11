@@ -1,5 +1,7 @@
-package com.eager.questioncloud.core.domain.cart;
+package com.eager.questioncloud.core.domain.cart.infrastructure;
 
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
+import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import java.util.List;
 
 public interface CartItemRepository {

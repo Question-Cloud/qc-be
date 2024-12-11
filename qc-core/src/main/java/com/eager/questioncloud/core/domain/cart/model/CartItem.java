@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.cart;
+package com.eager.questioncloud.core.domain.cart.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.cart;
+package com.eager.questioncloud.core.domain.cart.infrastructure;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

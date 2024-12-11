@@ -5,7 +5,7 @@ import com.eager.questioncloud.application.api.cart.CartRequest.RemoveCartItemRe
 import com.eager.questioncloud.application.api.cart.CartResponse.GetCartResponse;
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.core.domain.cart.CartItemDetail;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;

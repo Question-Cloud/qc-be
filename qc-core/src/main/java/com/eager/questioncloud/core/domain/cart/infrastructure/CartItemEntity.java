@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.cart;
+package com.eager.questioncloud.core.domain.cart.infrastructure;
 
+import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

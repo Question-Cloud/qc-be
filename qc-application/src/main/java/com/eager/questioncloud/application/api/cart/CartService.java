@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.cart;
 
-import com.eager.questioncloud.core.domain.cart.CartItemDetail;
-import com.eager.questioncloud.core.domain.cart.CartItemRepository;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
+import com.eager.questioncloud.core.domain.cart.infrastructure.CartItemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
