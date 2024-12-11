@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.cart;
+package com.eager.questioncloud.application.api.cart.dto;
 
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import java.util.List;
