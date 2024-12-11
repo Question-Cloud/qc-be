@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.post;
+package com.eager.questioncloud.core.domain.post.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

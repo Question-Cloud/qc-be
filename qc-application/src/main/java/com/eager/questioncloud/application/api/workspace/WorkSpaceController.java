@@ -7,7 +7,7 @@ import com.eager.questioncloud.application.api.workspace.WorkSpaceControllerResp
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.post.PostListItem;
+import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.question.QuestionContent;
 import com.eager.questioncloud.core.domain.question.QuestionInformation;
 import io.swagger.v3.oas.annotations.Operation;

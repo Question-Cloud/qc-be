@@ -1,6 +1,9 @@
-package com.eager.questioncloud.core.domain.post;
+package com.eager.questioncloud.core.domain.post.infrastructure;
 
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.post.dto.PostDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostListItem;
+import com.eager.questioncloud.core.domain.post.model.Post;
 import java.util.List;
 
 public interface PostRepository {

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.post;
 
-import com.eager.questioncloud.core.domain.post.Post;
-import com.eager.questioncloud.core.domain.post.PostRepository;
+import com.eager.questioncloud.core.domain.post.infrastructure.PostRepository;
+import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.question.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.UserQuestionRepository;
 import com.eager.questioncloud.exception.CustomException;

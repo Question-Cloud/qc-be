@@ -1,6 +1,8 @@
-package com.eager.questioncloud.core.domain.post;
+package com.eager.questioncloud.core.domain.post.infrastructure;
 
-import com.eager.questioncloud.core.domain.post.converter.PostFileConverter;
+import com.eager.questioncloud.core.domain.post.infrastructure.converter.PostFileConverter;
+import com.eager.questioncloud.core.domain.post.model.PostContent;
+import com.eager.questioncloud.core.domain.post.model.PostFile;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import java.util.List;

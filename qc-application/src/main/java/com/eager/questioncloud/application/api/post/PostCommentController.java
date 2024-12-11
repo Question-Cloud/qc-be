@@ -6,8 +6,8 @@ import com.eager.questioncloud.application.api.post.PostCommentControllerRequest
 import com.eager.questioncloud.application.api.post.PostCommentControllerRequest.ModifyPostCommentRequest;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.PostComment;
-import com.eager.questioncloud.core.domain.post.PostCommentDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.post.model.PostComment;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

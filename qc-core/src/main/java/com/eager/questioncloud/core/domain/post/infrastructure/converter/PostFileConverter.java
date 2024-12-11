@@ -1,6 +1,6 @@
-package com.eager.questioncloud.core.domain.post.converter;
+package com.eager.questioncloud.core.domain.post.infrastructure.converter;
 
-import com.eager.questioncloud.core.domain.post.PostFile;
+import com.eager.questioncloud.core.domain.post.model.PostFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;

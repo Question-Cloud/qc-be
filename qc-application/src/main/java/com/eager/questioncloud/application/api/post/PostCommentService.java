@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.post;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.PostComment;
-import com.eager.questioncloud.core.domain.post.PostCommentDetail;
-import com.eager.questioncloud.core.domain.post.PostCommentRepository;
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
+import com.eager.questioncloud.core.domain.post.infrastructure.PostCommentRepository;
+import com.eager.questioncloud.core.domain.post.model.PostComment;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import java.util.List;

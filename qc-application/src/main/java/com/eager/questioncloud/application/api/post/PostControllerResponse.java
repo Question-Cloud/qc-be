@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.post;
 
-import com.eager.questioncloud.core.domain.post.PostDetail;
+import com.eager.questioncloud.core.domain.post.dto.PostDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

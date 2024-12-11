@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.post;
+package com.eager.questioncloud.core.domain.post.infrastructure;
 
+import com.eager.questioncloud.core.domain.post.model.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
