@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.creator.service;
+package com.eager.questioncloud.application.api.workspace.service;
 
-import com.eager.questioncloud.application.api.creator.implement.CreatorRegister;
+import com.eager.questioncloud.application.api.workspace.implement.CreatorRegister;
 import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;

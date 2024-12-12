@@ -2,14 +2,18 @@ package com.eager.questioncloud.application.api.workspace.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
+import com.eager.questioncloud.application.api.creator.dto.RegisterCreatorControllerRequest;
+import com.eager.questioncloud.application.api.creator.dto.RegisterCreatorControllerResponse.RegisterCreatorResponse;
 import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest;
 import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.CreatorProfileResponse;
 import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.QuestionContentResponse;
 import com.eager.questioncloud.application.api.workspace.service.CreatorPostService;
 import com.eager.questioncloud.application.api.workspace.service.CreatorProfileService;
 import com.eager.questioncloud.application.api.workspace.service.CreatorQuestionService;
+import com.eager.questioncloud.application.api.workspace.service.CreatorRegisterService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
+import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
 import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
@@ -39,13 +43,27 @@ public class WorkSpaceController {
     private final CreatorProfileService creatorProfileService;
     private final CreatorPostService creatorPostService;
     private final CreatorQuestionService creatorQuestionService;
+    private final CreatorRegisterService creatorRegisterService;
+
+    @PostMapping("/register")
+    @PreAuthorize("hasAnyRole('ROLE_NormalUser')")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
+    })
+    @Operation(operationId = "크리에이터 등록 신청", summary = "크리에이터 등록 신청", tags = {"workspace"}, description = "크리에이터 등록 신청")
+    public RegisterCreatorResponse registerCreator(
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCreatorControllerRequest.RegisterCreatorRequest request) {
+        Creator creator = creatorRegisterService.register(
+            userPrincipal.getUser(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
+        return new RegisterCreatorResponse(creator.getId());
+    }
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
-    @Operation(operationId = "크리에이터 정보 조회 (나)", summary = "크리에이터 정보 조회 (나)", tags = {"creator"}, description = "크리에이터 정보 조회 (나)")
+    @Operation(operationId = "크리에이터 정보 조회 (나)", summary = "크리에이터 정보 조회 (나)", tags = {"workspace"}, description = "크리에이터 정보 조회 (나)")
     public CreatorProfileResponse getMyCreatorInformation(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         CreatorProfile profile = userPrincipal.getCreator().getCreatorProfile();
         return new CreatorProfileResponse(profile);
@@ -56,7 +74,7 @@ public class WorkSpaceController {
     @ApiResponses(value = {
         @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
     })
-    @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = {"creator"}, description = "크리에이터 정보 수정")
+    @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = {"workspace"}, description = "크리에이터 정보 수정")
     public DefaultResponse updateMyCreatorInformation(
         @AuthenticationPrincipal UserPrincipal userPrincipal,
         @RequestBody @Valid WorkSpaceControllerRequest.UpdateCreatorProfileRequest request) {
