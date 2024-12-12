@@ -11,6 +11,15 @@ import lombok.Getter;
 
 public class WorkSpaceControllerRequest {
     @Getter
+    public static class RegisterCreatorRequest {
+        @NotNull
+        private Subject mainSubject;
+
+        @NotBlank
+        private String introduction;
+    }
+    
+    @Getter
     public static class RegisterQuestionRequest {
         @NotNull
         private Long questionCategoryId;

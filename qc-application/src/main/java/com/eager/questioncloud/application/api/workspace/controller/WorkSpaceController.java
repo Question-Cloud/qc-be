@@ -2,11 +2,13 @@ package com.eager.questioncloud.application.api.workspace.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.creator.dto.RegisterCreatorControllerRequest;
-import com.eager.questioncloud.application.api.creator.dto.RegisterCreatorControllerResponse.RegisterCreatorResponse;
-import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest.ModifyQuestionRequest;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest.RegisterCreatorRequest;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest.RegisterQuestionRequest;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerRequest.UpdateCreatorProfileRequest;
 import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.CreatorProfileResponse;
 import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.QuestionContentResponse;
+import com.eager.questioncloud.application.api.workspace.dto.WorkSpaceControllerResponse.RegisterCreatorResponse;
 import com.eager.questioncloud.application.api.workspace.service.CreatorPostService;
 import com.eager.questioncloud.application.api.workspace.service.CreatorProfileService;
 import com.eager.questioncloud.application.api.workspace.service.CreatorQuestionService;
@@ -52,7 +54,7 @@ public class WorkSpaceController {
     })
     @Operation(operationId = "크리에이터 등록 신청", summary = "크리에이터 등록 신청", tags = {"workspace"}, description = "크리에이터 등록 신청")
     public RegisterCreatorResponse registerCreator(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCreatorControllerRequest.RegisterCreatorRequest request) {
+        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterCreatorRequest request) {
         Creator creator = creatorRegisterService.register(
             userPrincipal.getUser(), new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
         return new RegisterCreatorResponse(creator.getId());
@@ -77,7 +79,7 @@ public class WorkSpaceController {
     @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = {"workspace"}, description = "크리에이터 정보 수정")
     public DefaultResponse updateMyCreatorInformation(
         @AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid WorkSpaceControllerRequest.UpdateCreatorProfileRequest request) {
+        @RequestBody @Valid UpdateCreatorProfileRequest request) {
         creatorProfileService.updateCreatorProfile(
             userPrincipal.getCreator(),
             new CreatorProfile(request.getMainSubject(), request.getIntroduction()));
@@ -117,7 +119,7 @@ public class WorkSpaceController {
     })
     @Operation(operationId = "나의 자작 문제 등록", summary = "나의 자작 문제 등록", tags = {"workspace"}, description = "나의 자작 문제 등록")
     public DefaultResponse register(@AuthenticationPrincipal UserPrincipal userPrincipal,
-        @RequestBody @Valid WorkSpaceControllerRequest.RegisterQuestionRequest request) {
+        @RequestBody @Valid RegisterQuestionRequest request) {
         creatorQuestionService.registerQuestion(userPrincipal.getCreator().getId(), request.toQuestionContent());
         return DefaultResponse.success();
     }
@@ -130,7 +132,7 @@ public class WorkSpaceController {
     @Operation(operationId = "나의 자작 문제 수정", summary = "나의 자작 문제 수정", tags = {"workspace"}, description = "나의 자작 문제 수정")
     public DefaultResponse modify(
         @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long questionId,
-        @RequestBody @Valid WorkSpaceControllerRequest.ModifyQuestionRequest request) {
+        @RequestBody @Valid ModifyQuestionRequest request) {
         creatorQuestionService.modifyQuestion(userPrincipal.getCreator().getId(), questionId, request.toQuestionContent());
         return DefaultResponse.success();
     }

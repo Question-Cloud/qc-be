@@ -17,4 +17,10 @@ public class WorkSpaceControllerResponse {
     public static class CreatorProfileResponse {
         private CreatorProfile profile;
     }
+
+    @AllArgsConstructor
+    @Getter
+    public static class RegisterCreatorResponse {
+        private Long creatorId;
+    }
 }
