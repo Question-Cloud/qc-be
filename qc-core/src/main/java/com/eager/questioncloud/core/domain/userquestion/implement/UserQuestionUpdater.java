@@ -16,9 +16,6 @@ public class UserQuestionUpdater {
     @EventListener
     public void appendUserQuestionAfterPayment(CompletedQuestionPaymentEvent event) {
         try {
-            if (true) {
-                throw new RuntimeException("");
-            }
             userQuestionRepository.saveAll(UserQuestion.create(event.getQuestionPayment().getUserId(), event.getQuestionIds()));
         } catch (Exception e) {
             throw new FailQuestionPaymentException(event.getQuestionPayment().getOrderId());
