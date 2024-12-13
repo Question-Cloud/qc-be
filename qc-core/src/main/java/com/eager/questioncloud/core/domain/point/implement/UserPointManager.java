@@ -10,9 +10,14 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class UserPointUpdater {
+public class UserPointManager {
     private final UserPointRepository userPointRepository;
 
+    public void init(Long userId) {
+        UserPoint userPoint = new UserPoint(userId, 0);
+        userPointRepository.save(userPoint);
+    }
+    
     @EventListener
     public void chargePoint(ChargePointEvent chargePointEvent) {
         try {

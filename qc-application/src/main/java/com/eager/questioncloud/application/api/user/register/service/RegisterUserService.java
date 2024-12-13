@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.user.register.service;
 
 import com.eager.questioncloud.application.mail.EmailSender;
+import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
 import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
@@ -17,21 +18,26 @@ import com.eager.questioncloud.core.domain.verification.model.Email;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class RegisterUserService {
     private final UserRepository userRepository;
     private final EmailVerificationProcessor emailVerificationProcessor;
+    private final UserPointManager userPointManager;
     private final SocialAPIManager socialAPIManager;
     private final EmailSender emailSender;
 
-    //TODO UserPoint 초기화
+    @Transactional
     public User create(CreateUser createUser) {
         UserAccountInformation userAccountInformation = createUserAccountInformation(createUser);
         UserInformation userInformation = UserInformation.create(createUser);
-        User user = User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification);
-        return userRepository.save(user);
+        User user = userRepository.save(
+            User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification)
+        );
+        userPointManager.init(user.getUid());
+        return user;
     }
 
     public EmailVerification sendCreateUserVerifyMail(User user) {
