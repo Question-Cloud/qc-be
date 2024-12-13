@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.coupon.infrastructure.CouponRepositor
 import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentOrderRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionOrderRepository;
 import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QuestionPaymentProcessor {
     private final QuestionPaymentRepository questionPaymentRepository;
-    private final QuestionPaymentOrderRepository questionPaymentOrderRepository;
+    private final QuestionOrderRepository questionOrderRepository;
     private final UserCouponRepository userCouponRepository;
     private final CouponRepository couponRepository;
     private final UserPointRepository userPointRepository;
@@ -45,7 +45,7 @@ public class QuestionPaymentProcessor {
     }
 
     private QuestionPayment savePaymentInformation(QuestionPayment questionPayment) {
-        questionPaymentOrderRepository.save(questionPayment.getOrder());
+        questionOrderRepository.save(questionPayment.getOrder());
         return questionPaymentRepository.save(questionPayment);
     }
 }

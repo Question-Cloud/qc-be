@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.infrastructure;
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "question_payment_order")
+@Table(name = "question_order")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionPaymentOrderEntity {
+public class QuestionOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,20 +32,20 @@ public class QuestionPaymentOrderEntity {
     private int price;
 
     @Builder
-    public QuestionPaymentOrderEntity(Long id, String orderId, Long questionId, int price) {
+    public QuestionOrderEntity(Long id, String orderId, Long questionId, int price) {
         this.id = id;
         this.orderId = orderId;
         this.questionId = questionId;
         this.price = price;
     }
 
-    public static List<QuestionPaymentOrderEntity> from(QuestionPaymentOrder questionPaymentOrder) {
-        return questionPaymentOrder.getItems()
+    public static List<QuestionOrderEntity> from(QuestionOrder questionOrder) {
+        return questionOrder.getItems()
             .stream()
-            .map(item -> QuestionPaymentOrderEntity
+            .map(item -> QuestionOrderEntity
                 .builder()
                 .id(item.getId())
-                .orderId(questionPaymentOrder.getOrderId())
+                .orderId(questionOrder.getOrderId())
                 .questionId(item.getQuestionId())
                 .price(item.getPrice())
                 .build()

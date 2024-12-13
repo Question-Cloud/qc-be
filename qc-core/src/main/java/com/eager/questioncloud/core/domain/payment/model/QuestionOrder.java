@@ -8,27 +8,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public class QuestionPaymentOrder {
+public class QuestionOrder {
     private String orderId;
-    private List<QuestionPaymentOrderItem> items;
+    private List<QuestionOrderItem> items;
 
-    public QuestionPaymentOrder(String orderId, List<QuestionPaymentOrderItem> items) {
+    public QuestionOrder(String orderId, List<QuestionOrderItem> items) {
         this.orderId = orderId;
         this.items = items;
     }
 
-    public static QuestionPaymentOrder createOrder(List<Question> questions) {
+    public static QuestionOrder createOrder(List<Question> questions) {
         String orderId = UUID.randomUUID().toString();
-        List<QuestionPaymentOrderItem> items = questions
+        List<QuestionOrderItem> items = questions
             .stream()
-            .map(question -> new QuestionPaymentOrderItem(null, question.getId(), question.getQuestionContent().getPrice()))
+            .map(question -> new QuestionOrderItem(null, question.getId(), question.getQuestionContent().getPrice()))
             .collect(Collectors.toList());
-        return new QuestionPaymentOrder(orderId, items);
+        return new QuestionOrder(orderId, items);
     }
 
     @Getter
     @AllArgsConstructor
-    public static class QuestionPaymentOrderItem {
+    public static class QuestionOrderItem {
         private Long id;
         private Long questionId;
         private int price;

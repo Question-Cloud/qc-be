@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.implement;
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
@@ -16,13 +16,13 @@ public class QuestionOrderGenerator {
     private final UserQuestionRepository userQuestionRepository;
     private final QuestionRepository questionRepository;
 
-    public QuestionPaymentOrder generateQuestionPaymentOrder(Long userId, List<Long> questionIds) {
+    public QuestionOrder generateQuestionPaymentOrder(Long userId, List<Long> questionIds) {
         if (checkAlreadyOwned(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
 
         List<Question> questions = getQuestions(questionIds);
-        return QuestionPaymentOrder.createOrder(questions);
+        return QuestionOrder.createOrder(questions);
     }
 
     private Boolean checkAlreadyOwned(Long userId, List<Long> questionIds) {

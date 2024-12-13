@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.payment.model;
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder.QuestionPaymentOrderItem;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.QuestionOrderItem;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.Getter;
 public class QuestionPayment {
     private Long id;
     private String orderId;
-    private QuestionPaymentOrder order;
+    private QuestionOrder order;
     private Long userId;
     private Long userCouponId;
     private int amount;
@@ -20,7 +20,7 @@ public class QuestionPayment {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, String orderId, QuestionPaymentOrder order, Long userId, Long userCouponId, int amount,
+    public QuestionPayment(Long id, String orderId, QuestionOrder order, Long userId, Long userCouponId, int amount,
         QuestionPaymentStatus status, LocalDateTime createdAt) {
         this.id = id;
         this.orderId = orderId;
@@ -32,7 +32,7 @@ public class QuestionPayment {
         this.createdAt = createdAt;
     }
 
-    public static QuestionPayment create(Long userId, Long userCouponId, QuestionPaymentOrder order) {
+    public static QuestionPayment create(Long userId, Long userCouponId, QuestionOrder order) {
         int originalAmount = calcOriginalAmount(order);
         return QuestionPayment.builder()
             .orderId(order.getOrderId())
@@ -45,10 +45,10 @@ public class QuestionPayment {
             .build();
     }
 
-    private static int calcOriginalAmount(QuestionPaymentOrder order) {
+    private static int calcOriginalAmount(QuestionOrder order) {
         return order.getItems()
             .stream()
-            .mapToInt(QuestionPaymentOrderItem::getPrice)
+            .mapToInt(QuestionOrderItem::getPrice)
             .sum();
     }
 

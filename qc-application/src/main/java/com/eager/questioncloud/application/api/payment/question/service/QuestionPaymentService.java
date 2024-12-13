@@ -3,8 +3,8 @@ package com.eager.questioncloud.application.api.payment.question.service;
 import com.eager.questioncloud.application.api.payment.question.implement.QuestionOrderGenerator;
 import com.eager.questioncloud.application.api.payment.question.implement.QuestionPaymentProcessor;
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import java.util.List;
@@ -24,7 +24,7 @@ public class QuestionPaymentService {
         lockManager.executeWithLock(
             LockKeyGenerator.generateQuestionPaymentKey(userId),
             () -> {
-                QuestionPaymentOrder order = questionOrderGenerator.generateQuestionPaymentOrder(userId, questionIds);
+                QuestionOrder order = questionOrderGenerator.generateQuestionPaymentOrder(userId, questionIds);
                 QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(QuestionPayment.create(userId, userCouponId, order));
                 applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(paymentResult, questionIds));
             }

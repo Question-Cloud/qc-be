@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.payment.infrastructure;
 import static com.eager.questioncloud.core.domain.coupon.infrastructure.QCouponEntity.couponEntity;
 import static com.eager.questioncloud.core.domain.coupon.infrastructure.QUserCouponEntity.userCouponEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionOrderEntity.questionOrderEntity;
 import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentEntity.questionPaymentEntity;
-import static com.eager.questioncloud.core.domain.payment.infrastructure.QQuestionPaymentOrderEntity.questionPaymentOrderEntity;
 import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
@@ -42,8 +42,8 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
             .from(questionPaymentEntity)
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
-            .leftJoin(questionPaymentOrderEntity).on(questionPaymentOrderEntity.orderId.eq(questionPaymentEntity.orderId))
-            .leftJoin(questionEntity).on(questionEntity.id.eq(questionPaymentOrderEntity.questionId))
+            .leftJoin(questionOrderEntity).on(questionOrderEntity.orderId.eq(questionPaymentEntity.orderId))
+            .leftJoin(questionEntity).on(questionEntity.id.eq(questionOrderEntity.questionId))
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(userCouponEntity).on(userCouponEntity.id.eq(questionPaymentEntity.userCouponId))
@@ -58,7 +58,7 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
                         Projections.constructor(
                             QuestionPaymentHistory.OrderQuestion.class,
                             questionEntity.id,
-                            questionPaymentOrderEntity.price,
+                            questionOrderEntity.price,
                             questionEntity.questionContentEntity.title,
                             questionEntity.questionContentEntity.thumbnail,
                             userEntity.userInformationEntity.name,
