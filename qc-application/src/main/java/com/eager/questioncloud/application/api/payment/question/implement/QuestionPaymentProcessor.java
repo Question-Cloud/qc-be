@@ -35,6 +35,7 @@ public class QuestionPaymentProcessor {
             Coupon coupon = couponRepository.findById(userCoupon.getCouponId());
             userCoupon.use();
             questionPayment.useCoupon(coupon);
+            userCouponRepository.save(userCoupon);
         }
     }
 
