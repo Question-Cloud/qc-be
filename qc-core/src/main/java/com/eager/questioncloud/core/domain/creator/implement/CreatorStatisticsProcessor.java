@@ -13,7 +13,6 @@ import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -78,15 +77,10 @@ public class CreatorStatisticsProcessor {
     public void updateSalesCount(CompletedQuestionPaymentEvent event) {
         List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionIds());
         Map<Long, Long> countQuestionByCreator = questions.stream().collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
-        List<CreatorStatistics> updateStatistics = new ArrayList<>();
 
         countQuestionByCreator.forEach((creatorId, count) -> {
-            CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creatorId);
-            creatorStatistics.addSaleCount(count.intValue());
-            updateStatistics.add(creatorStatistics);
+            creatorStatisticsRepository.addSalesCount(creatorId, count.intValue());
         });
-
-        creatorStatisticsRepository.saveAll(updateStatistics);
     }
 
     @EventListener

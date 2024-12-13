@@ -10,5 +10,7 @@ public interface CreatorStatisticsRepository {
 
     CreatorStatistics findByCreatorId(Long creatorId);
 
+    void addSalesCount(Long creatorId, int count);
+
     void deleteAllInBatch();
 }
