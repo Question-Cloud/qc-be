@@ -23,9 +23,17 @@ public class UserPointRepositoryImpl implements UserPointRepository {
     }
 
     @Override
-    public void updatePoint(Long userId, int point) {
+    public Boolean usePoint(Long userId, int amount) {
+        return jpaQueryFactory.update(userPointEntity)
+            .set(userPointEntity.point, userPointEntity.point.subtract(amount))
+            .where(userPointEntity.userId.eq(userId), userPointEntity.point.goe(amount))
+            .execute() == 1;
+    }
+
+    @Override
+    public void chargePoint(Long userId, int amount) {
         jpaQueryFactory.update(userPointEntity)
-            .set(userPointEntity.point, point)
+            .set(userPointEntity.point, userPointEntity.point.add(amount))
             .where(userPointEntity.userId.eq(userId))
             .execute();
     }

@@ -14,4 +14,6 @@ public interface UserCouponRepository {
     UserCoupon save(UserCoupon userCoupon);
 
     List<AvailableUserCoupon> getAvailableUserCoupons(Long userId);
+
+    Boolean use(Long userCouponId);
 }

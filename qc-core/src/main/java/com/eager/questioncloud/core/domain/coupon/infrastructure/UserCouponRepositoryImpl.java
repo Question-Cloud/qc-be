@@ -59,4 +59,12 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
             .where(userCouponEntity.userId.eq(userId), userCouponEntity.isUsed.isFalse(), userCouponEntity.endAt.after(LocalDateTime.now()))
             .fetch();
     }
+
+    @Override
+    public Boolean use(Long userCouponId) {
+        return jpaQueryFactory.update(userCouponEntity)
+            .set(userCouponEntity.isUsed, true)
+            .where(userCouponEntity.id.eq(userCouponId), userCouponEntity.isUsed.isFalse())
+            .execute() == 1;
+    }
 }

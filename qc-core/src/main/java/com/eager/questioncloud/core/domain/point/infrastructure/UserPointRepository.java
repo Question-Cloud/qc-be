@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 public interface UserPointRepository {
     UserPoint getUserPoint(Long userId);
 
-    void updatePoint(Long userId, int point);
+    Boolean usePoint(Long userId, int amount);
+
+    void chargePoint(Long userId, int amount);
 
     UserPoint save(UserPoint userPoint);
 }

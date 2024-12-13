@@ -35,7 +35,8 @@ public enum Error {
     NOT_OWNED_QUESTION(400, "보유하고 있는 문제가 아닙니다."),
     FORBIDDEN(403, "권한이 없습니다."),
     UNAVAILABLE_QUESTION(400, "현재 이용할 수 없는 문제 입니다."),
-    ALREADY_VERIFIED_EMAIL(409, "이미 인증 완료 된 메일입니다.");
+    ALREADY_VERIFIED_EMAIL(409, "이미 인증 완료 된 메일입니다."),
+    FAIL_USE_COUPON(400, "쿠폰 사용에 실패하였습니다.");
 
     private final int httpStatus;
     private final String message;

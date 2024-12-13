@@ -25,11 +25,14 @@ public class UserCoupon {
         this.endAt = endAt;
     }
 
-    public void use() {
+    public void validate() {
         if (endAt.isBefore(LocalDateTime.now())) {
             throw new CustomException(Error.EXPIRED_COUPON);
         }
-        this.isUsed = true;
+
+        if (this.isUsed) {
+            throw new CustomException(Error.FAIL_USE_COUPON);
+        }
     }
 
     public void rollback() {
