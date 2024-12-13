@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -13,9 +12,9 @@ public class QuestionPaymentOrder {
     private String orderId;
     private List<QuestionPaymentOrderItem> items;
 
-    @Builder
     public QuestionPaymentOrder(String orderId, List<QuestionPaymentOrderItem> items) {
         this.orderId = orderId;
+        this.items = items;
     }
 
     public static QuestionPaymentOrder createOrder(List<Question> questions) {
