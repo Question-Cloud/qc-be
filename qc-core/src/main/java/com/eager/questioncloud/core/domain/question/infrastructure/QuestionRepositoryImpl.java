@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -184,6 +185,15 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         }
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void increaseQuestionCount(Long questionId) {
+        jpaQueryFactory.update(questionEntity)
+            .set(questionEntity.count, questionEntity.count.add(1))
+            .where(questionEntity.id.eq(questionId))
+            .execute();
     }
 
     @Override

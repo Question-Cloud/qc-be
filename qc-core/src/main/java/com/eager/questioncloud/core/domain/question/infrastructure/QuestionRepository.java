@@ -27,5 +27,7 @@ public interface QuestionRepository {
 
     int countByCreatorId(Long creatorId);
 
+    void increaseQuestionCount(Long questionId);
+
     void deleteAllInBatch();
 }
