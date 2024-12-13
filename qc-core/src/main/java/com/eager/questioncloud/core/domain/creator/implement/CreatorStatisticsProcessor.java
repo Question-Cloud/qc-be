@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -72,8 +73,8 @@ public class CreatorStatisticsProcessor {
         );
     }
 
-    //TODO 문제 결제는 실패인데 이 이벤트만 성공하면 어떻게 처리해야할지 고민해보기
     @EventListener
+    @Async
     public void updateSalesCount(CompletedQuestionPaymentEvent event) {
         List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionIds());
         Map<Long, Long> countQuestionByCreator = questions.stream().collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
