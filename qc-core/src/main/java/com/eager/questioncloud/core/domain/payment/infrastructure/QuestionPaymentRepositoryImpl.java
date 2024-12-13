@@ -42,7 +42,7 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
             .from(questionPaymentEntity)
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
-            .leftJoin(questionPaymentOrderEntity).on(questionPaymentOrderEntity.paymentId.eq(questionPaymentEntity.paymentId))
+            .leftJoin(questionPaymentOrderEntity).on(questionPaymentOrderEntity.orderId.eq(questionPaymentEntity.orderId))
             .leftJoin(questionEntity).on(questionEntity.id.eq(questionPaymentOrderEntity.questionId))
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
@@ -50,10 +50,10 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
             .leftJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
-            .transform(GroupBy.groupBy(questionPaymentEntity.paymentId).as(
+            .transform(GroupBy.groupBy(questionPaymentEntity.orderId).as(
                 Projections.constructor(
                     QuestionPaymentHistory.class,
-                    questionPaymentEntity.paymentId,
+                    questionPaymentEntity.orderId,
                     GroupBy.list(
                         Projections.constructor(
                             QuestionPaymentHistory.OrderQuestion.class,
@@ -93,7 +93,7 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
 
     @Override
     public QuestionPayment findByPaymentId(String paymentId) {
-        return questionPaymentJpaRepository.findByPaymentId(paymentId)
+        return questionPaymentJpaRepository.findByOrderId(paymentId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
             .toModel();
     }

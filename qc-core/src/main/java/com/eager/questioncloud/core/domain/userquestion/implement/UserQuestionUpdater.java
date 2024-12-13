@@ -21,7 +21,7 @@ public class UserQuestionUpdater {
             }
             userQuestionRepository.saveAll(UserQuestion.create(event.getQuestionPayment().getUserId(), event.getQuestionIds()));
         } catch (Exception e) {
-            throw new FailQuestionPaymentException(event.getQuestionPayment().getPaymentId());
+            throw new FailQuestionPaymentException(event.getQuestionPayment().getOrderId());
         }
     }
 }

@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FailQuestionPaymentException extends RuntimeException {
-    private String paymentId;
+    private String orderId;
 }

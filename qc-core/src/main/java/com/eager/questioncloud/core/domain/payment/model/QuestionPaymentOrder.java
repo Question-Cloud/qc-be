@@ -2,33 +2,36 @@ package com.eager.questioncloud.core.domain.payment.model;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class QuestionPaymentOrder {
-    private Long id;
-    private String paymentId;
-    private Long questionId;
-    private int price;
+    private String orderId;
+    private List<QuestionPaymentOrderItem> items;
 
     @Builder
-    public QuestionPaymentOrder(Long id, String paymentId, Long questionId, int price) {
-        this.id = id;
-        this.paymentId = paymentId;
-        this.questionId = questionId;
-        this.price = price;
+    public QuestionPaymentOrder(String orderId, List<QuestionPaymentOrderItem> items) {
+        this.orderId = orderId;
     }
 
-    public static List<QuestionPaymentOrder> createOrders(String paymentId, List<Question> questions) {
-        return questions
+    public static QuestionPaymentOrder createOrder(List<Question> questions) {
+        String orderId = UUID.randomUUID().toString();
+        List<QuestionPaymentOrderItem> items = questions
             .stream()
-            .map(question -> QuestionPaymentOrder.builder()
-                .paymentId(paymentId)
-                .questionId(question.getId())
-                .price(question.getQuestionContent().getPrice())
-                .build())
+            .map(question -> new QuestionPaymentOrderItem(null, question.getId(), question.getQuestionContent().getPrice()))
             .collect(Collectors.toList());
+        return new QuestionPaymentOrder(orderId, items);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class QuestionPaymentOrderItem {
+        private Long id;
+        private Long questionId;
+        private int price;
     }
 }

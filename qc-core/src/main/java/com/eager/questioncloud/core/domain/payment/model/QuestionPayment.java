@@ -3,18 +3,16 @@ package com.eager.questioncloud.core.domain.payment.model;
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import com.eager.questioncloud.core.domain.question.model.Question;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder.QuestionPaymentOrderItem;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class QuestionPayment {
     private Long id;
-    private String paymentId;
-    private List<QuestionPaymentOrder> orders;
+    private String orderId;
+    private QuestionPaymentOrder order;
     private Long userId;
     private Long userCouponId;
     private int amount;
@@ -22,11 +20,11 @@ public class QuestionPayment {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, String paymentId, List<QuestionPaymentOrder> orders, Long userId, Long userCouponId, int amount,
+    public QuestionPayment(Long id, String orderId, QuestionPaymentOrder order, Long userId, Long userCouponId, int amount,
         QuestionPaymentStatus status, LocalDateTime createdAt) {
         this.id = id;
-        this.paymentId = paymentId;
-        this.orders = orders;
+        this.orderId = orderId;
+        this.order = order;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
@@ -34,14 +32,11 @@ public class QuestionPayment {
         this.createdAt = createdAt;
     }
 
-    public static QuestionPayment create(Long userId, Long userCouponId, List<Question> questions) {
-        String paymentId = UUID.randomUUID().toString();
-        int originalAmount = calcOriginalAmount(questions);
-        List<QuestionPaymentOrder> orders = QuestionPaymentOrder.createOrders(paymentId, questions);
-
+    public static QuestionPayment create(Long userId, Long userCouponId, QuestionPaymentOrder order) {
+        int originalAmount = calcOriginalAmount(order);
         return QuestionPayment.builder()
-            .paymentId(paymentId)
-            .orders(orders)
+            .orderId(order.getOrderId())
+            .order(order)
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(originalAmount)
@@ -50,10 +45,10 @@ public class QuestionPayment {
             .build();
     }
 
-    private static int calcOriginalAmount(List<Question> questions) {
-        return questions
+    private static int calcOriginalAmount(QuestionPaymentOrder order) {
+        return order.getItems()
             .stream()
-            .mapToInt(question -> question.getQuestionContent().getPrice())
+            .mapToInt(QuestionPaymentOrderItem::getPrice)
             .sum();
     }
 

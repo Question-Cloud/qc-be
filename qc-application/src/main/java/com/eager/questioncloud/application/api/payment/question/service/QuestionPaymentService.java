@@ -1,9 +1,10 @@
 package com.eager.questioncloud.application.api.payment.question.service;
 
-import com.eager.questioncloud.application.api.payment.question.implement.QuestionPaymentGenerator;
+import com.eager.questioncloud.application.api.payment.question.implement.QuestionOrderGenerator;
 import com.eager.questioncloud.application.api.payment.question.implement.QuestionPaymentProcessor;
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentOrder;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class QuestionPaymentService {
     private final QuestionPaymentProcessor questionPaymentProcessor;
-    private final QuestionPaymentGenerator questionPaymentGenerator;
+    private final QuestionOrderGenerator questionOrderGenerator;
     private final ApplicationEventPublisher applicationEventPublisher;
     private final LockManager lockManager;
 
@@ -23,9 +24,9 @@ public class QuestionPaymentService {
         lockManager.executeWithLock(
             LockKeyGenerator.generateQuestionPaymentKey(userId),
             () -> {
-                QuestionPayment questionPayment = questionPaymentGenerator.generateQuestionPayment(userId, questionIds, userCouponId);
-                questionPaymentProcessor.processQuestionPayment(questionPayment);
-                applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(questionPayment, questionIds));
+                QuestionPaymentOrder order = questionOrderGenerator.generateQuestionPaymentOrder(userId, questionIds);
+                QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(QuestionPayment.create(userId, userCouponId, order));
+                applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(paymentResult, questionIds));
             }
         );
     }

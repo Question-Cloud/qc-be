@@ -20,13 +20,13 @@ public class QuestionPaymentOrderRepositoryImpl implements QuestionPaymentOrderR
         return jpaQueryFactory.select(questionPaymentOrderEntity.id, questionPaymentEntity.userId)
             .from(questionPaymentOrderEntity)
             .leftJoin(questionPaymentEntity)
-            .on(questionPaymentOrderEntity.paymentId.eq(questionPaymentEntity.paymentId), questionPaymentEntity.userId.eq(userId))
+            .on(questionPaymentOrderEntity.orderId.eq(questionPaymentEntity.orderId), questionPaymentEntity.userId.eq(userId))
             .where(questionPaymentOrderEntity.questionId.in(questionIds))
             .fetchFirst() != null;
     }
 
     @Override
-    public List<QuestionPaymentOrder> saveAll(List<QuestionPaymentOrder> questionPaymentOrders) {
-        return QuestionPaymentOrderEntity.toModel(questionPaymentOrderJpaRepository.saveAll(QuestionPaymentOrderEntity.from(questionPaymentOrders)));
+    public void save(QuestionPaymentOrder questionPaymentOrder) {
+        questionPaymentOrderJpaRepository.saveAll(QuestionPaymentOrderEntity.from(questionPaymentOrder));
     }
 }

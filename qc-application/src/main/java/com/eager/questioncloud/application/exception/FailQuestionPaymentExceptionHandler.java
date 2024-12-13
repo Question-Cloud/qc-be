@@ -23,7 +23,7 @@ public class FailQuestionPaymentExceptionHandler {
 
     @ExceptionHandler(FailQuestionPaymentException.class)
     protected ResponseEntity<ErrorResponse> handleInvalidPaymentException(FailQuestionPaymentException e) {
-        QuestionPayment questionPayment = questionPaymentRepository.findByPaymentId(e.getPaymentId());
+        QuestionPayment questionPayment = questionPaymentRepository.findByPaymentId(e.getOrderId());
         questionPayment.fail();
         questionPaymentRepository.save(questionPayment);
 

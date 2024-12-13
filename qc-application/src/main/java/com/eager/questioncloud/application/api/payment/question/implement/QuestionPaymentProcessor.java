@@ -45,7 +45,7 @@ public class QuestionPaymentProcessor {
     }
 
     private QuestionPayment savePaymentInformation(QuestionPayment questionPayment) {
-        questionPaymentOrderRepository.saveAll(questionPayment.getOrders());
+        questionPaymentOrderRepository.save(questionPayment.getOrder());
         return questionPaymentRepository.save(questionPayment);
     }
 }

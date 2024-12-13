@@ -26,7 +26,7 @@ public class QuestionPaymentEntity {
     private Long id;
 
     @Column
-    private String paymentId;
+    private String orderId;
 
     @Column
     private Long userId;
@@ -45,10 +45,10 @@ public class QuestionPaymentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPaymentEntity(Long id, String paymentId, Long userId, Long userCouponId, int amount, QuestionPaymentStatus status,
+    public QuestionPaymentEntity(Long id, String orderId, Long userId, Long userCouponId, int amount, QuestionPaymentStatus status,
         LocalDateTime createdAt) {
         this.id = id;
-        this.paymentId = paymentId;
+        this.orderId = orderId;
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.amount = amount;
@@ -59,7 +59,7 @@ public class QuestionPaymentEntity {
     public QuestionPayment toModel() {
         return QuestionPayment.builder()
             .id(id)
-            .paymentId(paymentId)
+            .orderId(orderId)
             .userId(userId)
             .userCouponId(userCouponId)
             .amount(amount)
@@ -71,7 +71,7 @@ public class QuestionPaymentEntity {
     public static QuestionPaymentEntity from(QuestionPayment questionPayment) {
         return QuestionPaymentEntity.builder()
             .id(questionPayment.getId())
-            .paymentId(questionPayment.getPaymentId())
+            .orderId(questionPayment.getOrderId())
             .userId(questionPayment.getUserId())
             .userCouponId(questionPayment.getUserCouponId())
             .amount(questionPayment.getAmount())

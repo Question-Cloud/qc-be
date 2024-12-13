@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class QuestionPaymentHistory {
-    private String paymentId;
+    private String orderId;
     private List<OrderQuestion> orders;
     private QuestionPaymentCoupon coupon;
     private int amount;

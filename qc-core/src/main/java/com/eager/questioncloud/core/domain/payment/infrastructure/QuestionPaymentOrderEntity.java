@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class QuestionPaymentOrderEntity {
     private Long id;
 
     @Column
-    private String paymentId;
+    private String orderId;
 
     @Column
     private Long questionId;
@@ -33,42 +32,24 @@ public class QuestionPaymentOrderEntity {
     private int price;
 
     @Builder
-    public QuestionPaymentOrderEntity(Long id, String paymentId, Long questionId, int price) {
+    public QuestionPaymentOrderEntity(Long id, String orderId, Long questionId, int price) {
         this.id = id;
-        this.paymentId = paymentId;
+        this.orderId = orderId;
         this.questionId = questionId;
         this.price = price;
     }
 
-    public static List<QuestionPaymentOrder> toModel(List<QuestionPaymentOrderEntity> orders) {
-        return orders
+    public static List<QuestionPaymentOrderEntity> from(QuestionPaymentOrder questionPaymentOrder) {
+        return questionPaymentOrder.getItems()
             .stream()
-            .map(QuestionPaymentOrderEntity::toModel)
-            .collect(Collectors.toList());
-    }
-
-    public QuestionPaymentOrder toModel() {
-        return QuestionPaymentOrder.builder()
-            .id(id)
-            .paymentId(paymentId)
-            .questionId(questionId)
-            .price(price)
-            .build();
-    }
-
-    public static QuestionPaymentOrderEntity from(QuestionPaymentOrder questionPaymentOrder) {
-        return QuestionPaymentOrderEntity.builder()
-            .id(questionPaymentOrder.getId())
-            .paymentId(questionPaymentOrder.getPaymentId())
-            .questionId(questionPaymentOrder.getQuestionId())
-            .price(questionPaymentOrder.getPrice())
-            .build();
-    }
-
-    public static List<QuestionPaymentOrderEntity> from(List<QuestionPaymentOrder> questionPaymentOrders) {
-        return questionPaymentOrders
-            .stream()
-            .map(QuestionPaymentOrderEntity::from)
-            .collect(Collectors.toList());
+            .map(item -> QuestionPaymentOrderEntity
+                .builder()
+                .id(item.getId())
+                .orderId(questionPaymentOrder.getOrderId())
+                .questionId(item.getQuestionId())
+                .price(item.getPrice())
+                .build()
+            )
+            .toList();
     }
 }
