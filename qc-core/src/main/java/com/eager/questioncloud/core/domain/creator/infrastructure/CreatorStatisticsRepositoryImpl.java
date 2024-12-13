@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class CreatorStatisticsRepositoryImpl implements CreatorStatisticsReposit
     }
 
     @Override
+    @Transactional
     public void addSalesCount(Long creatorId, int count) {
         jpaQueryFactory.update(creatorStatisticsEntity)
             .set(creatorStatisticsEntity.salesCount, creatorStatisticsEntity.salesCount.add(count))
