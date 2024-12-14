@@ -14,7 +14,7 @@ public class QuestionUpdater {
 
     @EventListener
     @Async
-    public void increaseQuestionCount(CompletedQuestionPaymentEvent event) {
+    public void updateCount(CompletedQuestionPaymentEvent event) {
         event.getQuestionIds()
             .forEach(questionRepository::increaseQuestionCount);
     }
