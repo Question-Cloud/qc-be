@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.question.dto;
 
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
+import com.eager.questioncloud.core.domain.question.enums.Subject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Getter;
 public class QuestionInformation {
     private Long id;
     private String title;
+    private Subject subject;
     private String parentCategory;
     private String childCategory;
     private String thumbnail;

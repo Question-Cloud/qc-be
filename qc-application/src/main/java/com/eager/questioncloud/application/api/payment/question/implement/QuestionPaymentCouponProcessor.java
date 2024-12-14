@@ -21,13 +21,13 @@ public class QuestionPaymentCouponProcessor {
             return;
         }
 
-        UserCoupon userCoupon = userCouponRepository.getUserCoupon(questionPayment.getUserId());
+        UserCoupon userCoupon = userCouponRepository.getUserCoupon(questionPayment.getUserCouponId());
         userCoupon.validate();
 
         Coupon coupon = couponRepository.findById(userCoupon.getCouponId());
         questionPayment.useCoupon(coupon);
 
-        if (userCouponRepository.use(userCoupon.getId())) {
+        if (!userCouponRepository.use(userCoupon.getId())) {
             throw new CustomException(Error.FAIL_USE_COUPON);
         }
     }

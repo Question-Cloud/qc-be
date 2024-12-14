@@ -174,6 +174,24 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
+    public List<QuestionInformation> findByQuestionIdIn(List<Long> questionIds) {
+        List<Tuple> tuples = questionInformationSelectFrom()
+            .where(questionEntity.id.in(questionIds))
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .leftJoin(userQuestionEntity)
+            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userEntity.uid))
+            .fetch();
+
+        return tuples.stream()
+            .map(this::parseQuestionInformationTuple)
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public int countByCreatorId(Long creatorId) {
         Integer result = jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
@@ -257,6 +275,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         return QuestionInformation.builder()
             .id(tuple.get(questionEntity.id))
             .title(tuple.get(questionEntity.questionContentEntity.title))
+            .subject(tuple.get(questionEntity.questionContentEntity.subject))
             .parentCategory(tuple.get(parent.title))
             .childCategory(tuple.get(child.title))
             .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
@@ -281,7 +300,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.price,
                 userQuestionEntity.id.isNotNull(),
-                questionReviewStatisticsEntity.averageRate)
+                questionReviewStatisticsEntity.averageRate,
+                questionEntity.questionContentEntity.subject)
             .from(questionEntity);
     }
 }

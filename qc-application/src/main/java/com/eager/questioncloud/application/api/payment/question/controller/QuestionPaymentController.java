@@ -7,7 +7,7 @@ import com.eager.questioncloud.application.api.payment.question.service.Question
 import com.eager.questioncloud.application.api.payment.question.service.QuestionPaymentService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.payment.dto.QuestionPaymentHistory;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;

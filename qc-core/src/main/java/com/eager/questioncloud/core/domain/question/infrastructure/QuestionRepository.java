@@ -25,6 +25,8 @@ public interface QuestionRepository {
 
     List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
 
+    List<QuestionInformation> findByQuestionIdIn(List<Long> questionIds);
+
     int countByCreatorId(Long creatorId);
 
     void increaseQuestionCount(Long questionId);
