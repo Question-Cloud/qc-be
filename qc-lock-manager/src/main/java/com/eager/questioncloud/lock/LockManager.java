@@ -22,7 +22,7 @@ public class LockManager {
         RLock lock = redissonClient.getLock(lockKey);
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
-            if (!lock.isLocked()) {
+            if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
                 throw new CustomException(Error.INTERNAL_SERVER_ERROR);
             }
             task.run();
@@ -48,22 +48,22 @@ public class LockManager {
         RLock lock = redissonClient.getLock(lockKey);
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
-            if (!lock.isLocked()) {
+            if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
                 throw new CustomException(Error.INTERNAL_SERVER_ERROR);
             }
             return task.call();
         } catch (CustomException e) {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
             throw e;
         } catch (Exception e) {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
             throw new CustomException(Error.INTERNAL_SERVER_ERROR);
         } finally {
-            if (lock.isLocked()) {
+            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
         }
