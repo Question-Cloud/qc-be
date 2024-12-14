@@ -36,23 +36,6 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     }
 
     @Override
-    public ChargePointPayment getChargePointPaymentForApprove(String paymentId) {
-        ChargePointPaymentEntity resultEntity =
-            jpaQueryFactory.select(chargePointPaymentEntity)
-                .from(chargePointPaymentEntity)
-                .where(
-                    chargePointPaymentEntity.paymentId.eq(paymentId),
-                    chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.ORDERED))
-                .fetchFirst();
-
-        if (resultEntity == null) {
-            throw new CustomException(Error.NOT_FOUND);
-        }
-
-        return resultEntity.toModel();
-    }
-
-    @Override
     public ChargePointPayment findByPaymentId(String paymentId) {
         return chargePointPaymentJpaRepository.findByPaymentId(paymentId)
             .orElseThrow(() -> new CustomException(Error.NOT_FOUND))

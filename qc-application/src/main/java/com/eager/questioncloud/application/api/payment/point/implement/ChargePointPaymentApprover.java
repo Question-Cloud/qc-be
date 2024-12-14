@@ -21,7 +21,7 @@ public class ChargePointPaymentApprover {
             LockKeyGenerator.generateChargePointPaymentKey(pgPayment.getPaymentId()),
             () -> {
                 try {
-                    ChargePointPayment chargePointPayment = chargePointPaymentRepository.getChargePointPaymentForApprove(pgPayment.getPaymentId());
+                    ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(pgPayment.getPaymentId());
                     chargePointPayment.approve(pgPayment);
                     return chargePointPaymentRepository.save(chargePointPayment);
                 } catch (CustomException customException) {
