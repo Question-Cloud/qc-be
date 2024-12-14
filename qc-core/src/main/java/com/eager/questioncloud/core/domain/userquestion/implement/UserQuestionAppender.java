@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserQuestionUpdater {
+public class UserQuestionAppender {
     private final UserQuestionRepository userQuestionRepository;
 
     @EventListener
-    public void appendUserQuestionAfterPayment(CompletedQuestionPaymentEvent event) {
+    public void appendUserQuestion(CompletedQuestionPaymentEvent event) {
         try {
             userQuestionRepository.saveAll(UserQuestion.create(event.getQuestionPayment().getUserId(), event.getQuestionIds()));
         } catch (Exception e) {
