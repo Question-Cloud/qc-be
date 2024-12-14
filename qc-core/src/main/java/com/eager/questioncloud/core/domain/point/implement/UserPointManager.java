@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.point.implement;
 
-import com.eager.questioncloud.core.domain.point.event.ChargePointEvent;
+import com.eager.questioncloud.core.domain.point.event.CompletedChargePointPaymentEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.exception.CustomException;
@@ -21,13 +21,13 @@ public class UserPointManager {
     }
 
     @EventListener
-    public void chargePoint(ChargePointEvent chargePointEvent) {
+    public void chargePoint(CompletedChargePointPaymentEvent completedChargePointPaymentEvent) {
         try {
-            UserPoint userPoint = userPointRepository.getUserPoint(chargePointEvent.getUserId());
-            userPoint.charge(chargePointEvent.getChargePointType().getAmount());
+            UserPoint userPoint = userPointRepository.getUserPoint(completedChargePointPaymentEvent.getUserId());
+            userPoint.charge(completedChargePointPaymentEvent.getChargePointType().getAmount());
             userPointRepository.save(userPoint);
         } catch (Exception e) {
-            throw new FailChargePointException(chargePointEvent.getPaymentId());
+            throw new FailChargePointException(completedChargePointPaymentEvent.getPaymentId());
         }
     }
 
