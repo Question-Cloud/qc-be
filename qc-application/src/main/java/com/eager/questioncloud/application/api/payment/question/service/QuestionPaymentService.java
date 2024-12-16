@@ -24,6 +24,8 @@ public class QuestionPaymentService {
         QuestionOrder order = questionOrderGenerator.generateQuestionPaymentOrder(userId, questionIds);
         QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponProcessor.getCoupon(userCouponId, userId);
         QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(QuestionPayment.create(userId, questionPaymentCoupon, order));
+
+        //TODO 이벤트 발행 전부 성공 보장하는 법 생각하기
         applicationEventPublisher.publishEvent(CompletedQuestionPaymentEvent.create(paymentResult, questionIds));
     }
 }
