@@ -21,7 +21,7 @@ public class QuestionOrder {
         String orderId = UUID.randomUUID().toString();
         List<QuestionOrderItem> items = questions
             .stream()
-            .map(question -> new QuestionOrderItem(null, question.getId(), question.getQuestionContent().getPrice()))
+            .map(QuestionOrderItem::create)
             .collect(Collectors.toList());
         return new QuestionOrder(orderId, items);
     }
@@ -32,5 +32,9 @@ public class QuestionOrder {
         private Long id;
         private Long questionId;
         private int price;
+
+        public static QuestionOrderItem create(Question question) {
+            return new QuestionOrderItem(null, question.getId(), question.getQuestionContent().getPrice());
+        }
     }
 }
