@@ -21,7 +21,7 @@ public class QuestionPaymentCouponProcessor {
             return;
         }
 
-        UserCoupon userCoupon = userCouponRepository.getUserCoupon(questionPayment.getUserCouponId());
+        UserCoupon userCoupon = userCouponRepository.getUserCoupon(questionPayment.getUserCouponId(), questionPayment.getUserId());
         userCoupon.validate();
 
         Coupon coupon = couponRepository.findById(userCoupon.getCouponId());
