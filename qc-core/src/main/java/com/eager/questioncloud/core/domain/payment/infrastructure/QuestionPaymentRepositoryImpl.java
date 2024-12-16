@@ -13,7 +13,17 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
 
     @Override
     public QuestionPayment save(QuestionPayment questionPayment) {
-        return questionPaymentJpaRepository.save(QuestionPaymentEntity.from(questionPayment)).toModel();
+        QuestionPaymentEntity entity = questionPaymentJpaRepository.save(QuestionPaymentEntity.from(questionPayment));
+        return QuestionPayment.builder()
+            .id(entity.getId())
+            .orderId(entity.getOrderId())
+            .order(questionPayment.getOrder())
+            .userId(entity.getUserId())
+            .userCouponId(entity.getUserCouponId())
+            .amount(entity.getAmount())
+            .status(entity.getStatus())
+            .createdAt(entity.getCreatedAt())
+            .build();
     }
 
     @Override
