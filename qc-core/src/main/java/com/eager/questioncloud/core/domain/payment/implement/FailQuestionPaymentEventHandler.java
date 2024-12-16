@@ -1,35 +1,31 @@
-package com.eager.questioncloud.application.exception;
+package com.eager.questioncloud.core.domain.payment.implement;
 
 import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
+import com.eager.questioncloud.core.domain.payment.event.FailedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
-@ControllerAdvice
+@Component
 @RequiredArgsConstructor
-public class FailQuestionPaymentExceptionHandler {
+public class FailQuestionPaymentEventHandler {
     private final QuestionPaymentRepository questionPaymentRepository;
     private final UserPointRepository userPointRepository;
     private final UserCouponRepository userCouponRepository;
 
-    @ExceptionHandler(FailQuestionPaymentException.class)
-    protected ResponseEntity<ErrorResponse> handleInvalidPaymentException(FailQuestionPaymentException e) {
-        QuestionPayment questionPayment = e.getQuestionPayment();
+    @EventListener
+    public void handler(FailedQuestionPaymentEvent event) {
+        QuestionPayment questionPayment = event.getQuestionPayment();
         questionPayment.fail();
         questionPaymentRepository.save(questionPayment);
 
         rollbackPoint(questionPayment.getUserId(), questionPayment.getAmount());
         rollbackCoupon(questionPayment.getQuestionPaymentCoupon().getUserCouponId());
-
-        return ErrorResponse.toResponse(new CustomException(Error.INTERNAL_SERVER_ERROR));
     }
 
     private void rollbackPoint(Long userId, int amount) {
