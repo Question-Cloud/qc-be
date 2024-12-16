@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.payment.infrastructure;
 
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.OrderQuestion;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.QuestionPaymentCoupon;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;

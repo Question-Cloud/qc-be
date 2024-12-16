@@ -8,7 +8,6 @@ import com.eager.questioncloud.core.domain.point.infrastructure.UserPointReposit
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.FailQuestionPaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,12 +22,12 @@ public class FailQuestionPaymentExceptionHandler {
 
     @ExceptionHandler(FailQuestionPaymentException.class)
     protected ResponseEntity<ErrorResponse> handleInvalidPaymentException(FailQuestionPaymentException e) {
-        QuestionPayment questionPayment = questionPaymentRepository.findByPaymentId(e.getOrderId());
+        QuestionPayment questionPayment = e.getQuestionPayment();
         questionPayment.fail();
         questionPaymentRepository.save(questionPayment);
 
         rollbackPoint(questionPayment.getUserId(), questionPayment.getAmount());
-        rollbackCoupon(questionPayment.getUserCouponId());
+        rollbackCoupon(questionPayment.getQuestionPaymentCoupon().getUserCouponId());
 
         return ErrorResponse.toResponse(new CustomException(Error.INTERNAL_SERVER_ERROR));
     }

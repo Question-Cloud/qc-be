@@ -1,7 +1,5 @@
 package com.eager.questioncloud.core.domain.payment.model;
 
-import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.enums.Subject;
@@ -24,7 +22,7 @@ public class QuestionPaymentHistory {
     private QuestionPaymentStatus status;
     private LocalDateTime createdAt;
 
-    public static QuestionPaymentHistory create(QuestionPayment questionPayment, List<QuestionInformation> questions, Coupon coupon) {
+    public static QuestionPaymentHistory create(QuestionPayment questionPayment, List<QuestionInformation> questions) {
         List<OrderQuestion> orders = questions.stream()
             .map(question ->
                 new OrderQuestion(
@@ -38,16 +36,12 @@ public class QuestionPaymentHistory {
                     question.getChildCategory()))
             .toList();
 
-        QuestionPaymentCoupon questionPaymentCoupon = coupon != null ?
-            new QuestionPaymentCoupon(coupon.getTitle(), coupon.getCouponType(), coupon.getValue()) :
-            new QuestionPaymentCoupon(null, null, 0);
-
         return QuestionPaymentHistory.builder()
             .paymentId(questionPayment.getId())
             .orderId(questionPayment.getOrderId())
             .userId(questionPayment.getUserId())
             .orders(orders)
-            .coupon(questionPaymentCoupon)
+            .coupon(questionPayment.getQuestionPaymentCoupon())
             .amount(questionPayment.getAmount())
             .isUsedCoupon(questionPayment.isUsingCoupon())
             .status(questionPayment.getStatus())
@@ -55,13 +49,6 @@ public class QuestionPaymentHistory {
             .build();
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class QuestionPaymentCoupon {
-        private String title;
-        private CouponType couponType;
-        private int value;
-    }
 
     @Getter
     @AllArgsConstructor

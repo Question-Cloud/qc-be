@@ -56,24 +56,12 @@ public class QuestionPaymentEntity {
         this.createdAt = createdAt;
     }
 
-    public QuestionPayment toModel() {
-        return QuestionPayment.builder()
-            .id(id)
-            .orderId(orderId)
-            .userId(userId)
-            .userCouponId(userCouponId)
-            .amount(amount)
-            .status(status)
-            .createdAt(createdAt)
-            .build();
-    }
-
     public static QuestionPaymentEntity from(QuestionPayment questionPayment) {
         return QuestionPaymentEntity.builder()
             .id(questionPayment.getId())
             .orderId(questionPayment.getOrderId())
             .userId(questionPayment.getUserId())
-            .userCouponId(questionPayment.getUserCouponId())
+            .userCouponId(questionPayment.getQuestionPaymentCoupon().getUserCouponId())
             .amount(questionPayment.getAmount())
             .status(questionPayment.getStatus())
             .createdAt(questionPayment.getCreatedAt())
