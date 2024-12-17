@@ -7,7 +7,6 @@ import com.eager.questioncloud.exception.CustomException;
 import com.eager.questioncloud.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +26,6 @@ public class SubscribeProcessor {
         return subscribeRepository.save(Subscribe.create(userId, creatorId));
     }
 
-    @Transactional
     public void unSubscribe(Long userId, Long creatorId) {
         subscribeRepository.unSubscribe(userId, creatorId);
     }
