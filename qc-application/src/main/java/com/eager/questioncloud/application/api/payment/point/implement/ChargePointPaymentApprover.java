@@ -22,7 +22,8 @@ public class ChargePointPaymentApprover {
             () -> {
                 try {
                     ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(pgPayment.getPaymentId());
-                    chargePointPayment.approve(pgPayment);
+                    chargePointPayment.validatePayment(pgPayment.getAmount());
+                    chargePointPayment.approve(pgPayment.getReceiptUrl());
                     return chargePointPaymentRepository.save(chargePointPayment);
                 } catch (CustomException customException) {
                     throw customException;

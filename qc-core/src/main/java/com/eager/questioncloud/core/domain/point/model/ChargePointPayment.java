@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.point.model;
 
-import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.exception.CustomException;
@@ -45,10 +44,9 @@ public class ChargePointPayment {
             .build();
     }
 
-    public void approve(PGPayment pgPayment) {
-        validatePayment(pgPayment);
+    public void approve(String receiptUrl) {
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID;
-        this.receiptUrl = pgPayment.getReceiptUrl();
+        this.receiptUrl = receiptUrl;
         this.paidAt = LocalDateTime.now();
     }
 
@@ -56,13 +54,13 @@ public class ChargePointPayment {
         this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail;
     }
 
-    private void validatePayment(PGPayment pgPayment) {
+    public void validatePayment(int paidAmount) {
         validateStatus();
-        validateAmount(pgPayment);
+        validateAmount(paidAmount);
     }
 
-    private void validateAmount(PGPayment pgPayment) {
-        if (chargePointType.getAmount() != pgPayment.getAmount()) {
+    private void validateAmount(int paidAmount) {
+        if (chargePointType.getAmount() != paidAmount) {
             throw new InvalidPaymentException();
         }
     }
