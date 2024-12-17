@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class CustomExceptionHandler {
+public class CoreExceptionHandler {
     @ExceptionHandler(CoreException.class)
     protected ResponseEntity<ErrorResponse> handleCustomException(CoreException e) {
         return ErrorResponse.toResponse(e);
