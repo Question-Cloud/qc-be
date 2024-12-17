@@ -3,10 +3,9 @@ package com.eager.questioncloud.application.exception;
 import com.eager.questioncloud.application.api.payment.point.implement.PGAPI;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.core.exception.FailChargePointException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +24,14 @@ public class FailChargePointExceptionHandler {
 
         pgAPI.cancel(chargePointPayment.getPaymentId());
 
-        return ErrorResponse.toResponse(new CoreException(Error.INTERNAL_SERVER_ERROR));
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(
+                ErrorResponse
+                    .builder()
+                    .status(500)
+                    .message("포인트 충전 중 오류가 발생하였습니다.")
+                    .build()
+            );
     }
 }
