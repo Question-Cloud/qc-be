@@ -21,7 +21,7 @@ public class QuestionPaymentService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
-        QuestionOrder order = questionOrderGenerator.generateQuestionPaymentOrder(userId, questionIds);
+        QuestionOrder order = questionOrderGenerator.generateQuestionOrder(userId, questionIds);
         QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponProcessor.getCoupon(userCouponId, userId);
         QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(QuestionPayment.create(userId, questionPaymentCoupon, order));
 

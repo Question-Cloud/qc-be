@@ -16,7 +16,7 @@ public class QuestionOrderGenerator {
     private final UserQuestionRepository userQuestionRepository;
     private final QuestionRepository questionRepository;
 
-    public QuestionOrder generateQuestionPaymentOrder(Long userId, List<Long> questionIds) {
+    public QuestionOrder generateQuestionOrder(Long userId, List<Long> questionIds) {
         if (checkAlreadyOwned(userId, questionIds)) {
             throw new CustomException(Error.ALREADY_OWN_QUESTION);
         }
