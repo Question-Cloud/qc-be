@@ -2,7 +2,6 @@ package com.eager.questioncloud.core.domain.payment.model;
 
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.QuestionOrderItem;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,23 +31,15 @@ public class QuestionPayment {
     }
 
     public static QuestionPayment create(Long userId, QuestionPaymentCoupon questionPaymentCoupon, QuestionOrder order) {
-        int originalAmount = calcOriginalAmount(order);
         return QuestionPayment.builder()
             .orderId(order.getOrderId())
             .order(order)
             .userId(userId)
             .questionPaymentCoupon(questionPaymentCoupon)
-            .amount(originalAmount)
+            .amount(order.calcAmount())
             .status(QuestionPaymentStatus.SUCCESS)
             .createdAt(LocalDateTime.now())
             .build();
-    }
-
-    private static int calcOriginalAmount(QuestionOrder order) {
-        return order.getItems()
-            .stream()
-            .mapToInt(QuestionOrderItem::getPrice)
-            .sum();
     }
 
     public Boolean isUsingCoupon() {

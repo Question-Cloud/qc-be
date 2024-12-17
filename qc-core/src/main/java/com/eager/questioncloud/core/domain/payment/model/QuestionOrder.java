@@ -26,6 +26,13 @@ public class QuestionOrder {
         return new QuestionOrder(orderId, items);
     }
 
+    public int calcAmount() {
+        return items
+            .stream()
+            .mapToInt(QuestionOrderItem::getPrice)
+            .sum();
+    }
+
     @Getter
     @AllArgsConstructor
     public static class QuestionOrderItem {
