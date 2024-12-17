@@ -59,7 +59,7 @@ public class QuestionPaymentEntity {
     public static QuestionPaymentEntity from(QuestionPayment questionPayment) {
         return QuestionPaymentEntity.builder()
             .id(questionPayment.getId())
-            .orderId(questionPayment.getOrderId())
+            .orderId(questionPayment.getOrder().getOrderId())
             .userId(questionPayment.getUserId())
             .userCouponId(questionPayment.getQuestionPaymentCoupon().getUserCouponId())
             .amount(questionPayment.getAmount())

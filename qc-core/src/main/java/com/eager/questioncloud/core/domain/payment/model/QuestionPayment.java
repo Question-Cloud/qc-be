@@ -9,7 +9,6 @@ import lombok.Getter;
 @Getter
 public class QuestionPayment {
     private Long id;
-    private String orderId;
     private QuestionOrder order;
     private QuestionPaymentCoupon questionPaymentCoupon;
     private Long userId;
@@ -18,10 +17,9 @@ public class QuestionPayment {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, String orderId, QuestionOrder order, Long userId, QuestionPaymentCoupon questionPaymentCoupon, int amount,
+    public QuestionPayment(Long id, QuestionOrder order, Long userId, QuestionPaymentCoupon questionPaymentCoupon, int amount,
         QuestionPaymentStatus status, LocalDateTime createdAt) {
         this.id = id;
-        this.orderId = orderId;
         this.order = order;
         this.userId = userId;
         this.questionPaymentCoupon = questionPaymentCoupon;
@@ -32,7 +30,6 @@ public class QuestionPayment {
 
     public static QuestionPayment create(Long userId, QuestionPaymentCoupon questionPaymentCoupon, QuestionOrder order) {
         return QuestionPayment.builder()
-            .orderId(order.getOrderId())
             .order(order)
             .userId(userId)
             .questionPaymentCoupon(questionPaymentCoupon)
@@ -58,5 +55,9 @@ public class QuestionPayment {
 
     public void fail() {
         this.status = QuestionPaymentStatus.FAIL;
+    }
+
+    public void success(Long paymentId) {
+        this.id = paymentId;
     }
 }

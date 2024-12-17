@@ -38,7 +38,7 @@ public class QuestionPaymentHistory {
 
         return QuestionPaymentHistory.builder()
             .paymentId(questionPayment.getId())
-            .orderId(questionPayment.getOrderId())
+            .orderId(questionPayment.getOrder().getOrderId())
             .userId(questionPayment.getUserId())
             .orders(orders)
             .coupon(questionPayment.getQuestionPaymentCoupon())
