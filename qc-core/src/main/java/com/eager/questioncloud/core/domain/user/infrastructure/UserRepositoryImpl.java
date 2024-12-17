@@ -9,8 +9,8 @@ import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
 import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getUserByEmail(String email) {
         return userJpaRepository.findByUserInformationEntityEmail(email)
-            .orElseThrow(() -> new CustomException(Error.FAIL_LOGIN))
+            .orElseThrow(() -> new CoreException(Error.FAIL_LOGIN))
             .toModel();
     }
 
@@ -34,14 +34,14 @@ public class UserRepositoryImpl implements UserRepository {
     public User getUserByPhone(String phone) {
         return userJpaRepository.findByUserInformationEntityPhone(phone)
             .filter(entity -> !entity.getUserStatus().equals(UserStatus.Deleted))
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
     @Override
     public User getUser(Long uid) {
         return userJpaRepository.findById(uid)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
@@ -54,14 +54,14 @@ public class UserRepositoryImpl implements UserRepository {
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         UserEntity user = result.get(userEntity);
         CreatorEntity creator = result.get(creatorEntity);
 
         if (user == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         if (user.getUserType().equals(UserType.CreatorUser) && creator != null) {

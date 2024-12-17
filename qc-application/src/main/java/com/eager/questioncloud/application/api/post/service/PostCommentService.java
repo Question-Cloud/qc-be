@@ -5,8 +5,8 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.post.infrastructure.PostCommentRepository;
 import com.eager.questioncloud.core.domain.post.model.PostComment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class PostCommentService {
 
     public PostComment addPostComment(PostComment postComment) {
         if (!postPermissionChecker.hasCommentPermission(postComment.getWriterId(), postComment.getPostId())) {
-            throw new CustomException(Error.FORBIDDEN);
+            throw new CoreException(Error.FORBIDDEN);
         }
         return postCommentRepository.save(postComment);
     }
@@ -37,7 +37,7 @@ public class PostCommentService {
 
     public List<PostCommentDetail> getPostComments(Long postId, Long userId, PagingInformation pagingInformation) {
         if (!postPermissionChecker.hasCommentPermission(userId, postId)) {
-            throw new CustomException(Error.FORBIDDEN);
+            throw new CoreException(Error.FORBIDDEN);
         }
         return postCommentRepository.getPostCommentDetails(postId, userId, pagingInformation);
     }

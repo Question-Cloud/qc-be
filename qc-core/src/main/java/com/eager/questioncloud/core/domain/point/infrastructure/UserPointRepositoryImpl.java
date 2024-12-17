@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.point.infrastructure;
 import static com.eager.questioncloud.core.domain.point.infrastructure.QUserPointEntity.userPointEntity;
 
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,7 +18,7 @@ public class UserPointRepositoryImpl implements UserPointRepository {
     @Override
     public UserPoint getUserPoint(Long userId) {
         return userPointJpaRepository.findById(userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

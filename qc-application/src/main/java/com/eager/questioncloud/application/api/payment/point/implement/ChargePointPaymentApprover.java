@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.payment.point.implement;
 import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.exception.CustomException;
+import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,8 @@ public class ChargePointPaymentApprover {
                     chargePointPayment.validatePayment(pgPayment.getAmount());
                     chargePointPayment.approve(pgPayment.getReceiptUrl());
                     return chargePointPaymentRepository.save(chargePointPayment);
-                } catch (CustomException customException) {
-                    throw customException;
+                } catch (CoreException coreException) {
+                    throw coreException;
                 } catch (Exception unknownException) {
                     chargePointPaymentFailHandler.failHandler(pgPayment.getPaymentId());
                     throw unknownException;

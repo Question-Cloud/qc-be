@@ -1,4 +1,4 @@
-package com.eager.questioncloud.exception;
+package com.eager.questioncloud.core.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

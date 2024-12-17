@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.social;
 
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -42,7 +42,7 @@ public class GoogleAPI extends SocialAPI {
             .block();
 
         if (res == null || res.access_token() == null) {
-            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
+            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         return res.access_token();
@@ -60,7 +60,7 @@ public class GoogleAPI extends SocialAPI {
             .block();
 
         if (googleUserInfo == null || googleUserInfo.id() == null) {
-            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
+            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         return new SocialUserInfo(googleUserInfo.id(), googleUserInfo.email(), googleUserInfo.name(), AccountType.GOOGLE);

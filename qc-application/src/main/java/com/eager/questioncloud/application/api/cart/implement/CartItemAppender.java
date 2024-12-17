@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.cart.infrastructure.CartItemRepositor
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,15 +18,15 @@ public class CartItemAppender {
 
     public void append(Long userId, Long questionId) {
         if (isUnAvailableQuestion(questionId)) {
-            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+            throw new CoreException(Error.UNAVAILABLE_QUESTION);
         }
 
         if (isAlreadyInCart(userId, questionId)) {
-            throw new CustomException(Error.ALREADY_IN_CART);
+            throw new CoreException(Error.ALREADY_IN_CART);
         }
 
         if (isAlreadyOwned(userId, questionId)) {
-            throw new CustomException(Error.ALREADY_OWN_QUESTION);
+            throw new CoreException(Error.ALREADY_OWN_QUESTION);
         }
 
         cartItemRepository.save(CartItem.create(userId, questionId));

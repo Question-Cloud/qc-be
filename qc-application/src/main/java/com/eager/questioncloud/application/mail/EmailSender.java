@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.mail;
 
 import com.eager.questioncloud.core.domain.verification.model.Email;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class EmailSender {
             mimeMessageHelper.setText(email.getContent(), true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+            throw new CoreException(Error.INTERNAL_SERVER_ERROR);
         }
     }
 }

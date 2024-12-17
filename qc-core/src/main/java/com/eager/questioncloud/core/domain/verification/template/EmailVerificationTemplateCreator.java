@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.verification.template;
 
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 
 public class EmailVerificationTemplateCreator {
     public static EmailVerificationTemplate getTemplate(EmailVerificationType emailVerificationType, String token) {
@@ -14,7 +14,7 @@ public class EmailVerificationTemplateCreator {
                 return new ChangePasswordEmailVerificationTemplate(token);
             }
             default -> {
-                throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+                throw new CoreException(Error.INTERNAL_SERVER_ERROR);
             }
         }
     }

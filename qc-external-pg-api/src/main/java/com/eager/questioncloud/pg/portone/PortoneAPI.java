@@ -1,7 +1,6 @@
 package com.eager.questioncloud.pg.portone;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.pg.exception.PGException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,12 +23,12 @@ public class PortoneAPI {
                 if (response.statusCode().is2xxSuccessful()) {
                     return response.bodyToMono(PortonePayment.class);
                 }
-                throw new CustomException(Error.PAYMENT_ERROR);
+                throw new PGException("PG 결제 요청 실패");
             })
             .block();
 
         if (portonePayment == null || portonePayment.getId() == null) {
-            throw new CustomException(Error.PAYMENT_ERROR);
+            throw new PGException("PG 결제 요청 실패");
         }
 
         return portonePayment;

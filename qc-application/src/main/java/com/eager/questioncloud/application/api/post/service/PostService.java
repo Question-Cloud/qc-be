@@ -7,8 +7,8 @@ import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.post.infrastructure.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.post.model.PostContent;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class PostService {
 
     public Post register(Post post) {
         if (!postPermissionChecker.hasPermission(post.getWriterId(), post.getQuestionId())) {
-            throw new CustomException(Error.FORBIDDEN);
+            throw new CoreException(Error.FORBIDDEN);
         }
 
         return postRepository.save(post);
@@ -29,7 +29,7 @@ public class PostService {
 
     public List<PostListItem> getPostList(Long userId, Long questionId, PagingInformation pagingInformation) {
         if (!postPermissionChecker.hasPermission(userId, questionId)) {
-            throw new CustomException(Error.FORBIDDEN);
+            throw new CoreException(Error.FORBIDDEN);
         }
 
         return postRepository.getPostList(questionId, pagingInformation);
@@ -41,7 +41,7 @@ public class PostService {
 
     public PostDetail getPostDetail(Long userId, Long postId) {
         if (!postPermissionChecker.hasPermission(userId, postId)) {
-            throw new CustomException(Error.FORBIDDEN);
+            throw new CoreException(Error.FORBIDDEN);
         }
         return postRepository.getPostDetail(postId);
     }

@@ -6,8 +6,8 @@ import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class QuestionPaymentCouponProcessor {
         questionPayment.useCoupon();
 
         if (!userCouponRepository.use(questionPayment.getQuestionPaymentCoupon().getUserCouponId())) {
-            throw new CustomException(Error.FAIL_USE_COUPON);
+            throw new CoreException(Error.FAIL_USE_COUPON);
         }
     }
 }

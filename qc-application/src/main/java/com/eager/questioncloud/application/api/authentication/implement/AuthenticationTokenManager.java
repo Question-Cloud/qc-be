@@ -2,8 +2,8 @@ package com.eager.questioncloud.application.api.authentication.implement;
 
 import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.core.domain.token.RefreshTokenRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -47,7 +47,7 @@ public class AuthenticationTokenManager {
         Claims claims = getClaims(accessToken);
 
         if (!claims.getSubject().equals("accessToken")) {
-            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+            throw new CoreException(Error.UNAUTHORIZED_TOKEN);
         }
 
         return claims.get("uid", Long.class);
@@ -62,7 +62,7 @@ public class AuthenticationTokenManager {
                 .parseClaimsJws(token)
                 .getBody();
         } catch (Exception e) {
-            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+            throw new CoreException(Error.UNAUTHORIZED_TOKEN);
         }
     }
 
@@ -99,14 +99,14 @@ public class AuthenticationTokenManager {
         Claims claims = getClaims(refreshToken);
 
         if (!claims.getSubject().equals("refreshToken")) {
-            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+            throw new CoreException(Error.UNAUTHORIZED_TOKEN);
         }
 
         Long uid = claims.get("uid", Long.class);
         String refreshTokenInStore = refreshTokenRepository.getByUserId(uid);
 
         if (!refreshToken.equals(refreshTokenInStore)) {
-            throw new CustomException(Error.UNAUTHORIZED_TOKEN);
+            throw new CoreException(Error.UNAUTHORIZED_TOKEN);
         }
 
         return claims;

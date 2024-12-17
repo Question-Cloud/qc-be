@@ -1,7 +1,6 @@
 package com.eager.questioncloud.lock;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.lock.exception.LockException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,14 @@ public class LockManager {
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
             if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
-                throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+                throw new LockException();
             }
             task.run();
-        } catch (CustomException e) {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
-            throw e;
         } catch (Exception e) {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
-            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+            throw new LockException();
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
@@ -49,10 +43,10 @@ public class LockManager {
         try {
             lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
             if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
-                throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+                throw new LockException();
             }
             return task.call();
-        } catch (CustomException e) {
+        } catch (LockException e) {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
@@ -61,7 +55,7 @@ public class LockManager {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
-            throw new CustomException(Error.INTERNAL_SERVER_ERROR);
+            throw new LockException();
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();

@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.review.infrastructure;
 
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ public class QuestionReviewStatisticsRepositoryImpl implements QuestionReviewSta
     @Override
     public QuestionReviewStatistics get(Long questionId) {
         return questionReviewStatisticsJpaRepository.findById(questionId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

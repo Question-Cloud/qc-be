@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepos
 import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
 import lombok.RequiredArgsConstructor;
@@ -24,15 +24,15 @@ public class HubReviewRegister {
             LockKeyGenerator.generateRegisterReview(questionReview.getReviewerId(), questionReview.getQuestionId()),
             () -> {
                 if (isUnAvailableQuestion(questionReview.getQuestionId())) {
-                    throw new CustomException(Error.UNAVAILABLE_QUESTION);
+                    throw new CoreException(Error.UNAVAILABLE_QUESTION);
                 }
 
                 if (isNotOwnedQuestion(questionReview.getReviewerId(), questionReview.getQuestionId())) {
-                    throw new CustomException(Error.NOT_OWNED_QUESTION);
+                    throw new CoreException(Error.NOT_OWNED_QUESTION);
                 }
 
                 if (isAlreadyWrittenReview(questionReview.getReviewerId(), questionReview.getQuestionId())) {
-                    throw new CustomException(Error.ALREADY_REGISTER_REVIEW);
+                    throw new CoreException(Error.ALREADY_REGISTER_REVIEW);
                 }
 
                 questionReviewRepository.save(questionReview);

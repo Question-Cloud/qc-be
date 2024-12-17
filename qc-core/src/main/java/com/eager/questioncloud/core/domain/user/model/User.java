@@ -3,9 +3,9 @@ package com.eager.questioncloud.core.domain.user.model;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
 import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.NotVerificationUserException;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.NotVerificationUserException;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -53,7 +53,7 @@ public class User {
             throw new NotVerificationUserException(uid);
         }
         if (!userStatus.equals(UserStatus.Active)) {
-            throw new CustomException(Error.NOT_ACTIVE_USER);
+            throw new CoreException(Error.NOT_ACTIVE_USER);
         }
     }
 
@@ -63,7 +63,7 @@ public class User {
 
     public void validatePassword(String rawPassword) {
         if (!PasswordProcessor.matches(rawPassword, userAccountInformation.getPassword())) {
-            throw new CustomException(Error.FAIL_LOGIN);
+            throw new CoreException(Error.FAIL_LOGIN);
         }
     }
 

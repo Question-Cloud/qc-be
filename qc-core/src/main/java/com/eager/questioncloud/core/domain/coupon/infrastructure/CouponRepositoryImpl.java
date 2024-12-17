@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.coupon.infrastructure;
 import static com.eager.questioncloud.core.domain.coupon.infrastructure.QCouponEntity.couponEntity;
 
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,14 +18,14 @@ public class CouponRepositoryImpl implements CouponRepository {
     @Override
     public Coupon findById(Long id) {
         return couponJpaRepository.findById(id)
-            .orElseThrow(() -> new CustomException(Error.WRONG_COUPON))
+            .orElseThrow(() -> new CoreException(Error.WRONG_COUPON))
             .toDomain();
     }
 
     @Override
     public Coupon findByCode(String code) {
         return couponJpaRepository.findByCode(code)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toDomain();
     }
 

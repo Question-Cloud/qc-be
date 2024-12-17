@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.exception;
 
-import com.eager.questioncloud.exception.InvalidPaymentException;
+import com.eager.questioncloud.core.exception.InvalidPaymentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

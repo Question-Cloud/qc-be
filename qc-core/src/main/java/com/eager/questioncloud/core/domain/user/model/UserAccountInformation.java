@@ -2,8 +2,8 @@ package com.eager.questioncloud.core.domain.user.model;
 
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +44,7 @@ public class UserAccountInformation {
 
     public UserAccountInformation changePassword(String newRawPassword) {
         if (!accountType.equals(AccountType.EMAIL)) {
-            throw new CustomException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT);
+            throw new CoreException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT);
         }
         String newEncodedPassword = PasswordProcessor.encode(newRawPassword);
         return new UserAccountInformation(newEncodedPassword, this.socialUid, this.accountType);

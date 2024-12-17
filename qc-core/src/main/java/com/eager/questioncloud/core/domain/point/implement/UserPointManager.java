@@ -3,9 +3,9 @@ package com.eager.questioncloud.core.domain.point.implement;
 import com.eager.questioncloud.core.domain.point.event.CompletedChargePointPaymentEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.FailChargePointException;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.FailChargePointException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,7 @@ public class UserPointManager {
 
     public void usePoint(Long userId, int amount) {
         if (!userPointRepository.usePoint(userId, amount)) {
-            throw new CustomException(Error.NOT_ENOUGH_POINT);
+            throw new CoreException(Error.NOT_ENOUGH_POINT);
         }
     }
 }

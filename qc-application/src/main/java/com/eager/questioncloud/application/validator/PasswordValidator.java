@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.validator;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +12,7 @@ public class PasswordValidator {
     public static void validate(String password) {
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches()) {
-            throw new CustomException(Error.BAD_REQUEST);
+            throw new CoreException(Error.BAD_REQUEST);
         }
     }
 }

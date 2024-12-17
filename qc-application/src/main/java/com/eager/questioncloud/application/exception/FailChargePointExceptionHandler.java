@@ -3,9 +3,9 @@ package com.eager.questioncloud.application.exception;
 import com.eager.questioncloud.application.api.payment.point.implement.PGAPI;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.FailChargePointException;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.FailChargePointException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,6 +25,6 @@ public class FailChargePointExceptionHandler {
 
         pgAPI.cancel(chargePointPayment.getPaymentId());
 
-        return ErrorResponse.toResponse(new CustomException(Error.INTERNAL_SERVER_ERROR));
+        return ErrorResponse.toResponse(new CoreException(Error.INTERNAL_SERVER_ERROR));
     }
 }

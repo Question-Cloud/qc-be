@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.creator.infrastructure;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorStatisticsEntity.creatorStatisticsEntity;
 
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class CreatorStatisticsRepositoryImpl implements CreatorStatisticsReposit
     @Override
     public CreatorStatistics findByCreatorId(Long creatorId) {
         return creatorStatisticsJpaRepository.findByCreatorId(creatorId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

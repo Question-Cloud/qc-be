@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.social;
 
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,7 +30,7 @@ public class NaverAPI extends SocialAPI {
             .block();
 
         if (res == null || res.access_token() == null) {
-            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
+            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         return res.access_token();
@@ -48,7 +48,7 @@ public class NaverAPI extends SocialAPI {
             .block();
 
         if (apiResponse == null || apiResponse.response() == null || apiResponse.response().id() == null) {
-            throw new CustomException(Error.FAIL_SOCIAL_LOGIN);
+            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
         }
 
         NaverUserInfo naverUserInfo = apiResponse.response();

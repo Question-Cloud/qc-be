@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class QuestionOrderGenerator {
 
     public QuestionOrder generateQuestionOrder(Long userId, List<Long> questionIds) {
         if (checkAlreadyOwned(userId, questionIds)) {
-            throw new CustomException(Error.ALREADY_OWN_QUESTION);
+            throw new CoreException(Error.ALREADY_OWN_QUESTION);
         }
 
         List<Question> questions = getQuestions(questionIds);
@@ -32,7 +32,7 @@ public class QuestionOrderGenerator {
     private List<Question> getQuestions(List<Long> questionIds) {
         List<Question> questions = questionRepository.getQuestionsByQuestionIds(questionIds);
         if (questions.size() != questionIds.size()) {
-            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+            throw new CoreException(Error.UNAVAILABLE_QUESTION);
         }
         return questions;
     }

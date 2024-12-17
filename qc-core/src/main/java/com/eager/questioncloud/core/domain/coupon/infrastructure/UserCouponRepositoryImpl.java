@@ -5,8 +5,8 @@ import static com.eager.questioncloud.core.domain.coupon.infrastructure.QUserCou
 
 import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -23,14 +23,14 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     @Override
     public UserCoupon getUserCoupon(Long userCouponId, Long userId) {
         return userCouponJpaRepository.findByIdAndUserIdAndIsUsedFalse(userCouponId, userId)
-            .orElseThrow(() -> new CustomException(Error.WRONG_COUPON))
+            .orElseThrow(() -> new CoreException(Error.WRONG_COUPON))
             .toModel();
     }
 
     @Override
     public UserCoupon getUserCoupon(Long userCouponId) {
         return userCouponJpaRepository.findById(userCouponId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

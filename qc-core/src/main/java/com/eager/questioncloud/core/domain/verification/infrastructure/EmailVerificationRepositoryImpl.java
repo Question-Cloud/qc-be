@@ -4,8 +4,8 @@ import static com.eager.questioncloud.core.domain.verification.infrastructure.QE
 
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,7 +19,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
     @Override
     public EmailVerification get(String token, EmailVerificationType emailVerificationType) {
         return emailVerificationJpaRepository.findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(token, emailVerificationType)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
@@ -34,7 +34,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return result.toModel();
@@ -48,7 +48,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return result.toModel();

@@ -6,8 +6,8 @@ import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.event.CompletedChargePointPaymentEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class ChargePointPaymentService {
 
     public void createOrder(ChargePointPayment chargePointPayment) {
         if (isAlreadyCreatedOrder(chargePointPayment.getPaymentId())) {
-            throw new CustomException(Error.ALREADY_ORDERED);
+            throw new CoreException(Error.ALREADY_ORDERED);
         }
         chargePointPaymentRepository.save(chargePointPayment);
     }

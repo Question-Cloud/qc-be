@@ -10,9 +10,9 @@ import com.eager.questioncloud.core.domain.user.enums.UserType;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.NotVerificationUserException;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.NotVerificationUserException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ class UserTest {
 
         //when then
         assertThatThrownBy(() -> user.validatePassword(wrongPassword))
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN);
     }
 
@@ -80,7 +80,7 @@ class UserTest {
 
         //when then
         assertThatThrownBy(user::checkUserStatus)
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.NOT_ACTIVE_USER);
     }
 
@@ -97,7 +97,7 @@ class UserTest {
 
         //when then
         assertThatThrownBy(user::checkUserStatus)
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.NOT_ACTIVE_USER);
     }
 }

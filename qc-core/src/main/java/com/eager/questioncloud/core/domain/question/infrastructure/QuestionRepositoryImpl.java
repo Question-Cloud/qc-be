@@ -14,8 +14,8 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
 import com.eager.questioncloud.core.domain.question.enums.QuestionType;
 import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -95,7 +95,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .fetchFirst();
 
         if (tuple == null || tuple.get(questionEntity.id) == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return parseQuestionInformationTuple(tuple);
@@ -130,7 +130,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return result.toModel();
@@ -144,7 +144,7 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+            throw new CoreException(Error.UNAVAILABLE_QUESTION);
         }
 
         return result.toModel();

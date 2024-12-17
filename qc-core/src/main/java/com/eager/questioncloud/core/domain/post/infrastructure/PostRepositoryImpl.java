@@ -9,8 +9,8 @@ import com.eager.questioncloud.core.domain.post.dto.PostDetail;
 import com.eager.questioncloud.core.domain.post.dto.PostListItem;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.question.infrastructure.QQuestionCategoryEntity;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -99,7 +99,7 @@ public class PostRepositoryImpl implements PostRepository {
             .fetchFirst();
 
         if (postDetail == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return postDetail;
@@ -108,14 +108,14 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Post findByIdAndWriterId(Long postId, Long userId) {
         return postJpaRepository.findByIdAndWriterId(postId, userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
     @Override
     public Post findById(Long postId) {
         return postJpaRepository.findById(postId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

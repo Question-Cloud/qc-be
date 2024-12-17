@@ -2,9 +2,9 @@ package com.eager.questioncloud.core.domain.point.model;
 
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
-import com.eager.questioncloud.exception.InvalidPaymentException;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.core.exception.InvalidPaymentException;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -67,7 +67,7 @@ public class ChargePointPayment {
 
     private void validateStatus() {
         if (!chargePointPaymentStatus.equals(ChargePointPaymentStatus.ORDERED)) {
-            throw new CustomException(Error.ALREADY_PROCESSED_PAYMENT);
+            throw new CoreException(Error.ALREADY_PROCESSED_PAYMENT);
         }
     }
 }

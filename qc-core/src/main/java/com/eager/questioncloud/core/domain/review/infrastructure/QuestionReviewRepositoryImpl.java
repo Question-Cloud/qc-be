@@ -7,8 +7,8 @@ import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.MathExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -77,7 +77,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
     @Override
     public QuestionReview getMyQuestionReview(Long questionId, Long userId) {
         return questionReviewJpaRepository.findByQuestionIdAndReviewerIdAndIsDeletedFalse(questionId, userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
@@ -89,7 +89,7 @@ public class QuestionReviewRepositoryImpl implements QuestionReviewRepository {
             .fetchFirst();
 
         if (result == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return result.toModel();

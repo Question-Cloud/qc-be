@@ -9,8 +9,8 @@ import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntit
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
 import com.eager.questioncloud.core.domain.post.model.PostComment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
     @Override
     public PostComment findByIdAndWriterId(Long commentId, Long userId) {
         return postCommentJpaRepository.findByIdAndWriterId(commentId, userId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 
@@ -93,7 +93,7 @@ public class PostCommentRepositoryImpl implements PostCommentRepository {
             .fetchFirst();
 
         if (questionCreatorUserId == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return questionCreatorUserId;

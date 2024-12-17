@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.post.infrastructure.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +18,11 @@ public class PostPermissionChecker {
 
     public Boolean hasPermission(Long userId, Long questionId) {
         if (!questionRepository.isAvailable(questionId)) {
-            throw new CustomException(Error.UNAVAILABLE_QUESTION);
+            throw new CoreException(Error.UNAVAILABLE_QUESTION);
         }
 
         if (!userQuestionRepository.isOwned(userId, questionId)) {
-            throw new CustomException(Error.NOT_OWNED_QUESTION);
+            throw new CoreException(Error.NOT_OWNED_QUESTION);
         }
 
         return true;

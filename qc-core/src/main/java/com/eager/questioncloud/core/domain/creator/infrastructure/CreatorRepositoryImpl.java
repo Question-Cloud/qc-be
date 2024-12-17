@@ -6,8 +6,8 @@ import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntit
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class CreatorRepositoryImpl implements CreatorRepository {
             .fetchFirst();
 
         if (creatorInformation == null) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         return creatorInformation;

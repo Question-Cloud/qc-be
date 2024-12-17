@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment.question.dto;
 
 import com.eager.questioncloud.application.validator.Validatable;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class QuestionPaymentControllerRequest {
         @Override
         public void validate() {
             if (questionIds == null || questionIds.isEmpty()) {
-                throw new CustomException(Error.BAD_REQUEST);
+                throw new CoreException(Error.BAD_REQUEST);
             }
         }
     }

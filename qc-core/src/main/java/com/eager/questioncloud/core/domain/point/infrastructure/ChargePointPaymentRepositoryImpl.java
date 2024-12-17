@@ -5,8 +5,8 @@ import static com.eager.questioncloud.core.domain.point.infrastructure.QChargePo
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +38,7 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     @Override
     public ChargePointPayment findByPaymentId(String paymentId) {
         return chargePointPaymentJpaRepository.findByPaymentId(paymentId)
-            .orElseThrow(() -> new CustomException(Error.NOT_FOUND))
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
             .toModel();
     }
 

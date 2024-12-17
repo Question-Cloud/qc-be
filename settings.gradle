@@ -3,5 +3,4 @@ include 'qc-external-pg-api'
 include 'qc-core'
 include 'qc-application'
 include 'qc-lock-manager'
-include 'qc-exception'
 

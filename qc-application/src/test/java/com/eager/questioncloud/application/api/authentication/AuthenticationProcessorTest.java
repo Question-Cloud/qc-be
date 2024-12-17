@@ -15,8 +15,8 @@ import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -68,7 +68,7 @@ class AuthenticationProcessorTest {
 
         //when then
         assertThatThrownBy(() -> authenticationProcessor.emailPasswordAuthentication(wrongEmail, password))
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN);
     }
 
@@ -88,7 +88,7 @@ class AuthenticationProcessorTest {
 
         //when //then
         assertThatThrownBy(() -> authenticationProcessor.emailPasswordAuthentication(email, wrongEmail))
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN);
     }
 
@@ -171,11 +171,11 @@ class AuthenticationProcessorTest {
         //given
         String wrongCode = "socialCode";
         AccountType accountType = AccountType.KAKAO;
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any())).willThrow(new CustomException(Error.FAIL_SOCIAL_LOGIN));
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any())).willThrow(new CoreException(Error.FAIL_SOCIAL_LOGIN));
 
         //when then
         assertThatThrownBy(() -> authenticationProcessor.socialAuthentication(wrongCode, accountType))
-            .isInstanceOf(CustomException.class)
+            .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_SOCIAL_LOGIN);
     }
 }

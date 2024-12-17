@@ -3,8 +3,8 @@ package com.eager.questioncloud.application.api.subscribe.implement;
 import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorRepository;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.SubscribeRepository;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +16,11 @@ public class SubscribeProcessor {
 
     public Subscribe subscribe(Long userId, Long creatorId) {
         if (!isActiveCreator(creatorId)) {
-            throw new CustomException(Error.NOT_FOUND);
+            throw new CoreException(Error.NOT_FOUND);
         }
 
         if (isAlreadySubscribed(userId, creatorId)) {
-            throw new CustomException(Error.ALREADY_SUBSCRIBE_CREATOR);
+            throw new CoreException(Error.ALREADY_SUBSCRIBE_CREATOR);
         }
 
         return subscribeRepository.save(Subscribe.create(userId, creatorId));

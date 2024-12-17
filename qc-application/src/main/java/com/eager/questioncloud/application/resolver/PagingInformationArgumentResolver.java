@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.resolver;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -27,12 +27,12 @@ public class PagingInformationArgumentResolver implements HandlerMethodArgumentR
             int size = Integer.parseInt(webRequest.getParameter("size"));
 
             if (page < 0) {
-                throw new CustomException(Error.BAD_REQUEST);
+                throw new CoreException(Error.BAD_REQUEST);
             }
 
             return new PagingInformation(page * size, size);
         } catch (Exception e) {
-            throw new CustomException(Error.BAD_REQUEST);
+            throw new CoreException(Error.BAD_REQUEST);
         }
     }
 }

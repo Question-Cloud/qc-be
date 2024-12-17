@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.coupon.model;
 
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,11 +27,11 @@ public class UserCoupon {
 
     public void validate() {
         if (endAt.isBefore(LocalDateTime.now())) {
-            throw new CustomException(Error.EXPIRED_COUPON);
+            throw new CoreException(Error.EXPIRED_COUPON);
         }
 
         if (this.isUsed) {
-            throw new CustomException(Error.FAIL_USE_COUPON);
+            throw new CoreException(Error.FAIL_USE_COUPON);
         }
     }
 
@@ -41,10 +41,10 @@ public class UserCoupon {
 
     public static UserCoupon create(Long userId, Coupon coupon) {
         if (coupon.getEndAt().isBefore(LocalDateTime.now())) {
-            throw new CustomException(Error.EXPIRED_COUPON);
+            throw new CoreException(Error.EXPIRED_COUPON);
         }
         if (coupon.getRemainingCount() == 0) {
-            throw new CustomException(Error.LIMITED_COUPON);
+            throw new CoreException(Error.LIMITED_COUPON);
         }
         return UserCoupon.builder()
             .userId(userId)

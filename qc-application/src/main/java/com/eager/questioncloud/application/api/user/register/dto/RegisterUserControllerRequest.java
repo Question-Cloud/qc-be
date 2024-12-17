@@ -5,8 +5,8 @@ import com.eager.questioncloud.application.validator.PasswordValidator;
 import com.eager.questioncloud.application.validator.Validatable;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.exception.CustomException;
-import com.eager.questioncloud.exception.Error;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -52,7 +52,7 @@ public class RegisterUserControllerRequest {
 
         public void socialRegisterTokenValidate() {
             if (!StringUtils.hasText(socialRegisterToken)) {
-                throw new CustomException(Error.BAD_REQUEST);
+                throw new CoreException(Error.BAD_REQUEST);
             }
         }
 
