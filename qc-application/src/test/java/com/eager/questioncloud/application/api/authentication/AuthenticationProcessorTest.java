@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
 import com.eager.questioncloud.application.api.authentication.implement.AuthenticationProcessor;
-import com.eager.questioncloud.core.domain.social.SocialAPIManager;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
@@ -17,6 +16,7 @@ import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.social.SocialAPIManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;

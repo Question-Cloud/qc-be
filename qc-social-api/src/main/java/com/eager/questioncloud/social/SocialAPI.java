@@ -1,6 +1,4 @@
-package com.eager.questioncloud.core.domain.social;
-
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
+package com.eager.questioncloud.social;
 
 public abstract class SocialAPI {
     abstract String getAccessToken(String code);
@@ -12,6 +10,6 @@ public abstract class SocialAPI {
     record SocialAccessToken(String access_token) {
     }
 
-    record SocialUserInfo(String uid, String email, String nickname, AccountType accountType) {
+    record SocialUserInfo(String uid, String email, String nickname, SocialPlatform socialPlatform) {
     }
 }

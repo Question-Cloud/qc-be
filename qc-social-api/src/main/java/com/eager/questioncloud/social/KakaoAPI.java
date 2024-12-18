@@ -1,8 +1,5 @@
-package com.eager.questioncloud.core.domain.social;
+package com.eager.questioncloud.social;
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -41,7 +38,7 @@ public class KakaoAPI extends SocialAPI {
             .block();
 
         if (res == null || res.access_token() == null) {
-            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
+            throw new FailSocialLoginException();
         }
 
         return res.access_token();
@@ -58,10 +55,10 @@ public class KakaoAPI extends SocialAPI {
             .block();
 
         if (kakaoUserInfo == null || kakaoUserInfo.sub() == null) {
-            throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
+            throw new FailSocialLoginException();
         }
 
-        return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), AccountType.KAKAO);
+        return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), SocialPlatform.KAKAO);
     }
 
     @Override

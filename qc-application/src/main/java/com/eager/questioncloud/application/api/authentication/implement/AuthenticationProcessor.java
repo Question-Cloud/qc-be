@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.authentication.implement;
 
 import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
-import com.eager.questioncloud.core.domain.social.SocialAPIManager;
-import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
+import com.eager.questioncloud.social.SocialAPIManager;
+import com.eager.questioncloud.social.SocialPlatform;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,8 +24,8 @@ public class AuthenticationProcessor {
     }
 
     public SocialAuthentication socialAuthentication(String code, AccountType accountType) {
-        String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.from(accountType));
-        String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.from(accountType));
+        String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.valueOf(accountType.getValue()));
+        String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.valueOf(accountType.getValue()));
         Optional<User> optionalUser = userRepository.getSocialUser(accountType, socialUid);
         return optionalUser
             .map(user -> {

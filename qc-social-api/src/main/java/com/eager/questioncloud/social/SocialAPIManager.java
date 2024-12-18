@@ -1,7 +1,5 @@
-package com.eager.questioncloud.core.domain.social;
+package com.eager.questioncloud.social;
 
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +15,7 @@ public class SocialAPIManager {
                 return socialAPI.getAccessToken(code);
             }
         }
-        throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
+        throw new FailSocialLoginException();
     }
 
     public String getSocialUid(String accessToken, SocialPlatform socialPlatform) {
@@ -26,6 +24,6 @@ public class SocialAPIManager {
                 return socialAPI.getUserInfo(accessToken).uid();
             }
         }
-        throw new CoreException(Error.FAIL_SOCIAL_LOGIN);
+        throw new FailSocialLoginException();
     }
 }

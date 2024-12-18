@@ -2,8 +2,6 @@ package com.eager.questioncloud.application.api.user.register.service;
 
 import com.eager.questioncloud.application.mail.EmailSender;
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
-import com.eager.questioncloud.core.domain.social.SocialAPIManager;
-import com.eager.questioncloud.core.domain.social.SocialPlatform;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
@@ -16,6 +14,8 @@ import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationT
 import com.eager.questioncloud.core.domain.verification.implement.EmailVerificationProcessor;
 import com.eager.questioncloud.core.domain.verification.model.Email;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
+import com.eager.questioncloud.social.SocialAPIManager;
+import com.eager.questioncloud.social.SocialPlatform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +65,10 @@ public class RegisterUserService {
         if (createUser.getAccountType().equals(AccountType.EMAIL)) {
             return UserAccountInformation.createEmailAccountInformation(createUser.getPassword());
         }
-        String socialUid = socialAPIManager.getSocialUid(createUser.getSocialRegisterToken(), SocialPlatform.from(createUser.getAccountType()));
+        String socialUid = socialAPIManager.getSocialUid(
+            createUser.getSocialRegisterToken(),
+            SocialPlatform.valueOf(createUser.getAccountType().getValue())
+        );
         return UserAccountInformation.createSocialAccountInformation(socialUid, createUser.getAccountType());
     }
 }
