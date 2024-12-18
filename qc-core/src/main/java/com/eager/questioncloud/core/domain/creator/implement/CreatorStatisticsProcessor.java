@@ -85,15 +85,11 @@ public class CreatorStatisticsProcessor {
 
     @EventListener
     public void increaseSubscribeCount(SubscribedEvent event) {
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(event.getSubscribe().getCreatorId());
-        creatorStatistics.increaseSubscribeCount();
-        creatorStatisticsRepository.save(creatorStatistics);
+        creatorStatisticsRepository.increaseSubscribeCount(event.getCreatorId());
     }
 
     @EventListener
     public void decreaseSubscribeCount(UnsubscribedEvent event) {
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(event.getCreatorId());
-        creatorStatistics.decreaseSubscribeCount();
-        creatorStatisticsRepository.save(creatorStatistics);
+        creatorStatisticsRepository.decreaseSubscribeCount(event.getCreatorId());
     }
 }

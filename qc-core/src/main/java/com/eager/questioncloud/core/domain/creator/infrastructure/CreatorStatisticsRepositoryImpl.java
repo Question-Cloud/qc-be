@@ -47,6 +47,24 @@ public class CreatorStatisticsRepositoryImpl implements CreatorStatisticsReposit
     }
 
     @Override
+    @Transactional
+    public void increaseSubscribeCount(Long creatorId) {
+        jpaQueryFactory.update(creatorStatisticsEntity)
+            .set(creatorStatisticsEntity.subscribeCount, creatorStatisticsEntity.subscribeCount.add(1))
+            .where(creatorStatisticsEntity.creatorId.eq(creatorId))
+            .execute();
+    }
+
+    @Override
+    @Transactional
+    public void decreaseSubscribeCount(Long creatorId) {
+        jpaQueryFactory.update(creatorStatisticsEntity)
+            .set(creatorStatisticsEntity.subscribeCount, creatorStatisticsEntity.subscribeCount.subtract(1))
+            .where(creatorStatisticsEntity.creatorId.eq(creatorId))
+            .execute();
+    }
+
+    @Override
     public void deleteAllInBatch() {
         creatorStatisticsJpaRepository.deleteAllInBatch();
     }

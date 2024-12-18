@@ -4,7 +4,6 @@ import com.eager.questioncloud.application.api.subscribe.implement.SubscribeProc
 import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.SubscribeRepository;
-import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ public class SubscribeService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void subscribe(Long userId, Long creatorId) {
-        Subscribe subscribe = subscribeProcessor.subscribe(userId, creatorId);
-        applicationEventPublisher.publishEvent(SubscribedEvent.create(subscribe));
+        subscribeProcessor.subscribe(userId, creatorId);
+        applicationEventPublisher.publishEvent(SubscribedEvent.create(creatorId));
     }
 
     public void unSubscribe(Long userId, Long creatorId) {
