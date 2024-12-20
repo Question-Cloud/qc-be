@@ -8,4 +8,8 @@ import lombok.Getter;
 public class PagingInformation {
     private int offset;
     private int size;
+
+    public int getPage() {
+        return offset / size;
+    }
 }

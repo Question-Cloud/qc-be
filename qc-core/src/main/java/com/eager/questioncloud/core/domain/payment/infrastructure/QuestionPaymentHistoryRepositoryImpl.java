@@ -18,7 +18,7 @@ public class QuestionPaymentHistoryRepositoryImpl implements QuestionPaymentHist
     public List<QuestionPaymentHistory> getQuestionPaymentHistory(Long userId, PagingInformation pagingInformation) {
         return questionPaymentHistoryMongoRepository.findByUserId(
                 userId,
-                PageRequest.of(pagingInformation.getOffset(), pagingInformation.getSize(), Sort.by(Sort.Order.desc("paymentId")))
+                PageRequest.of(pagingInformation.getPage(), pagingInformation.getSize(), Sort.by(Sort.Order.desc("paymentId")))
             )
             .stream()
             .map(QuestionPaymentHistoryDocument::toModel)
