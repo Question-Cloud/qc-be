@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.payment.infrastructure;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.OrderQuestion;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.QuestionPaymentHistoryOrder;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class QuestionPaymentHistoryDocument {
     private Long paymentId;
     private String orderId;
     private Long userId;
-    private List<OrderQuestion> orders;
+    private List<QuestionPaymentHistoryOrder> orders;
     private QuestionPaymentCoupon coupon;
     private int amount;
     private Boolean isUsedCoupon;

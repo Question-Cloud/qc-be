@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.payment.infrastructure;
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.OrderQuestion;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.QuestionPaymentHistoryOrder;
 import com.eager.questioncloud.core.domain.question.enums.Subject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -29,9 +29,9 @@ public class QuestionPaymentHistoryDocumentReadConverter implements Converter<Do
             .build();
     }
 
-    private List<OrderQuestion> convertOrders(List<Document> orders) {
+    private List<QuestionPaymentHistoryOrder> convertOrders(List<Document> orders) {
         return orders.stream()
-            .map(orderDocument -> new OrderQuestion(
+            .map(orderDocument -> new QuestionPaymentHistoryOrder(
                 orderDocument.getLong("questionId"),
                 orderDocument.getInteger("amount"),
                 orderDocument.getString("title"),

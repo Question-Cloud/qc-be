@@ -15,7 +15,7 @@ public class QuestionPaymentHistory {
     private Long paymentId;
     private String orderId;
     private Long userId;
-    private List<OrderQuestion> orders;
+    private List<QuestionPaymentHistoryOrder> orders;
     private QuestionPaymentCoupon coupon;
     private int amount;
     private Boolean isUsedCoupon;
@@ -23,9 +23,9 @@ public class QuestionPaymentHistory {
     private LocalDateTime createdAt;
 
     public static QuestionPaymentHistory create(QuestionPayment questionPayment, List<QuestionInformation> questions) {
-        List<OrderQuestion> orders = questions.stream()
+        List<QuestionPaymentHistoryOrder> orders = questions.stream()
             .map(question ->
-                new OrderQuestion(
+                new QuestionPaymentHistoryOrder(
                     question.getId(),
                     question.getPrice(),
                     question.getTitle(),
@@ -52,7 +52,7 @@ public class QuestionPaymentHistory {
 
     @Getter
     @AllArgsConstructor
-    public static class OrderQuestion {
+    public static class QuestionPaymentHistoryOrder {
         private Long questionId;
         private int amount;
         private String title;
