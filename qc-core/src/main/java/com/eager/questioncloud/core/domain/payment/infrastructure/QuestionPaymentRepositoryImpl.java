@@ -15,4 +15,9 @@ public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository 
         questionPayment.success(entity.getId());
         return questionPayment;
     }
+
+    @Override
+    public int countByUserId(Long userId) {
+        return questionPaymentJpaRepository.countByUserId(userId);
+    }
 }

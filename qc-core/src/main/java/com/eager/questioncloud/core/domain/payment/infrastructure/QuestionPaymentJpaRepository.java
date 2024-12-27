@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface QuestionPaymentJpaRepository extends JpaRepository<QuestionPaymentEntity, Long> {
     Optional<QuestionPaymentEntity> findByOrderId(String orderId);
+
+    int countByUserId(Long userId);
 }
