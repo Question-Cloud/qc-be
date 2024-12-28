@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.point.implement;
 
 import com.eager.questioncloud.core.domain.point.event.CompletedChargePointPaymentEvent;
-import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

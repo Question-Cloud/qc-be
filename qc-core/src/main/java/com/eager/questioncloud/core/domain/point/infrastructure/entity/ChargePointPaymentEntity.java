@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.point.infrastructure;
+package com.eager.questioncloud.core.domain.point.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;

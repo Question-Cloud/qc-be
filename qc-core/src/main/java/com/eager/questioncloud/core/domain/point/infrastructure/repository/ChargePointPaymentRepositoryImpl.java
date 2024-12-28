@@ -1,9 +1,10 @@
-package com.eager.questioncloud.core.domain.point.infrastructure;
+package com.eager.questioncloud.core.domain.point.infrastructure.repository;
 
-import static com.eager.questioncloud.core.domain.point.infrastructure.QChargePointPaymentEntity.chargePointPaymentEntity;
+import static com.eager.questioncloud.core.domain.point.infrastructure.entity.QChargePointPaymentEntity.chargePointPaymentEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
+import com.eager.questioncloud.core.domain.point.infrastructure.entity.ChargePointPaymentEntity;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

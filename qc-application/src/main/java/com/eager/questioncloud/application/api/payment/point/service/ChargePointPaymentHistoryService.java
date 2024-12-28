@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.payment.point.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

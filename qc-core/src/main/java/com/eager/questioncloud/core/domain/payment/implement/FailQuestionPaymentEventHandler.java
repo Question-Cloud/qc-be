@@ -5,7 +5,7 @@ import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.payment.event.FailedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.point.infrastructure.UserPointRepository;
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

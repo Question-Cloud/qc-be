@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.exception;
 
 import com.eager.questioncloud.application.api.payment.point.implement.PGAPI;
-import com.eager.questioncloud.core.domain.point.infrastructure.ChargePointPaymentRepository;
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.FailChargePointException;
 import lombok.RequiredArgsConstructor;
