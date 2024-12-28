@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user.infrastructure;
+package com.eager.questioncloud.core.domain.user.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;

@@ -1,13 +1,14 @@
-package com.eager.questioncloud.core.domain.user.infrastructure;
+package com.eager.questioncloud.core.domain.user.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity;
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.UserEntity;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

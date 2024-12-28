@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.security;
 
 import com.eager.questioncloud.application.api.authentication.implement.AuthenticationTokenManager;
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
-import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

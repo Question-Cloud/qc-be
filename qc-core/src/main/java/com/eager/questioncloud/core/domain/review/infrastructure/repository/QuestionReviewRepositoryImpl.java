@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.review.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewEntity.questionReviewEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;

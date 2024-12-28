@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.user.infrastructure;
+package com.eager.questioncloud.core.domain.user.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
 import com.eager.questioncloud.core.domain.user.enums.UserType;

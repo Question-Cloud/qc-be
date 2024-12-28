@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity;

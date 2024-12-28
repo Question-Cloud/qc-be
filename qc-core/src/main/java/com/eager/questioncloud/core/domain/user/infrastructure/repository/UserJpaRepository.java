@@ -1,6 +1,7 @@
-package com.eager.questioncloud.core.domain.user.infrastructure;
+package com.eager.questioncloud.core.domain.user.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.UserEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

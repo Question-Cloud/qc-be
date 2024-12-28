@@ -10,7 +10,7 @@ import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
-import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;

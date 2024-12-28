@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.post.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.post.infrastructure.entity.QPostEntity.postEntity;
 import static com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
+import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostDetail;

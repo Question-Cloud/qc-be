@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.workspace.implement;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.user.infrastructure.UserRepository;
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
