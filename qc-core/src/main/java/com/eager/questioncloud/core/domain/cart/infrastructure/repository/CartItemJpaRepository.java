@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure;
+package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
 
+import com.eager.questioncloud.core.domain.cart.infrastructure.entity.CartItemEntity;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

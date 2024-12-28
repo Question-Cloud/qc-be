@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.cart.implement;
 
-import com.eager.questioncloud.core.domain.cart.infrastructure.CartItemRepository;
+import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;

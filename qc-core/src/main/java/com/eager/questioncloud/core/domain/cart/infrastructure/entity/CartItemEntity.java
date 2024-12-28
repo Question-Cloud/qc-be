@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure;
+package com.eager.questioncloud.core.domain.cart.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import jakarta.persistence.Column;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure;
+package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;

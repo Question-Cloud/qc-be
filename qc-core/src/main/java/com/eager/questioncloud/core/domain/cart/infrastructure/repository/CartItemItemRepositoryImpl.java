@@ -1,12 +1,13 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure;
+package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
 
 
-import static com.eager.questioncloud.core.domain.cart.infrastructure.QCartItemEntity.cartItemEntity;
+import static com.eager.questioncloud.core.domain.cart.infrastructure.entity.QCartItemEntity.cartItemEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
+import com.eager.questioncloud.core.domain.cart.infrastructure.entity.CartItemEntity;
 import com.eager.questioncloud.core.domain.cart.model.CartItem;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
