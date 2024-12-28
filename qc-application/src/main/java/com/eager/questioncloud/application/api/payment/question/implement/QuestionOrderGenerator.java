@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.payment.question.implement;
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import java.util.List;

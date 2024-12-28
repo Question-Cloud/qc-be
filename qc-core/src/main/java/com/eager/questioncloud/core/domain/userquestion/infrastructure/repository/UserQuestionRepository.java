@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.userquestion.infrastructure;
+package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;

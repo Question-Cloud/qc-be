@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.post.implement;
 import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;

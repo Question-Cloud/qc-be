@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.domain.userquestion.implement;
 
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.payment.event.FailedQuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
