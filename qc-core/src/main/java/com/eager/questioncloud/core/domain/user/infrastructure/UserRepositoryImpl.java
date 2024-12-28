@@ -1,9 +1,9 @@
 package com.eager.questioncloud.core.domain.user.infrastructure;
 
-import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorEntity.creatorEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorEntity;
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity;
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;

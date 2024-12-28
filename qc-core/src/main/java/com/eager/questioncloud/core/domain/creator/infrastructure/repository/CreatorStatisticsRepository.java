@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import java.util.List;

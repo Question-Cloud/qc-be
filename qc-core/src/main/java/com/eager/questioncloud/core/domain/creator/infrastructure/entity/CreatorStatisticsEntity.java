@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure;
+package com.eager.questioncloud.core.domain.creator.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import jakarta.persistence.Column;

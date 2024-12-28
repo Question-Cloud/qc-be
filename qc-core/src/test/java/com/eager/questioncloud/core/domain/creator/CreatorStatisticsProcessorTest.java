@@ -3,8 +3,8 @@ package com.eager.questioncloud.core.domain.creator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor;
-import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorRepository;
-import com.eager.questioncloud.core.domain.creator.infrastructure.CreatorStatisticsRepository;
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.core.domain.question.QuestionBuilder;

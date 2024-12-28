@@ -1,7 +1,8 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
 
-import static com.eager.questioncloud.core.domain.creator.infrastructure.QCreatorStatisticsEntity.creatorStatisticsEntity;
+import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity;
 
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
