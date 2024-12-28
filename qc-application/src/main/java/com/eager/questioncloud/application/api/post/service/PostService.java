@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.post.implement.PostPermissionChec
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostDetail;
 import com.eager.questioncloud.core.domain.post.dto.PostListItem;
-import com.eager.questioncloud.core.domain.post.infrastructure.PostRepository;
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.post.model.PostContent;
 import com.eager.questioncloud.core.exception.CoreException;

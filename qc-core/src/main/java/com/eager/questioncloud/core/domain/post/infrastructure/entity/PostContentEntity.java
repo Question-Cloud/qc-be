@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.post.infrastructure;
+package com.eager.questioncloud.core.domain.post.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.post.infrastructure.converter.PostFileConverter;
 import com.eager.questioncloud.core.domain.post.model.PostContent;

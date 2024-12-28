@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.post.infrastructure;
+package com.eager.questioncloud.core.domain.post.infrastructure.repository;
 
+import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

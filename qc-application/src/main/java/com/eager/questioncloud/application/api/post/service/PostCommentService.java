@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.post.service;
 import com.eager.questioncloud.application.api.post.implement.PostPermissionChecker;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.post.infrastructure.PostCommentRepository;
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostCommentRepository;
 import com.eager.questioncloud.core.domain.post.model.PostComment;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

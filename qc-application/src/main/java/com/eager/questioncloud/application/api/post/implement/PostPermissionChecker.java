@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.post.implement;
 
-import com.eager.questioncloud.core.domain.post.infrastructure.PostRepository;
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
