@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.verification.implement;
 
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
-import com.eager.questioncloud.core.domain.verification.infrastructure.EmailVerificationRepository;
+import com.eager.questioncloud.core.domain.verification.infrastructure.repository.EmailVerificationRepository;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

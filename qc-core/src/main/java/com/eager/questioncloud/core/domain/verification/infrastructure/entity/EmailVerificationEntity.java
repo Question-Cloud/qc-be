@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.verification.infrastructure;
+package com.eager.questioncloud.core.domain.verification.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
