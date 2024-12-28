@@ -1,7 +1,8 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
 
-import static com.eager.questioncloud.core.domain.coupon.infrastructure.QCouponEntity.couponEntity;
+import static com.eager.questioncloud.core.domain.coupon.infrastructure.entity.QCouponEntity.couponEntity;
 
+import com.eager.questioncloud.core.domain.coupon.infrastructure.entity.CouponEntity;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

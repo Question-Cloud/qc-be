@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import jakarta.persistence.Column;

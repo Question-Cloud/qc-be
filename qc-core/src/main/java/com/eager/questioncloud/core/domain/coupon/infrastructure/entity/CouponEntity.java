@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;

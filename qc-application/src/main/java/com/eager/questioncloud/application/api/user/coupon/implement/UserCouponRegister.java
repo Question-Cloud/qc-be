@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.user.coupon.implement;
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.UserCouponRepository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.exception.CoreException;

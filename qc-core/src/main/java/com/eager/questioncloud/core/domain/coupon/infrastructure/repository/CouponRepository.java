@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
 
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import org.springframework.stereotype.Repository;
