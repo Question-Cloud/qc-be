@@ -9,7 +9,7 @@ import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
 import com.eager.questioncloud.core.domain.review.implement.QuestionReviewStatisticsUpdater;
-import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewStatisticsRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewStatisticsRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;

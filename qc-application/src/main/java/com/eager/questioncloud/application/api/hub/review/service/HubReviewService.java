@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
-import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

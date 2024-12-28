@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.review.infrastructure;
+package com.eager.questioncloud.core.domain.review.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import jakarta.persistence.Column;

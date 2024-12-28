@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.review.infrastructure;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;

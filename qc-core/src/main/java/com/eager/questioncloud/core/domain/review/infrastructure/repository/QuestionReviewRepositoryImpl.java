@@ -1,10 +1,12 @@
-package com.eager.questioncloud.core.domain.review.infrastructure;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository;
 
-import static com.eager.questioncloud.core.domain.review.infrastructure.QQuestionReviewEntity.questionReviewEntity;
+import static com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewEntity.questionReviewEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewEntity;
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewEntity;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.user.enums.UserType;
 import com.eager.questioncloud.core.exception.CoreException;

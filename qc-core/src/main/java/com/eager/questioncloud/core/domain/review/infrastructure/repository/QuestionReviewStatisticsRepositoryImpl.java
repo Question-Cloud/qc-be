@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.review.infrastructure;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository;
 
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewStatisticsEntity;
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

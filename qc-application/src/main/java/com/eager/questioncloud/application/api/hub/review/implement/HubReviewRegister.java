@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.hub.review.implement;
 
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionRepository;
 import com.eager.questioncloud.core.exception.CoreException;

@@ -7,7 +7,7 @@ import com.eager.questioncloud.core.domain.question.infrastructure.entity.Questi
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionJpaRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.model.QuestionContent;
-import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewJpaRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewJpaRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionEntity;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.UserQuestionJpaRepository;

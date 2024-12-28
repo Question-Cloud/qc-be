@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.hub.review.implement;
 
-import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository;
 import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
