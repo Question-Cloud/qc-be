@@ -1,5 +1,6 @@
-package com.eager.questioncloud.core.domain.subscribe.infrastructure;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository;
 
+import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.SubscribeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubscribeJpaRepository extends JpaRepository<SubscribeEntity, Long> {

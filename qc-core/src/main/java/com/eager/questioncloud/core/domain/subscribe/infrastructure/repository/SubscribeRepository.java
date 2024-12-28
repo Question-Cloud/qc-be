@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.subscribe.infrastructure;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;

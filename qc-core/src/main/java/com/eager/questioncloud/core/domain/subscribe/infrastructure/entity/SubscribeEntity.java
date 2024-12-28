@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.subscribe.infrastructure;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import jakarta.persistence.Column;
