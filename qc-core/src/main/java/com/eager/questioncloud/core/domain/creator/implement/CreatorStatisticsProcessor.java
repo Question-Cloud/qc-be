@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;

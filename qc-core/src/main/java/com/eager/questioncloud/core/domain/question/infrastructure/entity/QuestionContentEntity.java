@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.question.infrastructure;
+package com.eager.questioncloud.core.domain.question.infrastructure.entity;
 
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.enums.QuestionType;

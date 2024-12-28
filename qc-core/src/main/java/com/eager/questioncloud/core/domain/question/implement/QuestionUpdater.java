@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.question.implement;
 
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;

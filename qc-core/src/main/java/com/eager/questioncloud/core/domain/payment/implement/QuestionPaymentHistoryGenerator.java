@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymen
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentHistoryRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

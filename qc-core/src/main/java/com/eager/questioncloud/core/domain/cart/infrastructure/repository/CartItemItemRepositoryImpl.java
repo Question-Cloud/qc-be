@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.cart.infrastructure.entity.QCartItemEntity.cartItemEntity;
 import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;

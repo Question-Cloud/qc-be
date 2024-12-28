@@ -3,8 +3,8 @@ package com.eager.questioncloud.application.api.hub;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionEntity;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionJpaRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity;
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionJpaRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.question.model.QuestionContent;
 import com.eager.questioncloud.core.domain.review.infrastructure.QuestionReviewJpaRepository;

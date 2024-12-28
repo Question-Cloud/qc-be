@@ -1,7 +1,7 @@
-package com.eager.questioncloud.core.domain.question.infrastructure;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository;
 
 import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.question.infrastructure.QQuestionEntity.questionEntity;
+import static com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity;
 import static com.eager.questioncloud.core.domain.review.infrastructure.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
 import static com.eager.questioncloud.core.domain.user.infrastructure.QUserEntity.userEntity;
 import static com.eager.questioncloud.core.domain.userquestion.infrastructure.QUserQuestionEntity.userQuestionEntity;
@@ -13,6 +13,8 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
 import com.eager.questioncloud.core.domain.question.enums.QuestionType;
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity;
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;

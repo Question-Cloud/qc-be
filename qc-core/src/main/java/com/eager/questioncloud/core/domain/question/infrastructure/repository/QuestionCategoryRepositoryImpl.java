@@ -1,10 +1,11 @@
-package com.eager.questioncloud.core.domain.question.infrastructure;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository;
 
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory;
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.SubQuestionCategory;
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

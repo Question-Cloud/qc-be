@@ -8,7 +8,7 @@ import com.eager.questioncloud.core.domain.creator.infrastructure.repository.Cre
 import com.eager.questioncloud.core.domain.creator.model.Creator;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.core.domain.question.QuestionBuilder;
-import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
 import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
