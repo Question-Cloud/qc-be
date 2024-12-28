@@ -23,9 +23,10 @@ public class UserPointManager {
     @EventListener
     public void chargePoint(CompletedChargePointPaymentEvent completedChargePointPaymentEvent) {
         try {
-            UserPoint userPoint = userPointRepository.getUserPoint(completedChargePointPaymentEvent.getUserId());
-            userPoint.charge(completedChargePointPaymentEvent.getChargePointType().getAmount());
-            userPointRepository.save(userPoint);
+            userPointRepository.chargePoint(
+                completedChargePointPaymentEvent.getUserId(),
+                completedChargePointPaymentEvent.getChargePointType().getAmount()
+            );
         } catch (Exception e) {
             throw new FailChargePointException(completedChargePointPaymentEvent.getPaymentId());
         }
