@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure;
+package com.eager.questioncloud.core.domain.payment.infrastructure.document;
 
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;

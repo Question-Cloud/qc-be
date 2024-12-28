@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.payment.implement;
 
 import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentHistoryRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentHistoryRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
 import com.eager.questioncloud.core.domain.question.infrastructure.QuestionRepository;

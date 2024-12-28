@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.payment.question.implement;
 
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionOrderRepository;
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
 import lombok.RequiredArgsConstructor;

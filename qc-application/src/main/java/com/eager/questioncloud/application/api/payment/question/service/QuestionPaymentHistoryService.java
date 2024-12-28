@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment.question.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentHistoryRepository;
-import com.eager.questioncloud.core.domain.payment.infrastructure.QuestionPaymentRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentHistoryRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
