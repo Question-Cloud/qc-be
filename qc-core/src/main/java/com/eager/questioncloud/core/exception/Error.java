@@ -24,7 +24,7 @@ public enum Error {
     EXPIRED_COUPON(400, "등록 기간이 지난 쿠폰입니다."),
     LIMITED_COUPON(400, "쿠폰 물량이 전부 소진되었습니다."),
     WRONG_COUPON(400, "잘못된 쿠폰 사용입니다."),
-    PAYMENT_ERROR(500, "결제 요청 실패"),
+    PAYMENT_ERROR(500, "결제 실패"),
     ALREADY_PROCESSED_PAYMENT(409, "이미 처리된 결제입니다."),
     ALREADY_ORDERED(409, "이미 요청된 주문입니다."),
     NOT_PROCESS_PAYMENT(400, "완료된 결제가 아닙니다."),

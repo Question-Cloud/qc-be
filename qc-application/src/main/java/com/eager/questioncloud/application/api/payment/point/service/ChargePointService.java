@@ -5,6 +5,8 @@ import com.eager.questioncloud.application.api.payment.point.event.FailChargePoi
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class ChargePointService {
             userPointManager.chargePoint(event.getUserId(), event.getChargePointType().getAmount());
         } catch (Exception e) {
             messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentEvent(event.getPaymentId()));
+            throw new CoreException(Error.PAYMENT_ERROR);
         }
     }
 }
