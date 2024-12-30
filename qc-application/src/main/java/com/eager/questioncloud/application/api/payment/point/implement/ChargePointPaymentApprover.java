@@ -3,7 +3,6 @@ package com.eager.questioncloud.application.api.payment.point.implement;
 import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
-import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.CoreException;
@@ -11,6 +10,8 @@ import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.core.exception.InvalidPaymentException;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
+import com.eager.questioncloud.pg.dto.PGPayment;
+import com.eager.questioncloud.pg.implement.PGPaymentProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.core.domain.point.dto;
+package com.eager.questioncloud.pg.dto;
 
 import lombok.Getter;
 

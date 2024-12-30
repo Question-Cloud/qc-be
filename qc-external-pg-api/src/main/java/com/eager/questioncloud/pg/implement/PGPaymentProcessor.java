@@ -1,7 +1,6 @@
-package com.eager.questioncloud.application.api.payment.point.implement;
+package com.eager.questioncloud.pg.implement;
 
-
-import com.eager.questioncloud.core.domain.point.dto.PGPayment;
+import com.eager.questioncloud.pg.dto.PGPayment;
 import com.eager.questioncloud.pg.portone.PortoneAPI;
 import com.eager.questioncloud.pg.portone.PortonePayment;
 import lombok.RequiredArgsConstructor;
