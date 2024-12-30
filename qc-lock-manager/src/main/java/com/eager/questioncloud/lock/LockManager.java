@@ -25,10 +25,9 @@ public class LockManager {
                 throw new LockException();
             }
             task.run();
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
             throw new LockException();
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
@@ -46,15 +45,9 @@ public class LockManager {
                 throw new LockException();
             }
             return task.call();
-        } catch (LockException e) {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
+        } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
             throw new LockException();
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
