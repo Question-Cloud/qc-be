@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.payment.point.service;
 
+import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.application.api.payment.point.implement.PGAPI;
 import com.eager.questioncloud.core.domain.point.dto.PGPayment;
-import com.eager.questioncloud.core.domain.point.event.CompletedChargePointPaymentEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.CoreException;
@@ -30,7 +30,7 @@ public class ChargePointPaymentService {
     public void approvePayment(String paymentId) {
         PGPayment pgPayment = pgAPI.getPayment(paymentId);
         ChargePointPayment chargePointPayment = chargePointPaymentApprover.approve(pgPayment);
-        applicationEventPublisher.publishEvent(CompletedChargePointPaymentEvent.from(chargePointPayment));
+        applicationEventPublisher.publishEvent(ChargePointPaymentEvent.from(chargePointPayment));
     }
 
     public Boolean isCompletePayment(Long userId, String paymentId) {

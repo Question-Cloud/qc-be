@@ -1,5 +1,8 @@
 package com.eager.questioncloud.application.api.payment.point.implement;
 
+import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent;
+import com.eager.questioncloud.application.message.MessageSender;
+import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
@@ -13,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChargePointPaymentApprover {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
-    private final ChargePointPaymentFailHandler chargePointPaymentFailHandler;
+    private final MessageSender messageSender;
     private final LockManager lockManager;
 
     public ChargePointPayment approve(PGPayment pgPayment) {
@@ -28,7 +31,7 @@ public class ChargePointPaymentApprover {
                 } catch (CoreException coreException) {
                     throw coreException;
                 } catch (Exception unknownException) {
-                    chargePointPaymentFailHandler.failHandler(pgPayment.getPaymentId());
+                    messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentEvent(pgPayment.getPaymentId()));
                     throw unknownException;
                 }
             }

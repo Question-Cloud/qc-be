@@ -1,9 +1,11 @@
 package com.eager.questioncloud.application.api.payment.point.implement;
 
 
+import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,8 +14,9 @@ public class ChargePointPaymentFailHandler {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final PGAPI pgAPI;
 
-    public void failHandler(String paymentId) {
-        ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(paymentId);
+    @RabbitListener(queues = "fail-charge-point")
+    public void failHandler(FailChargePointPaymentEvent message) {
+        ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(message.getPaymentId());
         chargePointPayment.fail();
         chargePointPaymentRepository.save(chargePointPayment);
 
