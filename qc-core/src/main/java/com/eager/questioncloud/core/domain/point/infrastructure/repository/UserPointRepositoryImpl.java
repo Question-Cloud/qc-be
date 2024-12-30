@@ -7,6 +7,7 @@ import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +33,7 @@ public class UserPointRepositoryImpl implements UserPointRepository {
     }
 
     @Override
+    @Transactional
     public void chargePoint(Long userId, int amount) {
         jpaQueryFactory.update(userPointEntity)
             .set(userPointEntity.point, userPointEntity.point.add(amount))

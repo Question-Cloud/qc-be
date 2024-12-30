@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.payment.point.service;
 
 import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover;
-import com.eager.questioncloud.application.api.payment.point.implement.PGAPI;
+import com.eager.questioncloud.application.api.payment.point.implement.PGPaymentProcessor;
 import com.eager.questioncloud.core.domain.point.dto.PGPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentService {
     private final ChargePointPaymentApprover chargePointPaymentApprover;
     private final ChargePointPaymentRepository chargePointPaymentRepository;
-    private final PGAPI pgAPI;
+    private final PGPaymentProcessor pgAPI;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void createOrder(ChargePointPayment chargePointPayment) {

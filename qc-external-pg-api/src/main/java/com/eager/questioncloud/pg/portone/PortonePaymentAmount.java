@@ -5,9 +5,8 @@ import lombok.Getter;
 
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PortonePayment {
-    private String id;
-    private PortonePaymentStatus status;
-    private PortonePaymentAmount amount;
-    private String receiptUrl;
+public class PortonePaymentAmount {
+    private int total;
+    private int taxFree;
+    private int vat;
 }

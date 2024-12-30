@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChargePointPaymentFailHandler {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
-    private final PGAPI pgAPI;
+    private final PGPaymentProcessor pgAPI;
 
     @RabbitListener(queues = "fail-charge-point")
     public void failHandler(FailChargePointPaymentEvent message) {

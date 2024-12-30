@@ -6,5 +6,4 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PGException extends RuntimeException {
-    private final String message;
 }
