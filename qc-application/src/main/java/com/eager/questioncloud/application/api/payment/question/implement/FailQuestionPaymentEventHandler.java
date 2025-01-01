@@ -1,14 +1,14 @@
-package com.eager.questioncloud.core.domain.payment.implement;
+package com.eager.questioncloud.application.api.payment.question.implement;
 
+import com.eager.questioncloud.application.api.payment.question.event.FailQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.event.FailedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,8 +18,8 @@ public class FailQuestionPaymentEventHandler {
     private final UserPointRepository userPointRepository;
     private final UserCouponRepository userCouponRepository;
 
-    @EventListener
-    public void handler(FailedQuestionPaymentEvent event) {
+    @RabbitListener(queues = "fail-question-payment")
+    public void handler(FailQuestionPaymentEvent event) {
         QuestionPayment questionPayment = event.getQuestionPayment();
         questionPayment.fail();
         questionPaymentRepository.save(questionPayment);

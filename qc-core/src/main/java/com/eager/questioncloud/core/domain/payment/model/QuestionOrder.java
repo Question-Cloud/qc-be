@@ -6,8 +6,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class QuestionOrder {
     private String orderId;
     private List<QuestionOrderItem> items;
@@ -33,8 +35,16 @@ public class QuestionOrder {
             .sum();
     }
 
+    public List<Long> getQuestionIds() {
+        return items
+            .stream()
+            .map(QuestionOrderItem::getQuestionId)
+            .collect(Collectors.toList());
+    }
+
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class QuestionOrderItem {
         private Long id;
         private Long questionId;

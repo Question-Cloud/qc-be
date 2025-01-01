@@ -31,7 +31,7 @@ public class QuestionPaymentCouponProcessor {
     }
 
     public void applyCoupon(QuestionPayment questionPayment) {
-        if (!questionPayment.isUsingCoupon()) {
+        if (!questionPayment.checkUsingCoupon()) {
             return;
         }
 

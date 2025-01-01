@@ -3,10 +3,14 @@ package com.eager.questioncloud.core.domain.payment.model;
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuestionPayment {
     private Long id;
     private QuestionOrder order;
@@ -39,7 +43,7 @@ public class QuestionPayment {
             .build();
     }
 
-    public Boolean isUsingCoupon() {
+    public Boolean checkUsingCoupon() {
         return questionPaymentCoupon.getUserCouponId() != null;
     }
 

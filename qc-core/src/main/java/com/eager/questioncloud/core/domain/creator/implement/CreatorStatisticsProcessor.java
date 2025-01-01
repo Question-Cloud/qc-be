@@ -3,7 +3,6 @@ package com.eager.questioncloud.core.domain.creator.implement;
 import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import com.eager.questioncloud.core.domain.payment.event.CompletedQuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
@@ -13,12 +12,8 @@ import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent;
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent;
 import com.eager.questioncloud.lock.LockKeyGenerator;
 import com.eager.questioncloud.lock.LockManager;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -72,15 +67,8 @@ public class CreatorStatisticsProcessor {
         );
     }
 
-    @EventListener
-    @Async
-    public void updateSalesCount(CompletedQuestionPaymentEvent event) {
-        List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionIds());
-        Map<Long, Long> countQuestionByCreator = questions.stream().collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
-
-        countQuestionByCreator.forEach((creatorId, count) -> {
-            creatorStatisticsRepository.addSalesCount(creatorId, count.intValue());
-        });
+    public void updateSalesCount(Long creatorId, int count) {
+        creatorStatisticsRepository.addSalesCount(creatorId, count);
     }
 
     @EventListener
