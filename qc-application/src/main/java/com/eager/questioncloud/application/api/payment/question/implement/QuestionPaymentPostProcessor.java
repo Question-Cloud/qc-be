@@ -4,7 +4,6 @@ import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor;
-import com.eager.questioncloud.core.domain.payment.implement.QuestionPaymentHistoryGenerator;
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
@@ -25,7 +24,6 @@ public class QuestionPaymentPostProcessor {
     private final CreatorStatisticsProcessor creatorStatisticsProcessor;
     private final UserQuestionAppender userQuestionAppender;
     private final QuestionRepository questionRepository;
-    private final QuestionPaymentHistoryGenerator questionPaymentHistoryGenerator;
     private final MessageSender messageSender;
 
     @Transactional
@@ -34,7 +32,6 @@ public class QuestionPaymentPostProcessor {
             updateCreatorStatistics(questionPayment.getOrder());
             updateSalesCount(questionPayment.getOrder());
             userQuestionAppender.appendUserQuestion(questionPayment.getUserId(), questionPayment.getOrder().getQuestionIds());
-            questionPaymentHistoryGenerator.saveQuestionPaymentHistory(questionPayment);
         } catch (Exception e) {
             messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, new FailQuestionPaymentMessage(questionPayment));
             throw new CoreException(Error.PAYMENT_ERROR);
