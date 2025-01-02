@@ -27,17 +27,12 @@ public class QuestionPaymentPostProcessor {
 
     public void postProcess(QuestionPayment questionPayment) {
         try {
-            if (true) {
-                throw new RuntimeException("");
-            }
             updateCreatorStatistics(questionPayment.getOrder());
             updateSalesCount(questionPayment.getOrder());
             userQuestionAppender.appendUserQuestion(questionPayment.getUserId(), questionPayment.getOrder().getQuestionIds());
             questionPaymentHistoryGenerator.saveQuestionPaymentHistory(questionPayment);
         } catch (Exception e) {
-            messageSender.sendMessage(
-                MessageType.FAIL_QUESTION_PAYMENT,
-                new FailQuestionPaymentMessage(questionPayment)
+            messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, new FailQuestionPaymentMessage(questionPayment)
             );
         }
     }
