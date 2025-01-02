@@ -6,7 +6,7 @@ import static com.eager.questioncloud.core.domain.subscribe.infrastructure.entit
 import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
+import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.SubscribeEntity;
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
 import com.querydsl.core.types.Projections;
@@ -44,18 +44,16 @@ public class SubscribeRepositoryImpl implements SubscribeRepository {
     }
 
     @Override
-    public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {
+    public List<SubscribeDetail> getMySubscribes(Long userId, PagingInformation pagingInformation) {
         return jpaQueryFactory.select(
                 Projections.constructor(
-                    CreatorInformation.class,
+                    SubscribeDetail.class,
                     creatorEntity.id,
                     userEntity.userInformationEntity.name,
                     userEntity.userInformationEntity.profileImage,
                     creatorEntity.creatorProfileEntity.mainSubject,
-                    userEntity.userInformationEntity.email,
-                    creatorStatisticsEntity.salesCount,
-                    creatorStatisticsEntity.averageRateOfReview,
-                    creatorEntity.creatorProfileEntity.introduction))
+                    creatorEntity.creatorProfileEntity.introduction,
+                    creatorStatisticsEntity.subscribeCount))
             .from(subscribeEntity)
             .where(subscribeEntity.subscriberId.eq(userId))
             .leftJoin(creatorEntity).on(creatorEntity.id.eq(subscribeEntity.creatorId))

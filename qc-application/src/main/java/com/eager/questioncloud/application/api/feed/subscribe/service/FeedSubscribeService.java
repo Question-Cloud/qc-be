@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.feed.subscribe.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
+import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class FeedSubscribeService {
     private final SubscribeRepository subscribeRepository;
 
-    public List<CreatorInformation> getMySubscribeCreators(Long userId, PagingInformation pagingInformation) {
-        return subscribeRepository.getMySubscribeCreators(userId, pagingInformation);
+    public List<SubscribeDetail> getMySubscribes(Long userId, PagingInformation pagingInformation) {
+        return subscribeRepository.getMySubscribes(userId, pagingInformation);
     }
 
     public int countMySubscribe(Long userId) {
