@@ -18,7 +18,7 @@ public class AuthenticationProcessor {
 
     public User emailPasswordAuthentication(String email, String password) {
         User user = userRepository.getUserByEmail(email);
-        user.validatePassword(password);
+        user.passwordAuthentication(password);
         user.checkUserStatus();
         return user;
     }

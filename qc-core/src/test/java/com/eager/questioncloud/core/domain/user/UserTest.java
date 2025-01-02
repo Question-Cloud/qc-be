@@ -29,7 +29,7 @@ class UserTest {
         User user = User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.Active);
 
         //when then
-        assertThatCode(() -> user.validatePassword(password))
+        assertThatCode(() -> user.passwordAuthentication(password))
             .doesNotThrowAnyException();
     }
 
@@ -46,7 +46,7 @@ class UserTest {
         User user = User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.Active);
 
         //when then
-        assertThatThrownBy(() -> user.validatePassword(wrongPassword))
+        assertThatThrownBy(() -> user.passwordAuthentication(wrongPassword))
             .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN);
     }

@@ -61,7 +61,7 @@ public class User {
         userAccountInformation = userAccountInformation.changePassword(newPassword);
     }
 
-    public void validatePassword(String rawPassword) {
+    public void passwordAuthentication(String rawPassword) {
         if (!PasswordProcessor.matches(rawPassword, userAccountInformation.getPassword())) {
             throw new CoreException(Error.FAIL_LOGIN);
         }
