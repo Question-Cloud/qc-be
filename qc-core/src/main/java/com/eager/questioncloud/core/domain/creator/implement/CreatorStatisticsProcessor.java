@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.creator.implement;
 
-import com.eager.questioncloud.core.domain.creator.event.RegisteredCreatorEvent;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
@@ -23,9 +22,8 @@ public class CreatorStatisticsProcessor {
     private final QuestionRepository questionRepository;
     private final LockManager lockManager;
 
-    @EventListener
-    public void appendCreatorStatistics(RegisteredCreatorEvent event) {
-        creatorStatisticsRepository.save(CreatorStatistics.create(event.getCreator().getId()));
+    public void initializeCreatorStatistics(Long creatorId) {
+        creatorStatisticsRepository.save(CreatorStatistics.create(creatorId));
     }
 
     @EventListener
