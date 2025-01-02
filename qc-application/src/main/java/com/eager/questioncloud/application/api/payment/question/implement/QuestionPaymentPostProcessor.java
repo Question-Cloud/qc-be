@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.implement;
 
-import com.eager.questioncloud.application.api.payment.question.event.FailQuestionPaymentEvent;
+import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor;
@@ -37,7 +37,7 @@ public class QuestionPaymentPostProcessor {
         } catch (Exception e) {
             messageSender.sendMessage(
                 MessageType.FAIL_QUESTION_PAYMENT,
-                new FailQuestionPaymentEvent(questionPayment)
+                new FailQuestionPaymentMessage(questionPayment)
             );
         }
     }

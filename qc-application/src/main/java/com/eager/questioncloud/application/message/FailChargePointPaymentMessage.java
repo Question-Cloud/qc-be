@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.point.event;
+package com.eager.questioncloud.application.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FailChargePointPaymentEvent {
+public class FailChargePointPaymentMessage {
     private String paymentId;
 }

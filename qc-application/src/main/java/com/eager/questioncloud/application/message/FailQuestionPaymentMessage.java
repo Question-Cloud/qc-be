@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.question.event;
+package com.eager.questioncloud.application.message;
 
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import lombok.AllArgsConstructor;
@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FailQuestionPaymentEvent {
+public class FailQuestionPaymentMessage {
     private QuestionPayment questionPayment;
 }

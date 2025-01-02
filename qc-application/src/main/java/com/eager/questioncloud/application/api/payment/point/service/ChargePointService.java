@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.payment.point.service;
 
 import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
-import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent;
+import com.eager.questioncloud.application.message.FailChargePointPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
@@ -22,7 +22,7 @@ public class ChargePointService {
         try {
             userPointManager.chargePoint(event.getUserId(), event.getChargePointType().getAmount());
         } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentEvent(event.getPaymentId()));
+            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentMessage(event.getPaymentId()));
             throw new CoreException(Error.PAYMENT_ERROR);
         }
     }

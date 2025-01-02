@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment.point.implement;
 
-import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent;
+import com.eager.questioncloud.application.message.FailChargePointPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
@@ -40,7 +40,7 @@ public class ChargePointPaymentApprover {
         } catch (CoreException coreException) {
             throw coreException;
         } catch (Exception unknownException) {
-            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentEvent(paymentId));
+            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentMessage(paymentId));
             throw unknownException;
         }
     }

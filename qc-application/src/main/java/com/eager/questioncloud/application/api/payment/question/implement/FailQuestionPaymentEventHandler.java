@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.implement;
 
-import com.eager.questioncloud.application.api.payment.question.event.FailQuestionPaymentEvent;
+import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository;
@@ -19,8 +19,8 @@ public class FailQuestionPaymentEventHandler {
     private final UserCouponRepository userCouponRepository;
 
     @RabbitListener(queues = "fail-question-payment")
-    public void handler(FailQuestionPaymentEvent event) {
-        QuestionPayment questionPayment = event.getQuestionPayment();
+    public void handler(FailQuestionPaymentMessage message) {
+        QuestionPayment questionPayment = message.getQuestionPayment();
         questionPayment.fail();
         questionPaymentRepository.save(questionPayment);
 
