@@ -7,9 +7,9 @@ import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
