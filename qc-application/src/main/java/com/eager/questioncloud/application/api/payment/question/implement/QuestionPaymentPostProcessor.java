@@ -1,11 +1,10 @@
 package com.eager.questioncloud.application.api.payment.question.implement;
 
+import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent;
 import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
 import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
 import com.eager.questioncloud.core.domain.userquestion.implement.UserQuestionAppender;
@@ -15,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,20 +25,9 @@ public class QuestionPaymentPostProcessor {
     private final QuestionRepository questionRepository;
     private final MessageSender messageSender;
 
-    @Transactional
-    public void postProcess(QuestionPayment questionPayment) {
-        try {
-            updateCreatorStatistics(questionPayment.getOrder());
-            updateSalesCount(questionPayment.getOrder());
-            userQuestionAppender.appendUserQuestion(questionPayment.getUserId(), questionPayment.getOrder().getQuestionIds());
-        } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, new FailQuestionPaymentMessage(questionPayment));
-            throw new CoreException(Error.PAYMENT_ERROR);
-        }
-    }
-
-    private void updateCreatorStatistics(QuestionOrder order) {
-        List<Question> questions = questionRepository.getQuestionsByQuestionIds(order.getQuestionIds());
+    @EventListener
+    public void updateCreatorStatistics(QuestionPaymentEvent event) {
+        List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionPayment().getOrder().getQuestionIds());
         Map<Long, Long> countQuestionByCreator = questions
             .stream()
             .collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
@@ -48,8 +36,19 @@ public class QuestionPaymentPostProcessor {
             .forEach((creatorId, count) -> creatorStatisticsProcessor.updateSalesCount(creatorId, count.intValue()));
     }
 
-    private void updateSalesCount(QuestionOrder order) {
-        order.getItems()
+    @EventListener
+    public void updateSalesCount(QuestionPaymentEvent event) {
+        event.getQuestionPayment().getOrder().getItems()
             .forEach(item -> questionRepository.increaseQuestionCount(item.getQuestionId()));
+    }
+
+    @EventListener
+    public void appendUserQuestion(QuestionPaymentEvent event) {
+        try {
+            userQuestionAppender.appendUserQuestion(event.getQuestionPayment().getUserId(), event.getQuestionPayment().getOrder().getQuestionIds());
+        } catch (Exception e) {
+            messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, new FailQuestionPaymentMessage(event.getQuestionPayment()));
+            throw new CoreException(Error.PAYMENT_ERROR);
+        }
     }
 }
