@@ -34,3 +34,4 @@ test {
     useJUnitPlatform()
 }
 
+jar.enabled = false
