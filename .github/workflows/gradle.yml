@@ -54,4 +54,4 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }} # 접속포트
           script: |
             cd ~
-            ./deploy.sh
+            sudo ./deploy.sh
