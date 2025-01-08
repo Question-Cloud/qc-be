@@ -126,7 +126,7 @@ Spring Boot, Maria DB, JPA, Querydsl, Redis, Rabbit MQ, Mongo DB, Docker, AWS EC
 -   데이터 100만건 기준 집계 성능이 더 우수한 Maria DB를 이용하여 결제 내역 개수 Count 처리.
 -   Spring Data Mongo의 기본 매핑 Converter에서 병목 현상을 확인 후 Custom Converter로 개선.
 -   TPS 1937 -> 3900
--  [관련 포스팅](https://e4g3r.tistory.com/7)
+-  [관련 포스팅](https://e4g3r.tistory.com/8)
 
 ## Mongo DB를 활용한 조회용 모델 설계
 
@@ -134,7 +134,7 @@ Spring Boot, Maria DB, JPA, Querydsl, Redis, Rabbit MQ, Mongo DB, Docker, AWS EC
 
 -   결제 내역 데이터를 문서형 모델로 전환하여 Mongo DB에 저장.
 -   조회 시 단순한 쿼리만으로 데이터를 조회할 수 있게 됨.
--   [관련 포스팅](https://e4g3r.tistory.com/5)
+-   [관련 포스팅](https://e4g3r.tistory.com/7)
 
 ## 리뷰 평점 통계 성능 개선
 
