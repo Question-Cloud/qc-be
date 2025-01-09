@@ -25,6 +25,7 @@ public class UserPointRepositoryImpl implements UserPointRepository {
     }
 
     @Override
+    @Transactional
     public Boolean usePoint(Long userId, int amount) {
         return jpaQueryFactory.update(userPointEntity)
             .set(userPointEntity.point, userPointEntity.point.subtract(amount))
@@ -44,5 +45,10 @@ public class UserPointRepositoryImpl implements UserPointRepository {
     @Override
     public UserPoint save(UserPoint userPoint) {
         return userPointJpaRepository.save(UserPointEntity.from(userPoint)).toModel();
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+        userPointJpaRepository.deleteAllInBatch();
     }
 }

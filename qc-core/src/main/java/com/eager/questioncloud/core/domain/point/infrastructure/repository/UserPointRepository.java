@@ -12,4 +12,6 @@ public interface UserPointRepository {
     void chargePoint(Long userId, int amount);
 
     UserPoint save(UserPoint userPoint);
+
+    void deleteAllInBatch();
 }

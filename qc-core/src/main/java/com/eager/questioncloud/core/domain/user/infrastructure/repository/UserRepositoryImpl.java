@@ -105,4 +105,9 @@ public class UserRepositoryImpl implements UserRepository {
             )
             .fetchFirst() != null;
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        userJpaRepository.deleteAllInBatch();
+    }
 }

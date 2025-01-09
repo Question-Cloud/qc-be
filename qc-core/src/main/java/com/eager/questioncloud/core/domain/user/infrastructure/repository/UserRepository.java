@@ -23,4 +23,6 @@ public interface UserRepository {
     Boolean checkDuplicateEmail(String email);
 
     Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType);
+
+    void deleteAllInBatch();
 }
