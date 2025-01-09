@@ -25,8 +25,4 @@ public class Coupon {
         this.remainingCount = remainingCount;
         this.endAt = endAt;
     }
-
-    public void decrease() {
-        this.remainingCount = this.remainingCount - 1;
-    }
 }
