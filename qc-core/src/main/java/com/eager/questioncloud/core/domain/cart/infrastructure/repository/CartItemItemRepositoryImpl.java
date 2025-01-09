@@ -48,11 +48,6 @@ public class CartItemItemRepositoryImpl implements CartItemRepository {
     }
 
     @Override
-    public void deleteByQuestionIdInAndUserId(List<Long> questionIds, Long userId) {
-        cartItemJpaRepository.deleteByQuestionIdInAndUserId(questionIds, userId);
-    }
-
-    @Override
     public Boolean isExistsInCart(Long userId, Long questionId) {
         return jpaQueryFactory.select(cartItemEntity.id)
             .from(cartItemEntity)

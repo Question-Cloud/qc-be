@@ -11,7 +11,5 @@ public interface CartItemRepository {
 
     void deleteByIdInAndUserId(List<Long> ids, Long userId);
 
-    void deleteByQuestionIdInAndUserId(List<Long> questionIds, Long userId);
-
     Boolean isExistsInCart(Long userId, Long questionId);
 }
