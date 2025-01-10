@@ -16,4 +16,6 @@ public interface ChargePointPaymentRepository {
     List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation);
 
     int countByUserId(Long userId);
+
+    void deleteAllInBatch();
 }

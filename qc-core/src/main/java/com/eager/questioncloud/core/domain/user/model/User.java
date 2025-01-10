@@ -8,8 +8,10 @@ import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.core.exception.NotVerificationUserException;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class User {
     private Long uid;
     private UserAccountInformation userAccountInformation;

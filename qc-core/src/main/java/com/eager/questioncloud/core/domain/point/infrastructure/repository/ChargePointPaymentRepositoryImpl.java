@@ -73,4 +73,9 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
             .fetchFirst()
             .intValue();
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        chargePointPaymentJpaRepository.deleteAllInBatch();
+    }
 }
