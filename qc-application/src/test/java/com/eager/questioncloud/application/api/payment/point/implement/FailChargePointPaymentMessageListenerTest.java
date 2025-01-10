@@ -28,7 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest
 @RabbitListenerTest
 @ActiveProfiles("test")
-class ChargePointPaymentFailHandlerTest {
+class FailChargePointPaymentMessageListenerTest {
     @Autowired
     private ChargePointPaymentRepository chargePointPaymentRepository;
 
@@ -53,7 +53,7 @@ class ChargePointPaymentFailHandlerTest {
         String paymentId = UUID.randomUUID().toString();
         chargePointPaymentRepository.save(ChargePointPayment.order(paymentId, 1L, ChargePointType.PackageA));
 
-        ChargePointPaymentFailHandler listener = harness.getSpy("fail-charge-point");
+        FailChargePointPaymentMessageListener listener = harness.getSpy("fail-charge-point");
         LatchCountDownAndCallRealMethodAnswer answer = harness.getLatchAnswerFor("fail-charge-point", 1);
         doAnswer(answer).when(listener).failHandler(any());
 

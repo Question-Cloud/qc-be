@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ChargePointPaymentFailHandler {
+public class FailChargePointPaymentMessageListener {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final PGPaymentProcessor pgPaymentProcessor;
 
