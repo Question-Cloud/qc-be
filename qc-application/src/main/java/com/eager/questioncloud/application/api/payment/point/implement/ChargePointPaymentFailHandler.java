@@ -15,7 +15,7 @@ public class ChargePointPaymentFailHandler {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
     private final PGPaymentProcessor pgPaymentProcessor;
 
-    @RabbitListener(queues = "fail-charge-point")
+    @RabbitListener(id = "fail-charge-point", queues = "fail-charge-point")
     public void failHandler(FailChargePointPaymentMessage message) {
         ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(message.getPaymentId());
         chargePointPayment.fail();
