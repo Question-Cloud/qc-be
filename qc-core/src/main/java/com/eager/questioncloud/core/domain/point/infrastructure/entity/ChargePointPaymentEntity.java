@@ -26,7 +26,7 @@ public class ChargePointPaymentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String paymentId;
 
     @Column
