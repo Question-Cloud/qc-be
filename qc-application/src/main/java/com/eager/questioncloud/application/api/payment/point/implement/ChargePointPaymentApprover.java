@@ -9,23 +9,21 @@ import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.pg.dto.PGPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class ChargePointPaymentApprover {
     private final ChargePointPaymentRepository chargePointPaymentRepository;
-    private final TransactionTemplate transactionTemplate;
     private final MessageSender messageSender;
 
+    @Transactional
     public ChargePointPayment approve(PGPayment pgPayment) {
         try {
-            return transactionTemplate.execute((status) -> {
-                ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentIdWithLock(pgPayment.getPaymentId());
-                chargePointPayment.validatePayment(pgPayment.getAmount());
-                chargePointPayment.approve(pgPayment.getReceiptUrl());
-                return chargePointPaymentRepository.save(chargePointPayment);
-            });
+            ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentIdWithLock(pgPayment.getPaymentId());
+            chargePointPayment.validatePayment(pgPayment.getAmount());
+            chargePointPayment.approve(pgPayment.getReceiptUrl());
+            return chargePointPaymentRepository.save(chargePointPayment);
         } catch (CoreException coreException) {
             throw coreException;
         } catch (Exception unknownException) {
