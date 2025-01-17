@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.HeadersExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.TopicExchange;
@@ -17,36 +18,29 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
     private static final String FAIL_CHARGE_POINT_QUEUE = "fail-charge-point";
-    private static final String FAIL_CHARGE_POINT_DEAD_LETTER_QUEUE = "fail-charge-point-dead-letter";
     private static final String FAIL_QUESTION_PAYMENT_QUEUE = "fail-question-payment";
-    private static final String FAIL_QUESTION_PAYMENT_DEAD_LETTER_QUEUE = "fail-question-payment-dead-letter";
+    private static final String DELAY_QUEUE = "delay";
+    
     private static final String EXCHANGE = "qc.exchange";
-    private static final String DEAD_LETTER_EXCHANGE = "qc.deadLetterExchange";
+    public static final String DELAY_EXCHANGE = "qc.delay.exchange";
 
     @Bean
     public Queue failChargePointQueue() {
         return QueueBuilder.durable(FAIL_CHARGE_POINT_QUEUE)
-            .withArgument("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE)
-            .withArgument("x-dead-letter-routing-key", FAIL_CHARGE_POINT_DEAD_LETTER_QUEUE)
             .build();
-    }
-
-    @Bean
-    public Queue failChargePointDeadLetterQueue() {
-        return new Queue(FAIL_CHARGE_POINT_DEAD_LETTER_QUEUE);
     }
 
     @Bean
     public Queue failQuestionPaymentQueue() {
         return QueueBuilder.durable(FAIL_QUESTION_PAYMENT_QUEUE)
-            .withArgument("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE)
-            .withArgument("x-dead-letter-routing-key", FAIL_QUESTION_PAYMENT_DEAD_LETTER_QUEUE)
             .build();
     }
 
     @Bean
-    public Queue failQuestionPaymentDeadLetterQueue() {
-        return new Queue(FAIL_QUESTION_PAYMENT_DEAD_LETTER_QUEUE);
+    public Queue delayQueue() {
+        return QueueBuilder.durable(DELAY_QUEUE)
+            .deadLetterExchange(EXCHANGE)
+            .build();
     }
 
     @Bean
@@ -55,8 +49,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    public TopicExchange deadLetterExchange() {
-        return new TopicExchange(DEAD_LETTER_EXCHANGE);
+    public HeadersExchange headersExchange() {
+        return new HeadersExchange(DELAY_EXCHANGE);
     }
 
     @Bean
@@ -65,18 +59,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Binding bindingFailChargePointDeadLetter(Queue failChargePointDeadLetterQueue, TopicExchange deadLetterExchange) {
-        return BindingBuilder.bind(failChargePointDeadLetterQueue).to(deadLetterExchange).with(FAIL_CHARGE_POINT_DEAD_LETTER_QUEUE);
-    }
-
-    @Bean
     public Binding bindingFailQuestionPayment(Queue failQuestionPaymentQueue, TopicExchange exchange) {
         return BindingBuilder.bind(failQuestionPaymentQueue).to(exchange).with(FAIL_QUESTION_PAYMENT_QUEUE);
     }
 
     @Bean
-    public Binding bindingFailQuestionPaymentDeadLetter(Queue failQuestionPaymentDeadLetterQueue, TopicExchange deadLetterExchange) {
-        return BindingBuilder.bind(failQuestionPaymentDeadLetterQueue).to(deadLetterExchange).with(FAIL_QUESTION_PAYMENT_DEAD_LETTER_QUEUE);
+    public Binding bindingDelay(Queue delayQueue, HeadersExchange headersExchange) {
+        return BindingBuilder.bind(delayQueue).to(headersExchange).where("delay").matches("delay");
     }
 
     @Bean
