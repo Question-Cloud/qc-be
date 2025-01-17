@@ -3,7 +3,6 @@ package com.eager.questioncloud.pg.portone;
 import com.eager.questioncloud.pg.exception.InvalidPaymentIdException;
 import com.eager.questioncloud.pg.exception.PGException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import okhttp3.MediaType;
@@ -20,17 +19,11 @@ public class PortoneAPI {
     @Value("${PORT_ONE_SECRET_KEY}")
     private String PORT_ONE_SECRET_KEY;
     private static final String BASE_URL = "https://api.portone.io";
-    private OkHttpClient client;
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    @PostConstruct
-    public void init() {
-        client = new OkHttpClient()
-            .newBuilder()
-            .callTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .build();
-    }
+    private static final OkHttpClient client = new OkHttpClient().newBuilder()
+        .callTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .build();
 
     public PortonePayment getPayment(String paymentId) {
         Request request = new Request.Builder()
