@@ -6,6 +6,8 @@ import com.eager.questioncloud.core.domain.point.infrastructure.repository.Charg
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
+import com.eager.questioncloud.pg.dto.PGPayment;
+import com.eager.questioncloud.pg.implement.PGPaymentProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class ChargePointPaymentService {
     private final ChargePointPaymentApprover chargePointPaymentApprover;
     private final ChargePointPaymentRepository chargePointPaymentRepository;
+    private final PGPaymentProcessor pgPaymentProcessor;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public void createOrder(ChargePointPayment chargePointPayment) {
@@ -25,7 +28,8 @@ public class ChargePointPaymentService {
     }
 
     public void approvePayment(String paymentId) {
-        ChargePointPayment chargePointPayment = chargePointPaymentApprover.approve(paymentId);
+        PGPayment pgPayment = pgPaymentProcessor.getPayment(paymentId);
+        ChargePointPayment chargePointPayment = chargePointPaymentApprover.approve(pgPayment);
         applicationEventPublisher.publishEvent(ChargePointPaymentEvent.from(chargePointPayment));
     }
 

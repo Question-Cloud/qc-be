@@ -19,8 +19,6 @@ import com.eager.questioncloud.core.domain.user.model.User;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.pg.dto.PGPayment;
-import com.eager.questioncloud.pg.exception.InvalidPaymentIdException;
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,10 +27,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -47,9 +43,6 @@ class ChargePointPaymentApproverTest {
 
     @Autowired
     private UserPointRepository userPointRepository;
-
-    @MockBean
-    private PGPaymentProcessor pgPaymentProcessor;
 
     @SpyBean
     @Autowired
@@ -80,30 +73,16 @@ class ChargePointPaymentApproverTest {
         String paymentId = RandomStringUtils.randomAlphanumeric(10);
         ChargePointPayment order = chargePointPaymentRepository.save(ChargePointPayment.order(paymentId, user.getUid(), ChargePointType.PackageA));
 
-        BDDMockito.given(pgPaymentProcessor.getPayment(any()))
-            .willReturn(new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com"));
+        PGPayment pgPayment = new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com");
 
         //when
-        chargePointPaymentApprover.approve(paymentId);
+        chargePointPaymentApprover.approve(pgPayment);
 
         //then
         ChargePointPayment chargePointPayment = chargePointPaymentRepository.findByPaymentId(paymentId);
         assertThat(chargePointPayment.getChargePointPaymentStatus()).isEqualTo(ChargePointPaymentStatus.PAID);
     }
 
-    @Test
-    @DisplayName("존재하지 않는 paymentId면 예외가 발생한다.")
-    void throwExceptionWhenWrongPaymentId() {
-        //given
-        String wrongPaymentId = "wrongPaymentId";
-        BDDMockito.given(pgPaymentProcessor.getPayment(wrongPaymentId))
-            .willThrow(new InvalidPaymentIdException());
-
-        //when then
-        assertThatThrownBy(() -> chargePointPaymentApprover.approve(wrongPaymentId))
-            .isInstanceOf(CoreException.class)
-            .hasFieldOrPropertyWithValue("error", Error.NOT_FOUND);
-    }
 
     @Test
     @DisplayName("이미 처리 된 결제를 승인 요청할 경우 예외가 발생한다.")
@@ -121,11 +100,10 @@ class ChargePointPaymentApproverTest {
         order.approve("https://www.naver.com");
         chargePointPaymentRepository.save(order);
 
-        BDDMockito.given(pgPaymentProcessor.getPayment(any()))
-            .willReturn(new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com"));
+        PGPayment pgPayment = new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com");
 
         //when then
-        assertThatThrownBy(() -> chargePointPaymentApprover.approve(paymentId))
+        assertThatThrownBy(() -> chargePointPaymentApprover.approve(pgPayment))
             .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_PROCESSED_PAYMENT);
     }
@@ -146,13 +124,12 @@ class ChargePointPaymentApproverTest {
         order.approve("https://www.naver.com");
         chargePointPaymentRepository.save(order);
 
-        BDDMockito.given(pgPaymentProcessor.getPayment(any()))
-            .willReturn(new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com"));
+        PGPayment pgPayment = new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com");
 
-        doThrow(new RuntimeException()).when(chargePointPaymentRepository).findByPaymentId(any());
+        doThrow(new RuntimeException()).when(chargePointPaymentRepository).findByPaymentIdWithLock(any());
 
         //when then
-        assertThatThrownBy(() -> chargePointPaymentApprover.approve(paymentId))
+        assertThatThrownBy(() -> chargePointPaymentApprover.approve(pgPayment))
             .isInstanceOf(RuntimeException.class);
 
         verify(messageSender).sendMessage(any(), any());
@@ -172,8 +149,7 @@ class ChargePointPaymentApproverTest {
         String paymentId = RandomStringUtils.randomAlphanumeric(10);
         ChargePointPayment order = chargePointPaymentRepository.save(ChargePointPayment.order(paymentId, user.getUid(), ChargePointType.PackageA));
 
-        BDDMockito.given(pgPaymentProcessor.getPayment(any()))
-            .willReturn(new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com"));
+        PGPayment pgPayment = new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com");
 
         //when
         int numberOfThreads = 100;
@@ -186,7 +162,7 @@ class ChargePointPaymentApproverTest {
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.execute(() -> {
                 try {
-                    chargePointPaymentApprover.approve(paymentId);
+                    chargePointPaymentApprover.approve(pgPayment);
                     successCount.incrementAndGet();
                 } catch (CoreException e) {
                     if (e.getError().equals(Error.ALREADY_PROCESSED_PAYMENT)) {
