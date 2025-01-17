@@ -11,6 +11,8 @@ public interface ChargePointPaymentRepository {
 
     ChargePointPayment findByPaymentId(String paymentId);
 
+    ChargePointPayment findByPaymentIdWithLock(String userId);
+
     Boolean existsByPaymentId(String paymentId);
 
     List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation);

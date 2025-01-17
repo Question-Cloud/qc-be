@@ -44,6 +44,13 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     }
 
     @Override
+    public ChargePointPayment findByPaymentIdWithLock(String paymentId) {
+        return chargePointPaymentJpaRepository.findByPaymentIdWithLock(paymentId)
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
+            .toModel();
+    }
+
+    @Override
     public Boolean existsByPaymentId(String paymentId) {
         return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
             .from(chargePointPaymentEntity)
