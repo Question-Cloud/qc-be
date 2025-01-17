@@ -6,13 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
 @RequiredArgsConstructor
@@ -50,13 +50,27 @@ public class PortoneAPI {
     }
 
     public void cancel(String paymentId) {
-        WebClient webClient = WebClient.create("https://api.portone.io");
-        webClient.post()
-            .uri("/payments/%s/cancel".formatted(paymentId))
-            .headers(headers -> headers.set("Authorization", "Portone %s".formatted(PORT_ONE_SECRET_KEY)))
-            .body(BodyInserters.fromValue(new PortoneCancelRequest("Invalid Payment")))
-            .exchangeToMono(response -> response.bodyToMono(Void.class))
-            .subscribe();
+        Request request = new Request.Builder()
+            .url(String.format("%s/payments/%s/cancel", BASE_URL, paymentId))
+            .header("Authorization", "Portone " + PORT_ONE_SECRET_KEY)
+            .post(getCancelRequestBody())
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            validateCancelResponse(response);
+        } catch (Exception e) {
+            throw new PGException();
+        }
+    }
+
+    private RequestBody getCancelRequestBody() {
+        try {
+            return RequestBody.create(
+                objectMapper.writeValueAsString(new PortoneCancelRequest("Invalid Payment")),
+                MediaType.parse("application/json; charset=utf-8"));
+        } catch (Exception e) {
+            throw new PGException();
+        }
     }
 
     private void validatePaymentResponse(Response response) {
@@ -71,5 +85,12 @@ public class PortoneAPI {
         if (response.body() == null) {
             throw new PGException();
         }
+    }
+
+    private void validateCancelResponse(Response response) {
+        if (response.code() == 200) {
+            return;
+        }
+        throw new PGException();
     }
 }
