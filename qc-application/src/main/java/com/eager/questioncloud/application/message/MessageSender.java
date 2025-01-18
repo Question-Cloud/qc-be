@@ -20,7 +20,6 @@ public class MessageSender {
             messageType.getQueueName(),
             message,
             m -> {
-                m.getMessageProperties().setHeader("delay", "delay");
                 m.getMessageProperties().setExpiration(selectDelay(failCount));
                 return m;
             });
@@ -29,7 +28,7 @@ public class MessageSender {
     private String selectDelay(int failCount) {
         switch (failCount) {
             default:
-                return "5000";
+                return "10000";
         }
     }
 }

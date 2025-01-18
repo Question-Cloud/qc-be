@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.HeadersExchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.core.TopicExchange;
@@ -20,7 +20,7 @@ public class RabbitConfig {
     private static final String FAIL_CHARGE_POINT_QUEUE = "fail-charge-point";
     private static final String FAIL_QUESTION_PAYMENT_QUEUE = "fail-question-payment";
     private static final String DELAY_QUEUE = "delay";
-    
+
     private static final String EXCHANGE = "qc.exchange";
     public static final String DELAY_EXCHANGE = "qc.delay.exchange";
 
@@ -49,8 +49,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    public HeadersExchange headersExchange() {
-        return new HeadersExchange(DELAY_EXCHANGE);
+    public FanoutExchange delayQueueFanoutExchange() {
+        return new FanoutExchange(DELAY_EXCHANGE);
     }
 
     @Bean
@@ -64,8 +64,8 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Binding bindingDelay(Queue delayQueue, HeadersExchange headersExchange) {
-        return BindingBuilder.bind(delayQueue).to(headersExchange).where("delay").matches("delay");
+    public Binding bindingDelay(Queue delayQueue, FanoutExchange delayQueueFanoutExchange) {
+        return BindingBuilder.bind(delayQueue).to(delayQueueFanoutExchange);
     }
 
     @Bean
