@@ -14,15 +14,22 @@ public class MessageSender {
         rabbitTemplate.convertAndSend(messageType.getQueueName(), message);
     }
 
-    public void sendDelayMessage(int delay, MessageType messageType, Object message) {
+    public void sendDelayMessage(MessageType messageType, Object message, int failCount) {
         rabbitTemplate.convertAndSend(
             RabbitConfig.DELAY_EXCHANGE,
             messageType.getQueueName(),
             message,
             m -> {
-                m.getMessageProperties().setHeader("target", "delay");
-                m.getMessageProperties().setExpiration(String.valueOf(delay));
+                m.getMessageProperties().setHeader("delay", "delay");
+                m.getMessageProperties().setExpiration(selectDelay(failCount));
                 return m;
             });
+    }
+
+    private String selectDelay(int failCount) {
+        switch (failCount) {
+            default:
+                return "5000";
+        }
     }
 }

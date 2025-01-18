@@ -22,7 +22,7 @@ public class ChargePointService {
         try {
             userPointManager.chargePoint(event.getUserId(), event.getChargePointType().getAmount());
         } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentMessage(event.getPaymentId()));
+            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, FailChargePointPaymentMessage.create(event.getPaymentId()));
             throw new CoreException(Error.PAYMENT_ERROR);
         }
     }

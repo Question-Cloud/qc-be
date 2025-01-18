@@ -8,5 +8,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FailChargePointPaymentMessage {
+    private int failCount;
     private String paymentId;
+
+    public static FailChargePointPaymentMessage create(String paymentId) {
+        return new FailChargePointPaymentMessage(0, paymentId);
+    }
+
+    public void increaseFailCount() {
+        this.failCount++;
+    }
 }

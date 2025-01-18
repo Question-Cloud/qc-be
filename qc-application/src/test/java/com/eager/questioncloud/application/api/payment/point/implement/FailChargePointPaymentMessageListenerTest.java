@@ -60,7 +60,7 @@ class FailChargePointPaymentMessageListenerTest {
         BDDMockito.willDoNothing().given(pgPaymentProcessor).cancel(any());
 
         //when
-        messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentMessage(paymentId));
+        messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, FailChargePointPaymentMessage.create(paymentId));
         answer.await(10);
 
         //then

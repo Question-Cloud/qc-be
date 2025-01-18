@@ -27,7 +27,7 @@ public class ChargePointPaymentApprover {
         } catch (CoreException coreException) {
             throw coreException;
         } catch (Exception unknownException) {
-            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, new FailChargePointPaymentMessage(pgPayment.getPaymentId()));
+            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, FailChargePointPaymentMessage.create(pgPayment.getPaymentId()));
             throw unknownException;
         }
     }
