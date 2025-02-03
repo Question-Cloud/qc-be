@@ -15,4 +15,6 @@ public interface UserQuestionRepository {
     List<UserQuestionDetail> getUserQuestions(QuestionFilter questionFilter);
 
     int countUserQuestions(QuestionFilter questionFilter);
+
+    void deleteAllInBatch();
 }

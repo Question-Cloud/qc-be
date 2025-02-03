@@ -86,6 +86,11 @@ public class UserQuestionRepositoryImpl implements UserQuestionRepository {
         return count;
     }
 
+    @Override
+    public void deleteAllInBatch() {
+        userQuestionJpaRepository.deleteAllInBatch();
+    }
+
     private BooleanBuilder questionEntityJoinCondition(QuestionFilter questionFilter) {
         BooleanBuilder builder = new BooleanBuilder();
         if (questionFilter.getLevels() != null && !questionFilter.getLevels().isEmpty()) {

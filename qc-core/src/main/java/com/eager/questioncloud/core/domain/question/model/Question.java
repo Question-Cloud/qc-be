@@ -4,8 +4,10 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Question {
     private Long id;
     private Long creatorId;
