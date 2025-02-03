@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.point.service;
+package com.eager.questioncloud.application.api.payment.point.implement;
 
 import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
 import com.eager.questioncloud.application.message.FailChargePointPaymentMessage;
@@ -9,11 +9,11 @@ import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class ChargePointService {
+public class ChargePointPaymentPostProcessor {
     private final UserPointManager userPointManager;
     private final MessageSender messageSender;
 

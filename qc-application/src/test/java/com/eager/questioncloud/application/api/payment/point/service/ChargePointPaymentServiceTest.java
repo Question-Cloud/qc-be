@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
+import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPostProcessor;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
@@ -42,7 +43,7 @@ class ChargePointPaymentServiceTest {
     private ApplicationEvents events;
 
     @MockBean
-    private ChargePointService chargePointService;
+    private ChargePointPaymentPostProcessor chargePointPaymentPostProcessor;
 
     @AfterEach
     void tearDown() {
@@ -96,7 +97,7 @@ class ChargePointPaymentServiceTest {
         BDDMockito.given(pgPaymentProcessor.getPayment(any()))
             .willReturn(new PGPayment(order.getPaymentId(), ChargePointType.PackageA.getAmount(), "https://www.naver.com"));
 
-        BDDMockito.willDoNothing().given(chargePointService).chargeUserPoint(any());
+        BDDMockito.willDoNothing().given(chargePointPaymentPostProcessor).chargeUserPoint(any());
 
         //then
         chargePointPaymentService.approvePayment(paymentId);
