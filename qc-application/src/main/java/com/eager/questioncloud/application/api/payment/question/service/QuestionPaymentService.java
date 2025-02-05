@@ -20,10 +20,11 @@ public class QuestionPaymentService {
     private final QuestionPaymentCouponProcessor questionPaymentCouponProcessor;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void payment(Long userId, List<Long> questionIds, Long userCouponId) {
+    public QuestionPayment payment(Long userId, List<Long> questionIds, Long userCouponId) {
         QuestionOrder order = questionOrderGenerator.generateQuestionOrder(userId, questionIds);
         QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponProcessor.getCoupon(userCouponId, userId);
         QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(QuestionPayment.create(userId, questionPaymentCoupon, order));
         eventPublisher.publishEvent(new QuestionPaymentEvent(paymentResult));
+        return paymentResult;
     }
 }

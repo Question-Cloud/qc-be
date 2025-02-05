@@ -10,4 +10,6 @@ public interface QuestionPaymentHistoryRepository {
     int count(Long userId);
 
     QuestionPaymentHistory save(QuestionPaymentHistory questionPaymentHistory);
+
+    QuestionPaymentHistory findById(Long id);
 }

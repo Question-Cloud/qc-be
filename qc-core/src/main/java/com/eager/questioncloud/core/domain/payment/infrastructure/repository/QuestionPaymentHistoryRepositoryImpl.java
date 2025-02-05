@@ -3,6 +3,8 @@ package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.payment.infrastructure.document.QuestionPaymentHistoryDocument;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +36,12 @@ public class QuestionPaymentHistoryRepositoryImpl implements QuestionPaymentHist
     @Override
     public QuestionPaymentHistory save(QuestionPaymentHistory questionPaymentHistory) {
         return questionPaymentHistoryMongoRepository.save(QuestionPaymentHistoryDocument.from(questionPaymentHistory)).toModel();
+    }
+
+    @Override
+    public QuestionPaymentHistory findById(Long id) {
+        return questionPaymentHistoryMongoRepository.findById(id)
+            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
+            .toModel();
     }
 }
