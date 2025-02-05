@@ -44,7 +44,7 @@ public class QuestionPayment {
     }
 
     public Boolean checkUsingCoupon() {
-        return questionPaymentCoupon.getUserCouponId() != null;
+        return questionPaymentCoupon.isUsingCoupon();
     }
 
     public void useCoupon() {

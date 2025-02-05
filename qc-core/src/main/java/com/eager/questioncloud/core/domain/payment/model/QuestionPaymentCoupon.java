@@ -22,4 +22,8 @@ public class QuestionPaymentCoupon {
     public static QuestionPaymentCoupon create(Long userCouponId, Coupon coupon) {
         return new QuestionPaymentCoupon(userCouponId, coupon.getTitle(), coupon.getCouponType(), coupon.getValue());
     }
+
+    public boolean isUsingCoupon() {
+        return userCouponId != null;
+    }
 }
