@@ -6,7 +6,7 @@ import com.eager.questioncloud.application.api.authentication.dto.Authentication
 import com.eager.questioncloud.application.api.authentication.dto.AuthenticationResponse.SocialAuthenticateResponse;
 import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult;
-import com.eager.questioncloud.application.api.authentication.service.AuthenticationService;
+import com.eager.questioncloud.application.business.authentication.service.AuthenticationService;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

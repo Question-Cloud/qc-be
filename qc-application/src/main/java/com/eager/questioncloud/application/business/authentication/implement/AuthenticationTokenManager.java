@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.authentication.implement;
+package com.eager.questioncloud.application.business.authentication.implement;
 
 import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
 import com.eager.questioncloud.core.domain.token.RefreshTokenRepository;
