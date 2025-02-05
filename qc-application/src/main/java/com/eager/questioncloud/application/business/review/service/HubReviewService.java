@@ -1,7 +1,7 @@
-package com.eager.questioncloud.application.api.hub.review.service;
+package com.eager.questioncloud.application.business.review.service;
 
-import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister;
-import com.eager.questioncloud.application.api.hub.review.implement.HunReviewUpdater;
+import com.eager.questioncloud.application.business.review.implement.HubReviewRegister;
+import com.eager.questioncloud.application.business.review.implement.HunReviewUpdater;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
