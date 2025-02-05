@@ -1,6 +1,5 @@
 package com.eager.questioncloud.core.domain.payment.model;
 
-import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -48,13 +47,7 @@ public class QuestionPayment {
     }
 
     public void useCoupon() {
-        if (questionPaymentCoupon.getCouponType().equals(CouponType.Fixed)) {
-            amount = Math.max(amount - questionPaymentCoupon.getValue(), 0);
-        }
-        if (questionPaymentCoupon.getCouponType().equals(CouponType.Percent)) {
-            int discountAmount = (amount * (questionPaymentCoupon.getValue() / 100));
-            amount = amount - discountAmount;
-        }
+        amount = questionPaymentCoupon.calcDiscount(amount);
     }
 
     public void fail() {

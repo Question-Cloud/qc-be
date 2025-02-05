@@ -2,6 +2,8 @@ package com.eager.questioncloud.core.domain.payment.model;
 
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
+import com.eager.questioncloud.core.exception.CoreException;
+import com.eager.questioncloud.core.exception.Error;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +27,18 @@ public class QuestionPaymentCoupon {
 
     public boolean isUsingCoupon() {
         return userCouponId != null;
+    }
+
+    public int calcDiscount(int originalAmount) {
+        if (couponType.equals(CouponType.Fixed)) {
+            return Math.max(originalAmount - value, 0);
+        }
+
+        if (couponType.equals(CouponType.Percent)) {
+            int discountAmount = (originalAmount * (getValue() / 100));
+            return originalAmount - discountAmount;
+        }
+
+        throw new CoreException(Error.FAIL_USE_COUPON);
     }
 }
