@@ -7,4 +7,6 @@ public interface QuestionOrderRepository {
     Boolean isAlreadyPurchased(Long userId, List<Long> questionIds);
 
     void save(QuestionOrder questionOrder);
+
+    void deleteAllInBatch();
 }

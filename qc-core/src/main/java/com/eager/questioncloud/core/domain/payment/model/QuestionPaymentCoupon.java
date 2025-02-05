@@ -30,6 +30,10 @@ public class QuestionPaymentCoupon {
     }
 
     public int calcDiscount(int originalAmount) {
+        if (couponType == null) {
+            return originalAmount;
+        }
+
         if (couponType.equals(CouponType.Fixed)) {
             return Math.max(originalAmount - value, 0);
         }

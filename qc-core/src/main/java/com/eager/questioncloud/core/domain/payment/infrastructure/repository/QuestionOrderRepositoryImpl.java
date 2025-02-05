@@ -30,4 +30,9 @@ public class QuestionOrderRepositoryImpl implements QuestionOrderRepository {
     public void save(QuestionOrder questionOrder) {
         questionOrderJpaRepository.saveAll(QuestionOrderEntity.from(questionOrder));
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        questionOrderJpaRepository.deleteAllInBatch();
+    }
 }
