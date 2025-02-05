@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.point.service;
+package com.eager.questioncloud.application.business.payment.point.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 
 import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent;
 import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentPostProcessor;
-import com.eager.questioncloud.application.business.payment.point.service.ChargePointPaymentService;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;

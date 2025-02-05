@@ -1,11 +1,10 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.business.authentication.implement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
-import com.eager.questioncloud.application.business.authentication.implement.AuthenticationProcessor;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.enums.UserStatus;

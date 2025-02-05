@@ -1,6 +1,5 @@
-package com.eager.questioncloud.application.api.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement;
 
-import com.eager.questioncloud.application.business.payment.question.implement.QuestionPaymentCouponProcessor;
 import com.eager.questioncloud.application.utils.Fixture;
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;

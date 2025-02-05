@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.authentication;
+package com.eager.questioncloud.application.business.authentication.implement;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
