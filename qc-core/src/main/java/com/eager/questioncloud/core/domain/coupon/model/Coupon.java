@@ -4,8 +4,10 @@ import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Coupon {
     private Long id;
     private String code;

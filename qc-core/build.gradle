@@ -16,6 +16,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
     implementation(project(":qc-lock-manager"))
+
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
 }
 
 def querydslDir = "src/main/generated"

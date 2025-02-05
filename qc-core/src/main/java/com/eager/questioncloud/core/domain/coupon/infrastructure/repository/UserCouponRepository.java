@@ -16,4 +16,6 @@ public interface UserCouponRepository {
     List<AvailableUserCoupon> getAvailableUserCoupons(Long userId);
 
     Boolean use(Long userCouponId);
+
+    void deleteAllInBatch();
 }

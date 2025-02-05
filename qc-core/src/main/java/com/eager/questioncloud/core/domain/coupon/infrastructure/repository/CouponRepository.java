@@ -12,4 +12,6 @@ public interface CouponRepository {
     Coupon save(Coupon coupon);
 
     Boolean decreaseCount(Long couponId);
+
+    void deleteAllInBatch();
 }

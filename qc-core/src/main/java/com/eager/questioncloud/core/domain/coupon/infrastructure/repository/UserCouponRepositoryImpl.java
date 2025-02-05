@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -62,10 +63,16 @@ public class UserCouponRepositoryImpl implements UserCouponRepository {
     }
 
     @Override
+    @Transactional
     public Boolean use(Long userCouponId) {
         return jpaQueryFactory.update(userCouponEntity)
             .set(userCouponEntity.isUsed, true)
             .where(userCouponEntity.id.eq(userCouponId), userCouponEntity.isUsed.isFalse())
             .execute() == 1;
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+        userCouponJpaRepository.deleteAllInBatch();
     }
 }

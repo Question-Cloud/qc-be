@@ -43,4 +43,9 @@ public class CouponRepositoryImpl implements CouponRepository {
             .execute();
         return result == 1;
     }
+
+    @Override
+    public void deleteAllInBatch() {
+        couponJpaRepository.deleteAllInBatch();
+    }
 }
