@@ -108,7 +108,7 @@ class QuestionPaymentCouponProcessorTest {
         QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponProcessor.getCoupon(userCouponId, userId);
 
         // then
-        Assertions.assertThat(questionPaymentCoupon.getUserCouponId()).isEqualTo(null);
+        Assertions.assertThat(questionPaymentCoupon.isUsingCoupon()).isEqualTo(false);
     }
 
     @Test
