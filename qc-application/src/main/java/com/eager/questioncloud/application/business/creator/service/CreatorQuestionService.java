@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.workspace.service;
+package com.eager.questioncloud.application.business.creator.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;

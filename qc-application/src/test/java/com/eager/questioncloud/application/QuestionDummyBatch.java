@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application;
 
-import com.eager.questioncloud.application.api.workspace.service.CreatorQuestionService;
+import com.eager.questioncloud.application.business.creator.service.CreatorQuestionService;
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
 import com.eager.questioncloud.core.domain.question.enums.QuestionType;
 import com.eager.questioncloud.core.domain.question.enums.Subject;
