@@ -4,7 +4,6 @@ import com.eager.questioncloud.application.business.payment.question.event.Quest
 import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.userquestion.implement.UserQuestionAppender;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
@@ -16,14 +15,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class QuestionPaymentPostProcessor {
     private final UserQuestionAppender userQuestionAppender;
-    private final QuestionRepository questionRepository;
     private final MessageSender messageSender;
 
-    @EventListener
-    public void updateSalesCount(QuestionPaymentEvent event) {
-        event.getQuestionPayment().getOrder().getItems()
-            .forEach(item -> questionRepository.increaseQuestionCount(item.getQuestionId()));
-    }
 
     @EventListener
     public void appendUserQuestion(QuestionPaymentEvent event) {
