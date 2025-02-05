@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.hub.question.controller;
 import com.eager.questioncloud.application.api.common.PagingResponse;
 import com.eager.questioncloud.application.api.hub.question.dto.HubQuestionControllerResponse.QuestionCategoriesResponse;
 import com.eager.questioncloud.application.api.hub.question.dto.HubQuestionControllerResponse.QuestionInformationResponse;
-import com.eager.questioncloud.application.api.hub.question.service.HubQuestionService;
+import com.eager.questioncloud.application.business.question.service.HubQuestionService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;

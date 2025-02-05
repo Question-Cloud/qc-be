@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.hub.question.service;
+package com.eager.questioncloud.application.business.question.service;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject;
