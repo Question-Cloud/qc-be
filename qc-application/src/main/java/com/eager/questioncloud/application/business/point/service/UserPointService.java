@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.point.service;
+package com.eager.questioncloud.application.business.point.service;
 
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
