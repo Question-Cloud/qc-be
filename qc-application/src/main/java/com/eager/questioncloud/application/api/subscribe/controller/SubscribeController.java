@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.subscribe.controller;
 
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.subscribe.dto.SubscribeControllerResponse.CreatorSubscribeInformationResponse;
-import com.eager.questioncloud.application.api.subscribe.service.SubscribeService;
+import com.eager.questioncloud.application.business.subscribe.service.SubscribeService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

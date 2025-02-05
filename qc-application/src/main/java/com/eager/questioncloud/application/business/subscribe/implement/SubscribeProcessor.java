@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.subscribe.implement;
+package com.eager.questioncloud.application.business.subscribe.implement;
 
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository;

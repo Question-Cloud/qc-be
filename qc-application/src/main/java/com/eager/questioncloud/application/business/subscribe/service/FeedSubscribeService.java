@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.feed.subscribe.service;
+package com.eager.questioncloud.application.business.subscribe.service;
 
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail;
