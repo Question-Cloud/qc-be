@@ -1,5 +1,8 @@
 package com.eager.questioncloud.application.api.payment.question.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent;
 import com.eager.questioncloud.application.utils.Fixture;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
@@ -21,8 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 @SpringBootTest
+@RecordApplicationEvents
 @ActiveProfiles("test")
 class QuestionPaymentServiceTest {
     @Autowired
@@ -45,6 +51,9 @@ class QuestionPaymentServiceTest {
 
     @Autowired
     private QuestionOrderRepository questionOrderRepository;
+
+    @Autowired
+    private ApplicationEvents events;
 
     @AfterEach
     void tearDown() {
@@ -85,5 +94,8 @@ class QuestionPaymentServiceTest {
         // then
         Assertions.assertThat(questionPayment.getStatus()).isEqualTo(QuestionPaymentStatus.SUCCESS);
         Assertions.assertThat(questionPayment.getOrder().getQuestionIds().size()).isEqualTo(questionIds.size());
+
+        long eventCount = events.stream(QuestionPaymentEvent.class).count();
+        assertThat(eventCount).isEqualTo(1);
     }
 }
