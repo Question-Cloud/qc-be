@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.payment.point.implement;
+package com.eager.questioncloud.application.business.payment.point.implement;
 
-import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
+import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent;
 import com.eager.questioncloud.application.message.FailChargePointPaymentMessage;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.message.MessageType;

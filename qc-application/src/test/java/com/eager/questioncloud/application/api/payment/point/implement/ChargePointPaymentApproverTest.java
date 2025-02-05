@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
+import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.application.message.MessageSender;
 import com.eager.questioncloud.application.utils.Fixture;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement;
 
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.point.event;
+package com.eager.questioncloud.application.business.payment.point.event;
 
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;

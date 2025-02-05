@@ -1,7 +1,7 @@
-package com.eager.questioncloud.application.api.payment.point.service;
+package com.eager.questioncloud.application.business.payment.point.service;
 
-import com.eager.questioncloud.application.api.payment.point.event.ChargePointPaymentEvent;
-import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover;
+import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent;
+import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentApprover;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
 import com.eager.questioncloud.core.exception.CoreException;

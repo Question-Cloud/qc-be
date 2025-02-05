@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.payment.question.event;
+package com.eager.questioncloud.application.business.payment.question.event;
 
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import lombok.AllArgsConstructor;
