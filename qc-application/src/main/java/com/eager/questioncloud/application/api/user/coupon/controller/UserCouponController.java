@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.user.coupon.controller;
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.user.coupon.dto.UserCouponControllerRequest;
 import com.eager.questioncloud.application.api.user.coupon.dto.UserCouponControllerResponse.GetAvailableUserCouponsResponse;
-import com.eager.questioncloud.application.api.user.coupon.service.UserCouponService;
+import com.eager.questioncloud.application.business.coupon.service.UserCouponService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import io.swagger.v3.oas.annotations.Operation;

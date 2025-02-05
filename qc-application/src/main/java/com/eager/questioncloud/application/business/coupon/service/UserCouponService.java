@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.user.coupon.service;
+package com.eager.questioncloud.application.business.coupon.service;
 
-import com.eager.questioncloud.application.api.user.coupon.implement.UserCouponRegister;
+import com.eager.questioncloud.application.business.coupon.implement.UserCouponRegister;
 import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
 import com.eager.questioncloud.lock.LockKeyGenerator;

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.coupon.implement;
+package com.eager.questioncloud.application.business.coupon.implement;
 
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
