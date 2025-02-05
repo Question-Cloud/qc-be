@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.post.implement;
+package com.eager.questioncloud.application.business.post.implement;
 
 import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
 import com.eager.questioncloud.core.domain.post.model.Post;

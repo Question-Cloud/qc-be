@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.post.service;
+package com.eager.questioncloud.application.business.post.service;
 
-import com.eager.questioncloud.application.api.post.implement.PostPermissionChecker;
+import com.eager.questioncloud.application.business.post.implement.PostPermissionChecker;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.post.dto.PostDetail;
 import com.eager.questioncloud.core.domain.post.dto.PostListItem;
