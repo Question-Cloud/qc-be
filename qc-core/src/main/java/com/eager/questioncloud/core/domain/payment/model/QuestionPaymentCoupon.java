@@ -30,7 +30,7 @@ public class QuestionPaymentCoupon {
     }
 
     public int calcDiscount(int originalAmount) {
-        if (couponType == null) {
+        if (!isUsingCoupon()) {
             return originalAmount;
         }
 
@@ -39,7 +39,8 @@ public class QuestionPaymentCoupon {
         }
 
         if (couponType.equals(CouponType.Percent)) {
-            int discountAmount = (originalAmount * (getValue() / 100));
+            double discountRate = value / 100.0;
+            int discountAmount = (int) Math.floor(originalAmount * discountRate);
             return originalAmount - discountAmount;
         }
 
