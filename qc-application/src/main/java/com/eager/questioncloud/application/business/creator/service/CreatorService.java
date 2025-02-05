@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.creator.service;
+package com.eager.questioncloud.application.business.creator.service;
 
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;

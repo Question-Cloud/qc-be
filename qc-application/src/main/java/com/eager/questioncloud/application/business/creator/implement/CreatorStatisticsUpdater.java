@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.creator.implement;
+package com.eager.questioncloud.application.business.creator.implement;
 
 import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent;
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.creator.controller;
 
 import com.eager.questioncloud.application.api.creator.dto.CreatorResponse.CreatorInformationResponse;
-import com.eager.questioncloud.application.api.creator.service.CreatorService;
+import com.eager.questioncloud.application.business.creator.service.CreatorService;
 import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
