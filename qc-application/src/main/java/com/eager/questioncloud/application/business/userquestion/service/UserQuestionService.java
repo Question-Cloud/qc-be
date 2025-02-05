@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.feed.library.service;
+package com.eager.questioncloud.application.business.userquestion.service;
 
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
 import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FeedLibraryService {
+public class UserQuestionService {
     private final UserQuestionRepository userQuestionRepository;
 
     public List<UserQuestionDetail> getUserQuestions(QuestionFilter questionFilter) {
