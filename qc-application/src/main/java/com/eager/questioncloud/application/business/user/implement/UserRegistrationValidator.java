@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.register.implement;
+package com.eager.questioncloud.application.business.user.implement;
 
 import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;

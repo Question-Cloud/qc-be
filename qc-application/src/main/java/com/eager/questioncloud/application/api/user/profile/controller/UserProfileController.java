@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.user.profile.controller;
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.user.profile.dto.UserPointControllerRequest.UpdateMyInformationRequest;
 import com.eager.questioncloud.application.api.user.profile.dto.UserPointControllerResponse.MyInformationResponse;
-import com.eager.questioncloud.application.api.user.profile.service.UserProfileService;
+import com.eager.questioncloud.application.business.user.service.UserProfileService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import com.eager.questioncloud.core.domain.user.dto.MyInformation;
 import jakarta.validation.Valid;

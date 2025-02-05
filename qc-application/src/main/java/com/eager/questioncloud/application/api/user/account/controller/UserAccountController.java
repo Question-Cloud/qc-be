@@ -3,7 +3,7 @@ package com.eager.questioncloud.application.api.user.account.controller;
 import com.eager.questioncloud.application.api.common.DefaultResponse;
 import com.eager.questioncloud.application.api.user.account.dto.UserAccountControllerRequest;
 import com.eager.questioncloud.application.api.user.account.dto.UserAccountControllerResponse.RecoverForgottenEmailResponse;
-import com.eager.questioncloud.application.api.user.account.service.UserAccountService;
+import com.eager.questioncloud.application.business.user.service.UserAccountService;
 import com.eager.questioncloud.application.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.user.register.service;
+package com.eager.questioncloud.application.business.user.service;
 
-import com.eager.questioncloud.application.api.user.register.implement.UserRegister;
+import com.eager.questioncloud.application.business.user.implement.UserRegister;
 import com.eager.questioncloud.application.mail.EmailSender;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;

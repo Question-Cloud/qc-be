@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.user.register.implement;
+package com.eager.questioncloud.application.business.user.implement;
 
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
 import com.eager.questioncloud.core.domain.user.dto.CreateUser;
@@ -32,7 +32,7 @@ public class UserRegister {
         User user = userRepository.save(
             User.create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification)
         );
-        
+
         userPointManager.init(user.getUid());
         return user;
     }
