@@ -65,10 +65,6 @@ public class CreatorStatisticsProcessor {
         );
     }
 
-    public void updateSalesCount(Long creatorId, int count) {
-        creatorStatisticsRepository.addSalesCount(creatorId, count);
-    }
-
     @EventListener
     public void increaseSubscribeCount(SubscribedEvent event) {
         creatorStatisticsRepository.increaseSubscribeCount(event.getCreatorId());
