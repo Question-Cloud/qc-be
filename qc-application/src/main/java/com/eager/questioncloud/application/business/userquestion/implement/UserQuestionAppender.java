@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class UserQuestionAppender {
     private final UserQuestionRepository userQuestionRepository;
     private final MessageSender messageSender;
-    
+
     @EventListener
     public void appendUserQuestion(QuestionPaymentEvent event) {
         try {
@@ -28,7 +28,7 @@ public class UserQuestionAppender {
                 )
             );
         } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, new FailQuestionPaymentMessage(event.getQuestionPayment()));
+            messageSender.sendDelayMessage(MessageType.FAIL_QUESTION_PAYMENT, FailQuestionPaymentMessage.create(event.getQuestionPayment()), 0);
             throw new CoreException(Error.PAYMENT_ERROR);
         }
     }

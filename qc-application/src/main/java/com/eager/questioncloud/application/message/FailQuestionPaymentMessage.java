@@ -10,4 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FailQuestionPaymentMessage {
     private QuestionPayment questionPayment;
+    private int failCount;
+
+    public static FailQuestionPaymentMessage create(QuestionPayment questionPayment) {
+        return new FailQuestionPaymentMessage(questionPayment, 0);
+    }
+
+    public void increaseFailCount() {
+        this.failCount++;
+    }
 }
