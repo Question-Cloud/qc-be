@@ -43,7 +43,7 @@ public class QuestionPayment {
     }
 
     public Boolean checkUsingCoupon() {
-        return questionPaymentCoupon.isUsingCoupon();
+        return questionPaymentCoupon.checkUsingCoupon();
     }
 
     public void useCoupon() {

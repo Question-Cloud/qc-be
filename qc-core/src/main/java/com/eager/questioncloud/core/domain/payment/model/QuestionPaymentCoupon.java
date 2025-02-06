@@ -25,12 +25,12 @@ public class QuestionPaymentCoupon {
         return new QuestionPaymentCoupon(userCouponId, coupon.getTitle(), coupon.getCouponType(), coupon.getValue());
     }
 
-    public boolean isUsingCoupon() {
+    public boolean checkUsingCoupon() {
         return userCouponId != null;
     }
 
     public int calcDiscount(int originalAmount) {
-        if (!isUsingCoupon()) {
+        if (!checkUsingCoupon()) {
             return originalAmount;
         }
 

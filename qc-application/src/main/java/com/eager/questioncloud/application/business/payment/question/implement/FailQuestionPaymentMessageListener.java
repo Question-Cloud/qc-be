@@ -10,6 +10,7 @@ import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,7 @@ public class FailQuestionPaymentMessageListener {
         } catch (Exception e) {
             message.increaseFailCount();
             messageSender.sendDelayMessage(MessageType.FAIL_QUESTION_PAYMENT, message, message.getFailCount());
+            throw new AmqpRejectAndDontRequeueException(e);
         }
     }
 
