@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class FailQuestionPaymentEventHandler {
+public class FailQuestionPaymentMessageListener {
     private final QuestionPaymentRepository questionPaymentRepository;
     private final UserPointRepository userPointRepository;
     private final UserCouponRepository userCouponRepository;
