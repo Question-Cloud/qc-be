@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class QuestionPaymentHistoryGenerator {
+public class QuestionPaymentHistoryRegister {
     private final QuestionRepository questionRepository;
     private final QuestionPaymentHistoryRepository questionPaymentHistoryRepository;
 

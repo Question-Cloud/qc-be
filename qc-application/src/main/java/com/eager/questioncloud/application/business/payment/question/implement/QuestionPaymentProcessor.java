@@ -15,7 +15,7 @@ public class QuestionPaymentProcessor {
     private final QuestionOrderRepository questionOrderRepository;
     private final QuestionPaymentCouponProcessor questionPaymentCouponProcessor;
     private final UserPointManager userPointManager;
-    private final QuestionPaymentHistoryGenerator questionPaymentHistoryGenerator;
+    private final QuestionPaymentHistoryRegister questionPaymentHistoryRegister;
 
     @Transactional
     public QuestionPayment processQuestionPayment(QuestionPayment questionPayment) {
@@ -24,7 +24,7 @@ public class QuestionPaymentProcessor {
         questionOrderRepository.save(questionPayment.getOrder());
 
         QuestionPayment savedQuestionPayment = questionPaymentRepository.save(questionPayment);
-        questionPaymentHistoryGenerator.saveQuestionPaymentHistory(savedQuestionPayment);
+        questionPaymentHistoryRegister.saveQuestionPaymentHistory(savedQuestionPayment);
 
         return savedQuestionPayment;
     }

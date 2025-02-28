@@ -71,7 +71,7 @@ class QuestionPaymentProcessorTest {
     UserPointManager userPointManager;
 
     @SpyBean
-    QuestionPaymentHistoryGenerator questionPaymentHistoryGenerator;
+    QuestionPaymentHistoryRegister questionPaymentHistoryRegister;
 
     @AfterEach
     void tearDown() {
@@ -136,7 +136,7 @@ class QuestionPaymentProcessorTest {
         verify(userPointManager, times(1)).usePoint(questionPayment.getUserId(), questionPayment.getAmount());
         verify(questionOrderRepository, times(1)).save(questionPayment.getOrder());
         verify(questionPaymentRepository, times(1)).save(questionPayment);
-        verify(questionPaymentHistoryGenerator, times(1)).saveQuestionPaymentHistory(paymentResult);
+        verify(questionPaymentHistoryRegister, times(1)).saveQuestionPaymentHistory(paymentResult);
 
         UserCoupon afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.getId());
         Assertions.assertThat(afterUserCoupon.getIsUsed()).isTrue();
@@ -182,7 +182,7 @@ class QuestionPaymentProcessorTest {
         verify(userPointManager, times(1)).usePoint(questionPayment.getUserId(), questionPayment.getAmount());
         verify(questionOrderRepository, times(1)).save(questionPayment.getOrder());
         verify(questionPaymentRepository, times(1)).save(questionPayment);
-        verify(questionPaymentHistoryGenerator, times(1)).saveQuestionPaymentHistory(paymentResult);
+        verify(questionPaymentHistoryRegister, times(1)).saveQuestionPaymentHistory(paymentResult);
 
         Assertions.assertThat(paymentResult.getAmount()).isEqualTo(originalAmount);
 
