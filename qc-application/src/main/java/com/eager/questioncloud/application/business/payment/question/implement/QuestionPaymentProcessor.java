@@ -13,16 +13,11 @@ public class QuestionPaymentProcessor {
     private final QuestionPaymentRepository questionPaymentRepository;
     private final QuestionPaymentCouponProcessor questionPaymentCouponProcessor;
     private final UserPointManager userPointManager;
-    private final QuestionPaymentHistoryRegister questionPaymentHistoryRegister;
 
     @Transactional
-    public QuestionPayment processQuestionPayment(QuestionPayment questionPayment) {
+    public QuestionPayment payment(QuestionPayment questionPayment) {
         questionPaymentCouponProcessor.applyCoupon(questionPayment);
         userPointManager.usePoint(questionPayment.getUserId(), questionPayment.getAmount());
-
-        QuestionPayment savedQuestionPayment = questionPaymentRepository.save(questionPayment);
-        questionPaymentHistoryRegister.saveQuestionPaymentHistory(savedQuestionPayment);
-
-        return savedQuestionPayment;
+        return questionPaymentRepository.save(questionPayment);
     }
 }
