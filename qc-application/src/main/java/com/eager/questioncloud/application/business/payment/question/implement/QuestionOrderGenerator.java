@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.business.payment.question.implement;
 
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
 import com.eager.questioncloud.core.domain.question.model.Question;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class QuestionOrderGenerator {
     private final UserQuestionRepository userQuestionRepository;
     private final QuestionRepository questionRepository;
+    private final QuestionOrderRepository questionOrderRepository;
 
     public QuestionOrder generateQuestionOrder(Long userId, List<Long> questionIds) {
         if (checkAlreadyOwned(userId, questionIds)) {
@@ -22,7 +24,10 @@ public class QuestionOrderGenerator {
         }
 
         List<Question> questions = getQuestions(questionIds);
-        return QuestionOrder.createOrder(questions);
+        QuestionOrder questionOrder = QuestionOrder.createOrder(questions);
+
+        questionOrderRepository.save(questionOrder);
+        return questionOrder;
     }
 
     private Boolean checkAlreadyOwned(Long userId, List<Long> questionIds) {
