@@ -84,7 +84,7 @@ class QuestionPaymentProcessorTest {
 
     @Test
     @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 O)")
-    void processQuestionPayment() {
+    void payment() {
         // given
         User user = userRepository.save(Fixture.fixtureMonkey.giveMeBuilder(User.class)
             .set("uid", null)
@@ -129,14 +129,12 @@ class QuestionPaymentProcessorTest {
         int discountedAmount = questionPayment.getQuestionPaymentCoupon().calcDiscount(originalAmount);
 
         // when
-        QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(questionPayment);
+        QuestionPayment paymentResult = questionPaymentProcessor.payment(questionPayment);
 
         // then
         verify(questionPaymentCouponProcessor, times(1)).applyCoupon(questionPayment);
         verify(userPointManager, times(1)).usePoint(questionPayment.getUserId(), questionPayment.getAmount());
-        verify(questionOrderRepository, times(1)).save(questionPayment.getOrder());
         verify(questionPaymentRepository, times(1)).save(questionPayment);
-        verify(questionPaymentHistoryRegister, times(1)).saveQuestionPaymentHistory(paymentResult);
 
         UserCoupon afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.getId());
         Assertions.assertThat(afterUserCoupon.getIsUsed()).isTrue();
@@ -149,7 +147,7 @@ class QuestionPaymentProcessorTest {
 
     @Test
     @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 X)")
-    void processQuestionPaymentNoCoupon() {
+    void paymentNoCoupon() {
         // given
         User user = userRepository.save(Fixture.fixtureMonkey.giveMeBuilder(User.class)
             .set("uid", null)
@@ -175,14 +173,12 @@ class QuestionPaymentProcessorTest {
         int originalAmount = questionPayment.getAmount();
 
         // when
-        QuestionPayment paymentResult = questionPaymentProcessor.processQuestionPayment(questionPayment);
+        QuestionPayment paymentResult = questionPaymentProcessor.payment(questionPayment);
 
         // then
         verify(questionPaymentCouponProcessor, times(1)).applyCoupon(questionPayment);
         verify(userPointManager, times(1)).usePoint(questionPayment.getUserId(), questionPayment.getAmount());
-        verify(questionOrderRepository, times(1)).save(questionPayment.getOrder());
         verify(questionPaymentRepository, times(1)).save(questionPayment);
-        verify(questionPaymentHistoryRegister, times(1)).saveQuestionPaymentHistory(paymentResult);
 
         Assertions.assertThat(paymentResult.getAmount()).isEqualTo(originalAmount);
 
@@ -234,7 +230,7 @@ class QuestionPaymentProcessorTest {
         );
 
         // when then
-        Assertions.assertThatThrownBy(() -> questionPaymentProcessor.processQuestionPayment(questionPayment))
+        Assertions.assertThatThrownBy(() -> questionPaymentProcessor.payment(questionPayment))
             .isInstanceOf(CoreException.class)
             .hasFieldOrPropertyWithValue("error", Error.NOT_ENOUGH_POINT);
     }
@@ -285,7 +281,7 @@ class QuestionPaymentProcessorTest {
         Mockito.doThrow(new CoreException(Error.PAYMENT_ERROR)).when(questionPaymentRepository).save(any());
 
         // when then
-        Assertions.assertThatThrownBy(() -> questionPaymentProcessor.processQuestionPayment(questionPayment))
+        Assertions.assertThatThrownBy(() -> questionPaymentProcessor.payment(questionPayment))
             .isInstanceOf(CoreException.class);
 
         UserCoupon afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.getId());

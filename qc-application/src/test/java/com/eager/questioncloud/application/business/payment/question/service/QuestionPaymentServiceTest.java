@@ -8,7 +8,9 @@ import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.Coup
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
@@ -77,7 +79,7 @@ class QuestionPaymentServiceTest {
 
         userPointRepository.save(new UserPoint(user.getUid(), 1000000));
 
-        List<Long> questionIds = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
+        List<Question> questions = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
             .set("id", null)
             .set("creatorId", 1L)
             .set("questionContent.questionCategoryId", 25L)
@@ -85,15 +87,19 @@ class QuestionPaymentServiceTest {
             .set("questionStatus", QuestionStatus.Available)
             .sampleList(10)
             .stream()
-            .map(question -> questionRepository.save(question).getId())
+            .map(question -> questionRepository.save(question))
             .toList();
 
         // when
-        QuestionPayment questionPayment = questionPaymentService.payment(user.getUid(), questionIds, null);
+        QuestionPayment questionPayment = questionPaymentService.payment(
+            user.getUid(),
+            QuestionOrder.createOrder(questions),
+            QuestionPaymentCoupon.noCoupon()
+        );
 
         // then
         Assertions.assertThat(questionPayment.getStatus()).isEqualTo(QuestionPaymentStatus.SUCCESS);
-        Assertions.assertThat(questionPayment.getOrder().getQuestionIds().size()).isEqualTo(questionIds.size());
+        Assertions.assertThat(questionPayment.getOrder().getQuestionIds().size()).isEqualTo(questions.size());
 
         long eventCount = events.stream(QuestionPaymentEvent.class).count();
         assertThat(eventCount).isEqualTo(1);
