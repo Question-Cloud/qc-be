@@ -15,9 +15,9 @@ public class QuestionPaymentService {
     private final QuestionPaymentProcessor questionPaymentProcessor;
     private final ApplicationEventPublisher eventPublisher;
 
-    public QuestionPayment payment(Long userId, QuestionOrder order, QuestionPaymentCoupon questionPaymentCoupon) {
-        QuestionPayment paymentResult = questionPaymentProcessor.payment(QuestionPayment.create(userId, questionPaymentCoupon, order));
-        eventPublisher.publishEvent(new QuestionPaymentEvent(paymentResult));
-        return paymentResult;
+    public void payment(Long userId, QuestionOrder order, QuestionPaymentCoupon questionPaymentCoupon) {
+        QuestionPayment questionPayment = QuestionPayment.create(userId, questionPaymentCoupon, order);
+        questionPaymentProcessor.payment(questionPayment);
+        eventPublisher.publishEvent(new QuestionPaymentEvent(questionPayment));
     }
 }
