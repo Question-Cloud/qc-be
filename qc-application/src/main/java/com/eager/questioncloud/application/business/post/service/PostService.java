@@ -40,10 +40,11 @@ public class PostService {
     }
 
     public PostDetail getPostDetail(Long userId, Long postId) {
-        if (!postPermissionChecker.hasPermission(userId, postId)) {
+        PostDetail post = postRepository.getPostDetail(postId);
+        if (!postPermissionChecker.hasPermission(userId, post.getQuestionId())) {
             throw new CoreException(Error.FORBIDDEN);
         }
-        return postRepository.getPostDetail(postId);
+        return post;
     }
 
     public void modify(Long postId, Long userId, PostContent postContent) {
