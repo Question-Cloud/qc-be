@@ -25,9 +25,13 @@ public class QuestionReview {
         this.isDeleted = isDeleted;
     }
 
-    public void modify(String comment, int rate) {
+    public int modify(String comment, int newRate) {
+        int beforeRate = this.rate;
+
         this.comment = comment;
-        this.rate = rate;
+        this.rate = newRate;
+
+        return newRate - beforeRate;
     }
 
     public void delete() {

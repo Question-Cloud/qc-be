@@ -11,8 +11,7 @@ public class HunReviewUpdater {
     private final QuestionReviewRepository questionReviewRepository;
 
     public int modifyQuestionReview(QuestionReview questionReview, String comment, int rate) {
-        int varianceRate = rate - questionReview.getRate();
-        questionReview.modify(comment, rate);
+        int varianceRate = questionReview.modify(comment, rate);
         questionReviewRepository.save(questionReview);
         return varianceRate;
     }
