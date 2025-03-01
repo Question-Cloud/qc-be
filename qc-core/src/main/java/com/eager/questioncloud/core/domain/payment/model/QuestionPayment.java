@@ -40,11 +40,11 @@ public class QuestionPayment {
             .build();
     }
 
-    public Boolean checkUsingCoupon() {
-        return questionPaymentCoupon.checkUsingCoupon();
+    public boolean isUsingCoupon() {
+        return questionPaymentCoupon != null;
     }
 
-    public void useCoupon() {
+    public void applyCoupon() {
         amount = questionPaymentCoupon.calcDiscount(amount);
     }
 

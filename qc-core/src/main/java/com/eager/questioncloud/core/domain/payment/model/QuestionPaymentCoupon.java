@@ -17,23 +17,11 @@ public class QuestionPaymentCoupon {
     private CouponType couponType;
     private int value;
 
-    public static QuestionPaymentCoupon noCoupon() {
-        return new QuestionPaymentCoupon(null, null, null, 0);
-    }
-
     public static QuestionPaymentCoupon create(Long userCouponId, Coupon coupon) {
         return new QuestionPaymentCoupon(userCouponId, coupon.getTitle(), coupon.getCouponType(), coupon.getValue());
     }
-
-    public boolean checkUsingCoupon() {
-        return userCouponId != null;
-    }
-
+    
     public int calcDiscount(int originalAmount) {
-        if (!checkUsingCoupon()) {
-            return originalAmount;
-        }
-
         if (couponType.equals(CouponType.Fixed)) {
             return Math.max(originalAmount - value, 0);
         }

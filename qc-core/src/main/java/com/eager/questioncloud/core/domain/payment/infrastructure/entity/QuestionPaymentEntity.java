@@ -53,7 +53,7 @@ public class QuestionPaymentEntity {
         return QuestionPaymentEntity.builder()
             .orderId(questionPayment.getOrder().getOrderId())
             .userId(questionPayment.getUserId())
-            .userCouponId(questionPayment.getQuestionPaymentCoupon().getUserCouponId())
+            .userCouponId(questionPayment.getQuestionPaymentCoupon() != null ? questionPayment.getQuestionPaymentCoupon().getUserCouponId() : null)
             .amount(questionPayment.getAmount())
             .status(questionPayment.getStatus())
             .createdAt(questionPayment.getCreatedAt())

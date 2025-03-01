@@ -16,7 +16,7 @@ public class QuestionPaymentCouponReader {
 
     public QuestionPaymentCoupon getQuestionPaymentCoupon(Long userCouponId, Long userId) {
         if (userCouponId == null) {
-            return QuestionPaymentCoupon.noCoupon();
+            return null;
         }
 
         UserCoupon userCoupon = userCouponRepository.getUserCoupon(userCouponId, userId);

@@ -13,11 +13,11 @@ public class QuestionPaymentCouponProcessor {
     private final UserCouponRepository userCouponRepository;
 
     public void applyCoupon(QuestionPayment questionPayment) {
-        if (!questionPayment.checkUsingCoupon()) {
+        if (!questionPayment.isUsingCoupon()) {
             return;
         }
 
-        questionPayment.useCoupon();
+        questionPayment.applyCoupon();
 
         if (!userCouponRepository.use(questionPayment.getQuestionPaymentCoupon().getUserCouponId())) {
             throw new CoreException(Error.FAIL_USE_COUPON);

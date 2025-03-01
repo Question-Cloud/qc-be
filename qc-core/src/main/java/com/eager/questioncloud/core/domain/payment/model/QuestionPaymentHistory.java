@@ -41,7 +41,7 @@ public class QuestionPaymentHistory {
             .orders(orders)
             .coupon(questionPayment.getQuestionPaymentCoupon())
             .amount(questionPayment.getAmount())
-            .isUsedCoupon(questionPayment.checkUsingCoupon())
+            .isUsedCoupon(questionPayment.isUsingCoupon())
             .status(questionPayment.getStatus())
             .createdAt(questionPayment.getCreatedAt())
             .build();
