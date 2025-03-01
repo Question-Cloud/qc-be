@@ -90,11 +90,7 @@ class QuestionPaymentServiceTest {
             .toList();
 
         // when
-        QuestionPayment questionPayment = questionPaymentService.payment(
-            user.getUid(),
-            QuestionOrder.createOrder(questions),
-            null
-        );
+        QuestionPayment questionPayment = QuestionPayment.create(user.getUid(), null, QuestionOrder.createOrder(questions));
 
         // then
         Assertions.assertThat(questionPayment.getStatus()).isEqualTo(QuestionPaymentStatus.SUCCESS);
