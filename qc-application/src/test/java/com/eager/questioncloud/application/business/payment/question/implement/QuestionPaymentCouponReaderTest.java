@@ -103,6 +103,6 @@ class QuestionPaymentCouponReaderTest {
         QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponReader.getQuestionPaymentCoupon(userCouponId, userId);
 
         // then
-        Assertions.assertThat(questionPaymentCoupon.checkUsingCoupon()).isEqualTo(false);
+        Assertions.assertThat(questionPaymentCoupon).isNull();
     }
 }

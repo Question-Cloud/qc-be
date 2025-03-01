@@ -10,7 +10,6 @@ import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
 import com.eager.questioncloud.core.domain.point.model.UserPoint;
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
@@ -94,7 +93,7 @@ class QuestionPaymentServiceTest {
         QuestionPayment questionPayment = questionPaymentService.payment(
             user.getUid(),
             QuestionOrder.createOrder(questions),
-            QuestionPaymentCoupon.noCoupon()
+            null
         );
 
         // then

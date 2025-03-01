@@ -166,7 +166,7 @@ class QuestionPaymentProcessorTest {
 
         QuestionPayment questionPayment = QuestionPayment.create(
             user.getUid(),
-            QuestionPaymentCoupon.noCoupon(),
+            null,
             QuestionOrder.createOrder(questions)
         );
 
