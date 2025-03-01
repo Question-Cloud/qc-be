@@ -10,15 +10,13 @@ import lombok.Getter;
 
 @Getter
 public class ChargePointPaymentHistory {
-    private final Long id;
     private final String paymentId;
     private String receiptUrl;
     private final ChargePointType chargePointType;
     private LocalDateTime paidAt;
 
     @Builder
-    private ChargePointPaymentHistory(Long id, String paymentId, String receiptUrl, ChargePointType chargePointType, LocalDateTime paidAt) {
-        this.id = id;
+    private ChargePointPaymentHistory(String paymentId, String receiptUrl, ChargePointType chargePointType, LocalDateTime paidAt) {
         this.paymentId = paymentId;
         this.receiptUrl = receiptUrl;
         this.chargePointType = chargePointType;
@@ -33,7 +31,6 @@ public class ChargePointPaymentHistory {
 
     public static ChargePointPaymentHistory from(ChargePointPayment chargePointPayment) {
         return ChargePointPaymentHistory.builder()
-            .id(chargePointPayment.getId())
             .paymentId(chargePointPayment.getPaymentId())
             .receiptUrl(chargePointPayment.getReceiptUrl())
             .chargePointType(chargePointPayment.getChargePointType())

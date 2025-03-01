@@ -65,7 +65,7 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
             .where(chargePointPaymentEntity.userId.eq(userId))
             .offset(pagingInformation.getOffset())
             .limit(pagingInformation.getSize())
-            .orderBy(chargePointPaymentEntity.id.desc())
+            .orderBy(chargePointPaymentEntity.paymentId.desc())
             .fetch()
             .stream()
             .map(ChargePointPaymentEntity::toModel)
@@ -74,7 +74,7 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
 
     @Override
     public int countByUserId(Long userId) {
-        return jpaQueryFactory.select(chargePointPaymentEntity.id.count())
+        return jpaQueryFactory.select(chargePointPaymentEntity.paymentId.count())
             .from(chargePointPaymentEntity)
             .where(chargePointPaymentEntity.userId.eq(userId))
             .fetchFirst()
