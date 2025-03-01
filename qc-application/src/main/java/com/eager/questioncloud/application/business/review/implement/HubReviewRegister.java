@@ -6,9 +6,8 @@ import com.eager.questioncloud.core.domain.review.model.QuestionReview;
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
 import com.eager.questioncloud.core.exception.CoreException;
 import com.eager.questioncloud.core.exception.Error;
-import com.eager.questioncloud.lock.LockKeyGenerator;
-import com.eager.questioncloud.lock.LockManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,27 +16,24 @@ public class HubReviewRegister {
     private final QuestionReviewRepository questionReviewRepository;
     private final QuestionRepository questionRepository;
     private final UserQuestionRepository userQuestionRepository;
-    private final LockManager lockManager;
 
     public void register(QuestionReview questionReview) {
-        lockManager.executeWithLock(
-            LockKeyGenerator.generateRegisterReview(questionReview.getReviewerId(), questionReview.getQuestionId()),
-            () -> {
-                if (isUnAvailableQuestion(questionReview.getQuestionId())) {
-                    throw new CoreException(Error.UNAVAILABLE_QUESTION);
-                }
-
-                if (isNotOwnedQuestion(questionReview.getReviewerId(), questionReview.getQuestionId())) {
-                    throw new CoreException(Error.NOT_OWNED_QUESTION);
-                }
-
-                if (isAlreadyWrittenReview(questionReview.getReviewerId(), questionReview.getQuestionId())) {
-                    throw new CoreException(Error.ALREADY_REGISTER_REVIEW);
-                }
-
-                questionReviewRepository.save(questionReview);
+        try {
+            if (isUnAvailableQuestion(questionReview.getQuestionId())) {
+                throw new CoreException(Error.UNAVAILABLE_QUESTION);
             }
-        );
+
+            if (isNotOwnedQuestion(questionReview.getReviewerId(), questionReview.getQuestionId())) {
+                throw new CoreException(Error.NOT_OWNED_QUESTION);
+            }
+
+            if (isAlreadyWrittenReview(questionReview.getReviewerId(), questionReview.getQuestionId())) {
+                throw new CoreException(Error.ALREADY_REGISTER_REVIEW);
+            }
+            questionReviewRepository.save(questionReview);
+        } catch (DataIntegrityViolationException e) {
+            throw new CoreException(Error.ALREADY_REGISTER_REVIEW);
+        }
     }
 
     private Boolean isUnAvailableQuestion(Long questionId) {
