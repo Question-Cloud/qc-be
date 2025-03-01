@@ -7,7 +7,7 @@ import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.User
 import com.eager.questioncloud.core.domain.coupon.model.Coupon;
 import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.QuestionOrderItem;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrderItem;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;

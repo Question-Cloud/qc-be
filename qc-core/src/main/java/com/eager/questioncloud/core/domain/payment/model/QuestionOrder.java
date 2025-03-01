@@ -1,10 +1,9 @@
 package com.eager.questioncloud.core.domain.payment.model;
 
 import com.eager.questioncloud.core.domain.question.model.Question;
+import io.hypersistence.tsid.TSID;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,7 @@ public class QuestionOrder {
     }
 
     public static QuestionOrder createOrder(List<Question> questions) {
-        String orderId = UUID.randomUUID().toString();
+        String orderId = TSID.Factory.getTsid().toString();
         List<QuestionOrderItem> items = questions
             .stream()
             .map(QuestionOrderItem::create)
@@ -40,18 +39,5 @@ public class QuestionOrder {
             .stream()
             .map(QuestionOrderItem::getQuestionId)
             .collect(Collectors.toList());
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class QuestionOrderItem {
-        private Long id;
-        private Long questionId;
-        private int price;
-
-        public static QuestionOrderItem create(Question question) {
-            return new QuestionOrderItem(null, question.getId(), question.getQuestionContent().getPrice());
-        }
     }
 }
