@@ -1,7 +1,6 @@
 package com.eager.questioncloud.application.business.review.service;
 
 import com.eager.questioncloud.application.business.review.implement.HubReviewRegister;
-import com.eager.questioncloud.application.business.review.implement.HunReviewUpdater;
 import com.eager.questioncloud.core.common.PagingInformation;
 import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class HubReviewService {
     private final QuestionReviewRepository questionReviewRepository;
     private final HubReviewRegister hubReviewRegister;
-    private final HunReviewUpdater questionHubReviewUpdater;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public int getTotal(Long questionId) {
@@ -43,7 +41,8 @@ public class HubReviewService {
 
     public void modify(Long reviewId, Long userId, String comment, int rate) {
         QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
-        int varianceRate = questionHubReviewUpdater.modifyQuestionReview(questionReview, comment, rate);
+        int varianceRate = questionReview.modify(comment, rate);
+        questionReviewRepository.save(questionReview);
         applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
     }
 
