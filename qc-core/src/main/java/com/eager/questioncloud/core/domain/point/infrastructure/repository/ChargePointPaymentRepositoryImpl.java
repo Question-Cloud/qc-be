@@ -51,14 +51,6 @@ public class ChargePointPaymentRepositoryImpl implements ChargePointPaymentRepos
     }
 
     @Override
-    public Boolean existsByPaymentId(String paymentId) {
-        return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
-            .from(chargePointPaymentEntity)
-            .where(chargePointPaymentEntity.paymentId.eq(paymentId))
-            .fetchFirst() != null;
-    }
-
-    @Override
     public List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation) {
         return jpaQueryFactory.select(chargePointPaymentEntity)
             .from(chargePointPaymentEntity)

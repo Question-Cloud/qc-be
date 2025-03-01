@@ -1,7 +1,6 @@
 package com.eager.questioncloud.application.business.payment.point.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 
 import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent;
@@ -10,8 +9,6 @@ import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
 import com.eager.questioncloud.pg.dto.PGPayment;
 import com.eager.questioncloud.pg.implement.PGPaymentProcessor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -67,22 +64,6 @@ class ChargePointPaymentServiceTest {
         assertThat(savedOrder.getUserId()).isEqualTo(userId);
         assertThat(savedOrder.getChargePointType()).isEqualTo(ChargePointType.PackageA);
         assertThat(savedOrder.getChargePointPaymentStatus()).isEqualTo(ChargePointPaymentStatus.ORDERED);
-    }
-
-    @Test
-    @DisplayName("동일한 주문 번호로 포인트 충전 주문을 생성할 수 없다.")
-    void cannotCreateOrderSamePaymentId() {
-        String paymentId1 = RandomStringUtils.randomAlphanumeric(10);
-        Long userId = 1L;
-        ChargePointPayment order1 = ChargePointPayment.order(paymentId1, userId, ChargePointType.PackageA);
-        chargePointPaymentRepository.save(order1);
-
-        ChargePointPayment order2 = ChargePointPayment.order(paymentId1, userId, ChargePointType.PackageA);
-
-        //when then
-        assertThatThrownBy(() -> chargePointPaymentService.createOrder(order2))
-            .isInstanceOf(CoreException.class)
-            .hasFieldOrPropertyWithValue("error", Error.ALREADY_ORDERED);
     }
 
     @Test
