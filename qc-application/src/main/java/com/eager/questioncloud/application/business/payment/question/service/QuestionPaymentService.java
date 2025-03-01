@@ -15,9 +15,10 @@ public class QuestionPaymentService {
     private final QuestionPaymentProcessor questionPaymentProcessor;
     private final ApplicationEventPublisher eventPublisher;
 
-    public void payment(Long userId, QuestionOrder order, QuestionPaymentCoupon questionPaymentCoupon) {
+    public QuestionPayment payment(Long userId, QuestionOrder order, QuestionPaymentCoupon questionPaymentCoupon) {
         QuestionPayment questionPayment = QuestionPayment.create(userId, questionPaymentCoupon, order);
         questionPaymentProcessor.payment(questionPayment);
         eventPublisher.publishEvent(new QuestionPaymentEvent(questionPayment));
+        return questionPayment;
     }
 }
