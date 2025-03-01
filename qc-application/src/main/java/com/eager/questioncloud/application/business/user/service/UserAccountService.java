@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.business.user.service;
 
+import com.eager.questioncloud.application.business.user.implement.UserAccountUpdater;
 import com.eager.questioncloud.application.mail.EmailSender;
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.User;
@@ -9,13 +10,13 @@ import com.eager.questioncloud.core.domain.verification.model.Email;
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserAccountService {
     private final UserRepository userRepository;
     private final EmailVerificationProcessor emailVerificationProcessor;
+    private final UserAccountUpdater userAccountUpdater;
     private final EmailSender emailSender;
 
     public String recoverForgottenEmail(String phone) {
@@ -40,11 +41,8 @@ public class UserAccountService {
         emailSender.sendMail(Email.of(emailVerification));
     }
 
-    @Transactional
     public void changePassword(String token, String newPassword) {
         EmailVerification emailVerification = emailVerificationProcessor.verifyEmailVerification(token, EmailVerificationType.ChangePassword);
-        User user = userRepository.getUser(emailVerification.getUid());
-        user.changePassword(newPassword);
-        userRepository.save(user);
+        userAccountUpdater.changePassword(emailVerification.getUid(), newPassword);
     }
 }
