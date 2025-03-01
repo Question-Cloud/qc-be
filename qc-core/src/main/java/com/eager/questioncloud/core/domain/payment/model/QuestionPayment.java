@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionPayment {
-    private Long id;
     private QuestionOrder order;
     private QuestionPaymentCoupon questionPaymentCoupon;
     private Long userId;
@@ -20,9 +19,8 @@ public class QuestionPayment {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPayment(Long id, QuestionOrder order, Long userId, QuestionPaymentCoupon questionPaymentCoupon, int amount,
+    public QuestionPayment(QuestionOrder order, Long userId, QuestionPaymentCoupon questionPaymentCoupon, int amount,
         QuestionPaymentStatus status, LocalDateTime createdAt) {
-        this.id = id;
         this.order = order;
         this.userId = userId;
         this.questionPaymentCoupon = questionPaymentCoupon;
@@ -52,9 +50,5 @@ public class QuestionPayment {
 
     public void fail() {
         this.status = QuestionPaymentStatus.FAIL;
-    }
-
-    public void success(Long paymentId) {
-        this.id = paymentId;
     }
 }

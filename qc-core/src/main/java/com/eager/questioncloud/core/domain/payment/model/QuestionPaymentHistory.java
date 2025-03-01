@@ -12,7 +12,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class QuestionPaymentHistory {
-    private Long paymentId;
     private String orderId;
     private Long userId;
     private List<QuestionPaymentHistoryOrder> orders;
@@ -37,7 +36,6 @@ public class QuestionPaymentHistory {
             .toList();
 
         return QuestionPaymentHistory.builder()
-            .paymentId(questionPayment.getId())
             .orderId(questionPayment.getOrder().getOrderId())
             .userId(questionPayment.getUserId())
             .orders(orders)

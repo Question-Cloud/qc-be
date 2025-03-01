@@ -17,8 +17,7 @@ public class QuestionPaymentHistoryDocumentReadConverter implements Converter<Do
     @Override
     public QuestionPaymentHistoryDocument convert(Document source) {
         return QuestionPaymentHistoryDocument.builder()
-            .paymentId(source.getLong("_id"))
-            .orderId(source.getString("orderId"))
+            .orderId(source.getString("_id"))
             .userId(source.getLong("userId"))
             .orders(convertOrders(source.getList("orders", Document.class)))
             .coupon(convertCoupon(source))

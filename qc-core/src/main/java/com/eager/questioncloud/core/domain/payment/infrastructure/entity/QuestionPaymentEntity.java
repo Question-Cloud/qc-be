@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -22,10 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionPaymentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
     private String orderId;
 
     @Column
@@ -45,9 +39,8 @@ public class QuestionPaymentEntity {
     private LocalDateTime createdAt;
 
     @Builder
-    public QuestionPaymentEntity(Long id, String orderId, Long userId, Long userCouponId, int amount, QuestionPaymentStatus status,
+    public QuestionPaymentEntity(String orderId, Long userId, Long userCouponId, int amount, QuestionPaymentStatus status,
         LocalDateTime createdAt) {
-        this.id = id;
         this.orderId = orderId;
         this.userId = userId;
         this.userCouponId = userCouponId;
@@ -58,7 +51,6 @@ public class QuestionPaymentEntity {
 
     public static QuestionPaymentEntity from(QuestionPayment questionPayment) {
         return QuestionPaymentEntity.builder()
-            .id(questionPayment.getId())
             .orderId(questionPayment.getOrder().getOrderId())
             .userId(questionPayment.getUserId())
             .userCouponId(questionPayment.getQuestionPaymentCoupon().getUserCouponId())

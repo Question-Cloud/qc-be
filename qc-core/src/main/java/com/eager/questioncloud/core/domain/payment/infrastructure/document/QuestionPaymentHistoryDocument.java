@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class QuestionPaymentHistoryDocument {
     @Id
-    private Long paymentId;
     private String orderId;
     private Long userId;
     private List<QuestionPaymentHistoryOrder> orders;
@@ -28,7 +27,6 @@ public class QuestionPaymentHistoryDocument {
 
     public QuestionPaymentHistory toModel() {
         return QuestionPaymentHistory.builder()
-            .paymentId(paymentId)
             .orderId(orderId)
             .userId(userId)
             .orders(orders)
@@ -43,7 +41,6 @@ public class QuestionPaymentHistoryDocument {
     public static QuestionPaymentHistoryDocument from(QuestionPaymentHistory questionPaymentHistory) {
         return QuestionPaymentHistoryDocument
             .builder()
-            .paymentId(questionPaymentHistory.getPaymentId())
             .orderId(questionPaymentHistory.getOrderId())
             .userId(questionPaymentHistory.getUserId())
             .orders(questionPaymentHistory.getOrders())
