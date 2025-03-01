@@ -14,7 +14,7 @@ public class SubscribeProcessor {
     private final SubscribeRepository subscribeRepository;
     private final CreatorRepository creatorRepository;
 
-    public Subscribe subscribe(Long userId, Long creatorId) {
+    public void subscribe(Long userId, Long creatorId) {
         if (!isActiveCreator(creatorId)) {
             throw new CoreException(Error.NOT_FOUND);
         }
@@ -23,7 +23,7 @@ public class SubscribeProcessor {
             throw new CoreException(Error.ALREADY_SUBSCRIBE_CREATOR);
         }
 
-        return subscribeRepository.save(Subscribe.create(userId, creatorId));
+        subscribeRepository.save(Subscribe.create(userId, creatorId));
     }
 
     public void unSubscribe(Long userId, Long creatorId) {
