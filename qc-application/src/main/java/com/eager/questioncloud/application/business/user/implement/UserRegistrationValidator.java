@@ -1,6 +1,5 @@
 package com.eager.questioncloud.application.business.user.implement;
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
 import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
 import com.eager.questioncloud.core.domain.user.model.UserInformation;
@@ -23,14 +22,10 @@ public class UserRegistrationValidator {
             throw new CoreException(Error.DUPLICATE_PHONE);
         }
 
-        if (isSocialAccount(userAccountInformation)
+        if (userAccountInformation.isSocialAccount()
             &&
             userRepository.checkDuplicateSocialUidAndAccountType(userAccountInformation.getSocialUid(), userAccountInformation.getAccountType())) {
             throw new CoreException(Error.DUPLICATE_SOCIAL_UID);
         }
-    }
-
-    private Boolean isSocialAccount(UserAccountInformation userAccountInformation) {
-        return !userAccountInformation.getAccountType().equals(AccountType.EMAIL);
     }
 }

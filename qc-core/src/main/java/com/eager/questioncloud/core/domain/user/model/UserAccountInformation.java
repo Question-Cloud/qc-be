@@ -49,4 +49,8 @@ public class UserAccountInformation {
         String newEncodedPassword = PasswordProcessor.encode(newRawPassword);
         return new UserAccountInformation(newEncodedPassword, this.socialUid, this.accountType);
     }
+
+    public Boolean isSocialAccount() {
+        return accountType.equals(AccountType.GOOGLE) || accountType.equals(AccountType.KAKAO) || accountType.equals(AccountType.NAVER);
+    }
 }
