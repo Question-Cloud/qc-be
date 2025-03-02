@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.entity.CouponEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.entity.CouponEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface CouponJpaRepository extends JpaRepository<CouponEntity, Long> {
-    Optional<CouponEntity> findByCode(String code);
+interface CouponJpaRepository : JpaRepository<CouponEntity, Long> {
+    fun findByCode(code: String): Optional<CouponEntity>
 }

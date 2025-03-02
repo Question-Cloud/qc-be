@@ -1,17 +1,17 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.coupon.model.Coupon
+import org.springframework.stereotype.Repository
 
 @Repository
-public interface CouponRepository {
-    Coupon findById(Long id);
+interface CouponRepository {
+    fun findById(id: Long): Coupon
 
-    Coupon findByCode(String code);
+    fun findByCode(code: String): Coupon
 
-    Coupon save(Coupon coupon);
+    fun save(coupon: Coupon): Coupon
 
-    Boolean decreaseCount(Long couponId);
+    fun decreaseCount(couponId: Long): Boolean
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }
