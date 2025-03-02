@@ -1,72 +1,70 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity;
-
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity;
-import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity.Companion.from
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity
+import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
+import java.util.stream.Collectors
 
 @Repository
-@RequiredArgsConstructor
-public class CreatorStatisticsRepositoryImpl implements CreatorStatisticsRepository {
-    private final CreatorStatisticsJpaRepository creatorStatisticsJpaRepository;
-    private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public void save(CreatorStatistics creatorStatistics) {
-        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(creatorStatistics));
+class CreatorStatisticsRepositoryImpl(
+    private val creatorStatisticsJpaRepository: CreatorStatisticsJpaRepository,
+    private val jpaQueryFactory: JPAQueryFactory,
+) : CreatorStatisticsRepository {
+    override fun save(creatorStatistics: CreatorStatistics) {
+        creatorStatisticsJpaRepository.save(from(creatorStatistics))
     }
 
-    @Override
-    public void saveAll(List<CreatorStatistics> creatorStatistics) {
+    override fun saveAll(creatorStatistics: List<CreatorStatistics>) {
         creatorStatisticsJpaRepository.saveAll(
-            creatorStatistics.stream().map(CreatorStatisticsEntity::from).collect(Collectors.toList())
-        );
+            creatorStatistics.stream().map { entity: CreatorStatistics -> from(entity) }.collect(Collectors.toList())
+        )
     }
 
-    @Override
-    public CreatorStatistics findByCreatorId(Long creatorId) {
+    override fun findByCreatorId(creatorId: Long): CreatorStatistics {
         return creatorStatisticsJpaRepository.findByCreatorId(creatorId)
-            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
-            .toModel();
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
     }
 
-    @Override
     @Transactional
-    public void addSalesCount(Long creatorId, int count) {
+    override fun addSalesCount(creatorId: Long, count: Int) {
         jpaQueryFactory.update(creatorStatisticsEntity)
-            .set(creatorStatisticsEntity.salesCount, creatorStatisticsEntity.salesCount.add(count))
+            .set(
+                creatorStatisticsEntity.salesCount,
+                creatorStatisticsEntity.salesCount.add(count)
+            )
             .where(creatorStatisticsEntity.creatorId.eq(creatorId))
-            .execute();
+            .execute()
     }
 
-    @Override
     @Transactional
-    public void increaseSubscribeCount(Long creatorId) {
+    override fun increaseSubscribeCount(creatorId: Long) {
         jpaQueryFactory.update(creatorStatisticsEntity)
-            .set(creatorStatisticsEntity.subscribeCount, creatorStatisticsEntity.subscribeCount.add(1))
+            .set(
+                creatorStatisticsEntity.subscribeCount,
+                creatorStatisticsEntity.subscribeCount.add(1)
+            )
             .where(creatorStatisticsEntity.creatorId.eq(creatorId))
-            .execute();
+            .execute()
     }
 
-    @Override
     @Transactional
-    public void decreaseSubscribeCount(Long creatorId) {
+    override fun decreaseSubscribeCount(creatorId: Long) {
         jpaQueryFactory.update(creatorStatisticsEntity)
-            .set(creatorStatisticsEntity.subscribeCount, creatorStatisticsEntity.subscribeCount.subtract(1))
+            .set(
+                creatorStatisticsEntity.subscribeCount,
+                creatorStatisticsEntity.subscribeCount.subtract(1)
+            )
             .where(creatorStatisticsEntity.creatorId.eq(creatorId))
-            .execute();
+            .execute()
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        creatorStatisticsJpaRepository.deleteAllInBatch();
+    override fun deleteAllInBatch() {
+        creatorStatisticsJpaRepository.deleteAllInBatch()
     }
 }

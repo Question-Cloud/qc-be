@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface CreatorStatisticsJpaRepository extends JpaRepository<CreatorStatisticsEntity, Long> {
-    Optional<CreatorStatisticsEntity> findByCreatorId(Long creatorId);
+interface CreatorStatisticsJpaRepository : JpaRepository<CreatorStatisticsEntity, Long> {
+    fun findByCreatorId(creatorId: Long): Optional<CreatorStatisticsEntity>
 }

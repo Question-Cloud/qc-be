@@ -1,20 +1,19 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import java.util.List;
+import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
 
-public interface CreatorStatisticsRepository {
-    void save(CreatorStatistics creatorStatistics);
+interface CreatorStatisticsRepository {
+    fun save(creatorStatistics: CreatorStatistics)
 
-    void saveAll(List<CreatorStatistics> creatorStatistics);
+    fun saveAll(creatorStatistics: List<CreatorStatistics>)
 
-    CreatorStatistics findByCreatorId(Long creatorId);
+    fun findByCreatorId(creatorId: Long): CreatorStatistics
 
-    void addSalesCount(Long creatorId, int count);
+    fun addSalesCount(creatorId: Long, count: Int)
 
-    void increaseSubscribeCount(Long creatorId);
+    fun increaseSubscribeCount(creatorId: Long)
 
-    void decreaseSubscribeCount(Long creatorId);
+    fun decreaseSubscribeCount(creatorId: Long)
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }
