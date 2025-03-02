@@ -1,14 +1,14 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
-import com.eager.questioncloud.core.domain.creator.model.Creator;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
+import com.eager.questioncloud.core.domain.creator.model.Creator
 
-public interface CreatorRepository {
-    Boolean existsById(Long creatorId);
+interface CreatorRepository {
+    fun existsById(creatorId: Long): Boolean
 
-    CreatorInformation getCreatorInformation(Long creatorId);
+    fun getCreatorInformation(creatorId: Long): CreatorInformation
 
-    Creator save(Creator creator);
+    fun save(creator: Creator): Creator
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

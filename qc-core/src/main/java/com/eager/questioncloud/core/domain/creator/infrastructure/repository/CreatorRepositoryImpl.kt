@@ -1,34 +1,31 @@
-package com.eager.questioncloud.core.domain.creator.infrastructure.repository;
+package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
-
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity;
-import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity.Companion.from
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity
+import com.eager.questioncloud.core.domain.creator.model.Creator
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.querydsl.core.types.Projections
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
-public class CreatorRepositoryImpl implements CreatorRepository {
-    private final CreatorJpaRepository creatorJpaRepository;
-    private final JPAQueryFactory jpaQueryFactory;
+class CreatorRepositoryImpl(
+    private val creatorJpaRepository: CreatorJpaRepository,
+    private val jpaQueryFactory: JPAQueryFactory
+) : CreatorRepository {
 
-    @Override
-    public Boolean existsById(Long creatorId) {
-        return creatorJpaRepository.existsById(creatorId);
+    override fun existsById(creatorId: Long): Boolean {
+        return creatorJpaRepository.existsById(creatorId)
     }
 
-    @Override
-    public CreatorInformation getCreatorInformation(Long creatorId) {
-        CreatorInformation creatorInformation = jpaQueryFactory.select(Projections.constructor(
-                CreatorInformation.class,
+    override fun getCreatorInformation(creatorId: Long): CreatorInformation {
+        val creatorInformation = jpaQueryFactory.select(
+            Projections.constructor(
+                CreatorInformation::class.java,
                 creatorEntity.id,
                 userEntity.userInformationEntity.name,
                 userEntity.userInformationEntity.profileImage,
@@ -36,27 +33,27 @@ public class CreatorRepositoryImpl implements CreatorRepository {
                 userEntity.userInformationEntity.email,
                 creatorStatisticsEntity.salesCount,
                 creatorStatisticsEntity.averageRateOfReview,
-                creatorEntity.creatorProfileEntity.introduction))
+                creatorEntity.creatorProfileEntity.introduction
+            )
+        )
             .from(creatorEntity)
             .where(creatorEntity.id.eq(creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
-            .fetchFirst();
+            .fetchFirst()
 
         if (creatorInformation == null) {
-            throw new CoreException(Error.NOT_FOUND);
+            throw CoreException(Error.NOT_FOUND)
         }
 
-        return creatorInformation;
+        return creatorInformation
     }
 
-    @Override
-    public Creator save(Creator creator) {
-        return creatorJpaRepository.save(CreatorEntity.from(creator)).toModel();
+    override fun save(creator: Creator): Creator {
+        return creatorJpaRepository.save(from(creator)).toModel()
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        creatorJpaRepository.deleteAllInBatch();
+    override fun deleteAllInBatch() {
+        creatorJpaRepository.deleteAllInBatch()
     }
 }
