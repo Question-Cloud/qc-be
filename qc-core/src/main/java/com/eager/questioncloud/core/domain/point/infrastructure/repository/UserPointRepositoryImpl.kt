@@ -1,54 +1,50 @@
-package com.eager.questioncloud.core.domain.point.infrastructure.repository;
+package com.eager.questioncloud.core.domain.point.infrastructure.repository
 
-import static com.eager.questioncloud.core.domain.point.infrastructure.entity.QUserPointEntity.userPointEntity;
-
-import com.eager.questioncloud.core.domain.point.infrastructure.entity.UserPointEntity;
-import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.eager.questioncloud.core.domain.point.infrastructure.entity.QUserPointEntity.userPointEntity
+import com.eager.questioncloud.core.domain.point.infrastructure.entity.UserPointEntity.Companion.from
+import com.eager.questioncloud.core.domain.point.model.UserPoint
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@RequiredArgsConstructor
-public class UserPointRepositoryImpl implements UserPointRepository {
-    private final UserPointJpaRepository userPointJpaRepository;
-    private final JPAQueryFactory jpaQueryFactory;
+class UserPointRepositoryImpl(
+    private val userPointJpaRepository: UserPointJpaRepository,
+    private val jpaQueryFactory: JPAQueryFactory,
+) : UserPointRepository {
 
-    @Override
-    public UserPoint getUserPoint(Long userId) {
+    override fun getUserPoint(userId: Long): UserPoint {
         return userPointJpaRepository.findById(userId)
-            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
-            .toModel();
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
     }
 
-    @Override
     @Transactional
-    public Boolean usePoint(Long userId, int amount) {
+    override fun usePoint(userId: Long, amount: Int): Boolean {
         return jpaQueryFactory.update(userPointEntity)
             .set(userPointEntity.point, userPointEntity.point.subtract(amount))
-            .where(userPointEntity.userId.eq(userId), userPointEntity.point.goe(amount))
-            .execute() == 1;
+            .where(
+                userPointEntity.userId.eq(userId),
+                userPointEntity.point.goe(amount)
+            )
+            .execute() == 1L
     }
 
-    @Override
     @Transactional
-    public void chargePoint(Long userId, int amount) {
+    override fun chargePoint(userId: Long, amount: Int) {
         jpaQueryFactory.update(userPointEntity)
             .set(userPointEntity.point, userPointEntity.point.add(amount))
             .where(userPointEntity.userId.eq(userId))
-            .execute();
+            .execute()
     }
 
-    @Override
-    public UserPoint save(UserPoint userPoint) {
-        return userPointJpaRepository.save(UserPointEntity.from(userPoint)).toModel();
+    override fun save(userPoint: UserPoint): UserPoint {
+        return userPointJpaRepository.save(from(userPoint)).toModel()
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        userPointJpaRepository.deleteAllInBatch();
+    override fun deleteAllInBatch() {
+        userPointJpaRepository.deleteAllInBatch()
     }
 }

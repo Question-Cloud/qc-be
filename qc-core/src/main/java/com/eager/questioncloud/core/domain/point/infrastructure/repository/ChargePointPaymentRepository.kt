@@ -1,21 +1,20 @@
-package com.eager.questioncloud.core.domain.point.infrastructure.repository;
+package com.eager.questioncloud.core.domain.point.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 
-public interface ChargePointPaymentRepository {
-    ChargePointPayment save(ChargePointPayment chargePointPayment);
+interface ChargePointPaymentRepository {
+    fun save(chargePointPayment: ChargePointPayment): ChargePointPayment
 
-    Boolean isCompletedPayment(Long userId, String paymentId);
+    fun isCompletedPayment(userId: Long, paymentId: String): Boolean
 
-    ChargePointPayment findByPaymentId(String paymentId);
+    fun findByPaymentId(paymentId: String): ChargePointPayment?
 
-    ChargePointPayment findByPaymentIdWithLock(String userId);
+    fun findByPaymentIdWithLock(paymentId: String): ChargePointPayment
 
-    List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation);
+    fun getChargePointPayments(userId: Long, pagingInformation: PagingInformation): List<ChargePointPayment>
 
-    int countByUserId(Long userId);
+    fun countByUserId(userId: Long): Int
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

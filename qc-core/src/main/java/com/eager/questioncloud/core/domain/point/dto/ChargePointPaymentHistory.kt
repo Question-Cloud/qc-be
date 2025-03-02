@@ -1,40 +1,32 @@
-package com.eager.questioncloud.core.domain.point.dto;
+package com.eager.questioncloud.core.domain.point.dto
 
-import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Builder;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
+import java.time.LocalDateTime
+import java.util.stream.Collectors
 
-@Getter
-public class ChargePointPaymentHistory {
-    private final String paymentId;
-    private String receiptUrl;
-    private final ChargePointType chargePointType;
-    private LocalDateTime paidAt;
+class ChargePointPaymentHistory(
+    val paymentId: String,
+    val receiptUrl: String?,
+    val chargePointType: ChargePointType,
+    val paidAt: LocalDateTime?
+) {
+    companion object {
+        @JvmStatic
+        fun from(chargePointPayments: List<ChargePointPayment>): List<ChargePointPaymentHistory> {
+            return chargePointPayments.stream()
+                .map { chargePointPayment -> from(chargePointPayment) }
+                .collect(Collectors.toList())
+        }
 
-    @Builder
-    private ChargePointPaymentHistory(String paymentId, String receiptUrl, ChargePointType chargePointType, LocalDateTime paidAt) {
-        this.paymentId = paymentId;
-        this.receiptUrl = receiptUrl;
-        this.chargePointType = chargePointType;
-        this.paidAt = paidAt;
-    }
-
-    public static List<ChargePointPaymentHistory> from(List<ChargePointPayment> chargePointPayments) {
-        return chargePointPayments.stream()
-            .map(ChargePointPaymentHistory::from)
-            .collect(Collectors.toList());
-    }
-
-    public static ChargePointPaymentHistory from(ChargePointPayment chargePointPayment) {
-        return ChargePointPaymentHistory.builder()
-            .paymentId(chargePointPayment.getPaymentId())
-            .receiptUrl(chargePointPayment.getReceiptUrl())
-            .chargePointType(chargePointPayment.getChargePointType())
-            .paidAt(chargePointPayment.getPaidAt())
-            .build();
+        @JvmStatic
+        fun from(chargePointPayment: ChargePointPayment): ChargePointPaymentHistory {
+            return ChargePointPaymentHistory(
+                chargePointPayment.paymentId,
+                chargePointPayment.receiptUrl,
+                chargePointPayment.chargePointType,
+                chargePointPayment.paidAt
+            )
+        }
     }
 }

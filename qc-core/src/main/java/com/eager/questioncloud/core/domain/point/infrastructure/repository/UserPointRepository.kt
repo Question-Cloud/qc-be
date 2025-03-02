@@ -1,17 +1,17 @@
-package com.eager.questioncloud.core.domain.point.infrastructure.repository;
+package com.eager.questioncloud.core.domain.point.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.point.model.UserPoint
+import org.springframework.stereotype.Repository
 
 @Repository
-public interface UserPointRepository {
-    UserPoint getUserPoint(Long userId);
+interface UserPointRepository {
+    fun getUserPoint(userId: Long): UserPoint
 
-    Boolean usePoint(Long userId, int amount);
+    fun usePoint(userId: Long, amount: Int): Boolean
 
-    void chargePoint(Long userId, int amount);
+    fun chargePoint(userId: Long, amount: Int)
 
-    UserPoint save(UserPoint userPoint);
+    fun save(userPoint: UserPoint): UserPoint
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }
