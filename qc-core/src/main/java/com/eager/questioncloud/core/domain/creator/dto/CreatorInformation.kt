@@ -1,18 +1,15 @@
-package com.eager.questioncloud.core.domain.creator.dto;
+package com.eager.questioncloud.core.domain.creator.dto
 
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.question.enums.Subject
 
-@Getter
-@AllArgsConstructor
-public class CreatorInformation {
-    private Long creatorId;
-    private String name;
-    private String profileImage;
-    private Subject mainSubject;
-    private String email;
-    private int salesCount;
-    private Double rate;
-    private String introduction;
+class CreatorInformation(
+    val creatorId: Long,
+    val name: String,
+    val profileImage: String,
+    val mainSubject: Subject,
+    val email: String,
+    val salesCount: Int,
+    val rate: Double,
+    val introduction: String,
+) {
 }
