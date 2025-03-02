@@ -1,9 +1,8 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
+package com.eager.questioncloud.core.domain.cart.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.cart.infrastructure.entity.CartItemEntity;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.cart.infrastructure.entity.CartItemEntity
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface CartItemJpaRepository extends JpaRepository<CartItemEntity, Long> {
-    void deleteByIdInAndUserId(List<Long> id, Long userId);
+interface CartItemJpaRepository : JpaRepository<CartItemEntity, Long> {
+    fun deleteByIdInAndUserId(id: List<Long>, userId: Long)
 }

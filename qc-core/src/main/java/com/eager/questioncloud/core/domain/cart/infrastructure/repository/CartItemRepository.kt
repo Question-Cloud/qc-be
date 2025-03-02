@@ -1,15 +1,14 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure.repository;
+package com.eager.questioncloud.core.domain.cart.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
-import com.eager.questioncloud.core.domain.cart.model.CartItem;
-import java.util.List;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail
+import com.eager.questioncloud.core.domain.cart.model.CartItem
 
-public interface CartItemRepository {
-    CartItem save(CartItem cartItem);
+interface CartItemRepository {
+    fun save(cartItem: CartItem): CartItem
 
-    List<CartItemDetail> findByUserId(Long userId);
+    fun findByUserId(userId: Long): List<CartItemDetail>
 
-    void deleteByIdInAndUserId(List<Long> ids, Long userId);
+    fun deleteByIdInAndUserId(ids: List<Long>, userId: Long)
 
-    Boolean isExistsInCart(Long userId, Long questionId);
+    fun isExistsInCart(userId: Long, questionId: Long): Boolean
 }
