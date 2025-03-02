@@ -1,13 +1,13 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.entity.UserCouponEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.entity.UserCouponEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
-public interface UserCouponJpaRepository extends JpaRepository<UserCouponEntity, Long> {
-    Boolean existsByUserIdAndCouponId(Long userId, Long couponId);
+interface UserCouponJpaRepository : JpaRepository<UserCouponEntity, Long> {
+    fun existsByUserIdAndCouponId(userId: Long, couponId: Long): Boolean
 
-    Optional<UserCouponEntity> findByIdAndUserIdAndIsUsedFalse(Long id, Long userId);
+    fun findByIdAndUserIdAndIsUsedFalse(id: Long, userId: Long): Optional<UserCouponEntity>
 }

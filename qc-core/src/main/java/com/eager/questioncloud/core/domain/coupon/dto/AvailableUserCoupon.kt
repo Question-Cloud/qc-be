@@ -1,16 +1,14 @@
-package com.eager.questioncloud.core.domain.coupon.dto;
+package com.eager.questioncloud.core.domain.coupon.dto
 
-import com.eager.questioncloud.core.domain.coupon.enums.CouponType;
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.coupon.enums.CouponType
+import java.time.LocalDateTime
 
-@Getter
-@AllArgsConstructor
-public class AvailableUserCoupon {
-    private Long id;
-    private String title;
-    private CouponType couponType;
-    private int value;
-    private LocalDateTime endAt;
+class AvailableUserCoupon(
+    val id: Long,
+    val title: String,
+    val couponType: CouponType,
+    val value: Int,
+    val endAt: LocalDateTime
+) {
+
 }

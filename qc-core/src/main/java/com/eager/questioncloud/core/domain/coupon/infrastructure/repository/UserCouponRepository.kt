@@ -1,21 +1,20 @@
-package com.eager.questioncloud.core.domain.coupon.infrastructure.repository;
+package com.eager.questioncloud.core.domain.coupon.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon;
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import java.util.List;
+import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon
 
-public interface UserCouponRepository {
-    UserCoupon getUserCoupon(Long userCouponId, Long userId);
+interface UserCouponRepository {
+    fun getUserCoupon(userCouponId: Long, userId: Long): UserCoupon
 
-    UserCoupon getUserCoupon(Long userCouponId);
+    fun getUserCoupon(userCouponId: Long): UserCoupon
 
-    Boolean isRegistered(Long userId, Long couponId);
+    fun isRegistered(userId: Long, couponId: Long): Boolean
 
-    UserCoupon save(UserCoupon userCoupon);
+    fun save(userCoupon: UserCoupon): UserCoupon
 
-    List<AvailableUserCoupon> getAvailableUserCoupons(Long userId);
+    fun getAvailableUserCoupons(userId: Long): List<AvailableUserCoupon>
 
-    Boolean use(Long userCouponId);
+    fun use(userCouponId: Long): Boolean
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }
