@@ -1,34 +1,30 @@
-package com.eager.questioncloud.core.domain.user.infrastructure.entity;
+package com.eager.questioncloud.core.domain.user.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import com.eager.questioncloud.core.domain.user.model.UserAccountInformation
+import jakarta.persistence.Embeddable
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 
-@Getter
 @Embeddable
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserAccountInformationEntity {
-    private String password;
-
-    private String socialUid;
-
+class UserAccountInformationEntity private constructor(
+    private var password: String? = null,
+    private var socialUid: String? = null,
     @Enumerated(EnumType.STRING)
-    private AccountType accountType;
-
-    public static UserAccountInformationEntity from(UserAccountInformation userAccountInformation) {
-        return new UserAccountInformationEntity(
-            userAccountInformation.getPassword(),
-            userAccountInformation.getSocialUid(),
-            userAccountInformation.getAccountType());
+    private var accountType: AccountType
+) {
+    fun toModel(): UserAccountInformation {
+        return UserAccountInformation(password, socialUid, accountType)
     }
 
-    public UserAccountInformation toModel() {
-        return new UserAccountInformation(password, socialUid, accountType);
+    companion object {
+        @JvmStatic
+        fun from(userAccountInformation: UserAccountInformation): UserAccountInformationEntity {
+            return UserAccountInformationEntity(
+                userAccountInformation.password,
+                userAccountInformation.socialUid,
+                userAccountInformation.accountType
+            )
+        }
     }
 }

@@ -1,58 +1,19 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.entity;
+package com.eager.questioncloud.core.domain.question.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import com.eager.questioncloud.core.domain.question.model.QuestionCategory;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.question.enums.Subject
+import com.eager.questioncloud.core.domain.question.model.QuestionCategory
+import jakarta.persistence.*
 
-@Getter
 @Entity
 @Table(name = "question_category")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionCategoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private Long parentId;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Subject subject;
-
-    @Column
-    private String title;
-
-    @Column
-    private Boolean isParent;
-
-    @Builder
-    public QuestionCategoryEntity(Long id, Long parentId, Subject subject, String title, Boolean isParent) {
-        this.id = id;
-        this.parentId = parentId;
-        this.subject = subject;
-        this.title = title;
-        this.isParent = isParent;
-    }
-
-    public QuestionCategory toModel() {
-        return QuestionCategory.builder()
-            .id(id)
-            .parentId(parentId)
-            .subject(subject)
-            .title(title)
-            .isParent(isParent)
-            .build();
+class QuestionCategoryEntity private constructor(
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @Column var parentId: Long,
+    @Enumerated(EnumType.STRING) @Column var subject: Subject,
+    @Column var title: String,
+    @Column var isParent: Boolean
+) {
+    fun toModel(): QuestionCategory {
+        return QuestionCategory(id, parentId, subject, title, isParent)
     }
 }

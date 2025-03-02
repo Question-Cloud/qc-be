@@ -1,49 +1,35 @@
-package com.eager.questioncloud.core.domain.review.model;
+package com.eager.questioncloud.core.domain.review.model
 
-import lombok.Builder;
-import lombok.Getter;
-
-@Getter
-public class QuestionReviewStatistics {
-    private Long questionId;
-    private int reviewCount;
-    private int totalRate;
-    private double averageRate;
-
-    @Builder
-    public QuestionReviewStatistics(Long questionId, int reviewCount, int totalRate, double averageRate) {
-        this.questionId = questionId;
-        this.reviewCount = reviewCount;
-        this.totalRate = totalRate;
-        this.averageRate = averageRate;
+class QuestionReviewStatistics(
+    val questionId: Long,
+    var reviewCount: Int = 0,
+    var totalRate: Int = 0,
+    var averageRate: Double = 0.0,
+) {
+    fun updateByNewReview(newRate: Int) {
+        this.reviewCount += 1
+        this.totalRate += newRate
+        val value = totalRate.toDouble() / reviewCount.toDouble()
+        this.averageRate = Math.round(value * 10.0) / 10.0
     }
 
-    public static QuestionReviewStatistics create(Long questionId) {
-        return QuestionReviewStatistics.builder()
-            .questionId(questionId)
-            .reviewCount(0)
-            .totalRate(0)
-            .averageRate(0.0)
-            .build();
+    fun updateByModifyReview(fluctuationRate: Int) {
+        this.totalRate += fluctuationRate
+        val value = totalRate.toDouble() / reviewCount.toDouble()
+        this.averageRate = Math.round(value * 10.0) / 10.0
     }
 
-    public void updateByNewReview(int newRate) {
-        this.reviewCount = this.reviewCount + 1;
-        this.totalRate = this.totalRate + newRate;
-        double value = (double) totalRate / (double) reviewCount;
-        this.averageRate = Math.round(value * 10.0) / 10.0;
+    fun updateByDeleteReview(rate: Int) {
+        this.reviewCount -= 1
+        this.totalRate -= rate
+        val value = totalRate.toDouble() / reviewCount.toDouble()
+        this.averageRate = Math.round(value * 10.0) / 10.0
     }
 
-    public void updateByModifyReview(int fluctuationRate) {
-        this.totalRate = this.totalRate + fluctuationRate;
-        double value = (double) totalRate / (double) reviewCount;
-        this.averageRate = Math.round(value * 10.0) / 10.0;
-    }
-
-    public void updateByDeleteReview(int rate) {
-        this.reviewCount = this.reviewCount - 1;
-        this.totalRate = this.totalRate - rate;
-        double value = (double) totalRate / (double) reviewCount;
-        this.averageRate = Math.round(value * 10.0) / 10.0;
+    companion object {
+        @JvmStatic
+        fun create(questionId: Long): QuestionReviewStatistics {
+            return QuestionReviewStatistics(questionId = questionId)
+        }
     }
 }

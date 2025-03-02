@@ -1,65 +1,32 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.entity;
+package com.eager.questioncloud.core.domain.post.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.post.model.PostComment;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.post.model.PostComment
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
-@Getter
 @Entity
 @Table(name = "post_comment")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostCommentEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private Long postId;
-
-    @Column
-    private Long writerId;
-
-    @Column
-    private String comment;
-
-    @Column
-    private LocalDateTime createdAt;
-
-    @Builder
-    public PostCommentEntity(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
-        this.id = id;
-        this.postId = postId;
-        this.writerId = writerId;
-        this.comment = comment;
-        this.createdAt = createdAt;
+class PostCommentEntity private constructor(
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @Column var postId: Long,
+    @Column var writerId: Long,
+    @Column var comment: String,
+    @Column var createdAt: LocalDateTime
+) {
+    fun toModel(): PostComment {
+        return PostComment(id, postId, writerId, comment, createdAt)
     }
 
-    public static PostCommentEntity from(PostComment postComment) {
-        return PostCommentEntity.builder()
-            .id(postComment.getId())
-            .postId(postComment.getPostId())
-            .writerId(postComment.getWriterId())
-            .comment(postComment.getComment())
-            .createdAt(postComment.getCreatedAt())
-            .build();
-    }
-
-    public PostComment toModel() {
-        return PostComment.builder()
-            .id(id)
-            .postId(postId)
-            .writerId(writerId)
-            .comment(comment)
-            .createdAt(createdAt)
-            .build();
+    companion object {
+        @JvmStatic
+        fun from(postComment: PostComment): PostCommentEntity {
+            return PostCommentEntity(
+                postComment.id,
+                postComment.postId,
+                postComment.writerId,
+                postComment.comment,
+                postComment.createdAt
+            )
+        }
     }
 }

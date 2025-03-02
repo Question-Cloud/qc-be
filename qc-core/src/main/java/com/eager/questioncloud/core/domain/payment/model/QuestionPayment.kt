@@ -1,54 +1,40 @@
-package com.eager.questioncloud.core.domain.payment.model;
+package com.eager.questioncloud.core.domain.payment.model
 
-import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
+import java.time.LocalDateTime
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class QuestionPayment {
-    private QuestionOrder order;
-    private QuestionPaymentCoupon questionPaymentCoupon;
-    private Long userId;
-    private int amount;
-    private QuestionPaymentStatus status;
-    private LocalDateTime createdAt;
+class QuestionPayment(
+    var order: QuestionOrder,
+    var userId: Long,
+    var questionPaymentCoupon: QuestionPaymentCoupon?,
+    var amount: Int,
+    var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+) {
+    val isUsingCoupon: Boolean
+        get() = questionPaymentCoupon != null
 
-    @Builder
-    public QuestionPayment(QuestionOrder order, Long userId, QuestionPaymentCoupon questionPaymentCoupon, int amount,
-        QuestionPaymentStatus status, LocalDateTime createdAt) {
-        this.order = order;
-        this.userId = userId;
-        this.questionPaymentCoupon = questionPaymentCoupon;
-        this.amount = amount;
-        this.status = status;
-        this.createdAt = createdAt;
+    fun applyCoupon() {
+        amount = questionPaymentCoupon!!.calcDiscount(amount)
     }
 
-    public static QuestionPayment create(Long userId, QuestionPaymentCoupon questionPaymentCoupon, QuestionOrder order) {
-        return QuestionPayment.builder()
-            .order(order)
-            .userId(userId)
-            .questionPaymentCoupon(questionPaymentCoupon)
-            .amount(order.calcAmount())
-            .status(QuestionPaymentStatus.SUCCESS)
-            .createdAt(LocalDateTime.now())
-            .build();
+    fun fail() {
+        this.status = QuestionPaymentStatus.FAIL
     }
 
-    public boolean isUsingCoupon() {
-        return questionPaymentCoupon != null;
-    }
-
-    public void applyCoupon() {
-        amount = questionPaymentCoupon.calcDiscount(amount);
-    }
-
-    public void fail() {
-        this.status = QuestionPaymentStatus.FAIL;
+    companion object {
+        @JvmStatic
+        fun create(
+            userId: Long,
+            questionPaymentCoupon: QuestionPaymentCoupon?,
+            order: QuestionOrder
+        ): QuestionPayment {
+            return QuestionPayment(
+                order = order,
+                userId = userId,
+                questionPaymentCoupon = questionPaymentCoupon,
+                amount = order.calcAmount(),
+            )
+        }
     }
 }

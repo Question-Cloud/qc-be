@@ -1,70 +1,60 @@
-package com.eager.questioncloud.core.domain.point.model;
+package com.eager.questioncloud.core.domain.point.model
 
-import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus;
-import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.eager.questioncloud.core.exception.InvalidPaymentException;
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.core.exception.InvalidPaymentException
+import java.time.LocalDateTime
 
-@Getter
-public class ChargePointPayment {
-    private final String paymentId;
-    private final Long userId;
-    private String receiptUrl;
-    private final ChargePointType chargePointType;
-    private ChargePointPaymentStatus chargePointPaymentStatus;
-    private final LocalDateTime createdAt;
-    private LocalDateTime paidAt;
-
-    @Builder
-    public ChargePointPayment(String paymentId, Long userId, String receiptUrl, ChargePointType chargePointType,
-        ChargePointPaymentStatus chargePointPaymentStatus, LocalDateTime createdAt, LocalDateTime paidAt) {
-        this.paymentId = paymentId;
-        this.userId = userId;
-        this.receiptUrl = receiptUrl;
-        this.chargePointType = chargePointType;
-        this.chargePointPaymentStatus = chargePointPaymentStatus;
-        this.createdAt = createdAt;
-        this.paidAt = paidAt;
+class ChargePointPayment(
+    val paymentId: String,
+    val userId: Long,
+    var receiptUrl: String? = null,
+    val chargePointType: ChargePointType,
+    var chargePointPaymentStatus: ChargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var paidAt: LocalDateTime? = null,
+) {
+    fun approve(receiptUrl: String) {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID
+        this.receiptUrl = receiptUrl
+        this.paidAt = LocalDateTime.now()
     }
 
-    public static ChargePointPayment order(String paymentId, Long userId, ChargePointType chargePointType) {
-        return ChargePointPayment.builder()
-            .paymentId(paymentId)
-            .userId(userId)
-            .chargePointType(chargePointType)
-            .chargePointPaymentStatus(ChargePointPaymentStatus.ORDERED)
-            .createdAt(LocalDateTime.now())
-            .build();
+    fun fail() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail
     }
 
-    public void approve(String receiptUrl) {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID;
-        this.receiptUrl = receiptUrl;
-        this.paidAt = LocalDateTime.now();
+    fun validatePayment(paidAmount: Int) {
+        validateStatus()
+        validateAmount(paidAmount)
     }
 
-    public void fail() {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail;
-    }
-
-    public void validatePayment(int paidAmount) {
-        validateStatus();
-        validateAmount(paidAmount);
-    }
-
-    private void validateAmount(int paidAmount) {
-        if (chargePointType.getAmount() != paidAmount) {
-            throw new InvalidPaymentException();
+    private fun validateAmount(paidAmount: Int) {
+        if (chargePointType.amount != paidAmount) {
+            throw InvalidPaymentException()
         }
     }
 
-    private void validateStatus() {
-        if (!chargePointPaymentStatus.equals(ChargePointPaymentStatus.ORDERED)) {
-            throw new CoreException(Error.ALREADY_PROCESSED_PAYMENT);
+    private fun validateStatus() {
+        if (chargePointPaymentStatus != ChargePointPaymentStatus.ORDERED) {
+            throw CoreException(Error.ALREADY_PROCESSED_PAYMENT)
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun order(
+            paymentId: String,
+            userId: Long,
+            chargePointType: ChargePointType
+        ): ChargePointPayment {
+            return ChargePointPayment(
+                paymentId = paymentId,
+                userId = userId,
+                chargePointType = chargePointType
+            )
         }
     }
 }

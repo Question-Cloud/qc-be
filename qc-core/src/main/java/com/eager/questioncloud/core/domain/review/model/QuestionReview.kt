@@ -1,51 +1,43 @@
-package com.eager.questioncloud.core.domain.review.model;
+package com.eager.questioncloud.core.domain.review.model
 
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime
 
-@Getter
-public class QuestionReview {
-    private Long id;
-    private Long questionId;
-    private Long reviewerId;
-    private String comment;
-    private int rate;
-    private LocalDateTime createdAt;
-    private Boolean isDeleted;
+class QuestionReview(
+    val id: Long? = null,
+    val questionId: Long,
+    val reviewerId: Long,
+    var comment: String,
+    var rate: Int,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    var isDeleted: Boolean = false,
+) {
+    fun modify(comment: String, newRate: Int): Int {
+        val beforeRate = this.rate
 
-    @Builder
-    public QuestionReview(Long id, Long questionId, Long reviewerId, String comment, int rate, LocalDateTime createdAt, Boolean isDeleted) {
-        this.id = id;
-        this.questionId = questionId;
-        this.reviewerId = reviewerId;
-        this.comment = comment;
-        this.rate = rate;
-        this.createdAt = createdAt;
-        this.isDeleted = isDeleted;
+        this.comment = comment
+        this.rate = newRate
+
+        return newRate - beforeRate
     }
 
-    public int modify(String comment, int newRate) {
-        int beforeRate = this.rate;
-
-        this.comment = comment;
-        this.rate = newRate;
-
-        return newRate - beforeRate;
+    fun delete() {
+        this.isDeleted = true
     }
 
-    public void delete() {
-        this.isDeleted = true;
-    }
-
-    public static QuestionReview create(Long questionId, Long reviewerId, String comment, int rate) {
-        return QuestionReview.builder()
-            .questionId(questionId)
-            .reviewerId(reviewerId)
-            .comment(comment)
-            .rate(rate)
-            .createdAt(LocalDateTime.now())
-            .isDeleted(false)
-            .build();
+    companion object {
+        @JvmStatic
+        fun create(
+            questionId: Long,
+            reviewerId: Long,
+            comment: String,
+            rate: Int
+        ): QuestionReview {
+            return QuestionReview(
+                questionId = questionId,
+                reviewerId = reviewerId,
+                comment = comment,
+                rate = rate
+            )
+        }
     }
 }

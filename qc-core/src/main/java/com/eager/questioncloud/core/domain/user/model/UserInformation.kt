@@ -1,30 +1,28 @@
-package com.eager.questioncloud.core.domain.user.model;
+package com.eager.questioncloud.core.domain.user.model
 
-import com.eager.questioncloud.core.domain.user.dto.CreateUser;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.user.dto.CreateUser
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserInformation {
-    private String email;
-    private String phone;
-    private String name;
-    private String profileImage;
-
-    public static UserInformation guest = new UserInformation("guest", "guest", "guest", null);
-
-    public static UserInformation create(CreateUser createUser) {
-        return new UserInformation(createUser.getEmail(), createUser.getPhone(), createUser.getName(), null);
+class UserInformation(
+    var email: String,
+    var phone: String,
+    var name: String,
+    var profileImage: String? = null,
+) {
+    fun updateUserInformation(name: String, profileImage: String): UserInformation {
+        return UserInformation(this.email, this.phone, name, profileImage)
     }
 
-    public static UserInformation getGuestInformation() {
-        return guest;
-    }
+    companion object {
+        @JvmStatic
+        var guestInformation: UserInformation = UserInformation("guest", "guest", "guest", "guest")
 
-    public UserInformation updateUserInformation(String name, String profileImage) {
-        return new UserInformation(this.email, this.phone, name, profileImage);
+        @JvmStatic
+        fun create(createUser: CreateUser): UserInformation {
+            return UserInformation(
+                email = createUser.email,
+                phone = createUser.phone,
+                name = createUser.name
+            )
+        }
     }
 }

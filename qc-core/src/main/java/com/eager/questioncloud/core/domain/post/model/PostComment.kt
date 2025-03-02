@@ -1,36 +1,22 @@
-package com.eager.questioncloud.core.domain.post.model;
+package com.eager.questioncloud.core.domain.post.model
 
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime
 
-@Getter
-public class PostComment {
-    private Long id;
-    private Long postId;
-    private Long writerId;
-    private String comment;
-    private LocalDateTime createdAt;
-
-    @Builder
-    public PostComment(Long id, Long postId, Long writerId, String comment, LocalDateTime createdAt) {
-        this.id = id;
-        this.postId = postId;
-        this.writerId = writerId;
-        this.comment = comment;
-        this.createdAt = createdAt;
+class PostComment(
+    val id: Long? = null,
+    val postId: Long,
+    val writerId: Long,
+    var comment: String,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+) {
+    fun modify(comment: String) {
+        this.comment = comment
     }
 
-    public static PostComment create(Long postId, Long writerId, String comment) {
-        return PostComment.builder()
-            .postId(postId)
-            .writerId(writerId)
-            .comment(comment)
-            .createdAt(LocalDateTime.now())
-            .build();
-    }
-
-    public void modify(String comment) {
-        this.comment = comment;
+    companion object {
+        @JvmStatic
+        fun create(postId: Long, writerId: Long, comment: String): PostComment {
+            return PostComment(postId = postId, writerId = writerId, comment = comment)
+        }
     }
 }

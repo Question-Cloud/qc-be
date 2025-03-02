@@ -38,6 +38,7 @@ subprojects {
 
     dependencies {
         compileOnly 'org.projectlombok:lombok'
+        implementation "org.jetbrains.kotlin:kotlin-stdlib"
         implementation 'io.hypersistence:hypersistence-tsid:2.1.4'
         annotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'

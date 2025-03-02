@@ -1,59 +1,47 @@
-package com.eager.questioncloud.core.domain.coupon.model;
+package com.eager.questioncloud.core.domain.coupon.model
 
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import java.time.LocalDateTime
 
-@Getter
-@NoArgsConstructor
-public class UserCoupon {
-    private Long id;
-    private Long userId;
-    private Long couponId;
-    private Boolean isUsed;
-    private LocalDateTime createdAt;
-    private LocalDateTime endAt;
-
-    @Builder
-    public UserCoupon(Long id, Long userId, Long couponId, Boolean isUsed, LocalDateTime createdAt, LocalDateTime endAt) {
-        this.id = id;
-        this.userId = userId;
-        this.couponId = couponId;
-        this.isUsed = isUsed;
-        this.createdAt = createdAt;
-        this.endAt = endAt;
-    }
-
-    public void validate() {
+class UserCoupon(
+    var id: Long? = null,
+    var userId: Long,
+    var couponId: Long,
+    var isUsed: Boolean,
+    var createdAt: LocalDateTime,
+    var endAt: LocalDateTime
+) {
+    fun validate() {
         if (endAt.isBefore(LocalDateTime.now())) {
-            throw new CoreException(Error.EXPIRED_COUPON);
+            throw CoreException(Error.EXPIRED_COUPON)
         }
 
         if (this.isUsed) {
-            throw new CoreException(Error.FAIL_USE_COUPON);
+            throw CoreException(Error.FAIL_USE_COUPON)
         }
     }
 
-    public void rollback() {
-        this.isUsed = false;
+    fun rollback() {
+        this.isUsed = false
     }
 
-    public static UserCoupon create(Long userId, Coupon coupon) {
-        if (coupon.getEndAt().isBefore(LocalDateTime.now())) {
-            throw new CoreException(Error.EXPIRED_COUPON);
+    companion object {
+        @JvmStatic
+        fun create(userId: Long, coupon: Coupon): UserCoupon {
+            if (coupon.endAt.isBefore(LocalDateTime.now())) {
+                throw CoreException(Error.EXPIRED_COUPON)
+            }
+            if (coupon.remainingCount == 0) {
+                throw CoreException(Error.LIMITED_COUPON)
+            }
+            return UserCoupon(
+                userId = userId,
+                couponId = coupon.id!!,
+                isUsed = false,
+                createdAt = LocalDateTime.now(),
+                endAt = coupon.endAt
+            )
         }
-        if (coupon.getRemainingCount() == 0) {
-            throw new CoreException(Error.LIMITED_COUPON);
-        }
-        return UserCoupon.builder()
-            .userId(userId)
-            .couponId(coupon.getId())
-            .isUsed(false)
-            .createdAt(LocalDateTime.now())
-            .endAt(coupon.getEndAt())
-            .build();
     }
 }

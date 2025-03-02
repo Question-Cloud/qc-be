@@ -1,30 +1,28 @@
-package com.eager.questioncloud.core.domain.user.infrastructure.entity;
+package com.eager.questioncloud.core.domain.user.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.user.model.UserInformation;
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.user.model.UserInformation
+import jakarta.persistence.Embeddable
 
-@Getter
 @Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserInformationEntity {
-    private String email;
-    private String phone;
-    private String name;
-    private String profileImage;
-
-    public static UserInformationEntity from(UserInformation userInformation) {
-        return new UserInformationEntity(
-            userInformation.getEmail(),
-            userInformation.getPhone(),
-            userInformation.getName(),
-            userInformation.getProfileImage());
+class UserInformationEntity private constructor(
+    private var email: String,
+    private var phone: String,
+    private var name: String,
+    private var profileImage: String? = null
+) {
+    fun toModel(): UserInformation {
+        return UserInformation(email, phone, name, profileImage)
     }
 
-    public UserInformation toModel() {
-        return new UserInformation(email, phone, name, profileImage);
+    companion object {
+        @JvmStatic
+        fun from(userInformation: UserInformation): UserInformationEntity {
+            return UserInformationEntity(
+                userInformation.email,
+                userInformation.phone,
+                userInformation.name,
+                userInformation.profileImage
+            )
+        }
     }
 }

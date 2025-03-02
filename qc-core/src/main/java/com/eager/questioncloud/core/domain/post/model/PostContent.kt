@@ -1,19 +1,14 @@
-package com.eager.questioncloud.core.domain.post.model;
+package com.eager.questioncloud.core.domain.post.model
 
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class PostContent {
-    private String title;
-    private String content;
-    private List<PostFile> files;
-
-    public static PostContent create(String title, String content, List<PostFile> files) {
-        return new PostContent(title, content, files);
+class PostContent(
+    var title: String,
+    var content: String,
+    var files: List<PostFile>
+) {
+    companion object {
+        @JvmStatic
+        fun create(title: String, content: String, files: List<PostFile>): PostContent {
+            return PostContent(title, content, files)
+        }
     }
 }

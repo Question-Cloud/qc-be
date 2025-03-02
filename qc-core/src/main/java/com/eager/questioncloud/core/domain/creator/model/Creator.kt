@@ -1,29 +1,19 @@
-package com.eager.questioncloud.core.domain.creator.model;
+package com.eager.questioncloud.core.domain.creator.model
 
-import lombok.Builder;
-import lombok.Getter;
 
-@Getter
-public class Creator {
-    private Long id;
-    private Long userId;
-    private CreatorProfile creatorProfile;
-
-    @Builder
-    public Creator(Long id, Long userId, CreatorProfile creatorProfile) {
-        this.id = id;
-        this.userId = userId;
-        this.creatorProfile = creatorProfile;
+class Creator(
+    val id: Long? = null,
+    val userId: Long,
+    var creatorProfile: CreatorProfile
+) {
+    fun updateProfile(creatorProfile: CreatorProfile) {
+        this.creatorProfile = creatorProfile
     }
 
-    public static Creator create(Long userId, CreatorProfile creatorProfile) {
-        return Creator.builder()
-            .userId(userId)
-            .creatorProfile(creatorProfile)
-            .build();
-    }
-
-    public void updateProfile(CreatorProfile creatorProfile) {
-        this.creatorProfile = creatorProfile;
+    companion object {
+        @JvmStatic
+        fun create(userId: Long, creatorProfile: CreatorProfile): Creator {
+            return Creator(userId = userId, creatorProfile = creatorProfile)
+        }
     }
 }

@@ -1,77 +1,43 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.entity;
+package com.eager.questioncloud.core.domain.question.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import com.eager.questioncloud.core.domain.question.model.Question
+import jakarta.persistence.*
+import lombok.Builder
+import java.time.LocalDateTime
 
-@Getter
 @Entity
 @Table(name = "question")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private Long creatorId;
-
-    @Embedded
-    private QuestionContentEntity questionContentEntity;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private QuestionStatus questionStatus;
-
-    @Column
-    private int count;
-
-    @Column
-    private LocalDateTime createdAt;
-
-    @Builder
-    public QuestionEntity(Long id, Long creatorId, QuestionContentEntity questionContentEntity, QuestionStatus questionStatus, int count,
-        LocalDateTime createdAt) {
-        this.id = id;
-        this.creatorId = creatorId;
-        this.questionContentEntity = questionContentEntity;
-        this.questionStatus = questionStatus;
-        this.count = count;
-        this.createdAt = createdAt;
+class QuestionEntity @Builder constructor(
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @Column var creatorId: Long,
+    @Embedded var questionContentEntity: QuestionContentEntity,
+    @Enumerated(EnumType.STRING) @Column var questionStatus: QuestionStatus,
+    @Column var count: Int,
+    @Column var createdAt: LocalDateTime
+) {
+    fun toModel(): Question {
+        return Question(
+            id,
+            creatorId,
+            questionContentEntity.toModel(),
+            questionStatus,
+            count,
+            createdAt
+        )
     }
 
-    public Question toModel() {
-        return Question.builder()
-            .id(id)
-            .creatorId(creatorId)
-            .questionContent(questionContentEntity.toModel())
-            .questionStatus(questionStatus)
-            .count(count)
-            .createdAt(createdAt)
-            .build();
-    }
-
-    public static QuestionEntity from(Question question) {
-        return QuestionEntity.builder()
-            .id(question.getId())
-            .creatorId(question.getCreatorId())
-            .questionContentEntity(QuestionContentEntity.from(question.getQuestionContent()))
-            .questionStatus(question.getQuestionStatus())
-            .count(question.getCount())
-            .createdAt(question.getCreatedAt())
-            .build();
+    companion object {
+        @JvmStatic
+        fun from(question: Question): QuestionEntity {
+            return QuestionEntity(
+                question.id,
+                question.creatorId,
+                QuestionContentEntity.from(question.questionContent),
+                question.questionStatus,
+                question.count,
+                question.createdAt
+            )
+        }
     }
 }

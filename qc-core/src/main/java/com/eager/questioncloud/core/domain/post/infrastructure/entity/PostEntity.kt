@@ -1,66 +1,32 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.entity;
+package com.eager.questioncloud.core.domain.post.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.post.model.Post;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.post.model.Post
+import jakarta.persistence.*
+import java.time.LocalDateTime
 
-@Getter
 @Entity
 @Table(name = "post")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private Long questionId;
-
-    @Column
-    private Long writerId;
-
-    @Embedded
-    private PostContentEntity postContentEntity;
-
-    @Column
-    private LocalDateTime createdAt;
-
-    @Builder
-    public PostEntity(Long id, Long questionId, Long writerId, PostContentEntity postContentEntity, LocalDateTime createdAt) {
-        this.id = id;
-        this.questionId = questionId;
-        this.writerId = writerId;
-        this.postContentEntity = postContentEntity;
-        this.createdAt = createdAt;
+class PostEntity private constructor(
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @Column var questionId: Long,
+    @Column var writerId: Long,
+    @Embedded var postContentEntity: PostContentEntity,
+    @Column var createdAt: LocalDateTime
+) {
+    fun toModel(): Post {
+        return Post(id, questionId, writerId, postContentEntity.toModel(), createdAt)
     }
 
-    public Post toModel() {
-        return Post.builder()
-            .id(id)
-            .questionId(questionId)
-            .writerId(writerId)
-            .postContent(postContentEntity.toModel())
-            .createdAt(createdAt)
-            .build();
-    }
-
-    public static PostEntity from(Post post) {
-        return PostEntity.builder()
-            .id(post.getId())
-            .questionId(post.getQuestionId())
-            .writerId(post.getWriterId())
-            .postContentEntity(PostContentEntity.from(post.getPostContent()))
-            .createdAt(post.getCreatedAt())
-            .build();
+    companion object {
+        @JvmStatic
+        fun from(post: Post): PostEntity {
+            return PostEntity(
+                post.id,
+                post.questionId,
+                post.writerId,
+                PostContentEntity.from(post.postContent),
+                post.createdAt
+            )
+        }
     }
 }

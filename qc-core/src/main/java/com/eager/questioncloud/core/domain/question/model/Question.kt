@@ -1,46 +1,28 @@
-package com.eager.questioncloud.core.domain.question.model;
+package com.eager.questioncloud.core.domain.question.model
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
-import java.time.LocalDateTime;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import java.time.LocalDateTime
 
-@Getter
-@NoArgsConstructor
-public class Question {
-    private Long id;
-    private Long creatorId;
-    private QuestionContent questionContent;
-    private QuestionStatus questionStatus;
-    private int count;
-    private LocalDateTime createdAt;
-
-    @Builder
-    public Question(Long id, Long creatorId, QuestionContent questionContent, QuestionStatus questionStatus, int count, LocalDateTime createdAt) {
-        this.id = id;
-        this.creatorId = creatorId;
-        this.questionContent = questionContent;
-        this.questionStatus = questionStatus;
-        this.count = count;
-        this.createdAt = createdAt;
+class Question(
+    var id: Long? = null,
+    var creatorId: Long,
+    var questionContent: QuestionContent,
+    var questionStatus: QuestionStatus = QuestionStatus.Available,
+    var count: Int = 0,
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+) {
+    fun modify(questionContent: QuestionContent) {
+        this.questionContent = questionContent
     }
 
-    public static Question create(Long creatorId, QuestionContent questionContent) {
-        return Question.builder()
-            .creatorId(creatorId)
-            .questionContent(questionContent)
-            .questionStatus(QuestionStatus.Available)
-            .count(0)
-            .createdAt(LocalDateTime.now())
-            .build();
+    fun delete() {
+        this.questionStatus = QuestionStatus.Delete
     }
 
-    public void modify(QuestionContent questionContent) {
-        this.questionContent = questionContent;
-    }
-
-    public void delete() {
-        this.questionStatus = QuestionStatus.Delete;
+    companion object {
+        @JvmStatic
+        fun create(creatorId: Long, questionContent: QuestionContent): Question {
+            return Question(creatorId = creatorId, questionContent = questionContent)
+        }
     }
 }

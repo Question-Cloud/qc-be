@@ -1,15 +1,10 @@
-package com.eager.questioncloud.core.common;
+package com.eager.questioncloud.core.common
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
-public class PagingInformation {
-    private int offset;
-    private int size;
-
-    public int getPage() {
-        return offset / size;
-    }
+class PagingInformation(
+    val offset: Int,
+    val size: Int,
+) {
+    val page: Int
+        get() = offset / size
 }

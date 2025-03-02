@@ -1,48 +1,23 @@
-package com.eager.questioncloud.core.domain.cart.infrastructure.entity;
+package com.eager.questioncloud.core.domain.cart.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.cart.model.CartItem;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.cart.model.CartItem
+import jakarta.persistence.*
 
-@Getter
 @Entity
 @Table(name = "cart_item")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CartItemEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private Long userId;
-
-    @Column
-    private Long questionId;
-
-    @Builder
-    private CartItemEntity(Long id, Long userId, Long questionId) {
-        this.id = id;
-        this.userId = userId;
-        this.questionId = questionId;
+class CartItemEntity private constructor(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private val id: Long?,
+    @Column private val userId: Long,
+    @Column private val questionId: Long
+) {
+    fun toModel(): CartItem {
+        return CartItem(this.id, this.userId, this.questionId)
     }
 
-    public static CartItemEntity from(CartItem cartItem) {
-        return CartItemEntity.builder()
-            .id(cartItem.getId())
-            .userId(cartItem.getUserId())
-            .questionId(cartItem.getQuestionId())
-            .build();
-    }
-
-    public CartItem toModel() {
-        return new CartItem(this.id, this.userId, this.questionId);
+    companion object {
+        @JvmStatic
+        fun from(cartItem: CartItem): CartItemEntity {
+            return CartItemEntity(cartItem.id, cartItem.userId, cartItem.userId)
+        }
     }
 }

@@ -1,56 +1,46 @@
-package com.eager.questioncloud.core.domain.user.model;
+package com.eager.questioncloud.core.domain.user.model
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
 
-@Getter
-@NoArgsConstructor
-public class UserAccountInformation {
-    private String password;
-    private String socialUid;
-    private AccountType accountType;
-    public static UserAccountInformation guest = new UserAccountInformation("guest", "guest", AccountType.GUEST);
-
-    @Builder
-    public UserAccountInformation(String password, String socialUid, AccountType accountType) {
-        this.password = password;
-        this.socialUid = socialUid;
-        this.accountType = accountType;
-    }
-
-    public static UserAccountInformation createEmailAccountInformation(String rawPassword) {
-        String encodedPassword = PasswordProcessor.encode(rawPassword);
-        return UserAccountInformation.builder()
-            .password(encodedPassword)
-            .accountType(AccountType.EMAIL)
-            .build();
-    }
-
-    public static UserAccountInformation createSocialAccountInformation(String socialUid, AccountType socialType) {
-        return UserAccountInformation.builder()
-            .socialUid(socialUid)
-            .accountType(socialType)
-            .build();
-    }
-
-    public static UserAccountInformation getGuestAccountInformation() {
-        return guest;
-    }
-
-    public UserAccountInformation changePassword(String newRawPassword) {
-        if (!accountType.equals(AccountType.EMAIL)) {
-            throw new CoreException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT);
+class UserAccountInformation(
+    var password: String? = null,
+    var socialUid: String? = null,
+    var accountType: AccountType
+) {
+    fun changePassword(newRawPassword: String?): UserAccountInformation {
+        if (accountType != AccountType.EMAIL) {
+            throw CoreException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT)
         }
-        String newEncodedPassword = PasswordProcessor.encode(newRawPassword);
-        return new UserAccountInformation(newEncodedPassword, this.socialUid, this.accountType);
+        val newEncodedPassword = PasswordProcessor.encode(newRawPassword)
+        return UserAccountInformation(newEncodedPassword, this.socialUid, this.accountType)
     }
 
-    public Boolean isSocialAccount() {
-        return accountType.equals(AccountType.GOOGLE) || accountType.equals(AccountType.KAKAO) || accountType.equals(AccountType.NAVER);
+    val isSocialAccount: Boolean
+        get() = accountType == AccountType.GOOGLE || accountType == AccountType.KAKAO || accountType == AccountType.NAVER
+
+    companion object {
+        @JvmStatic
+        var guestAccountInformation: UserAccountInformation =
+            UserAccountInformation("guest", "guest", AccountType.GUEST)
+
+        @JvmStatic
+        fun createEmailAccountInformation(rawPassword: String?): UserAccountInformation {
+            val encodedPassword = PasswordProcessor.encode(rawPassword)
+            return UserAccountInformation(
+                password = encodedPassword,
+                accountType = AccountType.EMAIL
+            )
+        }
+
+        @JvmStatic
+        fun createSocialAccountInformation(
+            socialUid: String,
+            socialType: AccountType
+        ): UserAccountInformation {
+            return UserAccountInformation(socialUid = socialUid, accountType = socialType)
+        }
     }
 }

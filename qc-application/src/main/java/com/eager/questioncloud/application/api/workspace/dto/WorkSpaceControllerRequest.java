@@ -18,7 +18,7 @@ public class WorkSpaceControllerRequest {
         @NotBlank
         private String introduction;
     }
-    
+
     @Getter
     public static class RegisterQuestionRequest {
         @NotNull
@@ -49,18 +49,17 @@ public class WorkSpaceControllerRequest {
         private int price;
 
         public QuestionContent toQuestionContent() {
-            return QuestionContent.builder()
-                .questionCategoryId(questionCategoryId)
-                .subject(subject)
-                .title(title)
-                .description(description)
-                .thumbnail(thumbnail)
-                .fileUrl(fileUrl)
-                .explanationUrl(explanationUrl)
-                .questionType(QuestionType.SelfMade)
-                .questionLevel(questionLevel)
-                .price(price)
-                .build();
+            return new QuestionContent(
+                questionCategoryId,
+                subject,
+                title,
+                description,
+                thumbnail,
+                fileUrl,
+                explanationUrl,
+                QuestionType.SelfMade,
+                questionLevel,
+                price);
         }
     }
 
@@ -94,18 +93,17 @@ public class WorkSpaceControllerRequest {
         private int price;
 
         public QuestionContent toQuestionContent() {
-            return QuestionContent.builder()
-                .questionCategoryId(questionCategoryId)
-                .subject(subject)
-                .title(title)
-                .description(description)
-                .thumbnail(thumbnail)
-                .fileUrl(fileUrl)
-                .explanationUrl(explanationUrl)
-                .questionType(QuestionType.SelfMade)
-                .questionLevel(questionLevel)
-                .price(price)
-                .build();
+            return new QuestionContent(
+                questionCategoryId,
+                subject,
+                title,
+                description,
+                thumbnail,
+                fileUrl,
+                explanationUrl,
+                QuestionType.SelfMade,
+                questionLevel,
+                price);
         }
     }
 

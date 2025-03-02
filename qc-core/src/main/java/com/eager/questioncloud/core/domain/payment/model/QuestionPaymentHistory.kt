@@ -1,63 +1,42 @@
-package com.eager.questioncloud.core.domain.payment.model;
+package com.eager.questioncloud.core.domain.payment.model
 
-import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import java.time.LocalDateTime;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
+import java.time.LocalDateTime
 
-@Getter
-@Builder
-public class QuestionPaymentHistory {
-    private String orderId;
-    private Long userId;
-    private List<QuestionPaymentHistoryOrder> orders;
-    private QuestionPaymentCoupon coupon;
-    private int amount;
-    private Boolean isUsedCoupon;
-    private QuestionPaymentStatus status;
-    private LocalDateTime createdAt;
+class QuestionPaymentHistory(
+    val orderId: String,
+    val userId: Long,
+    val orders: List<QuestionPaymentHistoryOrder>,
+    val coupon: QuestionPaymentCoupon?,
+    val amount: Int,
+    val isUsedCoupon: Boolean,
+    val status: QuestionPaymentStatus,
+    val createdAt: LocalDateTime,
+) {
 
-    public static QuestionPaymentHistory create(QuestionPayment questionPayment, List<QuestionInformation> questions) {
-        List<QuestionPaymentHistoryOrder> orders = questions.stream()
-            .map(question ->
-                new QuestionPaymentHistoryOrder(
-                    question.getId(),
-                    question.getPrice(),
-                    question.getTitle(),
-                    question.getThumbnail(),
-                    question.getCreatorName(),
-                    question.getSubject(),
-                    question.getParentCategory(),
-                    question.getChildCategory()))
-            .toList();
+    companion object {
+        @JvmStatic
+        fun create(
+            questionPayment: QuestionPayment,
+            questions: List<QuestionInformation>
+        ): QuestionPaymentHistory {
+            val orders = questions.stream()
+                .map { question: QuestionInformation ->
+                    QuestionPaymentHistoryOrder.from(question)
+                }
+                .toList()
 
-        return QuestionPaymentHistory.builder()
-            .orderId(questionPayment.getOrder().getOrderId())
-            .userId(questionPayment.getUserId())
-            .orders(orders)
-            .coupon(questionPayment.getQuestionPaymentCoupon())
-            .amount(questionPayment.getAmount())
-            .isUsedCoupon(questionPayment.isUsingCoupon())
-            .status(questionPayment.getStatus())
-            .createdAt(questionPayment.getCreatedAt())
-            .build();
-    }
-
-
-    @Getter
-    @AllArgsConstructor
-    public static class QuestionPaymentHistoryOrder {
-        private Long questionId;
-        private int amount;
-        private String title;
-        private String thumbnail;
-        private String creatorName;
-        private Subject subject;
-        private String mainCategory;
-        private String subCategory;
+            return QuestionPaymentHistory(
+                questionPayment.order.orderId,
+                questionPayment.userId,
+                orders,
+                questionPayment.questionPaymentCoupon,
+                questionPayment.amount,
+                questionPayment.isUsingCoupon,
+                questionPayment.status,
+                questionPayment.createdAt,
+            )
+        }
     }
 }

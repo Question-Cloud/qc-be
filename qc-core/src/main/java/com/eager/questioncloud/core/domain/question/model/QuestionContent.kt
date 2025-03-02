@@ -1,38 +1,18 @@
-package com.eager.questioncloud.core.domain.question.model;
+package com.eager.questioncloud.core.domain.question.model
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.enums.QuestionType;
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
+import com.eager.questioncloud.core.domain.question.enums.QuestionType
+import com.eager.questioncloud.core.domain.question.enums.Subject
 
-@Getter
-@NoArgsConstructor
-public class QuestionContent {
-    private Long questionCategoryId;
-    private Subject subject;
-    private String title;
-    private String description;
-    private String thumbnail;
-    private String fileUrl;
-    private String explanationUrl;
-    private QuestionType questionType;
-    private QuestionLevel questionLevel;
-    private int price;
-
-    @Builder
-    public QuestionContent(Long questionCategoryId, Subject subject, String title, String description, String thumbnail, String fileUrl,
-        String explanationUrl, QuestionType questionType, QuestionLevel questionLevel, int price) {
-        this.questionCategoryId = questionCategoryId;
-        this.subject = subject;
-        this.title = title;
-        this.description = description;
-        this.thumbnail = thumbnail;
-        this.fileUrl = fileUrl;
-        this.explanationUrl = explanationUrl;
-        this.questionType = questionType;
-        this.questionLevel = questionLevel;
-        this.price = price;
-    }
-}
+class QuestionContent(
+    val questionCategoryId: Long,
+    val subject: Subject,
+    val title: String,
+    val description: String,
+    val thumbnail: String,
+    val fileUrl: String,
+    val explanationUrl: String,
+    val questionType: QuestionType,
+    val questionLevel: QuestionLevel,
+    val price: Int
+)

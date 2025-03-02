@@ -1,43 +1,39 @@
-package com.eager.questioncloud.core.domain.payment.model;
+package com.eager.questioncloud.core.domain.payment.model
 
-import com.eager.questioncloud.core.domain.question.model.Question;
-import io.hypersistence.tsid.TSID;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.question.model.Question
+import io.hypersistence.tsid.TSID
+import java.util.stream.Collectors
 
-@Getter
-@NoArgsConstructor
-public class QuestionOrder {
-    private String orderId;
-    private List<QuestionOrderItem> items;
-
-    public QuestionOrder(String orderId, List<QuestionOrderItem> items) {
-        this.orderId = orderId;
-        this.items = items;
-    }
-
-    public static QuestionOrder createOrder(List<Question> questions) {
-        String orderId = TSID.Factory.getTsid().toString();
-        List<QuestionOrderItem> items = questions
-            .stream()
-            .map(QuestionOrderItem::create)
-            .collect(Collectors.toList());
-        return new QuestionOrder(orderId, items);
-    }
-
-    public int calcAmount() {
+class QuestionOrder(
+    var orderId: String,
+    var items: List<QuestionOrderItem>
+) {
+    fun calcAmount(): Int {
         return items
             .stream()
-            .mapToInt(QuestionOrderItem::getPrice)
-            .sum();
+            .mapToInt { obj: QuestionOrderItem -> obj.price }
+            .sum()
     }
 
-    public List<Long> getQuestionIds() {
-        return items
+    val questionIds: List<Long>
+        get() = items
             .stream()
-            .map(QuestionOrderItem::getQuestionId)
-            .collect(Collectors.toList());
+            .map { obj: QuestionOrderItem -> obj.questionId }
+            .collect(Collectors.toList())
+
+    companion object {
+        @JvmStatic
+        fun createOrder(questions: List<Question>): QuestionOrder {
+            val orderId = TSID.Factory.getTsid().toString()
+            val items = questions
+                .stream()
+                .map { question: Question ->
+                    QuestionOrderItem.create(
+                        question
+                    )
+                }
+                .collect(Collectors.toList())
+            return QuestionOrder(orderId, items)
+        }
     }
 }

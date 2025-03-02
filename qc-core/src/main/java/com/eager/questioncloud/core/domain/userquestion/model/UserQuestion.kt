@@ -1,39 +1,24 @@
-package com.eager.questioncloud.core.domain.userquestion.model;
+package com.eager.questioncloud.core.domain.userquestion.model
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime
+import java.util.stream.Collectors
 
-@Getter
-public class UserQuestion {
-    private Long id;
-    private Long userId;
-    private Long questionId;
-    private Boolean isUsed;
-    private LocalDateTime createdAt;
-
-    @Builder
-    public UserQuestion(Long id, Long userId, Long questionId, Boolean isUsed, LocalDateTime createdAt) {
-        this.id = id;
-        this.userId = userId;
-        this.questionId = questionId;
-        this.isUsed = isUsed;
-        this.createdAt = createdAt;
-    }
-
-    public static List<UserQuestion> create(Long userId, List<Long> questionIds) {
-        LocalDateTime now = LocalDateTime.now();
-        return questionIds
-            .stream()
-            .map(questionId -> UserQuestion
-                .builder()
-                .userId(userId)
-                .questionId(questionId)
-                .isUsed(false)
-                .createdAt(now)
-                .build())
-            .collect(Collectors.toList());
+class UserQuestion(
+    val id: Long? = null,
+    val userId: Long,
+    val questionId: Long,
+    val isUsed: Boolean = false,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+) {
+    companion object {
+        @JvmStatic
+        fun create(userId: Long, questionIds: List<Long>): List<UserQuestion> {
+            return questionIds
+                .stream()
+                .map { questionId: Long ->
+                    UserQuestion(userId = userId, questionId = questionId)
+                }
+                .collect(Collectors.toList())
+        }
     }
 }

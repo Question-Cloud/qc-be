@@ -1,21 +1,18 @@
-package com.eager.questioncloud.core.domain.question.common;
+package com.eager.questioncloud.core.domain.question.common
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
-import com.eager.questioncloud.core.domain.question.enums.QuestionType;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType
+import com.eager.questioncloud.core.domain.question.enums.QuestionType
 
-@AllArgsConstructor
-@Getter
-public class QuestionFilter {
-    private Long userId;
-    private List<Long> categories;
-    private List<QuestionLevel> levels;
-    private QuestionType questionType;
-    private Long creatorId;
-    private QuestionSortType sort;
-    private PagingInformation pagingInformation;
+class QuestionFilter(
+    val userId: Long? = null,
+    val categories: List<Long>? = null,
+    val levels: List<QuestionLevel>? = null,
+    val questionType: QuestionType? = null,
+    val creatorId: Long? = null,
+    val sort: QuestionSortType? = null,
+    val pagingInformation: PagingInformation? = null
+) {
+
 }

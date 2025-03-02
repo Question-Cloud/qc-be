@@ -1,55 +1,26 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.entity;
+package com.eager.questioncloud.core.domain.payment.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrderItem
+import jakarta.persistence.*
 
-@Getter
 @Entity
 @Table(name = "question_order")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionOrderEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
-    private String orderId;
-
-    @Column
-    private Long questionId;
-
-    @Column
-    private int price;
-
-    @Builder
-    public QuestionOrderEntity(Long id, String orderId, Long questionId, int price) {
-        this.id = id;
-        this.orderId = orderId;
-        this.questionId = questionId;
-        this.price = price;
-    }
-
-    public static List<QuestionOrderEntity> from(QuestionOrder questionOrder) {
-        return questionOrder.getItems()
-            .stream()
-            .map(item -> QuestionOrderEntity
-                .builder()
-                .id(item.getId())
-                .orderId(questionOrder.getOrderId())
-                .questionId(item.getQuestionId())
-                .price(item.getPrice())
-                .build()
-            )
-            .toList();
+class QuestionOrderEntity private constructor(
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @Column var orderId: String,
+    @Column var questionId: Long,
+    @Column var price: Int
+) {
+    companion object {
+        @JvmStatic
+        fun from(questionOrder: QuestionOrder): List<QuestionOrderEntity> {
+            return questionOrder.items
+                .stream()
+                .map { item: QuestionOrderItem ->
+                    QuestionOrderEntity(item.id, questionOrder.orderId, item.questionId, item.price)
+                }
+                .toList()
+        }
     }
 }

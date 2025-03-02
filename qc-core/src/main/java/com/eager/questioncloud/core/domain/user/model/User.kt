@@ -1,79 +1,73 @@
-package com.eager.questioncloud.core.domain.user.model;
+package com.eager.questioncloud.core.domain.user.model
 
-import com.eager.questioncloud.core.domain.user.enums.UserStatus;
-import com.eager.questioncloud.core.domain.user.enums.UserType;
-import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.eager.questioncloud.core.exception.NotVerificationUserException;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.user.enums.UserStatus
+import com.eager.questioncloud.core.domain.user.enums.UserType
+import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.core.exception.NotVerificationUserException
 
-@Getter
-@NoArgsConstructor
-public class User {
-    private Long uid;
-    private UserAccountInformation userAccountInformation;
-    private UserInformation userInformation;
-    private UserType userType;
-    private UserStatus userStatus;
-
-    @Builder
-    public User(Long uid, UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType, UserStatus userStatus) {
-        this.uid = uid;
-        this.userAccountInformation = userAccountInformation;
-        this.userInformation = userInformation;
-        this.userType = userType;
-        this.userStatus = userStatus;
+class User(
+    var uid: Long? = null,
+    var userAccountInformation: UserAccountInformation,
+    var userInformation: UserInformation,
+    var userType: UserType? = null,
+    var userStatus: UserStatus? = null,
+) {
+    fun active() {
+        this.userStatus = UserStatus.Active
     }
 
-    public static User create(UserAccountInformation userAccountInformation, UserInformation userInformation, UserType userType,
-        UserStatus userStatus) {
-        return User.builder()
-            .userAccountInformation(userAccountInformation)
-            .userInformation(userInformation)
-            .userType(userType)
-            .userStatus(userStatus)
-            .build();
-    }
-
-    public static User guest() {
-        return User.builder()
-            .uid(-1L)
-            .userInformation(UserInformation.getGuestInformation())
-            .userAccountInformation(UserAccountInformation.getGuestAccountInformation())
-            .build();
-    }
-
-    public void active() {
-        this.userStatus = UserStatus.Active;
-    }
-
-    public void checkUserStatus() {
-        if (userStatus.equals(UserStatus.PendingEmailVerification)) {
-            throw new NotVerificationUserException(uid);
+    fun checkUserStatus() {
+        if (userStatus == UserStatus.PendingEmailVerification) {
+            throw NotVerificationUserException(uid)
         }
-        if (!userStatus.equals(UserStatus.Active)) {
-            throw new CoreException(Error.NOT_ACTIVE_USER);
+        if (userStatus != UserStatus.Active) {
+            throw CoreException(Error.NOT_ACTIVE_USER)
         }
     }
 
-    public void changePassword(String newPassword) {
-        userAccountInformation = userAccountInformation.changePassword(newPassword);
+    fun changePassword(newPassword: String?) {
+        userAccountInformation = userAccountInformation.changePassword(newPassword)
     }
 
-    public void passwordAuthentication(String rawPassword) {
-        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.getPassword())) {
-            throw new CoreException(Error.FAIL_LOGIN);
+    fun passwordAuthentication(rawPassword: String?) {
+        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.password)) {
+            throw CoreException(Error.FAIL_LOGIN)
         }
     }
 
-    public void updateUserInformation(String name, String profileImage) {
-        userInformation = userInformation.updateUserInformation(name, profileImage);
+    fun updateUserInformation(name: String, profileImage: String) {
+        userInformation = userInformation.updateUserInformation(name, profileImage)
     }
 
-    public void setCreator() {
-        this.userType = UserType.CreatorUser;
+    fun setCreator() {
+        this.userType = UserType.CreatorUser
+    }
+
+    companion object {
+        @JvmStatic
+        fun create(
+            userAccountInformation: UserAccountInformation,
+            userInformation: UserInformation,
+            userType: UserType,
+            userStatus: UserStatus
+        ): User {
+            return User(
+                userAccountInformation = userAccountInformation,
+                userInformation = userInformation,
+                userType = userType,
+                userStatus = userStatus
+            )
+        }
+
+        @JvmStatic
+        fun guest(): User {
+            return User(
+                uid = -1L,
+                userAccountInformation = UserAccountInformation.guestAccountInformation,
+                userInformation = UserInformation.guestInformation,
+            )
+        }
     }
 }

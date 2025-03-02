@@ -1,30 +1,26 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.entity;
+package com.eager.questioncloud.core.domain.post.infrastructure.entity
 
-import com.eager.questioncloud.core.domain.post.infrastructure.converter.PostFileConverter;
-import com.eager.questioncloud.core.domain.post.model.PostContent;
-import com.eager.questioncloud.core.domain.post.model.PostFile;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embeddable;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.post.infrastructure.converter.PostFileConverter
+import com.eager.questioncloud.core.domain.post.model.PostContent
+import com.eager.questioncloud.core.domain.post.model.PostFile
+import jakarta.persistence.Convert
+import jakarta.persistence.Embeddable
 
 @Embeddable
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-public class PostContentEntity {
-    private String title;
-    private String content;
-    @Convert(converter = PostFileConverter.class)
-    private List<PostFile> files;
-
-    public static PostContentEntity from(PostContent postContent) {
-        return new PostContentEntity(postContent.getTitle(), postContent.getTitle(), postContent.getFiles());
+class PostContentEntity private constructor(
+    var title: String,
+    var content: String,
+    @Convert(converter = PostFileConverter::class)
+    var files: List<PostFile>
+) {
+    fun toModel(): PostContent {
+        return PostContent(title, content, files)
     }
 
-    public PostContent toModel() {
-        return new PostContent(title, content, files);
+    companion object {
+        @JvmStatic
+        fun from(postContent: PostContent): PostContentEntity {
+            return PostContentEntity(postContent.title, postContent.title, postContent.files)
+        }
     }
 }
