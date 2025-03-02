@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.repository;
+package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostCommentEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostCommentEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface PostCommentJpaRepository extends JpaRepository<PostCommentEntity, Long> {
-    Optional<PostCommentEntity> findByIdAndWriterId(Long id, Long userId);
+interface PostCommentJpaRepository : JpaRepository<PostCommentEntity, Long> {
+    fun findByIdAndWriterId(id: Long, userId: Long): Optional<PostCommentEntity>
 }

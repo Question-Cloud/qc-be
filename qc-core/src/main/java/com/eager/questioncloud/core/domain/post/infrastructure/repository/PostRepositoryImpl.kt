@@ -1,146 +1,126 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.repository;
+package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
-import static com.eager.questioncloud.core.domain.post.infrastructure.entity.QPostEntity.postEntity;
-import static com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
-
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostDetail;
-import com.eager.questioncloud.core.domain.post.dto.PostListItem;
-import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostEntity;
-import com.eager.questioncloud.core.domain.post.model.Post;
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.post.dto.PostDetail
+import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostEntity.Companion.from
+import com.eager.questioncloud.core.domain.post.infrastructure.entity.QPostEntity.postEntity
+import com.eager.questioncloud.core.domain.post.model.Post
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.querydsl.core.types.Projections
+import com.querydsl.jpa.impl.JPAQueryFactory
+import lombok.RequiredArgsConstructor
+import org.springframework.stereotype.Repository
 
 @Repository
 @RequiredArgsConstructor
-public class PostRepositoryImpl implements PostRepository {
-    private final PostJpaRepository postJpaRepository;
-    private final JPAQueryFactory jpaQueryFactory;
-    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+class PostRepositoryImpl(
+    private val postJpaRepository: PostJpaRepository,
+    private val jpaQueryFactory: JPAQueryFactory,
+) : PostRepository {
+    private val parent = QQuestionCategoryEntity("parent")
+    private val child = QQuestionCategoryEntity("child")
 
-    @Override
-    public List<PostListItem> getPostList(Long questionId, PagingInformation pagingInformation) {
+    override fun getPostList(questionId: Long, pagingInformation: PagingInformation): List<PostListItem> {
         return jpaQueryFactory.select(
-                Projections.constructor(PostListItem.class,
-                    postEntity.id,
-                    postEntity.postContentEntity.title,
-                    userEntity.userInformationEntity.name,
-                    postEntity.createdAt
-                ))
+            Projections.constructor(
+                PostListItem::class.java,
+                postEntity.id,
+                postEntity.postContentEntity.title,
+                userEntity.userInformationEntity.name,
+                postEntity.createdAt
+            )
+        )
             .from(postEntity)
             .where(postEntity.questionId.eq(questionId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
-            .offset(pagingInformation.getOffset())
-            .limit(pagingInformation.getSize())
-            .fetch();
+            .offset(pagingInformation.offset.toLong())
+            .limit(pagingInformation.size.toLong())
+            .fetch()
     }
 
-    @Override
-    public List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation) {
+    override fun getCreatorPostList(creatorId: Long, pagingInformation: PagingInformation): List<PostListItem> {
         return jpaQueryFactory.select(
-                Projections.constructor(PostListItem.class,
-                    postEntity.id,
-                    postEntity.postContentEntity.title,
-                    userEntity.userInformationEntity.name,
-                    postEntity.createdAt
-                ))
+            Projections.constructor(
+                PostListItem::class.java,
+                postEntity.id,
+                postEntity.postContentEntity.title,
+                userEntity.userInformationEntity.name,
+                postEntity.createdAt
+            )
+        )
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
             .innerJoin(postEntity).on(postEntity.questionId.eq(questionEntity.id))
             .innerJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
-            .offset(pagingInformation.getOffset())
-            .limit(pagingInformation.getSize())
-            .fetch();
+            .offset(pagingInformation.offset.toLong())
+            .limit(pagingInformation.size.toLong())
+            .fetch()
     }
 
-    @Override
-    public int countCreatorPost(Long creatorId) {
-        Integer result = jpaQueryFactory.select(postEntity.id.count().intValue())
+    override fun countCreatorPost(creatorId: Long): Int {
+        return jpaQueryFactory.select(postEntity.id.count().intValue())
             .from(questionEntity)
             .where(questionEntity.creatorId.eq(creatorId))
-            .innerJoin(postEntity).on(postEntity.questionId.eq(questionEntity.id))
-            .fetchFirst();
-
-        if (result == null) {
-            return 0;
-        }
-
-        return result;
+            .innerJoin(postEntity)
+            .on(postEntity.questionId.eq(questionEntity.id))
+            .fetchFirst() ?: 0
     }
 
-    @Override
-    public PostDetail getPostDetail(Long postId) {
-        PostDetail postDetail = jpaQueryFactory.select(
-                Projections.constructor(PostDetail.class,
-                    postEntity.id,
-                    postEntity.questionId,
-                    postEntity.postContentEntity.title,
-                    postEntity.postContentEntity.content,
-                    postEntity.postContentEntity.files,
-                    parent.title,
-                    child.title,
-                    questionEntity.questionContentEntity.title,
-                    userEntity.userInformationEntity.name,
-                    postEntity.createdAt
-                ))
+    override fun getPostDetail(postId: Long): PostDetail {
+        return jpaQueryFactory.select(
+            Projections.constructor(
+                PostDetail::class.java,
+                postEntity.id,
+                postEntity.questionId,
+                postEntity.postContentEntity.title,
+                postEntity.postContentEntity.content,
+                postEntity.postContentEntity.files,
+                parent.title,
+                child.title,
+                questionEntity.questionContentEntity.title,
+                userEntity.userInformationEntity.name,
+                postEntity.createdAt
+            )
+        )
             .from(postEntity)
             .where(postEntity.id.eq(postId))
-            .leftJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
+            .leftJoin(questionEntity)
+            .on(questionEntity.id.eq(postEntity.questionId))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postEntity.writerId))
-            .fetchFirst();
-
-        if (postDetail == null) {
-            throw new CoreException(Error.NOT_FOUND);
-        }
-
-        return postDetail;
+            .fetchFirst() ?: throw CoreException(Error.NOT_FOUND)
     }
 
-    @Override
-    public Post findByIdAndWriterId(Long postId, Long userId) {
+    override fun findByIdAndWriterId(postId: Long, userId: Long): Post {
         return postJpaRepository.findByIdAndWriterId(postId, userId)
-            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
-            .toModel();
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
     }
 
-    @Override
-    public Post findById(Long postId) {
+    override fun findById(postId: Long): Post {
         return postJpaRepository.findById(postId)
-            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
-            .toModel();
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
     }
 
-    @Override
-    public int count(Long questionId) {
-        Integer result = jpaQueryFactory.select(postEntity.id.count().intValue())
+    override fun count(questionId: Long): Int {
+        return jpaQueryFactory.select(postEntity.id.count().intValue())
             .from(postEntity)
             .where(postEntity.questionId.eq(questionId))
-            .fetchFirst();
-
-        if (result == null) {
-            return 0;
-        }
-
-        return result;
+            .fetchFirst() ?: 0
     }
 
-    @Override
-    public Post save(Post post) {
-        return postJpaRepository.save(PostEntity.from(post)).toModel();
+    override fun save(post: Post): Post {
+        return postJpaRepository.save(from(post)).toModel()
     }
 
-    @Override
-    public void delete(Post post) {
-        postJpaRepository.delete(PostEntity.from(post));
+    override fun delete(post: Post) {
+        postJpaRepository.delete(from(post))
     }
 }

@@ -1,19 +1,15 @@
-package com.eager.questioncloud.core.domain.post.dto;
+package com.eager.questioncloud.core.domain.post.dto
 
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import java.time.LocalDateTime
 
-@Getter
-@AllArgsConstructor
-@Builder
-public class PostCommentDetail {
-    private Long id;
-    private String writerName;
-    private String profileImage;
-    private String comment;
-    private Boolean isCreator;
-    private Boolean isWriter;
-    private LocalDateTime createdAt;
+class PostCommentDetail(
+    val id: Long?,
+    val writerName: String?,
+    val profileImage: String?,
+    val comment: String?,
+    val isCreator: Boolean?,
+    val isWriter: Boolean?,
+    val createdAt: LocalDateTime?,
+) {
+
 }

@@ -1,27 +1,26 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.repository;
+package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostDetail;
-import com.eager.questioncloud.core.domain.post.dto.PostListItem;
-import com.eager.questioncloud.core.domain.post.model.Post;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.post.dto.PostDetail
+import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.model.Post
 
-public interface PostRepository {
-    List<PostListItem> getPostList(Long questionId, PagingInformation pagingInformation);
+interface PostRepository {
+    fun getPostList(questionId: Long, pagingInformation: PagingInformation): List<PostListItem>
 
-    List<PostListItem> getCreatorPostList(Long creatorId, PagingInformation pagingInformation);
+    fun getCreatorPostList(creatorId: Long, pagingInformation: PagingInformation): List<PostListItem>
 
-    int countCreatorPost(Long creatorId);
+    fun countCreatorPost(creatorId: Long): Int
 
-    PostDetail getPostDetail(Long postId);
+    fun getPostDetail(postId: Long): PostDetail
 
-    Post findByIdAndWriterId(Long postId, Long userId);
+    fun findByIdAndWriterId(postId: Long, userId: Long): Post
 
-    Post findById(Long postId);
+    fun findById(postId: Long): Post
 
-    int count(Long questionId);
+    fun count(questionId: Long): Int
 
-    Post save(Post post);
+    fun save(post: Post): Post
 
-    void delete(Post post);
+    fun delete(post: Post)
 }

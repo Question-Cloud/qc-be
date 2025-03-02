@@ -40,6 +40,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
         implementation "org.jetbrains.kotlin:kotlin-stdlib"
         implementation 'io.hypersistence:hypersistence-tsid:2.1.4'
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
         annotationProcessor 'org.projectlombok:lombok'
         testCompileOnly 'org.projectlombok:lombok'
         testAnnotationProcessor 'org.projectlombok:lombok'

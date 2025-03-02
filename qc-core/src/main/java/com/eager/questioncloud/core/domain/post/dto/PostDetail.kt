@@ -1,22 +1,19 @@
-package com.eager.questioncloud.core.domain.post.dto;
+package com.eager.questioncloud.core.domain.post.dto
 
-import com.eager.questioncloud.core.domain.post.model.PostFile;
-import java.time.LocalDateTime;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.post.model.PostFile
+import java.time.LocalDateTime
 
-@Getter
-@AllArgsConstructor
-public class PostDetail {
-    private Long id;
-    private Long questionId;
-    private String title;
-    private String content;
-    private List<PostFile> files;
-    private String parentCategory;
-    private String childCategory;
-    private String questionTitle;
-    private String writer;
-    private LocalDateTime createdAt;
+class PostDetail(
+    val id: Long,
+    val questionId: Long,
+    val title: String,
+    val content: String,
+    val files: List<PostFile>,
+    val parentCategory: String,
+    val childCategory: String,
+    val questionTitle: String,
+    val writer: String,
+    val createdAt: LocalDateTime,
+) {
+
 }

@@ -1,38 +1,33 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.converter;
+package com.eager.questioncloud.core.domain.post.infrastructure.converter
 
-import com.eager.questioncloud.core.domain.post.model.PostFile;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.AttributeConverter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.eager.questioncloud.core.domain.post.model.PostFile
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import jakarta.persistence.AttributeConverter
+import java.util.*
 
-public class PostFileConverter implements AttributeConverter<List<PostFile>, String> {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+class PostFileConverter : AttributeConverter<List<PostFile?>?, String> {
+    private val objectMapper = ObjectMapper().registerKotlinModule()
 
-    @Override
-    public String convertToDatabaseColumn(List<PostFile> attribute) {
-        if (attribute == null || attribute.isEmpty()) {
-            return null;
+    override fun convertToDatabaseColumn(attribute: List<PostFile?>?): String? {
+        if (attribute.isNullOrEmpty()) {
+            return null
         }
-        try {
-            return objectMapper.writeValueAsString(attribute);
-        } catch (JsonProcessingException e) {
-            return null;
+        return try {
+            objectMapper.writeValueAsString(attribute)
+        } catch (e: JsonProcessingException) {
+            null
         }
     }
 
-    @Override
-    public List<PostFile> convertToEntityAttribute(String dbData) {
-        List<PostFile> list = new ArrayList<>();
-        if (dbData == null) {
-            return list;
-        }
-        try {
-            return Arrays.asList(objectMapper.readValue(dbData, PostFile[].class));
-        } catch (JsonProcessingException e) {
-            return list;
-        }
+    override fun convertToEntityAttribute(dbData: String?): List<PostFile> {
+        return dbData?.let {
+            try {
+                objectMapper.readValue(dbData, Array<PostFile>::class.java).toList()
+            } catch (e: JsonProcessingException) {
+                emptyList()
+            }
+        } ?: emptyList()
     }
 }

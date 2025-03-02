@@ -1,18 +1,21 @@
-package com.eager.questioncloud.core.domain.post.infrastructure.repository;
+package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.post.model.PostComment;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
+import com.eager.questioncloud.core.domain.post.model.PostComment
 
-public interface PostCommentRepository {
-    PostComment save(PostComment postComment);
+interface PostCommentRepository {
+    fun save(postComment: PostComment): PostComment
 
-    PostComment findByIdAndWriterId(Long commentId, Long userId);
+    fun findByIdAndWriterId(commentId: Long, userId: Long): PostComment
 
-    List<PostCommentDetail> getPostCommentDetails(Long postId, Long userId, PagingInformation pagingInformation);
+    fun getPostCommentDetails(
+        postId: Long,
+        userId: Long,
+        pagingInformation: PagingInformation
+    ): List<PostCommentDetail>
 
-    void delete(PostComment postComment);
+    fun delete(postComment: PostComment)
 
-    int count(Long postId);
+    fun count(postId: Long): Int
 }
