@@ -51,18 +51,14 @@ class QuestionPaymentHistoryDocumentReadConverter :
         val coupon = source.get("coupon", Document::class.java)
 
         return QuestionPaymentCoupon(
-            getEmbeddedValue(coupon, "userCouponId", Long::class.java),
-            getEmbeddedValue(coupon, "title", String::class.java),
-            CouponType.valueOf(getEmbeddedValue(coupon, "couponType", String::class.java)),
-            getEmbeddedValue(coupon, "value", Int::class.java)
+            coupon.getLong("userCouponId"),
+            coupon.getString("title"),
+            CouponType.valueOf(coupon.getString("couponType")),
+            coupon.getInteger("value")
         )
     }
 
-    private fun <T> getEmbeddedValue(document: Document, key: String, clazz: Class<T>): T {
-        return document.get(key, clazz)
-    }
-
-    private fun convertDate(date: Date?): LocalDateTime {
-        return date!!.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    private fun convertDate(date: Date): LocalDateTime {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
     }
 }

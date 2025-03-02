@@ -1,38 +1,35 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.payment.infrastructure.document.QuestionPaymentHistoryDocument;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.payment.infrastructure.document.QuestionPaymentHistoryDocument.Companion.from
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.stereotype.Repository
+import java.util.stream.Collectors
 
 @Repository
-@RequiredArgsConstructor
-public class QuestionPaymentHistoryRepositoryImpl implements QuestionPaymentHistoryRepository {
-    private final QuestionPaymentHistoryMongoRepository questionPaymentHistoryMongoRepository;
-
-    @Override
-    public List<QuestionPaymentHistory> getQuestionPaymentHistory(Long userId, PagingInformation pagingInformation) {
+class QuestionPaymentHistoryRepositoryImpl(
+    private val questionPaymentHistoryMongoRepository: QuestionPaymentHistoryMongoRepository
+) : QuestionPaymentHistoryRepository {
+    override fun getQuestionPaymentHistory(
+        userId: Long,
+        pagingInformation: PagingInformation
+    ): List<QuestionPaymentHistory> {
         return questionPaymentHistoryMongoRepository.findByUserId(
-                userId,
-                PageRequest.of(pagingInformation.getPage(), pagingInformation.getSize(), Sort.by(Sort.Order.desc("paymentId")))
-            )
+            userId,
+            PageRequest.of(pagingInformation.page, pagingInformation.size, Sort.by(Sort.Order.desc("paymentId")))
+        )
             .stream()
-            .map(QuestionPaymentHistoryDocument::toModel)
-            .collect(Collectors.toList());
+            .map { document -> document.toModel() }
+            .collect(Collectors.toList())
     }
 
-    @Override
-    public int count(Long userId) {
-        return questionPaymentHistoryMongoRepository.countByUserId(userId);
+    override fun count(userId: Long): Int {
+        return questionPaymentHistoryMongoRepository.countByUserId(userId)
     }
 
-    @Override
-    public QuestionPaymentHistory save(QuestionPaymentHistory questionPaymentHistory) {
-        return questionPaymentHistoryMongoRepository.save(QuestionPaymentHistoryDocument.from(questionPaymentHistory)).toModel();
+    override fun save(questionPaymentHistory: QuestionPaymentHistory): QuestionPaymentHistory {
+        return questionPaymentHistoryMongoRepository.save(from(questionPaymentHistory)).toModel()
     }
 }

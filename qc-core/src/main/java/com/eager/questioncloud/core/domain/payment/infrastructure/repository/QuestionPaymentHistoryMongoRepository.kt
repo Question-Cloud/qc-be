@@ -1,12 +1,11 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.payment.infrastructure.document.QuestionPaymentHistoryDocument;
-import java.util.List;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.document.QuestionPaymentHistoryDocument
+import org.springframework.data.domain.Pageable
+import org.springframework.data.mongodb.repository.MongoRepository
 
-public interface QuestionPaymentHistoryMongoRepository extends MongoRepository<QuestionPaymentHistoryDocument, Long> {
-    List<QuestionPaymentHistoryDocument> findByUserId(Long userId, Pageable pageable);
+interface QuestionPaymentHistoryMongoRepository : MongoRepository<QuestionPaymentHistoryDocument, Long> {
+    fun findByUserId(userId: Long, pageable: Pageable): List<QuestionPaymentHistoryDocument>
 
-    int countByUserId(Long userId);
+    fun countByUserId(userId: Long): Int
 }

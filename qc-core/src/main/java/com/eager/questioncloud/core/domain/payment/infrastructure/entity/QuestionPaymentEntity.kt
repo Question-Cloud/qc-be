@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 class QuestionPaymentEntity private constructor(
     @Id var orderId: String,
     @Column var userId: Long,
-    @Column var userCouponId: Long,
+    @Column var userCouponId: Long?,
     @Column var amount: Int,
     @Enumerated(EnumType.STRING) @Column var status: QuestionPaymentStatus,
     @Column var createdAt: LocalDateTime
@@ -21,7 +21,7 @@ class QuestionPaymentEntity private constructor(
             return QuestionPaymentEntity(
                 questionPayment.order.orderId,
                 questionPayment.userId,
-                questionPayment.questionPaymentCoupon!!.userCouponId,
+                questionPayment.questionPaymentCoupon?.userCouponId,
                 questionPayment.amount,
                 questionPayment.status,
                 questionPayment.createdAt

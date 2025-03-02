@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment
 
-public interface QuestionPaymentRepository {
-    QuestionPayment save(QuestionPayment questionPayment);
+interface QuestionPaymentRepository {
+    fun save(questionPayment: QuestionPayment): QuestionPayment
 
-    int countByUserId(Long userId);
+    fun countByUserId(userId: Long): Int
 }

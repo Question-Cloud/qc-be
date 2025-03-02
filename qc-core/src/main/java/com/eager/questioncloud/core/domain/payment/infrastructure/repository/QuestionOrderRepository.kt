@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder
 
-public interface QuestionOrderRepository {
-    void save(QuestionOrder questionOrder);
+interface QuestionOrderRepository {
+    fun save(questionOrder: QuestionOrder)
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

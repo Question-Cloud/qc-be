@@ -1,13 +1,12 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory
 
-public interface QuestionPaymentHistoryRepository {
-    List<QuestionPaymentHistory> getQuestionPaymentHistory(Long userId, PagingInformation pagingInformation);
+interface QuestionPaymentHistoryRepository {
+    fun getQuestionPaymentHistory(userId: Long, pagingInformation: PagingInformation): List<QuestionPaymentHistory>
 
-    int count(Long userId);
+    fun count(userId: Long): Int
 
-    QuestionPaymentHistory save(QuestionPaymentHistory questionPaymentHistory);
+    fun save(questionPaymentHistory: QuestionPaymentHistory): QuestionPaymentHistory
 }

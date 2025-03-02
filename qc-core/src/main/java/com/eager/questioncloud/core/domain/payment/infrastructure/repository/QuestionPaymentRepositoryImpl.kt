@@ -1,23 +1,20 @@
-package com.eager.questioncloud.core.domain.payment.infrastructure.repository;
+package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.payment.infrastructure.entity.QuestionPaymentEntity;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.payment.infrastructure.entity.QuestionPaymentEntity.Companion.from
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment
+import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
-public class QuestionPaymentRepositoryImpl implements QuestionPaymentRepository {
-    private final QuestionPaymentJpaRepository questionPaymentJpaRepository;
+class QuestionPaymentRepositoryImpl(
+    private val questionPaymentJpaRepository: QuestionPaymentJpaRepository
+) : QuestionPaymentRepository {
 
-    @Override
-    public QuestionPayment save(QuestionPayment questionPayment) {
-        questionPaymentJpaRepository.save(QuestionPaymentEntity.from(questionPayment));
-        return questionPayment;
+    override fun save(questionPayment: QuestionPayment): QuestionPayment {
+        questionPaymentJpaRepository.save(from(questionPayment))
+        return questionPayment
     }
 
-    @Override
-    public int countByUserId(Long userId) {
-        return questionPaymentJpaRepository.countByUserId(userId);
+    override fun countByUserId(userId: Long): Int {
+        return questionPaymentJpaRepository.countByUserId(userId)
     }
 }
