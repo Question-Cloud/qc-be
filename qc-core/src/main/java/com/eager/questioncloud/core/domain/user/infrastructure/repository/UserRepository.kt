@@ -1,28 +1,28 @@
-package com.eager.questioncloud.core.domain.user.infrastructure.repository;
+package com.eager.questioncloud.core.domain.user.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.model.User;
-import java.util.Optional;
+import com.eager.questioncloud.core.domain.user.dto.UserWithCreator
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import com.eager.questioncloud.core.domain.user.model.User
+import java.util.*
 
-public interface UserRepository {
-    User getUserByEmail(String email);
+interface UserRepository {
+    fun getUserByEmail(email: String): User
 
-    User getUserByPhone(String phone);
+    fun getUserByPhone(phone: String): User
 
-    User getUser(Long uid);
+    fun getUser(uid: Long): User
 
-    UserWithCreator getUserWithCreator(Long uid);
+    fun getUserWithCreator(uid: Long): UserWithCreator
 
-    User save(User user);
+    fun save(user: User): User
 
-    Optional<User> getSocialUser(AccountType accountType, String socialUid);
+    fun getSocialUser(accountType: AccountType, socialUid: String): Optional<User>
 
-    Boolean checkDuplicatePhone(String phone);
+    fun checkDuplicatePhone(phone: String): Boolean
 
-    Boolean checkDuplicateEmail(String email);
+    fun checkDuplicateEmail(email: String): Boolean
 
-    Boolean checkDuplicateSocialUidAndAccountType(String socialUid, AccountType accountType);
+    fun checkDuplicateSocialUidAndAccountType(socialUid: String, accountType: AccountType): Boolean
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

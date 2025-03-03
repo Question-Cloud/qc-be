@@ -1,23 +1,16 @@
-package com.eager.questioncloud.core.domain.user.implement;
+package com.eager.questioncloud.core.domain.user.implement
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 
-@Component
-@RequiredArgsConstructor
-public class PasswordProcessor {
-    public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+object PasswordProcessor {
+    private val passwordEncoder: PasswordEncoder = BCryptPasswordEncoder()
 
-    public static String encode(String rawPassword) {
-        if (rawPassword == null) {
-            return null;
-        }
-        return passwordEncoder.encode(rawPassword);
+    fun encode(rawPassword: String): String {
+        return passwordEncoder.encode(rawPassword)
     }
 
-    public static Boolean matches(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+    fun matches(rawPassword: String, encodedPassword: String): Boolean {
+        return passwordEncoder.matches(rawPassword, encodedPassword)
     }
 }

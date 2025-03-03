@@ -10,7 +10,7 @@ class UserAccountInformation(
     var socialUid: String? = null,
     var accountType: AccountType
 ) {
-    fun changePassword(newRawPassword: String?): UserAccountInformation {
+    fun changePassword(newRawPassword: String): UserAccountInformation {
         if (accountType != AccountType.EMAIL) {
             throw CoreException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT)
         }
@@ -27,7 +27,7 @@ class UserAccountInformation(
             UserAccountInformation("guest", "guest", AccountType.GUEST)
 
         @JvmStatic
-        fun createEmailAccountInformation(rawPassword: String?): UserAccountInformation {
+        fun createEmailAccountInformation(rawPassword: String): UserAccountInformation {
             val encodedPassword = PasswordProcessor.encode(rawPassword)
             return UserAccountInformation(
                 password = encodedPassword,

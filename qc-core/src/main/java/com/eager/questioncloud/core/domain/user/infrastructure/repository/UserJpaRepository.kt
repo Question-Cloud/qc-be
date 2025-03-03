@@ -1,21 +1,26 @@
-package com.eager.questioncloud.core.domain.user.infrastructure.repository;
+package com.eager.questioncloud.core.domain.user.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.infrastructure.entity.UserEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.UserEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
-    Boolean existsByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(AccountType accountType, String socialUid);
+interface UserJpaRepository : JpaRepository<UserEntity, Long> {
+    fun existsByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
+        accountType: AccountType,
+        socialUid: String
+    ): Boolean
 
-    Boolean existsByUserInformationEntityPhone(String phone);
+    fun existsByUserInformationEntityPhone(phone: String): Boolean
 
-    Boolean existsByUserInformationEntityEmail(String email);
+    fun existsByUserInformationEntityEmail(email: String): Boolean
 
-    Optional<UserEntity> findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(AccountType accountType,
-        String socialUid);
+    fun findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
+        accountType: AccountType,
+        socialUid: String
+    ): Optional<UserEntity>
 
-    Optional<UserEntity> findByUserInformationEntityEmail(String email);
+    fun findByUserInformationEntityEmail(email: String): Optional<UserEntity>
 
-    Optional<UserEntity> findByUserInformationEntityPhone(String phone);
+    fun findByUserInformationEntityPhone(phone: String): Optional<UserEntity>
 }

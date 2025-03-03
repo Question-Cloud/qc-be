@@ -1,14 +1,5 @@
-package com.eager.questioncloud.core.domain.user.enums;
+package com.eager.questioncloud.core.domain.user.enums
 
-import lombok.Getter;
-
-@Getter
-public enum UserStatus {
-    PendingEmailVerification("PendingEmailVerification"), Active("Active"), Deleted("Deleted"), Ban("Ban");
-
-    private final String value;
-
-    UserStatus(String value) {
-        this.value = value;
-    }
+enum class UserStatus(val value: String) {
+    PendingEmailVerification("PendingEmailVerification"), Active("Active"), Deleted("Deleted"), Ban("Ban")
 }

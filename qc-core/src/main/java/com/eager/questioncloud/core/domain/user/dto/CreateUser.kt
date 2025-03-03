@@ -1,16 +1,13 @@
-package com.eager.questioncloud.core.domain.user.dto;
+package com.eager.questioncloud.core.domain.user.dto
 
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.user.enums.AccountType
 
-@Getter
-@AllArgsConstructor
-public class CreateUser {
-    private String email;
-    private String password;
-    private String socialRegisterToken;
-    private AccountType accountType;
-    private String phone;
-    private String name;
-}
+class CreateUser(
+    val email: String,
+    val password: String?,
+    val socialRegisterToken: String?,
+    val accountType: AccountType,
+    val phone: String,
+    val name: String,
+)
+

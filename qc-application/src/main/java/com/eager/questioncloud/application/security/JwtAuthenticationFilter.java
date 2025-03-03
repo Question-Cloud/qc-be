@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private void authentication(String accessToken) {
         Long uid = authenticationTokenManager.parseUidFromAccessToken(accessToken);
         UserWithCreator userWithCreator = userRepository.getUserWithCreator(uid);
-        UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.user(), userWithCreator.creator());
+        UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.getUser(), userWithCreator.getCreator());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             userPrincipal,
             userPrincipal.getUser().getUserInformation().getName(),

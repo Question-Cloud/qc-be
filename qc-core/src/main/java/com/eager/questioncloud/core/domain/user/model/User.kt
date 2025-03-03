@@ -27,12 +27,12 @@ class User(
         }
     }
 
-    fun changePassword(newPassword: String?) {
+    fun changePassword(newPassword: String) {
         userAccountInformation = userAccountInformation.changePassword(newPassword)
     }
 
-    fun passwordAuthentication(rawPassword: String?) {
-        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.password)) {
+    fun passwordAuthentication(rawPassword: String) {
+        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.password!!)) {
             throw CoreException(Error.FAIL_LOGIN)
         }
     }
