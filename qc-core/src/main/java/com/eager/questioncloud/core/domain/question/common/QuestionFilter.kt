@@ -11,8 +11,8 @@ class QuestionFilter(
     val levels: List<QuestionLevel>? = null,
     val questionType: QuestionType? = null,
     val creatorId: Long? = null,
-    val sort: QuestionSortType? = null,
-    val pagingInformation: PagingInformation? = null
+    val sort: QuestionSortType,
+    val pagingInformation: PagingInformation
 ) {
 
 }

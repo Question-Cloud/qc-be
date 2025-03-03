@@ -1,13 +1,5 @@
-package com.eager.questioncloud.core.domain.question.enums;
+package com.eager.questioncloud.core.domain.question.enums
 
-import lombok.Getter;
-
-@Getter
-public enum QuestionSortType {
-    Popularity("Popularity"), Rate("Rate"), Latest("Latest"), LEVEL("LEVEL");
-    private final String value;
-
-    QuestionSortType(String value) {
-        this.value = value;
-    }
+enum class QuestionSortType(val value: String) {
+    Popularity("Popularity"), Rate("Rate"), Latest("Latest"), LEVEL("LEVEL")
 }

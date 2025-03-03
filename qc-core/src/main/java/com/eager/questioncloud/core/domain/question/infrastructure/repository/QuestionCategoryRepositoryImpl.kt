@@ -1,43 +1,41 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.repository;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository
 
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
-
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory;
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.SubQuestionCategory;
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.SubQuestionCategory
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity
+import com.querydsl.core.group.GroupBy
+import com.querydsl.core.types.Projections
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
-public class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
-    private final JPAQueryFactory jpaQueryFactory;
+class QuestionCategoryRepositoryImpl(
+    private val jpaQueryFactory: JPAQueryFactory
+) : QuestionCategoryRepository {
+    val parent = QQuestionCategoryEntity("parent")
+    val child = QQuestionCategoryEntity("child")
 
-    @Override
-    public List<MainQuestionCategory> getMainQuestionCategories() {
-        QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-        QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+    override fun getMainQuestionCategories(): List<MainQuestionCategory> {
         return jpaQueryFactory.select(parent, child)
             .from(parent)
             .leftJoin(child).on(child.parentId.eq(parent.id))
             .where(parent.isParent.isTrue())
             .transform(
-                groupBy(parent.id)
+                GroupBy.groupBy(parent.id)
                     .list(
                         Projections.constructor(
-                            MainQuestionCategory.class,
+                            MainQuestionCategory::class.java,
                             parent.title,
                             parent.subject,
-                            list(
-                                Projections.constructor(SubQuestionCategory.class,
+                            GroupBy.list(
+                                Projections.constructor(
+                                    SubQuestionCategory::class.java,
                                     child.id,
-                                    child.title))
+                                    child.title
+                                )
+                            )
                         )
                     )
-            );
+            )
     }
 }

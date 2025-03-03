@@ -1,43 +1,36 @@
-package com.eager.questioncloud.core.domain.question.dto;
+package com.eager.questioncloud.core.domain.question.dto
 
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.question.enums.Subject
+import java.util.stream.Collectors
 
-@Getter
-@AllArgsConstructor
-public class QuestionCategoryGroupBySubject {
-    private Subject subject;
-    private List<MainQuestionCategory> list;
+class QuestionCategoryGroupBySubject(
+    val subject: Subject,
+    val list: List<MainQuestionCategory>,
+) {
+    class MainQuestionCategory(
+        val title: String,
+        val subject: Subject,
+        val sub: List<SubQuestionCategory>,
+    )
 
-    public static List<QuestionCategoryGroupBySubject> create(List<MainQuestionCategory> mainQuestionCategoryList) {
-        List<QuestionCategoryGroupBySubject> result = new ArrayList<>();
-        mainQuestionCategoryList
-            .stream()
-            .collect(Collectors.groupingBy(mainQuestionCategory -> mainQuestionCategory.subject))
-            .forEach((subject, items) -> result.add(new QuestionCategoryGroupBySubject(subject, items)));
+    class SubQuestionCategory(
+        val id: Long,
+        val title: String
+    )
 
-        result.sort(Comparator.comparing(data -> data.getSubject().getValue()));
+    companion object {
+        @JvmStatic
+        fun create(mainQuestionCategoryList: List<MainQuestionCategory>): List<QuestionCategoryGroupBySubject> {
+            val result: MutableList<QuestionCategoryGroupBySubject> = ArrayList()
+            mainQuestionCategoryList
+                .stream()
+                .collect(Collectors.groupingBy { mainQuestionCategory: MainQuestionCategory -> mainQuestionCategory.subject })
+                .forEach { (subject: Subject, items: List<MainQuestionCategory>) ->
+                    result.add(QuestionCategoryGroupBySubject(subject, items))
+                }
 
-        return result;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class MainQuestionCategory {
-        private String title;
-        private Subject subject;
-        private List<SubQuestionCategory> sub;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class SubQuestionCategory {
-        private Long id;
-        private String title;
+            result.sortWith(Comparator.comparing { data -> data.subject.value })
+            return result
+        }
     }
 }

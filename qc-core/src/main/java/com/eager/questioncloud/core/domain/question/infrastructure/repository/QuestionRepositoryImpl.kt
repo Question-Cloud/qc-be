@@ -1,295 +1,282 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.repository;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository
 
-import static com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity;
-import static com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity;
-import static com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity;
-import static com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity;
-import static com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.QUserQuestionEntity.userQuestionEntity;
-
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.enums.QuestionType;
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity;
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import com.eager.questioncloud.core.domain.question.enums.QuestionType
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity
+import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity.Companion.from
+import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity
+import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.QUserQuestionEntity.userQuestionEntity
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.querydsl.core.Tuple
+import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.jpa.impl.JPAQuery
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
+import java.util.stream.Collectors
 
 @Repository
-@RequiredArgsConstructor
-public class QuestionRepositoryImpl implements QuestionRepository {
-    private final JPAQueryFactory jpaQueryFactory;
-    private final QuestionJpaRepository questionJpaRepository;
-    private final QQuestionCategoryEntity parent = new QQuestionCategoryEntity("parent");
-    private final QQuestionCategoryEntity child = new QQuestionCategoryEntity("child");
+class QuestionRepositoryImpl(
+    private val jpaQueryFactory: JPAQueryFactory,
+    private val questionJpaRepository: QuestionJpaRepository,
+) : QuestionRepository {
+    private val parent = QQuestionCategoryEntity("parent")
+    private val child = QQuestionCategoryEntity("child")
 
-    @Override
-    public int countByQuestionFilter(QuestionFilter questionFilter) {
-        Integer total = jpaQueryFactory.select(questionEntity.id.count().intValue())
+    override fun countByQuestionFilter(questionFilter: QuestionFilter): Int {
+        return jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .where(
-                questionLevelFilter(questionFilter.getLevels()),
-                questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()),
-                questionCreatorFilter(questionFilter.getCreatorId()),
-                questionStatusFilter())
-            .fetchFirst();
-
-        if (total == null) {
-            return 0;
-        }
-
-        return total;
+                questionLevelFilter(questionFilter.levels),
+                questionCategoryFilter(questionFilter.categories),
+                questionTypeFilter(questionFilter.questionType),
+                questionCreatorFilter(questionFilter.creatorId),
+                questionStatusFilter()
+            )
+            .fetchFirst() ?: 0
     }
 
-    @Override
-    public List<QuestionInformation> getQuestionInformation(QuestionFilter questionFilter) {
-        List<Tuple> tuples = questionInformationSelectFrom()
-            .offset(questionFilter.getPagingInformation().getOffset())
-            .limit(questionFilter.getPagingInformation().getSize())
+    override fun getQuestionInformation(questionFilter: QuestionFilter): List<QuestionInformation> {
+        return questionInformationSelectFrom()
+            .offset(questionFilter.pagingInformation.offset.toLong())
+            .limit(questionFilter.pagingInformation.size.toLong())
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .leftJoin(userQuestionEntity)
-            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(questionFilter.getUserId()))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .on(
+                userQuestionEntity.questionId.eq(questionEntity.id),
+                userQuestionEntity.userId.eq(questionFilter.userId)
+            )
+            .leftJoin(questionReviewStatisticsEntity)
+            .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .groupBy(questionEntity.id)
-            .orderBy(sort(questionFilter.getSort()), questionEntity.id.desc())
+            .orderBy(sort(questionFilter.sort), questionEntity.id.desc())
             .where(
-                questionLevelFilter(questionFilter.getLevels()),
-                questionCategoryFilter(questionFilter.getCategories()),
-                questionTypeFilter(questionFilter.getQuestionType()),
-                questionCreatorFilter(questionFilter.getCreatorId()),
-                questionStatusFilter())
-            .fetch();
-
-        return tuples.stream()
-            .map(this::parseQuestionInformationTuple)
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public QuestionInformation getQuestionInformation(Long questionId, Long userId) {
-        Tuple tuple = questionInformationSelectFrom()
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(userQuestionEntity)
-            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userId))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .where(questionEntity.id.eq(questionId), questionStatusFilter())
-            .fetchFirst();
-
-        if (tuple == null || tuple.get(questionEntity.id) == null) {
-            throw new CoreException(Error.NOT_FOUND);
-        }
-
-        return parseQuestionInformationTuple(tuple);
-    }
-
-    @Override
-    public List<Question> getQuestionsByQuestionIds(List<Long> questionIds) {
-        return jpaQueryFactory.select(questionEntity)
-            .from(questionEntity)
-            .where(questionEntity.id.in(questionIds), questionStatusFilter())
+                questionLevelFilter(questionFilter.levels),
+                questionCategoryFilter(questionFilter.categories),
+                questionTypeFilter(questionFilter.questionType),
+                questionCreatorFilter(questionFilter.creatorId),
+                questionStatusFilter()
+            )
             .fetch()
             .stream()
-            .map(QuestionEntity::toModel)
-            .collect(Collectors.toList());
+            .map { tuple: Tuple -> this.parseQuestionInformationTuple(tuple) }
+            .collect(Collectors.toList())
     }
 
-    @Override
-    public Boolean isAvailable(Long questionId) {
-        Long result = jpaQueryFactory.select(questionEntity.id)
+    override fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation {
+        val tuple = questionInformationSelectFrom()
+            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .innerJoin(parent).on(parent.id.eq(child.parentId))
+            .innerJoin(creatorEntity)
+            .on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(userQuestionEntity)
+            .on(
+                userQuestionEntity.questionId.eq(questionEntity.id),
+                userQuestionEntity.userId.eq(userId)
+            )
+            .leftJoin(questionReviewStatisticsEntity)
+            .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .where(questionEntity.id.eq(questionId), questionStatusFilter())
+            .fetchFirst()
+            ?: throw CoreException(Error.NOT_FOUND)
+
+        return parseQuestionInformationTuple(tuple)
+    }
+
+    override fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question> {
+        return jpaQueryFactory.select(questionEntity)
+            .from(questionEntity)
+            .where(questionEntity.id.`in`(questionIds), questionStatusFilter())
+            .fetch()
+            .stream()
+            .map { entity: QuestionEntity -> entity.toModel() }
+            .collect(Collectors.toList())
+    }
+
+    override fun isAvailable(questionId: Long): Boolean {
+        val result = jpaQueryFactory.select(questionEntity.id)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
-            .fetchFirst();
+            .fetchFirst()
 
-        return result != null;
+        return result != null
     }
 
-    @Override
-    public Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId) {
-        QuestionEntity result = jpaQueryFactory.select(questionEntity)
+    override fun findByQuestionIdAndCreatorId(questionId: Long, creatorId: Long): Question {
+        return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
-            .where(questionEntity.creatorId.eq(creatorId), questionEntity.id.eq(questionId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
-            .fetchFirst();
-
-        if (result == null) {
-            throw new CoreException(Error.NOT_FOUND);
-        }
-
-        return result.toModel();
+            .where(
+                questionEntity.creatorId.eq(creatorId),
+                questionEntity.id.eq(questionId),
+                questionEntity.questionStatus.ne(QuestionStatus.Delete)
+            )
+            .fetchFirst()?.toModel() ?: throw CoreException(Error.NOT_FOUND)
     }
 
-    @Override
-    public Question get(Long questionId) {
-        QuestionEntity result = jpaQueryFactory.select(questionEntity)
+    override fun get(questionId: Long): Question {
+        return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
-            .fetchFirst();
-
-        if (result == null) {
-            throw new CoreException(Error.UNAVAILABLE_QUESTION);
-        }
-
-        return result.toModel();
+            .fetchFirst()?.toModel() ?: throw CoreException(Error.UNAVAILABLE_QUESTION)
     }
 
-    @Override
-    public Question save(Question question) {
-        return questionJpaRepository.save(QuestionEntity.from(question)).toModel();
+    override fun save(question: Question): Question {
+        return questionJpaRepository.save(from(question)).toModel()
     }
 
-    @Override
-    public List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation) {
-        List<Tuple> tuples = questionInformationSelectFrom()
-            .where(questionEntity.creatorId.eq(creatorId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
+    override fun findByCreatorIdWithPaging(
+        creatorId: Long,
+        pagingInformation: PagingInformation
+    ): List<QuestionInformation> {
+        return questionInformationSelectFrom()
+            .where(
+                questionEntity.creatorId.eq(creatorId),
+                questionEntity.questionStatus.ne(QuestionStatus.Delete)
+            )
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
             .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .leftJoin(questionReviewStatisticsEntity)
+            .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .leftJoin(userQuestionEntity)
-            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userEntity.uid))
-            .fetch();
-
-        return tuples.stream()
-            .map(this::parseQuestionInformationTuple)
-            .collect(Collectors.toList());
+            .on(
+                userQuestionEntity.questionId.eq(questionEntity.id),
+                userQuestionEntity.userId.eq(userEntity.uid)
+            )
+            .fetch()
+            .stream()
+            .map { tuple -> this.parseQuestionInformationTuple(tuple) }
+            .collect(Collectors.toList())
     }
 
-    @Override
-    public List<QuestionInformation> findByQuestionIdIn(List<Long> questionIds) {
-        List<Tuple> tuples = questionInformationSelectFrom()
-            .where(questionEntity.id.in(questionIds))
+    override fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation> {
+        return questionInformationSelectFrom()
+            .where(questionEntity.id.`in`(questionIds))
             .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(creatorEntity)
+            .on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(questionReviewStatisticsEntity).on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
+            .leftJoin(questionReviewStatisticsEntity)
+            .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .leftJoin(userQuestionEntity)
-            .on(userQuestionEntity.questionId.eq(questionEntity.id), userQuestionEntity.userId.eq(userEntity.uid))
-            .fetch();
-
-        return tuples.stream()
-            .map(this::parseQuestionInformationTuple)
-            .collect(Collectors.toList());
+            .on(
+                userQuestionEntity.questionId.eq(questionEntity.id),
+                userQuestionEntity.userId.eq(userEntity.uid)
+            )
+            .fetch()
+            .stream()
+            .map { tuple -> this.parseQuestionInformationTuple(tuple) }
+            .collect(Collectors.toList())
     }
 
-    @Override
-    public int countByCreatorId(Long creatorId) {
-        Integer result = jpaQueryFactory.select(questionEntity.id.count().intValue())
+    override fun countByCreatorId(creatorId: Long): Int {
+        return jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
-            .where(questionEntity.creatorId.eq(creatorId), questionEntity.questionStatus.ne(QuestionStatus.Delete))
-            .fetchFirst();
-
-        if (result == null) {
-            return 0;
-        }
-
-        return result;
+            .where(
+                questionEntity.creatorId.eq(creatorId),
+                questionEntity.questionStatus.ne(QuestionStatus.Delete)
+            )
+            .fetchFirst() ?: 0
     }
 
-    @Override
     @Transactional
-    public void increaseQuestionCount(Long questionId) {
+    override fun increaseQuestionCount(questionId: Long) {
         jpaQueryFactory.update(questionEntity)
             .set(questionEntity.count, questionEntity.count.add(1))
             .where(questionEntity.id.eq(questionId))
-            .execute();
+            .execute()
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        questionJpaRepository.deleteAllInBatch();
+    override fun deleteAllInBatch() {
+        questionJpaRepository.deleteAllInBatch()
     }
 
-    private OrderSpecifier<?> sort(QuestionSortType sort) {
-        switch (sort) {
-            case Popularity -> {
-                return questionEntity.count.desc();
+    private fun sort(sort: QuestionSortType): OrderSpecifier<*> {
+        return when (sort) {
+            QuestionSortType.Popularity -> {
+                questionEntity.count.desc()
             }
-            case Rate -> {
-                return questionReviewStatisticsEntity.averageRate.desc();
+
+            QuestionSortType.Rate -> {
+                questionReviewStatisticsEntity.averageRate.desc()
             }
-            case Latest -> {
-                return questionEntity.createdAt.desc();
+
+            QuestionSortType.Latest -> {
+                questionEntity.createdAt.desc()
             }
-            case LEVEL -> {
-                return questionEntity.questionContentEntity.questionLevel.desc();
-            }
-            default -> {
-                return null;
+
+            QuestionSortType.LEVEL -> {
+                questionEntity.questionContentEntity.questionLevel.desc()
             }
         }
     }
 
-    private BooleanExpression questionLevelFilter(List<QuestionLevel> levels) {
-        if (levels == null || levels.isEmpty()) {
-            return null;
+    private fun questionLevelFilter(levels: List<QuestionLevel?>?): BooleanExpression? {
+        if (levels.isNullOrEmpty()) {
+            return null
         }
-        return questionEntity.questionContentEntity.questionLevel.in(levels);
+        return questionEntity.questionContentEntity.questionLevel.`in`(levels)
     }
 
-    private BooleanExpression questionCategoryFilter(List<Long> categories) {
-        if (categories == null || categories.isEmpty()) {
-            return null;
+    private fun questionCategoryFilter(categories: List<Long?>?): BooleanExpression? {
+        if (categories.isNullOrEmpty()) {
+            return null
         }
-        return questionEntity.questionContentEntity.questionCategoryId.in(categories);
+        return questionEntity.questionContentEntity.questionCategoryId.`in`(categories)
     }
 
-    private BooleanExpression questionTypeFilter(QuestionType questionType) {
-        if (questionType == null) {
-            return null;
+    private fun questionTypeFilter(questionType: QuestionType?): BooleanExpression? {
+        return questionType?.let {
+            questionEntity.questionContentEntity.questionType.eq(questionType)
         }
-        return questionEntity.questionContentEntity.questionType.eq(questionType);
     }
 
-    private BooleanExpression questionCreatorFilter(Long creatorId) {
-        if (creatorId == null) {
-            return null;
+    private fun questionCreatorFilter(creatorId: Long?): BooleanExpression? {
+        return creatorId?.let {
+            questionEntity.creatorId.eq(creatorId)
         }
-        return questionEntity.creatorId.eq(creatorId);
     }
 
-    private BooleanExpression questionStatusFilter() {
-        return questionEntity.questionStatus.ne(QuestionStatus.Delete).and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable));
+    private fun questionStatusFilter(): BooleanExpression {
+        return questionEntity.questionStatus.ne(QuestionStatus.Delete)
+            .and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable))
     }
 
-    private QuestionInformation parseQuestionInformationTuple(Tuple tuple) {
-        return QuestionInformation.builder()
-            .id(tuple.get(questionEntity.id))
-            .title(tuple.get(questionEntity.questionContentEntity.title))
-            .subject(tuple.get(questionEntity.questionContentEntity.subject))
-            .parentCategory(tuple.get(parent.title))
-            .childCategory(tuple.get(child.title))
-            .thumbnail(tuple.get(questionEntity.questionContentEntity.thumbnail))
-            .creatorName(tuple.get(userEntity.userInformationEntity.name))
-            .questionLevel(tuple.get(questionEntity.questionContentEntity.questionLevel))
-            .price(tuple.get(questionEntity.questionContentEntity.price))
-            .rate(tuple.get(questionReviewStatisticsEntity.averageRate))
-            .isOwned(tuple.get(userQuestionEntity.id.isNotNull()))
-            .build();
+    private fun parseQuestionInformationTuple(tuple: Tuple): QuestionInformation {
+        return QuestionInformation(
+            tuple.get(questionEntity.id)!!,
+            tuple.get(questionEntity.questionContentEntity.title)!!,
+            tuple.get(questionEntity.questionContentEntity.subject)!!,
+            tuple.get(parent.title)!!,
+            tuple.get(child.title)!!,
+            tuple.get(questionEntity.questionContentEntity.thumbnail)!!,
+            tuple.get(userEntity.userInformationEntity.name)!!,
+            tuple.get(questionEntity.questionContentEntity.questionLevel)!!,
+            tuple.get(questionEntity.questionContentEntity.price)!!,
+            tuple.get(questionReviewStatisticsEntity.averageRate)!!,
+            tuple.get(userQuestionEntity.id.isNotNull())!!
+        )
     }
 
-    private JPAQuery<Tuple> questionInformationSelectFrom() {
+    private fun questionInformationSelectFrom(): JPAQuery<Tuple> {
         return jpaQueryFactory.query()
             .select(
                 questionEntity.id,
@@ -303,7 +290,8 @@ public class QuestionRepositoryImpl implements QuestionRepository {
                 questionEntity.questionContentEntity.price,
                 userQuestionEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate,
-                questionEntity.questionContentEntity.subject)
-            .from(questionEntity);
+                questionEntity.questionContentEntity.subject
+            )
+            .from(questionEntity)
     }
 }

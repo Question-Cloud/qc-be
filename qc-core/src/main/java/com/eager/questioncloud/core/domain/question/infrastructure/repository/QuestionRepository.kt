@@ -1,35 +1,34 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.repository;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
+import com.eager.questioncloud.core.domain.question.model.Question
 
-public interface QuestionRepository {
-    int countByQuestionFilter(QuestionFilter questionFilter);
+interface QuestionRepository {
+    fun countByQuestionFilter(questionFilter: QuestionFilter): Int
 
-    List<QuestionInformation> getQuestionInformation(QuestionFilter questionFilter);
+    fun getQuestionInformation(questionFilter: QuestionFilter): List<QuestionInformation>
 
-    QuestionInformation getQuestionInformation(Long questionId, Long userId);
+    fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation
 
-    List<Question> getQuestionsByQuestionIds(List<Long> questionIds);
+    fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question>
 
-    Boolean isAvailable(Long questionId);
+    fun isAvailable(questionId: Long): Boolean
 
-    Question findByQuestionIdAndCreatorId(Long questionId, Long creatorId);
+    fun findByQuestionIdAndCreatorId(questionId: Long, creatorId: Long): Question
 
-    Question get(Long questionId);
+    fun get(questionId: Long): Question
 
-    Question save(Question question);
+    fun save(question: Question): Question
 
-    List<QuestionInformation> findByCreatorIdWithPaging(Long creatorId, PagingInformation pagingInformation);
+    fun findByCreatorIdWithPaging(creatorId: Long, pagingInformation: PagingInformation): List<QuestionInformation>
 
-    List<QuestionInformation> findByQuestionIdIn(List<Long> questionIds);
+    fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation>
 
-    int countByCreatorId(Long creatorId);
+    fun countByCreatorId(creatorId: Long): Int
 
-    void increaseQuestionCount(Long questionId);
+    fun increaseQuestionCount(questionId: Long)
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

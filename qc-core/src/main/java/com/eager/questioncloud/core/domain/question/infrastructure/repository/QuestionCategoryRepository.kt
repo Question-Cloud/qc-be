@@ -1,8 +1,7 @@
-package com.eager.questioncloud.core.domain.question.infrastructure.repository;
+package com.eager.questioncloud.core.domain.question.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory;
-import java.util.List;
+import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.MainQuestionCategory
 
-public interface QuestionCategoryRepository {
-    List<MainQuestionCategory> getMainQuestionCategories();
+interface QuestionCategoryRepository {
+    fun getMainQuestionCategories(): List<MainQuestionCategory>
 }

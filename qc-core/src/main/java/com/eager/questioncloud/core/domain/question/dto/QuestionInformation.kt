@@ -1,24 +1,20 @@
-package com.eager.questioncloud.core.domain.question.dto;
+package com.eager.questioncloud.core.domain.question.dto
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.enums.Subject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
+import com.eager.questioncloud.core.domain.question.enums.Subject
 
-@Getter
-@AllArgsConstructor
-@Builder
-public class QuestionInformation {
-    private Long id;
-    private String title;
-    private Subject subject;
-    private String parentCategory;
-    private String childCategory;
-    private String thumbnail;
-    private String creatorName;
-    private QuestionLevel questionLevel;
-    private int price;
-    private Double rate;
-    private Boolean isOwned;
+class QuestionInformation(
+    val id: Long,
+    val title: String,
+    val subject: Subject,
+    val parentCategory: String,
+    val childCategory: String,
+    val thumbnail: String,
+    val creatorName: String,
+    val questionLevel: QuestionLevel,
+    val price: Int,
+    val rate: Double,
+    val isOwned: Boolean,
+) {
+
 }

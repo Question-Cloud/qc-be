@@ -43,7 +43,6 @@ public class QuestionFilterArgumentResolver implements HandlerMethodArgumentReso
 
     private Long getUserIdFromRequest() {
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(userPrincipal.getUser().getUid());
         return userPrincipal.getUser().getUid();
     }
 
