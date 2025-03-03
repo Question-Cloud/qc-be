@@ -1,31 +1,27 @@
-package com.eager.questioncloud.core.domain.review.infrastructure.repository;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewStatisticsEntity;
-import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewStatisticsEntity.Companion.from
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
-public class QuestionReviewStatisticsRepositoryImpl implements QuestionReviewStatisticsRepository {
-    private final QuestionReviewStatisticsJpaRepository questionReviewStatisticsJpaRepository;
+class QuestionReviewStatisticsRepositoryImpl(
+    private val questionReviewStatisticsJpaRepository: QuestionReviewStatisticsJpaRepository
+) : QuestionReviewStatisticsRepository {
 
-    @Override
-    public QuestionReviewStatistics get(Long questionId) {
+    override fun get(questionId: Long): QuestionReviewStatistics {
         return questionReviewStatisticsJpaRepository.findById(questionId)
-            .orElseThrow(() -> new CoreException(Error.NOT_FOUND))
-            .toModel();
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
     }
 
-    @Override
-    public QuestionReviewStatistics save(QuestionReviewStatistics questionReviewStatistics) {
-        return questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.from(questionReviewStatistics)).toModel();
+    override fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics {
+        return questionReviewStatisticsJpaRepository.save(from(questionReviewStatistics)).toModel()
     }
 
-    @Override
-    public void deleteAllInBatch() {
-        questionReviewStatisticsJpaRepository.deleteAllInBatch();
+    override fun deleteAllInBatch() {
+        questionReviewStatisticsJpaRepository.deleteAllInBatch()
     }
 }

@@ -1,20 +1,23 @@
-package com.eager.questioncloud.core.domain.review.infrastructure.repository;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
-import com.eager.questioncloud.core.domain.review.model.QuestionReview;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
+import com.eager.questioncloud.core.domain.review.model.QuestionReview
 
-public interface QuestionReviewRepository {
-    int getTotal(Long questionId);
+interface QuestionReviewRepository {
+    fun getTotal(questionId: Long): Int
 
-    List<QuestionReviewDetail> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation);
+    fun getQuestionReviews(
+        questionId: Long,
+        userId: Long,
+        pagingInformation: PagingInformation
+    ): List<QuestionReviewDetail>
 
-    QuestionReview getMyQuestionReview(Long questionId, Long userId);
+    fun getMyQuestionReview(questionId: Long, userId: Long): QuestionReview
 
-    QuestionReview findByIdAndUserId(Long reviewId, Long userId);
+    fun findByIdAndUserId(reviewId: Long, userId: Long): QuestionReview
 
-    Boolean isWritten(Long userId, Long questionId);
+    fun isWritten(userId: Long, questionId: Long): Boolean
 
-    QuestionReview save(QuestionReview questionReview);
+    fun save(questionReview: QuestionReview): QuestionReview
 }

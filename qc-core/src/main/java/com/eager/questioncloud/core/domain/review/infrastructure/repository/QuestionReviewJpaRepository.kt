@@ -1,11 +1,14 @@
-package com.eager.questioncloud.core.domain.review.infrastructure.repository;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface QuestionReviewJpaRepository extends JpaRepository<QuestionReviewEntity, Long> {
-    Optional<QuestionReviewEntity> findByQuestionIdAndReviewerIdAndIsDeletedFalse(Long questionId, Long reviewerId);
+interface QuestionReviewJpaRepository : JpaRepository<QuestionReviewEntity, Long> {
+    fun findByQuestionIdAndReviewerIdAndIsDeletedFalse(
+        questionId: Long,
+        reviewerId: Long
+    ): Optional<QuestionReviewEntity>
 
-    Optional<QuestionReviewEntity> findByIdAndReviewerIdAndIsDeletedFalse(Long id, Long reviewerId);
+    fun findByIdAndReviewerIdAndIsDeletedFalse(id: Long, reviewerId: Long): Optional<QuestionReviewEntity>
 }

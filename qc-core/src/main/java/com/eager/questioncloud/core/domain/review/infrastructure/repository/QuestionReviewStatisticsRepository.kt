@@ -1,11 +1,11 @@
-package com.eager.questioncloud.core.domain.review.infrastructure.repository;
+package com.eager.questioncloud.core.domain.review.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics
 
-public interface QuestionReviewStatisticsRepository {
-    QuestionReviewStatistics get(Long questionId);
+interface QuestionReviewStatisticsRepository {
+    fun get(questionId: Long): QuestionReviewStatistics
 
-    QuestionReviewStatistics save(QuestionReviewStatistics questionReviewStatistics);
+    fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }
