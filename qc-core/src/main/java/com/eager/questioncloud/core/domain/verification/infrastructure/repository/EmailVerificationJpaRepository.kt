@@ -1,13 +1,15 @@
-package com.eager.questioncloud.core.domain.verification.infrastructure.repository;
+package com.eager.questioncloud.core.domain.verification.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
-import com.eager.questioncloud.core.domain.verification.infrastructure.entity.EmailVerificationEntity;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
+import com.eager.questioncloud.core.domain.verification.infrastructure.entity.EmailVerificationEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import java.util.*
 
-public interface EmailVerificationJpaRepository extends JpaRepository<EmailVerificationEntity, String> {
-    Optional<EmailVerificationEntity> findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(
-        String token, EmailVerificationType emailVerificationType);
+interface EmailVerificationJpaRepository : JpaRepository<EmailVerificationEntity, String> {
+    fun findByTokenAndEmailVerificationTypeAndIsVerifiedFalse(
+        token: String,
+        emailVerificationType: EmailVerificationType
+    ): Optional<EmailVerificationEntity>
 
-    Optional<EmailVerificationEntity> findByResendToken(String resendToken);
+    fun findByResendToken(resendToken: String): Optional<EmailVerificationEntity>
 }

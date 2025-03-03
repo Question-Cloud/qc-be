@@ -1,14 +1,5 @@
-package com.eager.questioncloud.core.domain.verification.enums;
+package com.eager.questioncloud.core.domain.verification.enums
 
-import lombok.Getter;
-
-@Getter
-public enum EmailVerificationType {
-    CreateUser("CreateUser"), ChangePassword("ChangePassword");
-
-    private final String value;
-
-    EmailVerificationType(String value) {
-        this.value = value;
-    }
+enum class EmailVerificationType(val value: String) {
+    CreateUser("CreateUser"), ChangePassword("ChangePassword")
 }

@@ -1,15 +1,15 @@
-package com.eager.questioncloud.core.domain.verification.infrastructure.repository;
+package com.eager.questioncloud.core.domain.verification.infrastructure.repository
+
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification
 
 
-import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
-import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
+interface EmailVerificationRepository {
+    fun get(token: String, emailVerificationType: EmailVerificationType): EmailVerification
 
-public interface EmailVerificationRepository {
-    EmailVerification get(String token, EmailVerificationType emailVerificationType);
+    fun getCreateUserVerification(userId: Long): EmailVerification
 
-    EmailVerification getCreateUserVerification(Long userId);
+    fun getForResend(resendToken: String): EmailVerification
 
-    EmailVerification getForResend(String resendToken);
-
-    EmailVerification save(EmailVerification emailVerification);
+    fun save(emailVerification: EmailVerification): EmailVerification
 }

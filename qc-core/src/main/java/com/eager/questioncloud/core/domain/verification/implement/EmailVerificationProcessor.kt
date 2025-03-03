@@ -1,27 +1,30 @@
-package com.eager.questioncloud.core.domain.verification.implement;
+package com.eager.questioncloud.core.domain.verification.implement
 
-import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType;
-import com.eager.questioncloud.core.domain.verification.infrastructure.repository.EmailVerificationRepository;
-import com.eager.questioncloud.core.domain.verification.model.EmailVerification;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
+import com.eager.questioncloud.core.domain.verification.infrastructure.repository.EmailVerificationRepository
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification
+import com.eager.questioncloud.core.domain.verification.model.EmailVerification.Companion.create
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class EmailVerificationProcessor {
-    private final EmailVerificationRepository emailVerificationRepository;
-
-    public EmailVerification getByResendToken(String resendToken) {
-        return emailVerificationRepository.getForResend(resendToken);
+class EmailVerificationProcessor(
+    private val emailVerificationRepository: EmailVerificationRepository
+) {
+    fun getByResendToken(resendToken: String): EmailVerification {
+        return emailVerificationRepository.getForResend(resendToken)
     }
 
-    public EmailVerification createEmailVerification(Long userId, String email, EmailVerificationType emailVerificationType) {
-        return emailVerificationRepository.save(EmailVerification.create(userId, email, emailVerificationType));
+    fun createEmailVerification(
+        userId: Long,
+        email: String,
+        emailVerificationType: EmailVerificationType
+    ): EmailVerification {
+        return emailVerificationRepository.save(create(userId, email, emailVerificationType))
     }
 
-    public EmailVerification verifyEmailVerification(String token, EmailVerificationType emailVerificationType) {
-        EmailVerification emailVerification = emailVerificationRepository.get(token, emailVerificationType);
-        emailVerification.verify();
-        return emailVerificationRepository.save(emailVerification);
+    fun verifyEmailVerification(token: String, emailVerificationType: EmailVerificationType): EmailVerification {
+        val emailVerification = emailVerificationRepository.get(token, emailVerificationType)
+        emailVerification.verify()
+        return emailVerificationRepository.save(emailVerification)
     }
 }
