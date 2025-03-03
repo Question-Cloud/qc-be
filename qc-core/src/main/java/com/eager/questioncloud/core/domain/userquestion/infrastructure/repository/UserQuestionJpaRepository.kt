@@ -1,11 +1,10 @@
-package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository;
+package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.UserQuestionEntity;
-import java.util.List;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.UserQuestionEntity
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface UserQuestionJpaRepository extends JpaRepository<UserQuestionEntity, Long> {
-    Boolean existsByUserIdAndQuestionIdIn(Long userId, List<Long> questionIds);
+interface UserQuestionJpaRepository : JpaRepository<UserQuestionEntity, Long> {
+    fun existsByUserIdAndQuestionIdIn(userId: Long, questionIds: List<Long>): Boolean
 
-    Boolean existsByUserIdAndQuestionId(Long userId, Long questionId);
+    fun existsByUserIdAndQuestionId(userId: Long, questionId: Long): Boolean
 }

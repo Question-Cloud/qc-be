@@ -1,20 +1,19 @@
-package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository;
+package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;
-import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion;
-import java.util.List;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter
+import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail
+import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion
 
-public interface UserQuestionRepository {
-    List<UserQuestion> saveAll(List<UserQuestion> userQuestionLibraries);
+interface UserQuestionRepository {
+    fun saveAll(userQuestionLibraries: List<UserQuestion>): List<UserQuestion>
 
-    Boolean isOwned(Long userId, List<Long> questionIds);
+    fun isOwned(userId: Long, questionIds: List<Long>): Boolean
 
-    Boolean isOwned(Long userId, Long questionId);
+    fun isOwned(userId: Long, questionId: Long): Boolean
 
-    List<UserQuestionDetail> getUserQuestions(QuestionFilter questionFilter);
+    fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionDetail>
 
-    int countUserQuestions(QuestionFilter questionFilter);
+    fun countUserQuestions(questionFilter: QuestionFilter): Int
 
-    void deleteAllInBatch();
+    fun deleteAllInBatch()
 }

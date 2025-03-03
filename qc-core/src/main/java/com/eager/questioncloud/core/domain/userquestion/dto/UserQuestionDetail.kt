@@ -1,19 +1,15 @@
-package com.eager.questioncloud.core.domain.userquestion.dto;
+package com.eager.questioncloud.core.domain.userquestion.dto
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
 
-@Getter
-@AllArgsConstructor
-public class UserQuestionDetail {
-    private Long questionId;
-    private String title;
-    private String parentCategory;
-    private String childCategory;
-    private String thumbnail;
-    private String creatorName;
-    private QuestionLevel questionLevel;
-    private String fileUrl;
-    private String explanationUrl;
-}
+class UserQuestionDetail(
+    val questionId: Long,
+    val title: String,
+    val parentCategory: String,
+    val childCategory: String,
+    val thumbnail: String,
+    val creatorName: String,
+    val questionLevel: QuestionLevel,
+    val fileUrl: String,
+    val explanationUrl: String,
+)
