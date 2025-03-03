@@ -15,19 +15,18 @@ public class QuestionBuilder {
     @Builder.Default
     private Long creatorId = 1L;
     @Builder.Default
-    private QuestionContent questionContent = QuestionContent
-        .builder()
-        .questionCategoryId(1L)
-        .subject(Subject.Biology)
-        .title("questionTitle")
-        .description("questionDescription")
-        .thumbnail("questionThumbnail")
-        .fileUrl("questionFileUrl")
-        .explanationUrl("questionExplanationUrl")
-        .questionType(QuestionType.Past)
-        .questionLevel(QuestionLevel.LEVEL4)
-        .price(1000)
-        .build();
+    private QuestionContent questionContent = new QuestionContent(
+        1L,
+        Subject.Biology,
+        "questionTitle",
+        "questionDescription",
+        "questionThumbnail",
+        "questionFileUrl",
+        "questionExplanationUrl",
+        QuestionType.Past,
+        QuestionLevel.LEVEL4,
+        1000
+    );
     @Builder.Default
     private QuestionStatus questionStatus = QuestionStatus.Available;
     @Builder.Default
@@ -36,13 +35,6 @@ public class QuestionBuilder {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public Question toQuestion() {
-        return Question.builder()
-            .id(id)
-            .creatorId(creatorId)
-            .questionContent(questionContent)
-            .questionStatus(questionStatus)
-            .count(count)
-            .createdAt(createdAt)
-            .build();
+        return new Question(id, creatorId, questionContent, questionStatus, count, createdAt);
     }
 }

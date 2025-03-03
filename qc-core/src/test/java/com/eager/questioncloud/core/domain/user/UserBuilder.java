@@ -11,21 +11,15 @@ import lombok.Builder;
 public class UserBuilder {
     private Long uid;
     @Builder.Default
-    private UserAccountInformation userAccountInformation = UserAccountInformation.guest;
+    private UserAccountInformation userAccountInformation = UserAccountInformation.getGuestAccountInformation();
     @Builder.Default
-    private UserInformation userInformation = UserInformation.guest;
+    private UserInformation userInformation = UserInformation.getGuestInformation();
     @Builder.Default
     private UserType userType = UserType.NormalUser;
     @Builder.Default
     private UserStatus userStatus = UserStatus.Active;
 
     public User toUser() {
-        return User.builder()
-            .uid(uid)
-            .userAccountInformation(userAccountInformation)
-            .userInformation(userInformation)
-            .userType(userType)
-            .userStatus(userStatus)
-            .build();
+        return new User(uid, userAccountInformation, userInformation, userType, userStatus);
     }
 }

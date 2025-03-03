@@ -14,10 +14,6 @@ public class CreatorBuilder {
     private CreatorProfile creatorProfile = CreatorProfile.create(Subject.Biology, "creatorIntroduction");
 
     public Creator toCreator() {
-        return Creator.builder()
-            .id(id)
-            .userId(userId)
-            .creatorProfile(creatorProfile)
-            .build();
+        return new Creator(id, userId, creatorProfile);
     }
 }

@@ -16,7 +16,7 @@ allOpen {
 
 dependencies {
     implementation(kotlin("reflect"))
-    
+
     implementation("org.springframework:spring-context")
     implementation("org.springframework.security:spring-security-crypto:6.3.4")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -34,8 +34,8 @@ dependencies {
     kapt("jakarta.persistence:jakarta.persistence-api")
 
     implementation(project(":qc-lock-manager"))
-
-    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
+    
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
 }
 
 val querydslDir = file("src/main/generated")

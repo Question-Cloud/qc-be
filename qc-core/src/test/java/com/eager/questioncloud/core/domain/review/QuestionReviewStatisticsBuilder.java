@@ -15,11 +15,6 @@ public class QuestionReviewStatisticsBuilder {
     private double averageRate = 0.0;
 
     public QuestionReviewStatistics toQuestionReviewStatistics() {
-        return QuestionReviewStatistics.builder()
-            .questionId(questionId)
-            .reviewCount(reviewCount)
-            .totalRate(totalRate)
-            .averageRate(averageRate)
-            .build();
+        return new QuestionReviewStatistics(questionId, reviewCount, totalRate, averageRate);
     }
 }

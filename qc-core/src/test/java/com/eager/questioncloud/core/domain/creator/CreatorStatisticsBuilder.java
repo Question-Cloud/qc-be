@@ -19,13 +19,6 @@ public class CreatorStatisticsBuilder {
     private Double averageRateOfReview = 0.0;
 
     public CreatorStatistics toCreatorStatistics() {
-        return CreatorStatistics.builder()
-            .creatorId(creatorId)
-            .subscribeCount(subscribeCount)
-            .salesCount(salesCount)
-            .reviewCount(reviewCount)
-            .totalReviewRate(totalReviewRate)
-            .averageRateOfReview(averageRateOfReview)
-            .build();
+        return new CreatorStatistics(creatorId, subscribeCount, salesCount, reviewCount, totalReviewRate, averageRateOfReview);
     }
 }

@@ -7,6 +7,7 @@ class CreatorProfile(
     var introduction: String
 ) {
     companion object {
+        @JvmStatic
         fun create(mainSubject: Subject, introduction: String): CreatorProfile {
             return CreatorProfile(mainSubject, introduction)
         }
