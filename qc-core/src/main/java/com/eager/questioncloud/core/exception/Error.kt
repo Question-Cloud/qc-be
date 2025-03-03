@@ -1,11 +1,9 @@
-package com.eager.questioncloud.core.exception;
+package com.eager.questioncloud.core.exception
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@AllArgsConstructor
-@Getter
-public enum Error {
+enum class Error(
+    val httpStatus: Int,
+    val message: String,
+) {
     FAIL_LOGIN(401, "아이디 또는 비밀번호가 일치하지 않습니다."),
     UNAUTHORIZED_TOKEN(401, "토큰 인증 실패"),
     INTERNAL_SERVER_ERROR(500, "오류가 발생하였습니다."),
@@ -37,7 +35,4 @@ public enum Error {
     UNAVAILABLE_QUESTION(400, "현재 이용할 수 없는 문제 입니다."),
     ALREADY_VERIFIED_EMAIL(409, "이미 인증 완료 된 메일입니다."),
     FAIL_USE_COUPON(400, "쿠폰 사용에 실패하였습니다.");
-
-    private final int httpStatus;
-    private final String message;
 }

@@ -1,10 +1,6 @@
-package com.eager.questioncloud.core.exception;
+package com.eager.questioncloud.core.exception
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class FailChargePointException extends RuntimeException {
-    private final String paymentId;
+class FailChargePointException(
+    val paymentId: String
+) : RuntimeException() {
 }

@@ -20,7 +20,7 @@ class User(
 
     fun checkUserStatus() {
         if (userStatus == UserStatus.PendingEmailVerification) {
-            throw NotVerificationUserException(uid)
+            throw NotVerificationUserException(uid!!)
         }
         if (userStatus != UserStatus.Active) {
             throw CoreException(Error.NOT_ACTIVE_USER)
