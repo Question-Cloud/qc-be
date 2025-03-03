@@ -1,12 +1,12 @@
-package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.SubscribeEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.SubscribeEntity
+import org.springframework.data.jpa.repository.JpaRepository
 
-public interface SubscribeJpaRepository extends JpaRepository<SubscribeEntity, Long> {
-    Boolean existsBySubscriberIdAndCreatorId(Long subscriberId, Long creatorId);
+interface SubscribeJpaRepository : JpaRepository<SubscribeEntity, Long> {
+    fun existsBySubscriberIdAndCreatorId(subscriberId: Long, creatorId: Long): Boolean
 
-    void deleteBySubscriberIdAndCreatorId(Long subscriberId, Long creatorId);
+    fun deleteBySubscriberIdAndCreatorId(subscriberId: Long, creatorId: Long)
 
-    int countByCreatorId(Long creatorId);
+    fun countByCreatorId(creatorId: Long): Int
 }

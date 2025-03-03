@@ -1,14 +1,12 @@
-package com.eager.questioncloud.core.domain.subscribe.event;
+package com.eager.questioncloud.core.domain.subscribe.event
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class UnsubscribedEvent {
-    private Long creatorId;
-
-    public static UnsubscribedEvent create(Long creatorId) {
-        return new UnsubscribedEvent(creatorId);
+class UnsubscribedEvent(
+    val creatorId: Long
+) {
+    companion object {
+        @JvmStatic
+        fun create(creatorId: Long): UnsubscribedEvent {
+            return UnsubscribedEvent(creatorId)
+        }
     }
 }

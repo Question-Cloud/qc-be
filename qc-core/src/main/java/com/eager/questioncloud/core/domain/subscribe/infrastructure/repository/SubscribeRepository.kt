@@ -1,20 +1,19 @@
-package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository;
+package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail;
-import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
-import java.util.List;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe
 
-public interface SubscribeRepository {
-    Subscribe save(Subscribe subscribe);
+interface SubscribeRepository {
+    fun save(subscribe: Subscribe): Subscribe
 
-    Boolean isSubscribed(Long subscriberId, Long creatorId);
+    fun isSubscribed(subscriberId: Long, creatorId: Long): Boolean
 
-    void unSubscribe(Long subscriberId, Long creatorId);
+    fun unSubscribe(subscriberId: Long, creatorId: Long)
 
-    int countSubscriber(Long creatorId);
+    fun countSubscriber(creatorId: Long): Int
 
-    List<SubscribeDetail> getMySubscribes(Long userId, PagingInformation pagingInformation);
+    fun getMySubscribes(userId: Long, pagingInformation: PagingInformation): List<SubscribeDetail>
 
-    int countMySubscribe(Long userId);
+    fun countMySubscribe(userId: Long): Int
 }
