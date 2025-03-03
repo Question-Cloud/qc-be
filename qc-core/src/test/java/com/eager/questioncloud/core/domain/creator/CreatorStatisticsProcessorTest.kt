@@ -1,268 +1,287 @@
-package com.eager.questioncloud.core.domain.creator;
+package com.eager.questioncloud.core.domain.creator
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor;
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
-import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics;
-import com.eager.questioncloud.core.domain.question.QuestionBuilder;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
-import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
-import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import com.eager.questioncloud.core.domain.creator.implement.CreatorStatisticsProcessor
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.core.domain.creator.model.Creator
+import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent
+import com.eager.questioncloud.utils.Fixture
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
 
 @SpringBootTest
 @ActiveProfiles("test")
-class CreatorStatisticsProcessorTest {
+internal class CreatorStatisticsProcessorTest(
     @Autowired
-    private CreatorStatisticsProcessor creatorStatisticsProcessor;
+    private val creatorStatisticsProcessor: CreatorStatisticsProcessor,
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private val questionRepository: QuestionRepository,
 
     @Autowired
-    private CreatorStatisticsRepository creatorStatisticsRepository;
+    private val creatorStatisticsRepository: CreatorStatisticsRepository,
 
     @Autowired
-    private CreatorRepository creatorRepository;
-
+    private val creatorRepository: CreatorRepository,
+) {
     @AfterEach
-    void tearDown() {
-        questionRepository.deleteAllInBatch();
-        creatorRepository.deleteAllInBatch();
-        creatorStatisticsRepository.deleteAllInBatch();
+    fun tearDown() {
+        questionRepository.deleteAllInBatch()
+        creatorRepository.deleteAllInBatch()
+        creatorStatisticsRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("리뷰 등록 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenRegisteredReviewEvent() throws InterruptedException {
+    fun creatorStatisticsConcurrencyTestWhenRegisteredReviewEvent() {
         //given
-        Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
+        val creator = creatorRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
+                .set(Creator::id, null)
+                .build()
+                .sample()
+        )
         creatorStatisticsRepository.save(
-            CreatorStatisticsBuilder
-                .builder()
-                .creatorId(creator.getId())
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
+                .set(CreatorStatistics::creatorId, creator.id)
+                .set(CreatorStatistics::reviewCount, 0)
+                .set(CreatorStatistics::totalReviewRate, 0)
                 .build()
-                .toCreatorStatistics()
-        );
+                .sample()
+        )
 
-        Question question = questionRepository.save(
-            QuestionBuilder
-                .builder()
-                .creatorId(creator.getId())
+        val question = questionRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::creatorId, creator.id)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .build()
-                .toQuestion()
-        );
+                .sample()
+        )
 
-        RegisteredReviewEvent event = RegisteredReviewEvent.create(question.getId(), 4);
+        val event = RegisteredReviewEvent.create(question.id!!, 4)
 
         //when
-        int threadCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        val threadCount = 100
+        val executorService = Executors.newFixedThreadPool(threadCount)
+        val latch = CountDownLatch(threadCount)
 
-        for (int i = 0; i < threadCount; i++) {
-            executorService.execute(() -> {
+        for (i in 0..<threadCount) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        latch.await();
+        latch.await()
 
         //then
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.getId());
+        val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id!!)
 
-        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(400);
-        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(4.0);
+        Assertions.assertThat(creatorStatistics.totalReviewRate).isEqualTo(400)
+        Assertions.assertThat(creatorStatistics.averageRateOfReview).isEqualTo(4.0)
     }
 
     @Test
     @DisplayName("리뷰 수정 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenModifiedReviewEvent() throws InterruptedException {
-        Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
+    fun creatorStatisticsConcurrencyTestWhenModifiedReviewEvent() {
+        val creator = creatorRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
+                .set(Creator::id, null)
+                .build()
+                .sample()
+        )
         creatorStatisticsRepository.save(
-            CreatorStatisticsBuilder
-                .builder()
-                .creatorId(creator.getId())
-                .reviewCount(100)
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
+                .set(CreatorStatistics::creatorId, creator.id)
+                .set(CreatorStatistics::reviewCount, 100)
+                .set(CreatorStatistics::totalReviewRate, 0)
                 .build()
-                .toCreatorStatistics()
-        );
+                .sample()
+        )
 
-        Question question = questionRepository.save(
-            QuestionBuilder
-                .builder()
-                .creatorId(creator.getId())
+        val question = questionRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::creatorId, creator.id)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .build()
-                .toQuestion()
-        );
+                .sample()
+        )
 
-        ModifiedReviewEvent event = ModifiedReviewEvent.create(question.getId(), 3);
+        val event = ModifiedReviewEvent.create(question.id!!, 3)
 
         //when
-        int threadCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        val threadCount = 100
+        val executorService = Executors.newFixedThreadPool(threadCount)
+        val latch = CountDownLatch(threadCount)
 
-        for (int i = 0; i < threadCount; i++) {
-            executorService.execute(() -> {
+        for (i in 0..<threadCount) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        latch.await();
+        latch.await()
 
         //then
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.getId());
+        val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id!!)
 
-        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(300);
-        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(3.0);
+        Assertions.assertThat(creatorStatistics.totalReviewRate).isEqualTo(300)
+        Assertions.assertThat(creatorStatistics.averageRateOfReview).isEqualTo(3.0)
     }
 
     @Test
     @DisplayName("리뷰 삭제 이벤트 크리에이터 평점 통계 업데이트 동시성 이슈 테스트")
-    void creatorStatisticsConcurrencyTestWhenDeletedReviewEvent() throws InterruptedException {
-        Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
+    fun creatorStatisticsConcurrencyTestWhenDeletedReviewEvent() {
+        val creator = creatorRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
+                .set(Creator::id, null)
+                .build()
+                .sample()
+        )
         creatorStatisticsRepository.save(
-            CreatorStatisticsBuilder
-                .builder()
-                .creatorId(creator.getId())
-                .reviewCount(100)
-                .totalReviewRate(400)
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
+                .set(CreatorStatistics::creatorId, creator.id)
+                .set(CreatorStatistics::reviewCount, 100)
+                .set(CreatorStatistics::totalReviewRate, 400)
                 .build()
-                .toCreatorStatistics()
-        );
+                .sample()
+        )
 
-        Question question = questionRepository.save(
-            QuestionBuilder
-                .builder()
-                .creatorId(creator.getId())
+        val question = questionRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::creatorId, creator.id)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .build()
-                .toQuestion()
-        );
+                .sample()
+        )
 
-        DeletedReviewEvent event = DeletedReviewEvent.create(question.getId(), 4);
+        val event = DeletedReviewEvent.create(question.id!!, 4)
 
         //when
-        int threadCount = 80;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        val threadCount = 80
+        val executorService = Executors.newFixedThreadPool(threadCount)
+        val latch = CountDownLatch(threadCount)
 
-        for (int i = 0; i < threadCount; i++) {
-            executorService.execute(() -> {
+        for (i in 0..<threadCount) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(event)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        latch.await();
+        latch.await()
 
         //then
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.getId());
+        val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id!!)
 
-        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(80);
-        assertThat(creatorStatistics.getReviewCount()).isEqualTo(20);
-        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(4.0);
+        Assertions.assertThat(creatorStatistics.totalReviewRate).isEqualTo(80)
+        Assertions.assertThat(creatorStatistics.reviewCount).isEqualTo(20)
+        Assertions.assertThat(creatorStatistics.averageRateOfReview).isEqualTo(4.0)
     }
 
     @Test
     @DisplayName("리뷰 추가, 수정, 삭제 이벤트가 동시에 일어나는 경우 크리에이터 통계 업데이트 동시성 테스트")
-    void creatorStatisticsConcurrencyTestWhenMultipleEvent() throws InterruptedException {
+    fun creatorStatisticsConcurrencyTestWhenMultipleEvent() {
         //given
-        Creator creator = creatorRepository.save(CreatorBuilder.builder().build().toCreator());
+        val creator = creatorRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
+                .set(Creator::id, null)
+                .build()
+                .sample()
+        )
         creatorStatisticsRepository.save(
-            CreatorStatisticsBuilder
-                .builder()
-                .creatorId(creator.getId())
-                .reviewCount(100)
-                .totalReviewRate(100)
-                .averageRateOfReview(1.0)
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
+                .set(CreatorStatistics::creatorId, creator.id)
+                .set(CreatorStatistics::reviewCount, 100)
+                .set(CreatorStatistics::totalReviewRate, 100)
+                .set(CreatorStatistics::averageRateOfReview, 1.0)
                 .build()
-                .toCreatorStatistics()
-        );
+                .sample()
+        )
 
-        Question question = questionRepository.save(
-            QuestionBuilder
-                .builder()
-                .creatorId(creator.getId())
+        val question = questionRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::creatorId, creator.id)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .build()
-                .toQuestion()
-        );
+                .sample()
+        )
 
-        RegisteredReviewEvent registeredReviewEvent = RegisteredReviewEvent.create(question.getId(), 1);
-        ModifiedReviewEvent modifiedReviewEvent = ModifiedReviewEvent.create(question.getId(), 1);
-        DeletedReviewEvent deletedReviewEvent = DeletedReviewEvent.create(question.getId(), 1);
+        val registeredReviewEvent = RegisteredReviewEvent.create(question.id!!, 1)
+        val modifiedReviewEvent = ModifiedReviewEvent.create(question.id!!, 1)
+        val deletedReviewEvent = DeletedReviewEvent.create(question.id!!, 1)
 
         //when
-        int threadCount = 120;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
+        val threadCount = 120
+        val executorService = Executors.newFixedThreadPool(threadCount)
+        val latch = CountDownLatch(threadCount)
 
-        for (int i = 0; i < 40; i++) {
-            executorService.execute(() -> {
+        for (i in 0..39) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(registeredReviewEvent);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(registeredReviewEvent)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        for (int i = 0; i < 40; i++) {
-            executorService.execute(() -> {
+        for (i in 0..39) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(modifiedReviewEvent);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(modifiedReviewEvent)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        for (int i = 0; i < 40; i++) {
-            executorService.execute(() -> {
+        for (i in 0..39) {
+            executorService.execute {
                 try {
-                    creatorStatisticsProcessor.updateCreatorReviewStatistics(deletedReviewEvent);
-                } catch (Exception ignored) {
+                    creatorStatisticsProcessor.updateCreatorReviewStatistics(deletedReviewEvent)
+                } catch (ignored: Exception) {
                 } finally {
-                    latch.countDown();
+                    latch.countDown()
                 }
-            });
+            }
         }
 
-        latch.await();
+        latch.await()
 
         //then
-        CreatorStatistics creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.getId());
-        assertThat(creatorStatistics.getTotalReviewRate()).isEqualTo(140);
-        assertThat(creatorStatistics.getReviewCount()).isEqualTo(100);
-        assertThat(creatorStatistics.getAverageRateOfReview()).isEqualTo(1.4);
+        val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id!!)
+        Assertions.assertThat(creatorStatistics.totalReviewRate).isEqualTo(140)
+        Assertions.assertThat(creatorStatistics.reviewCount).isEqualTo(100)
+        Assertions.assertThat(creatorStatistics.averageRateOfReview).isEqualTo(1.4)
     }
 }
