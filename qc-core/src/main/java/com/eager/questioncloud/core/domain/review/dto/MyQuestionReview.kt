@@ -1,18 +1,16 @@
-package com.eager.questioncloud.core.domain.review.dto;
+package com.eager.questioncloud.core.domain.review.dto
 
-import com.eager.questioncloud.core.domain.review.model.QuestionReview;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.review.model.QuestionReview
 
-@Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MyQuestionReview {
-    private Long id;
-    private Integer rate;
-    private String comment;
-
-    public static MyQuestionReview from(QuestionReview questionReview) {
-        return new MyQuestionReview(questionReview.getId(), questionReview.getRate(), questionReview.getComment());
+class MyQuestionReview(
+    val id: Long,
+    val rate: Int,
+    val comment: String,
+) {
+    companion object {
+        @JvmStatic
+        fun from(questionReview: QuestionReview): MyQuestionReview {
+            return MyQuestionReview(questionReview.id!!, questionReview.rate, questionReview.comment)
+        }
     }
 }

@@ -1,15 +1,13 @@
-package com.eager.questioncloud.core.domain.review.event;
+package com.eager.questioncloud.core.domain.review.event
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class RegisteredReviewEvent {
-    private Long questionId;
-    private int rate;
-
-    public static RegisteredReviewEvent create(Long questionId, int rate) {
-        return new RegisteredReviewEvent(questionId, rate);
+class RegisteredReviewEvent(
+    val questionId: Long,
+    val rate: Int
+) {
+    companion object {
+        @JvmStatic
+        fun create(questionId: Long, rate: Int): RegisteredReviewEvent {
+            return RegisteredReviewEvent(questionId, rate)
+        }
     }
 }

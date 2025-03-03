@@ -1,19 +1,18 @@
-package com.eager.questioncloud.core.domain.review.implement;
+package com.eager.questioncloud.core.domain.review.implement
 
-import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent;
-import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewStatisticsRepository;
-import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewStatisticsRepository
+import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics.Companion.create
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class QuestionReviewStatisticsGenerator {
-    private final QuestionReviewStatisticsRepository questionReviewStatisticsRepository;
+class QuestionReviewStatisticsGenerator(
+    private val questionReviewStatisticsRepository: QuestionReviewStatisticsRepository
+) {
 
     @EventListener
-    public void generate(RegisteredQuestionEvent event) {
-        questionReviewStatisticsRepository.save(QuestionReviewStatistics.create(event.getQuestion().getId()));
+    fun generate(event: RegisteredQuestionEvent) {
+        questionReviewStatisticsRepository.save(create(event.question.id!!))
     }
 }

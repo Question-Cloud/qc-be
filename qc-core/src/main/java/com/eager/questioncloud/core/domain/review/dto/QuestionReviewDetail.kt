@@ -1,19 +1,17 @@
-package com.eager.questioncloud.core.domain.review.dto;
+package com.eager.questioncloud.core.domain.review.dto
 
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import java.time.LocalDateTime
 
-@Getter
-@AllArgsConstructor
-public class QuestionReviewDetail {
-    private Long id;
-    private String name;
-    private Boolean isCreator;
-    private Boolean isWriter;
-    private Integer reviewCount;
-    private Double rateAverage;
-    private Integer rate;
-    private String comment;
-    private LocalDateTime createdAt;
+class QuestionReviewDetail(
+    val id: Long,
+    val name: String,
+    val isCreator: Boolean,
+    val isWriter: Boolean,
+    val reviewCount: Int,
+    val rateAverage: Double,
+    val rate: Int,
+    val comment: String,
+    val createdAt: LocalDateTime,
+) {
+
 }
