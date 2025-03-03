@@ -1,9 +1,9 @@
-package com.eager.questioncloud.core.domain.token;
+package com.eager.questioncloud.core.domain.token
 
-public interface RefreshTokenRepository {
-    String getByUserId(Long uid);
+interface RefreshTokenRepository {
+    fun getByUserId(uid: Long): String?
 
-    void delete(String uid);
+    fun delete(uid: String)
 
-    void save(String token, Long uid);
+    fun save(token: String, uid: Long)
 }
