@@ -33,7 +33,7 @@ class AuthenticationTokenManager(
 
     fun refresh(refreshToken: String): AuthenticationToken {
         val claims = getRefreshTokenClaimsWithValidate(refreshToken)
-        val uid = claims.get("uid", Long::class.java)
+        val uid = claims.get("uid").toString().toLong()
         val accessToken = generateAccessToken(uid)
         if (isExpireSoon(claims.expiration)) {
             return AuthenticationToken.create(accessToken, generateRefreshToken(uid))
@@ -48,7 +48,7 @@ class AuthenticationTokenManager(
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
 
-        return claims.get("uid", Long::class.java)
+        return claims.get("uid").toString().toLong()
     }
 
     fun getClaims(token: String?): Claims {
@@ -97,7 +97,7 @@ class AuthenticationTokenManager(
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
 
-        val uid = claims.get("uid", Long::class.java)
+        val uid = claims.get("uid").toString().toLong()
         val refreshTokenInStore = refreshTokenRepository.getByUserId(uid)
 
         if (refreshToken != refreshTokenInStore) {
