@@ -1,44 +1,42 @@
-package com.eager.questioncloud.application.business.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement
 
-import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class QuestionOrderGenerator {
-    private final UserQuestionRepository userQuestionRepository;
-    private final QuestionRepository questionRepository;
-    private final QuestionOrderRepository questionOrderRepository;
-
-    public QuestionOrder generateQuestionOrder(Long userId, List<Long> questionIds) {
+class QuestionOrderGenerator(
+    private val userQuestionRepository: UserQuestionRepository,
+    private val questionRepository: QuestionRepository,
+    private val questionOrderRepository: QuestionOrderRepository,
+) {
+    fun generateQuestionOrder(userId: Long, questionIds: List<Long>): QuestionOrder {
         if (checkAlreadyOwned(userId, questionIds)) {
-            throw new CoreException(Error.ALREADY_OWN_QUESTION);
+            throw CoreException(Error.ALREADY_OWN_QUESTION)
         }
 
-        List<Question> questions = getQuestions(questionIds);
-        QuestionOrder questionOrder = QuestionOrder.createOrder(questions);
+        val questions = getQuestions(questionIds)
+        val questionOrder = createOrder(questions)
 
-        questionOrderRepository.save(questionOrder);
-        return questionOrder;
+        questionOrderRepository.save(questionOrder)
+        return questionOrder
     }
 
-    private Boolean checkAlreadyOwned(Long userId, List<Long> questionIds) {
-        return userQuestionRepository.isOwned(userId, questionIds);
+    private fun checkAlreadyOwned(userId: Long, questionIds: List<Long>): Boolean {
+        return userQuestionRepository.isOwned(userId, questionIds)
     }
 
-    private List<Question> getQuestions(List<Long> questionIds) {
-        List<Question> questions = questionRepository.getQuestionsByQuestionIds(questionIds);
-        if (questions.size() != questionIds.size()) {
-            throw new CoreException(Error.UNAVAILABLE_QUESTION);
+    private fun getQuestions(questionIds: List<Long>): List<Question> {
+        val questions = questionRepository.getQuestionsByQuestionIds(questionIds)
+        if (questions.size != questionIds.size) {
+            throw CoreException(Error.UNAVAILABLE_QUESTION)
         }
-        return questions;
+        return questions
     }
 }

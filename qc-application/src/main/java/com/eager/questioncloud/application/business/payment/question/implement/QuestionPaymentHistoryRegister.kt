@@ -1,24 +1,20 @@
-package com.eager.questioncloud.application.business.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement
 
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentHistoryRepository;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory;
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentHistoryRepository
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory.Companion.create
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class QuestionPaymentHistoryRegister {
-    private final QuestionRepository questionRepository;
-    private final QuestionPaymentHistoryRepository questionPaymentHistoryRepository;
-
+class QuestionPaymentHistoryRegister(
+    private val questionRepository: QuestionRepository,
+    private val questionPaymentHistoryRepository: QuestionPaymentHistoryRepository,
+) {
     @EventListener
-    public void saveQuestionPaymentHistory(QuestionPaymentEvent event) {
-        List<QuestionInformation> questions = questionRepository.findByQuestionIdIn(event.getQuestionPayment().getOrder().getQuestionIds());
-        questionPaymentHistoryRepository.save(QuestionPaymentHistory.create(event.getQuestionPayment(), questions));
+    fun saveQuestionPaymentHistory(event: QuestionPaymentEvent) {
+        val questions = questionRepository.findByQuestionIdIn(event.questionPayment.order.questionIds)
+        questionPaymentHistoryRepository.save(create(event.questionPayment, questions))
     }
 }

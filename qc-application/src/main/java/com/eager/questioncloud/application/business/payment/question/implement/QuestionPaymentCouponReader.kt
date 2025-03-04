@@ -1,29 +1,26 @@
-package com.eager.questioncloud.application.business.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon
+import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon.Companion.create
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class QuestionPaymentCouponReader {
-    private final UserCouponRepository userCouponRepository;
-    private final CouponRepository couponRepository;
-
-    public QuestionPaymentCoupon getQuestionPaymentCoupon(Long userCouponId, Long userId) {
+class QuestionPaymentCouponReader(
+    private val userCouponRepository: UserCouponRepository,
+    private val couponRepository: CouponRepository,
+) {
+    fun getQuestionPaymentCoupon(userCouponId: Long?, userId: Long): QuestionPaymentCoupon? {
         if (userCouponId == null) {
-            return null;
+            return null
         }
 
-        UserCoupon userCoupon = userCouponRepository.getUserCoupon(userCouponId, userId);
-        userCoupon.validate();
+        val userCoupon = userCouponRepository.getUserCoupon(userCouponId, userId)
+        userCoupon.validate()
 
-        Coupon coupon = couponRepository.findById(userCoupon.getCouponId());
+        val coupon = couponRepository.findById(userCoupon.couponId)
 
-        return QuestionPaymentCoupon.create(userCouponId, coupon);
+        return create(userCouponId, coupon)
     }
 }
