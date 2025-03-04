@@ -2,7 +2,6 @@ package com.eager.questioncloud.core.domain.user.model
 
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
 import com.eager.questioncloud.core.domain.user.enums.UserType
-import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.core.exception.NotVerificationUserException
@@ -32,9 +31,7 @@ class User(
     }
 
     fun passwordAuthentication(rawPassword: String) {
-        if (!PasswordProcessor.matches(rawPassword, userAccountInformation.password!!)) {
-            throw CoreException(Error.FAIL_LOGIN)
-        }
+        userAccountInformation.validatePassword(rawPassword)
     }
 
     fun updateUserInformation(name: String, profileImage: String) {

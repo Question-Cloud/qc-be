@@ -1,35 +1,31 @@
-package com.eager.questioncloud.application.business.authentication.service;
+package com.eager.questioncloud.application.business.authentication.service
 
-import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken;
-import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
-import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult;
-import com.eager.questioncloud.application.business.authentication.implement.AuthenticationProcessor;
-import com.eager.questioncloud.application.business.authentication.implement.AuthenticationTokenManager;
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.model.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult
+import com.eager.questioncloud.application.business.authentication.implement.AuthenticationProcessor
+import com.eager.questioncloud.application.business.authentication.implement.AuthenticationTokenManager
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class AuthenticationService {
-    private final AuthenticationProcessor authenticationProcessor;
-    private final AuthenticationTokenManager authenticationTokenManager;
-
-    public AuthenticationToken login(String email, String password) {
-        User user = authenticationProcessor.emailPasswordAuthentication(email, password);
-        return authenticationTokenManager.create(user.getUid());
+class AuthenticationService(
+    private val authenticationProcessor: AuthenticationProcessor,
+    private val authenticationTokenManager: AuthenticationTokenManager,
+) {
+    fun login(email: String, password: String): AuthenticationToken {
+        val user = authenticationProcessor.emailPasswordAuthentication(email, password)
+        return authenticationTokenManager.create(user.uid!!)
     }
 
-    public SocialAuthenticationResult socialLogin(AccountType accountType, String code) {
-        SocialAuthentication socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType);
-        if (socialAuthentication.isRegistered()) {
-            return SocialAuthenticationResult.success(authenticationTokenManager.create(socialAuthentication.getUser().getUid()));
+    fun socialLogin(accountType: AccountType, code: String): SocialAuthenticationResult {
+        val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
+        if (socialAuthentication.isRegistered) {
+            return SocialAuthenticationResult.success(authenticationTokenManager.create(socialAuthentication.user.uid!!))
         }
-        return SocialAuthenticationResult.notRegister(socialAuthentication.getSocialAccessToken());
+        return SocialAuthenticationResult.notRegister(socialAuthentication.socialAccessToken)
     }
 
-    public AuthenticationToken refresh(String refreshToken) {
-        return authenticationTokenManager.refresh(refreshToken);
+    fun refresh(refreshToken: String): AuthenticationToken {
+        return authenticationTokenManager.refresh(refreshToken)
     }
 }

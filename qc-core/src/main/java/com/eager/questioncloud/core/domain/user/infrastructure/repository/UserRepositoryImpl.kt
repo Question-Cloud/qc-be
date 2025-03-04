@@ -12,7 +12,6 @@ import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
 class UserRepositoryImpl(
@@ -70,13 +69,11 @@ class UserRepositoryImpl(
         return userJpaRepository.save(from(user)).toModel()
     }
 
-    override fun getSocialUser(accountType: AccountType, socialUid: String): Optional<User> {
-        val userEntity =
-            userJpaRepository.findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
-                accountType,
-                socialUid
-            )
-        return userEntity.map { entity -> entity.toModel() }
+    override fun getSocialUser(accountType: AccountType, socialUid: String): User? {
+        return userJpaRepository.findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
+            accountType,
+            socialUid
+        )?.toModel()
     }
 
     override fun checkDuplicatePhone(phone: String): Boolean {

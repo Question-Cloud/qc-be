@@ -18,7 +18,7 @@ interface UserJpaRepository : JpaRepository<UserEntity, Long> {
     fun findByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
         accountType: AccountType,
         socialUid: String
-    ): Optional<UserEntity>
+    ): UserEntity?
 
     fun findByUserInformationEntityEmail(email: String): Optional<UserEntity>
 

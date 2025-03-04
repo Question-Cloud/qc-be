@@ -3,7 +3,6 @@ package com.eager.questioncloud.core.domain.user.infrastructure.repository
 import com.eager.questioncloud.core.domain.user.dto.UserWithCreator
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.model.User
-import java.util.*
 
 interface UserRepository {
     fun getUserByEmail(email: String): User
@@ -16,7 +15,7 @@ interface UserRepository {
 
     fun save(user: User): User
 
-    fun getSocialUser(accountType: AccountType, socialUid: String): Optional<User>
+    fun getSocialUser(accountType: AccountType, socialUid: String): User?
 
     fun checkDuplicatePhone(phone: String): Boolean
 

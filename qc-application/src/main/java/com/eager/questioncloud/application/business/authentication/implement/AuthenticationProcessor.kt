@@ -1,38 +1,33 @@
-package com.eager.questioncloud.application.business.authentication.implement;
+package com.eager.questioncloud.application.business.authentication.implement
 
-import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication;
-import com.eager.questioncloud.core.domain.user.enums.AccountType;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.social.SocialAPIManager;
-import com.eager.questioncloud.social.SocialPlatform;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthentication
+import com.eager.questioncloud.core.domain.user.enums.AccountType
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import com.eager.questioncloud.social.SocialAPIManager
+import com.eager.questioncloud.social.SocialPlatform
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class AuthenticationProcessor {
-    private final SocialAPIManager socialAPIManager;
-    private final UserRepository userRepository;
-
-    public User emailPasswordAuthentication(String email, String password) {
-        User user = userRepository.getUserByEmail(email);
-        user.passwordAuthentication(password);
-        user.checkUserStatus();
-        return user;
+class AuthenticationProcessor(
+    private val socialAPIManager: SocialAPIManager,
+    private val userRepository: UserRepository,
+) {
+    fun emailPasswordAuthentication(email: String, password: String): User {
+        val user = userRepository.getUserByEmail(email)
+        user.passwordAuthentication(password)
+        user.checkUserStatus()
+        return user
     }
 
-    public SocialAuthentication socialAuthentication(String code, AccountType accountType) {
-        String socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.valueOf(accountType.getValue()));
-        String socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.valueOf(accountType.getValue()));
-        Optional<User> optionalUser = userRepository.getSocialUser(accountType, socialUid);
-        return optionalUser
-            .map(user -> {
-                user.checkUserStatus();
-                return SocialAuthentication.create(user, socialAccessToken);
-            })
-            .orElseGet(() -> SocialAuthentication.create(null, socialAccessToken));
+    fun socialAuthentication(code: String, accountType: AccountType): SocialAuthentication {
+        val socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.valueOf(accountType.value))
+        val socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.valueOf(accountType.value))
+        return userRepository.getSocialUser(accountType, socialUid)
+            ?.let {
+                it.checkUserStatus()
+                SocialAuthentication.create(it, socialAccessToken)
+            }
+            ?: SocialAuthentication.create(null, socialAccessToken)
     }
-
 }

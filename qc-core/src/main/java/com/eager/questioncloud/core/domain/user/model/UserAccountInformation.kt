@@ -18,6 +18,13 @@ class UserAccountInformation(
         return UserAccountInformation(newEncodedPassword, this.socialUid, this.accountType)
     }
 
+    fun validatePassword(rawPassword: String) {
+        if (accountType != AccountType.EMAIL) throw CoreException(Error.NOT_PASSWORD_SUPPORT_ACCOUNT)
+        if (!PasswordProcessor.matches(rawPassword, password!!)) {
+            throw CoreException(Error.FAIL_LOGIN)
+        }
+    }
+
     val isSocialAccount: Boolean
         get() = accountType == AccountType.GOOGLE || accountType == AccountType.KAKAO || accountType == AccountType.NAVER
 
