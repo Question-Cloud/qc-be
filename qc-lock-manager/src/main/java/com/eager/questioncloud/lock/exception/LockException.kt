@@ -1,4 +1,3 @@
-package com.eager.questioncloud.lock.exception;
+package com.eager.questioncloud.lock.exception
 
-public class LockException extends RuntimeException {
-}
+class LockException : RuntimeException()

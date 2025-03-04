@@ -1,58 +1,57 @@
-package com.eager.questioncloud.lock;
+package com.eager.questioncloud.lock
 
-import com.eager.questioncloud.lock.exception.LockException;
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
-import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
-import org.redisson.api.RedissonClient;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.lock.exception.LockException
+import org.redisson.api.RedissonClient
+import org.springframework.stereotype.Component
+import java.util.concurrent.Callable
+import java.util.concurrent.TimeUnit
 
 @Component
-@RequiredArgsConstructor
-public class LockManager {
-    private static final String LOCK_PREFIX = "LOCK:";
-    private final RedissonClient redissonClient;
-    private final long WAIT_TIME = 3L;
-    private final long LEASE_TIME = 5L;
+class LockManager(private val redissonClient: RedissonClient) {
+    private val WAIT_TIME = 3L
+    private val LEASE_TIME = 5L
 
-    public void executeWithLock(String key, Runnable task) {
-        String lockKey = LOCK_PREFIX + key;
-        RLock lock = redissonClient.getLock(lockKey);
+    fun executeWithLock(key: String, task: Runnable) {
+        val lockKey = LOCK_PREFIX + key
+        val lock = redissonClient.getLock(lockKey)
         try {
-            lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
-            if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
-                throw new LockException();
+            lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)
+            if (!lock.isLocked && lock.isHeldByCurrentThread) {
+                throw LockException()
             }
-            task.run();
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new LockException();
+            task.run()
+        } catch (e: RuntimeException) {
+            throw e
+        } catch (e: Exception) {
+            throw LockException()
         } finally {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
+            if (lock.isLocked && lock.isHeldByCurrentThread) {
+                lock.unlock()
             }
         }
     }
 
-    public <T> T executeWithLock(String key, Callable<T> task) {
-        String lockKey = LOCK_PREFIX + key;
-        RLock lock = redissonClient.getLock(lockKey);
+    fun <T> executeWithLock(key: String, task: Callable<T>): T {
+        val lockKey = LOCK_PREFIX + key
+        val lock = redissonClient.getLock(lockKey)
         try {
-            lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
-            if (!lock.isLocked() && lock.isHeldByCurrentThread()) {
-                throw new LockException();
+            lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)
+            if (!lock.isLocked && lock.isHeldByCurrentThread) {
+                throw LockException()
             }
-            return task.call();
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new LockException();
+            return task.call()
+        } catch (e: RuntimeException) {
+            throw e
+        } catch (e: Exception) {
+            throw LockException()
         } finally {
-            if (lock.isLocked() && lock.isHeldByCurrentThread()) {
-                lock.unlock();
+            if (lock.isLocked && lock.isHeldByCurrentThread) {
+                lock.unlock()
             }
         }
+    }
+
+    companion object {
+        private const val LOCK_PREFIX = "LOCK:"
     }
 }

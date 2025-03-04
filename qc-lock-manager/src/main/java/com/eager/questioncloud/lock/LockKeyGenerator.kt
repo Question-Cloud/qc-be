@@ -1,15 +1,18 @@
-package com.eager.questioncloud.lock;
+package com.eager.questioncloud.lock
 
-public class LockKeyGenerator {
-    public static String generateRegisterCouponKey(Long userId, String couponCode) {
-        return "REGISTER-COUPON-" + userId + "-" + couponCode;
+object LockKeyGenerator {
+    @JvmStatic
+    fun generateRegisterCouponKey(userId: Long, couponCode: String): String {
+        return "REGISTER-COUPON-$userId-$couponCode"
     }
 
-    public static String generateCreatorStatistics(Long creatorId) {
-        return "CREATOR-STATISTICS-" + creatorId;
+    @JvmStatic
+    fun generateCreatorStatistics(creatorId: Long): String {
+        return "CREATOR-STATISTICS-$creatorId"
     }
 
-    public static String generateReviewStatistics(Long questionId) {
-        return "REVIEW-STATISTICS-" + questionId;
+    @JvmStatic
+    fun generateReviewStatistics(questionId: Long): String {
+        return "REVIEW-STATISTICS-$questionId"
     }
 }
