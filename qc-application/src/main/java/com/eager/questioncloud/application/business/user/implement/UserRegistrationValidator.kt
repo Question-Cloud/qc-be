@@ -1,31 +1,33 @@
-package com.eager.questioncloud.application.business.user.implement;
+package com.eager.questioncloud.application.business.user.implement
 
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation;
-import com.eager.questioncloud.core.domain.user.model.UserInformation;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.UserAccountInformation
+import com.eager.questioncloud.core.domain.user.model.UserInformation
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class UserRegistrationValidator {
-    private final UserRepository userRepository;
-
-    public void validate(UserAccountInformation userAccountInformation, UserInformation userInformation) {
-        if (userRepository.checkDuplicateEmail(userInformation.getEmail())) {
-            throw new CoreException(Error.DUPLICATE_EMAIL);
+class UserRegistrationValidator(
+    private val userRepository: UserRepository
+) {
+    fun validate(userAccountInformation: UserAccountInformation, userInformation: UserInformation) {
+        if (userRepository.checkDuplicateEmail(userInformation.email)) {
+            throw CoreException(Error.DUPLICATE_EMAIL)
         }
 
-        if (userRepository.checkDuplicatePhone(userInformation.getPhone())) {
-            throw new CoreException(Error.DUPLICATE_PHONE);
+        if (userRepository.checkDuplicatePhone(userInformation.phone)) {
+            throw CoreException(Error.DUPLICATE_PHONE)
         }
 
-        if (userAccountInformation.isSocialAccount()
+        if (userAccountInformation.isSocialAccount
             &&
-            userRepository.checkDuplicateSocialUidAndAccountType(userAccountInformation.getSocialUid(), userAccountInformation.getAccountType())) {
-            throw new CoreException(Error.DUPLICATE_SOCIAL_UID);
+            userRepository.checkDuplicateSocialUidAndAccountType(
+                userAccountInformation.socialUid!!,
+                userAccountInformation.accountType
+            )
+        ) {
+            throw CoreException(Error.DUPLICATE_SOCIAL_UID)
         }
     }
 }
