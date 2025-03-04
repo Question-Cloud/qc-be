@@ -1,33 +1,30 @@
-package com.eager.questioncloud.application.business.coupon.implement;
+package com.eager.questioncloud.application.business.coupon.implement
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon.Companion.create
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
-@RequiredArgsConstructor
-public class UserCouponRegister {
-    private final CouponRepository couponRepository;
-    private final UserCouponRepository userCouponRepository;
-
+class UserCouponRegister(
+    private val couponRepository: CouponRepository,
+    private val userCouponRepository: UserCouponRepository,
+) {
     @Transactional
-    public void registerCoupon(Long userId, String couponCode) {
-        Coupon coupon = couponRepository.findByCode(couponCode);
+    fun registerCoupon(userId: Long, couponCode: String) {
+        val coupon = couponRepository.findByCode(couponCode)
 
-        if (userCouponRepository.isRegistered(userId, coupon.getId())) {
-            throw new CoreException(Error.ALREADY_REGISTER_COUPON);
+        if (userCouponRepository.isRegistered(userId, coupon.id!!)) {
+            throw CoreException(Error.ALREADY_REGISTER_COUPON)
         }
 
-        if (!couponRepository.decreaseCount(coupon.getId())) {
-            throw new CoreException(Error.LIMITED_COUPON);
+        if (!couponRepository.decreaseCount(coupon.id!!)) {
+            throw CoreException(Error.LIMITED_COUPON)
         }
 
-        userCouponRepository.save(UserCoupon.create(userId, coupon));
+        userCouponRepository.save(create(userId, coupon))
     }
 }
