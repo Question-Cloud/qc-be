@@ -1,30 +1,31 @@
-package com.eager.questioncloud.application.business.creator.implement;
+package com.eager.questioncloud.application.business.creator.implement
 
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
+import java.util.stream.Collectors
 
 @Component
-@RequiredArgsConstructor
-public class CreatorStatisticsUpdater {
-    private final QuestionRepository questionRepository;
-    private final CreatorStatisticsRepository creatorStatisticsRepository;
-
+class CreatorStatisticsUpdater(
+    private val questionRepository: QuestionRepository,
+    private val creatorStatisticsRepository: CreatorStatisticsRepository,
+) {
     @EventListener
-    public void updateCreatorStatistics(QuestionPaymentEvent event) {
-        List<Question> questions = questionRepository.getQuestionsByQuestionIds(event.getQuestionPayment().getOrder().getQuestionIds());
-        Map<Long, Long> countQuestionByCreator = questions
+    fun updateCreatorStatistics(event: QuestionPaymentEvent) {
+        val questions = questionRepository.getQuestionsByQuestionIds(event.questionPayment.order.questionIds)
+        val countQuestionByCreator = questions
             .stream()
-            .collect(Collectors.groupingBy(Question::getCreatorId, Collectors.counting()));
+            .collect(Collectors.groupingBy(Question::creatorId, Collectors.counting()))
 
         countQuestionByCreator
-            .forEach((creatorId, count) -> creatorStatisticsRepository.addSalesCount(creatorId, count.intValue()));
+            .forEach { (creatorId: Long, count: Long) ->
+                creatorStatisticsRepository.addSalesCount(
+                    creatorId,
+                    count.toInt()
+                )
+            }
     }
 }

@@ -1,49 +1,46 @@
-package com.eager.questioncloud.application.business.creator.service;
+package com.eager.questioncloud.application.business.creator.service
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation;
-import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.question.model.QuestionContent;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
+import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent.Companion.create
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question.Companion.create
+import com.eager.questioncloud.core.domain.question.model.QuestionContent
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class CreatorQuestionService {
-    private final QuestionRepository questionRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    public List<QuestionInformation> getMyQuestions(Long creatorId, PagingInformation pagingInformation) {
-        return questionRepository.findByCreatorIdWithPaging(creatorId, pagingInformation);
+class CreatorQuestionService(
+    private val questionRepository: QuestionRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
+) {
+    fun getMyQuestions(creatorId: Long, pagingInformation: PagingInformation): List<QuestionInformation> {
+        return questionRepository.findByCreatorIdWithPaging(creatorId, pagingInformation)
     }
 
-    public int countMyQuestions(Long creatorId) {
-        return questionRepository.countByCreatorId(creatorId);
+    fun countMyQuestions(creatorId: Long): Int {
+        return questionRepository.countByCreatorId(creatorId)
     }
 
-    public QuestionContent getMyQuestionContent(Long creatorId, Long questionId) {
-        Question question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId);
-        return question.getQuestionContent();
+    fun getMyQuestionContent(creatorId: Long, questionId: Long): QuestionContent {
+        val question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId)
+        return question.questionContent
     }
 
-    public void registerQuestion(Long creatorId, QuestionContent questionContent) {
-        Question question = questionRepository.save(Question.create(creatorId, questionContent));
-        applicationEventPublisher.publishEvent(RegisteredQuestionEvent.create(question));
+    fun registerQuestion(creatorId: Long, questionContent: QuestionContent) {
+        val question = questionRepository.save(create(creatorId, questionContent))
+        applicationEventPublisher.publishEvent(create(question))
     }
 
-    public void modifyQuestion(Long creatorId, Long questionId, QuestionContent questionContent) {
-        Question question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId);
-        question.modify(questionContent);
-        questionRepository.save(question);
+    fun modifyQuestion(creatorId: Long, questionId: Long, questionContent: QuestionContent) {
+        val question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId)
+        question.modify(questionContent)
+        questionRepository.save(question)
     }
 
-    public void deleteQuestion(Long creatorId, Long questionId) {
-        Question question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId);
-        question.delete();
-        questionRepository.save(question);
+    fun deleteQuestion(creatorId: Long, questionId: Long) {
+        val question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId)
+        question.delete()
+        questionRepository.save(question)
     }
 }

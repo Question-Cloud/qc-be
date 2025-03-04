@@ -1,28 +1,27 @@
-package com.eager.questioncloud.application.business.creator.implement;
+package com.eager.questioncloud.application.business.creator.implement
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
-import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.creator.model.CreatorProfile;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.core.domain.creator.model.Creator
+import com.eager.questioncloud.core.domain.creator.model.Creator.Companion.create
+import com.eager.questioncloud.core.domain.creator.model.CreatorProfile
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
-@RequiredArgsConstructor
-public class CreatorRegister {
-    private final CreatorRepository creatorRepository;
-    private final UserRepository userRepository;
-
+class CreatorRegister(
+    private val creatorRepository: CreatorRepository,
+    private val userRepository: UserRepository,
+) {
     @Transactional
-    public Creator register(User user, CreatorProfile creatorProfile) {
-        setCreator(user);
-        return creatorRepository.save(Creator.create(user.getUid(), creatorProfile));
+    fun register(user: User, creatorProfile: CreatorProfile): Creator {
+        setCreator(user)
+        return creatorRepository.save(create(user.uid!!, creatorProfile))
     }
 
-    private void setCreator(User user) {
-        user.setCreator();
-        userRepository.save(user);
+    private fun setCreator(user: User) {
+        user.setCreator()
+        userRepository.save(user)
     }
 }
