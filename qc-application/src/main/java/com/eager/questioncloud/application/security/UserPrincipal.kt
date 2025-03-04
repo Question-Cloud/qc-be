@@ -1,43 +1,36 @@
-package com.eager.questioncloud.application.security;
+package com.eager.questioncloud.application.security
 
-import com.eager.questioncloud.core.domain.creator.model.Creator;
-import com.eager.questioncloud.core.domain.user.enums.UserType;
-import com.eager.questioncloud.core.domain.user.model.User;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.eager.questioncloud.core.domain.creator.model.Creator
+import com.eager.questioncloud.core.domain.user.enums.UserType
+import com.eager.questioncloud.core.domain.user.model.User
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.io.Serializable
 
-@Getter
-public class UserPrincipal implements Serializable {
-    private final User user;
-    private final Creator creator;
-
-    private UserPrincipal(User user, Creator creator) {
-        this.user = user;
-        this.creator = creator;
-    }
-
-    public static UserPrincipal create(User user, Creator creator) {
-        return new UserPrincipal(user, creator);
-    }
-
-    public static UserPrincipal guest() {
-        return new UserPrincipal(User.guest(), null);
-    }
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.getUid().equals(-1L)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_GUEST"));
-        } else if (user.getUserType().equals(UserType.NormalUser)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_NormalUser"));
-        } else if (user.getUserType().equals(UserType.CreatorUser)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_CreatorUser"));
+class UserPrincipal(
+    val user: User,
+    val creator: Creator?
+) : Serializable {
+    val authorities: Collection<GrantedAuthority>
+        get() {
+            val authorities: MutableList<GrantedAuthority> = ArrayList()
+            if (user.uid == -1L) {
+                authorities.add(SimpleGrantedAuthority("ROLE_GUEST"))
+            } else if (user.userType == UserType.NormalUser) {
+                authorities.add(SimpleGrantedAuthority("ROLE_NormalUser"))
+            } else if (user.userType == UserType.CreatorUser) {
+                authorities.add(SimpleGrantedAuthority("ROLE_CreatorUser"))
+            }
+            return authorities
         }
-        return authorities;
+
+    companion object {
+        fun create(user: User, creator: Creator?): UserPrincipal {
+            return UserPrincipal(user, creator)
+        }
+
+        fun guest(): UserPrincipal {
+            return UserPrincipal(User.guest(), null)
+        }
     }
 }

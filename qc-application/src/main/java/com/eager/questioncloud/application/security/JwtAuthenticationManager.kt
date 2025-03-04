@@ -1,16 +1,14 @@
-package com.eager.questioncloud.application.security;
+package com.eager.questioncloud.application.security
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Component
 
 @Component
-public class JwtAuthenticationManager implements AuthenticationManager {
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return authentication;
+class JwtAuthenticationManager : AuthenticationManager {
+    override fun authenticate(authentication: Authentication): Authentication {
+        SecurityContextHolder.getContext().authentication = authentication
+        return authentication
     }
 }

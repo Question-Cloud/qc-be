@@ -1,30 +1,41 @@
-package com.eager.questioncloud.application.security;
+package com.eager.questioncloud.application.security
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableMethodSecurity
-@RequiredArgsConstructor
-public class SpringSecurityConfig {
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
+class SpringSecurityConfig(
+    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint,
+    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+) {
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .csrf(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
-            .exceptionHandling(config -> config.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-            .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf { csrf -> csrf.disable() }
+            .formLogin { form -> form.disable() }
+            .authorizeHttpRequests { auth ->
+                auth.requestMatchers(
+                    "/**"
+                ).permitAll()
+            }
+            .exceptionHandling { config: ExceptionHandlingConfigurer<HttpSecurity> ->
+                config.authenticationEntryPoint(
+                    jwtAuthenticationEntryPoint
+                )
+            }
+            .sessionManagement { config: SessionManagementConfigurer<HttpSecurity> ->
+                config.sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS
+                )
+            }
             .addFilter(jwtAuthenticationFilter)
-            .build();
+            .build()
     }
 }

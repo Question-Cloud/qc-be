@@ -1,74 +1,69 @@
-package com.eager.questioncloud.application.security;
+package com.eager.questioncloud.application.security
 
-import com.eager.questioncloud.application.business.authentication.implement.AuthenticationTokenManager;
-import com.eager.questioncloud.core.domain.user.dto.UserWithCreator;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import com.eager.questioncloud.application.business.authentication.implement.AuthenticationTokenManager
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import org.springframework.stereotype.Component
+import org.springframework.util.StringUtils
 
 @Component
-public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-    private final AuthenticationTokenManager authenticationTokenManager;
-    private final UserRepository userRepository;
-
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationTokenManager authenticationTokenManager,
-        UserRepository userRepository) {
-        super(authenticationManager);
-        this.authenticationTokenManager = authenticationTokenManager;
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+class JwtAuthenticationFilter(
+    authenticationManager: AuthenticationManager,
+    private val authenticationTokenManager: AuthenticationTokenManager,
+    private val userRepository: UserRepository
+) : BasicAuthenticationFilter(authenticationManager) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
         try {
-            String accessToken = parseToken(request.getHeader("Authorization"));
-            authentication(accessToken);
-        } catch (Exception e) {
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                setGuestAuthentication();
+            val accessToken = parseToken(request.getHeader("Authorization"))
+            authentication(accessToken)
+        } catch (e: Exception) {
+            if (SecurityContextHolder.getContext().authentication == null) {
+                setGuestAuthentication()
             }
         } finally {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response)
         }
     }
 
-    private String parseToken(String authorization) {
+    private fun parseToken(authorization: String): String? {
         if (!StringUtils.hasText(authorization)) {
-            return null;
+            return null
         }
         if (!authorization.startsWith("Bearer ")) {
-            return null;
+            return null
         }
-        return authorization.substring(7);
+        return authorization.substring(7)
     }
 
-    private void authentication(String accessToken) {
-        Long uid = authenticationTokenManager.parseUidFromAccessToken(accessToken);
-        UserWithCreator userWithCreator = userRepository.getUserWithCreator(uid);
-        UserPrincipal userPrincipal = UserPrincipal.create(userWithCreator.getUser(), userWithCreator.getCreator());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+    private fun authentication(accessToken: String?) {
+        val uid = authenticationTokenManager.parseUidFromAccessToken(accessToken)
+        val userWithCreator = userRepository.getUserWithCreator(uid)
+        val userPrincipal: UserPrincipal = UserPrincipal.create(userWithCreator.user, userWithCreator.creator)
+        val authentication = UsernamePasswordAuthenticationToken(
             userPrincipal,
-            userPrincipal.getUser().getUserInformation().getName(),
-            userPrincipal.getAuthorities());
-        super.getAuthenticationManager().authenticate(authentication);
+            userPrincipal.user.userInformation.name,
+            userPrincipal.authorities
+        )
+        super.getAuthenticationManager().authenticate(authentication)
     }
 
-    private void setGuestAuthentication() {
-        UserPrincipal userPrincipal = UserPrincipal.guest();
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+    private fun setGuestAuthentication() {
+        val userPrincipal: UserPrincipal = UserPrincipal.guest()
+        val authentication = UsernamePasswordAuthenticationToken(
             userPrincipal,
-            userPrincipal.getUser().getUserInformation().getName(),
-            userPrincipal.getAuthorities());
-        super.getAuthenticationManager().authenticate(authentication);
+            userPrincipal.user.userInformation.name,
+            userPrincipal.authorities
+        )
+        super.getAuthenticationManager().authenticate(authentication)
     }
 }
