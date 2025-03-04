@@ -1,35 +1,32 @@
-package com.eager.questioncloud.application.business.post.implement;
+package com.eager.questioncloud.application.business.post.implement
 
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
-import com.eager.questioncloud.core.domain.post.model.Post;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class PostPermissionChecker {
-    private final QuestionRepository questionRepository;
-    private final UserQuestionRepository userQuestionRepository;
-    private final PostRepository postRepository;
-
-    public Boolean hasPermission(Long userId, Long questionId) {
+class PostPermissionChecker(
+    private val questionRepository: QuestionRepository,
+    private val userQuestionRepository: UserQuestionRepository,
+    private val postRepository: PostRepository,
+) {
+    fun hasPermission(userId: Long, questionId: Long): Boolean {
         if (!questionRepository.isAvailable(questionId)) {
-            throw new CoreException(Error.UNAVAILABLE_QUESTION);
+            throw CoreException(Error.UNAVAILABLE_QUESTION)
         }
 
         if (!userQuestionRepository.isOwned(userId, questionId)) {
-            throw new CoreException(Error.NOT_OWNED_QUESTION);
+            throw CoreException(Error.NOT_OWNED_QUESTION)
         }
 
-        return true;
+        return true
     }
 
-    public Boolean hasCommentPermission(Long userId, Long postId) {
-        Post post = postRepository.findById(postId);
-        return hasPermission(userId, post.getQuestionId());
+    fun hasCommentPermission(userId: Long, postId: Long): Boolean {
+        val post = postRepository.findById(postId)
+        return hasPermission(userId, post.questionId)
     }
 }

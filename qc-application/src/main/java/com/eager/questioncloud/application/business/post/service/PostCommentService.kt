@@ -1,48 +1,45 @@
-package com.eager.questioncloud.application.business.post.service;
+package com.eager.questioncloud.application.business.post.service
 
-import com.eager.questioncloud.application.business.post.implement.PostPermissionChecker;
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail;
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostCommentRepository;
-import com.eager.questioncloud.core.domain.post.model.PostComment;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.application.business.post.implement.PostPermissionChecker
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostCommentRepository
+import com.eager.questioncloud.core.domain.post.model.PostComment
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class PostCommentService {
-    private final PostPermissionChecker postPermissionChecker;
-    private final PostCommentRepository postCommentRepository;
-
-    public PostComment addPostComment(PostComment postComment) {
-        if (!postPermissionChecker.hasCommentPermission(postComment.getWriterId(), postComment.getPostId())) {
-            throw new CoreException(Error.FORBIDDEN);
+class PostCommentService(
+    private val postPermissionChecker: PostPermissionChecker,
+    private val postCommentRepository: PostCommentRepository,
+) {
+    fun addPostComment(postComment: PostComment): PostComment {
+        if (!postPermissionChecker.hasCommentPermission(postComment.writerId, postComment.postId)) {
+            throw CoreException(Error.FORBIDDEN)
         }
-        return postCommentRepository.save(postComment);
+        return postCommentRepository.save(postComment)
     }
 
-    public void modifyPostComment(Long commentId, Long userId, String comment) {
-        PostComment postComment = postCommentRepository.findByIdAndWriterId(commentId, userId);
-        postComment.modify(comment);
-        postCommentRepository.save(postComment);
+    fun modifyPostComment(commentId: Long, userId: Long, comment: String) {
+        val postComment = postCommentRepository.findByIdAndWriterId(commentId, userId)
+        postComment.modify(comment)
+        postCommentRepository.save(postComment)
     }
 
-    public void deletePostComment(Long commentId, Long userId) {
-        PostComment postComment = postCommentRepository.findByIdAndWriterId(commentId, userId);
-        postCommentRepository.delete(postComment);
+    fun deletePostComment(commentId: Long, userId: Long) {
+        val postComment = postCommentRepository.findByIdAndWriterId(commentId, userId)
+        postCommentRepository.delete(postComment)
     }
 
-    public List<PostCommentDetail> getPostComments(Long postId, Long userId, PagingInformation pagingInformation) {
+    fun getPostComments(postId: Long, userId: Long, pagingInformation: PagingInformation): List<PostCommentDetail> {
         if (!postPermissionChecker.hasCommentPermission(userId, postId)) {
-            throw new CoreException(Error.FORBIDDEN);
+            throw CoreException(Error.FORBIDDEN)
         }
-        return postCommentRepository.getPostCommentDetails(postId, userId, pagingInformation);
+        return postCommentRepository.getPostCommentDetails(postId, userId, pagingInformation)
     }
 
-    public int count(Long postId) {
-        return postCommentRepository.count(postId);
+    fun count(postId: Long): Int {
+        return postCommentRepository.count(postId)
     }
 }

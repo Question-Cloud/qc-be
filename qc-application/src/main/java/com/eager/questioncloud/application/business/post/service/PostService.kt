@@ -1,60 +1,57 @@
-package com.eager.questioncloud.application.business.post.service;
+package com.eager.questioncloud.application.business.post.service
 
-import com.eager.questioncloud.application.business.post.implement.PostPermissionChecker;
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.post.dto.PostDetail;
-import com.eager.questioncloud.core.domain.post.dto.PostListItem;
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository;
-import com.eager.questioncloud.core.domain.post.model.Post;
-import com.eager.questioncloud.core.domain.post.model.PostContent;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.application.business.post.implement.PostPermissionChecker
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.post.dto.PostDetail
+import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository
+import com.eager.questioncloud.core.domain.post.model.Post
+import com.eager.questioncloud.core.domain.post.model.PostContent
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class PostService {
-    private final PostPermissionChecker postPermissionChecker;
-    private final PostRepository postRepository;
-
-    public Post register(Post post) {
-        if (!postPermissionChecker.hasPermission(post.getWriterId(), post.getQuestionId())) {
-            throw new CoreException(Error.FORBIDDEN);
+class PostService(
+    private val postPermissionChecker: PostPermissionChecker,
+    private val postRepository: PostRepository,
+) {
+    fun register(post: Post): Post {
+        if (!postPermissionChecker.hasPermission(post.writerId, post.questionId)) {
+            throw CoreException(Error.FORBIDDEN)
         }
 
-        return postRepository.save(post);
+        return postRepository.save(post)
     }
 
-    public List<PostListItem> getPostList(Long userId, Long questionId, PagingInformation pagingInformation) {
+    fun getPostList(userId: Long, questionId: Long, pagingInformation: PagingInformation): List<PostListItem> {
         if (!postPermissionChecker.hasPermission(userId, questionId)) {
-            throw new CoreException(Error.FORBIDDEN);
+            throw CoreException(Error.FORBIDDEN)
         }
 
-        return postRepository.getPostList(questionId, pagingInformation);
+        return postRepository.getPostList(questionId, pagingInformation)
     }
 
-    public int countPost(Long questionId) {
-        return postRepository.count(questionId);
+    fun countPost(questionId: Long): Int {
+        return postRepository.count(questionId)
     }
 
-    public PostDetail getPostDetail(Long userId, Long postId) {
-        PostDetail post = postRepository.getPostDetail(postId);
-        if (!postPermissionChecker.hasPermission(userId, post.getQuestionId())) {
-            throw new CoreException(Error.FORBIDDEN);
+    fun getPostDetail(userId: Long, postId: Long): PostDetail {
+        val post = postRepository.getPostDetail(postId)
+        if (!postPermissionChecker.hasPermission(userId, post.questionId)) {
+            throw CoreException(Error.FORBIDDEN)
         }
-        return post;
+        return post
     }
 
-    public void modify(Long postId, Long userId, PostContent postContent) {
-        Post post = postRepository.findByIdAndWriterId(postId, userId);
-        post.updateQuestionBoardContent(postContent);
-        postRepository.save(post);
+    fun modify(postId: Long, userId: Long, postContent: PostContent) {
+        val post = postRepository.findByIdAndWriterId(postId, userId)
+        post.updateQuestionBoardContent(postContent)
+        postRepository.save(post)
     }
 
-    public void delete(Long postId, Long userId) {
-        Post post = postRepository.findByIdAndWriterId(postId, userId);
-        postRepository.delete(post);
+    fun delete(postId: Long, userId: Long) {
+        val post = postRepository.findByIdAndWriterId(postId, userId)
+        postRepository.delete(post)
     }
 }
