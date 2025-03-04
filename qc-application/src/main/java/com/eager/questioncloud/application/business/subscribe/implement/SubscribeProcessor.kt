@@ -1,40 +1,38 @@
-package com.eager.questioncloud.application.business.subscribe.implement;
+package com.eager.questioncloud.application.business.subscribe.implement
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository;
-import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository;
-import com.eager.questioncloud.core.domain.subscribe.model.Subscribe;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
+import com.eager.questioncloud.core.domain.subscribe.model.Subscribe.Companion.create
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class SubscribeProcessor {
-    private final SubscribeRepository subscribeRepository;
-    private final CreatorRepository creatorRepository;
-
-    public void subscribe(Long userId, Long creatorId) {
+class SubscribeProcessor(
+    private val subscribeRepository: SubscribeRepository,
+    private val creatorRepository: CreatorRepository,
+) {
+    fun subscribe(userId: Long, creatorId: Long) {
         if (!isActiveCreator(creatorId)) {
-            throw new CoreException(Error.NOT_FOUND);
+            throw CoreException(Error.NOT_FOUND)
         }
 
         if (isAlreadySubscribed(userId, creatorId)) {
-            throw new CoreException(Error.ALREADY_SUBSCRIBE_CREATOR);
+            throw CoreException(Error.ALREADY_SUBSCRIBE_CREATOR)
         }
 
-        subscribeRepository.save(Subscribe.create(userId, creatorId));
+        subscribeRepository.save(create(userId, creatorId))
     }
 
-    public void unSubscribe(Long userId, Long creatorId) {
-        subscribeRepository.unSubscribe(userId, creatorId);
+    fun unSubscribe(userId: Long, creatorId: Long) {
+        subscribeRepository.unSubscribe(userId, creatorId)
     }
 
-    private Boolean isActiveCreator(Long creatorId) {
-        return creatorRepository.existsById(creatorId);
+    private fun isActiveCreator(creatorId: Long): Boolean {
+        return creatorRepository.existsById(creatorId)
     }
 
-    private Boolean isAlreadySubscribed(Long userId, Long creatorId) {
-        return subscribeRepository.isSubscribed(userId, creatorId);
+    private fun isAlreadySubscribed(userId: Long, creatorId: Long): Boolean {
+        return subscribeRepository.isSubscribed(userId, creatorId)
     }
 }
