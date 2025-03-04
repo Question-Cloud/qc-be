@@ -32,7 +32,6 @@ class PortoneAPI {
         } catch (e: InvalidPaymentIdException) {
             throw e
         } catch (e: Exception) {
-            println(e.message)
             throw PGException()
         }
     }
