@@ -1,18 +1,18 @@
-package com.eager.questioncloud.application.validator;
+package com.eager.questioncloud.application.validator
 
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import java.util.regex.Pattern
 
-public class EmailValidator {
-    public static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    public static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+object EmailValidator {
+    const val EMAIL_REGEX: String = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    val pattern: Pattern = Pattern.compile(EMAIL_REGEX)
 
-    public static void validate(String email) {
-        Matcher matcher = pattern.matcher(email);
+    @JvmStatic
+    fun validate(email: String) {
+        val matcher = pattern.matcher(email)
         if (!matcher.matches()) {
-            throw new CoreException(Error.BAD_REQUEST);
+            throw CoreException(Error.BAD_REQUEST)
         }
     }
 }
