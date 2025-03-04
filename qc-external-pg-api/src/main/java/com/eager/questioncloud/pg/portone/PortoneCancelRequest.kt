@@ -1,10 +1,5 @@
-package com.eager.questioncloud.pg.portone;
+package com.eager.questioncloud.pg.portone
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+class PortoneCancelRequest(val reason: String) {
 
-@Getter
-@AllArgsConstructor
-public class PortoneCancelRequest {
-    private String reason;
 }

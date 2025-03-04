@@ -1,9 +1,3 @@
-package com.eager.questioncloud.pg.exception;
+package com.eager.questioncloud.pg.exception
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@AllArgsConstructor
-@Getter
-public class PGException extends RuntimeException {
-}
+class PGException : RuntimeException()

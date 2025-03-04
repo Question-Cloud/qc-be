@@ -1,13 +1,5 @@
-package com.eager.questioncloud.pg.portone;
+package com.eager.questioncloud.pg.portone
 
-import lombok.Getter;
-
-@Getter
-public enum PortoneCancelStatus {
-    FAILED("FAILED"), REQUESTED("REQUESTED"), SUCCEEDED("SUCCEEDED");
-    private final String value;
-
-    PortoneCancelStatus(String value) {
-        this.value = value;
-    }
+enum class PortoneCancelStatus(val value: String) {
+    FAILED("FAILED"), REQUESTED("REQUESTED"), SUCCEEDED("SUCCEEDED")
 }

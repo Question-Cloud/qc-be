@@ -1,14 +1,6 @@
-package com.eager.questioncloud.pg.portone;
+package com.eager.questioncloud.pg.portone
 
-import lombok.Getter;
-
-@Getter
-public enum PortoneWebhookStatus {
-    Ready("Ready"), Paid("Paid"), VirtualAccountIssued("VirtualAccountIssued"), PartialCancelled("PartialCancelled"), Cancelled("Cancelled"),
-    Failed("Failed"), PayPending("PayPending"), CancelPending("CancelPending");
-    private final String value;
-
-    PortoneWebhookStatus(String value) {
-        this.value = value;
-    }
+enum class PortoneWebhookStatus(val value: String) {
+    Ready("Ready"), Paid("Paid"), VirtualAccountIssued("VirtualAccountIssued"), PartialCancelled("PartialCancelled"),
+    Cancelled("Cancelled"), Failed("Failed"), PayPending("PayPending"), CancelPending("CancelPending")
 }

@@ -1,13 +1,11 @@
-package com.eager.questioncloud.pg.portone;
+package com.eager.questioncloud.pg.portone
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
-@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PortonePayment {
-    private String id;
-    private PortonePaymentStatus status;
-    private PortonePaymentAmount amount;
-    private String receiptUrl;
-}
+class PortonePayment(
+    val id: String,
+    val status: PortonePaymentStatus,
+    val amount: PortonePaymentAmount,
+    val receiptUrl: String,
+)

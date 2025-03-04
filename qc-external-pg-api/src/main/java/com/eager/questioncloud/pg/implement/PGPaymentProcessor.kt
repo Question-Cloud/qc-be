@@ -1,22 +1,17 @@
-package com.eager.questioncloud.pg.implement;
+package com.eager.questioncloud.pg.implement
 
-import com.eager.questioncloud.pg.dto.PGPayment;
-import com.eager.questioncloud.pg.portone.PortoneAPI;
-import com.eager.questioncloud.pg.portone.PortonePayment;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.pg.dto.PGPayment
+import com.eager.questioncloud.pg.portone.PortoneAPI
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class PGPaymentProcessor {
-    private final PortoneAPI portoneAPI;
-
-    public PGPayment getPayment(String paymentId) {
-        PortonePayment portonePayment = portoneAPI.getPayment(paymentId);
-        return new PGPayment(portonePayment.getId(), portonePayment.getAmount().getTotal(), portonePayment.getReceiptUrl());
+class PGPaymentProcessor(private val portoneAPI: PortoneAPI) {
+    fun getPayment(paymentId: String): PGPayment {
+        val portonePayment = portoneAPI.getPayment(paymentId)
+        return PGPayment(portonePayment.id, portonePayment.amount.total, portonePayment.receiptUrl)
     }
 
-    public void cancel(String paymentId) {
-        portoneAPI.cancel(paymentId);
+    fun cancel(paymentId: String) {
+        portoneAPI.cancel(paymentId)
     }
 }
