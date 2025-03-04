@@ -1,15 +1,16 @@
-package com.eager.questioncloud.utils;
+package com.eager.questioncloud.utils
 
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.plugin.SimpleValueJqwikPlugin;
-import com.navercorp.fixturemonkey.kotlin.KotlinPlugin;
+import com.navercorp.fixturemonkey.FixtureMonkey
+import com.navercorp.fixturemonkey.api.plugin.SimpleValueJqwikPlugin
+import com.navercorp.fixturemonkey.kotlin.KotlinPlugin
 
-public class Fixture {
-    public static SimpleValueJqwikPlugin simpleValueJqwikPlugin = new SimpleValueJqwikPlugin().minStringLength(10).maxStringLength(15);
-    public static FixtureMonkey fixtureMonkey = FixtureMonkey
+object Fixture {
+    private var simpleValueJqwikPlugin: SimpleValueJqwikPlugin =
+        SimpleValueJqwikPlugin().minStringLength(10).maxStringLength(15)
+    var fixtureMonkey: FixtureMonkey = FixtureMonkey
         .builder()
         .plugin(simpleValueJqwikPlugin)
-        .plugin(new KotlinPlugin())
+        .plugin(KotlinPlugin())
         .defaultNotNull(true)
-        .build();
+        .build()
 }
