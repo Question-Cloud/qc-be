@@ -1,113 +1,87 @@
-package com.eager.questioncloud.application.resolver;
+package com.eager.questioncloud.application.resolver
 
-import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel;
-import com.eager.questioncloud.core.domain.question.enums.QuestionSortType;
-import com.eager.questioncloud.core.domain.question.enums.QuestionType;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.MethodParameter;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.support.WebDataBinderFactory;
-import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.ModelAndViewContainer;
+import com.eager.questioncloud.application.security.UserPrincipal
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter
+import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
+import com.eager.questioncloud.core.domain.question.enums.QuestionSortType
+import com.eager.questioncloud.core.domain.question.enums.QuestionType
+import org.springframework.core.MethodParameter
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.support.WebDataBinderFactory
+import org.springframework.web.context.request.NativeWebRequest
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
+import org.springframework.web.method.support.ModelAndViewContainer
+import java.util.*
+import java.util.stream.Collectors
 
 @Component
-@RequiredArgsConstructor
-public class QuestionFilterArgumentResolver implements HandlerMethodArgumentResolver {
-    private final PagingInformationArgumentResolver pagingInformationArgumentResolver;
-
-    @Override
-    public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().equals(QuestionFilter.class);
+class QuestionFilterArgumentResolver(
+    private val pagingInformationArgumentResolver: PagingInformationArgumentResolver
+) : HandlerMethodArgumentResolver {
+    override fun supportsParameter(parameter: MethodParameter): Boolean {
+        return parameter.parameterType == QuestionFilter::class.java
     }
 
-    @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest,
-        WebDataBinderFactory binderFactory) throws Exception {
-        Long userId = getUserIdFromRequest();
-        List<Long> categories = getCategoriesFromRequest(webRequest);
-        List<QuestionLevel> levels = getLevelsFromRequest(webRequest);
-        QuestionType questionType = getQuestionTypeFromRequest(webRequest);
-        Long creatorId = getCreatorIdFromRequest(webRequest);
-        QuestionSortType sort = getSortFromRequest(webRequest);
-        PagingInformation pagingInformation = pagingInformationArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
-        return new QuestionFilter(userId, categories, levels, questionType, creatorId, sort, pagingInformation);
+    override fun resolveArgument(
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): QuestionFilter {
+        val userId = userIdFromRequest
+        val categories = getCategoriesFromRequest(webRequest)
+        val levels = getLevelsFromRequest(webRequest)
+        val questionType = getQuestionTypeFromRequest(webRequest)
+        val creatorId = getCreatorIdFromRequest(webRequest)
+        val sort = getSortFromRequest(webRequest)
+        val pagingInformation =
+            pagingInformationArgumentResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory)
+        return QuestionFilter(userId, categories, levels, questionType, creatorId, sort!!, pagingInformation)
     }
 
-    private Long getUserIdFromRequest() {
-        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userPrincipal.getUser().getUid();
-    }
-
-    private List<Long> getCategoriesFromRequest(NativeWebRequest webRequest) {
-        String input = webRequest.getParameter("categories");
-
-        if (input == null) {
-            return null;
+    private val userIdFromRequest: Long?
+        get() {
+            val userPrincipal =
+                SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+            return userPrincipal.user.uid
         }
 
-        String[] categoriesParams = input.split(",");
+    private fun getCategoriesFromRequest(webRequest: NativeWebRequest): List<Long>? {
+        val input = webRequest.getParameter("categories") ?: return null
+
+        val categoriesParams = input.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         return Arrays.stream(categoriesParams)
-            .map(Long::parseLong)
-            .collect(Collectors.toList());
+            .map { s: String -> s.toLong() }
+            .collect(Collectors.toList())
     }
 
-    private List<QuestionLevel> getLevelsFromRequest(NativeWebRequest webRequest) {
-        String input = webRequest.getParameter("levels");
+    private fun getLevelsFromRequest(webRequest: NativeWebRequest): List<QuestionLevel>? {
+        val input = webRequest.getParameter("levels") ?: return null
 
-        if (input == null) {
-            return null;
-        }
-
-        String[] levelParams = input.split(",");
+        val levelParams = input.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
         return Arrays.stream(levelParams)
-            .map(QuestionLevel::valueOf)
-            .collect(Collectors.toList());
+            .map { value: String? -> QuestionLevel.valueOf(value!!) }
+            .collect(Collectors.toList())
     }
 
-    private QuestionType getQuestionTypeFromRequest(NativeWebRequest webRequest) {
-        String input = webRequest.getParameter("questionType");
+    private fun getQuestionTypeFromRequest(webRequest: NativeWebRequest): QuestionType? {
+        val input = webRequest.getParameter("questionType") ?: return null
 
-        if (input == null) {
-            return null;
-        }
-
-        return QuestionType.valueOf(input);
+        return QuestionType.valueOf(input)
     }
 
-    private Long getCreatorIdFromRequest(NativeWebRequest webRequest) {
-        String input = webRequest.getParameter("creatorId");
+    private fun getCreatorIdFromRequest(webRequest: NativeWebRequest): Long? {
+        val input = webRequest.getParameter("creatorId") ?: return null
 
-        if (input == null) {
-            return null;
-        }
-
-        return Long.parseLong(input);
+        return input.toLong()
     }
 
-    private QuestionSortType getSortFromRequest(NativeWebRequest webRequest) {
-        String input = webRequest.getParameter("sort");
+    private fun getSortFromRequest(webRequest: NativeWebRequest): QuestionSortType? {
+        val input = webRequest.getParameter("sort") ?: return null
 
-        if (input == null) {
-            return null;
-        }
-
-        return QuestionSortType.valueOf(input);
-    }
-
-    private PagingInformation getPagingInformation(NativeWebRequest webRequest) {
-        int page = Integer.parseInt(webRequest.getParameter("page"));
-        int size = Integer.parseInt(webRequest.getParameter("size"));
-
-        return new PagingInformation(page, size);
+        return QuestionSortType.valueOf(input)
     }
 }
