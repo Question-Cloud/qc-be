@@ -1,19 +1,19 @@
-package com.eager.questioncloud.application.business.question.implement;
+package com.eager.questioncloud.application.business.question.implement
 
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrderItem
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
+import java.util.function.Consumer
 
 @Component
-@RequiredArgsConstructor
-public class QuestionStatisticsUpdater {
-    private final QuestionRepository questionRepository;
-
+class QuestionStatisticsUpdater(
+    private val questionRepository: QuestionRepository
+) {
     @EventListener
-    public void updateSalesCount(QuestionPaymentEvent event) {
-        event.getQuestionPayment().getOrder().getItems()
-            .forEach(item -> questionRepository.increaseQuestionCount(item.getQuestionId()));
+    fun updateSalesCount(event: QuestionPaymentEvent) {
+        event.questionPayment.order.items
+            .forEach(Consumer { item: QuestionOrderItem -> questionRepository.increaseQuestionCount(item.questionId) })
     }
 }
