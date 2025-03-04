@@ -1,46 +1,44 @@
-package com.eager.questioncloud.application.business.cart.implement;
+package com.eager.questioncloud.application.business.cart.implement
 
-import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository;
-import com.eager.questioncloud.core.domain.cart.model.CartItem;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository
+import com.eager.questioncloud.core.domain.cart.model.CartItem.Companion.create
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class CartItemAppender {
-    private final QuestionRepository questionRepository;
-    private final CartItemRepository cartItemRepository;
-    private final UserQuestionRepository userQuestionRepository;
-
-    public void append(Long userId, Long questionId) {
+class CartItemAppender(
+    private val questionRepository: QuestionRepository,
+    private val cartItemRepository: CartItemRepository,
+    private val userQuestionRepository: UserQuestionRepository,
+) {
+    fun append(userId: Long, questionId: Long) {
         if (isUnAvailableQuestion(questionId)) {
-            throw new CoreException(Error.UNAVAILABLE_QUESTION);
+            throw CoreException(Error.UNAVAILABLE_QUESTION)
         }
 
         if (isAlreadyInCart(userId, questionId)) {
-            throw new CoreException(Error.ALREADY_IN_CART);
+            throw CoreException(Error.ALREADY_IN_CART)
         }
 
         if (isAlreadyOwned(userId, questionId)) {
-            throw new CoreException(Error.ALREADY_OWN_QUESTION);
+            throw CoreException(Error.ALREADY_OWN_QUESTION)
         }
 
-        cartItemRepository.save(CartItem.create(userId, questionId));
+        cartItemRepository.save(create(userId, questionId))
     }
 
-    private Boolean isUnAvailableQuestion(Long questionId) {
-        return !questionRepository.isAvailable(questionId);
+    private fun isUnAvailableQuestion(questionId: Long): Boolean {
+        return !questionRepository.isAvailable(questionId)
     }
 
-    private Boolean isAlreadyInCart(Long userId, Long questionId) {
-        return cartItemRepository.isExistsInCart(userId, questionId);
+    private fun isAlreadyInCart(userId: Long, questionId: Long): Boolean {
+        return cartItemRepository.isExistsInCart(userId, questionId)
     }
 
-    private Boolean isAlreadyOwned(Long userId, Long questionId) {
-        return userQuestionRepository.isOwned(userId, questionId);
+    private fun isAlreadyOwned(userId: Long, questionId: Long): Boolean {
+        return userQuestionRepository.isOwned(userId, questionId)
     }
 }

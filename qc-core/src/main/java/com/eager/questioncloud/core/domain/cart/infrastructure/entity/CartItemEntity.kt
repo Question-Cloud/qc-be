@@ -17,7 +17,7 @@ class CartItemEntity private constructor(
     companion object {
         @JvmStatic
         fun from(cartItem: CartItem): CartItemEntity {
-            return CartItemEntity(cartItem.id, cartItem.userId, cartItem.userId)
+            return CartItemEntity(cartItem.id, cartItem.userId, cartItem.questionId)
         }
     }
 }
