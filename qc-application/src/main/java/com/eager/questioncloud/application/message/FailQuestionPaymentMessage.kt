@@ -1,22 +1,18 @@
-package com.eager.questioncloud.application.message;
+package com.eager.questioncloud.application.message
 
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.eager.questioncloud.core.domain.payment.model.QuestionPayment
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class FailQuestionPaymentMessage {
-    private QuestionPayment questionPayment;
-    private int failCount;
-
-    public static FailQuestionPaymentMessage create(QuestionPayment questionPayment) {
-        return new FailQuestionPaymentMessage(questionPayment, 0);
+class FailQuestionPaymentMessage(
+    var questionPayment: QuestionPayment,
+    var failCount: Int,
+) {
+    fun increaseFailCount() {
+        failCount++
     }
 
-    public void increaseFailCount() {
-        this.failCount++;
+    companion object {
+        fun create(questionPayment: QuestionPayment): FailQuestionPaymentMessage {
+            return FailQuestionPaymentMessage(questionPayment, 0)
+        }
     }
 }

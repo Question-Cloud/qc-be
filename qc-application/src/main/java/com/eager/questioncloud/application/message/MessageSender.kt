@@ -1,34 +1,28 @@
-package com.eager.questioncloud.application.message;
+package com.eager.questioncloud.application.message
 
-import com.eager.questioncloud.application.config.RabbitConfig;
-import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.config.RabbitConfig
+import org.springframework.amqp.rabbit.core.RabbitTemplate
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class MessageSender {
-    private final RabbitTemplate rabbitTemplate;
-
-    public void sendMessage(MessageType messageType, Object message) {
-        rabbitTemplate.convertAndSend(messageType.getQueueName(), message);
+class MessageSender(
+    private val rabbitTemplate: RabbitTemplate
+) {
+    fun sendMessage(messageType: MessageType, message: Any) {
+        rabbitTemplate.convertAndSend(messageType.queueName, message)
     }
 
-    public void sendDelayMessage(MessageType messageType, Object message, int failCount) {
+    fun sendDelayMessage(messageType: MessageType, message: Any, failCount: Int) {
         rabbitTemplate.convertAndSend(
-            RabbitConfig.DELAY_EXCHANGE,
-            messageType.getQueueName(),
-            message,
-            m -> {
-                m.getMessageProperties().setExpiration(selectDelay(failCount));
-                return m;
-            });
+            RabbitConfig.DELAY_EXCHANGE, messageType.queueName, message
+        ) { m ->
+            m.apply { messageProperties.expiration = selectDelay(failCount) }
+        }
     }
 
-    private String selectDelay(int failCount) {
-        switch (failCount) {
-            default:
-                return "10000";
+    private fun selectDelay(failCount: Int): String {
+        when (failCount) {
+            else -> return "10000"
         }
     }
 }

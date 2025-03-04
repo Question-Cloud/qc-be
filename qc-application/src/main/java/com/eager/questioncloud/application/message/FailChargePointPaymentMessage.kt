@@ -1,21 +1,16 @@
-package com.eager.questioncloud.application.message;
+package com.eager.questioncloud.application.message
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-public class FailChargePointPaymentMessage {
-    private int failCount;
-    private String paymentId;
-
-    public static FailChargePointPaymentMessage create(String paymentId) {
-        return new FailChargePointPaymentMessage(0, paymentId);
+class FailChargePointPaymentMessage(
+    var failCount: Int,
+    var paymentId: String,
+) {
+    fun increaseFailCount() {
+        failCount++
     }
 
-    public void increaseFailCount() {
-        this.failCount++;
+    companion object {
+        fun create(paymentId: String): FailChargePointPaymentMessage {
+            return FailChargePointPaymentMessage(0, paymentId)
+        }
     }
 }

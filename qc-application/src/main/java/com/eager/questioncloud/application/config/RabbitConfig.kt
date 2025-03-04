@@ -1,7 +1,9 @@
 package com.eager.questioncloud.application.config
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.springframework.amqp.core.*
 import org.springframework.amqp.rabbit.connection.ConnectionFactory
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -66,7 +68,9 @@ class RabbitConfig {
     @Bean
     fun jackson2JsonMessageConverter(): MessageConverter {
         val objectMapper = ObjectMapper()
+        objectMapper.registerKotlinModule()
         objectMapper.registerModule(JavaTimeModule())
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return Jackson2JsonMessageConverter(objectMapper)
     }
 
