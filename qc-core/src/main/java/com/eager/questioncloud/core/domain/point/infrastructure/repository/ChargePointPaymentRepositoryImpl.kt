@@ -32,7 +32,7 @@ class ChargePointPaymentRepositoryImpl(
             .fetchFirst() != null
     }
 
-    override fun findByPaymentId(paymentId: String): ChargePointPayment? {
+    override fun findByPaymentId(paymentId: String): ChargePointPayment {
         return chargePointPaymentJpaRepository.findByPaymentId(paymentId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()

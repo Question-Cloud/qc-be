@@ -1,23 +1,21 @@
-package com.eager.questioncloud.application.business.payment.point.event;
+package com.eager.questioncloud.application.business.payment.point.event
 
-import com.eager.questioncloud.core.domain.point.enums.ChargePointType;
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 
-@Getter
-public class ChargePointPaymentEvent {
-    private final String paymentId;
-    private final Long userId;
-    private final ChargePointType chargePointType;
-
-    private ChargePointPaymentEvent(String paymentId, Long userId, ChargePointType chargePointType) {
-        this.paymentId = paymentId;
-        this.userId = userId;
-        this.chargePointType = chargePointType;
-    }
-
-    public static ChargePointPaymentEvent from(ChargePointPayment chargePointPayment) {
-        return new ChargePointPaymentEvent(chargePointPayment.getPaymentId(), chargePointPayment.getUserId(),
-            chargePointPayment.getChargePointType());
+class ChargePointPaymentEvent(
+    val paymentId: String,
+    val userId: Long,
+    val chargePointType: ChargePointType
+) {
+    companion object {
+        @JvmStatic
+        fun from(chargePointPayment: ChargePointPayment): ChargePointPaymentEvent {
+            return ChargePointPaymentEvent(
+                chargePointPayment.paymentId,
+                chargePointPayment.userId,
+                chargePointPayment.chargePointType
+            )
+        }
     }
 }

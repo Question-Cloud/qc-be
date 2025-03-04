@@ -1,22 +1,19 @@
-package com.eager.questioncloud.application.business.payment.point.service;
+package com.eager.questioncloud.application.business.payment.point.service
 
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository;
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class ChargePointPaymentHistoryService {
-    private final ChargePointPaymentRepository chargePointPaymentRepository;
-
-    public List<ChargePointPayment> getChargePointPayments(Long userId, PagingInformation pagingInformation) {
-        return chargePointPaymentRepository.getChargePointPayments(userId, pagingInformation);
+class ChargePointPaymentHistoryService(
+    private val chargePointPaymentRepository: ChargePointPaymentRepository
+) {
+    fun getChargePointPayments(userId: Long, pagingInformation: PagingInformation): List<ChargePointPayment> {
+        return chargePointPaymentRepository.getChargePointPayments(userId, pagingInformation)
     }
 
-    public int countChargePointPayment(Long userId) {
-        return chargePointPaymentRepository.countByUserId(userId);
+    fun countChargePointPayment(userId: Long): Int {
+        return chargePointPaymentRepository.countByUserId(userId)
     }
 }

@@ -8,7 +8,7 @@ interface ChargePointPaymentRepository {
 
     fun isCompletedPayment(userId: Long, paymentId: String): Boolean
 
-    fun findByPaymentId(paymentId: String): ChargePointPayment?
+    fun findByPaymentId(paymentId: String): ChargePointPayment
 
     fun findByPaymentIdWithLock(paymentId: String): ChargePointPayment
 

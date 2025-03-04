@@ -1,29 +1,30 @@
-package com.eager.questioncloud.application.business.payment.point.implement;
+package com.eager.questioncloud.application.business.payment.point.implement
 
-import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent;
-import com.eager.questioncloud.application.message.FailChargePointPaymentMessage;
-import com.eager.questioncloud.application.message.MessageSender;
-import com.eager.questioncloud.application.message.MessageType;
-import com.eager.questioncloud.core.domain.point.implement.UserPointManager;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent
+import com.eager.questioncloud.application.message.FailChargePointPaymentMessage
+import com.eager.questioncloud.application.message.MessageSender
+import com.eager.questioncloud.application.message.MessageType
+import com.eager.questioncloud.core.domain.point.implement.UserPointManager
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class ChargePointPaymentPostProcessor {
-    private final UserPointManager userPointManager;
-    private final MessageSender messageSender;
-
+class ChargePointPaymentPostProcessor(
+    private val userPointManager: UserPointManager,
+    private val messageSender: MessageSender,
+) {
     @EventListener
-    public void chargeUserPoint(ChargePointPaymentEvent event) {
+    fun chargeUserPoint(event: ChargePointPaymentEvent) {
         try {
-            userPointManager.chargePoint(event.getUserId(), event.getChargePointType().getAmount());
-        } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_CHARGE_POINT, FailChargePointPaymentMessage.create(event.getPaymentId()));
-            throw new CoreException(Error.PAYMENT_ERROR);
+            userPointManager.chargePoint(event.userId, event.chargePointType.amount)
+        } catch (e: Exception) {
+            messageSender.sendMessage(
+                MessageType.FAIL_CHARGE_POINT,
+                FailChargePointPaymentMessage.create(event.paymentId)
+            )
+            throw CoreException(Error.PAYMENT_ERROR)
         }
     }
 }
