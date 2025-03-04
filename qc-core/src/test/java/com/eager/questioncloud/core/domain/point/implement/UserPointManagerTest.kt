@@ -1,80 +1,93 @@
-package com.eager.questioncloud.core.domain.point.implement;
+package com.eager.questioncloud.core.domain.point.implement
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
-import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.core.domain.user.UserBuilder;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import com.eager.questioncloud.utils.Fixture
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class UserPointManagerTest {
+internal class UserPointManagerTest(
     @Autowired
-    private UserPointManager userPointManager;
+    private val userPointManager: UserPointManager,
 
     @Autowired
-    private UserPointRepository userPointRepository;
+    private val userPointRepository: UserPointRepository,
 
     @Autowired
-    private UserRepository userRepository;
-
+    private val userRepository: UserRepository,
+) {
     @AfterEach
-    void tearDown() {
-        userRepository.deleteAllInBatch();
-        userPointRepository.deleteAllInBatch();
+    fun tearDown() {
+        userRepository.deleteAllInBatch()
+        userPointRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("유저의 포인트를 초기화 한다.")
-    void init() {
+    fun init() {
         // given
-        User user = userRepository.save(UserBuilder.builder().build().toUser());
+        val user = userRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
+                .sample()
+        )
 
         // when
-        userPointManager.init(user.getUid());
+        userPointManager.init(user.uid!!)
 
         // then
-        UserPoint userPoint = userPointRepository.getUserPoint(user.getUid());
-        Assertions.assertNotNull(userPoint);
+        val userPoint = userPointRepository.getUserPoint(user.uid!!)
+        Assertions.assertNotNull(userPoint)
     }
 
     @Test
     @DisplayName("유저의 포인트를 충전한다.")
-    void chargePoint() {
+    fun chargePoint() {
         // given
-        User user = userRepository.save(UserBuilder.builder().build().toUser());
-        userPointManager.init(user.getUid());
+        val user = userRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
+                .sample()
+        )
+        userPointManager.init(user.uid!!)
 
         // when
-        userPointManager.chargePoint(user.getUid(), 10000);
+        userPointManager.chargePoint(user.uid!!, 10000)
 
         //then
-        UserPoint userPoint = userPointRepository.getUserPoint(user.getUid());
-        assertThat(userPoint.getPoint()).isEqualTo(10000);
+        val userPoint = userPointRepository.getUserPoint(user.uid!!)
+        org.assertj.core.api.Assertions.assertThat(userPoint.point).isEqualTo(10000)
     }
 
     @Test
     @DisplayName("유저의 포인트를 차감한다.")
-    void usePoint() {
+    fun usePoint() {
         // given
-        User user = userRepository.save(UserBuilder.builder().build().toUser());
-        userPointManager.init(user.getUid());
-        userPointManager.chargePoint(user.getUid(), 10000);
+        val user = userRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
+                .sample()
+        )
+        userPointManager.init(user.uid!!)
+        userPointManager.chargePoint(user.uid!!, 10000)
 
         // when
-        userPointManager.usePoint(user.getUid(), 5000);
+        userPointManager.usePoint(user.uid!!, 5000)
 
         //then
-        UserPoint userPoint = userPointRepository.getUserPoint(user.getUid());
-        assertThat(userPoint.getPoint()).isEqualTo(5000);
+        val userPoint = userPointRepository.getUserPoint(user.uid!!)
+        org.assertj.core.api.Assertions.assertThat(userPoint.point).isEqualTo(5000)
     }
 }
