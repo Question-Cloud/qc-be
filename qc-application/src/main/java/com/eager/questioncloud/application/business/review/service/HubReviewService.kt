@@ -1,55 +1,61 @@
-package com.eager.questioncloud.application.business.review.service;
+package com.eager.questioncloud.application.business.review.service
 
-import com.eager.questioncloud.application.business.review.implement.HubReviewRegister;
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
-import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent;
-import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent;
-import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent;
-import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository;
-import com.eager.questioncloud.core.domain.review.model.QuestionReview;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.application.business.review.implement.HubReviewRegister
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview
+import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview.Companion.from
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
+import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent
+import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent
+import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent
+import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository
+import com.eager.questioncloud.core.domain.review.model.QuestionReview
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class HubReviewService {
-    private final QuestionReviewRepository questionReviewRepository;
-    private final HubReviewRegister hubReviewRegister;
-    private final ApplicationEventPublisher applicationEventPublisher;
-
-    public int getTotal(Long questionId) {
-        return questionReviewRepository.getTotal(questionId);
+class HubReviewService(
+    private val questionReviewRepository: QuestionReviewRepository,
+    private val hubReviewRegister: HubReviewRegister,
+    private val applicationEventPublisher: ApplicationEventPublisher,
+) {
+    fun getTotal(questionId: Long): Int {
+        return questionReviewRepository.getTotal(questionId)
     }
 
-    public List<QuestionReviewDetail> getQuestionReviews(Long questionId, Long userId, PagingInformation pagingInformation) {
-        return questionReviewRepository.getQuestionReviews(questionId, userId, pagingInformation);
+    fun getQuestionReviews(
+        questionId: Long,
+        userId: Long,
+        pagingInformation: PagingInformation
+    ): List<QuestionReviewDetail> {
+        return questionReviewRepository.getQuestionReviews(questionId, userId, pagingInformation)
     }
 
-    public MyQuestionReview getMyQuestionReview(Long questionId, Long userId) {
-        QuestionReview questionReview = questionReviewRepository.getMyQuestionReview(questionId, userId);
-        return MyQuestionReview.from(questionReview);
+    fun getMyQuestionReview(questionId: Long, userId: Long): MyQuestionReview {
+        val questionReview = questionReviewRepository.getMyQuestionReview(questionId, userId)
+        return from(questionReview)
     }
 
-    public void register(QuestionReview questionReview) {
-        hubReviewRegister.register(questionReview);
-        applicationEventPublisher.publishEvent(RegisteredReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
+    fun register(questionReview: QuestionReview) {
+        hubReviewRegister.register(questionReview)
+        applicationEventPublisher.publishEvent(
+            RegisteredReviewEvent.create(questionReview.questionId, questionReview.rate)
+        )
     }
 
-    public void modify(Long reviewId, Long userId, String comment, int rate) {
-        QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
-        int varianceRate = questionReview.modify(comment, rate);
-        questionReviewRepository.save(questionReview);
-        applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.getQuestionId(), varianceRate));
+    fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
+        val questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId)
+        val varianceRate = questionReview.modify(comment, rate)
+        questionReviewRepository.save(questionReview)
+        applicationEventPublisher.publishEvent(ModifiedReviewEvent.create(questionReview.questionId, varianceRate))
     }
 
-    public void delete(Long reviewId, Long userId) {
-        QuestionReview questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId);
-        questionReview.delete();
-        questionReviewRepository.save(questionReview);
-        applicationEventPublisher.publishEvent(DeletedReviewEvent.create(questionReview.getQuestionId(), questionReview.getRate()));
+    fun delete(reviewId: Long, userId: Long) {
+        val questionReview = questionReviewRepository.findByIdAndUserId(reviewId, userId)
+        questionReview.delete()
+        questionReviewRepository.save(questionReview)
+        applicationEventPublisher.publishEvent(
+            DeletedReviewEvent.create(questionReview.questionId, questionReview.rate)
+        )
     }
 }
