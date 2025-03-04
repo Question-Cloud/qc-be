@@ -1,15 +1,9 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social
 
-public abstract class SocialAPI {
-    abstract String getAccessToken(String code);
+interface SocialAPI {
+    fun getAccessToken(code: String): String
 
-    abstract SocialUserInfo getUserInfo(String accessToken);
+    fun getUserInfo(accessToken: String): SocialUserInfo
 
-    abstract SocialPlatform getSocialPlatform();
-
-    record SocialAccessToken(String access_token) {
-    }
-
-    record SocialUserInfo(String uid, String email, String nickname, SocialPlatform socialPlatform) {
-    }
+    fun getSocialPlatform(): SocialPlatform
 }

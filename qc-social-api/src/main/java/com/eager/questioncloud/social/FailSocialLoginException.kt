@@ -1,4 +1,3 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social
 
-public class FailSocialLoginException extends RuntimeException {
-}
+class FailSocialLoginException : RuntimeException()

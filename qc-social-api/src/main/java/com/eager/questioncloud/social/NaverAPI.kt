@@ -1,66 +1,85 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit
 
 @Component
-public class NaverAPI extends SocialAPI {
-    @Value("${NAVER_CLIENT_ID}")
-    private String NAVER_CLIENT_ID;
+class NaverAPI : SocialAPI {
+    @Value("\${NAVER_CLIENT_ID}")
+    private lateinit var NAVER_CLIENT_ID: String
 
-    @Value("${NAVER_CLIENT_SECRET}")
-    private String NAVER_CLIENT_SECRET;
+    @Value("\${NAVER_CLIENT_SECRET}")
+    private lateinit var NAVER_CLIENT_SECRET: String
 
-    @Override
-    public String getAccessToken(String code) {
-        WebClient webClient = WebClient.create("https://nid.naver.com/oauth2.0/token");
+    override fun getAccessToken(code: String): String {
+        val request = Request.Builder()
+            .url(
+                "https://nid.naver.com/oauth2.0/token".toHttpUrl()
+                    .newBuilder()
+                    .addQueryParameter("grant_type", "authorization_code")
+                    .addQueryParameter("client_id", NAVER_CLIENT_ID)
+                    .addQueryParameter("client_secret", NAVER_CLIENT_SECRET)
+                    .addQueryParameter("code", code)
+                    .build()
+            )
+            .get()
+            .build()
 
-        SocialAccessToken res = webClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .queryParam("grant_type", "authorization_code")
-                .queryParam("client_id", NAVER_CLIENT_ID)
-                .queryParam("client_secret", NAVER_CLIENT_SECRET)
-                .queryParam("code", code)
-                .build())
-            .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
-            .block();
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException()
 
-        if (res == null || res.access_token() == null) {
-            throw new FailSocialLoginException();
+            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
+        }
+    }
+
+    override fun getUserInfo(accessToken: String): SocialUserInfo {
+        val request = Request.Builder()
+            .url("https://openapi.naver.com/v1/nid/me")
+            .addHeader("Authorization", "Bearer $accessToken")
+            .get()
+            .build()
+
+        val naverUserInfo = client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException()
+
+            objectMapper.readValue(response.body?.string(), NaverUserInfoAPIResponse::class.java).response
         }
 
-        return res.access_token();
+        return SocialUserInfo(
+            naverUserInfo.id,
+            naverUserInfo.email,
+            naverUserInfo.nickname,
+            SocialPlatform.NAVER
+        )
     }
 
-    @Override
-    public SocialUserInfo getUserInfo(String accessToken) {
-        WebClient webClient = WebClient.create("https://openapi.naver.com/v1/nid/me");
-
-        NaverUserInfoAPIResponse apiResponse = webClient.get()
-            .headers(header -> {
-                header.add("Authorization", "Bearer " + accessToken);
-            })
-            .exchangeToMono(response -> response.bodyToMono(NaverUserInfoAPIResponse.class))
-            .block();
-
-        if (apiResponse == null || apiResponse.response() == null || apiResponse.response().id() == null) {
-            throw new FailSocialLoginException();
-        }
-
-        NaverUserInfo naverUserInfo = apiResponse.response();
-
-        return new SocialUserInfo(naverUserInfo.id(), naverUserInfo.email(), naverUserInfo.nickname(), SocialPlatform.NAVER.NAVER);
+    override fun getSocialPlatform(): SocialPlatform {
+        return SocialPlatform.NAVER
     }
 
-    @Override
-    SocialPlatform getSocialPlatform() {
-        return SocialPlatform.NAVER;
-    }
+    internal data class NaverUserInfoAPIResponse(val response: NaverUserInfo)
 
-    record NaverUserInfoAPIResponse(NaverUserInfo response) {
-    }
+    internal data class NaverUserInfo(
+        val id: String,
+        val email: String,
+        val nickname: String,
+        val mobile: String,
+        val profile_image: String
+    )
 
-    record NaverUserInfo(String id, String email, String nickname, String mobile, String profile_image) {
+    companion object {
+        private val objectMapper =
+            ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        private val client = OkHttpClient().newBuilder()
+            .callTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()
     }
 }

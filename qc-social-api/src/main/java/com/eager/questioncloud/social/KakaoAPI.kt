@@ -1,71 +1,74 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit
 
 @Component
-public class KakaoAPI extends SocialAPI {
-    @Value("${KAKAO_API_KEY}")
-    private String KAKAO_API_KEY;
+class KakaoAPI : SocialAPI {
+    @Value("\${KAKAO_API_KEY}")
+    private lateinit var KAKAO_API_KEY: String
 
-    @Value("${KAKAO_API_SECRET}")
-    private String KAKAO_API_SECRET;
+    @Value("\${KAKAO_API_SECRET}")
+    private lateinit var KAKAO_API_SECRET: String
 
-    @Value("${CLIENT_URL}")
-    private String CLIENT_URL;
+    @Value("\${CLIENT_URL}")
+    private lateinit var CLIENT_URL: String
 
-    @Override
-    public String getAccessToken(String code) {
-        WebClient webClient = WebClient.create("https://kauth.kakao.com/oauth/token");
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+    override fun getAccessToken(code: String): String {
+        val formBody = FormBody.Builder()
+            .add("grant_type", "authorization_code")
+            .add("client_id", KAKAO_API_KEY)
+            .add("redirect_uri", "$CLIENT_URL/user/social/kakao")
+            .add("code", code)
+            .add("client_secret", KAKAO_API_SECRET)
+            .build()
 
-        formData.add("grant_type", "authorization_code");
-        formData.add("client_id", KAKAO_API_KEY);
-        formData.add("redirect_uri", CLIENT_URL + "/user/social/kakao");
-        formData.add("code", code);
-        formData.add("client_secret", KAKAO_API_SECRET);
+        val request = Request.Builder()
+            .url("https://kauth.kakao.com/oauth/token")
+            .post(formBody)
+            .build()
 
-        SocialAccessToken res = webClient.post()
-            .headers(headers -> headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8"))
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData(formData))
-            .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
-            .block();
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException()
+            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
+        }
+    }
 
-        if (res == null || res.access_token() == null) {
-            throw new FailSocialLoginException();
+    override fun getUserInfo(accessToken: String): SocialUserInfo {
+        val request = Request.Builder()
+            .url("https://kapi.kakao.com/v1/oidc/userinfo")
+            .addHeader("Authorization", "Bearer $accessToken")
+            .get()
+            .build()
+
+        val kakaoUserInfo = client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException()
+
+            objectMapper.readValue(response.body?.string(), KakaoUserInfo::class.java)
         }
 
-        return res.access_token();
+        return SocialUserInfo(kakaoUserInfo.sub, kakaoUserInfo.email, kakaoUserInfo.nickname, SocialPlatform.KAKAO)
     }
 
-    @Override
-    public SocialUserInfo getUserInfo(String accessToken) {
-        WebClient webClient = WebClient.create("https://kapi.kakao.com/v1/oidc/userinfo");
-        KakaoUserInfo kakaoUserInfo = webClient.get()
-            .headers(header -> {
-                header.add("Authorization", "Bearer " + accessToken);
-            })
-            .exchangeToMono(response -> response.bodyToMono(KakaoUserInfo.class))
-            .block();
-
-        if (kakaoUserInfo == null || kakaoUserInfo.sub() == null) {
-            throw new FailSocialLoginException();
-        }
-
-        return new SocialUserInfo(kakaoUserInfo.sub(), kakaoUserInfo.email(), kakaoUserInfo.nickname(), SocialPlatform.KAKAO);
+    override fun getSocialPlatform(): SocialPlatform {
+        return SocialPlatform.KAKAO
     }
 
-    @Override
-    SocialPlatform getSocialPlatform() {
-        return SocialPlatform.KAKAO;
-    }
+    internal data class KakaoUserInfo(val sub: String, val email: String?, val nickname: String?)
 
-    record KakaoUserInfo(String sub, String email, String nickname) {
+    companion object {
+        private val objectMapper =
+            ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        private val client = OkHttpClient().newBuilder()
+            .callTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()
     }
 }

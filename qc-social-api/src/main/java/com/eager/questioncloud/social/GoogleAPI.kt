@@ -1,73 +1,74 @@
-package com.eager.questioncloud.social;
+package com.eager.questioncloud.social
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+import java.util.concurrent.TimeUnit
 
 @Component
-public class GoogleAPI extends SocialAPI {
-    @Value("${GOOGLE_CLIENT_ID}")
-    private String GOOGLE_CLIENT_ID;
+class GoogleAPI : SocialAPI {
+    @Value("\${GOOGLE_CLIENT_ID}")
+    private lateinit var GOOGLE_CLIENT_ID: String
 
-    @Value("${GOOGLE_CLIENT_SECRET}")
-    private String GOOGLE_CLIENT_SECRET;
+    @Value("\${GOOGLE_CLIENT_SECRET}")
+    private lateinit var GOOGLE_CLIENT_SECRET: String
 
-    @Value("${CLIENT_URL}")
-    private String CLIENT_URL;
+    @Value("\${CLIENT_URL}")
+    private lateinit var CLIENT_URL: String
 
-    @Override
-    public String getAccessToken(String code) {
-        WebClient webClient = WebClient.create("https://oauth2.googleapis.com/token");
-        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+    override fun getAccessToken(code: String): String {
+        val formBody = FormBody.Builder()
+            .add("client_id", GOOGLE_CLIENT_ID)
+            .add("client_secret", GOOGLE_CLIENT_SECRET)
+            .add("code", code)
+            .add("grant_type", "authorization_code")
+            .add("redirect_uri", "$CLIENT_URL/user/social/kakao")
+            .build()
 
-        formData.add("client_id", GOOGLE_CLIENT_ID);
-        formData.add("client_secret", GOOGLE_CLIENT_SECRET);
-        formData.add("code", code);
-        formData.add("grant_type", "authorization_code");
-        formData.add("redirect_uri", CLIENT_URL + "/user/social/google");
+        val request = Request.Builder()
+            .url("https://oauth2.googleapis.com/token")
+            .post(formBody)
+            .build()
 
-        SocialAccessToken res = webClient.post()
-            .headers(headers -> headers.add("Content-Type",
-                "application/x-www-form-urlencoded;charset=utf-8"))
-            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData(formData))
-            .exchangeToMono(response -> response.bodyToMono(SocialAccessToken.class))
-            .block();
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException();
+            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
+        }
+    }
 
-        if (res == null || res.access_token() == null) {
-            throw new FailSocialLoginException();
+    override fun getUserInfo(accessToken: String): SocialUserInfo {
+        val request = Request.Builder()
+            .url("https://www.googleapis.com/oauth2/v1/userinfo?alt=json")
+            .addHeader("Authorization", "Bearer $accessToken")
+            .get()
+            .build()
+
+        val googleUserInfo = client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw FailSocialLoginException()
+
+            objectMapper.readValue(response.body?.string(), GoogleUserInfo::class.java)
         }
 
-        return res.access_token();
+        return SocialUserInfo(googleUserInfo.id, googleUserInfo.email, googleUserInfo.name, SocialPlatform.GOOGLE)
     }
 
-    @Override
-    public SocialUserInfo getUserInfo(String accessToken) {
-        WebClient webClient = WebClient.create("https://www.googleapis.com/oauth2/v1/userinfo?alt=json");
-
-        GoogleUserInfo googleUserInfo = webClient.get()
-            .headers(header -> {
-                header.add("Authorization", "Bearer " + accessToken);
-            })
-            .exchangeToMono(response -> response.bodyToMono(GoogleUserInfo.class))
-            .block();
-
-        if (googleUserInfo == null || googleUserInfo.id() == null) {
-            throw new FailSocialLoginException();
-        }
-
-        return new SocialUserInfo(googleUserInfo.id(), googleUserInfo.email(), googleUserInfo.name(), SocialPlatform.GOOGLE);
+    override fun getSocialPlatform(): SocialPlatform {
+        return SocialPlatform.GOOGLE
     }
 
-    @Override
-    SocialPlatform getSocialPlatform() {
-        return SocialPlatform.GOOGLE;
-    }
+    internal data class GoogleUserInfo(val id: String, val email: String, val name: String, val picture: String)
 
-    record GoogleUserInfo(String id, String email, String name, String picture) {
+    companion object {
+        private val objectMapper =
+            ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        private val client = OkHttpClient().newBuilder()
+            .callTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
+            .build()
     }
 }
