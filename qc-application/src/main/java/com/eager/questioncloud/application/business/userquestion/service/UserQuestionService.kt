@@ -1,22 +1,19 @@
-package com.eager.questioncloud.application.business.userquestion.service;
+package com.eager.questioncloud.application.business.userquestion.service
 
-import com.eager.questioncloud.core.domain.question.common.QuestionFilter;
-import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.eager.questioncloud.core.domain.question.common.QuestionFilter
+import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import org.springframework.stereotype.Service
 
 @Service
-@RequiredArgsConstructor
-public class UserQuestionService {
-    private final UserQuestionRepository userQuestionRepository;
-
-    public List<UserQuestionDetail> getUserQuestions(QuestionFilter questionFilter) {
-        return userQuestionRepository.getUserQuestions(questionFilter);
+class UserQuestionService(
+    private val userQuestionRepository: UserQuestionRepository
+) {
+    fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionDetail> {
+        return userQuestionRepository.getUserQuestions(questionFilter)
     }
 
-    public int countUserQuestions(QuestionFilter questionFilter) {
-        return userQuestionRepository.countUserQuestions(questionFilter);
+    fun countUserQuestions(questionFilter: QuestionFilter): Int {
+        return userQuestionRepository.countUserQuestions(questionFilter)
     }
 }

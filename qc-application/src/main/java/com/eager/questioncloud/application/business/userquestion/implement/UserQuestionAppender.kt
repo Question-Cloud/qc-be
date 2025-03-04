@@ -1,35 +1,33 @@
-package com.eager.questioncloud.application.business.userquestion.implement;
+package com.eager.questioncloud.application.business.userquestion.implement
 
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent;
-import com.eager.questioncloud.application.message.FailQuestionPaymentMessage;
-import com.eager.questioncloud.application.message.MessageSender;
-import com.eager.questioncloud.application.message.MessageType;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.application.message.FailQuestionPaymentMessage
+import com.eager.questioncloud.application.message.MessageSender
+import com.eager.questioncloud.application.message.MessageType
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion.Companion.create
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
 
 @Component
-@RequiredArgsConstructor
-public class UserQuestionAppender {
-    private final UserQuestionRepository userQuestionRepository;
-    private final MessageSender messageSender;
-
+class UserQuestionAppender(
+    private val userQuestionRepository: UserQuestionRepository,
+    private val messageSender: MessageSender,
+) {
     @EventListener
-    public void appendUserQuestion(QuestionPaymentEvent event) {
+    fun appendUserQuestion(event: QuestionPaymentEvent) {
         try {
             userQuestionRepository.saveAll(
-                UserQuestion.create(
-                    event.getQuestionPayment().getUserId(),
-                    event.getQuestionPayment().getOrder().getQuestionIds()
-                )
-            );
-        } catch (Exception e) {
-            messageSender.sendMessage(MessageType.FAIL_QUESTION_PAYMENT, FailQuestionPaymentMessage.create(event.getQuestionPayment()));
-            throw new CoreException(Error.PAYMENT_ERROR);
+                create(event.questionPayment.userId, event.questionPayment.order.questionIds)
+            )
+        } catch (e: Exception) {
+            messageSender.sendMessage(
+                MessageType.FAIL_QUESTION_PAYMENT,
+                FailQuestionPaymentMessage.create(event.questionPayment)
+            )
+            throw CoreException(Error.PAYMENT_ERROR)
         }
     }
 }
