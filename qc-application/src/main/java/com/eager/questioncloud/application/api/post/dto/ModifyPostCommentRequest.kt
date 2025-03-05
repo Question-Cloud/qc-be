@@ -1,22 +1,7 @@
-package com.eager.questioncloud.application.api.post.dto;
+package com.eager.questioncloud.application.api.post.dto
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank
 
-public class PostCommentControllerRequest {
-    @Getter
-    public static class AddPostCommentRequest {
-        @NotNull
-        private Long postId;
-
-        @NotBlank
-        private String comment;
-    }
-
-    @Getter
-    public static class ModifyPostCommentRequest {
-        @NotBlank
-        private String comment;
-    }
-}
+class ModifyPostCommentRequest(
+    @NotBlank val comment: String = ""
+)
