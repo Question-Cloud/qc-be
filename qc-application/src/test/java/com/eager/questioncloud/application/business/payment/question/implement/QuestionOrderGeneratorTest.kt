@@ -1,139 +1,154 @@
-package com.eager.questioncloud.application.business.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement
 
-import com.eager.questioncloud.application.utils.Fixture;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository;
-import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.util.ArrayList;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion.Companion.create
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class QuestionOrderGeneratorTest {
+internal class QuestionOrderGeneratorTest {
     @Autowired
-    private UserQuestionRepository userQuestionRepository;
+    private val userQuestionRepository: UserQuestionRepository? = null
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private val questionRepository: QuestionRepository? = null
 
     @Autowired
-    private UserRepository userRepository;
+    private val userRepository: UserRepository? = null
 
     @Autowired
-    private QuestionOrderGenerator questionOrderGenerator;
+    private val questionOrderGenerator: QuestionOrderGenerator? = null
 
     @AfterEach
-    void tearDown() {
-        questionRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-        userQuestionRepository.deleteAllInBatch();
+    fun tearDown() {
+        questionRepository!!.deleteAllInBatch()
+        userRepository!!.deleteAllInBatch()
+        userQuestionRepository!!.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("Question 주문을 생성할 수 있다.")
-    void generateQuestionOrder() {
+    fun generateQuestionOrder() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
-                .set("uid", null)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
                 .sample()
-        );
+        )
 
-        List<Long> questionIds = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
-            .set("id", null)
-            .set("questionStatus", QuestionStatus.Available)
+        val questionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+            .set(Question::id, null)
+            .set(Question::questionStatus, QuestionStatus.Available)
             .sampleList(10)
             .stream()
-            .map(question -> questionRepository.save(question).getId())
-            .toList();
+            .map { question ->
+                questionRepository!!.save(question).id!!
+            }
+            .toList()
 
         // when
-        QuestionOrder questionOrder = questionOrderGenerator.generateQuestionOrder(user.getUid(), questionIds);
+        val questionOrder = questionOrderGenerator!!.generateQuestionOrder(user.uid!!, questionIds)
 
         // then
-        Assertions.assertThat(questionOrder.getQuestionIds()).containsExactlyInAnyOrderElementsOf(questionIds);
+        Assertions.assertThat(questionOrder.questionIds).containsExactlyInAnyOrderElementsOf(questionIds)
     }
 
     @Test
     @DisplayName("비활성화 된 Question을 포함한 주문을 생성할 수 없다.")
-    void cannotCreateOrderWithUnAvailableQuestion() {
+    fun cannotCreateOrderWithUnAvailableQuestion() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
-                .set("uid", null)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
                 .sample()
-        );
+        )
 
-        List<Long> availableQuestionIds = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
-            .set("id", null)
-            .set("questionStatus", QuestionStatus.Available)
+        val availableQuestionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+            .set(Question::id, null)
+            .set(Question::questionStatus, QuestionStatus.Available)
             .sampleList(10)
             .stream()
-            .map(question -> questionRepository.save(question).getId())
-            .toList();
+            .map { question ->
+                questionRepository!!.save(question).id!!
+            }
+            .toList()
 
-        List<Long> unavailableQuestionIds = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
-            .set("id", null)
-            .set("questionStatus", QuestionStatus.UnAvailable)
+        val unavailableQuestionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+            .set(Question::id, null)
+            .set(Question::questionStatus, QuestionStatus.UnAvailable)
             .sampleList(10)
             .stream()
-            .map(question -> questionRepository.save(question).getId())
-            .toList();
+            .map { question ->
+                questionRepository!!.save(question).id!!
+            }
+            .toList()
 
-        List<Long> questionIds = new ArrayList<>();
-        questionIds.addAll(availableQuestionIds);
-        questionIds.addAll(unavailableQuestionIds);
+        val questionIds: MutableList<Long> = mutableListOf()
+        questionIds.addAll(availableQuestionIds)
+        questionIds.addAll(unavailableQuestionIds)
 
         //when then
-        Assertions.assertThatThrownBy(() -> questionOrderGenerator.generateQuestionOrder(user.getUid(), questionIds))
-            .isInstanceOf(CoreException.class)
-            .hasFieldOrPropertyWithValue("error", Error.UNAVAILABLE_QUESTION);
+        Assertions.assertThatThrownBy {
+            questionOrderGenerator!!.generateQuestionOrder(
+                user.uid!!, questionIds
+            )
+        }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.UNAVAILABLE_QUESTION)
     }
 
     @Test
     @DisplayName("이미 구매한 Question은 주문에 포함할 수 없다.")
-    void cannotCreateOrderWithAlreadyOwnedQuestion() {
+    fun cannotCreateOrderWithAlreadyOwnedQuestion() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
-                .set("uid", null)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
                 .sample()
-        );
+        )
 
-        Question alreadyOwnedQuestion = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question.class)
-                .set("id", null)
-                .set("questionStatus", QuestionStatus.Available)
+        val alreadyOwnedQuestion = questionRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::id, null)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .sample()
-        );
+        )
 
-        Question normalQuestion = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question.class)
-                .set("id", null)
-                .set("questionStatus", QuestionStatus.Available)
+        val normalQuestion = questionRepository.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
+                .set(Question::id, null)
+                .set(Question::questionStatus, QuestionStatus.Available)
                 .sample()
-        );
+        )
 
-        userQuestionRepository.saveAll(UserQuestion.create(user.getUid(), List.of(alreadyOwnedQuestion.getId())));
+        userQuestionRepository!!.saveAll(create(user.uid!!, listOf(alreadyOwnedQuestion.id!!)))
 
         // when then
-        Assertions.assertThatThrownBy(
-                () -> questionOrderGenerator.generateQuestionOrder(user.getUid(), List.of(normalQuestion.getId(), alreadyOwnedQuestion.getId())))
-            .isInstanceOf(CoreException.class)
-            .hasFieldOrPropertyWithValue("error", Error.ALREADY_OWN_QUESTION);
+        Assertions.assertThatThrownBy {
+            questionOrderGenerator!!.generateQuestionOrder(
+                user.uid!!,
+                listOf(normalQuestion.id!!, alreadyOwnedQuestion.id!!)
+            )
+        }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.ALREADY_OWN_QUESTION)
     }
 }

@@ -1,84 +1,84 @@
-package com.eager.questioncloud.application.business.payment.question.service;
+package com.eager.questioncloud.application.business.payment.question.service
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent;
-import com.eager.questioncloud.application.utils.Fixture;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
-import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus;
-import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository;
-import com.eager.questioncloud.core.domain.payment.model.QuestionOrder;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPayment;
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository;
-import com.eager.questioncloud.core.domain.point.model.UserPoint;
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus;
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository;
-import com.eager.questioncloud.core.domain.question.model.Question;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import java.util.List;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.event.ApplicationEvents;
-import org.springframework.test.context.event.RecordApplicationEvents;
+import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
+import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
+import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
+import com.eager.questioncloud.core.domain.point.model.UserPoint
+import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.event.ApplicationEvents
+import org.springframework.test.context.event.RecordApplicationEvents
 
 @SpringBootTest
 @RecordApplicationEvents
 @ActiveProfiles("test")
-class QuestionPaymentServiceTest {
+internal class QuestionPaymentServiceTest {
     @Autowired
-    QuestionPaymentService questionPaymentService;
+    var questionPaymentService: QuestionPaymentService? = null
 
     @Autowired
-    private UserRepository userRepository;
+    private val userRepository: UserRepository? = null
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private val questionRepository: QuestionRepository? = null
 
     @Autowired
-    private CouponRepository couponRepository;
+    private val couponRepository: CouponRepository? = null
 
     @Autowired
-    private UserCouponRepository userCouponRepository;
+    private val userCouponRepository: UserCouponRepository? = null
 
     @Autowired
-    private UserPointRepository userPointRepository;
+    private val userPointRepository: UserPointRepository? = null
 
     @Autowired
-    private QuestionOrderRepository questionOrderRepository;
+    private val questionOrderRepository: QuestionOrderRepository? = null
 
     @Autowired
-    private ApplicationEvents events;
+    private val events: ApplicationEvents? = null
 
     @AfterEach
-    void tearDown() {
-        userRepository.deleteAllInBatch();
-        questionRepository.deleteAllInBatch();
-        couponRepository.deleteAllInBatch();
-        userCouponRepository.deleteAllInBatch();
-        questionOrderRepository.deleteAllInBatch();
-        userPointRepository.deleteAllInBatch();
+    fun tearDown() {
+        userRepository!!.deleteAllInBatch()
+        questionRepository!!.deleteAllInBatch()
+        couponRepository!!.deleteAllInBatch()
+        userCouponRepository!!.deleteAllInBatch()
+        questionOrderRepository!!.deleteAllInBatch()
+        userPointRepository!!.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("문제 결제를 할 수 있다.")
-    void payment() {
+    fun payment() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeBuilder(
+                User::class.java
+            )
                 .set("uid", null)
                 .sample()
-        );
+        )
 
-        userPointRepository.save(new UserPoint(user.getUid(), 1000000));
+        userPointRepository!!.save(UserPoint(user.uid!!, 1000000))
 
-        List<Question> questions = Fixture.fixtureMonkey.giveMeBuilder(Question.class)
+        val questions = Fixture.fixtureMonkey.giveMeBuilder(
+            Question::class.java
+        )
             .set("id", null)
             .set("creatorId", 1L)
             .set("questionContent.questionCategoryId", 25L)
@@ -86,17 +86,21 @@ class QuestionPaymentServiceTest {
             .set("questionStatus", QuestionStatus.Available)
             .sampleList(10)
             .stream()
-            .map(question -> questionRepository.save(question))
-            .toList();
+            .map { question: Question? ->
+                questionRepository!!.save(
+                    question!!
+                )
+            }
+            .toList()
 
         // when
-        QuestionPayment questionPayment = questionPaymentService.payment(user.getUid(), QuestionOrder.createOrder(questions), null);
+        val questionPayment = questionPaymentService!!.payment(user.uid!!, createOrder(questions), null)
 
         // then
-        Assertions.assertThat(questionPayment.getStatus()).isEqualTo(QuestionPaymentStatus.SUCCESS);
-        Assertions.assertThat(questionPayment.getOrder().getQuestionIds().size()).isEqualTo(questions.size());
+        Assertions.assertThat(questionPayment.status).isEqualTo(QuestionPaymentStatus.SUCCESS)
+        Assertions.assertThat(questionPayment.order.questionIds.size).isEqualTo(questions.size)
 
-        long eventCount = events.stream(QuestionPaymentEvent.class).count();
-        assertThat(eventCount).isEqualTo(1);
+        val eventCount = events!!.stream(QuestionPaymentEvent::class.java).count()
+        Assertions.assertThat(eventCount).isEqualTo(1)
     }
 }

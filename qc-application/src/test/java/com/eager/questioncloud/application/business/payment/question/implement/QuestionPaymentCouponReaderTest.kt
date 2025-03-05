@@ -1,108 +1,118 @@
-package com.eager.questioncloud.application.business.payment.question.implement;
+package com.eager.questioncloud.application.business.payment.question.implement
 
-import com.eager.questioncloud.application.utils.Fixture;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository;
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository;
-import com.eager.questioncloud.core.domain.coupon.model.Coupon;
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon;
-import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon;
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository;
-import com.eager.questioncloud.core.domain.user.model.User;
-import com.eager.questioncloud.core.exception.CoreException;
-import com.eager.questioncloud.core.exception.Error;
-import java.time.LocalDateTime;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
+import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.core.domain.coupon.model.Coupon
+import com.eager.questioncloud.core.domain.coupon.model.UserCoupon
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.core.domain.user.model.User
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
-class QuestionPaymentCouponReaderTest {
+internal class QuestionPaymentCouponReaderTest {
     @Autowired
-    UserCouponRepository userCouponRepository;
+    var userCouponRepository: UserCouponRepository? = null
 
     @Autowired
-    CouponRepository couponRepository;
+    var couponRepository: CouponRepository? = null
 
     @Autowired
-    UserRepository userRepository;
+    var userRepository: UserRepository? = null
 
     @Autowired
-    QuestionPaymentCouponReader questionPaymentCouponReader;
+    var questionPaymentCouponReader: QuestionPaymentCouponReader? = null
 
     @AfterEach
-    void tearDown() {
-        userCouponRepository.deleteAllInBatch();
-        couponRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
+    fun tearDown() {
+        userCouponRepository!!.deleteAllInBatch()
+        couponRepository!!.deleteAllInBatch()
+        userRepository!!.deleteAllInBatch()
     }
 
-    @Test
     @DisplayName("유효한 쿠폰을 불러 올 수 있다.")
-    void getCoupon() {
+    @Test
+    fun getCoupon() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
-                .set("uid", null)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
                 .sample()
-        );
+        )
 
-        Coupon coupon = couponRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Coupon.class)
-                .set("id", null)
-                .set("endAt", LocalDateTime.now().plusDays(10))
+        val coupon = couponRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
+                .set(Coupon::id, null)
+                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
                 .sample()
-        );
+        )
 
-        UserCoupon userCoupon = userCouponRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(UserCoupon.class)
-                .set("couponId", coupon.getId())
-                .set("userId", user.getUid())
-                .set("endAt", coupon.getEndAt())
-                .set("isUsed", false)
+        val userCoupon = userCouponRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
+                .set(UserCoupon::couponId, coupon.id)
+                .set(UserCoupon::userId, user.uid)
+                .set(UserCoupon::endAt, coupon.endAt)
+                .set(UserCoupon::isUsed, false)
                 .sample()
-        );
+        )
 
         // when
-        QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponReader.getQuestionPaymentCoupon(userCoupon.getId(), user.getUid());
-        Assertions.assertThat(questionPaymentCoupon.getUserCouponId()).isEqualTo(userCoupon.getId());
-        Assertions.assertThat(questionPaymentCoupon.getTitle()).isEqualTo(coupon.getTitle());
-        Assertions.assertThat(questionPaymentCoupon.getCouponType()).isEqualTo(coupon.getCouponType());
-        Assertions.assertThat(questionPaymentCoupon.getValue()).isEqualTo(coupon.getValue());
+        val questionPaymentCoupon = questionPaymentCouponReader!!.getQuestionPaymentCoupon(
+            userCoupon.id,
+            user.uid!!
+        )
+        Assertions.assertThat(questionPaymentCoupon!!.userCouponId).isEqualTo(userCoupon.id)
+        Assertions.assertThat(questionPaymentCoupon.title).isEqualTo(coupon.title)
+        Assertions.assertThat(questionPaymentCoupon.couponType).isEqualTo(coupon.couponType)
+        Assertions.assertThat(questionPaymentCoupon.value).isEqualTo(coupon.value)
     }
 
     @Test
     @DisplayName("존재하지 않는 쿠폰은 불러올 수 없다.")
-    void cannotGetWrongCoupon() {
+    fun cannotGetWrongCoupon() {
         // given
-        User user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(User.class)
-                .set("uid", null)
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
                 .sample()
-        );
+        )
 
-        Long wrongUserCouponId = 12L;
+        val wrongUserCouponId = 12L
 
         //when then
-        Assertions.assertThatThrownBy(() -> questionPaymentCouponReader.getQuestionPaymentCoupon(wrongUserCouponId, user.getUid()))
-            .isInstanceOf(CoreException.class)
-            .hasFieldOrPropertyWithValue("error", Error.WRONG_COUPON);
+        Assertions.assertThatThrownBy {
+            questionPaymentCouponReader!!.getQuestionPaymentCoupon(
+                wrongUserCouponId,
+                user.uid!!
+            )
+        }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.WRONG_COUPON)
     }
 
     @Test
     @DisplayName("쿠폰을 사용하지 않을 수 있다.")
-    void noCoupon() {
-        Long userId = 1L;
-        Long userCouponId = null;
+    fun noCoupon() {
+        val userId = 1L
+        val userCouponId: Long? = null
 
         // when
-        QuestionPaymentCoupon questionPaymentCoupon = questionPaymentCouponReader.getQuestionPaymentCoupon(userCouponId, userId);
+        val questionPaymentCoupon = questionPaymentCouponReader!!.getQuestionPaymentCoupon(userCouponId, userId)
 
         // then
-        Assertions.assertThat(questionPaymentCoupon).isNull();
+        Assertions.assertThat(questionPaymentCoupon).isNull()
     }
 }

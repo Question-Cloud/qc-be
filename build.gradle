@@ -46,6 +46,7 @@ subprojects {
         testAnnotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testImplementation "org.mockito.kotlin:mockito-kotlin:5.4.0"
     }
 
     test {
