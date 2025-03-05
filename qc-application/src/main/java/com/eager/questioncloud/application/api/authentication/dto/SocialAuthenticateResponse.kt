@@ -1,38 +1,18 @@
-package com.eager.questioncloud.application.api.authentication.dto;
+package com.eager.questioncloud.application.api.authentication.dto
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-public class AuthenticationResponse {
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class SocialAuthenticateResponse {
-        private Boolean isRegistered;
-        private String registerToken;
-        private AuthenticationToken authenticationToken;
-
-        public static SocialAuthenticateResponse create(SocialAuthenticationResult socialAuthenticationResult) {
-            return new SocialAuthenticateResponse(
-                socialAuthenticationResult.getIsRegistered(),
-                socialAuthenticationResult.getRegisterToken(),
-                socialAuthenticationResult.getAuthenticationToken());
-
+class SocialAuthenticateResponse(
+    val isRegistered: Boolean,
+    val registerToken: String?,
+    val authenticationToken: AuthenticationToken?,
+) {
+    companion object {
+        fun create(socialAuthenticationResult: SocialAuthenticationResult): SocialAuthenticateResponse {
+            return SocialAuthenticateResponse(
+                socialAuthenticationResult.isRegistered,
+                socialAuthenticationResult.registerToken,
+                socialAuthenticationResult.authenticationToken
+            )
         }
     }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class LoginResponse {
-        private AuthenticationToken authenticationToken;
-    }
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    public static class RefreshResponse {
-        private AuthenticationToken authenticationToken;
-    }
 }
+

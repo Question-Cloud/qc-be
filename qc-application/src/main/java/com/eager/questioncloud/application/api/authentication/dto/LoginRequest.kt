@@ -1,26 +1,17 @@
-package com.eager.questioncloud.application.api.authentication.dto;
+package com.eager.questioncloud.application.api.authentication.dto
 
-import com.eager.questioncloud.application.validator.EmailValidator;
-import com.eager.questioncloud.application.validator.PasswordValidator;
-import com.eager.questioncloud.application.validator.Validatable;
-import lombok.Getter;
+import com.eager.questioncloud.application.validator.EmailValidator
+import com.eager.questioncloud.application.validator.PasswordValidator
+import com.eager.questioncloud.application.validator.Validatable
 
-public class AuthenticationRequest {
-    @Getter
-    public static class LoginRequest implements Validatable {
-        private String email;
-        private String password;
+class LoginRequest(val email: String, val password: String) : Validatable {
+    init {
+        validate()
+    }
 
-        public LoginRequest(String email, String password) {
-            this.email = email;
-            this.password = password;
-            validate();
-        }
-
-        @Override
-        public void validate() {
-            EmailValidator.validate(email);
-            PasswordValidator.validate(password);
-        }
+    override fun validate() {
+        EmailValidator.validate(email)
+        PasswordValidator.validate(password)
     }
 }
+

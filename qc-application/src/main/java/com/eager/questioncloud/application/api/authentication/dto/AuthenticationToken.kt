@@ -1,18 +1,12 @@
-package com.eager.questioncloud.application.api.authentication.dto;
+package com.eager.questioncloud.application.api.authentication.dto
 
-import lombok.Getter;
-
-@Getter
-public class AuthenticationToken {
-    private String accessToken;
-    private String refreshToken;
-
-    private AuthenticationToken(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
-
-    public static AuthenticationToken create(String accessToken, String refreshToken) {
-        return new AuthenticationToken(accessToken, refreshToken);
+class AuthenticationToken(
+    val accessToken: String,
+    val refreshToken: String
+) {
+    companion object {
+        fun create(accessToken: String, refreshToken: String): AuthenticationToken {
+            return AuthenticationToken(accessToken, refreshToken)
+        }
     }
 }

@@ -1,23 +1,17 @@
-package com.eager.questioncloud.application.api.authentication.dto;
+package com.eager.questioncloud.application.api.authentication.dto
 
-import com.eager.questioncloud.core.domain.user.model.User;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.user.model.User
 
-@Getter
-public class SocialAuthentication {
-    private final User user;
-    private final String socialAccessToken;
+class SocialAuthentication(
+    val user: User?,
+    val socialAccessToken: String
+) {
+    val isRegistered: Boolean
+        get() = this.user != null
 
-    private SocialAuthentication(User user, String socialAccessToken) {
-        this.user = user;
-        this.socialAccessToken = socialAccessToken;
-    }
-
-    public static SocialAuthentication create(User user, String socialAccessToken) {
-        return new SocialAuthentication(user, socialAccessToken);
-    }
-
-    public Boolean isRegistered() {
-        return this.user != null;
+    companion object {
+        fun create(user: User?, socialAccessToken: String): SocialAuthentication {
+            return SocialAuthentication(user, socialAccessToken)
+        }
     }
 }
