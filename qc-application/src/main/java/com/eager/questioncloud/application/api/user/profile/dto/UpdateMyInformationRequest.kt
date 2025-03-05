@@ -1,13 +1,9 @@
-package com.eager.questioncloud.application.api.user.profile.dto;
+package com.eager.questioncloud.application.api.user.profile.dto
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank
 
-public class UserPointControllerRequest {
-    @Getter
-    public static class UpdateMyInformationRequest {
-        private String profileImage;
-        @NotBlank
-        private String name;
-    }
+class UpdateMyInformationRequest(
+    val profileImage: String?,
+    @NotBlank val name: String,
+) {
 }

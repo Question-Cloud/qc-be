@@ -9,8 +9,13 @@ object PasswordValidator {
     private val pattern: Pattern = Pattern.compile(PASSWORD_REGEX)
 
     @JvmStatic
-    fun validate(password: String) {
+    fun validate(password: String?) {
+        if (password == null) {
+            throw throw CoreException(Error.BAD_REQUEST)
+        }
+
         val matcher = pattern.matcher(password)
+
         if (!matcher.matches()) {
             throw CoreException(Error.BAD_REQUEST)
         }

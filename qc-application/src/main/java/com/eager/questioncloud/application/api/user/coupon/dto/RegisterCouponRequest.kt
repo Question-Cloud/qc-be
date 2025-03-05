@@ -1,12 +1,7 @@
-package com.eager.questioncloud.application.api.user.coupon.dto;
+package com.eager.questioncloud.application.api.user.coupon.dto
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import jakarta.validation.constraints.NotBlank
 
-public class UserCouponControllerRequest {
-    @Getter
-    public static class RegisterCouponRequest {
-        @NotBlank
-        private String code;
-    }
-}
+class RegisterCouponRequest(
+    @NotBlank val code: String = ""
+)

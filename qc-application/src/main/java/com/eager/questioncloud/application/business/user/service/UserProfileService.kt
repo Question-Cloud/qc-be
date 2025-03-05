@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class UserProfileService(
     private val userRepository: UserRepository
 ) {
-    fun updateUserInformation(user: User, name: String, profileImage: String) {
+    fun updateUserInformation(user: User, name: String, profileImage: String?) {
         user.updateUserInformation(name, profileImage)
         userRepository.save(user)
     }

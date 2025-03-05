@@ -1,25 +1,18 @@
-package com.eager.questioncloud.application.api.user.account.dto;
+package com.eager.questioncloud.application.api.user.account.dto
 
-import com.eager.questioncloud.application.validator.PasswordValidator;
-import com.eager.questioncloud.application.validator.Validatable;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import com.eager.questioncloud.application.validator.PasswordValidator
+import com.eager.questioncloud.application.validator.Validatable
+import jakarta.validation.constraints.NotBlank
 
-public class UserAccountControllerRequest {
-    @Getter
-    public static class ChangePasswordRequest implements Validatable {
-        @NotBlank
-        private String token;
-        private String newPassword;
+class ChangePasswordRequest(
+    @NotBlank val token: String,
+    val newPassword: String
+) : Validatable {
+    init {
+        validate()
+    }
 
-        public ChangePasswordRequest(String token, String newPassword) {
-            this.token = token;
-            this.newPassword = newPassword;
-            validate();
-        }
-
-        public void validate() {
-            PasswordValidator.validate(newPassword);
-        }
+    override fun validate() {
+        PasswordValidator.validate(newPassword)
     }
 }
