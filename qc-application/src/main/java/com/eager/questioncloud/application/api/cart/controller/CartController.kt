@@ -1,57 +1,50 @@
-package com.eager.questioncloud.application.api.cart.controller;
+package com.eager.questioncloud.application.api.cart.controller
 
-import com.eager.questioncloud.application.api.cart.dto.CartRequest.AddCartItemRequest;
-import com.eager.questioncloud.application.api.cart.dto.CartRequest.RemoveCartItemRequest;
-import com.eager.questioncloud.application.api.cart.dto.CartResponse.GetCartResponse;
-import com.eager.questioncloud.application.api.common.DefaultResponse;
-import com.eager.questioncloud.application.business.cart.service.CartService;
-import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.eager.questioncloud.application.api.cart.dto.AddCartItemRequest
+import com.eager.questioncloud.application.api.cart.dto.GetCartResponse
+import com.eager.questioncloud.application.api.cart.dto.RemoveCartItemRequest
+import com.eager.questioncloud.application.api.common.DefaultResponse
+import com.eager.questioncloud.application.business.cart.service.CartService
+import com.eager.questioncloud.application.security.UserPrincipal
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/cart")
-@RequiredArgsConstructor
-public class CartController {
-    private final CartService cartService;
-
+class CartController(
+    private val cartService: CartService
+) {
     @GetMapping
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "장바구니 조회", summary = "장바구니 조회", tags = {"cart"}, description = "장바구니 조회")
-    public GetCartResponse getCart(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        List<CartItemDetail> items = cartService.getCartItems(userPrincipal.getUser().getUid());
-        return GetCartResponse.create(items);
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "장바구니 조회", summary = "장바구니 조회", tags = ["cart"], description = "장바구니 조회")
+    fun getCart(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetCartResponse {
+        val items: List<CartItemDetail> = cartService.getCartItems(userPrincipal.user.uid!!)
+        return GetCartResponse.create(items)
     }
 
     @PostMapping
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "장바구니 담기", summary = "장바구니 담기", tags = {"cart"}, description = "장바구니 담기")
-    public DefaultResponse addItem(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody AddCartItemRequest request) {
-        cartService.appendCartItem(userPrincipal.getUser().getUid(), request.getQuestionId());
-        return DefaultResponse.success();
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "장바구니 담기", summary = "장바구니 담기", tags = ["cart"], description = "장바구니 담기")
+    fun addItem(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestBody request: AddCartItemRequest
+    ): DefaultResponse {
+        cartService.appendCartItem(userPrincipal.user.uid!!, request.questionId)
+        return DefaultResponse.success()
     }
 
     @DeleteMapping
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "장바구니 빼기", summary = "장바구니 빼기", tags = {"cart"}, description = "장바구니 빼기")
-    public DefaultResponse removeItem(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RemoveCartItemRequest request) {
-        cartService.removeCartItem(request.getIds(), userPrincipal.getUser().getUid());
-        return DefaultResponse.success();
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "장바구니 빼기", summary = "장바구니 빼기", tags = ["cart"], description = "장바구니 빼기")
+    fun removeItem(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestBody request: RemoveCartItemRequest
+    ): DefaultResponse {
+        cartService.removeCartItem(request.ids, userPrincipal.user.uid!!)
+        return DefaultResponse.success()
     }
 }

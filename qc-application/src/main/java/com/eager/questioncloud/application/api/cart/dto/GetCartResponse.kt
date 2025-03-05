@@ -1,20 +1,15 @@
-package com.eager.questioncloud.application.api.cart.dto;
+package com.eager.questioncloud.application.api.cart.dto
 
-import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail
 
-public class CartResponse {
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class GetCartResponse {
-        private Boolean success;
-        private List<CartItemDetail> items;
-
-        public static GetCartResponse create(List<CartItemDetail> items) {
-            return new GetCartResponse(true, items);
+class GetCartResponse(
+    val success: Boolean,
+    val items: List<CartItemDetail>,
+) {
+    companion object {
+        fun create(items: List<CartItemDetail>): GetCartResponse {
+            return GetCartResponse(true, items)
         }
     }
 }
+
