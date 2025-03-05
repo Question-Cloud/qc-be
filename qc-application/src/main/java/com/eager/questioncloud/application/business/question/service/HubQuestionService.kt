@@ -25,9 +25,8 @@ class HubQuestionService(
         return questionRepository.getQuestionInformation(questionId, userId)
     }
 
-    val questionCategories: List<QuestionCategoryGroupBySubject>
-        get() {
-            val mainQuestionCategories = questionCategoryRepository.getMainQuestionCategories()
-            return create(mainQuestionCategories)
-        }
+    fun getQuestionCategories(): List<QuestionCategoryGroupBySubject> {
+        val mainQuestionCategories = questionCategoryRepository.getMainQuestionCategories()
+        return create(mainQuestionCategories)
+    }
 }

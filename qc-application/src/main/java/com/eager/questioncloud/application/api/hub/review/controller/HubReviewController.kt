@@ -1,107 +1,108 @@
-package com.eager.questioncloud.application.api.hub.review.controller;
+package com.eager.questioncloud.application.api.hub.review.controller
 
-import com.eager.questioncloud.application.api.common.DefaultResponse;
-import com.eager.questioncloud.application.api.common.PagingResponse;
-import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerRequest.ModifyQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerRequest.RegisterQuestionReviewRequest;
-import com.eager.questioncloud.application.api.hub.review.dto.HubReviewControllerResponse.MyQuestionReviewResponse;
-import com.eager.questioncloud.application.business.review.service.HubReviewService;
-import com.eager.questioncloud.application.security.UserPrincipal;
-import com.eager.questioncloud.core.common.PagingInformation;
-import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview;
-import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail;
-import com.eager.questioncloud.core.domain.review.model.QuestionReview;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.eager.questioncloud.application.api.common.DefaultResponse
+import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
+import com.eager.questioncloud.application.api.common.PagingResponse
+import com.eager.questioncloud.application.api.hub.review.dto.ModifyQuestionReviewRequest
+import com.eager.questioncloud.application.api.hub.review.dto.MyQuestionReviewResponse
+import com.eager.questioncloud.application.api.hub.review.dto.RegisterQuestionReviewRequest
+import com.eager.questioncloud.application.business.review.service.HubReviewService
+import com.eager.questioncloud.application.security.UserPrincipal
+import com.eager.questioncloud.core.common.PagingInformation
+import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
+import com.eager.questioncloud.core.domain.review.model.QuestionReview.Companion.create
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import jakarta.validation.Valid
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/hub/question/review")
-@RequiredArgsConstructor
-public class HubReviewController {
-    private final HubReviewService hubReviewService;
-
+class HubReviewController(
+    private val hubReviewService: HubReviewService
+) {
     @GetMapping
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "문제 리뷰 목록 조회", summary = "문제 리뷰 목록 조회", tags = {"question-review"}, description = "문제 리뷰 조회")
-    @Parameter(name = "size", description = "paging size", schema = @Schema(type = "integer"))
-    @Parameter(name = "page", description = "paging page", schema = @Schema(type = "integer"))
-    public PagingResponse<QuestionReviewDetail> getQuestionReviews(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId, PagingInformation pagingInformation) {
-        int total = hubReviewService.getTotal(questionId);
-        List<QuestionReviewDetail> questionReviewDetails = hubReviewService.getQuestionReviews(
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(
+        operationId = "문제 리뷰 목록 조회",
+        summary = "문제 리뷰 목록 조회",
+        tags = ["question-review"],
+        description = "문제 리뷰 조회"
+    )
+    @Parameter(name = "size", description = "paging size", schema = Schema(type = "integer"))
+    @Parameter(name = "page", description = "paging page", schema = Schema(type = "integer"))
+    fun getQuestionReviews(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestParam questionId: Long,
+        pagingInformation: PagingInformation
+    ): PagingResponse<QuestionReviewDetail> {
+        val total = hubReviewService.getTotal(questionId)
+        val questionReviewDetails = hubReviewService.getQuestionReviews(
             questionId,
-            userPrincipal.getUser().getUid(),
-            pagingInformation);
-        return new PagingResponse<>(total, questionReviewDetails);
+            userPrincipal.user.uid!!,
+            pagingInformation
+        )
+        return PagingResponse(total, questionReviewDetails)
     }
 
     @GetMapping("/me")
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "내가 작성한 리뷰 조회", summary = "내가 작성한 리뷰 조회", tags = {"question-review"},
-        description = """
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(
+        operationId = "내가 작성한 리뷰 조회", summary = "내가 작성한 리뷰 조회", tags = ["question-review"], description = """
                 작성한 리뷰가 있다면 review 정보를 응답으로 반환하며
                 작성한 리뷰가 없다면 404를 반환합니다.
-            """)
-    public MyQuestionReviewResponse getMyQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam Long questionId) {
-        MyQuestionReview review = hubReviewService.getMyQuestionReview(questionId, userPrincipal.getUser().getUid());
-        return new MyQuestionReviewResponse(review);
+            
+            """
+    )
+    fun getMyQuestionReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestParam questionId: Long
+    ): MyQuestionReviewResponse {
+        val review = hubReviewService.getMyQuestionReview(questionId, userPrincipal.user.uid!!)
+        return MyQuestionReviewResponse(review)
     }
 
     @PostMapping
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = {"question-review"}, description = "문제 리뷰 등록")
-    public DefaultResponse registerQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody @Valid RegisterQuestionReviewRequest request) {
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = ["question-review"], description = "문제 리뷰 등록")
+    fun registerQuestionReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestBody request: @Valid RegisterQuestionReviewRequest
+    ): DefaultResponse {
         hubReviewService.register(
-            QuestionReview.create(
-                request.getQuestionId(),
-                userPrincipal.getUser().getUid(),
-                request.getComment(),
-                request.getRate())
-        );
-        return DefaultResponse.success();
+            create(
+                request.questionId,
+                userPrincipal.user.uid!!,
+                request.comment,
+                request.rate
+            )
+        )
+        return success()
     }
 
     @PatchMapping("/{reviewId}")
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "문제 리뷰 수정", summary = "문제 리뷰 수정", tags = {"question-review"}, description = "문제 리뷰 수정")
-    public DefaultResponse modifyQuestionReview(
-        @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId,
-        @RequestBody @Valid ModifyQuestionReviewRequest request) {
-        hubReviewService.modify(reviewId, userPrincipal.getUser().getUid(), request.getComment(), request.getRate());
-        return DefaultResponse.success();
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "문제 리뷰 수정", summary = "문제 리뷰 수정", tags = ["question-review"], description = "문제 리뷰 수정")
+    fun modifyQuestionReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable reviewId: Long,
+        @RequestBody request: @Valid ModifyQuestionReviewRequest
+    ): DefaultResponse {
+        hubReviewService.modify(reviewId, userPrincipal.user.uid!!, request.comment, request.rate)
+        return success()
     }
 
     @DeleteMapping("/{reviewId}")
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청 성공")
-    })
-    @Operation(operationId = "문제 리뷰 삭제", summary = "문제 리뷰 삭제", tags = {"question-review"}, description = "문제 리뷰 삭제")
-    public DefaultResponse deleteQuestionReview(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long reviewId) {
-        hubReviewService.delete(reviewId, userPrincipal.getUser().getUid());
-        return DefaultResponse.success();
+    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
+    @Operation(operationId = "문제 리뷰 삭제", summary = "문제 리뷰 삭제", tags = ["question-review"], description = "문제 리뷰 삭제")
+    fun deleteQuestionReview(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable reviewId: Long
+    ): DefaultResponse {
+        hubReviewService.delete(reviewId, userPrincipal.user.uid!!)
+        return success()
     }
 }
