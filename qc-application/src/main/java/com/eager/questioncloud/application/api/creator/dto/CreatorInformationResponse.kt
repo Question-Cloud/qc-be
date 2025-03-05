@@ -1,13 +1,7 @@
-package com.eager.questioncloud.application.api.creator.dto;
+package com.eager.questioncloud.application.api.creator.dto
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
 
-public class CreatorResponse {
-    @AllArgsConstructor
-    @Getter
-    public static class CreatorInformationResponse {
-        private CreatorInformation creatorInformation;
-    }
-}
+class CreatorInformationResponse(
+    val creatorInformation: CreatorInformation
+)
