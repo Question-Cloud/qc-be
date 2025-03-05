@@ -1,12 +1,7 @@
-package com.eager.questioncloud.core.domain.verification.template;
+package com.eager.questioncloud.core.domain.verification.template
 
-import lombok.Getter;
-
-@Getter
-public class EmailVerificationTemplate {
-    String title;
-    String content;
-
-    public EmailVerificationTemplate() {
-    }
+open class EmailVerificationTemplate(
+) {
+    open var title: String? = null
+    open var content: String? = null
 }

@@ -4,8 +4,8 @@ import com.eager.questioncloud.core.domain.verification.template.EmailVerificati
 
 class Email(
     val to: String,
-    val subject: String,
-    val content: String
+    val subject: String?,
+    val content: String?
 ) {
     companion object {
         @JvmStatic
