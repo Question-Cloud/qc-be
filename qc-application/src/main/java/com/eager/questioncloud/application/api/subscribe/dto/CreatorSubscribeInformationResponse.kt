@@ -1,13 +1,6 @@
-package com.eager.questioncloud.application.api.subscribe.dto;
+package com.eager.questioncloud.application.api.subscribe.dto
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-public class SubscribeControllerResponse {
-    @Getter
-    @AllArgsConstructor
-    public static class CreatorSubscribeInformationResponse {
-        private Boolean isSubscribed;
-        private int count;
-    }
-}
+class CreatorSubscribeInformationResponse(
+    val isSubscribed: Boolean,
+    val count: Int
+)
