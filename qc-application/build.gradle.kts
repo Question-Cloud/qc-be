@@ -1,11 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm")
     kotlin("plugin.spring") version "2.1.10"
-    kotlin("plugin.jpa") version "2.1.10"
-    kotlin("plugin.allopen") version "2.1.10"
-    kotlin("kapt") version "2.1.10"
-    kotlin("plugin.lombok") version "2.1.10"
-    id("io.freefair.lombok") version "8.10"
 }
 
 dependencies {
@@ -52,10 +46,3 @@ tasks.getByName<Jar>("jar") {
     enabled = false
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
-kapt {
-    keepJavacAnnotationProcessors = true
-}

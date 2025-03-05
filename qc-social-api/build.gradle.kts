@@ -1,5 +1,6 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-    id("org.jetbrains.kotlin.jvm")
 }
 
 dependencies {
@@ -7,7 +8,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
-tasks.getByName<Jar>("bootJar") {
+tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }
 

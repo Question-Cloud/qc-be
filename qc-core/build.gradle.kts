@@ -1,11 +1,8 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-    kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
     kotlin("plugin.jpa") version "2.1.10"
-    kotlin("plugin.allopen") version "2.1.10"
-    kotlin("kapt") version "2.1.10"
-    kotlin("plugin.lombok") version "2.1.10"
-    id("io.freefair.lombok") version "8.10"
 }
 
 allOpen {
@@ -34,7 +31,7 @@ dependencies {
     kapt("jakarta.persistence:jakarta.persistence-api")
 
     implementation(project(":qc-lock-manager"))
-    
+
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
 }
 
@@ -57,18 +54,14 @@ tasks.clean {
     }
 }
 
-tasks.bootJar {
+tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }
 
-tasks.jar {
+tasks.getByName<Jar>("jar") {
     enabled = true
 }
 
 kotlin {
     jvmToolchain(17)
-}
-
-kapt {
-    keepJavacAnnotationProcessors = true
 }

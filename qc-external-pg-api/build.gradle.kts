@@ -1,5 +1,6 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
-    id("org.jetbrains.kotlin.jvm")
 }
 
 dependencies {
@@ -9,7 +10,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
 }
 
-tasks.getByName<Jar>("bootJar") {
+tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }
 
