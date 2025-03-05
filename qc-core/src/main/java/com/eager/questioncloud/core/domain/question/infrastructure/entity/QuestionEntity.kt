@@ -3,12 +3,11 @@ package com.eager.questioncloud.core.domain.question.infrastructure.entity
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.model.Question
 import jakarta.persistence.*
-import lombok.Builder
 import java.time.LocalDateTime
 
 @Entity
 @Table(name = "question")
-class QuestionEntity @Builder constructor(
+class QuestionEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
     @Column var creatorId: Long,
     @Embedded var questionContentEntity: QuestionContentEntity,

@@ -13,11 +13,9 @@ import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Repository
 
 @Repository
-@RequiredArgsConstructor
 class PostRepositoryImpl(
     private val postJpaRepository: PostJpaRepository,
     private val jpaQueryFactory: JPAQueryFactory,
