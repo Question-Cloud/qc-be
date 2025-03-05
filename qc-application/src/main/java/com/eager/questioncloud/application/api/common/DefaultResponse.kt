@@ -1,15 +1,12 @@
-package com.eager.questioncloud.application.api.common;
+package com.eager.questioncloud.application.api.common
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class DefaultResponse {
-    private Boolean success;
-
-    public static DefaultResponse success() {
-        return new DefaultResponse(true);
+class DefaultResponse(
+    val success: Boolean
+) {
+    companion object {
+        @JvmStatic
+        fun success(): DefaultResponse {
+            return DefaultResponse(true)
+        }
     }
-
 }
