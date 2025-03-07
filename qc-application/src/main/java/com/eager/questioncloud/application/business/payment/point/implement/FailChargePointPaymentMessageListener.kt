@@ -14,7 +14,7 @@ class FailChargePointPaymentMessageListener(
     private val pgPaymentProcessor: PGPaymentProcessor,
     private val messageSender: MessageSender,
 ) {
-    @RabbitListener(id = "fail-charge-point", queues = ["fail-charge-point"])
+    @RabbitListener(id = "fail.charge.point", queues = ["fail.charge.point"])
     fun failHandler(message: FailChargePointPaymentMessage) {
         try {
             val chargePointPayment = chargePointPaymentRepository.findByPaymentId(message.paymentId)

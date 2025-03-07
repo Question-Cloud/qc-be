@@ -54,8 +54,8 @@ internal class FailChargePointPaymentMessageListenerTest {
         val paymentId = UUID.randomUUID().toString()
         chargePointPaymentRepository!!.save(order(paymentId, 1L, ChargePointType.PackageA))
 
-        val listener = harness!!.getSpy<FailChargePointPaymentMessageListener>("fail-charge-point")
-        val answer = harness.getLatchAnswerFor("fail-charge-point", 1)
+        val listener = harness!!.getSpy<FailChargePointPaymentMessageListener>("fail.charge.point")
+        val answer = harness.getLatchAnswerFor("fail.charge.point", 1)
         Mockito.doAnswer(answer).`when`(listener).failHandler(any())
 
         BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.cancel(any())

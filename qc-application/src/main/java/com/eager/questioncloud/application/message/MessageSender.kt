@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.message
 
-import com.eager.questioncloud.application.config.RabbitConfig
+import com.eager.questioncloud.application.config.DelayQueueConfig
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.stereotype.Component
 
@@ -14,7 +14,7 @@ class MessageSender(
 
     fun sendDelayMessage(messageType: MessageType, message: Any, failCount: Int) {
         rabbitTemplate.convertAndSend(
-            RabbitConfig.DELAY_EXCHANGE, messageType.queueName, message
+            DelayQueueConfig.DELAY_EXCHANGE, messageType.queueName, message
         ) { m ->
             m.apply { messageProperties.expiration = selectDelay(failCount) }
         }

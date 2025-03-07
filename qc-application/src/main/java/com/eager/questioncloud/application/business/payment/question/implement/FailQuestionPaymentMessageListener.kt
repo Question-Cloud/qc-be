@@ -18,7 +18,7 @@ class FailQuestionPaymentMessageListener(
     private val userCouponRepository: UserCouponRepository,
     private val messageSender: MessageSender,
 ) {
-    @RabbitListener(id = "fail-question-payment", queues = ["fail-question-payment"])
+    @RabbitListener(id = "fail.question.payment", queues = ["fail.question.payment"])
     @Transactional
     fun handler(message: FailQuestionPaymentMessage) {
         try {
