@@ -4,7 +4,8 @@ import com.eager.questioncloud.application.business.payment.question.event.Quest
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
-import org.springframework.context.event.EventListener
+import io.awspring.cloud.sqs.annotation.SqsListener
+import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 import java.util.stream.Collectors
 
@@ -13,8 +14,8 @@ class CreatorStatisticsUpdater(
     private val questionRepository: QuestionRepository,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
 ) {
-    @EventListener
-    fun updateCreatorStatistics(event: QuestionPaymentEvent) {
+    @SqsListener("update-creator-sales-statistics.fifo")
+    fun updateCreatorStatistics(@Payload event: QuestionPaymentEvent) {
         val questions = questionRepository.getQuestionsByQuestionIds(event.questionPayment.order.questionIds)
         val countQuestionByCreator = questions
             .stream()
