@@ -11,11 +11,13 @@ class QuestionPaymentProcessor(
     private val questionPaymentRepository: QuestionPaymentRepository,
     private val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor,
     private val userPointManager: UserPointManager,
+    private val questionPaymentHistoryRegister: QuestionPaymentHistoryRegister
 ) {
     @Transactional
     fun payment(questionPayment: QuestionPayment): QuestionPayment {
         questionPaymentCouponProcessor.applyCoupon(questionPayment)
         userPointManager.usePoint(questionPayment.userId, questionPayment.amount)
+        questionPaymentHistoryRegister.saveQuestionPaymentHistory(questionPayment)
         return questionPaymentRepository.save(questionPayment)
     }
 }
