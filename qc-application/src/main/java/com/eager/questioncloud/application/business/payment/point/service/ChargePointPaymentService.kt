@@ -5,15 +5,15 @@ import com.eager.questioncloud.application.business.payment.point.implement.Char
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.pg.implement.PGPaymentProcessor
-import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
+import software.amazon.awssdk.services.sns.SnsClient
 
 @Component
 class ChargePointPaymentService(
     private val chargePointPaymentApprover: ChargePointPaymentApprover,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val pgPaymentProcessor: PGPaymentProcessor,
-    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val snsClient: SnsClient,
 ) {
     fun createOrder(chargePointPayment: ChargePointPayment) {
         chargePointPaymentRepository.save(chargePointPayment)
@@ -22,7 +22,7 @@ class ChargePointPaymentService(
     fun approvePayment(paymentId: String) {
         val pgPayment = pgPaymentProcessor.getPayment(paymentId)
         val chargePointPayment = chargePointPaymentApprover.approve(pgPayment)
-        applicationEventPublisher.publishEvent(ChargePointPaymentEvent.Companion.from(chargePointPayment))
+        snsClient.publish(ChargePointPaymentEvent.from(chargePointPayment).toRequest())
     }
 
     fun isCompletePayment(userId: Long, paymentId: String): Boolean {
