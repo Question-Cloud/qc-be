@@ -14,10 +14,10 @@ class QuestionPaymentProcessor(
     private val questionPaymentHistoryRegister: QuestionPaymentHistoryRegister
 ) {
     @Transactional
-    fun payment(questionPayment: QuestionPayment): QuestionPayment {
+    fun payment(questionPayment: QuestionPayment) {
         questionPaymentCouponProcessor.applyCoupon(questionPayment)
         userPointManager.usePoint(questionPayment.userId, questionPayment.amount)
         questionPaymentHistoryRegister.saveQuestionPaymentHistory(questionPayment)
-        return questionPaymentRepository.save(questionPayment)
+        questionPaymentRepository.save(questionPayment)
     }
 }
