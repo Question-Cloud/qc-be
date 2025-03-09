@@ -26,7 +26,7 @@ import java.util.*
 @SpringBootTest
 @RabbitListenerTest
 @ActiveProfiles("test")
-internal class FailChargePointPaymentMessageListenerTest {
+internal class ChargePointPaymentCancellerTest {
     @Autowired
     private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
 
@@ -49,12 +49,12 @@ internal class FailChargePointPaymentMessageListenerTest {
     @Throws(
         Exception::class
     )
-    fun failHandler() {
+    fun cancelHandler() {
         //given
         val paymentId = UUID.randomUUID().toString()
         chargePointPaymentRepository!!.save(order(paymentId, 1L, ChargePointType.PackageA))
 
-        val listener = harness!!.getSpy<FailChargePointPaymentMessageListener>("fail.charge.point")
+        val listener = harness!!.getSpy<ChargePointPaymentCanceller>("fail.charge.point")
         val answer = harness.getLatchAnswerFor("fail.charge.point", 1)
         Mockito.doAnswer(answer).`when`(listener).failHandler(any())
 

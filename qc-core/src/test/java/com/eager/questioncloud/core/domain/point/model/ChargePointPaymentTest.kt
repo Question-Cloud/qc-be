@@ -31,7 +31,7 @@ internal class ChargePointPaymentTest {
 
     @Test
     @DisplayName("결제 금액이 올바르지 않을 경우 결제 검증에 실패한다.")
-    fun failValidatePaymentWhenInCorrectAmount() {
+    fun cancelValidatePaymentWhenInCorrectAmount() {
         //given
         val paymentId = UUID.randomUUID().toString()
         val userId = 1L
@@ -46,7 +46,7 @@ internal class ChargePointPaymentTest {
 
     @Test
     @DisplayName("이미 처리 된 결제인 경우 검증에 실패한다.")
-    fun failValidatePaymentWhenAlreadyApproved() {
+    fun cancelValidatePaymentWhenAlreadyApproved() {
         //given
         val paymentId1 = UUID.randomUUID().toString()
         val userId = 1L
@@ -56,7 +56,7 @@ internal class ChargePointPaymentTest {
 
         val paymentId2 = UUID.randomUUID().toString()
         val chargePointPayment2 = order(paymentId2, userId, chargePointType)
-        chargePointPayment2.fail()
+        chargePointPayment2.cancel()
 
         val paidAmount = chargePointType.amount
 

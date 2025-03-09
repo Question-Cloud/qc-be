@@ -114,7 +114,7 @@ internal class ChargePointPaymentApproverTest {
 
     @Test
     @DisplayName("결제 승인 시 예외가 발생하면 RabbitMQ 결제 실패 메시지를 전송한다.")
-    fun sendFailChargePointPaymentMessageWhenThrownUnknownException() {
+    fun sendCancelChargePointPaymentMessageWhenThrownUnknownException() {
         //given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()

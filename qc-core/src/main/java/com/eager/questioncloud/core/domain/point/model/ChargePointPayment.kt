@@ -22,8 +22,12 @@ class ChargePointPayment(
         this.paidAt = LocalDateTime.now()
     }
 
-    fun fail() {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.Fail
+    fun charge() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
+    }
+
+    fun cancel() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.CANCELED
     }
 
     fun validatePayment(paidAmount: Int) {

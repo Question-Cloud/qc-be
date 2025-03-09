@@ -8,6 +8,7 @@ import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaym
 import com.eager.questioncloud.application.api.payment.point.dto.CheckCompletePaymentResponse
 import com.eager.questioncloud.application.business.payment.point.service.ChargePointPaymentHistoryService
 import com.eager.questioncloud.application.business.payment.point.service.ChargePointPaymentService
+import com.eager.questioncloud.application.business.payment.point.service.PgPaymentService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/payment/point")
 class ChargePointPaymentController(
     private val chargePointPaymentService: ChargePointPaymentService,
+    private val pgPaymentService: PgPaymentService,
     private val chargePointPaymentHistoryService: ChargePointPaymentHistoryService,
 ) {
     @GetMapping("/status/{paymentId}")
@@ -72,7 +74,8 @@ class ChargePointPaymentController(
         description = "Portone 포인트 충전 Webhook"
     )
     fun payment(@RequestBody request: ChargePointPaymentRequest): DefaultResponse {
-        chargePointPaymentService.approvePayment(request.payment_id)
+        val pgPayment = pgPaymentService.getPgPayment(request.payment_id)
+        chargePointPaymentService.approvePayment(pgPayment)
         return success()
     }
 

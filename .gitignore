@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+logs
 
 ### STS ###
 .apt_generated
@@ -28,6 +29,8 @@ out/
 /src/main/generated
 /src/test/java/com/eager/questioncloud/DummyDataInsert.java
 /qc-core/src/main/generated/
+.kotlin
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -36,4 +39,5 @@ out/
 /.nb-gradle/
 
 ### VS Code ###
-.vscode/
+.vscode/!/.kotlin/
+

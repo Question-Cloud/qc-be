@@ -1,17 +1,29 @@
 package com.eager.questioncloud.application.business.payment.point.implement
 
-import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent
+import com.eager.questioncloud.application.business.payment.point.event.FailChargePointPaymentEvent
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager
-import io.awspring.cloud.sqs.annotation.SqsListener
-import org.springframework.messaging.handler.annotation.Payload
+import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class ChargePointPaymentPostProcessor(
     private val userPointManager: UserPointManager,
+    private val chargePointPaymentRepository: ChargePointPaymentRepository,
+    private val failChargePointPaymentEventProcessor: FailChargePointPaymentEventProcessor,
 ) {
-    @SqsListener("charge-point.fifo")
-    fun chargeUserPoint(@Payload event: ChargePointPaymentEvent) {
-        userPointManager.chargePoint(event.userId, event.chargePointType.amount)
+    @Transactional
+    fun chargeUserPoint(chargePointPayment: ChargePointPayment) {
+        try {
+            userPointManager.chargePoint(chargePointPayment.userId, chargePointPayment.chargePointType.amount)
+            chargePointPayment.charge()
+            chargePointPaymentRepository.save(chargePointPayment)
+        } catch (e: Exception) {
+            failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent(chargePointPayment.paymentId))
+            throw CoreException(Error.PAYMENT_ERROR)
+        }
     }
 }

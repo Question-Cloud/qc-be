@@ -1,28 +1,25 @@
 package com.eager.questioncloud.application.business.payment.point.service
 
-import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent
 import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentApprover
+import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentPostProcessor
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor
+import com.eager.questioncloud.pg.dto.PGPayment
 import org.springframework.stereotype.Component
-import software.amazon.awssdk.services.sns.SnsClient
 
 @Component
 class ChargePointPaymentService(
     private val chargePointPaymentApprover: ChargePointPaymentApprover,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
-    private val pgPaymentProcessor: PGPaymentProcessor,
-    private val snsClient: SnsClient,
+    private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
 ) {
     fun createOrder(chargePointPayment: ChargePointPayment) {
         chargePointPaymentRepository.save(chargePointPayment)
     }
 
-    fun approvePayment(paymentId: String) {
-        val pgPayment = pgPaymentProcessor.getPayment(paymentId)
+    fun approvePayment(pgPayment: PGPayment) {
         val chargePointPayment = chargePointPaymentApprover.approve(pgPayment)
-        snsClient.publish(ChargePointPaymentEvent.from(chargePointPayment).toRequest())
+        chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
     }
 
     fun isCompletePayment(userId: Long, paymentId: String): Boolean {
