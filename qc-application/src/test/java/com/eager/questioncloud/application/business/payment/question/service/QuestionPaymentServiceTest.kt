@@ -1,6 +1,5 @@
 package com.eager.questioncloud.application.business.payment.question.service
 
-import com.eager.questioncloud.application.business.payment.question.event.QuestionPaymentEvent
 import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
@@ -21,7 +20,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
 
 @SpringBootTest
@@ -48,9 +46,6 @@ internal class QuestionPaymentServiceTest {
 
     @Autowired
     private val questionOrderRepository: QuestionOrderRepository? = null
-
-    @Autowired
-    private val events: ApplicationEvents? = null
 
     @AfterEach
     fun tearDown() {
@@ -99,8 +94,5 @@ internal class QuestionPaymentServiceTest {
         // then
         Assertions.assertThat(questionPayment.status).isEqualTo(QuestionPaymentStatus.SUCCESS)
         Assertions.assertThat(questionPayment.order.questionIds.size).isEqualTo(questions.size)
-
-        val eventCount = events!!.stream(QuestionPaymentEvent::class.java).count()
-        Assertions.assertThat(eventCount).isEqualTo(1)
     }
 }

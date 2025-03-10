@@ -14,9 +14,10 @@ class QuestionPaymentService(
     private val questionPaymentEventProcessor: QuestionPaymentEventProcessor,
 ) {
     @Transactional
-    fun payment(userId: Long, order: QuestionOrder, questionPaymentCoupon: QuestionPaymentCoupon?) {
+    fun payment(userId: Long, order: QuestionOrder, questionPaymentCoupon: QuestionPaymentCoupon?): QuestionPayment {
         val questionPayment = QuestionPayment.create(userId, questionPaymentCoupon, order)
         questionPaymentProcessor.payment(questionPayment)
         questionPaymentEventProcessor.createEvent(questionPayment)
+        return questionPayment
     }
 }

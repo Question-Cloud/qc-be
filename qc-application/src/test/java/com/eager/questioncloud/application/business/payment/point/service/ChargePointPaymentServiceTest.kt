@@ -1,25 +1,18 @@
 package com.eager.questioncloud.application.business.payment.point.service
 
-import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent
-import com.eager.questioncloud.application.business.payment.point.implement.ChargePointPaymentPostProcessor
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
 import com.eager.questioncloud.pg.dto.PGPayment
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
-import org.mockito.kotlin.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
 
 @SpringBootTest
@@ -31,15 +24,6 @@ internal class ChargePointPaymentServiceTest {
 
     @Autowired
     private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
-
-    @MockBean
-    private val pgPaymentProcessor: PGPaymentProcessor? = null
-
-    @Autowired
-    private val events: ApplicationEvents? = null
-
-    @MockBean
-    private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor? = null
 
     @AfterEach
     fun tearDown() {
@@ -72,23 +56,16 @@ internal class ChargePointPaymentServiceTest {
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
         val userId = 1L
         val order = order(paymentId, userId, ChargePointType.PackageA)
+        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
         chargePointPaymentRepository!!.save(order)
 
-        BDDMockito.given(pgPaymentProcessor!!.getPayment(any()))
-            .willReturn(PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com"))
-
-        BDDMockito.willDoNothing().given(chargePointPaymentPostProcessor)!!.chargeUserPoint(any())
-
         //then
-        chargePointPaymentService!!.approvePayment(paymentId)
+        chargePointPaymentService!!.approvePayment(pgPayment)
 
         //then
         val paymentResult = chargePointPaymentRepository.findByPaymentId(paymentId)
 
         Assertions.assertThat(paymentResult.paymentId).isEqualTo(paymentId)
-        Assertions.assertThat(paymentResult.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.PAID)
-
-        val eventCount = events!!.stream(ChargePointPaymentEvent::class.java).count()
-        Assertions.assertThat(eventCount).isEqualTo(1)
+        Assertions.assertThat(paymentResult.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.CHARGED)
     }
 }

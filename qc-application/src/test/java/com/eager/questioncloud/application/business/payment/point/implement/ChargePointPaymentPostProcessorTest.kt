@@ -1,6 +1,5 @@
 package com.eager.questioncloud.application.business.payment.point.implement
 
-import com.eager.questioncloud.application.business.payment.point.event.ChargePointPaymentEvent.Companion.from
 import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
@@ -44,8 +43,8 @@ internal class ChargePointPaymentPostProcessorTest {
     }
 
     @Test
-    @DisplayName("포인트 충전 결제 완료 시 포인트 충전 이벤트를 처리할 수 있다.")
-    fun chargeUserPointWhenReceivedChargePointPaymentEvent() {
+    @DisplayName("포인트 충전을 처리할 수 있다.")
+    fun chargeUserPoint() {
         // given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -63,10 +62,10 @@ internal class ChargePointPaymentPostProcessorTest {
             )
         )
         payment.approve("approve")
-        chargePointPaymentRepository.save(payment)
+        val chargePointPayment = chargePointPaymentRepository.save(payment)
 
         // when
-        chargePointPaymentPostProcessor!!.chargeUserPoint(from(payment))
+        chargePointPaymentPostProcessor!!.chargeUserPoint(chargePointPayment)
 
         //then
         val userPoint = userPointRepository.getUserPoint(user.uid!!)

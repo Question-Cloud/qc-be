@@ -145,10 +145,10 @@ internal class QuestionPaymentProcessorTest {
         val afterUserCoupon = userCouponRepository!!.getUserCoupon(userCoupon.id!!)
         Assertions.assertThat(afterUserCoupon.isUsed).isTrue()
 
-        Assertions.assertThat(paymentResult.amount).isEqualTo(discountedAmount)
+        Assertions.assertThat(questionPayment.amount).isEqualTo(discountedAmount)
 
         val afterUserPoint = userPointRepository!!.getUserPoint(user.uid!!)
-        Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - paymentResult.amount)
+        Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - questionPayment.amount)
     }
 
     @Test
@@ -193,10 +193,10 @@ internal class QuestionPaymentProcessorTest {
         Mockito.verify(userPointManager, Mockito.times(1))!!.usePoint(questionPayment.userId, questionPayment.amount)
         Mockito.verify(questionPaymentRepository, Mockito.times(1))!!.save(questionPayment)
 
-        Assertions.assertThat(paymentResult.amount).isEqualTo(originalAmount)
+        Assertions.assertThat(questionPayment.amount).isEqualTo(originalAmount)
 
         val afterUserPoint = userPointRepository!!.getUserPoint(user.uid!!)
-        Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - paymentResult.amount)
+        Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - questionPayment.amount)
     }
 
     @Test

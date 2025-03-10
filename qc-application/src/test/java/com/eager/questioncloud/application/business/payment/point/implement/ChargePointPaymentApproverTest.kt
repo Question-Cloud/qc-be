@@ -1,6 +1,5 @@
 package com.eager.questioncloud.application.business.payment.point.implement
 
-import com.eager.questioncloud.application.message.MessageSender
 import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
@@ -43,7 +42,7 @@ internal class ChargePointPaymentApproverTest {
 
     @SpyBean
     @Autowired
-    private val messageSender: MessageSender? = null
+    private val failChargePointPaymentEventProcessor: FailChargePointPaymentEventProcessor? = null
 
     @SpyBean
     @Autowired
@@ -113,8 +112,8 @@ internal class ChargePointPaymentApproverTest {
     }
 
     @Test
-    @DisplayName("결제 승인 시 예외가 발생하면 RabbitMQ 결제 실패 메시지를 전송한다.")
-    fun sendCancelChargePointPaymentMessageWhenThrownUnknownException() {
+    @DisplayName("결제 승인 시 예외가 발생하면 결제 실패 이벤트를 발행한다.")
+    fun sendCancelChargePointPaymentEventWhenThrownUnknownException() {
         //given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -138,7 +137,7 @@ internal class ChargePointPaymentApproverTest {
         Assertions.assertThatThrownBy { chargePointPaymentApprover!!.approve(pgPayment) }
             .isInstanceOf(RuntimeException::class.java)
 
-        Mockito.verify(messageSender)!!.sendMessage(any(), any())
+        Mockito.verify(failChargePointPaymentEventProcessor)!!.publishEvent(any())
     }
 
     @Test
