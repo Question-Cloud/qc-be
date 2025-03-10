@@ -7,11 +7,11 @@ QuestionCloud는 수학, 물리, 지구과학, 화학, 생명과학 문제를 �
 
 # 프로젝트 아키텍처
 
-![image](https://github.com/user-attachments/assets/ab368135-c839-4cfa-bed7-b2d6514f1c9f)
+![image](https://github.com/user-attachments/assets/1c81a6d6-923f-4ad4-98b0-08cc70666581)
 
 # 프로젝트 Stack
 
-Spring Boot, Maria DB, JPA, Querydsl, Redis, Rabbit MQ, Mongo DB, Docker, AWS EC2, AWS RDS, AWS
+Spring Boot, Maria DB, JPA, Querydsl, Redis, AWS SNS, AWS SQS, Mongo DB, Docker, AWS EC2, AWS RDS, AWS
 Elasticache
 
 # 멀티 모듈
@@ -126,13 +126,12 @@ Elasticache
 - TPS 1937 -> 3900
 - [관련 포스팅](https://e4g3r.tistory.com/8)
 
-## 지연 큐를 활용 한 예외 처리 도중 예외 처리
+## 메시지 발행을 통한 결제 취소 처리 보장
 
 포인트 충전 결제 도중 예외가 발생하면 결제 취소 처리 및 롤백 처리를 위한 메서드가 호출됩니다.   
 하지만 예외발생 원인이 DB 장애, 외부 API 장애일 경우 바로 롤백 처리를 진행하면 장애가 복구 되지 않았을 확률이 높기 때문에   
-다시 예외 처리 중에 또 예외가 발생할 수 있습니다. 따라서 결제 취소 처리 로직이 완전히 처리 되지 않고 유실될 수 있게 됩니다.   
-해결 방안으로 RabbitMQ를 통해 지연 큐를 구현하였습니다.   
-만약 예외 처리 도중 예외가 발생한다면 메시지를 발행하여 일정시간 이후 다시 예외처리를 수행하도록 처리하였습니다.
+예외 처리 중에 또 예외가 발생할 수 있습니다. 따라서 결제 취소 처리 로직이 완전히 처리 되지 않고 유실될 수 있게 됩니다.
+예외 처리 도중 예외가 발생하는 경우를 고려하여 메시지를 발행하여 일정시간 이후 다시 예외처리를 수행하도록 처리하였습니다.
 
 - [관련포스팅](https://e4g3r.tistory.com/9)
 
