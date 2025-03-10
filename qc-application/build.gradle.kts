@@ -10,11 +10,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     compileOnly("org.springframework:spring-tx")
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
+
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0"))
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sns")
-
 
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
@@ -31,7 +30,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
-    testImplementation("org.springframework.amqp:spring-rabbit-test:3.2.1")
 }
 
 sourceSets {
