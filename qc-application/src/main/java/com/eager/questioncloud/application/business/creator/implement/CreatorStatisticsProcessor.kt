@@ -1,16 +1,17 @@
-package com.eager.questioncloud.core.domain.creator.implement
+package com.eager.questioncloud.application.business.creator.implement
 
+import com.eager.questioncloud.application.business.review.event.ReviewEvent
+import com.eager.questioncloud.application.business.review.event.ReviewEventType
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics.Companion.create
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.core.domain.review.event.DeletedReviewEvent
-import com.eager.questioncloud.core.domain.review.event.ModifiedReviewEvent
-import com.eager.questioncloud.core.domain.review.event.RegisteredReviewEvent
 import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent
 import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent
 import com.eager.questioncloud.lock.LockKeyGenerator
 import com.eager.questioncloud.lock.LockManager
+import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.context.event.EventListener
+import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,38 +24,18 @@ class CreatorStatisticsProcessor(
         creatorStatisticsRepository.save(create(creatorId))
     }
 
-    @EventListener
-    fun updateCreatorReviewStatistics(event: RegisteredReviewEvent) {
+    @SqsListener("update-creator-review-statistics")
+    fun updateCreatorReviewStatistics(@Payload event: ReviewEvent) {
         val question = questionRepository.get(event.questionId)
         lockManager.executeWithLock(
             LockKeyGenerator.generateCreatorStatistics(question.creatorId)
         ) {
             val creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.creatorId)
-            creatorStatistics.updateReviewStatisticsByRegisteredReview(event.rate)
-            creatorStatisticsRepository.save(creatorStatistics)
-        }
-    }
-
-    @EventListener
-    fun updateCreatorReviewStatistics(event: ModifiedReviewEvent) {
-        val question = questionRepository.get(event.questionId)
-        lockManager.executeWithLock(
-            LockKeyGenerator.generateCreatorStatistics(question.creatorId)
-        ) {
-            val creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.creatorId)
-            creatorStatistics.updateReviewStatisticsByModifiedReview(event.varianceRate)
-            creatorStatisticsRepository.save(creatorStatistics)
-        }
-    }
-
-    @EventListener
-    fun updateCreatorReviewStatistics(event: DeletedReviewEvent) {
-        val question = questionRepository.get(event.questionId)
-        lockManager.executeWithLock(
-            LockKeyGenerator.generateCreatorStatistics(question.creatorId)
-        ) {
-            val creatorStatistics = creatorStatisticsRepository.findByCreatorId(question.creatorId)
-            creatorStatistics.updateReviewStatisticsByDeletedReview(event.rate)
+            when (event.reviewEventType) {
+                ReviewEventType.REGISTER -> creatorStatistics.updateReviewStatisticsByRegisteredReview(event.varianceRate)
+                ReviewEventType.MODIFY -> creatorStatistics.updateReviewStatisticsByModifiedReview(event.varianceRate)
+                ReviewEventType.DELETE -> creatorStatistics.updateReviewStatisticsByDeletedReview(event.varianceRate)
+            }
             creatorStatisticsRepository.save(creatorStatistics)
         }
     }
