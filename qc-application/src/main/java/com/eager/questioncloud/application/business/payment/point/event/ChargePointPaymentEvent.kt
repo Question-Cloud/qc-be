@@ -22,6 +22,7 @@ class ChargePointPaymentEvent(
         return PublishRequest.builder()
             .topicArn("arn:aws:sns:ap-northeast-2:503561444273:charge-point-payment.fifo")
             .messageGroupId(paymentId)
+            .messageDeduplicationId(paymentId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }

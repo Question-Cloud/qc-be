@@ -21,6 +21,7 @@ class QuestionPaymentEvent(
         return PublishRequest.builder()
             .topicArn("arn:aws:sns:ap-northeast-2:503561444273:question-payment-sns.fifo")
             .messageGroupId(questionPayment.order.orderId)
+            .messageDeduplicationId(questionPayment.order.orderId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }
