@@ -24,7 +24,7 @@ class CreatorStatisticsProcessor(
         creatorStatisticsRepository.save(create(creatorId))
     }
 
-    @SqsListener("update-creator-review-statistics")
+    @SqsListener("update-creator-review-statistics.fifo")
     fun updateCreatorReviewStatistics(@Payload event: ReviewEvent) {
         val question = questionRepository.get(event.questionId)
         lockManager.executeWithLock(

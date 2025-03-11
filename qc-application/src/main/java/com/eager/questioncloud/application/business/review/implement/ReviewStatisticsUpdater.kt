@@ -13,7 +13,7 @@ class ReviewStatisticsUpdater(
     private val questionReviewStatisticsRepository: QuestionReviewStatisticsRepository,
     private val lockManager: LockManager,
 ) {
-    @SqsListener("update-question-review-statistics")
+    @SqsListener("update-question-review-statistics.fifo")
     fun updateByRegisteredReview(event: ReviewEvent) {
         lockManager.executeWithLock(
             LockKeyGenerator.generateReviewStatistics(event.questionId)

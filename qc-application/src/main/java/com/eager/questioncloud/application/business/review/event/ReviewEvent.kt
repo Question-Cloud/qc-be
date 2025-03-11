@@ -19,7 +19,9 @@ class ReviewEvent(
 
     fun toRequest(): PublishRequest {
         return PublishRequest.builder()
-            .topicArn("arn:aws:sns:ap-northeast-2:503561444273:question-review")
+            .topicArn("arn:aws:sns:ap-northeast-2:503561444273:question-review.fifo")
+            .messageDeduplicationId(eventId)
+            .messageGroupId(questionId.toString())
             .message(objectMapper.writeValueAsString(this))
             .build()
     }
