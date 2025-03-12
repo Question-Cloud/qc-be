@@ -30,6 +30,14 @@ class SubscribeRepositoryImpl(
         return subscribeJpaRepository.countByCreatorId(creatorId)
     }
 
+    override fun countSubscriber(creatorIds: List<Long>): Map<Long, Int> {
+        return jpaQueryFactory.select(subscribeEntity.creatorId, subscribeEntity.id.count().intValue())
+            .from(subscribeEntity)
+            .where(subscribeEntity.subscriberId.`in`(creatorIds))
+            .fetch()
+            .associate { it.get(subscribeEntity.creatorId)!! to it.get(subscribeEntity.id.count().intValue())!! }
+    }
+
     override fun getMySubscribedCreators(userId: Long, pagingInformation: PagingInformation): List<Long> {
         return jpaQueryFactory.select(subscribeEntity.creatorId)
             .from(subscribeEntity)

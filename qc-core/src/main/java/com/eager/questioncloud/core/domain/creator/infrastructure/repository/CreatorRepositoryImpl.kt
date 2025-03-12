@@ -1,9 +1,8 @@
 package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
+import com.eager.questioncloud.core.domain.creator.dto.CreatorProfile
 import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorEntity.Companion.from
 import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity
 import com.eager.questioncloud.core.domain.creator.model.Creator
 import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
 import com.eager.questioncloud.core.exception.CoreException
@@ -22,52 +21,41 @@ class CreatorRepositoryImpl(
         return creatorJpaRepository.existsById(creatorId)
     }
 
-    override fun getCreatorInformation(creatorId: Long): CreatorInformation {
-        val creatorInformation = jpaQueryFactory.select(
+    override fun getCreatorProfile(creatorId: Long): CreatorProfile {
+        return jpaQueryFactory.select(
             Projections.constructor(
-                CreatorInformation::class.java,
+                CreatorProfile::class.java,
                 creatorEntity.id,
                 userEntity.userInformationEntity.name,
                 userEntity.userInformationEntity.profileImage,
                 creatorEntity.mainSubject,
                 userEntity.userInformationEntity.email,
-                creatorStatisticsEntity.salesCount,
-                creatorStatisticsEntity.averageRateOfReview,
                 creatorEntity.introduction
             )
         )
             .from(creatorEntity)
             .where(creatorEntity.id.eq(creatorId))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
-            .fetchFirst()
-
-        if (creatorInformation == null) {
-            throw CoreException(Error.NOT_FOUND)
-        }
-
-        return creatorInformation
+            .fetchFirst() ?: throw CoreException(Error.NOT_FOUND)
     }
 
-    override fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation> {
+    override fun getCreatorProfile(creatorIds: List<Long>): Map<Long, CreatorProfile> {
         return jpaQueryFactory.select(
             Projections.constructor(
-                CreatorInformation::class.java,
+                CreatorProfile::class.java,
                 creatorEntity.id,
                 userEntity.userInformationEntity.name,
                 userEntity.userInformationEntity.profileImage,
                 creatorEntity.mainSubject,
                 userEntity.userInformationEntity.email,
-                creatorStatisticsEntity.salesCount,
-                creatorStatisticsEntity.averageRateOfReview,
                 creatorEntity.introduction
             )
         )
             .from(creatorEntity)
             .where(creatorEntity.id.`in`(creatorIds))
             .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
             .fetch()
+            .associateBy { it.creatorId }
     }
 
     override fun save(creator: Creator): Creator {

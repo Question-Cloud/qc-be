@@ -31,6 +31,14 @@ class CreatorStatisticsRepositoryImpl(
             .toModel()
     }
 
+    override fun findByCreatorIdIn(creatorIds: List<Long>): Map<Long, CreatorStatistics> {
+        return creatorStatisticsJpaRepository.findByCreatorIdIn(creatorIds)
+            .stream()
+            .map { entity -> entity.toModel() }
+            .toList()
+            .associateBy { it.creatorId }
+    }
+
     @Transactional
     override fun addSalesCount(creatorId: Long, count: Int) {
         jpaQueryFactory.update(creatorStatisticsEntity)

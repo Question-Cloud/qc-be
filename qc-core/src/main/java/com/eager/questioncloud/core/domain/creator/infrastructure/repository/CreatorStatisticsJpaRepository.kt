@@ -6,4 +6,6 @@ import java.util.*
 
 interface CreatorStatisticsJpaRepository : JpaRepository<CreatorStatisticsEntity, Long> {
     fun findByCreatorId(creatorId: Long): Optional<CreatorStatisticsEntity>
+
+    fun findByCreatorIdIn(creatorIds: List<Long>): List<CreatorStatisticsEntity>
 }

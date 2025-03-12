@@ -9,6 +9,8 @@ interface CreatorStatisticsRepository {
 
     fun findByCreatorId(creatorId: Long): CreatorStatistics
 
+    fun findByCreatorIdIn(creatorIds: List<Long>): Map<Long, CreatorStatistics>
+
     fun addSalesCount(creatorId: Long, count: Int)
 
     fun deleteAllInBatch()

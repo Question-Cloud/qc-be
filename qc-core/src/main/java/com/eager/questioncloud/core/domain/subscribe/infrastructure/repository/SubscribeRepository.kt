@@ -12,6 +12,8 @@ interface SubscribeRepository {
 
     fun countSubscriber(creatorId: Long): Int
 
+    fun countSubscriber(creatorIds: List<Long>): Map<Long, Int>
+
     fun getMySubscribedCreators(userId: Long, pagingInformation: PagingInformation): List<Long>
 
     fun countMySubscribe(userId: Long): Int

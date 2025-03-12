@@ -1,14 +1,14 @@
 package com.eager.questioncloud.application.business.creator.service
 
-import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.application.business.creator.dto.CreatorInformation
+import com.eager.questioncloud.application.business.creator.implement.CreatorReader
 import org.springframework.stereotype.Service
 
 @Service
 class CreatorService(
-    private val creatorRepository: CreatorRepository
+    private val creatorReader: CreatorReader
 ) {
     fun getCreatorInformation(creatorId: Long): CreatorInformation {
-        return creatorRepository.getCreatorInformation(creatorId)
+        return creatorReader.getCreatorInformation(creatorId)
     }
 }
