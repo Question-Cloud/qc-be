@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.business.subscribe.service.FeedSubscribeService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail
+import com.eager.questioncloud.core.domain.creator.dto.CreatorInformation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Schema
@@ -27,7 +27,7 @@ class FeedSubscribeController(
     @Parameter(name = "page", description = "paging page", schema = Schema(type = "integer"))
     fun getMySubscribeList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
-    ): PagingResponse<SubscribeDetail> {
+    ): PagingResponse<CreatorInformation> {
         val total = feedSubscribeService.countMySubscribe(userPrincipal.user.uid!!)
         val subscribeCreators = feedSubscribeService.getMySubscribes(
             userPrincipal.user.uid!!, pagingInformation

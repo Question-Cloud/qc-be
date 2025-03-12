@@ -8,6 +8,8 @@ interface CreatorRepository {
 
     fun getCreatorInformation(creatorId: Long): CreatorInformation
 
+    fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation>
+
     fun save(creator: Creator): Creator
 
     fun deleteAllInBatch()

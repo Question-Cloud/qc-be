@@ -49,6 +49,27 @@ class CreatorRepositoryImpl(
         return creatorInformation
     }
 
+    override fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation> {
+        return jpaQueryFactory.select(
+            Projections.constructor(
+                CreatorInformation::class.java,
+                creatorEntity.id,
+                userEntity.userInformationEntity.name,
+                userEntity.userInformationEntity.profileImage,
+                creatorEntity.creatorProfileEntity.mainSubject,
+                userEntity.userInformationEntity.email,
+                creatorStatisticsEntity.salesCount,
+                creatorStatisticsEntity.averageRateOfReview,
+                creatorEntity.creatorProfileEntity.introduction
+            )
+        )
+            .from(creatorEntity)
+            .where(creatorEntity.id.`in`(creatorIds))
+            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
+            .fetch()
+    }
+
     override fun save(creator: Creator): Creator {
         return creatorJpaRepository.save(from(creator)).toModel()
     }

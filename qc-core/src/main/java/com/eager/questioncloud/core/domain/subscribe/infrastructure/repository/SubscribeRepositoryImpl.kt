@@ -1,14 +1,9 @@
 package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository
 
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.QSubscribeEntity.subscribeEntity
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.entity.SubscribeEntity.Companion.from
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe
-import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
-import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -35,23 +30,10 @@ class SubscribeRepositoryImpl(
         return subscribeJpaRepository.countByCreatorId(creatorId)
     }
 
-    override fun getMySubscribes(userId: Long, pagingInformation: PagingInformation): List<SubscribeDetail> {
-        return jpaQueryFactory.select(
-            Projections.constructor(
-                SubscribeDetail::class.java,
-                creatorEntity.id,
-                userEntity.userInformationEntity.name,
-                userEntity.userInformationEntity.profileImage,
-                creatorEntity.creatorProfileEntity.mainSubject,
-                creatorEntity.creatorProfileEntity.introduction,
-                creatorStatisticsEntity.subscribeCount
-            )
-        )
+    override fun getMySubscribedCreators(userId: Long, pagingInformation: PagingInformation): List<Long> {
+        return jpaQueryFactory.select(subscribeEntity.creatorId)
             .from(subscribeEntity)
             .where(subscribeEntity.subscriberId.eq(userId))
-            .leftJoin(creatorEntity).on(creatorEntity.id.eq(subscribeEntity.creatorId))
-            .leftJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(creatorStatisticsEntity).on(creatorStatisticsEntity.creatorId.eq(creatorEntity.id))
             .offset(pagingInformation.offset.toLong())
             .limit(pagingInformation.size.toLong())
             .fetch()

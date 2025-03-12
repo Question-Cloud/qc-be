@@ -1,7 +1,6 @@
 package com.eager.questioncloud.core.domain.subscribe.infrastructure.repository
 
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.subscribe.dto.SubscribeDetail
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe
 
 interface SubscribeRepository {
@@ -13,7 +12,7 @@ interface SubscribeRepository {
 
     fun countSubscriber(creatorId: Long): Int
 
-    fun getMySubscribes(userId: Long, pagingInformation: PagingInformation): List<SubscribeDetail>
+    fun getMySubscribedCreators(userId: Long, pagingInformation: PagingInformation): List<Long>
 
     fun countMySubscribe(userId: Long): Int
 }
