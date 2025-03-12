@@ -2,17 +2,17 @@ package com.eager.questioncloud.application.business.creator.service
 
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
-import com.eager.questioncloud.core.domain.question.event.RegisteredQuestionEvent.Companion.create
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question.Companion.create
 import com.eager.questioncloud.core.domain.question.model.QuestionContent
-import org.springframework.context.ApplicationEventPublisher
+import com.eager.questioncloud.core.domain.review.implement.QuestionReviewStatisticsGenerator
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CreatorQuestionService(
     private val questionRepository: QuestionRepository,
-    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val questionReviewStatisticsGenerator: QuestionReviewStatisticsGenerator
 ) {
     fun getMyQuestions(creatorId: Long, pagingInformation: PagingInformation): List<QuestionInformation> {
         return questionRepository.findByCreatorIdWithPaging(creatorId, pagingInformation)
@@ -27,9 +27,10 @@ class CreatorQuestionService(
         return question.questionContent
     }
 
+    @Transactional
     fun registerQuestion(creatorId: Long, questionContent: QuestionContent) {
         val question = questionRepository.save(create(creatorId, questionContent))
-        applicationEventPublisher.publishEvent(create(question))
+        questionReviewStatisticsGenerator.generate(question.id!!)
     }
 
     fun modifyQuestion(creatorId: Long, questionId: Long, questionContent: QuestionContent) {
