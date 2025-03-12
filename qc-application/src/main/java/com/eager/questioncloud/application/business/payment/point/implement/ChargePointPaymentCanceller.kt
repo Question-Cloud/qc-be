@@ -12,7 +12,7 @@ class ChargePointPaymentCanceller(
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val pgPaymentProcessor: PGPaymentProcessor
 ) {
-    @SqsListener("cancel-charge-point-payment.fifo")
+    @SqsListener("fail-charge-point-payment.fifo")
     fun failHandler(@Payload event: FailChargePointPaymentEvent) {
         val chargePointPayment = chargePointPaymentRepository.findByPaymentId(event.paymentId)
 

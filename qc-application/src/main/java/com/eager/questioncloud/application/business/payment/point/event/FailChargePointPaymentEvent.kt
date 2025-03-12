@@ -24,4 +24,8 @@ class FailChargePointPaymentEvent(
             .message(objectMapper.writeValueAsString(this))
             .build()
     }
+
+    fun toJson(): String {
+        return objectMapper.writeValueAsString(this)
+    }
 }
