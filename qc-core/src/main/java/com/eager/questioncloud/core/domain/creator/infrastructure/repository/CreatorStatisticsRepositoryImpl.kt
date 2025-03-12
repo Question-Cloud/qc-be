@@ -42,28 +42,6 @@ class CreatorStatisticsRepositoryImpl(
             .execute()
     }
 
-    @Transactional
-    override fun increaseSubscribeCount(creatorId: Long) {
-        jpaQueryFactory.update(creatorStatisticsEntity)
-            .set(
-                creatorStatisticsEntity.subscribeCount,
-                creatorStatisticsEntity.subscribeCount.add(1)
-            )
-            .where(creatorStatisticsEntity.creatorId.eq(creatorId))
-            .execute()
-    }
-
-    @Transactional
-    override fun decreaseSubscribeCount(creatorId: Long) {
-        jpaQueryFactory.update(creatorStatisticsEntity)
-            .set(
-                creatorStatisticsEntity.subscribeCount,
-                creatorStatisticsEntity.subscribeCount.subtract(1)
-            )
-            .where(creatorStatisticsEntity.creatorId.eq(creatorId))
-            .execute()
-    }
-
     override fun deleteAllInBatch() {
         creatorStatisticsJpaRepository.deleteAllInBatch()
     }

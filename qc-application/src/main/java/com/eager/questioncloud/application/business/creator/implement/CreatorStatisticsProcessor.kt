@@ -7,12 +7,9 @@ import com.eager.questioncloud.core.domain.creator.infrastructure.repository.Cre
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics.Companion.create
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
-import com.eager.questioncloud.core.domain.subscribe.event.SubscribedEvent
-import com.eager.questioncloud.core.domain.subscribe.event.UnsubscribedEvent
 import com.eager.questioncloud.lock.LockKeyGenerator
 import com.eager.questioncloud.lock.LockManager
 import io.awspring.cloud.sqs.annotation.SqsListener
-import org.springframework.context.event.EventListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 import java.util.stream.Collectors
@@ -57,15 +54,5 @@ class CreatorStatisticsProcessor(
             }
             creatorStatisticsRepository.save(creatorStatistics)
         }
-    }
-
-    @EventListener
-    fun increaseSubscribeCount(event: SubscribedEvent) {
-        creatorStatisticsRepository.increaseSubscribeCount(event.creatorId)
-    }
-
-    @EventListener
-    fun decreaseSubscribeCount(event: UnsubscribedEvent) {
-        creatorStatisticsRepository.decreaseSubscribeCount(event.creatorId)
     }
 }

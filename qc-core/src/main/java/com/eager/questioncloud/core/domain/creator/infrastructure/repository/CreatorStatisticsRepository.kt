@@ -11,9 +11,5 @@ interface CreatorStatisticsRepository {
 
     fun addSalesCount(creatorId: Long, count: Int)
 
-    fun increaseSubscribeCount(creatorId: Long)
-
-    fun decreaseSubscribeCount(creatorId: Long)
-
     fun deleteAllInBatch()
 }
