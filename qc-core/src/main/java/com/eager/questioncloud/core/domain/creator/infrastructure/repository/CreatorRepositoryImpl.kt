@@ -29,11 +29,11 @@ class CreatorRepositoryImpl(
                 creatorEntity.id,
                 userEntity.userInformationEntity.name,
                 userEntity.userInformationEntity.profileImage,
-                creatorEntity.creatorProfileEntity.mainSubject,
+                creatorEntity.mainSubject,
                 userEntity.userInformationEntity.email,
                 creatorStatisticsEntity.salesCount,
                 creatorStatisticsEntity.averageRateOfReview,
-                creatorEntity.creatorProfileEntity.introduction
+                creatorEntity.introduction
             )
         )
             .from(creatorEntity)
@@ -56,11 +56,11 @@ class CreatorRepositoryImpl(
                 creatorEntity.id,
                 userEntity.userInformationEntity.name,
                 userEntity.userInformationEntity.profileImage,
-                creatorEntity.creatorProfileEntity.mainSubject,
+                creatorEntity.mainSubject,
                 userEntity.userInformationEntity.email,
                 creatorStatisticsEntity.salesCount,
                 creatorStatisticsEntity.averageRateOfReview,
-                creatorEntity.creatorProfileEntity.introduction
+                creatorEntity.introduction
             )
         )
             .from(creatorEntity)

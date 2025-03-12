@@ -10,7 +10,6 @@ import com.eager.questioncloud.application.business.creator.service.CreatorQuest
 import com.eager.questioncloud.application.business.creator.service.CreatorRegisterService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.creator.model.CreatorProfile
 import com.eager.questioncloud.core.domain.post.dto.PostListItem
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
 import io.swagger.v3.oas.annotations.Operation
@@ -38,9 +37,7 @@ class WorkSpaceController(
     fun registerCreator(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody request: @Valid RegisterCreatorRequest
     ): RegisterCreatorResponse {
-        val creator = creatorRegisterService.register(
-            userPrincipal.user, CreatorProfile(request.mainSubject, request.introduction)
-        )
+        val creator = creatorRegisterService.register(userPrincipal.user, request.mainSubject, request.introduction)
         return RegisterCreatorResponse(creator.id!!)
     }
 
@@ -54,8 +51,8 @@ class WorkSpaceController(
         description = "크리에이터 정보 조회 (나)"
     )
     fun getMyCreatorInformation(@AuthenticationPrincipal userPrincipal: UserPrincipal): CreatorProfileResponse {
-        val profile = userPrincipal.creator!!.creatorProfile
-        return CreatorProfileResponse(profile)
+        val me = userPrincipal.creator!!
+        return CreatorProfileResponse(me.mainSubject, me.introduction)
     }
 
     @PatchMapping("/me")
@@ -66,10 +63,7 @@ class WorkSpaceController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid UpdateCreatorProfileRequest
     ): DefaultResponse {
-        creatorProfileService.updateCreatorProfile(
-            userPrincipal.creator!!,
-            CreatorProfile(request.mainSubject, request.introduction)
-        )
+        creatorProfileService.updateCreatorProfile(userPrincipal.creator!!, request.mainSubject, request.introduction)
         return success()
     }
 

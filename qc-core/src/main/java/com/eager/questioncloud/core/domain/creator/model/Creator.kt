@@ -1,19 +1,22 @@
 package com.eager.questioncloud.core.domain.creator.model
 
+import com.eager.questioncloud.core.domain.question.enums.Subject
+
 
 class Creator(
     val id: Long? = null,
     val userId: Long,
-    var creatorProfile: CreatorProfile
+    var mainSubject: Subject,
+    var introduction: String,
 ) {
-    fun updateProfile(creatorProfile: CreatorProfile) {
-        this.creatorProfile = creatorProfile
+    fun updateProfile(mainSubject: Subject, introduction: String) {
+        this.mainSubject = mainSubject
+        this.introduction = introduction
     }
 
     companion object {
-        @JvmStatic
-        fun create(userId: Long, creatorProfile: CreatorProfile): Creator {
-            return Creator(userId = userId, creatorProfile = creatorProfile)
+        fun create(userId: Long, mainSubject: Subject, introduction: String): Creator {
+            return Creator(userId = userId, mainSubject = mainSubject, introduction = introduction)
         }
     }
 }

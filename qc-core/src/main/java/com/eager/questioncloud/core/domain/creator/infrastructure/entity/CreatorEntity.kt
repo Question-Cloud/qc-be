@@ -1,6 +1,7 @@
 package com.eager.questioncloud.core.domain.creator.infrastructure.entity
 
 import com.eager.questioncloud.core.domain.creator.model.Creator
+import com.eager.questioncloud.core.domain.question.enums.Subject
 import jakarta.persistence.*
 
 @Entity
@@ -8,20 +9,16 @@ import jakarta.persistence.*
 class CreatorEntity private constructor(
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
     @Column var userId: Long,
-    @Embedded var creatorProfileEntity: CreatorProfileEntity
+    @Enumerated(EnumType.STRING) @Column var mainSubject: Subject,
+    @Column var introduction: String,
 ) {
     fun toModel(): Creator {
-        return Creator(id, userId, creatorProfileEntity.toModel())
+        return Creator(id, userId, mainSubject, introduction)
     }
 
     companion object {
-        @JvmStatic
         fun from(creator: Creator): CreatorEntity {
-            return CreatorEntity(
-                creator.id,
-                creator.userId,
-                CreatorProfileEntity.from(creator.creatorProfile)
-            )
+            return CreatorEntity(creator.id, creator.userId, creator.mainSubject, creator.introduction)
         }
     }
 }
