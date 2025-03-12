@@ -6,7 +6,7 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.post.dto.ModifyPostRequest
 import com.eager.questioncloud.application.api.post.dto.PostResponse
 import com.eager.questioncloud.application.api.post.dto.RegisterPostRequest
-import com.eager.questioncloud.application.business.post.service.PostService
+import com.eager.questioncloud.application.api.post.service.PostService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.post.dto.PostListItem

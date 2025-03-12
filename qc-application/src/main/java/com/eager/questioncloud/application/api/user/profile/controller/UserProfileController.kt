@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.user.profile.dto.MyInformationResponse
 import com.eager.questioncloud.application.api.user.profile.dto.UpdateMyInformationRequest
-import com.eager.questioncloud.application.business.user.service.UserProfileService
+import com.eager.questioncloud.application.api.user.profile.service.UserProfileService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.domain.user.dto.MyInformation.Companion.from
 import jakarta.validation.Valid

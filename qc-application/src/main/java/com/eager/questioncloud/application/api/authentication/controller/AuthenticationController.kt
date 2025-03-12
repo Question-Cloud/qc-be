@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.authentication.dto.LoginRequest
 import com.eager.questioncloud.application.api.authentication.dto.LoginResponse
 import com.eager.questioncloud.application.api.authentication.dto.RefreshResponse
 import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticateResponse
-import com.eager.questioncloud.application.business.authentication.service.AuthenticationService
+import com.eager.questioncloud.application.api.authentication.service.AuthenticationService
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

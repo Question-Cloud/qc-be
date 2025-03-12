@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.user.register.dto.CreateUserRequest
 import com.eager.questioncloud.application.api.user.register.dto.CreateUserResponse
-import com.eager.questioncloud.application.business.user.service.RegisterUserService
+import com.eager.questioncloud.application.api.user.register.service.RegisterUserService
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

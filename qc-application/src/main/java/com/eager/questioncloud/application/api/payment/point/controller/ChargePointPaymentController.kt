@@ -6,9 +6,9 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.payment.point.dto.ChargePointOrderRequest
 import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaymentRequest
 import com.eager.questioncloud.application.api.payment.point.dto.CheckCompletePaymentResponse
-import com.eager.questioncloud.application.business.payment.point.service.ChargePointPaymentHistoryService
-import com.eager.questioncloud.application.business.payment.point.service.ChargePointPaymentService
-import com.eager.questioncloud.application.business.payment.point.service.PgPaymentService
+import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentHistoryService
+import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentService
+import com.eager.questioncloud.application.api.payment.point.service.PgPaymentService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory

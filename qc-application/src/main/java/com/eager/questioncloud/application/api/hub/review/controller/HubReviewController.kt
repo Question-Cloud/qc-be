@@ -6,7 +6,7 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.hub.review.dto.ModifyQuestionReviewRequest
 import com.eager.questioncloud.application.api.hub.review.dto.MyQuestionReviewResponse
 import com.eager.questioncloud.application.api.hub.review.dto.RegisterQuestionReviewRequest
-import com.eager.questioncloud.application.business.review.service.HubReviewService
+import com.eager.questioncloud.application.api.hub.review.service.HubReviewService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail

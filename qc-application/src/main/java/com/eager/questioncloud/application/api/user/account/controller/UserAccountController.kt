@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.user.account.dto.ChangePasswordRequest
 import com.eager.questioncloud.application.api.user.account.dto.RecoverForgottenEmailResponse
-import com.eager.questioncloud.application.business.user.service.UserAccountService
+import com.eager.questioncloud.application.api.user.account.service.UserAccountService
 import com.eager.questioncloud.application.security.UserPrincipal
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

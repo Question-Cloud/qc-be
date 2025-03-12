@@ -4,10 +4,10 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.payment.question.dto.QuestionPaymentRequest
-import com.eager.questioncloud.application.business.payment.question.service.QuestionOrderService
-import com.eager.questioncloud.application.business.payment.question.service.QuestionPaymentCouponService
-import com.eager.questioncloud.application.business.payment.question.service.QuestionPaymentHistoryService
-import com.eager.questioncloud.application.business.payment.question.service.QuestionPaymentService
+import com.eager.questioncloud.application.api.payment.question.service.QuestionOrderService
+import com.eager.questioncloud.application.api.payment.question.service.QuestionPaymentCouponService
+import com.eager.questioncloud.application.api.payment.question.service.QuestionPaymentHistoryService
+import com.eager.questioncloud.application.api.payment.question.service.QuestionPaymentService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory

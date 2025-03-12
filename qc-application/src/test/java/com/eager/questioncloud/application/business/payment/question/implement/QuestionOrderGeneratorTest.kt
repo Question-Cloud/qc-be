@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.business.payment.question.implement
 
+import com.eager.questioncloud.application.api.payment.question.implement.QuestionOrderGenerator
 import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository

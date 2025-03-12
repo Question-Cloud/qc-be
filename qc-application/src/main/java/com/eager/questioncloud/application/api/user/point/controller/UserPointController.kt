@@ -1,7 +1,7 @@
 package com.eager.questioncloud.application.api.user.point.controller
 
 import com.eager.questioncloud.application.api.user.point.dto.GetUserPointResponse
-import com.eager.questioncloud.application.business.point.service.UserPointService
+import com.eager.questioncloud.application.api.user.point.service.UserPointService
 import com.eager.questioncloud.application.security.UserPrincipal
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse

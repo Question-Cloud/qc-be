@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.business.authentication.implement
 
-import com.eager.questioncloud.application.business.authentication.service.AuthenticationService
+import com.eager.questioncloud.application.api.authentication.service.AuthenticationService
 import com.eager.questioncloud.core.domain.user.dto.CreateUser
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus

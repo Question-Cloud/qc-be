@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.user.coupon.dto.GetAvailableUserCouponsResponse
 import com.eager.questioncloud.application.api.user.coupon.dto.RegisterCouponRequest
-import com.eager.questioncloud.application.business.coupon.service.UserCouponService
+import com.eager.questioncloud.application.api.user.coupon.service.UserCouponService
 import com.eager.questioncloud.application.security.UserPrincipal
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
