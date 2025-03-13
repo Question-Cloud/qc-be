@@ -8,7 +8,6 @@ import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class FailChargePointPaymentEvent(
     val orderId: String,
-    val paymentId: String,
 ) {
     private val objectMapper: ObjectMapper = ObjectMapper()
         .registerKotlinModule()
@@ -18,8 +17,8 @@ class FailChargePointPaymentEvent(
     fun toRequest(): PublishRequest {
         return PublishRequest.builder()
             .topicArn("arn:aws:sns:ap-northeast-2:503561444273:fail-charge-point-payment.fifo")
-            .messageGroupId(paymentId)
-            .messageDeduplicationId(paymentId)
+            .messageGroupId(orderId)
+            .messageDeduplicationId(orderId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }

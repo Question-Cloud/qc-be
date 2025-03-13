@@ -48,6 +48,7 @@ class TossPaymentAPI {
         val request = Request.Builder()
             .url("${BASE_URL}/payments/$paymentId/cancel")
             .header("Authorization", "Basic $TOSS_SECRET_KEY")
+            .header("Idempotency-Key", paymentId)
             .post(getCancelRequestBody(TossPaymentCancelRequest(amount)))
             .build()
 

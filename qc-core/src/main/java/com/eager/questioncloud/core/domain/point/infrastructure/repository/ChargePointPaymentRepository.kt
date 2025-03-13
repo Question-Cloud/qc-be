@@ -8,8 +8,6 @@ interface ChargePointPaymentRepository {
 
     fun isCompletedPayment(userId: Long, paymentId: String): Boolean
 
-    fun findByPaymentId(paymentId: String): ChargePointPayment
-
     fun findByOrderIdWithLock(paymentId: String): ChargePointPayment
 
     fun getChargePointPayments(userId: Long, pagingInformation: PagingInformation): List<ChargePointPayment>

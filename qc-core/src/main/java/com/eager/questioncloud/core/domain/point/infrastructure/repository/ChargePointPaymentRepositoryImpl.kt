@@ -32,12 +32,6 @@ class ChargePointPaymentRepositoryImpl(
             .fetchFirst() != null
     }
 
-    override fun findByPaymentId(paymentId: String): ChargePointPayment {
-        return chargePointPaymentJpaRepository.findByPaymentId(paymentId)
-            .orElseThrow { CoreException(Error.NOT_FOUND) }
-            .toModel()
-    }
-
     override fun findByOrderIdWithLock(paymentId: String): ChargePointPayment {
         return chargePointPaymentJpaRepository.findByOrderIdWithLock(paymentId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }

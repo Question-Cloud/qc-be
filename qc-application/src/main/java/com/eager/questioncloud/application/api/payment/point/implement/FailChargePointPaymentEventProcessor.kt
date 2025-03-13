@@ -17,7 +17,7 @@ class FailChargePointPaymentEventProcessor(
                 to.queue("fail-charge-point-payment.fifo").payload(failChargePointPaymentEvent.toJson())
             }
         } catch (e: Exception) {
-            logger.warn(failChargePointPaymentEvent.paymentId)
+            logger.warn(failChargePointPaymentEvent.orderId)
         }
     }
 }

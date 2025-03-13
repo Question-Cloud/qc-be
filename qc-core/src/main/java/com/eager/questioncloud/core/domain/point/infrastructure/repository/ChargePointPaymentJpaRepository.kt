@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query
 import java.util.*
 
 interface ChargePointPaymentJpaRepository : JpaRepository<ChargePointPaymentEntity, String> {
-    fun findByPaymentId(paymentId: String): Optional<ChargePointPaymentEntity>
-
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from ChargePointPaymentEntity c where c.orderId =:orderId")
     fun findByOrderIdWithLock(orderId: String): Optional<ChargePointPaymentEntity>
