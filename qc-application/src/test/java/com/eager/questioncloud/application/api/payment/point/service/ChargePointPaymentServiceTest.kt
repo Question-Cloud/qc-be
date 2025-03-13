@@ -1,6 +1,5 @@
-package com.eager.questioncloud.application.business.payment.point.service
+package com.eager.questioncloud.application.api.payment.point.service
 
-import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentService
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
@@ -72,7 +71,7 @@ internal class ChargePointPaymentServiceTest {
 
         BDDMockito.willReturn(pgPayment).given(pgPaymentProcessor)!!.getPayment(any())
         BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.confirm(any(), any(), any())
-        
+
         //then
         chargePointPaymentService!!.approvePayment(order.orderId)
 

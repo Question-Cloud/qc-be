@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.business.authentication.implement
+package com.eager.questioncloud.application.api.authentication.implement
 
 import com.eager.questioncloud.application.api.authentication.service.AuthenticationService
 import com.eager.questioncloud.core.domain.user.dto.CreateUser

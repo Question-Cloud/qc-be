@@ -1,6 +1,5 @@
-package com.eager.questioncloud.application.business.payment.question.service
+package com.eager.questioncloud.application.api.payment.question.service
 
-import com.eager.questioncloud.application.api.payment.question.service.QuestionPaymentService
 import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository

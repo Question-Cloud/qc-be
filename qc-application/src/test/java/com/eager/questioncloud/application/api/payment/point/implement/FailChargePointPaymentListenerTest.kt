@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.business.payment.point.implement
+package com.eager.questioncloud.application.api.payment.point.implement
 
 import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent
 import com.eager.questioncloud.application.listener.payment.FailChargePointPaymentListener

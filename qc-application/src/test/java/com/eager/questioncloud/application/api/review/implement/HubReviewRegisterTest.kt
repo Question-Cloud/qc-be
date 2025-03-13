@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.business.review.implement
+package com.eager.questioncloud.application.api.review.implement
 
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
 import com.eager.questioncloud.application.utils.Fixture
