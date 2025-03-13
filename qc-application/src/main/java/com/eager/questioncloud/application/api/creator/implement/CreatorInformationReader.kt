@@ -9,7 +9,7 @@ import com.eager.questioncloud.core.exception.Error
 import org.springframework.stereotype.Component
 
 @Component
-class CreatorReader(
+class CreatorInformationReader(
     private val creatorRepository: CreatorRepository,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val subscribeRepository: SubscribeRepository,

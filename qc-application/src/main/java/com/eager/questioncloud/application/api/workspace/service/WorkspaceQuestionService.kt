@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.creator.service
+package com.eager.questioncloud.application.api.workspace.service
 
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class CreatorQuestionService(
+class WorkspaceQuestionService(
     private val questionRepository: QuestionRepository,
     private val questionReviewStatisticsGenerator: QuestionReviewStatisticsGenerator
 ) {
