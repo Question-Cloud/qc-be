@@ -5,7 +5,7 @@ import com.eager.questioncloud.application.listener.payment.FailChargePointPayme
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
@@ -38,21 +38,22 @@ internal class FailChargePointPaymentListenerTest {
 
     @Test
     @DisplayName("FailChargePointPaymentEvent를 처리할 수 있다.")
-    @Throws(
-        Exception::class
-    )
     fun cancelHandler() {
         //given
         val paymentId = UUID.randomUUID().toString()
-        chargePointPaymentRepository!!.save(order(paymentId, 1L, ChargePointType.PackageA))
 
-        BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.cancel(any())
+        val order = ChargePointPayment.createOrder(1L, ChargePointType.PackageA)
+        order.approve(paymentId)
+
+        chargePointPaymentRepository!!.save(order)
+
+        BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.cancel(any(), any())
 
         //when
-        failChargePointPaymentListener!!.failHandler(FailChargePointPaymentEvent(paymentId))
+        failChargePointPaymentListener!!.failHandler(FailChargePointPaymentEvent(order.orderId))
 
         //then
-        val failChargePointPayment = chargePointPaymentRepository.findByPaymentId(paymentId)
+        val failChargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
         Assertions.assertThat(failChargePointPayment.chargePointPaymentStatus)
             .isEqualTo(ChargePointPaymentStatus.CANCELED)
     }

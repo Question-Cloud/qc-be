@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.api.payment.point.service
 
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPostProcessor
+import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.pg.implement.PGPaymentProcessor
@@ -14,8 +15,8 @@ class ChargePointPaymentService(
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
     private val pgPaymentProcessor: PGPaymentProcessor
 ) {
-    fun createOrder(chargePointPayment: ChargePointPayment): String {
-        val order = chargePointPaymentRepository.save(chargePointPayment)
+    fun createOrder(userId: Long, chargePointType: ChargePointType): String {
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointType))
         return order.orderId
     }
 

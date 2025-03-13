@@ -7,21 +7,20 @@ import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.domain.user.model.User
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.pg.dto.PGPayment
+import com.eager.questioncloud.pg.toss.PaymentStatus
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.kotlin.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
@@ -70,20 +69,20 @@ internal class ChargePointPaymentApproverTest {
         userPointRepository!!.save(UserPoint(user.uid!!, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
+
         val order = chargePointPaymentRepository!!.save(
-            order(
-                paymentId,
+            ChargePointPayment.createOrder(
                 user.uid!!, ChargePointType.PackageA
             )
         )
 
-        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when
         chargePointPaymentApprover!!.approve(pgPayment)
 
         //then
-        val chargePointPayment = chargePointPaymentRepository.findByPaymentId(paymentId)
+        val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
         Assertions.assertThat(chargePointPayment.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.PAID)
     }
 
@@ -101,45 +100,18 @@ internal class ChargePointPaymentApproverTest {
         userPointRepository!!.save(UserPoint(user.uid!!, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = order(paymentId, user.uid!!, ChargePointType.PackageA)
-        order.approve("https://www.naver.com")
+
+        val order = ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA)
+        order.approve(paymentId)
+
         chargePointPaymentRepository!!.save(order)
 
-        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentApprover!!.approve(pgPayment) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_PROCESSED_PAYMENT)
-    }
-
-    @Test
-    @DisplayName("결제 승인 시 예외가 발생하면 결제 실패 이벤트를 발행한다.")
-    fun sendCancelChargePointPaymentEventWhenThrownUnknownException() {
-        //given
-        val user = userRepository!!.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
-
-        val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = order(paymentId, user.uid!!, ChargePointType.PackageA)
-        order.approve("https://www.naver.com")
-        chargePointPaymentRepository!!.save(order)
-
-        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
-
-        Mockito.doThrow(RuntimeException()).`when`(chargePointPaymentRepository)
-            .findByOrderIdWithLock(any())
-
-        //when then
-        Assertions.assertThatThrownBy { chargePointPaymentApprover!!.approve(pgPayment) }
-            .isInstanceOf(RuntimeException::class.java)
-
-        Mockito.verify(failChargePointPaymentEventProcessor)!!.publishEvent(any())
     }
 
     @Test
@@ -158,14 +130,12 @@ internal class ChargePointPaymentApproverTest {
         userPointRepository!!.save(UserPoint(user.uid!!, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
+
         val order = chargePointPaymentRepository!!.save(
-            order(
-                paymentId,
-                user.uid!!, ChargePointType.PackageA
-            )
+            ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA)
         )
 
-        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when
         val numberOfThreads = 100

@@ -13,7 +13,6 @@ import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory.Companion.from
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -54,12 +53,8 @@ class ChargePointPaymentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody chargePointOrderRequest: ChargePointOrderRequest
     ): ChargePointOrderResponse {
-        val orderId = chargePointPaymentService.createOrder(
-            ChargePointPayment.createOrder(
-                userPrincipal.user.uid!!,
-                chargePointOrderRequest.chargePointType
-            )
-        )
+        val orderId =
+            chargePointPaymentService.createOrder(userPrincipal.user.uid!!, chargePointOrderRequest.chargePointType)
         return ChargePointOrderResponse(orderId)
     }
 

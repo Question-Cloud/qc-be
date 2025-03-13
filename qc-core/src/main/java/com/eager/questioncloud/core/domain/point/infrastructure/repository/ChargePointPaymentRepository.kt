@@ -10,6 +10,8 @@ interface ChargePointPaymentRepository {
 
     fun findByOrderIdWithLock(paymentId: String): ChargePointPayment
 
+    fun findByOrderId(orderId: String): ChargePointPayment
+
     fun getChargePointPayments(userId: Long, pagingInformation: PagingInformation): List<ChargePointPayment>
 
     fun countByUserId(userId: Long): Int

@@ -5,7 +5,7 @@ import com.eager.questioncloud.application.utils.Fixture
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.domain.user.model.User
@@ -56,13 +56,12 @@ internal class ChargePointPaymentPostProcessorTest {
         userPointRepository!!.save(UserPoint(user.uid!!, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val payment = chargePointPaymentRepository!!.save(
-            order(
-                paymentId,
-                user.uid!!, ChargePointType.PackageA
-            )
-        )
-        payment.approve("approve")
+
+        val payment =
+            chargePointPaymentRepository!!.save(ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA))
+        
+        payment.approve(paymentId)
+
         val chargePointPayment = chargePointPaymentRepository.save(payment)
 
         // when

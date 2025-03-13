@@ -4,15 +4,20 @@ import com.eager.questioncloud.application.api.payment.point.service.ChargePoint
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.pg.dto.PGPayment
+import com.eager.questioncloud.pg.implement.PGPaymentProcessor
+import com.eager.questioncloud.pg.toss.PaymentStatus
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.mockito.BDDMockito
+import org.mockito.kotlin.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.event.RecordApplicationEvents
 
@@ -26,6 +31,9 @@ internal class ChargePointPaymentServiceTest {
     @Autowired
     private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
 
+    @MockBean
+    private val pgPaymentProcessor: PGPaymentProcessor? = null
+
     @AfterEach
     fun tearDown() {
         chargePointPaymentRepository!!.deleteAllInBatch()
@@ -35,16 +43,15 @@ internal class ChargePointPaymentServiceTest {
     @DisplayName("포인트 충전 결제 주문을 생성할 수 있다.")
     fun createOrder() {
         //given
-        val paymentId = RandomStringUtils.randomAlphanumeric(10)
         val userId = 1L
-        val createOrder = order(paymentId, userId, ChargePointType.PackageA)
+        val chargePointType = ChargePointType.PackageA
 
         //when
-        chargePointPaymentService!!.createOrder(createOrder)
+        val orderId = chargePointPaymentService!!.createOrder(userId, chargePointType)
 
         //then
-        val savedOrder = chargePointPaymentRepository!!.findByPaymentId(paymentId)
-        Assertions.assertThat(savedOrder.paymentId).isEqualTo(paymentId)
+        val savedOrder = chargePointPaymentRepository!!.findByOrderId(orderId)
+        Assertions.assertThat(savedOrder.orderId).isEqualTo(orderId)
         Assertions.assertThat(savedOrder.userId).isEqualTo(userId)
         Assertions.assertThat(savedOrder.chargePointType).isEqualTo(ChargePointType.PackageA)
         Assertions.assertThat(savedOrder.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.ORDERED)
@@ -55,16 +62,22 @@ internal class ChargePointPaymentServiceTest {
     fun approvePayment() {
         //given
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
+
         val userId = 1L
-        val order = order(paymentId, userId, ChargePointType.PackageA)
-        val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
+
+        val order = ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
         chargePointPaymentRepository!!.save(order)
 
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
+
+        BDDMockito.willReturn(pgPayment).given(pgPaymentProcessor)!!.getPayment(any())
+        BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.confirm(any(), any(), any())
+        
         //then
-        chargePointPaymentService!!.approvePayment(pgPayment)
+        chargePointPaymentService!!.approvePayment(order.orderId)
 
         //then
-        val paymentResult = chargePointPaymentRepository.findByPaymentId(paymentId)
+        val paymentResult = chargePointPaymentRepository.findByOrderId(order.orderId)
 
         Assertions.assertThat(paymentResult.paymentId).isEqualTo(paymentId)
         Assertions.assertThat(paymentResult.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.CHARGED)

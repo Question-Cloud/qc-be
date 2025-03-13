@@ -38,6 +38,12 @@ class ChargePointPaymentRepositoryImpl(
             .toModel()
     }
 
+    override fun findByOrderId(orderId: String): ChargePointPayment {
+        return chargePointPaymentJpaRepository.findById(orderId)
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
+            .toModel()
+    }
+
     override fun getChargePointPayments(userId: Long, pagingInformation: PagingInformation): List<ChargePointPayment> {
         return jpaQueryFactory.select(chargePointPaymentEntity)
             .from(chargePointPaymentEntity)
