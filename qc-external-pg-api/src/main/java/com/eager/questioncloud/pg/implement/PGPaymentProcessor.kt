@@ -1,17 +1,28 @@
 package com.eager.questioncloud.pg.implement
 
 import com.eager.questioncloud.pg.dto.PGPayment
-import com.eager.questioncloud.pg.portone.PortoneAPI
+import com.eager.questioncloud.pg.toss.TossPaymentAPI
 import org.springframework.stereotype.Component
 
 @Component
-class PGPaymentProcessor(private val portoneAPI: PortoneAPI) {
-    fun getPayment(paymentId: String): PGPayment {
-        val portonePayment = portoneAPI.getPayment(paymentId)
-        return PGPayment(portonePayment.id, portonePayment.amount.total, portonePayment.receiptUrl)
+class PGPaymentProcessor(
+    private val tossPaymentAPI: TossPaymentAPI,
+) {
+    fun getPayment(orderId: String): PGPayment {
+        val tossPayment = tossPaymentAPI.getPayment(orderId)
+        return PGPayment(
+            tossPayment.paymentKey,
+            tossPayment.orderId,
+            tossPayment.totalAmount,
+            tossPayment.status,
+        )
     }
 
-    fun cancel(paymentId: String) {
-        portoneAPI.cancel(paymentId)
+    fun confirm(paymentId: String, orderId: String, amount: Int) {
+        tossPaymentAPI.confirm(paymentId, orderId, amount)
+    }
+
+    fun cancel(paymentId: String, amount: Int) {
+        tossPaymentAPI.cancel(paymentId, amount)
     }
 }

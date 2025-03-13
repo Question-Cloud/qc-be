@@ -16,14 +16,19 @@ class ChargePointPaymentApprover(
     @Transactional
     fun approve(pgPayment: PGPayment): ChargePointPayment {
         try {
-            val chargePointPayment = chargePointPaymentRepository.findByPaymentIdWithLock(pgPayment.paymentId)
+            val chargePointPayment = chargePointPaymentRepository.findByOrderIdWithLock(pgPayment.orderId)
             chargePointPayment.validatePayment(pgPayment.amount)
-            chargePointPayment.approve(pgPayment.receiptUrl)
+            chargePointPayment.approve(pgPayment.paymentId)
             return chargePointPaymentRepository.save(chargePointPayment)
         } catch (coreException: CoreException) {
             throw coreException
         } catch (unknownException: Exception) {
-            failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent(pgPayment.paymentId))
+            failChargePointPaymentEventProcessor.publishEvent(
+                FailChargePointPaymentEvent(
+                    pgPayment.orderId,
+                    pgPayment.paymentId
+                )
+            )
             throw unknownException
         }
     }

@@ -4,16 +4,16 @@ import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.common.DefaultResponse.Companion.success
 import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.payment.point.dto.ChargePointOrderRequest
+import com.eager.questioncloud.application.api.payment.point.dto.ChargePointOrderResponse
 import com.eager.questioncloud.application.api.payment.point.dto.ChargePointPaymentRequest
 import com.eager.questioncloud.application.api.payment.point.dto.CheckCompletePaymentResponse
 import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentHistoryService
 import com.eager.questioncloud.application.api.payment.point.service.ChargePointPaymentService
-import com.eager.questioncloud.application.api.payment.point.service.PgPaymentService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory
 import com.eager.questioncloud.core.domain.point.dto.ChargePointPaymentHistory.Companion.from
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment.Companion.order
+import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/payment/point")
 class ChargePointPaymentController(
     private val chargePointPaymentService: ChargePointPaymentService,
-    private val pgPaymentService: PgPaymentService,
     private val chargePointPaymentHistoryService: ChargePointPaymentHistoryService,
 ) {
     @GetMapping("/status/{paymentId}")
@@ -54,15 +53,14 @@ class ChargePointPaymentController(
     fun createOrder(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody chargePointOrderRequest: ChargePointOrderRequest
-    ): DefaultResponse {
-        chargePointPaymentService.createOrder(
-            order(
-                chargePointOrderRequest.paymentId,
+    ): ChargePointOrderResponse {
+        val orderId = chargePointPaymentService.createOrder(
+            ChargePointPayment.createOrder(
                 userPrincipal.user.uid!!,
                 chargePointOrderRequest.chargePointType
             )
         )
-        return success()
+        return ChargePointOrderResponse(orderId)
     }
 
     @PostMapping
@@ -74,8 +72,7 @@ class ChargePointPaymentController(
         description = "Portone 포인트 충전 Webhook"
     )
     fun payment(@RequestBody request: ChargePointPaymentRequest): DefaultResponse {
-        val pgPayment = pgPaymentService.getPgPayment(request.payment_id)
-        chargePointPaymentService.approvePayment(pgPayment)
+        chargePointPaymentService.approvePayment(request.orderId)
         return success()
     }
 

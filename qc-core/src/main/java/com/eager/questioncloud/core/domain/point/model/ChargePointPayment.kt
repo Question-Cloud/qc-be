@@ -5,20 +5,21 @@ import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.core.exception.InvalidPaymentException
+import io.hypersistence.tsid.TSID
 import java.time.LocalDateTime
 
 class ChargePointPayment(
-    val paymentId: String,
+    val orderId: String,
+    var paymentId: String? = null,
     val userId: Long,
-    var receiptUrl: String? = null,
     val chargePointType: ChargePointType,
     var chargePointPaymentStatus: ChargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
     val createdAt: LocalDateTime = LocalDateTime.now(),
     var paidAt: LocalDateTime? = null,
 ) {
-    fun approve(receiptUrl: String) {
+    fun approve(paymentId: String) {
+        this.paymentId = paymentId
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID
-        this.receiptUrl = receiptUrl
         this.paidAt = LocalDateTime.now()
     }
 
@@ -48,14 +49,12 @@ class ChargePointPayment(
     }
 
     companion object {
-        @JvmStatic
-        fun order(
-            paymentId: String,
+        fun createOrder(
             userId: Long,
             chargePointType: ChargePointType
         ): ChargePointPayment {
             return ChargePointPayment(
-                paymentId = paymentId,
+                orderId = TSID.Factory.getTsid().toString(),
                 userId = userId,
                 chargePointType = chargePointType
             )

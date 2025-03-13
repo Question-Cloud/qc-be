@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.payment.point.implement.ChargePoi
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPostProcessor
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.pg.dto.PGPayment
+import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,14 +12,22 @@ class ChargePointPaymentService(
     private val chargePointPaymentApprover: ChargePointPaymentApprover,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
+    private val pgPaymentProcessor: PGPaymentProcessor
 ) {
-    fun createOrder(chargePointPayment: ChargePointPayment) {
-        chargePointPaymentRepository.save(chargePointPayment)
+    fun createOrder(chargePointPayment: ChargePointPayment): String {
+        val order = chargePointPaymentRepository.save(chargePointPayment)
+        return order.orderId
     }
 
-    fun approvePayment(pgPayment: PGPayment) {
+    fun approvePayment(orderId: String) {
+        val pgPayment = pgPaymentProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentApprover.approve(pgPayment)
         chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
+        pgPaymentProcessor.confirm(
+            chargePointPayment.paymentId!!,
+            chargePointPayment.orderId,
+            chargePointPayment.chargePointType.amount
+        )
     }
 
     fun isCompletePayment(userId: Long, paymentId: String): Boolean {

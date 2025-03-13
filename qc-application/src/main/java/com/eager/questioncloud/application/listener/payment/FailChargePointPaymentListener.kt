@@ -16,7 +16,7 @@ class FailChargePointPaymentListener(
     fun failHandler(@Payload event: FailChargePointPaymentEvent) {
         val chargePointPayment = chargePointPaymentRepository.findByPaymentId(event.paymentId)
 
-        pgPaymentProcessor.cancel(chargePointPayment.paymentId)
+        pgPaymentProcessor.cancel(event.paymentId, chargePointPayment.chargePointType.amount)
 
         chargePointPayment.cancel()
         chargePointPaymentRepository.save(chargePointPayment)

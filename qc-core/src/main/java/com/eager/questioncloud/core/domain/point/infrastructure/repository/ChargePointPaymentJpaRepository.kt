@@ -11,6 +11,6 @@ interface ChargePointPaymentJpaRepository : JpaRepository<ChargePointPaymentEnti
     fun findByPaymentId(paymentId: String): Optional<ChargePointPaymentEntity>
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select c from ChargePointPaymentEntity c where c.paymentId = :paymentId")
-    fun findByPaymentIdWithLock(paymentId: String): Optional<ChargePointPaymentEntity>
+    @Query("select c from ChargePointPaymentEntity c where c.orderId =:orderId")
+    fun findByOrderIdWithLock(orderId: String): Optional<ChargePointPaymentEntity>
 }

@@ -38,8 +38,8 @@ class ChargePointPaymentRepositoryImpl(
             .toModel()
     }
 
-    override fun findByPaymentIdWithLock(paymentId: String): ChargePointPayment {
-        return chargePointPaymentJpaRepository.findByPaymentIdWithLock(paymentId)
+    override fun findByOrderIdWithLock(paymentId: String): ChargePointPayment {
+        return chargePointPaymentJpaRepository.findByOrderIdWithLock(paymentId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
     }

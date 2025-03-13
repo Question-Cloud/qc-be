@@ -133,7 +133,7 @@ internal class ChargePointPaymentApproverTest {
         val pgPayment = PGPayment(order.paymentId, ChargePointType.PackageA.amount, "https://www.naver.com")
 
         Mockito.doThrow(RuntimeException()).`when`(chargePointPaymentRepository)
-            .findByPaymentIdWithLock(any())
+            .findByOrderIdWithLock(any())
 
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentApprover!!.approve(pgPayment) }

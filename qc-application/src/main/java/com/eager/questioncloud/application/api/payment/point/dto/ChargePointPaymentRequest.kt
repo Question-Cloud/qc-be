@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment.point.dto
 
-import com.eager.questioncloud.pg.portone.PortoneWebhookStatus
+import com.fasterxml.jackson.annotation.JsonProperty
 
 class ChargePointPaymentRequest(
-    val payment_id: String,
-    val status: PortoneWebhookStatus,
+    @JsonProperty("orderId")
+    val orderId: String
 )
