@@ -11,6 +11,7 @@ import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRe
 import com.eager.questioncloud.core.domain.user.model.User
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.core.exception.InvalidPaymentException
 import com.eager.questioncloud.pg.dto.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
@@ -41,10 +42,6 @@ internal class ChargePointPaymentPreparerTest {
 
     @SpyBean
     @Autowired
-    private val failChargePointPaymentEventProcessor: FailChargePointPaymentEventProcessor? = null
-
-    @SpyBean
-    @Autowired
     private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
 
     @AfterEach
@@ -55,7 +52,7 @@ internal class ChargePointPaymentPreparerTest {
     }
 
     @Test
-    @DisplayName("포인트 충전 결제 승인을 할 수 있다.")
+    @DisplayName("PG 결제 요청 전 사전 검증을 할 수 있다.")
     fun prepare() {
         //given
         val user = userRepository!!.save(
@@ -81,13 +78,41 @@ internal class ChargePointPaymentPreparerTest {
 
         //then
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
-        Assertions.assertThat(chargePointPayment.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.PAID)
+        Assertions.assertThat(chargePointPayment.chargePointPaymentStatus)
+            .isEqualTo(ChargePointPaymentStatus.PAYMENT_REQUEST)
+    }
+
+    @Test
+    @DisplayName("결제 금액이 올바르지 않으면 예외가 발생한다.")
+    fun throwExceptionWhenWrongPaymentAmount() {
+        //given
+        val user = userRepository!!.save(
+            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
+                .set(User::uid, null)
+                .build()
+                .sample()
+        )
+
+        val chargePointType = ChargePointType.PackageA
+        val wrongPaymentAmount = chargePointType.amount - 500
+
+        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+
+        val paymentId = RandomStringUtils.randomAlphanumeric(10)
+
+        val order = chargePointPaymentRepository!!.save(ChargePointPayment.createOrder(user.uid!!, chargePointType))
+
+        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.DONE)
+
+        //when then
+        Assertions.assertThatThrownBy { chargePointPaymentPreparer!!.prepare(pgPayment) }
+            .isInstanceOf(InvalidPaymentException::class.java)
     }
 
 
     @Test
-    @DisplayName("이미 처리 된 결제를 승인 요청할 경우 예외가 발생한다.")
-    fun throwExceptionWhenAlreadyApproved() {
+    @DisplayName("이미 진행중인 결제인 경우 예외가 발생한다.")
+    fun throwExceptionWhenAlreadyInProgress() {
         //given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -113,7 +138,7 @@ internal class ChargePointPaymentPreparerTest {
     }
 
     @Test
-    @DisplayName("결제 승인 요청 동시성 이슈를 방지할 수 있다.")
+    @DisplayName("결제 준비 요청 동시성 이슈를 방지할 수 있다.")
     @Throws(
         InterruptedException::class
     )
