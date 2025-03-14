@@ -1,6 +1,5 @@
-package com.eager.questioncloud.application.api.authentication.implement
+package com.eager.questioncloud.application.api.authentication.service
 
-import com.eager.questioncloud.application.api.authentication.service.AuthenticationService
 import com.eager.questioncloud.core.domain.user.dto.CreateUser
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
@@ -12,7 +11,7 @@ import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Com
 import com.eager.questioncloud.core.domain.user.model.UserInformation.Companion.create
 import com.eager.questioncloud.social.SocialAPIManager
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.kotlin.any
@@ -20,11 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 internal class AuthenticationServiceTest {
     @Autowired
     private val authenticationService: AuthenticationService? = null
@@ -35,9 +32,13 @@ internal class AuthenticationServiceTest {
     @MockBean
     private val socialAPIManager: SocialAPIManager? = null
 
+    @AfterEach
+    fun tearDown() {
+        userRepository!!.deleteAllInBatch()
+    }
+
     @Test
-    @DisplayName("이메일 유저 인증에 성공하면 AuthenticationToken을 발급한다.")
-    fun 이메일_유저_인증에_성공하면_AuthenticationToken을_발급한다() {
+    fun 이메일_계정_로그인을_할_수_있다() {
         //given
         val email = "test@test.com"
         val password = "qwer1234"
@@ -62,7 +63,6 @@ internal class AuthenticationServiceTest {
     }
 
     @Test
-    @DisplayName("등록된 소셜 계정이라면 AuthenticationToken을 발급한다.")
     fun 등록된_소셜_계정이라면_AuthenticationToken을_발급한다() {
         //given
         val email = "test@test.com"
@@ -98,7 +98,6 @@ internal class AuthenticationServiceTest {
     }
 
     @Test
-    @DisplayName("등록되지 않은 소셜 계정이라면 RegisterToken을 발급한다.")
     fun 등록되지_않은_소셜_계정이라면_RegisterToken을_발급한다() {
         //given
         val code = "socialCode"
