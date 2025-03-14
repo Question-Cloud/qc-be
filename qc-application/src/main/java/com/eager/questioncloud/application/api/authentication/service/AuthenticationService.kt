@@ -19,10 +19,7 @@ class AuthenticationService(
 
     fun socialLogin(accountType: AccountType, code: String): SocialAuthenticationResult {
         val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
-        if (socialAuthentication.isRegistered) {
-            return SocialAuthenticationResult.success(authenticationTokenManager.create(socialAuthentication.user!!.uid!!))
-        }
-        return SocialAuthenticationResult.notRegister(socialAuthentication.socialAccessToken)
+        return socialAuthentication.toSocialAuthenticationResult(authenticationTokenManager)
     }
 
     fun refresh(refreshToken: String): AuthenticationToken {
