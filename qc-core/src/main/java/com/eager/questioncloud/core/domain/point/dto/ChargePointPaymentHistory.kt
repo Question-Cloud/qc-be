@@ -21,7 +21,7 @@ class ChargePointPaymentHistory(
             return ChargePointPaymentHistory(
                 chargePointPayment.orderId,
                 chargePointPayment.chargePointType,
-                chargePointPayment.paidAt
+                chargePointPayment.requestAt
             )
         }
     }

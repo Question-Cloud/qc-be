@@ -15,12 +15,12 @@ class ChargePointPayment(
     val chargePointType: ChargePointType,
     var chargePointPaymentStatus: ChargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    var paidAt: LocalDateTime? = null,
+    var requestAt: LocalDateTime? = null,
 ) {
     fun approve(paymentId: String) {
         this.paymentId = paymentId
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAID
-        this.paidAt = LocalDateTime.now()
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAYMENT_REQUEST
+        this.requestAt = LocalDateTime.now()
     }
 
     fun charge() {

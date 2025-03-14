@@ -15,7 +15,7 @@ class ChargePointPaymentEntity private constructor(
     @Enumerated(EnumType.STRING) @Column var chargePointType: ChargePointType,
     @Enumerated(EnumType.STRING) @Column var chargePointPaymentStatus: ChargePointPaymentStatus,
     @Column var createdAt: LocalDateTime,
-    @Column var paidAt: LocalDateTime?
+    @Column var requestAt: LocalDateTime?
 ) {
     fun toModel(): ChargePointPayment {
         return ChargePointPayment(
@@ -25,7 +25,7 @@ class ChargePointPaymentEntity private constructor(
             chargePointType,
             chargePointPaymentStatus,
             createdAt,
-            paidAt
+            requestAt
         )
     }
 
@@ -39,7 +39,7 @@ class ChargePointPaymentEntity private constructor(
                 chargePointPayment.chargePointType,
                 chargePointPayment.chargePointPaymentStatus,
                 chargePointPayment.createdAt,
-                chargePointPayment.paidAt
+                chargePointPayment.requestAt
             )
         }
     }

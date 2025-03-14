@@ -27,7 +27,7 @@ class ChargePointPaymentRepositoryImpl(
             .where(
                 chargePointPaymentEntity.paymentId.eq(paymentId),
                 chargePointPaymentEntity.userId.eq(userId),
-                chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.PAID)
+                chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.CHARGED)
             )
             .fetchFirst() != null
     }
