@@ -33,11 +33,8 @@ class AuthenticationTokenManager(
 
     fun refresh(refreshToken: String): AuthenticationToken {
         val claims = getRefreshTokenClaimsWithValidate(refreshToken)
-        val uid = claims.get("uid").toString().toLong()
+        val uid = claims["uid"].toString().toLong()
         val accessToken = generateAccessToken(uid)
-        if (isExpireSoon(claims.expiration)) {
-            return AuthenticationToken.create(accessToken, generateRefreshToken(uid))
-        }
         return AuthenticationToken.create(accessToken, refreshToken)
     }
 
@@ -48,10 +45,10 @@ class AuthenticationTokenManager(
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
 
-        return claims.get("uid").toString().toLong()
+        return claims["uid"].toString().toLong()
     }
 
-    fun getClaims(token: String?): Claims {
+    private fun getClaims(token: String?): Claims {
         try {
             return Jwts
                 .parser()
@@ -97,7 +94,7 @@ class AuthenticationTokenManager(
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
 
-        val uid = claims.get("uid").toString().toLong()
+        val uid = claims["uid"].toString().toLong()
         val refreshTokenInStore = refreshTokenRepository.getByUserId(uid)
 
         if (refreshToken != refreshTokenInStore) {
@@ -105,13 +102,6 @@ class AuthenticationTokenManager(
         }
 
         return claims
-    }
-
-    private fun isExpireSoon(expireDate: Date): Boolean {
-        val now = Date()
-        val differenceInMillis = expireDate.time - now.time
-        val differenceInDays = differenceInMillis / (1000 * 60 * 60 * 24)
-        return differenceInDays <= 7
     }
 
     companion object {
