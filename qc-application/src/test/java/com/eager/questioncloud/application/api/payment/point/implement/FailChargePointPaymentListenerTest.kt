@@ -42,7 +42,7 @@ internal class FailChargePointPaymentListenerTest {
         val paymentId = UUID.randomUUID().toString()
 
         val order = ChargePointPayment.createOrder(1L, ChargePointType.PackageA)
-        order.approve(paymentId)
+        order.prepare(paymentId)
 
         chargePointPaymentRepository!!.save(order)
 

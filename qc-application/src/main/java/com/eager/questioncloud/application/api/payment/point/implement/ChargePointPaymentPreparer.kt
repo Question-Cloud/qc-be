@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class ChargePointPaymentApprover(
+class ChargePointPaymentPreparer(
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
 ) {
     @Transactional
-    fun approve(pgPayment: PGPayment): ChargePointPayment {
+    fun prepare(pgPayment: PGPayment): ChargePointPayment {
         val chargePointPayment = chargePointPaymentRepository.findByOrderIdWithLock(pgPayment.orderId)
         chargePointPayment.validatePayment(pgPayment.amount)
-        chargePointPayment.approve(pgPayment.paymentId)
+        chargePointPayment.prepare(pgPayment.paymentId)
         return chargePointPaymentRepository.save(chargePointPayment)
     }
 }

@@ -29,9 +29,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class ChargePointPaymentApproverTest {
+internal class ChargePointPaymentPreparerTest {
     @Autowired
-    private val chargePointPaymentApprover: ChargePointPaymentApprover? = null
+    private val chargePointPaymentPreparer: ChargePointPaymentPreparer? = null
 
     @Autowired
     private val userRepository: UserRepository? = null
@@ -56,7 +56,7 @@ internal class ChargePointPaymentApproverTest {
 
     @Test
     @DisplayName("포인트 충전 결제 승인을 할 수 있다.")
-    fun approve() {
+    fun prepare() {
         //given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -77,7 +77,7 @@ internal class ChargePointPaymentApproverTest {
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when
-        chargePointPaymentApprover!!.approve(pgPayment)
+        chargePointPaymentPreparer!!.prepare(pgPayment)
 
         //then
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
@@ -100,14 +100,14 @@ internal class ChargePointPaymentApproverTest {
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
         val order = ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA)
-        order.approve(paymentId)
+        order.prepare(paymentId)
 
         chargePointPaymentRepository!!.save(order)
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when then
-        Assertions.assertThatThrownBy { chargePointPaymentApprover!!.approve(pgPayment) }
+        Assertions.assertThatThrownBy { chargePointPaymentPreparer!!.prepare(pgPayment) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_PROCESSED_PAYMENT)
     }
@@ -117,7 +117,7 @@ internal class ChargePointPaymentApproverTest {
     @Throws(
         InterruptedException::class
     )
-    fun preventApproveConcurrency() {
+    fun preventPrepareConcurrency() {
         //given
         val user = userRepository!!.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -146,7 +146,7 @@ internal class ChargePointPaymentApproverTest {
         for (i in 0..<numberOfThreads) {
             executorService.execute {
                 try {
-                    chargePointPaymentApprover!!.approve(pgPayment)
+                    chargePointPaymentPreparer!!.prepare(pgPayment)
                     successCount.incrementAndGet()
                 } catch (e: CoreException) {
                     if (e.error == Error.ALREADY_PROCESSED_PAYMENT) {

@@ -59,7 +59,7 @@ internal class ChargePointPaymentPostProcessorTest {
         val payment =
             chargePointPaymentRepository!!.save(ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA))
 
-        payment.approve(paymentId)
+        payment.prepare(paymentId)
 
         val chargePointPayment = chargePointPaymentRepository.save(payment)
 

@@ -17,7 +17,7 @@ class ChargePointPayment(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     var requestAt: LocalDateTime? = null,
 ) {
-    fun approve(paymentId: String) {
+    fun prepare(paymentId: String) {
         this.paymentId = paymentId
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PAYMENT_REQUEST
         this.requestAt = LocalDateTime.now()

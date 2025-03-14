@@ -58,7 +58,7 @@ internal class ChargePointPaymentServiceTest {
 
     @Test
     @DisplayName("포인트 충전 결제를 승인할 수 있다.")
-    fun approvePayment() {
+    fun preparePayment() {
         //given
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 

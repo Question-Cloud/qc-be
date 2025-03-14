@@ -1,8 +1,8 @@
 package com.eager.questioncloud.application.api.payment.point.service
 
-import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPGProcessor
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPostProcessor
+import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPreparer
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ChargePointPaymentService(
-    private val chargePointPaymentApprover: ChargePointPaymentApprover,
+    private val chargePointPaymentPreparer: ChargePointPaymentPreparer,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
     private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
@@ -22,7 +22,7 @@ class ChargePointPaymentService(
 
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
-        val chargePointPayment = chargePointPaymentApprover.approve(pgPayment)
+        val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
         chargePointPaymentPGProcessor.confirm(
             pgPayment.paymentId,
             pgPayment.orderId,
