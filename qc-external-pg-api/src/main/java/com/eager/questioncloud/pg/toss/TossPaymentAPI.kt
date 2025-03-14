@@ -36,6 +36,7 @@ class TossPaymentAPI {
         val request = Request.Builder()
             .url("${BASE_URL}/payments/confirm")
             .header("Authorization", "Basic $TOSS_SECRET_KEY")
+            .header("Idempotency-Key", paymentId)
             .post(getConfirmRequestBody(TossPaymentConfirmRequest(paymentId, orderId, amount)))
             .build()
 

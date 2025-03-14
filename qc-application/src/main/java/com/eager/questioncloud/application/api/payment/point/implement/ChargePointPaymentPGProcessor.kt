@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.api.payment.point.implement
 
 import com.eager.questioncloud.pg.dto.PGPayment
 import com.eager.questioncloud.pg.toss.TossPaymentAPI
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
 
 @Component
@@ -18,6 +19,7 @@ class ChargePointPaymentPGProcessor(
         )
     }
 
+    @Retryable(maxAttempts = 5)
     fun confirm(paymentId: String, orderId: String, amount: Int) {
         tossPaymentAPI.confirm(paymentId, orderId, amount)
     }
