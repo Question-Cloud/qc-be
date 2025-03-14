@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.payment.point.service
 
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentApprover
+import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPGProcessor
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPostProcessor
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,7 @@ class ChargePointPaymentService(
     private val chargePointPaymentApprover: ChargePointPaymentApprover,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
-    private val pgPaymentProcessor: PGPaymentProcessor
+    private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
 ) {
     fun createOrder(userId: Long, chargePointType: ChargePointType): String {
         val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointType))
@@ -21,9 +21,9 @@ class ChargePointPaymentService(
     }
 
     fun approvePayment(orderId: String) {
-        val pgPayment = pgPaymentProcessor.getPayment(orderId)
+        val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentApprover.approve(pgPayment)
-        pgPaymentProcessor.confirm(
+        chargePointPaymentPGProcessor.confirm(
             pgPayment.paymentId,
             pgPayment.orderId,
             chargePointPayment.chargePointType.amount

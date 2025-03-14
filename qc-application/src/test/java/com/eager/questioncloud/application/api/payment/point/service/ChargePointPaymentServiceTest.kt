@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.payment.point.service
 
+import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPGProcessor
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.pg.dto.PGPayment
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import com.eager.questioncloud.pg.toss.PaymentStatus
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
@@ -31,7 +31,7 @@ internal class ChargePointPaymentServiceTest {
     private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
 
     @MockBean
-    private val pgPaymentProcessor: PGPaymentProcessor? = null
+    private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor? = null
 
     @AfterEach
     fun tearDown() {
@@ -69,8 +69,8 @@ internal class ChargePointPaymentServiceTest {
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
-        BDDMockito.willReturn(pgPayment).given(pgPaymentProcessor)!!.getPayment(any())
-        BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.confirm(any(), any(), any())
+        BDDMockito.willReturn(pgPayment).given(chargePointPaymentPGProcessor)!!.getPayment(any())
+        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor)!!.confirm(any(), any(), any())
 
         //then
         chargePointPaymentService!!.approvePayment(order.orderId)

@@ -1,11 +1,11 @@
-package com.eager.questioncloud.pg.implement
+package com.eager.questioncloud.application.api.payment.point.implement
 
 import com.eager.questioncloud.pg.dto.PGPayment
 import com.eager.questioncloud.pg.toss.TossPaymentAPI
 import org.springframework.stereotype.Component
 
 @Component
-class PGPaymentProcessor(
+class ChargePointPaymentPGProcessor(
     private val tossPaymentAPI: TossPaymentAPI,
 ) {
     fun getPayment(orderId: String): PGPayment {

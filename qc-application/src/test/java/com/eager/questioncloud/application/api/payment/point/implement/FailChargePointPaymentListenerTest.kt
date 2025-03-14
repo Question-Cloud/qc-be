@@ -6,7 +6,6 @@ import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.pg.implement.PGPaymentProcessor
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
@@ -29,7 +28,7 @@ internal class FailChargePointPaymentListenerTest {
     private val failChargePointPaymentListener: FailChargePointPaymentListener? = null
 
     @MockBean
-    private val pgPaymentProcessor: PGPaymentProcessor? = null
+    private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor? = null
 
     @AfterEach
     fun tearDown() {
@@ -47,7 +46,7 @@ internal class FailChargePointPaymentListenerTest {
 
         chargePointPaymentRepository!!.save(order)
 
-        BDDMockito.willDoNothing().given(pgPaymentProcessor)!!.cancel(any(), any())
+        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor)!!.cancel(any(), any())
 
         //when
         failChargePointPaymentListener!!.failHandler(FailChargePointPaymentEvent(order.orderId))
