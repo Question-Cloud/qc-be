@@ -61,10 +61,10 @@ class ChargePointPaymentController(
     @PostMapping
     @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
     @Operation(
-        operationId = "Portone 포인트 충전 Webhook",
-        summary = "Portone 포인트 충전 Webhook",
+        operationId = "포인트 충전 결제 승인 요청",
+        summary = "포인트 충전 결제 승인 요청",
         tags = ["charge-point"],
-        description = "Portone 포인트 충전 Webhook"
+        description = "포인트 충전 결제 승인 요청"
     )
     fun payment(@RequestBody request: ChargePointPaymentRequest): DefaultResponse {
         chargePointPaymentService.approvePayment(request.orderId)
