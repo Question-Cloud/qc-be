@@ -11,7 +11,6 @@ class UserQuestion(
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
-        @JvmStatic
         fun create(userId: Long, questionIds: List<Long>): List<UserQuestion> {
             return questionIds
                 .stream()

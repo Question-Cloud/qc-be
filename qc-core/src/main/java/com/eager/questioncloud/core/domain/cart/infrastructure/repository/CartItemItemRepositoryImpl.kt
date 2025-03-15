@@ -57,4 +57,8 @@ class CartItemItemRepositoryImpl(
             )
             .fetchFirst() != null
     }
+
+    override fun deleteAllInBatch() {
+        cartItemJpaRepository.deleteAllInBatch()
+    }
 }
