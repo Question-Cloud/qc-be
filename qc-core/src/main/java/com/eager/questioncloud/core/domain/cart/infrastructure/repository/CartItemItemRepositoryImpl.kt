@@ -10,6 +10,7 @@ import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntit
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 
 @Component
@@ -44,6 +45,7 @@ class CartItemItemRepositoryImpl(
             .fetch()
     }
 
+    @Transactional
     override fun deleteByIdInAndUserId(ids: List<Long>, userId: Long) {
         cartItemJpaRepository.deleteByIdInAndUserId(ids, userId)
     }
