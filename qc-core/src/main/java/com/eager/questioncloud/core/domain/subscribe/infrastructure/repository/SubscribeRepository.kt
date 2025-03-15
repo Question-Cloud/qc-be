@@ -17,4 +17,6 @@ interface SubscribeRepository {
     fun getMySubscribedCreators(userId: Long, pagingInformation: PagingInformation): List<Long>
 
     fun countMySubscribe(userId: Long): Int
+
+    fun deleteAllInBatch()
 }

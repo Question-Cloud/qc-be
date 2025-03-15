@@ -33,7 +33,8 @@ class SubscribeRepositoryImpl(
     override fun countSubscriber(creatorIds: List<Long>): Map<Long, Int> {
         return jpaQueryFactory.select(subscribeEntity.creatorId, subscribeEntity.id.count().intValue())
             .from(subscribeEntity)
-            .where(subscribeEntity.subscriberId.`in`(creatorIds))
+            .where(subscribeEntity.creatorId.`in`(creatorIds))
+            .groupBy(subscribeEntity.creatorId)
             .fetch()
             .associate { it.get(subscribeEntity.creatorId)!! to it.get(subscribeEntity.id.count().intValue())!! }
     }
@@ -52,5 +53,9 @@ class SubscribeRepositoryImpl(
             .from(subscribeEntity)
             .where(subscribeEntity.subscriberId.eq(userId))
             .fetchFirst() ?: 0
+    }
+
+    override fun deleteAllInBatch() {
+        subscribeJpaRepository.deleteAllInBatch()
     }
 }

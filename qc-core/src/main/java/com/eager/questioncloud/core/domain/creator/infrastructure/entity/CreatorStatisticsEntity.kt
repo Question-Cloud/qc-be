@@ -10,7 +10,6 @@ import jakarta.persistence.Table
 @Table(name = "creator_statistics")
 class CreatorStatisticsEntity private constructor(
     @Id var creatorId: Long?,
-    @Column var subscribeCount: Int,
     @Column var salesCount: Int,
     @Column var reviewCount: Int,
     @Column var totalReviewRate: Int,
@@ -19,7 +18,6 @@ class CreatorStatisticsEntity private constructor(
     fun toModel(): CreatorStatistics {
         return CreatorStatistics(
             creatorId!!,
-            subscribeCount,
             salesCount,
             reviewCount,
             totalReviewRate,
@@ -32,7 +30,6 @@ class CreatorStatisticsEntity private constructor(
         fun from(creatorStatistics: CreatorStatistics): CreatorStatisticsEntity {
             return CreatorStatisticsEntity(
                 creatorStatistics.creatorId,
-                creatorStatistics.subscribeCount,
                 creatorStatistics.salesCount,
                 creatorStatistics.reviewCount,
                 creatorStatistics.totalReviewRate,

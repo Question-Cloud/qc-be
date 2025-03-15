@@ -2,7 +2,6 @@ package com.eager.questioncloud.core.domain.creator.model
 
 class CreatorStatistics(
     val creatorId: Long,
-    var subscribeCount: Int = 0,
     var salesCount: Int = 0,
     var reviewCount: Int = 0,
     var totalReviewRate: Int = 0,
@@ -10,14 +9,6 @@ class CreatorStatistics(
 ) {
     fun addSaleCount(count: Int) {
         this.salesCount += count
-    }
-
-    fun increaseSubscribeCount() {
-        this.subscribeCount += 1
-    }
-
-    fun decreaseSubscribeCount() {
-        this.subscribeCount -= 1
     }
 
     fun updateReviewStatisticsByRegisteredReview(newRate: Int) {
@@ -41,7 +32,6 @@ class CreatorStatistics(
     }
 
     companion object {
-        @JvmStatic
         fun create(creatorId: Long): CreatorStatistics {
             return CreatorStatistics(creatorId = creatorId)
         }
