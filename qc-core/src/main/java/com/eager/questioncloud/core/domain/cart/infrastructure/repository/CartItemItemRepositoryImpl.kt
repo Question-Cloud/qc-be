@@ -50,6 +50,10 @@ class CartItemItemRepositoryImpl(
         cartItemJpaRepository.deleteByIdInAndUserId(ids, userId)
     }
 
+    override fun deleteByQuestionIdInAndUserId(questionIds: List<Long>, userId: Long) {
+        cartItemJpaRepository.deleteByQuestionIdInAndUserId(questionIds, userId)
+    }
+
     override fun isExistsInCart(userId: Long, questionId: Long): Boolean {
         return jpaQueryFactory.select(cartItemEntity.id)
             .from(cartItemEntity)
