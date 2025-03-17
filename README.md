@@ -7,7 +7,7 @@ QuestionCloud는 수학, 물리, 지구과학, 화학, 생명과학 문제를 �
 
 # 프로젝트 아키텍처
 
-![image](https://github.com/user-attachments/assets/1c81a6d6-923f-4ad4-98b0-08cc70666581)
+<img width="667" alt="image" src="https://github.com/user-attachments/assets/122699cb-8c58-45c7-9db7-abd93542b933" />
 
 # 프로젝트 Stack
 
