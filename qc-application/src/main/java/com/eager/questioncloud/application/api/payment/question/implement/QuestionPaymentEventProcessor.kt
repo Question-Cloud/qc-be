@@ -19,7 +19,7 @@ class QuestionPaymentEventProcessor(
     private val snsClient: SnsClient,
 ) {
     fun createEvent(questionPayment: QuestionPayment) {
-        val questionPaymentEvent = QuestionPaymentEvent(questionPayment)
+        val questionPaymentEvent = QuestionPaymentEvent.create(questionPayment)
         questionPaymentEventLogRepository.save(
             QuestionPaymentEventLog(
                 questionPayment.order.orderId,

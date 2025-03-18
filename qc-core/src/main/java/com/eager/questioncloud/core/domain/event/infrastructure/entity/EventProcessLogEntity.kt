@@ -10,12 +10,12 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "event_process_log")
 class EventProcessLogEntity(
-    @Id val eventId: String,
+    @Id val idempotentKey: String,
     @Column val createdAt: LocalDateTime
 ) {
     companion object {
         fun from(eventProcessLog: EventProcessLog): EventProcessLogEntity {
-            return EventProcessLogEntity(eventProcessLog.eventId, eventProcessLog.createdAt)
+            return EventProcessLogEntity(eventProcessLog.idempotentKey, eventProcessLog.createdAt)
         }
     }
 }

@@ -22,7 +22,7 @@ class ChargePointPaymentPostProcessor(
             chargePointPayment.charge()
             chargePointPaymentRepository.save(chargePointPayment)
         } catch (e: Exception) {
-            failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent(chargePointPayment.orderId))
+            failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent.create(chargePointPayment.orderId))
             throw CoreException(Error.PAYMENT_ERROR)
         }
     }
