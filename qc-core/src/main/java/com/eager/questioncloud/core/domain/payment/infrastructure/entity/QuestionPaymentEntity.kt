@@ -16,7 +16,6 @@ class QuestionPaymentEntity private constructor(
     @Column var createdAt: LocalDateTime
 ) {
     companion object {
-        @JvmStatic
         fun from(questionPayment: QuestionPayment): QuestionPaymentEntity {
             return QuestionPaymentEntity(
                 questionPayment.order.orderId,

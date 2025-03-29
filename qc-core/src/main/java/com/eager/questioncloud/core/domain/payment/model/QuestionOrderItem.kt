@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.payment.model
 import com.eager.questioncloud.core.domain.question.model.Question
 
 class QuestionOrderItem(
-    var id: Long? = null,
+    var id: Long = 0,
     var questionId: Long,
     var price: Int,
 ) {

@@ -11,8 +11,9 @@ class QuestionPayment(
     var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    val isUsingCoupon: Boolean
-        get() = questionPaymentCoupon != null
+    fun isUsedCoupon(): Boolean {
+        return questionPaymentCoupon != null
+    }
 
     fun applyCoupon() {
         amount = questionPaymentCoupon!!.calcDiscount(amount)
@@ -23,7 +24,6 @@ class QuestionPayment(
     }
 
     companion object {
-        @JvmStatic
         fun create(
             userId: Long,
             questionPaymentCoupon: QuestionPaymentCoupon?,

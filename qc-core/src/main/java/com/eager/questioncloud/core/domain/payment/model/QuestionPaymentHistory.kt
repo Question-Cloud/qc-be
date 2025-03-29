@@ -33,7 +33,7 @@ class QuestionPaymentHistory(
                 orders,
                 questionPayment.questionPaymentCoupon,
                 questionPayment.amount,
-                questionPayment.isUsingCoupon,
+                questionPayment.isUsedCoupon(),
                 questionPayment.status,
                 questionPayment.createdAt,
             )

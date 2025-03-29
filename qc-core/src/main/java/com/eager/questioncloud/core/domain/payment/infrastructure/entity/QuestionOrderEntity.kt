@@ -7,13 +7,12 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "question_order")
 class QuestionOrderEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var orderId: String,
     @Column var questionId: Long,
     @Column var price: Int
 ) {
     companion object {
-        @JvmStatic
         fun from(questionOrder: QuestionOrder): List<QuestionOrderEntity> {
             return questionOrder.items
                 .stream()

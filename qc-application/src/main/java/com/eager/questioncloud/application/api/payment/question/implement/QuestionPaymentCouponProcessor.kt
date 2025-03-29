@@ -11,7 +11,7 @@ class QuestionPaymentCouponProcessor(
     private val userCouponRepository: UserCouponRepository
 ) {
     fun applyCoupon(questionPayment: QuestionPayment) {
-        if (!questionPayment.isUsingCoupon) {
+        if (!questionPayment.isUsedCoupon()) {
             return
         }
 
