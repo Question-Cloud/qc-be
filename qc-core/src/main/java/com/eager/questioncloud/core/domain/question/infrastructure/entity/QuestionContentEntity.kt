@@ -40,7 +40,6 @@ class QuestionContentEntity(
     }
 
     companion object {
-        @JvmStatic
         fun from(questionContent: QuestionContent): QuestionContentEntity {
             return QuestionContentEntity(
                 questionContent.questionCategoryId,

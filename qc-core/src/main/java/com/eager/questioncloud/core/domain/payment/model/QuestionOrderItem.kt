@@ -10,7 +10,7 @@ class QuestionOrderItem(
     companion object {
         fun create(question: Question): QuestionOrderItem {
             return QuestionOrderItem(
-                questionId = question.id!!,
+                questionId = question.id,
                 price = question.questionContent.price
             )
         }

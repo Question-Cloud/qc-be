@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "question")
 class QuestionEntity(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var creatorId: Long,
     @Embedded var questionContentEntity: QuestionContentEntity,
     @Enumerated(EnumType.STRING) @Column var questionStatus: QuestionStatus,
@@ -27,7 +27,6 @@ class QuestionEntity(
     }
 
     companion object {
-        @JvmStatic
         fun from(question: Question): QuestionEntity {
             return QuestionEntity(
                 question.id,

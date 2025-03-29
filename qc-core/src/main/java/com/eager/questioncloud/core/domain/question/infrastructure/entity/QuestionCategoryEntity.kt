@@ -7,7 +7,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "question_category")
 class QuestionCategoryEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var parentId: Long,
     @Enumerated(EnumType.STRING) @Column var subject: Subject,
     @Column var title: String,

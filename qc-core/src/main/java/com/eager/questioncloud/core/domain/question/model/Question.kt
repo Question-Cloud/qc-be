@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import java.time.LocalDateTime
 
 class Question(
-    var id: Long? = null,
+    var id: Long = 0,
     var creatorId: Long,
     var questionContent: QuestionContent,
     var questionStatus: QuestionStatus = QuestionStatus.Available,
@@ -20,7 +20,6 @@ class Question(
     }
 
     companion object {
-        @JvmStatic
         fun create(creatorId: Long, questionContent: QuestionContent): Question {
             return Question(creatorId = creatorId, questionContent = questionContent)
         }

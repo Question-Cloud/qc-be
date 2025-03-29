@@ -30,7 +30,7 @@ class WorkspaceQuestionService(
     @Transactional
     fun registerQuestion(creatorId: Long, questionContent: QuestionContent) {
         val question = questionRepository.save(create(creatorId, questionContent))
-        questionReviewStatisticsGenerator.generate(question.id!!)
+        questionReviewStatisticsGenerator.generate(question.id)
     }
 
     fun modifyQuestion(creatorId: Long, questionId: Long, questionContent: QuestionContent) {
