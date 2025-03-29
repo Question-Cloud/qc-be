@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "user_coupon")
 class UserCouponEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var userId: Long,
     @Column var couponId: Long,
     @Column var isUsed: Boolean,
@@ -19,7 +19,6 @@ class UserCouponEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(userCoupon: UserCoupon): UserCouponEntity {
             return UserCouponEntity(
                 userCoupon.id,

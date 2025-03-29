@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "coupon")
 class CouponEntity private constructor(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long?,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
     @Column var code: String,
     @Column var title: String,
     @Column @Enumerated(EnumType.STRING) var couponType: CouponType,
@@ -21,7 +21,6 @@ class CouponEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(coupon: Coupon): CouponEntity {
             return CouponEntity(
                 coupon.id,

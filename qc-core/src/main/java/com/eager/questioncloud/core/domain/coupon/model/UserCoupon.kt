@@ -5,7 +5,7 @@ import com.eager.questioncloud.core.exception.Error
 import java.time.LocalDateTime
 
 class UserCoupon(
-    var id: Long? = null,
+    var id: Long = 0,
     var userId: Long,
     var couponId: Long,
     var isUsed: Boolean,
@@ -27,7 +27,6 @@ class UserCoupon(
     }
 
     companion object {
-        @JvmStatic
         fun create(userId: Long, coupon: Coupon): UserCoupon {
             if (coupon.endAt.isBefore(LocalDateTime.now())) {
                 throw CoreException(Error.EXPIRED_COUPON)
