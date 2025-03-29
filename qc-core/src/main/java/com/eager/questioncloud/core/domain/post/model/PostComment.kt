@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.post.model
 import java.time.LocalDateTime
 
 class PostComment(
-    val id: Long? = null,
+    val id: Long = 0,
     val postId: Long,
     val writerId: Long,
     var comment: String,
@@ -14,7 +14,6 @@ class PostComment(
     }
 
     companion object {
-        @JvmStatic
         fun create(postId: Long, writerId: Long, comment: String): PostComment {
             return PostComment(postId = postId, writerId = writerId, comment = comment)
         }

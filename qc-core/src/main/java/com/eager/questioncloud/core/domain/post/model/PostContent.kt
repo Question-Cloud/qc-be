@@ -6,7 +6,6 @@ class PostContent(
     var files: List<PostFile>
 ) {
     companion object {
-        @JvmStatic
         fun create(title: String, content: String, files: List<PostFile>): PostContent {
             return PostContent(title, content, files)
         }

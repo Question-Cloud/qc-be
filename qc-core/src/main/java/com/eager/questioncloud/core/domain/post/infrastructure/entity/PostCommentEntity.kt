@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "post_comment")
 class PostCommentEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var postId: Long,
     @Column var writerId: Long,
     @Column var comment: String,
@@ -18,7 +18,6 @@ class PostCommentEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(postComment: PostComment): PostCommentEntity {
             return PostCommentEntity(
                 postComment.id,

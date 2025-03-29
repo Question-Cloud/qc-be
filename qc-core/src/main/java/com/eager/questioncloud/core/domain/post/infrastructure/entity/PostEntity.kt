@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "post")
 class PostEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var questionId: Long,
     @Column var writerId: Long,
     @Embedded var postContentEntity: PostContentEntity,
@@ -18,7 +18,6 @@ class PostEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(post: Post): PostEntity {
             return PostEntity(
                 post.id,
