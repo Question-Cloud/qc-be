@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "creator_statistics")
 class CreatorStatisticsEntity private constructor(
-    @Id var creatorId: Long?,
+    @Id var creatorId: Long,
     @Column var salesCount: Int,
     @Column var reviewCount: Int,
     @Column var totalReviewRate: Int,
@@ -17,7 +17,7 @@ class CreatorStatisticsEntity private constructor(
 ) {
     fun toModel(): CreatorStatistics {
         return CreatorStatistics(
-            creatorId!!,
+            creatorId,
             salesCount,
             reviewCount,
             totalReviewRate,
@@ -26,7 +26,6 @@ class CreatorStatisticsEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(creatorStatistics: CreatorStatistics): CreatorStatisticsEntity {
             return CreatorStatisticsEntity(
                 creatorStatistics.creatorId,

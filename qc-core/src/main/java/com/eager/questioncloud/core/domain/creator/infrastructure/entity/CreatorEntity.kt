@@ -7,7 +7,7 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "creator")
 class CreatorEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var userId: Long,
     @Enumerated(EnumType.STRING) @Column var mainSubject: Subject,
     @Column var introduction: String,

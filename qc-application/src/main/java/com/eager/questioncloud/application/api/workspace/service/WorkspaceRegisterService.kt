@@ -16,7 +16,7 @@ class WorkspaceRegisterService(
     @Transactional
     fun register(user: User, mainSubject: Subject, introduction: String): Creator {
         val creator = workspaceCreatorRegister.register(user, mainSubject, introduction)
-        creatorStatisticsInitializer.initializeCreatorStatistics(creator.id!!)
+        creatorStatisticsInitializer.initializeCreatorStatistics(creator.id)
         return creator
     }
 }

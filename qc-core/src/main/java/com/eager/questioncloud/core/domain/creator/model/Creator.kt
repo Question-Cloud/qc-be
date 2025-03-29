@@ -4,7 +4,7 @@ import com.eager.questioncloud.core.domain.question.enums.Subject
 
 
 class Creator(
-    val id: Long? = null,
+    val id: Long = 0,
     val userId: Long,
     var mainSubject: Subject,
     var introduction: String,
