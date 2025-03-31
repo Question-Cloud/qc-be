@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.verification.template
 
-class ChangePasswordEmailVerificationTemplate(token: String) : EmailVerificationTemplate() {
-    override var title: String? = "[QuestionCloud] 비밀번호 변경 메일"
-    override var content: String? = """
+class ChangePasswordEmailVerificationTemplate(token: String) : EmailVerificationTemplate(
+    title = "[QuestionCloud] 비밀번호 변경 메일",
+    content = """
         <!DOCTYPE html>
         <html lang="ko">
         <head>
@@ -61,4 +61,4 @@ class ChangePasswordEmailVerificationTemplate(token: String) : EmailVerification
         </html>
         
         """.trimIndent().format(token, token, token)
-}
+)

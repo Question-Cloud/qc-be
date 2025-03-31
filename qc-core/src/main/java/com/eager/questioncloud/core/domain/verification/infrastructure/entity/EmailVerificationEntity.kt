@@ -19,7 +19,6 @@ class EmailVerificationEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(emailVerification: EmailVerification): EmailVerificationEntity {
             return EmailVerificationEntity(
                 emailVerification.token,

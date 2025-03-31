@@ -16,7 +16,6 @@ class EmailVerification(
     }
 
     companion object {
-        @JvmStatic
         fun create(
             uid: Long,
             email: String,

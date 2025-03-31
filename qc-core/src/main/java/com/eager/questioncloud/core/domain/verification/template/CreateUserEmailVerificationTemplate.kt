@@ -1,8 +1,8 @@
 package com.eager.questioncloud.core.domain.verification.template
 
-class CreateUserEmailVerificationTemplate(token: String) : EmailVerificationTemplate() {
-    override var title: String? = "[QuestionCloud] 회원가입 인증 메일"
-    override var content: String? = """
+class CreateUserEmailVerificationTemplate(token: String) : EmailVerificationTemplate(
+    title = "[QuestionCloud] 회원가입 인증 메일",
+    content = """
         <!DOCTYPE html>
         <html lang="ko">
         <head>
@@ -62,4 +62,4 @@ class CreateUserEmailVerificationTemplate(token: String) : EmailVerificationTemp
         </html>
         
         """.trimIndent().format(token, token, token)
-}
+)
