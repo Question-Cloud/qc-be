@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "subscribe")
 class SubscribeEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var subscriberId: Long,
     @Column var creatorId: Long,
     @Column var createdAt: LocalDateTime
@@ -17,7 +17,6 @@ class SubscribeEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(subscribe: Subscribe): SubscribeEntity {
             return SubscribeEntity(
                 subscribe.id,
