@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.ExceptionH
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableMethodSecurity
@@ -35,7 +36,7 @@ class SpringSecurityConfig(
                     SessionCreationPolicy.STATELESS
                 )
             }
-            .addFilter(jwtAuthenticationFilter)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
 }

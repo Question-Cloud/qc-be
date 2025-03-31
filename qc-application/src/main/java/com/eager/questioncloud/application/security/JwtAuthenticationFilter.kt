@@ -5,19 +5,17 @@ import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRe
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
+import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    authenticationManager: AuthenticationManager,
     private val authenticationTokenManager: AuthenticationTokenManager,
     private val userRepository: UserRepository
-) : BasicAuthenticationFilter(authenticationManager) {
+) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -54,7 +52,7 @@ class JwtAuthenticationFilter(
             userPrincipal.user.userInformation.name,
             userPrincipal.authorities
         )
-        super.getAuthenticationManager().authenticate(authentication)
+        SecurityContextHolder.getContext().authentication = authentication
     }
 
     private fun setGuestAuthentication() {
@@ -64,6 +62,6 @@ class JwtAuthenticationFilter(
             userPrincipal.user.userInformation.name,
             userPrincipal.authorities
         )
-        super.getAuthenticationManager().authenticate(authentication)
+        SecurityContextHolder.getContext().authentication = authentication
     }
 }
