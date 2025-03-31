@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.review.model
 import java.time.LocalDateTime
 
 class QuestionReview(
-    val id: Long? = null,
+    val id: Long = 0,
     val questionId: Long,
     val reviewerId: Long,
     var comment: String,
@@ -25,7 +25,6 @@ class QuestionReview(
     }
 
     companion object {
-        @JvmStatic
         fun create(
             questionId: Long,
             reviewerId: Long,

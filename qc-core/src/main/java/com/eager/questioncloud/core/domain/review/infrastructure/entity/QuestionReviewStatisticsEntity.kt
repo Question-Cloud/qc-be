@@ -19,7 +19,6 @@ class QuestionReviewStatisticsEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatisticsEntity {
             return QuestionReviewStatisticsEntity(
                 questionReviewStatistics.questionId,

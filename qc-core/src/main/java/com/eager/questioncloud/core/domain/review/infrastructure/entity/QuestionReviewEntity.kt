@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "question_review")
 class QuestionReviewEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id private var id: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id private var id: Long = 0,
     @Column private var questionId: Long,
     @Column private var reviewerId: Long,
     @Column private var comment: String,

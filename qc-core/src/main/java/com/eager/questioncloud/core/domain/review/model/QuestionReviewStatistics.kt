@@ -27,7 +27,6 @@ class QuestionReviewStatistics(
     }
 
     companion object {
-        @JvmStatic
         fun create(questionId: Long): QuestionReviewStatistics {
             return QuestionReviewStatistics(questionId = questionId)
         }
