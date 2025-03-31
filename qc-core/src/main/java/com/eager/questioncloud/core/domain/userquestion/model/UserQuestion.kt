@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 class UserQuestion(
-    val id: Long? = null,
+    val id: Long = 0,
     val userId: Long,
     val questionId: Long,
     val isUsed: Boolean = false,
