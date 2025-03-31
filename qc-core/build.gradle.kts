@@ -13,15 +13,12 @@ allOpen {
 
 dependencies {
     implementation(kotlin("reflect"))
-
-    implementation("org.springframework:spring-context")
+    
     implementation("org.springframework.security:spring-security-crypto:6.3.4")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
-    compileOnly("org.springframework:spring-tx")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
