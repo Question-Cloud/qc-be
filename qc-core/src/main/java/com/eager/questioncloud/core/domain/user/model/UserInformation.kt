@@ -13,10 +13,8 @@ class UserInformation(
     }
 
     companion object {
-        @JvmStatic
         var guestInformation: UserInformation = UserInformation("guest", "guest", "guest", "guest")
-
-        @JvmStatic
+        
         fun create(createUser: CreateUser): UserInformation {
             return UserInformation(
                 email = createUser.email,

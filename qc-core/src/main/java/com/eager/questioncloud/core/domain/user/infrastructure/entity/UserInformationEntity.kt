@@ -15,7 +15,6 @@ class UserInformationEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(userInformation: UserInformation): UserInformationEntity {
             return UserInformationEntity(
                 userInformation.email,

@@ -29,11 +29,9 @@ class UserAccountInformation(
         get() = accountType == AccountType.GOOGLE || accountType == AccountType.KAKAO || accountType == AccountType.NAVER
 
     companion object {
-        @JvmStatic
         var guestAccountInformation: UserAccountInformation =
             UserAccountInformation("guest", "guest", AccountType.GUEST)
 
-        @JvmStatic
         fun createEmailAccountInformation(rawPassword: String): UserAccountInformation {
             val encodedPassword = PasswordProcessor.encode(rawPassword)
             return UserAccountInformation(
@@ -42,7 +40,6 @@ class UserAccountInformation(
             )
         }
 
-        @JvmStatic
         fun createSocialAccountInformation(
             socialUid: String,
             socialType: AccountType

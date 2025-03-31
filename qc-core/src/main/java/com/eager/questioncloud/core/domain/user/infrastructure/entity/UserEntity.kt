@@ -8,11 +8,11 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "user")
 class UserEntity private constructor(
-    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var uid: Long?,
+    @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var uid: Long = 0,
     @Embedded var userAccountInformationEntity: UserAccountInformationEntity,
     @Embedded var userInformationEntity: UserInformationEntity,
-    @Enumerated(EnumType.STRING) @Column var userType: UserType?,
-    @Enumerated(EnumType.STRING) @Column var userStatus: UserStatus?
+    @Enumerated(EnumType.STRING) @Column var userType: UserType,
+    @Enumerated(EnumType.STRING) @Column var userStatus: UserStatus
 ) {
     fun toModel(): User {
         return User(
@@ -25,7 +25,6 @@ class UserEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(user: User): UserEntity {
             return UserEntity(
                 user.uid,

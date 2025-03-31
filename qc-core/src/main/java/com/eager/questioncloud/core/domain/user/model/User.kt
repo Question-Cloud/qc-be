@@ -7,11 +7,11 @@ import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.core.exception.NotVerificationUserException
 
 class User(
-    var uid: Long? = null,
+    var uid: Long = 0,
     var userAccountInformation: UserAccountInformation,
     var userInformation: UserInformation,
-    var userType: UserType? = null,
-    var userStatus: UserStatus? = null,
+    var userType: UserType,
+    var userStatus: UserStatus,
 ) {
     fun active() {
         this.userStatus = UserStatus.Active
@@ -19,7 +19,7 @@ class User(
 
     fun checkUserStatus() {
         if (userStatus == UserStatus.PendingEmailVerification) {
-            throw NotVerificationUserException(uid!!)
+            throw NotVerificationUserException(uid)
         }
         if (userStatus != UserStatus.Active) {
             throw CoreException(Error.NOT_ACTIVE_USER)
@@ -43,7 +43,6 @@ class User(
     }
 
     companion object {
-        @JvmStatic
         fun create(
             userAccountInformation: UserAccountInformation,
             userInformation: UserInformation,
@@ -58,12 +57,13 @@ class User(
             )
         }
 
-        @JvmStatic
         fun guest(): User {
             return User(
                 uid = -1L,
                 userAccountInformation = UserAccountInformation.guestAccountInformation,
                 userInformation = UserInformation.guestInformation,
+                userType = UserType.Guest,
+                userStatus = UserStatus.Active
             )
         }
     }

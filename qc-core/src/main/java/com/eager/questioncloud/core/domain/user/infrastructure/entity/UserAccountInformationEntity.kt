@@ -18,7 +18,6 @@ class UserAccountInformationEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
         fun from(userAccountInformation: UserAccountInformation): UserAccountInformationEntity {
             return UserAccountInformationEntity(
                 userAccountInformation.password,
