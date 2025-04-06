@@ -24,7 +24,7 @@ class UserAccountService(
     fun sendRecoverForgottenPasswordMail(email: String) {
         val user = userRepository.getUserByEmail(email)
         val emailVerification = emailVerificationProcessor.createEmailVerification(
-            user.uid!!,
+            user.uid,
             email,
             EmailVerificationType.ChangePassword
         )
@@ -33,7 +33,7 @@ class UserAccountService(
 
     fun sendChangePasswordMail(user: User) {
         val emailVerification = emailVerificationProcessor.createEmailVerification(
-            user.uid!!,
+            user.uid,
             user.userInformation.email,
             EmailVerificationType.ChangePassword
         )

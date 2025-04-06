@@ -32,12 +32,12 @@ class QuestionPaymentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: QuestionPaymentRequest
     ): DefaultResponse {
-        val questionOrder = questionOrderService.generateQuestionOrder(userPrincipal.user.uid!!, request.questionIds!!)
+        val questionOrder = questionOrderService.generateQuestionOrder(userPrincipal.user.uid, request.questionIds!!)
         val questionPaymentCoupon = questionPaymentCouponService.getQuestionPaymentCoupon(
             request.userCouponId,
-            userPrincipal.user.uid!!
+            userPrincipal.user.uid
         )
-        questionPaymentService.payment(userPrincipal.user.uid!!, questionOrder, questionPaymentCoupon)
+        questionPaymentService.payment(userPrincipal.user.uid, questionOrder, questionPaymentCoupon)
         return success()
     }
 
@@ -53,8 +53,8 @@ class QuestionPaymentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<QuestionPaymentHistory> {
         return PagingResponse(
-            questionPaymentHistoryService.countQuestionPaymentHistory(userPrincipal.user.uid!!),
-            questionPaymentHistoryService.getQuestionPaymentHistory(userPrincipal.user.uid!!, pagingInformation)
+            questionPaymentHistoryService.countQuestionPaymentHistory(userPrincipal.user.uid),
+            questionPaymentHistoryService.getQuestionPaymentHistory(userPrincipal.user.uid, pagingInformation)
         )
     }
 }

@@ -28,9 +28,9 @@ class FeedSubscribeController(
     fun getMySubscribeList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<CreatorInformation> {
-        val total = feedSubscribeService.countMySubscribe(userPrincipal.user.uid!!)
+        val total = feedSubscribeService.countMySubscribe(userPrincipal.user.uid)
         val subscribeCreators = feedSubscribeService.getMySubscribes(
-            userPrincipal.user.uid!!, pagingInformation
+            userPrincipal.user.uid, pagingInformation
         )
         return PagingResponse(total, subscribeCreators)
     }

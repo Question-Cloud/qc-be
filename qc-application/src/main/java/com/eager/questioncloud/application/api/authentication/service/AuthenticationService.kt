@@ -14,7 +14,7 @@ class AuthenticationService(
 ) {
     fun login(email: String, password: String): AuthenticationToken {
         val user = authenticationProcessor.emailPasswordAuthentication(email, password)
-        return authenticationTokenManager.create(user.uid!!)
+        return authenticationTokenManager.create(user.uid)
     }
 
     fun socialLogin(accountType: AccountType, code: String): SocialAuthenticationResult {

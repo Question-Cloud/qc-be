@@ -41,7 +41,7 @@ class PostController(
     ): DefaultResponse {
         postService.modify(
             postId,
-            userPrincipal.user.uid!!,
+            userPrincipal.user.uid,
             create(request.title, request.content, request.files)
         )
         return success()
@@ -56,7 +56,7 @@ class PostController(
         description = "문제 게시판 글 삭제"
     )
     fun delete(@AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable postId: Long): DefaultResponse {
-        postService.delete(postId, userPrincipal.user.uid!!)
+        postService.delete(postId, userPrincipal.user.uid)
         return success()
     }
 
@@ -69,7 +69,7 @@ class PostController(
         description = "문제 게시판 글 조회"
     )
     fun getPost(@AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable postId: Long): PostResponse {
-        val board = postService.getPostDetail(userPrincipal.user.uid!!, postId)
+        val board = postService.getPostDetail(userPrincipal.user.uid, postId)
         return PostResponse(board)
     }
 
@@ -89,7 +89,7 @@ class PostController(
         pagingInformation: PagingInformation
     ): PagingResponse<PostListItem> {
         val total = postService.countPost(questionId)
-        val boards = postService.getPostList(userPrincipal.user.uid!!, questionId, pagingInformation)
+        val boards = postService.getPostList(userPrincipal.user.uid, questionId, pagingInformation)
         return PagingResponse(total, boards)
     }
 
@@ -108,7 +108,7 @@ class PostController(
         postService.register(
             create(
                 request.questionId,
-                userPrincipal.user.uid!!,
+                userPrincipal.user.uid,
                 create(request.title, request.content, request.files)
             )
         )

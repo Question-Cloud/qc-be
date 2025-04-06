@@ -34,7 +34,7 @@ class UserRegister(
             create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.PendingEmailVerification)
         )
 
-        userPointManager.init(user.uid!!)
+        userPointManager.init(user.uid)
         return user
     }
 

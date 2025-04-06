@@ -24,7 +24,7 @@ class RegisterUserService(
 
     fun sendCreateUserVerifyMail(user: User): EmailVerification {
         val emailVerification = emailVerificationProcessor.createEmailVerification(
-            user.uid!!,
+            user.uid,
             user.userInformation.email,
             EmailVerificationType.CreateUser
         )

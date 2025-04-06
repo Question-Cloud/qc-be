@@ -17,7 +17,7 @@ class WorkspaceCreatorRegister(
     @Transactional
     fun register(user: User, mainSubject: Subject, introduction: String): Creator {
         setCreator(user)
-        return creatorRepository.save(create(user.uid!!, mainSubject, introduction))
+        return creatorRepository.save(create(user.uid, mainSubject, introduction))
     }
 
     private fun setCreator(user: User) {

@@ -42,7 +42,7 @@ class PostCommentController(
         val total = postCommentService.count(postId)
         val comments = postCommentService.getPostComments(
             postId,
-            userPrincipal.user.uid!!, pagingInformation
+            userPrincipal.user.uid, pagingInformation
         )
         return PagingResponse(total, comments)
     }
@@ -58,7 +58,7 @@ class PostCommentController(
     fun addPostComment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody request: @Valid AddPostCommentRequest
     ): DefaultResponse {
-        postCommentService.addPostComment(create(request.postId, userPrincipal.user.uid!!, request.comment))
+        postCommentService.addPostComment(create(request.postId, userPrincipal.user.uid, request.comment))
         return success()
     }
 
@@ -74,7 +74,7 @@ class PostCommentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable commentId: Long,
         @RequestBody request: @Valid ModifyPostCommentRequest
     ): DefaultResponse {
-        postCommentService.modifyPostComment(commentId, userPrincipal.user.uid!!, request.comment)
+        postCommentService.modifyPostComment(commentId, userPrincipal.user.uid, request.comment)
         return success()
     }
 
@@ -90,7 +90,7 @@ class PostCommentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable commentId: Long
     ): DefaultResponse {
-        postCommentService.deletePostComment(commentId, userPrincipal.user.uid!!)
+        postCommentService.deletePostComment(commentId, userPrincipal.user.uid)
         return success()
     }
 }

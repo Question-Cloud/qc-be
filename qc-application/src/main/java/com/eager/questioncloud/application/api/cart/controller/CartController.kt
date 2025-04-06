@@ -3,8 +3,8 @@ package com.eager.questioncloud.application.api.cart.controller
 import com.eager.questioncloud.application.api.cart.dto.AddCartItemRequest
 import com.eager.questioncloud.application.api.cart.dto.GetCartResponse
 import com.eager.questioncloud.application.api.cart.dto.RemoveCartItemRequest
-import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.api.cart.service.CartService
+import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail
 import io.swagger.v3.oas.annotations.Operation
@@ -22,7 +22,7 @@ class CartController(
     @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
     @Operation(operationId = "장바구니 조회", summary = "장바구니 조회", tags = ["cart"], description = "장바구니 조회")
     fun getCart(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetCartResponse {
-        val items: List<CartItemDetail> = cartService.getCartItems(userPrincipal.user.uid!!)
+        val items: List<CartItemDetail> = cartService.getCartItems(userPrincipal.user.uid)
         return GetCartResponse.create(items)
     }
 
@@ -33,7 +33,7 @@ class CartController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: AddCartItemRequest
     ): DefaultResponse {
-        cartService.appendCartItem(userPrincipal.user.uid!!, request.questionId)
+        cartService.appendCartItem(userPrincipal.user.uid, request.questionId)
         return DefaultResponse.success()
     }
 
@@ -44,7 +44,7 @@ class CartController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: RemoveCartItemRequest
     ): DefaultResponse {
-        cartService.removeCartItem(request.ids, userPrincipal.user.uid!!)
+        cartService.removeCartItem(request.ids, userPrincipal.user.uid)
         return DefaultResponse.success()
     }
 }

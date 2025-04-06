@@ -27,7 +27,7 @@ class SubscribeController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable creatorId: Long
     ): CreatorSubscribeInformationResponse {
-        val isSubscribed = subscribeService.isSubscribed(userPrincipal.user.uid!!, creatorId)
+        val isSubscribed = subscribeService.isSubscribed(userPrincipal.user.uid, creatorId)
         val countSubscriber = subscribeService.countSubscriber(creatorId)
         return CreatorSubscribeInformationResponse(isSubscribed, countSubscriber)
     }
@@ -39,7 +39,7 @@ class SubscribeController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable creatorId: Long
     ): DefaultResponse {
-        subscribeService.subscribe(userPrincipal.user.uid!!, creatorId)
+        subscribeService.subscribe(userPrincipal.user.uid, creatorId)
         return success()
     }
 
@@ -50,7 +50,7 @@ class SubscribeController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable creatorId: Long
     ): DefaultResponse {
-        subscribeService.unSubscribe(userPrincipal.user.uid!!, creatorId)
+        subscribeService.unSubscribe(userPrincipal.user.uid, creatorId)
         return success()
     }
 }

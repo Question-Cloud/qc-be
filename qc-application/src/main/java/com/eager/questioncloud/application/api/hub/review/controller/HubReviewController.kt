@@ -43,7 +43,7 @@ class HubReviewController(
         val total = hubReviewService.getTotal(questionId)
         val questionReviewDetails = hubReviewService.getQuestionReviews(
             questionId,
-            userPrincipal.user.uid!!,
+            userPrincipal.user.uid,
             pagingInformation
         )
         return PagingResponse(total, questionReviewDetails)
@@ -62,7 +62,7 @@ class HubReviewController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestParam questionId: Long
     ): MyQuestionReviewResponse {
-        val review = hubReviewService.getMyQuestionReview(questionId, userPrincipal.user.uid!!)
+        val review = hubReviewService.getMyQuestionReview(questionId, userPrincipal.user.uid)
         return MyQuestionReviewResponse(review)
     }
 
@@ -76,7 +76,7 @@ class HubReviewController(
         hubReviewService.register(
             create(
                 request.questionId,
-                userPrincipal.user.uid!!,
+                userPrincipal.user.uid,
                 request.comment,
                 request.rate
             )
@@ -91,7 +91,7 @@ class HubReviewController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable reviewId: Long,
         @RequestBody request: @Valid ModifyQuestionReviewRequest
     ): DefaultResponse {
-        hubReviewService.modify(reviewId, userPrincipal.user.uid!!, request.comment, request.rate)
+        hubReviewService.modify(reviewId, userPrincipal.user.uid, request.comment, request.rate)
         return success()
     }
 
@@ -102,7 +102,7 @@ class HubReviewController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long
     ): DefaultResponse {
-        hubReviewService.delete(reviewId, userPrincipal.user.uid!!)
+        hubReviewService.delete(reviewId, userPrincipal.user.uid)
         return success()
     }
 }

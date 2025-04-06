@@ -20,7 +20,7 @@ class UserPointController(
     @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
     @Operation(operationId = "보유중인 포인트 조회", summary = "보유중인 포인트 조회", tags = ["point"], description = "보유중인 포인트 조회")
     fun getUserPoint(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetUserPointResponse {
-        val userPoint = userPointService.getUserPoint(userPrincipal.user.uid!!)
+        val userPoint = userPointService.getUserPoint(userPrincipal.user.uid)
         return GetUserPointResponse(userPoint.point)
     }
 }

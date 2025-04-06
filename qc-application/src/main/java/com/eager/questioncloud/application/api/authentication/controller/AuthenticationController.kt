@@ -43,6 +43,6 @@ class AuthenticationController(
     )
     fun socialLogin(@RequestParam accountType: AccountType, @RequestParam code: String): SocialAuthenticateResponse {
         val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
-        return SocialAuthenticateResponse.Companion.create(socialAuthenticationResult)
+        return SocialAuthenticateResponse.create(socialAuthenticationResult)
     }
 }

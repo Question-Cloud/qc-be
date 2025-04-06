@@ -37,7 +37,7 @@ class ChargePointPaymentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable paymentId: String
     ): CheckCompletePaymentResponse {
-        val isCompletePayment = chargePointPaymentService.isCompletePayment(userPrincipal.user.uid!!, paymentId)
+        val isCompletePayment = chargePointPaymentService.isCompletePayment(userPrincipal.user.uid, paymentId)
         return CheckCompletePaymentResponse(isCompletePayment)
     }
 
@@ -54,7 +54,7 @@ class ChargePointPaymentController(
         @RequestBody chargePointOrderRequest: ChargePointOrderRequest
     ): ChargePointOrderResponse {
         val orderId =
-            chargePointPaymentService.createOrder(userPrincipal.user.uid!!, chargePointOrderRequest.chargePointType)
+            chargePointPaymentService.createOrder(userPrincipal.user.uid, chargePointOrderRequest.chargePointType)
         return ChargePointOrderResponse(orderId)
     }
 
@@ -83,9 +83,9 @@ class ChargePointPaymentController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<ChargePointPaymentHistory> {
         return PagingResponse(
-            chargePointPaymentHistoryService.countChargePointPayment(userPrincipal.user.uid!!),
+            chargePointPaymentHistoryService.countChargePointPayment(userPrincipal.user.uid),
             from(
-                chargePointPaymentHistoryService.getChargePointPayments(userPrincipal.user.uid!!, pagingInformation)
+                chargePointPaymentHistoryService.getChargePointPayments(userPrincipal.user.uid, pagingInformation)
             )
         )
     }

@@ -27,7 +27,7 @@ class UserCouponController(
         description = "사용 가능한 쿠폰 목록 조회"
     )
     fun getAvailableUserCoupons(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetAvailableUserCouponsResponse {
-        val coupons = userCouponService.getAvailableUserCoupons(userPrincipal.user.uid!!)
+        val coupons = userCouponService.getAvailableUserCoupons(userPrincipal.user.uid)
         return GetAvailableUserCouponsResponse(coupons)
     }
 
@@ -38,7 +38,7 @@ class UserCouponController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid RegisterCouponRequest
     ): DefaultResponse {
-        userCouponService.registerCoupon(userPrincipal.user.uid!!, request.code)
+        userCouponService.registerCoupon(userPrincipal.user.uid, request.code)
         return success()
     }
 }

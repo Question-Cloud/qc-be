@@ -38,7 +38,7 @@ class WorkSpaceController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody request: @Valid RegisterCreatorRequest
     ): RegisterCreatorResponse {
         val creator = workspaceRegisterService.register(userPrincipal.user, request.mainSubject, request.introduction)
-        return RegisterCreatorResponse(creator.id!!)
+        return RegisterCreatorResponse(creator.id)
     }
 
     @GetMapping("/me")
@@ -81,9 +81,9 @@ class WorkSpaceController(
     fun getQuestions(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<QuestionInformation> {
-        val total = workspaceQuestionService.countMyQuestions(userPrincipal.creator!!.id!!)
+        val total = workspaceQuestionService.countMyQuestions(userPrincipal.creator!!.id)
         val questions = workspaceQuestionService.getMyQuestions(
-            userPrincipal.creator.id!!, pagingInformation
+            userPrincipal.creator.id, pagingInformation
         )
         return PagingResponse(total, questions)
     }
@@ -101,7 +101,7 @@ class WorkSpaceController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable questionId: Long
     ): QuestionContentResponse {
-        val questionContent = workspaceQuestionService.getMyQuestionContent(userPrincipal.creator!!.id!!, questionId)
+        val questionContent = workspaceQuestionService.getMyQuestionContent(userPrincipal.creator!!.id, questionId)
         return QuestionContentResponse(questionContent)
     }
 
@@ -113,7 +113,7 @@ class WorkSpaceController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid RegisterQuestionRequest
     ): DefaultResponse {
-        workspaceQuestionService.registerQuestion(userPrincipal.creator!!.id!!, request.toQuestionContent())
+        workspaceQuestionService.registerQuestion(userPrincipal.creator!!.id, request.toQuestionContent())
         return success()
     }
 
@@ -125,7 +125,7 @@ class WorkSpaceController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable questionId: Long,
         @RequestBody request: @Valid ModifyQuestionRequest
     ): DefaultResponse {
-        workspaceQuestionService.modifyQuestion(userPrincipal.creator!!.id!!, questionId, request.toQuestionContent())
+        workspaceQuestionService.modifyQuestion(userPrincipal.creator!!.id, questionId, request.toQuestionContent())
         return success()
     }
 
@@ -134,7 +134,7 @@ class WorkSpaceController(
     @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
     @Operation(operationId = "나의 자작 문제 삭제", summary = "나의 자작 문제 삭제", tags = ["workspace"], description = "나의 자작 문제 삭제")
     fun delete(@AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable questionId: Long): DefaultResponse {
-        workspaceQuestionService.deleteQuestion(userPrincipal.creator!!.id!!, questionId)
+        workspaceQuestionService.deleteQuestion(userPrincipal.creator!!.id, questionId)
         return success()
     }
 
@@ -149,9 +149,9 @@ class WorkSpaceController(
     fun creatorQuestionBoardList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<PostListItem> {
-        val total = workspacePostService.countCreatorPost(userPrincipal.creator!!.id!!)
+        val total = workspacePostService.countCreatorPost(userPrincipal.creator!!.id)
         val boards = workspacePostService.getCreatorPosts(
-            userPrincipal.creator.id!!,
+            userPrincipal.creator.id,
             pagingInformation
         )
         return PagingResponse(total, boards)

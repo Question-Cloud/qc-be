@@ -57,7 +57,7 @@ class HubQuestionController(
     ): QuestionInformationResponse {
         val questionInformation = hubQuestionService.getQuestionInformation(
             questionId,
-            userPrincipal.user.uid!!
+            userPrincipal.user.uid
         )
         return QuestionInformationResponse(questionInformation)
     }
