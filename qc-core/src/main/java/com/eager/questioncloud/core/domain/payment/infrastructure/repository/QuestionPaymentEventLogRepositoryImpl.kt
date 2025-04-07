@@ -16,6 +16,18 @@ class QuestionPaymentEventLogRepositoryImpl(
         questionPaymentEventLogJpaRepository.save(QuestionPaymentEventLogEntity.from(questionPaymentEventLog))
     }
 
+    override fun getUnPublishedEvent(): List<QuestionPaymentEventLog> {
+        return jpaQueryFactory.select(questionPaymentEventLogEntity)
+            .from(questionPaymentEventLogEntity)
+            .where(questionPaymentEventLogEntity.isPublish.isFalse)
+            .orderBy(questionPaymentEventLogEntity.eventId.asc())
+            .limit(1000)
+            .fetch()
+            .stream()
+            .map { entity -> entity.toModel() }
+            .toList()
+    }
+
     override fun findByEventId(eventId: String): QuestionPaymentEventLog {
         return questionPaymentEventLogJpaRepository.findById(eventId)
             .orElseThrow { RuntimeException("Not Found QuestionPayment Event Log : $eventId") }
