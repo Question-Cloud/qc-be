@@ -8,6 +8,7 @@ import com.eager.questioncloud.core.domain.review.model.QuestionReviewEventLog
 import io.hypersistence.tsid.TSID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
@@ -24,7 +25,7 @@ class ReviewEventProcessor(
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val snsClient: SnsClient
 ) {
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private val republishCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun createEvent(questionId: Long, varianceRate: Int, reviewEventType: ReviewEventType) {
         val reviewEvent = ReviewEvent(TSID.Factory.getTsid().toString(), questionId, varianceRate, reviewEventType)
@@ -48,11 +49,11 @@ class ReviewEventProcessor(
 
     @Scheduled(fixedDelay = 10000)
     suspend fun republish() {
-        coroutineScope.launch {
+        republishCoroutineScope.launch {
             do {
                 val unpublishedEvents = questionReviewEventLogRepository.getUnPublishedEvent()
                 unpublishedEvents.forEach { event ->
-                    launch(Dispatchers.IO) {
+                    launch {
                         val reviewEvent = SQSEvent.objectMapper.readValue(event.payload, ReviewEvent::class.java)
                         snsClient.publish(reviewEvent.toRequest())
                         questionReviewEventLogRepository.publish(reviewEvent.eventId)
