@@ -38,54 +38,32 @@ import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class QuestionPaymentProcessorTest {
-    @Autowired
-    var questionPaymentProcessor: QuestionPaymentProcessor? = null
-
-    @Autowired
-    var userRepository: UserRepository? = null
-
-    @Autowired
-    var questionRepository: QuestionRepository? = null
-
-    @Autowired
-    var couponRepository: CouponRepository? = null
-
-    @Autowired
-    var userCouponRepository: UserCouponRepository? = null
-
-    @Autowired
-    var userPointRepository: UserPointRepository? = null
-
-    @SpyBean
-    var questionOrderRepository: QuestionOrderRepository? = null
-
-    @SpyBean
-    var questionPaymentRepository: QuestionPaymentRepository? = null
-
-    @SpyBean
-    var questionPaymentCouponProcessor: QuestionPaymentCouponProcessor? = null
-
-    @SpyBean
-    var userPointManager: UserPointManager? = null
-
-    @SpyBean
-    var questionPaymentHistoryRegister: QuestionPaymentHistoryRegister? = null
-
+internal class QuestionPaymentProcessorTest(
+    @Autowired val questionPaymentProcessor: QuestionPaymentProcessor,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val questionRepository: QuestionRepository,
+    @Autowired val couponRepository: CouponRepository,
+    @Autowired val userCouponRepository: UserCouponRepository,
+    @Autowired val userPointRepository: UserPointRepository,
+    @Autowired @SpyBean val questionOrderRepository: QuestionOrderRepository,
+    @Autowired @SpyBean val questionPaymentRepository: QuestionPaymentRepository,
+    @Autowired @SpyBean val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor,
+    @Autowired @SpyBean val userPointManager: UserPointManager,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
-        questionRepository!!.deleteAllInBatch()
-        couponRepository!!.deleteAllInBatch()
-        userCouponRepository!!.deleteAllInBatch()
-        questionOrderRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
+        questionRepository.deleteAllInBatch()
+        couponRepository.deleteAllInBatch()
+        userCouponRepository.deleteAllInBatch()
+        questionOrderRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 O)")
     fun payment() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -93,9 +71,9 @@ internal class QuestionPaymentProcessorTest {
         )
 
         val beforeUserPoint = 1000000
-        userPointRepository!!.save(UserPoint(user.uid!!, beforeUserPoint))
+        userPointRepository.save(UserPoint(user.uid, beforeUserPoint))
 
-        val coupon = couponRepository!!.save(
+        val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
                 .set(Coupon::value, 1000)
@@ -104,7 +82,7 @@ internal class QuestionPaymentProcessorTest {
                 .sample()
         )
 
-        val userCoupon = userCouponRepository!!.save(
+        val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
                 .set(UserCoupon::userId, user.uid)
@@ -121,13 +99,13 @@ internal class QuestionPaymentProcessorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question)
+                questionRepository.save(question)
             }
             .toList()
 
         val questionPayment = create(
-            user.uid!!,
-            create(userCoupon.id!!, coupon),
+            user.uid,
+            create(userCoupon.id, coupon),
             createOrder(questions)
         )
 
@@ -135,19 +113,19 @@ internal class QuestionPaymentProcessorTest {
         val discountedAmount = questionPayment.questionPaymentCoupon!!.calcDiscount(originalAmount)
 
         // when
-        val paymentResult = questionPaymentProcessor!!.payment(questionPayment)
+        val paymentResult = questionPaymentProcessor.payment(questionPayment)
 
         // then
-        Mockito.verify(questionPaymentCouponProcessor, Mockito.times(1))!!.applyCoupon(questionPayment)
-        Mockito.verify(userPointManager, Mockito.times(1))!!.usePoint(questionPayment.userId, questionPayment.amount)
-        Mockito.verify(questionPaymentRepository, Mockito.times(1))!!.save(questionPayment)
+        Mockito.verify(questionPaymentCouponProcessor, Mockito.times(1)).applyCoupon(questionPayment)
+        Mockito.verify(userPointManager, Mockito.times(1)).usePoint(questionPayment.userId, questionPayment.amount)
+        Mockito.verify(questionPaymentRepository, Mockito.times(1)).save(questionPayment)
 
-        val afterUserCoupon = userCouponRepository!!.getUserCoupon(userCoupon.id!!)
+        val afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
         Assertions.assertThat(afterUserCoupon.isUsed).isTrue()
 
         Assertions.assertThat(questionPayment.amount).isEqualTo(discountedAmount)
 
-        val afterUserPoint = userPointRepository!!.getUserPoint(user.uid!!)
+        val afterUserPoint = userPointRepository.getUserPoint(user.uid)
         Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - questionPayment.amount)
     }
 
@@ -155,7 +133,7 @@ internal class QuestionPaymentProcessorTest {
     @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 X)")
     fun paymentNoCoupon() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -163,7 +141,7 @@ internal class QuestionPaymentProcessorTest {
         )
 
         val beforeUserPoint = 1000000
-        userPointRepository!!.save(UserPoint(user.uid!!, beforeUserPoint))
+        userPointRepository.save(UserPoint(user.uid, beforeUserPoint))
 
         val questions = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
             .set(Question::id, null)
@@ -173,12 +151,12 @@ internal class QuestionPaymentProcessorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question)
+                questionRepository.save(question)
             }
             .toList()
 
         val questionPayment = create(
-            user.uid!!,
+            user.uid,
             null,
             createOrder(questions)
         )
@@ -186,16 +164,16 @@ internal class QuestionPaymentProcessorTest {
         val originalAmount = questionPayment.amount
 
         // when
-        val paymentResult = questionPaymentProcessor!!.payment(questionPayment)
+        val paymentResult = questionPaymentProcessor.payment(questionPayment)
 
         // then
-        Mockito.verify(questionPaymentCouponProcessor, Mockito.times(1))!!.applyCoupon(questionPayment)
-        Mockito.verify(userPointManager, Mockito.times(1))!!.usePoint(questionPayment.userId, questionPayment.amount)
-        Mockito.verify(questionPaymentRepository, Mockito.times(1))!!.save(questionPayment)
+        Mockito.verify(questionPaymentCouponProcessor, Mockito.times(1)).applyCoupon(questionPayment)
+        Mockito.verify(userPointManager, Mockito.times(1)).usePoint(questionPayment.userId, questionPayment.amount)
+        Mockito.verify(questionPaymentRepository, Mockito.times(1)).save(questionPayment)
 
         Assertions.assertThat(questionPayment.amount).isEqualTo(originalAmount)
 
-        val afterUserPoint = userPointRepository!!.getUserPoint(user.uid!!)
+        val afterUserPoint = userPointRepository.getUserPoint(user.uid)
         Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint - questionPayment.amount)
     }
 
@@ -203,7 +181,7 @@ internal class QuestionPaymentProcessorTest {
     @DisplayName("보유 포인트가 부족하면 포인트 부족 예외가 발생한다.")
     fun cancelQuestionPaymentWhenNotEnoughUserPoint() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -211,9 +189,9 @@ internal class QuestionPaymentProcessorTest {
         )
 
         val beforeUserPoint = 1000
-        userPointRepository!!.save(UserPoint(user.uid!!, beforeUserPoint))
+        userPointRepository.save(UserPoint(user.uid, beforeUserPoint))
 
-        val coupon = couponRepository!!.save(
+        val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
                 .set(Coupon::value, 1000)
@@ -222,7 +200,7 @@ internal class QuestionPaymentProcessorTest {
                 .sample()
         )
 
-        val userCoupon = userCouponRepository!!.save(
+        val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
                 .set(UserCoupon::userId, user.uid)
@@ -239,18 +217,18 @@ internal class QuestionPaymentProcessorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question)
+                questionRepository.save(question)
             }
             .toList()
 
         val questionPayment = create(
-            user.uid!!,
-            create(userCoupon.id!!, coupon),
+            user.uid,
+            create(userCoupon.id, coupon),
             createOrder(questions)
         )
 
         // when then
-        Assertions.assertThatThrownBy { questionPaymentProcessor!!.payment(questionPayment) }
+        Assertions.assertThatThrownBy { questionPaymentProcessor.payment(questionPayment) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.NOT_ENOUGH_POINT)
     }
@@ -259,7 +237,7 @@ internal class QuestionPaymentProcessorTest {
     @DisplayName("결제 도중 예외가 발생하면 쿠폰, 포인트가 롤백 처리 된다.")
     fun rollbackWhenOccurException() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -267,9 +245,9 @@ internal class QuestionPaymentProcessorTest {
         )
 
         val beforeUserPoint = 1000000
-        userPointRepository!!.save(UserPoint(user.uid!!, beforeUserPoint))
+        userPointRepository.save(UserPoint(user.uid, beforeUserPoint))
 
-        val coupon = couponRepository!!.save(
+        val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
                 .set(Coupon::value, 1000)
@@ -278,7 +256,7 @@ internal class QuestionPaymentProcessorTest {
                 .sample()
         )
 
-        val userCoupon = userCouponRepository!!.save(
+        val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
                 .set(UserCoupon::userId, user.uid)
@@ -295,27 +273,27 @@ internal class QuestionPaymentProcessorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question)
+                questionRepository.save(question)
             }
             .toList()
 
         val questionPayment = create(
-            user.uid!!,
-            create(userCoupon.id!!, coupon),
+            user.uid,
+            create(userCoupon.id, coupon),
             createOrder(questions)
         )
 
-        Mockito.doThrow(CoreException(Error.PAYMENT_ERROR)).`when`(questionPaymentRepository)!!
+        Mockito.doThrow(CoreException(Error.PAYMENT_ERROR)).`when`(questionPaymentRepository)
             .save(any())
 
         // when then
-        Assertions.assertThatThrownBy { questionPaymentProcessor!!.payment(questionPayment) }
+        Assertions.assertThatThrownBy { questionPaymentProcessor.payment(questionPayment) }
             .isInstanceOf(CoreException::class.java)
 
-        val afterUserCoupon = userCouponRepository!!.getUserCoupon(userCoupon.id!!)
+        val afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
         Assertions.assertThat(afterUserCoupon.isUsed).isFalse()
 
-        val afterUserPoint = userPointRepository!!.getUserPoint(user.uid!!)
+        val afterUserPoint = userPointRepository.getUserPoint(user.uid)
         Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint)
     }
 }

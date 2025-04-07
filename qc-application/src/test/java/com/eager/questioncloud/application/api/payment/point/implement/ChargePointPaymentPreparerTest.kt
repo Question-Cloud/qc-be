@@ -30,51 +30,43 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class ChargePointPaymentPreparerTest {
-    @Autowired
-    private val chargePointPaymentPreparer: ChargePointPaymentPreparer? = null
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @Autowired
-    private val userPointRepository: UserPointRepository? = null
-
-    @SpyBean
-    @Autowired
-    private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
-
+class ChargePointPaymentPreparerTest(
+    @Autowired val chargePointPaymentPreparer: ChargePointPaymentPreparer,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val userPointRepository: UserPointRepository,
+    @SpyBean @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
-        userPointRepository!!.deleteAllInBatch()
-        chargePointPaymentRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
+        userPointRepository.deleteAllInBatch()
+        chargePointPaymentRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("PG 결제 요청 전 사전 검증을 할 수 있다.")
     fun prepare() {
         //given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+        userPointRepository.save(UserPoint(user.uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = chargePointPaymentRepository!!.save(
+        val order = chargePointPaymentRepository.save(
             ChargePointPayment.createOrder(
-                user.uid!!, ChargePointType.PackageA
+                user.uid, ChargePointType.PackageA
             )
         )
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when
-        chargePointPaymentPreparer!!.prepare(pgPayment)
+        chargePointPaymentPreparer.prepare(pgPayment)
 
         //then
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
@@ -86,7 +78,7 @@ internal class ChargePointPaymentPreparerTest {
     @DisplayName("결제 금액이 올바르지 않으면 예외가 발생한다.")
     fun throwExceptionWhenWrongPaymentAmount() {
         //given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -96,16 +88,16 @@ internal class ChargePointPaymentPreparerTest {
         val chargePointType = ChargePointType.PackageA
         val wrongPaymentAmount = chargePointType.amount - 500
 
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+        userPointRepository.save(UserPoint(user.uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = chargePointPaymentRepository!!.save(ChargePointPayment.createOrder(user.uid!!, chargePointType))
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(user.uid, chargePointType))
 
         val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.DONE)
 
         //when then
-        Assertions.assertThatThrownBy { chargePointPaymentPreparer!!.prepare(pgPayment) }
+        Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
             .isInstanceOf(InvalidPaymentException::class.java)
     }
 
@@ -114,25 +106,25 @@ internal class ChargePointPaymentPreparerTest {
     @DisplayName("이미 진행중인 결제인 경우 예외가 발생한다.")
     fun throwExceptionWhenAlreadyInProgress() {
         //given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+        userPointRepository.save(UserPoint(user.uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA)
+        val order = ChargePointPayment.createOrder(user.uid, ChargePointType.PackageA)
         order.prepare(paymentId)
 
-        chargePointPaymentRepository!!.save(order)
+        chargePointPaymentRepository.save(order)
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when then
-        Assertions.assertThatThrownBy { chargePointPaymentPreparer!!.prepare(pgPayment) }
+        Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_PROCESSED_PAYMENT)
     }
@@ -144,18 +136,18 @@ internal class ChargePointPaymentPreparerTest {
     )
     fun preventPrepareConcurrency() {
         //given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+        userPointRepository.save(UserPoint(user.uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = chargePointPaymentRepository!!.save(
-            ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA)
+        val order = chargePointPaymentRepository.save(
+            ChargePointPayment.createOrder(user.uid, ChargePointType.PackageA)
         )
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
@@ -171,7 +163,7 @@ internal class ChargePointPaymentPreparerTest {
         for (i in 0..<numberOfThreads) {
             executorService.execute {
                 try {
-                    chargePointPaymentPreparer!!.prepare(pgPayment)
+                    chargePointPaymentPreparer.prepare(pgPayment)
                     successCount.incrementAndGet()
                 } catch (e: CoreException) {
                     if (e.error == Error.ALREADY_PROCESSED_PAYMENT) {

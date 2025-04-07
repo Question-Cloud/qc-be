@@ -22,19 +22,14 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class AuthenticationServiceTest {
-    @Autowired
-    private val authenticationService: AuthenticationService? = null
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @MockBean
-    private val socialAPIManager: SocialAPIManager? = null
-
+class AuthenticationServiceTest(
+    @Autowired val authenticationService: AuthenticationService,
+    @Autowired val userRepository: UserRepository,
+    @Autowired @MockBean val socialAPIManager: SocialAPIManager,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
     }
 
     @Test
@@ -46,7 +41,7 @@ internal class AuthenticationServiceTest {
         val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
         val userAccountInformation = createEmailAccountInformation(password)
         val userInformation = create(createUser)
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             create(
                 userAccountInformation,
                 userInformation,
@@ -56,7 +51,7 @@ internal class AuthenticationServiceTest {
         )
 
         //when
-        val authenticationToken = authenticationService!!.login(email, password)
+        val authenticationToken = authenticationService.login(email, password)
 
         //then
         Assertions.assertThat(authenticationToken).isNotNull()
@@ -71,7 +66,7 @@ internal class AuthenticationServiceTest {
         val socialAccessToken = "socialAccessToken"
         val socialUid = "socialUid"
 
-        BDDMockito.given(socialAPIManager!!.getAccessToken(any(), any()))
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
@@ -79,7 +74,7 @@ internal class AuthenticationServiceTest {
         val createUser = CreateUser(email, null, null, accountType, "01012345678", "김승환")
         val userAccountInformation = createSocialAccountInformation(socialUid, accountType)
         val userInformation = create(createUser)
-        val savedUser = userRepository!!.save(
+        val savedUser = userRepository.save(
             create(
                 userAccountInformation,
                 userInformation,
@@ -89,7 +84,7 @@ internal class AuthenticationServiceTest {
         )
 
         //when
-        val socialAuthenticationResult = authenticationService!!.socialLogin(accountType, code)
+        val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
 
         //then
         Assertions.assertThat(socialAuthenticationResult.isRegistered).isTrue()
@@ -105,13 +100,13 @@ internal class AuthenticationServiceTest {
         val socialAccessToken = "socialAccessToken"
         val socialUid = "socialUid"
 
-        BDDMockito.given(socialAPIManager!!.getAccessToken(any(), any()))
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
 
         //when
-        val socialAuthenticationResult = authenticationService!!.socialLogin(accountType, code)
+        val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
 
         //then
         Assertions.assertThat(socialAuthenticationResult.isRegistered).isFalse()

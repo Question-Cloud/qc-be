@@ -25,38 +25,31 @@ import java.util.*
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class QuestionPaymentCouponProcessorTest {
-    @Autowired
-    var userCouponRepository: UserCouponRepository? = null
-
-    @Autowired
-    var couponRepository: CouponRepository? = null
-
-    @Autowired
-    var userRepository: UserRepository? = null
-
-    @Autowired
-    private val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor? = null
-
+internal class QuestionPaymentCouponProcessorTest(
+    @Autowired val userCouponRepository: UserCouponRepository,
+    @Autowired val couponRepository: CouponRepository,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor
+) {
     @AfterEach
     fun tearDown() {
-        userCouponRepository!!.deleteAllInBatch()
-        couponRepository!!.deleteAllInBatch()
-        userRepository!!.deleteAllInBatch()
+        userCouponRepository.deleteAllInBatch()
+        couponRepository.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("쿠폰을 적용하여 금액을 할인할 수 있다.")
     fun applyCoupon() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
 
-        val coupon = couponRepository!!.save(
+        val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
                 .set(Coupon::couponType, CouponType.Fixed)
@@ -65,7 +58,7 @@ internal class QuestionPaymentCouponProcessorTest {
                 .sample()
         )
 
-        val userCoupon = userCouponRepository!!.save(
+        val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
                 .set(UserCoupon::userId, user.uid)
@@ -74,7 +67,7 @@ internal class QuestionPaymentCouponProcessorTest {
                 .sample()
         )
 
-        val questionPaymentCoupon = create(userCoupon.id!!, coupon)
+        val questionPaymentCoupon = create(userCoupon.id, coupon)
 
         val orderItems = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionOrderItem>()
             .set(QuestionOrderItem::price, 1000)
@@ -82,11 +75,11 @@ internal class QuestionPaymentCouponProcessorTest {
 
         val questionOrder = QuestionOrder(UUID.randomUUID().toString(), orderItems)
 
-        val questionPayment = create(user.uid!!, questionPaymentCoupon, questionOrder)
+        val questionPayment = create(user.uid, questionPaymentCoupon, questionOrder)
         val originalAmount = questionPayment.amount
 
         // when
-        questionPaymentCouponProcessor!!.applyCoupon(questionPayment)
+        questionPaymentCouponProcessor.applyCoupon(questionPayment)
 
         // then
         val afterAmount = questionPayment.amount

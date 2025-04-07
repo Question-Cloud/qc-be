@@ -21,45 +21,38 @@ import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class QuestionPaymentCouponReaderTest {
-    @Autowired
-    var userCouponRepository: UserCouponRepository? = null
-
-    @Autowired
-    var couponRepository: CouponRepository? = null
-
-    @Autowired
-    var userRepository: UserRepository? = null
-
-    @Autowired
-    var questionPaymentCouponReader: QuestionPaymentCouponReader? = null
-
+internal class QuestionPaymentCouponReaderTest(
+    @Autowired val userCouponRepository: UserCouponRepository,
+    @Autowired val couponRepository: CouponRepository,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val questionPaymentCouponReader: QuestionPaymentCouponReader,
+) {
     @AfterEach
     fun tearDown() {
-        userCouponRepository!!.deleteAllInBatch()
-        couponRepository!!.deleteAllInBatch()
-        userRepository!!.deleteAllInBatch()
+        userCouponRepository.deleteAllInBatch()
+        couponRepository.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
     }
 
     @DisplayName("유효한 쿠폰을 불러 올 수 있다.")
     @Test
     fun getCoupon() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
 
-        val coupon = couponRepository!!.save(
+        val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
                 .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
                 .sample()
         )
 
-        val userCoupon = userCouponRepository!!.save(
+        val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
                 .set(UserCoupon::userId, user.uid)
@@ -69,9 +62,9 @@ internal class QuestionPaymentCouponReaderTest {
         )
 
         // when
-        val questionPaymentCoupon = questionPaymentCouponReader!!.getQuestionPaymentCoupon(
+        val questionPaymentCoupon = questionPaymentCouponReader.getQuestionPaymentCoupon(
             userCoupon.id,
-            user.uid!!
+            user.uid
         )
         Assertions.assertThat(questionPaymentCoupon!!.userCouponId).isEqualTo(userCoupon.id)
         Assertions.assertThat(questionPaymentCoupon.title).isEqualTo(coupon.title)
@@ -83,7 +76,7 @@ internal class QuestionPaymentCouponReaderTest {
     @DisplayName("존재하지 않는 쿠폰은 불러올 수 없다.")
     fun cannotGetWrongCoupon() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -94,9 +87,9 @@ internal class QuestionPaymentCouponReaderTest {
 
         //when then
         Assertions.assertThatThrownBy {
-            questionPaymentCouponReader!!.getQuestionPaymentCoupon(
+            questionPaymentCouponReader.getQuestionPaymentCoupon(
                 wrongUserCouponId,
-                user.uid!!
+                user.uid
             )
         }
             .isInstanceOf(CoreException::class.java)
@@ -110,7 +103,7 @@ internal class QuestionPaymentCouponReaderTest {
         val userCouponId: Long? = null
 
         // when
-        val questionPaymentCoupon = questionPaymentCouponReader!!.getQuestionPaymentCoupon(userCouponId, userId)
+        val questionPaymentCoupon = questionPaymentCouponReader.getQuestionPaymentCoupon(userCouponId, userId)
 
         // then
         Assertions.assertThat(questionPaymentCoupon).isNull()

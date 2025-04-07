@@ -19,5 +19,9 @@ class UserQuestion(
                 }
                 .collect(Collectors.toList())
         }
+
+        fun create(userId: Long, questionId: Long): UserQuestion {
+            return UserQuestion(userId = userId, questionId = questionId)
+        }
     }
 }

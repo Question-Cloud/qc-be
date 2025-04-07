@@ -24,19 +24,14 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class AuthenticationProcessorTest {
-    @Autowired
-    private val authenticationProcessor: AuthenticationProcessor? = null
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @MockBean
-    private val socialAPIManager: SocialAPIManager? = null
-
+class AuthenticationProcessorTest(
+    @Autowired val authenticationProcessor: AuthenticationProcessor,
+    @Autowired val userRepository: UserRepository,
+    @Autowired @MockBean val socialAPIManager: SocialAPIManager,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
     }
 
     @Test
@@ -48,7 +43,7 @@ internal class AuthenticationProcessorTest {
         val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
         val userAccountInformation = createEmailAccountInformation(password)
         val userInformation = create(createUser)
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             create(
                 userAccountInformation,
                 userInformation,
@@ -58,7 +53,7 @@ internal class AuthenticationProcessorTest {
         )
 
         //when
-        val result = authenticationProcessor!!.emailPasswordAuthentication(email, password)
+        val result = authenticationProcessor.emailPasswordAuthentication(email, password)
 
         //then
         Assertions.assertThat(result.uid).isEqualTo(user.uid)
@@ -72,7 +67,7 @@ internal class AuthenticationProcessorTest {
 
         //when then
         Assertions.assertThatThrownBy {
-            authenticationProcessor!!.emailPasswordAuthentication(
+            authenticationProcessor.emailPasswordAuthentication(
                 wrongEmail,
                 password
             )
@@ -91,7 +86,7 @@ internal class AuthenticationProcessorTest {
         val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
         val userAccountInformation = createEmailAccountInformation(password)
         val userInformation = create(createUser)
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             create(
                 userAccountInformation,
                 userInformation,
@@ -102,7 +97,7 @@ internal class AuthenticationProcessorTest {
 
         //when //then
         Assertions.assertThatThrownBy {
-            authenticationProcessor!!.emailPasswordAuthentication(
+            authenticationProcessor.emailPasswordAuthentication(
                 email,
                 wrongEmail
             )
@@ -121,11 +116,11 @@ internal class AuthenticationProcessorTest {
         val userAccountInformation = createEmailAccountInformation(password)
         val userInformation = create(createUser)
         val user =
-            userRepository!!.save(create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.Ban))
+            userRepository.save(create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.Ban))
 
         //when //then
         Assertions.assertThatThrownBy {
-            authenticationProcessor!!.emailPasswordAuthentication(
+            authenticationProcessor.emailPasswordAuthentication(
                 email,
                 password
             )
@@ -141,7 +136,7 @@ internal class AuthenticationProcessorTest {
         val socialAccessToken = "socialAccessToken"
         val socialUid = "socialUid"
 
-        BDDMockito.given(socialAPIManager!!.getAccessToken(any(), any()))
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
@@ -149,7 +144,7 @@ internal class AuthenticationProcessorTest {
         val createUser = CreateUser(email, null, null, accountType, "01012345678", "김승환")
         val userAccountInformation = createSocialAccountInformation(socialUid, accountType)
         val userInformation = create(createUser)
-        val savedUser = userRepository!!.save(
+        val savedUser = userRepository.save(
             create(
                 userAccountInformation,
                 userInformation,
@@ -159,7 +154,7 @@ internal class AuthenticationProcessorTest {
         )
 
         //when
-        val socialAuthentication = authenticationProcessor!!.socialAuthentication(code, accountType)
+        val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
 
         //then
         Assertions.assertThat(socialAuthentication)
@@ -176,13 +171,13 @@ internal class AuthenticationProcessorTest {
         val socialAccessToken = "socialAccessToken"
         val socialUid = "socialUid"
 
-        BDDMockito.given(socialAPIManager!!.getAccessToken(any(), any()))
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
 
         //when
-        val socialAuthentication = authenticationProcessor!!.socialAuthentication(code, accountType)
+        val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
 
         //then
         Assertions.assertThat(socialAuthentication)
@@ -200,12 +195,12 @@ internal class AuthenticationProcessorTest {
         //given
         val wrongCode = "socialCode"
         val accountType = AccountType.KAKAO
-        BDDMockito.given(socialAPIManager!!.getAccessToken(any(), any()))
+        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willThrow(CoreException(Error.FAIL_SOCIAL_LOGIN))
 
         //when then
         Assertions.assertThatThrownBy {
-            authenticationProcessor!!.socialAuthentication(
+            authenticationProcessor.socialAuthentication(
                 wrongCode,
                 accountType
             )

@@ -49,7 +49,7 @@ internal class FailChargePointPaymentListenerTest {
         BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor)!!.cancel(any(), any())
 
         //when
-        failChargePointPaymentListener!!.failHandler(FailChargePointPaymentEvent(order.orderId))
+        failChargePointPaymentListener!!.failHandler(FailChargePointPaymentEvent.create(order.orderId))
 
         //then
         val failChargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)

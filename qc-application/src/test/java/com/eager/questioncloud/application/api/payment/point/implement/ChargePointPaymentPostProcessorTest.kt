@@ -21,53 +21,45 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class ChargePointPaymentPostProcessorTest {
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @Autowired
-    private val userPointRepository: UserPointRepository? = null
-
-    @Autowired
-    private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
-
-    @SpyBean
-    @Autowired
-    private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor? = null
-
+class ChargePointPaymentPostProcessorTest(
+    @Autowired val userRepository: UserRepository,
+    @Autowired val userPointRepository: UserPointRepository,
+    @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
+    @SpyBean @Autowired val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
-        userPointRepository!!.deleteAllInBatch()
-        chargePointPaymentRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
+        userPointRepository.deleteAllInBatch()
+        chargePointPaymentRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("포인트 충전을 처리할 수 있다.")
     fun chargeUserPoint() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
-        userPointRepository!!.save(UserPoint(user.uid!!, 0))
+        userPointRepository.save(UserPoint(user.uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
         val payment =
-            chargePointPaymentRepository!!.save(ChargePointPayment.createOrder(user.uid!!, ChargePointType.PackageA))
+            chargePointPaymentRepository.save(ChargePointPayment.createOrder(user.uid, ChargePointType.PackageA))
 
         payment.prepare(paymentId)
 
         val chargePointPayment = chargePointPaymentRepository.save(payment)
 
         // when
-        chargePointPaymentPostProcessor!!.chargeUserPoint(chargePointPayment)
+        chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
 
         //then
-        val userPoint = userPointRepository.getUserPoint(user.uid!!)
+        val userPoint = userPointRepository.getUserPoint(user.uid)
         Assertions.assertThat(userPoint.point).isEqualTo(ChargePointType.PackageA.amount)
     }
 }

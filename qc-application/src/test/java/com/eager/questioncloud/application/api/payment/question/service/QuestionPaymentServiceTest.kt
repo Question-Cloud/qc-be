@@ -25,43 +25,30 @@ import org.springframework.test.context.event.RecordApplicationEvents
 @SpringBootTest
 @RecordApplicationEvents
 @ActiveProfiles("test")
-internal class QuestionPaymentServiceTest {
-    @Autowired
-    var questionPaymentService: QuestionPaymentService? = null
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @Autowired
-    private val questionRepository: QuestionRepository? = null
-
-    @Autowired
-    private val couponRepository: CouponRepository? = null
-
-    @Autowired
-    private val userCouponRepository: UserCouponRepository? = null
-
-    @Autowired
-    private val userPointRepository: UserPointRepository? = null
-
-    @Autowired
-    private val questionOrderRepository: QuestionOrderRepository? = null
-
+internal class QuestionPaymentServiceTest(
+    @Autowired val questionPaymentService: QuestionPaymentService,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val questionRepository: QuestionRepository,
+    @Autowired val couponRepository: CouponRepository,
+    @Autowired val userCouponRepository: UserCouponRepository,
+    @Autowired val userPointRepository: UserPointRepository,
+    @Autowired val questionOrderRepository: QuestionOrderRepository,
+) {
     @AfterEach
     fun tearDown() {
-        userRepository!!.deleteAllInBatch()
-        questionRepository!!.deleteAllInBatch()
-        couponRepository!!.deleteAllInBatch()
-        userCouponRepository!!.deleteAllInBatch()
-        questionOrderRepository!!.deleteAllInBatch()
-        userPointRepository!!.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
+        questionRepository.deleteAllInBatch()
+        couponRepository.deleteAllInBatch()
+        userCouponRepository.deleteAllInBatch()
+        questionOrderRepository.deleteAllInBatch()
+        userPointRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("문제 결제를 할 수 있다.")
     fun payment() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(
                 User::class.java
             )
@@ -69,7 +56,7 @@ internal class QuestionPaymentServiceTest {
                 .sample()
         )
 
-        userPointRepository!!.save(UserPoint(user.uid!!, 1000000))
+        userPointRepository.save(UserPoint(user.uid, 1000000))
 
         val questions = Fixture.fixtureMonkey.giveMeBuilder(
             Question::class.java
@@ -81,15 +68,15 @@ internal class QuestionPaymentServiceTest {
             .set("questionStatus", QuestionStatus.Available)
             .sampleList(10)
             .stream()
-            .map { question: Question? ->
-                questionRepository!!.save(
-                    question!!
+            .map { question: Question ->
+                questionRepository.save(
+                    question
                 )
             }
             .toList()
 
         // when
-        val questionPayment = questionPaymentService!!.payment(user.uid!!, createOrder(questions), null)
+        val questionPayment = questionPaymentService.payment(user.uid, createOrder(questions), null)
 
         // then
         Assertions.assertThat(questionPayment.status).isEqualTo(QuestionPaymentStatus.SUCCESS)

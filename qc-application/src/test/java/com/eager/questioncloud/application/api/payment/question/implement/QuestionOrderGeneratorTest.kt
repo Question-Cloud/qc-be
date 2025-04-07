@@ -21,31 +21,24 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class QuestionOrderGeneratorTest {
-    @Autowired
-    private val userQuestionRepository: UserQuestionRepository? = null
-
-    @Autowired
-    private val questionRepository: QuestionRepository? = null
-
-    @Autowired
-    private val userRepository: UserRepository? = null
-
-    @Autowired
-    private val questionOrderGenerator: QuestionOrderGenerator? = null
-
+internal class QuestionOrderGeneratorTest(
+    @Autowired val userQuestionRepository: UserQuestionRepository,
+    @Autowired val questionRepository: QuestionRepository,
+    @Autowired val userRepository: UserRepository,
+    @Autowired val questionOrderGenerator: QuestionOrderGenerator,
+) {
     @AfterEach
     fun tearDown() {
-        questionRepository!!.deleteAllInBatch()
-        userRepository!!.deleteAllInBatch()
-        userQuestionRepository!!.deleteAllInBatch()
+        questionRepository.deleteAllInBatch()
+        userRepository.deleteAllInBatch()
+        userQuestionRepository.deleteAllInBatch()
     }
 
     @Test
     @DisplayName("Question 주문을 생성할 수 있다.")
     fun generateQuestionOrder() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -58,12 +51,12 @@ internal class QuestionOrderGeneratorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question).id!!
+                questionRepository.save(question).id
             }
             .toList()
 
         // when
-        val questionOrder = questionOrderGenerator!!.generateQuestionOrder(user.uid!!, questionIds)
+        val questionOrder = questionOrderGenerator.generateQuestionOrder(user.uid, questionIds)
 
         // then
         Assertions.assertThat(questionOrder.questionIds).containsExactlyInAnyOrderElementsOf(questionIds)
@@ -73,7 +66,7 @@ internal class QuestionOrderGeneratorTest {
     @DisplayName("비활성화 된 Question을 포함한 주문을 생성할 수 없다.")
     fun cannotCreateOrderWithUnAvailableQuestion() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
@@ -86,7 +79,7 @@ internal class QuestionOrderGeneratorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question).id!!
+                questionRepository.save(question).id
             }
             .toList()
 
@@ -96,7 +89,7 @@ internal class QuestionOrderGeneratorTest {
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository!!.save(question).id!!
+                questionRepository.save(question).id
             }
             .toList()
 
@@ -106,8 +99,8 @@ internal class QuestionOrderGeneratorTest {
 
         //when then
         Assertions.assertThatThrownBy {
-            questionOrderGenerator!!.generateQuestionOrder(
-                user.uid!!, questionIds
+            questionOrderGenerator.generateQuestionOrder(
+                user.uid, questionIds
             )
         }
             .isInstanceOf(CoreException::class.java)
@@ -118,14 +111,14 @@ internal class QuestionOrderGeneratorTest {
     @DisplayName("이미 구매한 Question은 주문에 포함할 수 없다.")
     fun cannotCreateOrderWithAlreadyOwnedQuestion() {
         // given
-        val user = userRepository!!.save(
+        val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
                 .set(User::uid, null)
                 .build()
                 .sample()
         )
 
-        val alreadyOwnedQuestion = questionRepository!!.save(
+        val alreadyOwnedQuestion = questionRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
                 .set(Question::id, null)
                 .set(Question::questionStatus, QuestionStatus.Available)
@@ -139,13 +132,13 @@ internal class QuestionOrderGeneratorTest {
                 .sample()
         )
 
-        userQuestionRepository!!.saveAll(create(user.uid!!, listOf(alreadyOwnedQuestion.id!!)))
+        userQuestionRepository.saveAll(create(user.uid, listOf(alreadyOwnedQuestion.id)))
 
         // when then
         Assertions.assertThatThrownBy {
-            questionOrderGenerator!!.generateQuestionOrder(
-                user.uid!!,
-                listOf(normalQuestion.id!!, alreadyOwnedQuestion.id!!)
+            questionOrderGenerator.generateQuestionOrder(
+                user.uid,
+                listOf(normalQuestion.id, alreadyOwnedQuestion.id)
             )
         }
             .isInstanceOf(CoreException::class.java)

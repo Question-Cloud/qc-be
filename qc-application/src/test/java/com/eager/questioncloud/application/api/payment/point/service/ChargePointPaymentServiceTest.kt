@@ -23,19 +23,14 @@ import org.springframework.test.context.event.RecordApplicationEvents
 @SpringBootTest
 @RecordApplicationEvents
 @ActiveProfiles("test")
-internal class ChargePointPaymentServiceTest {
-    @Autowired
-    private val chargePointPaymentService: ChargePointPaymentService? = null
-
-    @Autowired
-    private val chargePointPaymentRepository: ChargePointPaymentRepository? = null
-
-    @MockBean
-    private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor? = null
-
+internal class ChargePointPaymentServiceTest(
+    @Autowired val chargePointPaymentService: ChargePointPaymentService,
+    @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
+    @Autowired @MockBean val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
+) {
     @AfterEach
     fun tearDown() {
-        chargePointPaymentRepository!!.deleteAllInBatch()
+        chargePointPaymentRepository.deleteAllInBatch()
     }
 
     @Test
@@ -46,10 +41,10 @@ internal class ChargePointPaymentServiceTest {
         val chargePointType = ChargePointType.PackageA
 
         //when
-        val orderId = chargePointPaymentService!!.createOrder(userId, chargePointType)
+        val orderId = chargePointPaymentService.createOrder(userId, chargePointType)
 
         //then
-        val savedOrder = chargePointPaymentRepository!!.findByOrderId(orderId)
+        val savedOrder = chargePointPaymentRepository.findByOrderId(orderId)
         Assertions.assertThat(savedOrder.orderId).isEqualTo(orderId)
         Assertions.assertThat(savedOrder.userId).isEqualTo(userId)
         Assertions.assertThat(savedOrder.chargePointType).isEqualTo(ChargePointType.PackageA)
@@ -65,15 +60,15 @@ internal class ChargePointPaymentServiceTest {
         val userId = 1L
 
         val order = ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
-        chargePointPaymentRepository!!.save(order)
+        chargePointPaymentRepository.save(order)
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
-        BDDMockito.willReturn(pgPayment).given(chargePointPaymentPGProcessor)!!.getPayment(any())
-        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor)!!.confirm(any(), any(), any())
+        BDDMockito.willReturn(pgPayment).given(chargePointPaymentPGProcessor).getPayment(any())
+        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor).confirm(any(), any(), any())
 
         //then
-        chargePointPaymentService!!.approvePayment(order.orderId)
+        chargePointPaymentService.approvePayment(order.orderId)
 
         //then
         val paymentResult = chargePointPaymentRepository.findByOrderId(order.orderId)
