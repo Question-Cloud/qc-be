@@ -21,6 +21,18 @@ class QuestionReviewEventLogRepositoryImpl(
             .toModel()
     }
 
+    override fun getUnPublishedEvent(): List<QuestionReviewEventLog> {
+        return jpaQueryFactory.select(questionReviewEventLogEntity)
+            .from(questionReviewEventLogEntity)
+            .where(questionReviewEventLogEntity.isPublish.isFalse)
+            .orderBy(questionReviewEventLogEntity.eventId.asc())
+            .limit(1000)
+            .fetch()
+            .stream()
+            .map { entity -> entity.toModel() }
+            .toList()
+    }
+
     override fun save(questionReviewEventLog: QuestionReviewEventLog) {
         questionReviewEventLogJpaRepository.save(QuestionReviewEventLogEntity.from(questionReviewEventLog))
     }

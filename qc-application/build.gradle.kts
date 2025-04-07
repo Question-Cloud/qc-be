@@ -30,6 +30,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 }
 
 sourceSets {
