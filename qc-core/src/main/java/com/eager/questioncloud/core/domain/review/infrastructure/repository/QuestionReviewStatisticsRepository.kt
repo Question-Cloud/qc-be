@@ -5,6 +5,8 @@ import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics
 interface QuestionReviewStatisticsRepository {
     fun get(questionId: Long): QuestionReviewStatistics
 
+    fun getForUpdate(questionId: Long): QuestionReviewStatistics
+
     fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics
 
     fun deleteAllInBatch()

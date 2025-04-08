@@ -17,6 +17,11 @@ class QuestionReviewStatisticsRepositoryImpl(
             .toModel()
     }
 
+    override fun getForUpdate(questionId: Long): QuestionReviewStatistics {
+        return questionReviewStatisticsJpaRepository.findByQuestionId(questionId)?.toModel()
+            ?: throw CoreException(Error.NOT_FOUND)
+    }
+
     override fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics {
         return questionReviewStatisticsJpaRepository.save(from(questionReviewStatistics)).toModel()
     }
