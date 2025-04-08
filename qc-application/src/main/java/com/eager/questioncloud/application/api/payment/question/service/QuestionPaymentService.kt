@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.service
 
+import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent
 import com.eager.questioncloud.application.api.payment.question.implement.QuestionPaymentEventProcessor
 import com.eager.questioncloud.application.api.payment.question.implement.QuestionPaymentProcessor
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder
@@ -17,7 +18,7 @@ class QuestionPaymentService(
     fun payment(userId: Long, order: QuestionOrder, questionPaymentCoupon: QuestionPaymentCoupon?): QuestionPayment {
         val questionPayment = QuestionPayment.create(userId, questionPaymentCoupon, order)
         questionPaymentProcessor.payment(questionPayment)
-        questionPaymentEventProcessor.createEvent(questionPayment)
+        questionPaymentEventProcessor.saveEventLog(QuestionPaymentEvent.create(questionPayment))
         return questionPayment
     }
 }

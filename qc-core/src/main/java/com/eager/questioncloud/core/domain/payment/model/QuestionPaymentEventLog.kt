@@ -8,4 +8,9 @@ class QuestionPaymentEventLog(
     val payload: String,
     val createdAt: LocalDateTime
 ) {
+    companion object {
+        fun create(eventId: String, payload: String): QuestionPaymentEventLog {
+            return QuestionPaymentEventLog(eventId, false, payload, LocalDateTime.now())
+        }
+    }
 }
