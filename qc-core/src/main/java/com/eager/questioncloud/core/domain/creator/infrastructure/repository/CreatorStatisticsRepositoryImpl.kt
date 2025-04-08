@@ -31,6 +31,10 @@ class CreatorStatisticsRepositoryImpl(
             .toModel()
     }
 
+    override fun getForUpdate(creatorId: Long): CreatorStatistics {
+        return creatorStatisticsJpaRepository.getForUpdate(creatorId)?.toModel() ?: throw CoreException(Error.NOT_FOUND)
+    }
+
     override fun findByCreatorIdIn(creatorIds: List<Long>): Map<Long, CreatorStatistics> {
         return creatorStatisticsJpaRepository.findByCreatorIdIn(creatorIds)
             .stream()
