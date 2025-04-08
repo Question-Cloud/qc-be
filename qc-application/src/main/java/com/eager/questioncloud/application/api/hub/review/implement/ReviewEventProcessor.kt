@@ -48,18 +48,34 @@ class ReviewEventProcessor(
     }
 
     @Scheduled(fixedDelay = 10000)
-    suspend fun republish() {
+    suspend fun republishScheduled() {
+        var hasMoreEvents = true
+        while (hasMoreEvents) {
+            val events = getUnpublishedEvents()
+
+            if (events.isEmpty()) {
+                hasMoreEvents = false
+            }
+
+            republish(events)
+        }
+    }
+
+    private fun getUnpublishedEvents(): List<ReviewEvent> {
+        return questionReviewEventLogRepository.getUnPublishedEvent()
+            .stream()
+            .map { log -> SQSEvent.objectMapper.readValue(log.payload, ReviewEvent::class.java) }
+            .toList()
+    }
+
+    private suspend fun republish(events: List<ReviewEvent>) {
         republishCoroutineScope.launch {
-            do {
-                val unpublishedEvents = questionReviewEventLogRepository.getUnPublishedEvent()
-                unpublishedEvents.forEach { event ->
-                    launch {
-                        val reviewEvent = SQSEvent.objectMapper.readValue(event.payload, ReviewEvent::class.java)
-                        snsClient.publish(reviewEvent.toRequest())
-                        questionReviewEventLogRepository.publish(reviewEvent.eventId)
-                    }
+            events.map { event ->
+                launch {
+                    snsClient.publish(event.toRequest())
+                    questionReviewEventLogRepository.publish(event.eventId)
                 }
-            } while (unpublishedEvents.isNotEmpty())
+            }
         }.join()
     }
 }

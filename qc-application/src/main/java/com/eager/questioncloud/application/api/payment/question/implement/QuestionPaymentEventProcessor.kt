@@ -46,19 +46,34 @@ class QuestionPaymentEventProcessor(
     }
 
     @Scheduled(fixedDelay = 10000)
-    suspend fun republish() {
+    suspend fun republishScheduled() {
+        var hasMoreEvents = true
+        while (hasMoreEvents) {
+            val events = getUnpublishedEvents()
+
+            if (events.isEmpty()) {
+                hasMoreEvents = false
+            }
+
+            republish(events)
+        }
+    }
+
+    private fun getUnpublishedEvents(): List<QuestionPaymentEvent> {
+        return questionPaymentEventLogRepository.getUnPublishedEvent()
+            .stream()
+            .map { log -> SQSEvent.objectMapper.readValue(log.payload, QuestionPaymentEvent::class.java) }
+            .toList()
+    }
+
+    private suspend fun republish(events: List<QuestionPaymentEvent>) {
         republishCoroutineScope.launch {
-            do {
-                val unpublishedEvents = questionPaymentEventLogRepository.getUnPublishedEvent()
-                unpublishedEvents.forEach { event ->
-                    launch {
-                        val questionPaymentEvent =
-                            SQSEvent.objectMapper.readValue(event.payload, QuestionPaymentEvent::class.java)
-                        snsClient.publish(questionPaymentEvent.toRequest())
-                        questionPaymentEventLogRepository.publish(questionPaymentEvent.eventId)
-                    }
+            events.map { event ->
+                launch {
+                    snsClient.publish(event.toRequest())
+                    questionPaymentEventLogRepository.publish(event.eventId)
                 }
-            } while (unpublishedEvents.isNotEmpty())
+            }
         }.join()
     }
 }
