@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.hub.review.service
 
+import com.eager.questioncloud.application.api.hub.review.event.ReviewEvent
 import com.eager.questioncloud.application.api.hub.review.event.ReviewEventType
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRemover
@@ -42,25 +43,36 @@ class HubReviewService(
     @Transactional
     fun register(questionReview: QuestionReview) {
         hubReviewRegister.register(questionReview)
-
-        reviewEventProcessor.createEvent(
-            questionReview.questionId,
-            questionReview.rate,
-            ReviewEventType.REGISTER
+        reviewEventProcessor.saveEventLog(
+            ReviewEvent.create(
+                questionReview.questionId,
+                questionReview.rate,
+                ReviewEventType.REGISTER
+            )
         )
     }
 
     @Transactional
     fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
         val (questionId, varianceRate) = hubReviewUpdater.modify(reviewId, userId, comment, rate)
-
-        reviewEventProcessor.createEvent(questionId, varianceRate, ReviewEventType.MODIFY)
+        reviewEventProcessor.saveEventLog(
+            ReviewEvent.create(
+                questionId,
+                varianceRate,
+                ReviewEventType.MODIFY
+            )
+        )
     }
 
     @Transactional
     fun delete(reviewId: Long, userId: Long) {
         val (questionId, varianceRate) = hubReviewRemover.delete(reviewId, userId)
-
-        reviewEventProcessor.createEvent(questionId, varianceRate, ReviewEventType.DELETE)
+        reviewEventProcessor.saveEventLog(
+            ReviewEvent.create(
+                questionId,
+                varianceRate,
+                ReviewEventType.DELETE
+            )
+        )
     }
 }

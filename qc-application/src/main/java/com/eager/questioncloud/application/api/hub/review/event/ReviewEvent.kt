@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.hub.review.event
 
 import com.eager.questioncloud.application.event.SQSEvent
+import io.hypersistence.tsid.TSID
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class ReviewEvent(
@@ -16,5 +17,11 @@ class ReviewEvent(
             .messageGroupId(questionId.toString())
             .message(SQSEvent.objectMapper.writeValueAsString(this))
             .build()
+    }
+
+    companion object {
+        fun create(questionId: Long, varianceRate: Int, reviewEventType: ReviewEventType): ReviewEvent {
+            return ReviewEvent(TSID.Factory.getTsid().toString(), questionId, varianceRate, reviewEventType)
+        }
     }
 }
