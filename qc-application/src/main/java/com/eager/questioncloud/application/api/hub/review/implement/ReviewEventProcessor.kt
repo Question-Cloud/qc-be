@@ -42,7 +42,6 @@ class ReviewEventProcessor(
         republishCoroutineScope.launch {
             events.map { event ->
                 launch {
-                    println(event.eventId)
                     snsClient.publish(event.toRequest())
                     questionReviewEventLogRepository.publish(event.eventId)
                 }
