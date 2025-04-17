@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.payment.point.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -30,8 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger
 class ChargePointPaymentPreparerTest(
     @Autowired val chargePointPaymentPreparer: ChargePointPaymentPreparer,
     @Autowired val userRepository: UserRepository,
-    @Autowired val userPointRepository: UserPointRepository,
     @SpyBean @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
 
@@ -42,9 +42,7 @@ class ChargePointPaymentPreparerTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
-        userPointRepository.deleteAllInBatch()
-        chargePointPaymentRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

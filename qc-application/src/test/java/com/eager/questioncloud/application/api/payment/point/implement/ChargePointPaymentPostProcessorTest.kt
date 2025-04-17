@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment.point.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserPointFixtureHelper
@@ -25,6 +26,7 @@ class ChargePointPaymentPostProcessorTest(
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @SpyBean @Autowired val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
 
@@ -35,9 +37,7 @@ class ChargePointPaymentPostProcessorTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
-        userPointRepository.deleteAllInBatch()
-        chargePointPaymentRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

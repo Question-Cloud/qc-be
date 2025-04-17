@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.cart.service
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
@@ -25,6 +26,7 @@ class CartServiceTest(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val questionRepository: QuestionRepository,
     @Autowired private val creatorRepository: CreatorRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
     private var creatorId: Long = 0
@@ -37,10 +39,7 @@ class CartServiceTest(
 
     @AfterEach
     fun tearDown() {
-        cartRepository.deleteAllInBatch()
-        userRepository.deleteAllInBatch()
-        questionRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.payment.point.service
 
 import com.eager.questioncloud.application.api.payment.point.implement.ChargePointPaymentPGProcessor
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
@@ -26,10 +27,12 @@ internal class ChargePointPaymentServiceTest(
     @Autowired val chargePointPaymentService: ChargePointPaymentService,
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @Autowired @MockBean val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     @AfterEach
     fun tearDown() {
         chargePointPaymentRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

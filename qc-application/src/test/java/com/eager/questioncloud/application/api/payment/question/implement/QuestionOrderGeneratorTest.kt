@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
@@ -28,6 +29,7 @@ internal class QuestionOrderGeneratorTest(
     @Autowired val userRepository: UserRepository,
     @Autowired val creatorRepository: CreatorRepository,
     @Autowired val questionOrderGenerator: QuestionOrderGenerator,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
     private var creatorId: Long = 0
@@ -40,10 +42,7 @@ internal class QuestionOrderGeneratorTest(
 
     @AfterEach
     fun tearDown() {
-        questionRepository.deleteAllInBatch()
-        userRepository.deleteAllInBatch()
-        userQuestionRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

@@ -1,14 +1,12 @@
 package com.eager.questioncloud.application.api.payment.question.service
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserPointFixtureHelper
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
-import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
@@ -31,11 +29,9 @@ internal class QuestionPaymentServiceTest(
     @Autowired val questionPaymentService: QuestionPaymentService,
     @Autowired val userRepository: UserRepository,
     @Autowired val questionRepository: QuestionRepository,
-    @Autowired val couponRepository: CouponRepository,
-    @Autowired val userCouponRepository: UserCouponRepository,
     @Autowired val userPointRepository: UserPointRepository,
-    @Autowired val questionOrderRepository: QuestionOrderRepository,
     @Autowired val creatorRepository: CreatorRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
     private var creatorId: Long = 0
@@ -48,13 +44,7 @@ internal class QuestionPaymentServiceTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
-        questionRepository.deleteAllInBatch()
-        couponRepository.deleteAllInBatch()
-        userCouponRepository.deleteAllInBatch()
-        questionOrderRepository.deleteAllInBatch()
-        userPointRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

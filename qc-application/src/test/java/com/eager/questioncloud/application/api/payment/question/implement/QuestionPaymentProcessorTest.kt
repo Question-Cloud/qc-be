@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.Fixture
 import com.eager.questioncloud.application.utils.fixture.helper.*
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment.Companion.create
@@ -42,10 +42,10 @@ internal class QuestionPaymentProcessorTest(
     @Autowired val userCouponRepository: UserCouponRepository,
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val creatorRepository: CreatorRepository,
-    @Autowired @SpyBean val questionOrderRepository: QuestionOrderRepository,
     @Autowired @SpyBean val questionPaymentRepository: QuestionPaymentRepository,
     @Autowired @SpyBean val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor,
     @Autowired @SpyBean val userPointManager: UserPointManager,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
     private var creatorId: Long = 0
@@ -58,12 +58,7 @@ internal class QuestionPaymentProcessorTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
-        questionRepository.deleteAllInBatch()
-        couponRepository.deleteAllInBatch()
-        userCouponRepository.deleteAllInBatch()
-        questionOrderRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

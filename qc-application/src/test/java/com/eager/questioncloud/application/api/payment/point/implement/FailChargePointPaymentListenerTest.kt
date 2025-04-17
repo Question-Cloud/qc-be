@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.api.payment.point.implement
 
 import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent
 import com.eager.questioncloud.application.listener.payment.FailChargePointPaymentListener
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
@@ -23,10 +24,11 @@ internal class FailChargePointPaymentListenerTest(
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @Autowired val failChargePointPaymentListener: FailChargePointPaymentListener,
     @Autowired @MockBean val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     @AfterEach
     fun tearDown() {
-        chargePointPaymentRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

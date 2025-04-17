@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.authentication.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
@@ -24,6 +25,7 @@ class AuthenticationProcessorTest(
     @Autowired val authenticationProcessor: AuthenticationProcessor,
     @Autowired val userRepository: UserRepository,
     @Autowired @MockBean val socialAPIManager: SocialAPIManager,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     @BeforeEach
     fun setUp() {
@@ -33,7 +35,7 @@ class AuthenticationProcessorTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

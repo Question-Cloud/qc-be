@@ -1,5 +1,6 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CouponFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserCouponFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
@@ -23,6 +24,7 @@ internal class QuestionPaymentCouponReaderTest(
     @Autowired val couponRepository: CouponRepository,
     @Autowired val userRepository: UserRepository,
     @Autowired val questionPaymentCouponReader: QuestionPaymentCouponReader,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
 
@@ -33,9 +35,7 @@ internal class QuestionPaymentCouponReaderTest(
 
     @AfterEach
     fun tearDown() {
-        userCouponRepository.deleteAllInBatch()
-        couponRepository.deleteAllInBatch()
-        userRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

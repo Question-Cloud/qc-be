@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.review.implement
 
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
+import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
@@ -31,6 +32,7 @@ internal class HubReviewRegisterTest(
     @Autowired val questionReviewJpaRepository: QuestionReviewJpaRepository,
     @Autowired val userQuestionJpaRepository: UserQuestionJpaRepository,
     @Autowired val creatorRepository: CreatorRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0
     private var creatorId: Long = 0
@@ -43,10 +45,7 @@ internal class HubReviewRegisterTest(
 
     @AfterEach
     fun tearDown() {
-        questionRepository.deleteAllInBatch()
-        questionReviewJpaRepository.deleteAllInBatch()
-        userQuestionJpaRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test

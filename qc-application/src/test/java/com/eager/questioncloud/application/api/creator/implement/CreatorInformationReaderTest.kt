@@ -1,8 +1,9 @@
 package com.eager.questioncloud.application.api.creator.implement
 
+import com.eager.questioncloud.application.utils.DBCleaner
+import com.eager.questioncloud.application.utils.fixture.Fixture
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorStatisticsFixtureHelper
-import com.eager.questioncloud.application.utils.fixture.Fixture
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
@@ -26,13 +27,11 @@ class CreatorInformationReaderTest(
     @Autowired val creatorRepository: CreatorRepository,
     @Autowired val creatorStatisticsRepository: CreatorStatisticsRepository,
     @Autowired val subscribeRepository: SubscribeRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
-        creatorRepository.deleteAllInBatch()
-        creatorStatisticsRepository.deleteAllInBatch()
-        subscribeRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test
