@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.cart.service
 
 import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository
 import com.eager.questioncloud.core.domain.cart.model.CartItem
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
@@ -9,10 +10,10 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,6 +28,13 @@ class CartServiceTest(
     @Autowired private val questionRepository: QuestionRepository,
     @Autowired private val creatorRepository: CreatorRepository,
 ) {
+    private var uid: Long = 0
+
+    @BeforeEach
+    fun setUp() {
+        uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+    }
+
     @AfterEach
     fun tearDown() {
         cartRepository.deleteAllInBatch()
@@ -38,17 +46,10 @@ class CartServiceTest(
     @Test
     fun `장바구니를 조회할 수 있다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid)
+                .set(Creator::userId, uid)
                 .build()
                 .sample()
         )
@@ -64,10 +65,10 @@ class CartServiceTest(
             }
             .toList()
 
-        questionIds.forEach { questionId -> cartRepository.save(CartItem.create(user.uid, questionId)) }
+        questionIds.forEach { questionId -> cartRepository.save(CartItem.create(uid, questionId)) }
 
         // when
-        val cartItems = cartService.getCartItems(user.uid)
+        val cartItems = cartService.getCartItems(uid)
 
         //then
         Assertions.assertThat(cartItems).hasSize(10)
@@ -79,17 +80,10 @@ class CartServiceTest(
     @Test
     fun `장바구니에 문제를 추가할 수 있다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid)
+                .set(Creator::userId, uid)
                 .build()
                 .sample()
         )
@@ -103,10 +97,10 @@ class CartServiceTest(
         )
 
         // when
-        cartService.appendCartItem(user.uid, question.id)
+        cartService.appendCartItem(uid, question.id)
 
         //then
-        val cartItems = cartService.getCartItems(user.uid)
+        val cartItems = cartService.getCartItems(uid)
         Assertions.assertThat(cartItems).hasSize(1)
         Assertions.assertThat(cartItems.map { it.questionId })
             .containsExactly(question.id)
@@ -115,17 +109,10 @@ class CartServiceTest(
     @Test
     fun `장바구니에서 문제를 삭제할 수 있다`() {
         // given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid)
+                .set(Creator::userId, uid)
                 .build()
                 .sample()
         )
@@ -138,13 +125,13 @@ class CartServiceTest(
                 .sample()
         )
 
-        val cartItem = cartRepository.save(CartItem.create(user.uid, question.id))
+        val cartItem = cartRepository.save(CartItem.create(uid, question.id))
 
         // when
-        cartService.removeCartItem(listOf(cartItem.id), user.uid)
+        cartService.removeCartItem(listOf(cartItem.id), uid)
 
         // then
-        val cartItems = cartService.getCartItems(user.uid)
+        val cartItems = cartService.getCartItems(uid)
         Assertions.assertThat(cartItems).isEmpty()
     }
 }

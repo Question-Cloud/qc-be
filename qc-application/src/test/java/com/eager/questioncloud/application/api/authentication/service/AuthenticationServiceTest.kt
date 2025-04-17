@@ -1,17 +1,12 @@
 package com.eager.questioncloud.application.api.authentication.service
 
-import com.eager.questioncloud.core.domain.user.dto.CreateUser
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User.Companion.create
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createEmailAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createSocialAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserInformation.Companion.create
 import com.eager.questioncloud.social.SocialAPIManager
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.kotlin.any
@@ -27,6 +22,12 @@ class AuthenticationServiceTest(
     @Autowired val userRepository: UserRepository,
     @Autowired @MockBean val socialAPIManager: SocialAPIManager,
 ) {
+    @BeforeEach
+    fun setUp() {
+        UserFixtureHelper.createDefaultEmailUser(userRepository)
+        UserFixtureHelper.createDefaultSocialUser(userRepository)
+    }
+
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
@@ -35,20 +36,8 @@ class AuthenticationServiceTest(
     @Test
     fun 이메일_계정_로그인을_할_수_있다() {
         //given
-        val email = "test@test.com"
-        val password = "qwer1234"
-
-        val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
-        val userAccountInformation = createEmailAccountInformation(password)
-        val userInformation = create(createUser)
-        val user = userRepository.save(
-            create(
-                userAccountInformation,
-                userInformation,
-                UserType.NormalUser,
-                UserStatus.Active
-            )
-        )
+        val email = UserFixtureHelper.defaultEmailUserEmail
+        val password = UserFixtureHelper.defaultEmailUserPassword
 
         //when
         val authenticationToken = authenticationService.login(email, password)
@@ -58,30 +47,18 @@ class AuthenticationServiceTest(
     }
 
     @Test
-    fun 등록된_소셜_계정이라면_AuthenticationToken을_발급한다() {
+    fun `등록된 소셜 계정 인증 성공`() {
         //given
-        val email = "test@test.com"
-        val code = "socialCode"
-        val accountType = AccountType.KAKAO
+        val accountType = UserFixtureHelper.defaultSocialUserAccountType
+        val socialUid = UserFixtureHelper.defaultSocialUserSocialUid
+        val code = "socialAuthenticationCode"
         val socialAccessToken = "socialAccessToken"
-        val socialUid = "socialUid"
+
 
         BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
-
-        val createUser = CreateUser(email, null, null, accountType, "01012345678", "김승환")
-        val userAccountInformation = createSocialAccountInformation(socialUid, accountType)
-        val userInformation = create(createUser)
-        val savedUser = userRepository.save(
-            create(
-                userAccountInformation,
-                userInformation,
-                UserType.NormalUser,
-                UserStatus.Active
-            )
-        )
 
         //when
         val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
@@ -93,12 +70,12 @@ class AuthenticationServiceTest(
     }
 
     @Test
-    fun 등록되지_않은_소셜_계정이라면_RegisterToken을_발급한다() {
+    fun `등록되지 않은 소셜 계정 인증 성공`() {
         //given
-        val code = "socialCode"
+        val code = "socialAuthenticationCode"
         val accountType = AccountType.KAKAO
         val socialAccessToken = "socialAccessToken"
-        val socialUid = "socialUid"
+        val socialUid = "unregisterdSocialUid"
 
         BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)

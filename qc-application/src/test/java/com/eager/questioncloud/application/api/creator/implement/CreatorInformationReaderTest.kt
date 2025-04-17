@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.creator.implement
 
 import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.core.domain.creator.model.Creator
@@ -8,8 +9,8 @@ import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
 import com.eager.questioncloud.core.domain.question.enums.Subject
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe
+import com.eager.questioncloud.core.domain.user.enums.UserStatus
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
@@ -39,19 +40,11 @@ class CreatorInformationReaderTest(
     @Test
     fun `한 명의 크리에이터 정보를 조회할 수 있다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
+        val user = UserFixtureHelper.createEmailUser("user1@Naver.com", "qwer1234", UserStatus.Active, userRepository)
         val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
-
         val creatorStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
             .set(CreatorStatistics::creatorId, creator.id)
             .sample()
-
         creatorStatisticsRepository.save(creatorStatistics)
 
         val subscribers = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
@@ -82,18 +75,8 @@ class CreatorInformationReaderTest(
 
     @Test
     fun `2명 이상의 크리에이터 정보를 조회할 수 있다`() {
-        val user1 = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-        val user2 = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
+        val user1 = UserFixtureHelper.createEmailUser("user1@Naver.com", "qwer1234", UserStatus.Active, userRepository)
+        val user2 = UserFixtureHelper.createEmailUser("user2@Naver.com", "qwer1234", UserStatus.Active, userRepository)
 
         val creator1 = creatorRepository.save(Creator.create(user1.uid, Subject.Biology, "Hello"))
         val creator2 = creatorRepository.save(Creator.create(user2.uid, Subject.Biology, "Hello"))

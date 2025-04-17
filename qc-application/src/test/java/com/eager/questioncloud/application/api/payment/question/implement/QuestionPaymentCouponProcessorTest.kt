@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
 import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.coupon.enums.CouponType
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
@@ -11,10 +12,10 @@ import com.eager.questioncloud.core.domain.payment.model.QuestionOrderItem
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment.Companion.create
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon.Companion.create
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,6 +31,14 @@ internal class QuestionPaymentCouponProcessorTest(
     @Autowired val userRepository: UserRepository,
     @Autowired val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor
 ) {
+    private var uid: Long = 0
+
+    @BeforeEach
+    fun setUp() {
+        uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+    }
+
+
     @AfterEach
     fun tearDown() {
         userCouponRepository.deleteAllInBatch()
@@ -40,13 +49,6 @@ internal class QuestionPaymentCouponProcessorTest(
     @Test
     fun `쿠폰을 적용할 수 있다`() {
         // given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
         val coupon = couponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
                 .set(Coupon::id, null)
@@ -59,7 +61,7 @@ internal class QuestionPaymentCouponProcessorTest(
         val userCoupon = userCouponRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
                 .set(UserCoupon::couponId, coupon.id)
-                .set(UserCoupon::userId, user.uid)
+                .set(UserCoupon::userId, uid)
                 .set(UserCoupon::endAt, coupon.endAt)
                 .set(UserCoupon::isUsed, false)
                 .sample()
@@ -73,7 +75,7 @@ internal class QuestionPaymentCouponProcessorTest(
 
         val questionOrder = QuestionOrder(UUID.randomUUID().toString(), orderItems)
 
-        val questionPayment = create(user.uid, questionPaymentCoupon, questionOrder)
+        val questionPayment = create(uid, questionPaymentCoupon, questionOrder)
         val originalAmount = questionPayment.amount
 
         // when

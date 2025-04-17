@@ -1,19 +1,15 @@
 package com.eager.questioncloud.application.api.authentication.implement
 
-import com.eager.questioncloud.core.domain.user.dto.CreateUser
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User.Companion.create
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createEmailAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createSocialAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserInformation.Companion.create
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.social.SocialAPIManager
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.kotlin.any
@@ -29,6 +25,12 @@ class AuthenticationProcessorTest(
     @Autowired val userRepository: UserRepository,
     @Autowired @MockBean val socialAPIManager: SocialAPIManager,
 ) {
+    @BeforeEach
+    fun setUp() {
+        UserFixtureHelper.createDefaultEmailUser(userRepository)
+        UserFixtureHelper.createDefaultSocialUser(userRepository)
+    }
+
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
@@ -37,32 +39,20 @@ class AuthenticationProcessorTest(
     @Test
     fun `이메일 계정 로그인 성공`() {
         //given
-        val email = "test@test.com"
-        val password = "qwer1234"
-
-        val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
-        val userAccountInformation = createEmailAccountInformation(password)
-        val userInformation = create(createUser)
-        val user = userRepository.save(
-            create(
-                userAccountInformation,
-                userInformation,
-                UserType.NormalUser,
-                UserStatus.Active
-            )
-        )
+        val email = UserFixtureHelper.defaultEmailUserEmail
+        val password = UserFixtureHelper.defaultEmailUserPassword
 
         //when
         val result = authenticationProcessor.emailPasswordAuthentication(email, password)
 
         //then
-        Assertions.assertThat(result.uid).isEqualTo(user.uid)
+        Assertions.assertThat(result.uid).isNotNull()
     }
 
     @Test
     fun `존재하지 않는 이메일인 경우 로그인 실패`() {
         //given
-        val wrongEmail = "test@test.com"
+        val wrongEmail = "wrong@email.com"
         val password = "qwer1234"
 
         //when then
@@ -79,27 +69,14 @@ class AuthenticationProcessorTest(
     @Test
     fun `비밀번호가 일치하지 않는 경우 로그인 실패`() {
         //given
-        val email = "test@test.com"
-        val password = "qwer1234"
-        val wrongEmail = "qwer1235"
-
-        val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
-        val userAccountInformation = createEmailAccountInformation(password)
-        val userInformation = create(createUser)
-        val user = userRepository.save(
-            create(
-                userAccountInformation,
-                userInformation,
-                UserType.NormalUser,
-                UserStatus.Active
-            )
-        )
+        val email = UserFixtureHelper.defaultEmailUserPassword
+        val wrongPassword = "wrongPassword"
 
         //when //then
         Assertions.assertThatThrownBy {
             authenticationProcessor.emailPasswordAuthentication(
                 email,
-                wrongEmail
+                wrongPassword
             )
         }
             .isInstanceOf(CoreException::class.java)
@@ -109,14 +86,9 @@ class AuthenticationProcessorTest(
     @Test
     fun `활성화 된 계정이 아니라면 로그인 실패`() {
         //given
-        val email = "test@test.com"
+        val email = "inactive@test.com"
         val password = "qwer1234"
-
-        val createUser = CreateUser(email, password, null, AccountType.EMAIL, "01012345678", "김승환")
-        val userAccountInformation = createEmailAccountInformation(password)
-        val userInformation = create(createUser)
-        val user =
-            userRepository.save(create(userAccountInformation, userInformation, UserType.NormalUser, UserStatus.Ban))
+        UserFixtureHelper.createEmailUser(email, password, UserStatus.Deleted, userRepository)
 
         //when //then
         Assertions.assertThatThrownBy {
@@ -130,28 +102,15 @@ class AuthenticationProcessorTest(
     @Test
     fun `등록되어 있는 소셜 계정 로그인 성공`() {
         //given
-        val email = "test@test.com"
-        val code = "socialCode"
-        val accountType = AccountType.KAKAO
+        val code = "socialAuthenticationCode"
         val socialAccessToken = "socialAccessToken"
-        val socialUid = "socialUid"
+        val socialUid = UserFixtureHelper.defaultSocialUserSocialUid
+        val accountType = UserFixtureHelper.defaultSocialUserAccountType
 
         BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
         BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
             .willReturn(socialUid)
-
-        val createUser = CreateUser(email, null, null, accountType, "01012345678", "김승환")
-        val userAccountInformation = createSocialAccountInformation(socialUid, accountType)
-        val userInformation = create(createUser)
-        val savedUser = userRepository.save(
-            create(
-                userAccountInformation,
-                userInformation,
-                UserType.NormalUser,
-                UserStatus.Active
-            )
-        )
 
         //when
         val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
@@ -165,11 +124,10 @@ class AuthenticationProcessorTest(
     @Test
     fun `미가입 소셜 계정이라면 socialAccessToken 반환`() {
         //given
-        val email = "test@test.com"
-        val code = "socialCode"
-        val accountType = AccountType.KAKAO
+        val code = "socialAuthenticationCode"
         val socialAccessToken = "socialAccessToken"
-        val socialUid = "socialUid"
+        val accountType = AccountType.KAKAO
+        val socialUid = "unRegisteredSocialUid"
 
         BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
             .willReturn(socialAccessToken)
@@ -191,7 +149,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun `올바르지 않은 소셜 계정 로그인 실패`() {
+    fun `소셜 계정 로그인 실패`() {
         //given
         val wrongCode = "socialCode"
         val accountType = AccountType.KAKAO

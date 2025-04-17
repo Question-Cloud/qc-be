@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.api.payment.question.service
 
 import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
@@ -12,9 +13,9 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -33,6 +34,13 @@ internal class QuestionPaymentServiceTest(
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val questionOrderRepository: QuestionOrderRepository,
 ) {
+    private var uid: Long = 0
+
+    @BeforeEach
+    fun setUp() {
+        uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+    }
+
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
@@ -46,15 +54,7 @@ internal class QuestionPaymentServiceTest(
     @Test
     fun `문제 결제를 할 수 있다`() {
         // given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(
-                User::class.java
-            )
-                .set("uid", null)
-                .sample()
-        )
-
-        userPointRepository.save(UserPoint(user.uid, 1000000))
+        userPointRepository.save(UserPoint(uid, 1000000))
 
         val questions = Fixture.fixtureMonkey.giveMeBuilder(
             Question::class.java
@@ -74,7 +74,7 @@ internal class QuestionPaymentServiceTest(
             .toList()
 
         // when
-        val questionPayment = questionPaymentService.payment(user.uid, createOrder(questions), null)
+        val questionPayment = questionPaymentService.payment(uid, createOrder(questions), null)
 
         // then
         Assertions.assertThat(questionPayment.status).isEqualTo(QuestionPaymentStatus.SUCCESS)

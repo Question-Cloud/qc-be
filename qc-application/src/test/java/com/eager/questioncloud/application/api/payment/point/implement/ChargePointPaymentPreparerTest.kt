@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.payment.point.implement
 
-import com.eager.questioncloud.application.utils.Fixture
+import com.eager.questioncloud.application.utils.UserFixtureHelper
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
@@ -8,16 +8,15 @@ import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserP
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.core.exception.InvalidPaymentException
 import com.eager.questioncloud.pg.dto.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -35,6 +34,13 @@ class ChargePointPaymentPreparerTest(
     @Autowired val userPointRepository: UserPointRepository,
     @SpyBean @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
 ) {
+    private var uid: Long = 0
+
+    @BeforeEach
+    fun setUp() {
+        uid = UserFixtureHelper.createDefaultSocialUser(userRepository).uid
+    }
+
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
@@ -45,21 +51,11 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `PG 결제 요청 전 사전 검증을 할 수 있다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-        userPointRepository.save(UserPoint(user.uid, 0))
+        userPointRepository.save(UserPoint(uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = chargePointPaymentRepository.save(
-            ChargePointPayment.createOrder(
-                user.uid, ChargePointType.PackageA
-            )
-        )
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(uid, ChargePointType.PackageA))
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
@@ -75,21 +71,14 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 금액이 올바르지 않으면 예외가 발생한다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-
         val chargePointType = ChargePointType.PackageA
         val wrongPaymentAmount = chargePointType.amount - 500
 
-        userPointRepository.save(UserPoint(user.uid, 0))
+        userPointRepository.save(UserPoint(uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(user.uid, chargePointType))
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(uid, chargePointType))
 
         val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.DONE)
 
@@ -102,17 +91,11 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `이미 진행중인 결제인 경우 예외가 발생한다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-        userPointRepository.save(UserPoint(user.uid, 0))
+        userPointRepository.save(UserPoint(uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
-        val order = ChargePointPayment.createOrder(user.uid, ChargePointType.PackageA)
+        val order = ChargePointPayment.createOrder(uid, ChargePointType.PackageA)
         order.prepare(paymentId)
 
         chargePointPaymentRepository.save(order)
@@ -128,18 +111,12 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 준비 요청 동시성 이슈를 방지할 수 있다`() {
         //given
-        val user = userRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
-                .set(User::uid, null)
-                .build()
-                .sample()
-        )
-        userPointRepository.save(UserPoint(user.uid, 0))
+        userPointRepository.save(UserPoint(uid, 0))
 
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 
         val order = chargePointPaymentRepository.save(
-            ChargePointPayment.createOrder(user.uid, ChargePointType.PackageA)
+            ChargePointPayment.createOrder(uid, ChargePointType.PackageA)
         )
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
