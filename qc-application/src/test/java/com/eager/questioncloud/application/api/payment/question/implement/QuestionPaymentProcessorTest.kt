@@ -1,12 +1,10 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
-import com.eager.questioncloud.core.domain.coupon.enums.CouponType
+import com.eager.questioncloud.application.utils.fixture.Fixture
+import com.eager.questioncloud.application.utils.fixture.helper.*
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
-import com.eager.questioncloud.core.domain.coupon.model.Coupon
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
@@ -14,7 +12,6 @@ import com.eager.questioncloud.core.domain.payment.model.QuestionPayment.Compani
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon.Companion.create
 import com.eager.questioncloud.core.domain.point.implement.UserPointManager
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
@@ -34,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -45,21 +41,25 @@ internal class QuestionPaymentProcessorTest(
     @Autowired val couponRepository: CouponRepository,
     @Autowired val userCouponRepository: UserCouponRepository,
     @Autowired val userPointRepository: UserPointRepository,
+    @Autowired val creatorRepository: CreatorRepository,
     @Autowired @SpyBean val questionOrderRepository: QuestionOrderRepository,
     @Autowired @SpyBean val questionPaymentRepository: QuestionPaymentRepository,
     @Autowired @SpyBean val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor,
     @Autowired @SpyBean val userPointManager: UserPointManager,
 ) {
     private var uid: Long = 0
+    private var creatorId: Long = 0
 
     @BeforeEach
     fun setUp() {
         uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+        creatorId = CreatorFixtureHelper.createCreator(uid, creatorRepository).id
     }
 
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
+        creatorRepository.deleteAllInBatch()
         questionRepository.deleteAllInBatch()
         couponRepository.deleteAllInBatch()
         userCouponRepository.deleteAllInBatch()
@@ -70,25 +70,15 @@ internal class QuestionPaymentProcessorTest(
     fun `문제 결제 처리를 할 수 있다 (쿠폰 O)`() {
         // given
         val beforeUserPoint = 1000000
-        userPointRepository.save(UserPoint(uid, beforeUserPoint))
+        UserPointFixtureHelper.createUserPoint(uid, beforeUserPoint, userPointRepository)
 
-        val coupon = couponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                .set(Coupon::id, null)
-                .set(Coupon::value, 1000)
-                .set(Coupon::couponType, CouponType.Fixed)
-                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
-                .sample()
-        )
-
-        val userCoupon = userCouponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
-                .set(UserCoupon::couponId, coupon.id)
-                .set(UserCoupon::userId, uid)
-                .set(UserCoupon::endAt, coupon.endAt)
-                .set(UserCoupon::isUsed, false)
-                .sample()
-        )
+        val coupon = CouponFixtureHelper.createCoupon(couponRepository = couponRepository)
+        val userCoupon =
+            UserCouponFixtureHelper.createUserCoupon(
+                coupon = coupon,
+                uid = uid,
+                userCouponRepository = userCouponRepository
+            )
 
         val questions = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
             .set(Question::id, null)
@@ -132,19 +122,9 @@ internal class QuestionPaymentProcessorTest(
     fun `문제 결제 처리를 할 수 있다 (쿠폰 X)`() {
         // given
         val beforeUserPoint = 1000000
-        userPointRepository.save(UserPoint(uid, beforeUserPoint))
+        UserPointFixtureHelper.createUserPoint(uid, beforeUserPoint, userPointRepository)
 
-        val questions = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionContent into QuestionContent::questionCategoryId, 25L)
-            .set(Question::questionContent into QuestionContent::price, 1000)
-            .set(Question::questionStatus, QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question)
-            }
-            .toList()
+        val questions = dummyQuestions()
 
         val questionPayment = create(
             uid,
@@ -155,7 +135,7 @@ internal class QuestionPaymentProcessorTest(
         val originalAmount = questionPayment.amount
 
         // when
-        val paymentResult = questionPaymentProcessor.payment(questionPayment)
+        questionPaymentProcessor.payment(questionPayment)
 
         // then
         Mockito.verify(questionPaymentCouponProcessor, Mockito.times(1)).applyCoupon(questionPayment)
@@ -172,37 +152,16 @@ internal class QuestionPaymentProcessorTest(
     fun `보유 포인트가 부족하면 포인트 부족 예외가 발생한다`() {
         // given
         val beforeUserPoint = 1000
-        userPointRepository.save(UserPoint(uid, beforeUserPoint))
+        UserPointFixtureHelper.createUserPoint(uid, beforeUserPoint, userPointRepository)
 
-        val coupon = couponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                .set(Coupon::id, null)
-                .set(Coupon::value, 1000)
-                .set(Coupon::couponType, CouponType.Fixed)
-                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
-                .sample()
+        val coupon = CouponFixtureHelper.createCoupon(couponRepository = couponRepository)
+        val userCoupon = UserCouponFixtureHelper.createUserCoupon(
+            coupon = coupon,
+            uid = uid,
+            userCouponRepository = userCouponRepository
         )
 
-        val userCoupon = userCouponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
-                .set(UserCoupon::couponId, coupon.id)
-                .set(UserCoupon::userId, uid)
-                .set(UserCoupon::endAt, coupon.endAt)
-                .set(UserCoupon::isUsed, false)
-                .sample()
-        )
-
-        val questions = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionContent into QuestionContent::questionCategoryId, 25L)
-            .set(Question::questionContent into QuestionContent::price, 1000)
-            .set(Question::questionStatus, QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question)
-            }
-            .toList()
+        val questions = dummyQuestions()
 
         val questionPayment = create(
             uid,
@@ -220,37 +179,16 @@ internal class QuestionPaymentProcessorTest(
     fun `결제 도중 예외가 발생하면 쿠폰, 포인트가 롤백 처리 된다`() {
         // given
         val beforeUserPoint = 1000000
-        userPointRepository.save(UserPoint(uid, beforeUserPoint))
+        UserPointFixtureHelper.createUserPoint(uid, beforeUserPoint, userPointRepository)
 
-        val coupon = couponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                .set(Coupon::id, null)
-                .set(Coupon::value, 1000)
-                .set(Coupon::couponType, CouponType.Fixed)
-                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
-                .sample()
+        val coupon = CouponFixtureHelper.createCoupon(couponRepository = couponRepository)
+        val userCoupon = UserCouponFixtureHelper.createUserCoupon(
+            coupon = coupon,
+            uid = uid,
+            userCouponRepository = userCouponRepository
         )
 
-        val userCoupon = userCouponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
-                .set(UserCoupon::couponId, coupon.id)
-                .set(UserCoupon::userId, uid)
-                .set(UserCoupon::endAt, coupon.endAt)
-                .set(UserCoupon::isUsed, false)
-                .sample()
-        )
-
-        val questions = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionContent into QuestionContent::questionCategoryId, 25L)
-            .set(Question::questionContent into QuestionContent::price, 1000)
-            .set(Question::questionStatus, QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question)
-            }
-            .toList()
+        val questions = dummyQuestions()
 
         val questionPayment = create(
             uid,
@@ -270,5 +208,24 @@ internal class QuestionPaymentProcessorTest(
 
         val afterUserPoint = userPointRepository.getUserPoint(uid)
         Assertions.assertThat(afterUserPoint.point).isEqualTo(beforeUserPoint)
+    }
+
+    private fun createDummyQuestion(questionStatus: QuestionStatus = QuestionStatus.Available): Question {
+        return QuestionFixtureHelper.createQuestion(
+            creatorId = creatorId,
+            questionStatus = questionStatus,
+            questionRepository = questionRepository
+        )
+    }
+
+    private fun dummyQuestions(): List<Question> {
+        val questions = mutableListOf<Question>()
+
+        for (i in 1..10) {
+            val question = createDummyQuestion()
+            questions.add(question)
+        }
+
+        return questions
     }
 }

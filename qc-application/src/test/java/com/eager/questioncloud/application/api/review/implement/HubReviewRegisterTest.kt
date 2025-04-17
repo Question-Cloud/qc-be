@@ -1,19 +1,20 @@
 package com.eager.questioncloud.application.api.review.implement
 
 import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity.Companion.from
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionJpaRepository
-import com.eager.questioncloud.core.domain.question.model.Question
-import com.eager.questioncloud.core.domain.question.model.QuestionContent
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewJpaRepository
 import com.eager.questioncloud.core.domain.review.model.QuestionReview.Companion.create
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.UserQuestionEntity
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionJpaRepository
 import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,32 +25,36 @@ import java.util.concurrent.Executors
 @SpringBootTest
 @ActiveProfiles("test")
 internal class HubReviewRegisterTest(
+    @Autowired val userRepository: UserRepository,
     @Autowired val hubReviewRegister: HubReviewRegister,
-    @Autowired val questionJpaRepository: QuestionJpaRepository,
+    @Autowired val questionRepository: QuestionRepository,
     @Autowired val questionReviewJpaRepository: QuestionReviewJpaRepository,
     @Autowired val userQuestionJpaRepository: UserQuestionJpaRepository,
+    @Autowired val creatorRepository: CreatorRepository,
 ) {
+    private var uid: Long = 0
+    private var creatorId: Long = 0
+
+    @BeforeEach
+    fun setUp() {
+        uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+        creatorId = CreatorFixtureHelper.createCreator(uid, creatorRepository).id
+    }
+
     @AfterEach
     fun tearDown() {
-        questionJpaRepository.deleteAllInBatch()
+        questionRepository.deleteAllInBatch()
         questionReviewJpaRepository.deleteAllInBatch()
         userQuestionJpaRepository.deleteAllInBatch()
+        creatorRepository.deleteAllInBatch()
     }
 
     @Test
     fun `리뷰 중복 작성 동시성 문제를 방지할 수 있다`() {
         //given
-        val reviewerId = 1L
+        val reviewerId = uid
         val question =
-            questionJpaRepository.save(
-                from(
-                    Question.create(
-                        1L,
-                        Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionContent>()
-                            .sample()
-                    )
-                )
-            ).toModel()
+            QuestionFixtureHelper.createQuestion(creatorId = creatorId, questionRepository = questionRepository)
         userQuestionJpaRepository.save(UserQuestionEntity.from(UserQuestion.create(reviewerId, question.id)))
         val questionReview = create(question.id, reviewerId, "comment", 5)
 

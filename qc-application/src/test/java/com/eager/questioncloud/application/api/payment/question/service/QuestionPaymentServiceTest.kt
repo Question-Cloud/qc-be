@@ -1,14 +1,16 @@
 package com.eager.questioncloud.application.api.payment.question.service
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserPointFixtureHelper
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.payment.enums.QuestionPaymentStatus
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionOrderRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionOrder.Companion.createOrder
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
@@ -33,17 +35,21 @@ internal class QuestionPaymentServiceTest(
     @Autowired val userCouponRepository: UserCouponRepository,
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val questionOrderRepository: QuestionOrderRepository,
+    @Autowired val creatorRepository: CreatorRepository,
 ) {
     private var uid: Long = 0
+    private var creatorId: Long = 0
 
     @BeforeEach
     fun setUp() {
         uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+        creatorId = CreatorFixtureHelper.createCreator(uid, creatorRepository).id
     }
 
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
+        creatorRepository.deleteAllInBatch()
         questionRepository.deleteAllInBatch()
         couponRepository.deleteAllInBatch()
         userCouponRepository.deleteAllInBatch()
@@ -54,24 +60,10 @@ internal class QuestionPaymentServiceTest(
     @Test
     fun `문제 결제를 할 수 있다`() {
         // given
-        userPointRepository.save(UserPoint(uid, 1000000))
+        val beforeUserPoint = 1000000
+        UserPointFixtureHelper.createUserPoint(uid, beforeUserPoint, userPointRepository)
 
-        val questions = Fixture.fixtureMonkey.giveMeBuilder(
-            Question::class.java
-        )
-            .set("id", null)
-            .set("creatorId", 1L)
-            .set("questionContent.questionCategoryId", 25L)
-            .set("questionContent.price", 1000)
-            .set("questionStatus", QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question: Question ->
-                questionRepository.save(
-                    question
-                )
-            }
-            .toList()
+        val questions = dummyQuestions()
 
         // when
         val questionPayment = questionPaymentService.payment(uid, createOrder(questions), null)
@@ -79,5 +71,24 @@ internal class QuestionPaymentServiceTest(
         // then
         Assertions.assertThat(questionPayment.status).isEqualTo(QuestionPaymentStatus.SUCCESS)
         Assertions.assertThat(questionPayment.order.questionIds.size).isEqualTo(questions.size)
+    }
+
+    private fun createDummyQuestion(questionStatus: QuestionStatus = QuestionStatus.Available): Question {
+        return QuestionFixtureHelper.createQuestion(
+            creatorId = creatorId,
+            questionStatus = questionStatus,
+            questionRepository = questionRepository
+        )
+    }
+
+    private fun dummyQuestions(): List<Question> {
+        val questions = mutableListOf<Question>()
+
+        for (i in 1..10) {
+            val question = createDummyQuestion()
+            questions.add(question)
+        }
+
+        return questions
     }
 }

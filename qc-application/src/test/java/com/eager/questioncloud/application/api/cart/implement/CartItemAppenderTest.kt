@@ -1,7 +1,8 @@
 package com.eager.questioncloud.application.api.cart.implement
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository
 import com.eager.questioncloud.core.domain.cart.model.CartItem
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
@@ -9,7 +10,6 @@ import com.eager.questioncloud.core.domain.creator.model.Creator
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.enums.Subject
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.core.domain.question.model.Question
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.repository.UserQuestionRepository
 import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion
@@ -34,10 +34,12 @@ class CartItemAppenderTest(
     @Autowired private val userQuestionRepository: UserQuestionRepository,
 ) {
     private var uid: Long = 0
+    private var creatorId: Long = 0
 
     @BeforeEach
     fun setUp() {
         uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+        creatorId = CreatorFixtureHelper.createCreator(uid, creatorRepository).id
     }
 
 
@@ -53,17 +55,8 @@ class CartItemAppenderTest(
     @Test
     fun `장바구니에 문제를 추가할 수 있다`() {
         //given
-        val creator = creatorRepository.save(Creator.create(uid, Subject.Biology, "Hello"))
-
-        val question = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
-                .set("id", null)
-                .set("creatorId", creator.id)
-                .set("questionContent.questionCategoryId", 25L)
-                .set("questionContent.price", 1000)
-                .set("questionStatus", QuestionStatus.Available)
-                .sample()
-        )
+        val question =
+            QuestionFixtureHelper.createQuestion(creatorId = creatorId, questionRepository = questionRepository)
 
         //when
         cartItemAppender.append(uid, question.id)
@@ -78,15 +71,12 @@ class CartItemAppenderTest(
         //given
         val creator = creatorRepository.save(Creator.create(uid, Subject.Biology, "Hello"))
 
-        val unAvailableQuestion = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
-                .set("id", null)
-                .set("creatorId", creator.id)
-                .set("questionContent.questionCategoryId", 25L)
-                .set("questionContent.price", 1000)
-                .set("questionStatus", QuestionStatus.UnAvailable)
-                .sample()
-        )
+        val unAvailableQuestion =
+            QuestionFixtureHelper.createQuestion(
+                creatorId = creatorId,
+                questionStatus = QuestionStatus.UnAvailable,
+                questionRepository = questionRepository
+            )
 
         //when then
         Assertions.assertThatThrownBy { cartItemAppender.append(uid, unAvailableQuestion.id) }
@@ -100,15 +90,8 @@ class CartItemAppenderTest(
         //given
         val creator = creatorRepository.save(Creator.create(uid, Subject.Biology, "Hello"))
 
-        val question = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
-                .set("id", null)
-                .set("creatorId", creator.id)
-                .set("questionContent.questionCategoryId", 25L)
-                .set("questionContent.price", 1000)
-                .set("questionStatus", QuestionStatus.Available)
-                .sample()
-        )
+        val question =
+            QuestionFixtureHelper.createQuestion(creatorId = creator.id, questionRepository = questionRepository)
         cartItemRepository.save(CartItem.create(uid, question.id))
 
         //when then
@@ -122,15 +105,8 @@ class CartItemAppenderTest(
         //given
         val creator = creatorRepository.save(Creator.create(uid, Subject.Biology, "Hello"))
 
-        val question = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
-                .set("id", null)
-                .set("creatorId", creator.id)
-                .set("questionContent.questionCategoryId", 25L)
-                .set("questionContent.price", 1000)
-                .set("questionStatus", QuestionStatus.Available)
-                .sample()
-        )
+        val question =
+            QuestionFixtureHelper.createQuestion(creatorId = creator.id, questionRepository = questionRepository)
 
         userQuestionRepository.saveAll(UserQuestion.create(uid, listOf(question.id)))
 

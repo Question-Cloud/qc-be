@@ -1,12 +1,11 @@
 package com.eager.questioncloud.application.api.payment.point.implement
 
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -49,14 +48,14 @@ class ChargePointPaymentPreparerTest(
     }
 
     @Test
-    fun `PG 결제 요청 전 사전 검증을 할 수 있다`() {
+    fun `포인트 결제 검증 성공`() {
         //given
-        userPointRepository.save(UserPoint(uid, 0))
-
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(uid, ChargePointType.PackageA))
-
+        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
+            uid = uid,
+            chargePointType = ChargePointType.PackageA,
+            chargePointPaymentRepository = chargePointPaymentRepository,
+        )
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when
@@ -71,15 +70,13 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 금액이 올바르지 않으면 예외가 발생한다`() {
         //given
-        val chargePointType = ChargePointType.PackageA
-        val wrongPaymentAmount = chargePointType.amount - 500
-
-        userPointRepository.save(UserPoint(uid, 0))
-
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(uid, chargePointType))
-
+        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
+            uid = uid,
+            chargePointType = ChargePointType.PackageA,
+            chargePointPaymentRepository = chargePointPaymentRepository,
+        )
+        val wrongPaymentAmount = order.chargePointType.amount - 500
         val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.DONE)
 
         //when then
@@ -89,17 +86,15 @@ class ChargePointPaymentPreparerTest(
 
 
     @Test
-    fun `이미 진행중인 결제인 경우 예외가 발생한다`() {
+    fun `이미 결제 처리가 완료된 경우 예외가 발생한다`() {
         //given
-        userPointRepository.save(UserPoint(uid, 0))
-
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-
-        val order = ChargePointPayment.createOrder(uid, ChargePointType.PackageA)
-        order.prepare(paymentId)
-
-        chargePointPaymentRepository.save(order)
-
+        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
+            uid = uid,
+            chargePointType = ChargePointType.PackageA,
+            chargePointPaymentRepository = chargePointPaymentRepository,
+            chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED,
+        )
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when then
@@ -111,14 +106,12 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 준비 요청 동시성 이슈를 방지할 수 있다`() {
         //given
-        userPointRepository.save(UserPoint(uid, 0))
-
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-
-        val order = chargePointPaymentRepository.save(
-            ChargePointPayment.createOrder(uid, ChargePointType.PackageA)
+        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
+            uid = uid,
+            chargePointType = ChargePointType.PackageA,
+            chargePointPaymentRepository = chargePointPaymentRepository,
         )
-
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
         //when

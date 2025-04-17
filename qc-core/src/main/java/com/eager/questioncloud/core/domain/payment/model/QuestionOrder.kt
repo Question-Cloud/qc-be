@@ -22,7 +22,6 @@ class QuestionOrder(
             .collect(Collectors.toList())
 
     companion object {
-        @JvmStatic
         fun createOrder(questions: List<Question>): QuestionOrder {
             val orderId = TSID.Factory.getTsid().toString()
             val items = questions

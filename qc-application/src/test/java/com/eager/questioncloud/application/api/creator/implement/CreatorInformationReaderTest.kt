@@ -1,12 +1,11 @@
 package com.eager.questioncloud.application.api.creator.implement
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorStatisticsFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.Fixture
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
-import com.eager.questioncloud.core.domain.creator.model.Creator
-import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
-import com.eager.questioncloud.core.domain.question.enums.Subject
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
 import com.eager.questioncloud.core.domain.subscribe.model.Subscribe
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
@@ -28,7 +27,6 @@ class CreatorInformationReaderTest(
     @Autowired val creatorStatisticsRepository: CreatorStatisticsRepository,
     @Autowired val subscribeRepository: SubscribeRepository,
 ) {
-
     @AfterEach
     fun tearDown() {
         userRepository.deleteAllInBatch()
@@ -40,20 +38,12 @@ class CreatorInformationReaderTest(
     @Test
     fun `한 명의 크리에이터 정보를 조회할 수 있다`() {
         //given
-        val user = UserFixtureHelper.createEmailUser("user1@Naver.com", "qwer1234", UserStatus.Active, userRepository)
-        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
-        val creatorStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-            .set(CreatorStatistics::creatorId, creator.id)
-            .sample()
-        creatorStatisticsRepository.save(creatorStatistics)
-
-        val subscribers = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
-            .set(Subscribe::creatorId, creator.id)
-            .sampleList(10)
-
-        subscribers.forEach { subscriber ->
-            subscribeRepository.save(subscriber)
-        }
+        val user = UserFixtureHelper.createEmailUser("user1@naver.com", "qwer1234", UserStatus.Active, userRepository)
+        val creator = CreatorFixtureHelper.createCreator(user.uid, creatorRepository)
+        val creatorStatistics =
+            CreatorStatisticsFixtureHelper.createCreatorStatistics(creator.id, creatorStatisticsRepository)
+        val subscribersCount = 10
+        createDummySubscribers(creator.id, subscribersCount)
 
         // when
         val creatorInformation = creatorInformationReader.getCreatorInformation(creator.id)
@@ -69,43 +59,28 @@ class CreatorInformationReaderTest(
                 user.userInformation.name,
                 creatorStatistics.salesCount,
                 creatorStatistics.averageRateOfReview,
-                subscribers.size
+                subscribersCount
             )
     }
 
     @Test
     fun `2명 이상의 크리에이터 정보를 조회할 수 있다`() {
-        val user1 = UserFixtureHelper.createEmailUser("user1@Naver.com", "qwer1234", UserStatus.Active, userRepository)
-        val user2 = UserFixtureHelper.createEmailUser("user2@Naver.com", "qwer1234", UserStatus.Active, userRepository)
+        val user1 = UserFixtureHelper.createEmailUser("user1@naver.com", "qwer1234", UserStatus.Active, userRepository)
+        val user2 = UserFixtureHelper.createEmailUser("user2@naver.com", "qwer1234", UserStatus.Active, userRepository)
 
-        val creator1 = creatorRepository.save(Creator.create(user1.uid, Subject.Biology, "Hello"))
-        val creator2 = creatorRepository.save(Creator.create(user2.uid, Subject.Biology, "Hello"))
+        val creator1 = CreatorFixtureHelper.createCreator(user1.uid, creatorRepository)
+        val creator2 = CreatorFixtureHelper.createCreator(user2.uid, creatorRepository)
 
-        val creatorStatistics1 = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-            .set(CreatorStatistics::creatorId, creator1.id)
-            .sample()
-        val creatorStatistics2 = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-            .set(CreatorStatistics::creatorId, creator2.id)
-            .sample()
+        val creatorStatistics1 =
+            CreatorStatisticsFixtureHelper.createCreatorStatistics(creator1.id, creatorStatisticsRepository)
+        val creatorStatistics2 =
+            CreatorStatisticsFixtureHelper.createCreatorStatistics(creator2.id, creatorStatisticsRepository)
 
-        creatorStatisticsRepository.save(creatorStatistics1)
-        creatorStatisticsRepository.save(creatorStatistics2)
+        val creator1SubscribersCount = 12
+        val creator2SubscribersCount = 20
 
-        val subscribers1 = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
-            .set(Subscribe::creatorId, creator1.id)
-            .sampleList(10)
-
-        subscribers1.forEach { subscriber ->
-            subscribeRepository.save(subscriber)
-        }
-
-        val subscribers2 = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
-            .set(Subscribe::creatorId, creator2.id)
-            .sampleList(10)
-
-        subscribers2.forEach { subscriber ->
-            subscribeRepository.save(subscriber)
-        }
+        createDummySubscribers(creator1.id, creator1SubscribersCount)
+        createDummySubscribers(creator2.id, creator2SubscribersCount)
 
         // when
         val creatorInformations = creatorInformationReader.getCreatorInformation(listOf(creator1.id, creator2.id))
@@ -123,7 +98,7 @@ class CreatorInformationReaderTest(
                 user1.userInformation.name,
                 creatorStatistics1.salesCount,
                 creatorStatistics1.averageRateOfReview,
-                subscribers1.size
+                creator1SubscribersCount
             )
 
         Assertions.assertThat(creatorInformations[1])
@@ -136,7 +111,17 @@ class CreatorInformationReaderTest(
                 user2.userInformation.name,
                 creatorStatistics2.salesCount,
                 creatorStatistics2.averageRateOfReview,
-                subscribers2.size
+                creator2SubscribersCount
             )
+    }
+
+    fun createDummySubscribers(creatorId: Long, count: Int) {
+        val subscribers = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
+            .set(Subscribe::creatorId, creatorId)
+            .sampleList(count)
+
+        subscribers.forEach { subscriber ->
+            subscribeRepository.save(subscriber)
+        }
     }
 }

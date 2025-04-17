@@ -28,7 +28,6 @@ class QuestionPaymentCoupon(
     }
 
     companion object {
-        @JvmStatic
         fun create(userCouponId: Long, coupon: Coupon): QuestionPaymentCoupon {
             return QuestionPaymentCoupon(
                 userCouponId,

@@ -9,7 +9,7 @@ import io.hypersistence.tsid.TSID
 import java.time.LocalDateTime
 
 class ChargePointPayment(
-    val orderId: String,
+    val orderId: String = TSID.Factory.getTsid().toString(),
     var paymentId: String? = null,
     val userId: Long,
     val chargePointType: ChargePointType,
@@ -54,7 +54,6 @@ class ChargePointPayment(
             chargePointType: ChargePointType
         ): ChargePointPayment {
             return ChargePointPayment(
-                orderId = TSID.Factory.getTsid().toString(),
                 userId = userId,
                 chargePointType = chargePointType
             )

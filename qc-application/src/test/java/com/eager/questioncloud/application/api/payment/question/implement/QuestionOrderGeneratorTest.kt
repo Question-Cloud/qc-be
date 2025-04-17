@@ -1,7 +1,9 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
@@ -10,7 +12,6 @@ import com.eager.questioncloud.core.domain.userquestion.infrastructure.repositor
 import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion.Companion.create
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -25,13 +26,16 @@ internal class QuestionOrderGeneratorTest(
     @Autowired val userQuestionRepository: UserQuestionRepository,
     @Autowired val questionRepository: QuestionRepository,
     @Autowired val userRepository: UserRepository,
+    @Autowired val creatorRepository: CreatorRepository,
     @Autowired val questionOrderGenerator: QuestionOrderGenerator,
 ) {
     private var uid: Long = 0
+    private var creatorId: Long = 0
 
     @BeforeEach
     fun setUp() {
         uid = UserFixtureHelper.createDefaultEmailUser(userRepository).uid
+        creatorId = CreatorFixtureHelper.createCreator(uid, creatorRepository).id
     }
 
     @AfterEach
@@ -39,20 +43,13 @@ internal class QuestionOrderGeneratorTest(
         questionRepository.deleteAllInBatch()
         userRepository.deleteAllInBatch()
         userQuestionRepository.deleteAllInBatch()
+        creatorRepository.deleteAllInBatch()
     }
 
     @Test
     fun `Question 주문을 생성할 수 있다`() {
         // given
-        val questionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionStatus, QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question).id
-            }
-            .toList()
+        val questionIds = dummyQuestionIds()
 
         // when
         val questionOrder = questionOrderGenerator.generateQuestionOrder(uid, questionIds)
@@ -64,29 +61,13 @@ internal class QuestionOrderGeneratorTest(
     @Test
     fun `비활성화 된 Question을 포함한 주문을 생성할 수 없다`() {
         // given
-        val availableQuestionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionStatus, QuestionStatus.Available)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question).id
-            }
-            .toList()
+        val availableQuestionIds = dummyQuestionIds()
 
-        val unavailableQuestionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-            .set(Question::id, null)
-            .set(Question::questionStatus, QuestionStatus.UnAvailable)
-            .sampleList(10)
-            .stream()
-            .map { question ->
-                questionRepository.save(question).id
-            }
-            .toList()
+        val unavailableQuestionId = createDummyQuestion(questionStatus = QuestionStatus.UnAvailable).id
 
         val questionIds: MutableList<Long> = mutableListOf()
         questionIds.addAll(availableQuestionIds)
-        questionIds.addAll(unavailableQuestionIds)
+        questionIds.add(unavailableQuestionId)
 
         //when then
         Assertions.assertThatThrownBy {
@@ -101,19 +82,9 @@ internal class QuestionOrderGeneratorTest(
     @Test
     fun `이미 구매한 Question은 주문에 포함할 수 없다`() {
         // given
-        val alreadyOwnedQuestion = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-                .set(Question::id, null)
-                .set(Question::questionStatus, QuestionStatus.Available)
-                .sample()
-        )
+        val alreadyOwnedQuestion = createDummyQuestion()
 
-        val normalQuestion = questionRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
-                .set(Question::id, null)
-                .set(Question::questionStatus, QuestionStatus.Available)
-                .sample()
-        )
+        val normalQuestion = createDummyQuestion()
 
         userQuestionRepository.saveAll(create(uid, listOf(alreadyOwnedQuestion.id)))
 
@@ -126,5 +97,24 @@ internal class QuestionOrderGeneratorTest(
         }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_OWN_QUESTION)
+    }
+
+    private fun createDummyQuestion(questionStatus: QuestionStatus = QuestionStatus.Available): Question {
+        return QuestionFixtureHelper.createQuestion(
+            creatorId = creatorId,
+            questionStatus = questionStatus,
+            questionRepository = questionRepository
+        )
+    }
+
+    private fun dummyQuestionIds(): List<Long> {
+        val questionIds = mutableListOf<Long>()
+
+        for (i in 1..10) {
+            val question = createDummyQuestion()
+            questionIds.add(question.id)
+        }
+
+        return questionIds
     }
 }

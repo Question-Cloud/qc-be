@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.utils
+package com.eager.questioncloud.application.utils.fixture
 
 import com.navercorp.fixturemonkey.FixtureMonkey
 import com.navercorp.fixturemonkey.api.plugin.SimpleValueJqwikPlugin

@@ -1,11 +1,12 @@
 package com.eager.questioncloud.application.api.payment.point.implement
 
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserPointFixtureHelper
+import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
-import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
@@ -42,16 +43,15 @@ class ChargePointPaymentPostProcessorTest(
     @Test
     fun `포인트 충전을 처리할 수 있다`() {
         // given
-        userPointRepository.save(UserPoint(uid, 0))
-
+        UserPointFixtureHelper.createUserPoint(uid = uid, point = 0, userPointRepository = userPointRepository)
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-
-        val payment =
-            chargePointPaymentRepository.save(ChargePointPayment.createOrder(uid, ChargePointType.PackageA))
-
-        payment.prepare(paymentId)
-
-        val chargePointPayment = chargePointPaymentRepository.save(payment)
+        val chargePointPayment = ChargePointPaymentFixtureHelper.createChargePointPayment(
+            uid = uid,
+            paymentId = paymentId,
+            chargePointType = ChargePointType.PackageA,
+            chargePointPaymentRepository = chargePointPaymentRepository,
+            chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED,
+        )
 
         // when
         chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)

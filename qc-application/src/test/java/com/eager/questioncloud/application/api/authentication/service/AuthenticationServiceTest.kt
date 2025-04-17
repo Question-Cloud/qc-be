@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.api.authentication.service
 
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.social.SocialAPIManager

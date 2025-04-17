@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.utils
+package com.eager.questioncloud.application.utils.fixture.helper
 
 import com.eager.questioncloud.core.domain.user.dto.CreateUser
 import com.eager.questioncloud.core.domain.user.enums.AccountType

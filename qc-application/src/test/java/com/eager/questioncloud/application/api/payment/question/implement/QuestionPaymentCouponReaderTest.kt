@@ -1,15 +1,13 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
-import com.eager.questioncloud.application.utils.Fixture
-import com.eager.questioncloud.application.utils.UserFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.CouponFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserCouponFixtureHelper
+import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
 import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
-import com.eager.questioncloud.core.domain.coupon.model.Coupon
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -17,7 +15,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -44,20 +41,11 @@ internal class QuestionPaymentCouponReaderTest(
     @Test
     fun `유효한 쿠폰을 불러 올 수 있다`() {
         // given
-        val coupon = couponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                .set(Coupon::id, null)
-                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
-                .sample()
-        )
-
-        val userCoupon = userCouponRepository.save(
-            Fixture.fixtureMonkey.giveMeKotlinBuilder<UserCoupon>()
-                .set(UserCoupon::couponId, coupon.id)
-                .set(UserCoupon::userId, uid)
-                .set(UserCoupon::endAt, coupon.endAt)
-                .set(UserCoupon::isUsed, false)
-                .sample()
+        val coupon = CouponFixtureHelper.createCoupon(couponRepository = couponRepository)
+        val userCoupon = UserCouponFixtureHelper.createUserCoupon(
+            coupon = coupon,
+            uid = uid,
+            userCouponRepository = userCouponRepository
         )
 
         // when
