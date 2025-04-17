@@ -46,7 +46,7 @@ class CreatorInformationReaderTest(
                 .sample()
         )
 
-        val creator = creatorRepository.save(Creator.create(user.uid!!, Subject.Biology, "Hello"))
+        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
 
         val creatorStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
             .set(CreatorStatistics::creatorId, creator.id)
@@ -63,7 +63,7 @@ class CreatorInformationReaderTest(
         }
 
         // when
-        val creatorInformation = creatorInformationReader.getCreatorInformation(creator.id!!)
+        val creatorInformation = creatorInformationReader.getCreatorInformation(creator.id)
 
         //then
         Assertions.assertThat(creatorInformation)
@@ -95,8 +95,8 @@ class CreatorInformationReaderTest(
                 .sample()
         )
 
-        val creator1 = creatorRepository.save(Creator.create(user1.uid!!, Subject.Biology, "Hello"))
-        val creator2 = creatorRepository.save(Creator.create(user2.uid!!, Subject.Biology, "Hello"))
+        val creator1 = creatorRepository.save(Creator.create(user1.uid, Subject.Biology, "Hello"))
+        val creator2 = creatorRepository.save(Creator.create(user2.uid, Subject.Biology, "Hello"))
 
         val creatorStatistics1 = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
             .set(CreatorStatistics::creatorId, creator1.id)
@@ -125,7 +125,7 @@ class CreatorInformationReaderTest(
         }
 
         // when
-        val creatorInformations = creatorInformationReader.getCreatorInformation(listOf(creator1.id!!, creator2.id!!))
+        val creatorInformations = creatorInformationReader.getCreatorInformation(listOf(creator1.id, creator2.id))
 
         // then
         Assertions.assertThat(creatorInformations.size).isEqualTo(2)

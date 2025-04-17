@@ -10,7 +10,6 @@ import com.eager.questioncloud.pg.toss.PaymentStatus
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.kotlin.any
@@ -34,8 +33,7 @@ internal class ChargePointPaymentServiceTest(
     }
 
     @Test
-    @DisplayName("포인트 충전 결제 주문을 생성할 수 있다.")
-    fun createOrder() {
+    fun `포인트 충전 주문을 생성할 수 있다`() {
         //given
         val userId = 1L
         val chargePointType = ChargePointType.PackageA
@@ -52,8 +50,7 @@ internal class ChargePointPaymentServiceTest(
     }
 
     @Test
-    @DisplayName("포인트 충전 결제를 승인할 수 있다.")
-    fun preparePayment() {
+    fun `포인트 충전 결제를 승인할 수 있다`() {
         //given
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
 

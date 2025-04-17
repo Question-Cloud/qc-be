@@ -48,7 +48,7 @@ class CartServiceTest(
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid!!)
+                .set(Creator::userId, user.uid)
                 .build()
                 .sample()
         )
@@ -56,18 +56,18 @@ class CartServiceTest(
         val questionIds = Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
             .set(Question::id, null)
             .set(Question::questionStatus, QuestionStatus.Available)
-            .set(Question::creatorId, creator.id!!)
+            .set(Question::creatorId, creator.id)
             .sampleList(10)
             .stream()
             .map { question ->
-                questionRepository.save(question).id!!
+                questionRepository.save(question).id
             }
             .toList()
 
-        questionIds.forEach { questionId -> cartRepository.save(CartItem.create(user.uid!!, questionId)) }
+        questionIds.forEach { questionId -> cartRepository.save(CartItem.create(user.uid, questionId)) }
 
         // when
-        val cartItems = cartService.getCartItems(user.uid!!)
+        val cartItems = cartService.getCartItems(user.uid)
 
         //then
         Assertions.assertThat(cartItems).hasSize(10)
@@ -89,7 +89,7 @@ class CartServiceTest(
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid!!)
+                .set(Creator::userId, user.uid)
                 .build()
                 .sample()
         )
@@ -98,18 +98,18 @@ class CartServiceTest(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
                 .set(Question::id, null)
                 .set(Question::questionStatus, QuestionStatus.Available)
-                .set(Question::creatorId, creator.id!!)
+                .set(Question::creatorId, creator.id)
                 .sample()
         )
 
         // when
-        cartService.appendCartItem(user.uid!!, question.id!!)
+        cartService.appendCartItem(user.uid, question.id)
 
         //then
-        val cartItems = cartService.getCartItems(user.uid!!)
+        val cartItems = cartService.getCartItems(user.uid)
         Assertions.assertThat(cartItems).hasSize(1)
         Assertions.assertThat(cartItems.map { it.questionId })
-            .containsExactly(question.id!!)
+            .containsExactly(question.id)
     }
 
     @Test
@@ -125,7 +125,7 @@ class CartServiceTest(
         val creator = creatorRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
                 .set(Creator::id, null)
-                .set(Creator::userId, user.uid!!)
+                .set(Creator::userId, user.uid)
                 .build()
                 .sample()
         )
@@ -134,17 +134,17 @@ class CartServiceTest(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<Question>()
                 .set(Question::id, null)
                 .set(Question::questionStatus, QuestionStatus.Available)
-                .set(Question::creatorId, creator.id!!)
+                .set(Question::creatorId, creator.id)
                 .sample()
         )
 
-        val cartItem = cartRepository.save(CartItem.create(user.uid!!, question.id!!))
+        val cartItem = cartRepository.save(CartItem.create(user.uid, question.id))
 
         // when
-        cartService.removeCartItem(listOf(cartItem.id!!), user.uid!!)
+        cartService.removeCartItem(listOf(cartItem.id), user.uid)
 
         // then
-        val cartItems = cartService.getCartItems(user.uid!!)
+        val cartItems = cartService.getCartItems(user.uid)
         Assertions.assertThat(cartItems).isEmpty()
     }
 }

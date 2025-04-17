@@ -54,7 +54,7 @@ class CartItemAppenderTest(
         )
         user.setCreator()
 
-        val creator = creatorRepository.save(Creator.create(user.uid!!, Subject.Biology, "Hello"))
+        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
 
         val question = questionRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
@@ -67,10 +67,10 @@ class CartItemAppenderTest(
         )
 
         //when
-        cartItemAppender.append(user.uid!!, question.id!!)
+        cartItemAppender.append(user.uid, question.id)
 
         //then
-        val isExistInCart = cartItemRepository.isExistsInCart(user.uid!!, question.id!!)
+        val isExistInCart = cartItemRepository.isExistsInCart(user.uid, question.id)
         Assertions.assertThat(isExistInCart).isTrue()
     }
 
@@ -86,7 +86,7 @@ class CartItemAppenderTest(
         )
         user.setCreator()
 
-        val creator = creatorRepository.save(Creator.create(user.uid!!, Subject.Biology, "Hello"))
+        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
 
         val unAvailableQuestion = questionRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
@@ -99,7 +99,7 @@ class CartItemAppenderTest(
         )
 
         //when then
-        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid!!, unAvailableQuestion.id!!) }
+        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid, unAvailableQuestion.id) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.UNAVAILABLE_QUESTION)
 
@@ -117,7 +117,7 @@ class CartItemAppenderTest(
         )
         user.setCreator()
 
-        val creator = creatorRepository.save(Creator.create(user.uid!!, Subject.Biology, "Hello"))
+        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
 
         val question = questionRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
@@ -128,10 +128,10 @@ class CartItemAppenderTest(
                 .set("questionStatus", QuestionStatus.Available)
                 .sample()
         )
-        cartItemRepository.save(CartItem.create(user.uid!!, question.id!!))
+        cartItemRepository.save(CartItem.create(user.uid, question.id))
 
         //when then
-        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid!!, question.id!!) }
+        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid, question.id) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_IN_CART)
     }
@@ -148,7 +148,7 @@ class CartItemAppenderTest(
         )
         user.setCreator()
 
-        val creator = creatorRepository.save(Creator.create(user.uid!!, Subject.Biology, "Hello"))
+        val creator = creatorRepository.save(Creator.create(user.uid, Subject.Biology, "Hello"))
 
         val question = questionRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
@@ -160,10 +160,10 @@ class CartItemAppenderTest(
                 .sample()
         )
 
-        userQuestionRepository.saveAll(UserQuestion.create(user.uid!!, listOf(question.id!!)))
+        userQuestionRepository.saveAll(UserQuestion.create(user.uid, listOf(question.id)))
 
         //when then
-        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid!!, question.id!!) }
+        Assertions.assertThatThrownBy { cartItemAppender.append(user.uid, question.id) }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.ALREADY_OWN_QUESTION)
     }

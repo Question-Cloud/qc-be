@@ -14,7 +14,6 @@ import com.eager.questioncloud.core.domain.userquestion.model.UserQuestion
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -38,9 +37,7 @@ internal class HubReviewRegisterTest(
     }
 
     @Test
-    @DisplayName("리뷰 중복 작성 동시성 테스트")
-    @Throws(InterruptedException::class)
-    fun concurrencyTestWhenRegisterReview() {
+    fun `리뷰 중복 작성 동시성 문제를 방지할 수 있다`() {
         //given
         val reviewerId = 1L
         val question =

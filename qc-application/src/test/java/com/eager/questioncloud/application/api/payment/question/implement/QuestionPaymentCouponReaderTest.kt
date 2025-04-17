@@ -12,7 +12,6 @@ import com.eager.questioncloud.core.exception.Error
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -34,9 +33,8 @@ internal class QuestionPaymentCouponReaderTest(
         userRepository.deleteAllInBatch()
     }
 
-    @DisplayName("유효한 쿠폰을 불러 올 수 있다.")
     @Test
-    fun getCoupon() {
+    fun `유효한 쿠폰을 불러 올 수 있다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -73,8 +71,7 @@ internal class QuestionPaymentCouponReaderTest(
     }
 
     @Test
-    @DisplayName("존재하지 않는 쿠폰은 불러올 수 없다.")
-    fun cannotGetWrongCoupon() {
+    fun `존재하지 않는 쿠폰은 불러올 수 없다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -97,8 +94,7 @@ internal class QuestionPaymentCouponReaderTest(
     }
 
     @Test
-    @DisplayName("쿠폰을 사용하지 않을 수 있다.")
-    fun noCoupon() {
+    fun `쿠폰을 사용하지 않을 수 있다`() {
         val userId = 1L
         val userCouponId: Long? = null
 

@@ -12,7 +12,6 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -35,8 +34,7 @@ class ChargePointPaymentPostProcessorTest(
     }
 
     @Test
-    @DisplayName("포인트 충전을 처리할 수 있다.")
-    fun chargeUserPoint() {
+    fun `포인트 충전을 처리할 수 있다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()

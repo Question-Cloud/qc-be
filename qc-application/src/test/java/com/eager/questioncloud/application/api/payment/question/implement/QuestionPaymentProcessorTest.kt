@@ -26,7 +26,6 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import com.navercorp.fixturemonkey.kotlin.into
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
@@ -60,8 +59,7 @@ internal class QuestionPaymentProcessorTest(
     }
 
     @Test
-    @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 O)")
-    fun payment() {
+    fun `문제 결제 처리를 할 수 있다 (쿠폰 O)`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -130,8 +128,7 @@ internal class QuestionPaymentProcessorTest(
     }
 
     @Test
-    @DisplayName("문제 결제 처리를 할 수 있다. (쿠폰 X)")
-    fun paymentNoCoupon() {
+    fun `문제 결제 처리를 할 수 있다 (쿠폰 X)`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -178,8 +175,7 @@ internal class QuestionPaymentProcessorTest(
     }
 
     @Test
-    @DisplayName("보유 포인트가 부족하면 포인트 부족 예외가 발생한다.")
-    fun cancelQuestionPaymentWhenNotEnoughUserPoint() {
+    fun `보유 포인트가 부족하면 포인트 부족 예외가 발생한다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -234,8 +230,7 @@ internal class QuestionPaymentProcessorTest(
     }
 
     @Test
-    @DisplayName("결제 도중 예외가 발생하면 쿠폰, 포인트가 롤백 처리 된다.")
-    fun rollbackWhenOccurException() {
+    fun `결제 도중 예외가 발생하면 쿠폰, 포인트가 롤백 처리 된다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()

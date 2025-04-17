@@ -13,7 +13,6 @@ import com.eager.questioncloud.core.exception.Error
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -35,8 +34,7 @@ internal class QuestionOrderGeneratorTest(
     }
 
     @Test
-    @DisplayName("Question 주문을 생성할 수 있다.")
-    fun generateQuestionOrder() {
+    fun `Question 주문을 생성할 수 있다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -63,8 +61,7 @@ internal class QuestionOrderGeneratorTest(
     }
 
     @Test
-    @DisplayName("비활성화 된 Question을 포함한 주문을 생성할 수 없다.")
-    fun cannotCreateOrderWithUnAvailableQuestion() {
+    fun `비활성화 된 Question을 포함한 주문을 생성할 수 없다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -108,8 +105,7 @@ internal class QuestionOrderGeneratorTest(
     }
 
     @Test
-    @DisplayName("이미 구매한 Question은 주문에 포함할 수 없다.")
-    fun cannotCreateOrderWithAlreadyOwnedQuestion() {
+    fun `이미 구매한 Question은 주문에 포함할 수 없다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()

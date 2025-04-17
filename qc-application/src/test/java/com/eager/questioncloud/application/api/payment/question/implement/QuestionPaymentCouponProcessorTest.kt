@@ -15,7 +15,6 @@ import com.eager.questioncloud.core.domain.user.model.User
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -39,8 +38,7 @@ internal class QuestionPaymentCouponProcessorTest(
     }
 
     @Test
-    @DisplayName("쿠폰을 적용하여 금액을 할인할 수 있다.")
-    fun applyCoupon() {
+    fun `쿠폰을 적용할 수 있다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()

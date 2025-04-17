@@ -15,7 +15,6 @@ import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRe
 import com.eager.questioncloud.core.domain.user.model.User
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -45,8 +44,7 @@ internal class QuestionPaymentServiceTest(
     }
 
     @Test
-    @DisplayName("문제 결제를 할 수 있다.")
-    fun payment() {
+    fun `문제 결제를 할 수 있다`() {
         // given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeBuilder(

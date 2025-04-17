@@ -35,7 +35,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 이메일과_비밀번호가_일치하고_Active_유저라면_유저_객체를_반환한다() {
+    fun `이메일 계정 로그인 성공`() {
         //given
         val email = "test@test.com"
         val password = "qwer1234"
@@ -60,7 +60,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 존재하지_않는_이메일이면_로그인_실패_예외를_던진다() {
+    fun `존재하지 않는 이메일인 경우 로그인 실패`() {
         //given
         val wrongEmail = "test@test.com"
         val password = "qwer1234"
@@ -77,7 +77,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 비밀번호가_일치하지_않으면_로그인_실패_예외를_던진다() {
+    fun `비밀번호가 일치하지 않는 경우 로그인 실패`() {
         //given
         val email = "test@test.com"
         val password = "qwer1234"
@@ -107,7 +107,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 이메일_로그인_시_Active_상태가_아니라면_예외를_던진다() {
+    fun `활성화 된 계정이 아니라면 로그인 실패`() {
         //given
         val email = "test@test.com"
         val password = "qwer1234"
@@ -128,7 +128,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 가입된_소셜_계정이라면_User가_담긴_SocialAuthentication을_반환한다() {
+    fun `등록되어 있는 소셜 계정 로그인 성공`() {
         //given
         val email = "test@test.com"
         val code = "socialCode"
@@ -163,7 +163,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 미가입_소셜_계정이라면_socialAccessToken이_담긴_SocialAuthentication을_반환한다() {
+    fun `미가입 소셜 계정이라면 socialAccessToken 반환`() {
         //given
         val email = "test@test.com"
         val code = "socialCode"
@@ -191,7 +191,7 @@ class AuthenticationProcessorTest(
     }
 
     @Test
-    fun 올바르지_않은_social_code가_전달되면_소셜_로그인_실패_예외를_던진다() {
+    fun `올바르지 않은 소셜 계정 로그인 실패`() {
         //given
         val wrongCode = "socialCode"
         val accountType = AccountType.KAKAO

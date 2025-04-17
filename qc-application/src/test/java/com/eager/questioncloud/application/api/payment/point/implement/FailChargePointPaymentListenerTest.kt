@@ -8,7 +8,6 @@ import com.eager.questioncloud.core.domain.point.infrastructure.repository.Charg
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito
 import org.mockito.kotlin.any
@@ -36,8 +35,7 @@ internal class FailChargePointPaymentListenerTest {
     }
 
     @Test
-    @DisplayName("FailChargePointPaymentEvent를 처리할 수 있다.")
-    fun cancelHandler() {
+    fun `FailChargePointPaymentEvent를 처리할 수 있다`() {
         //given
         val paymentId = UUID.randomUUID().toString()
 

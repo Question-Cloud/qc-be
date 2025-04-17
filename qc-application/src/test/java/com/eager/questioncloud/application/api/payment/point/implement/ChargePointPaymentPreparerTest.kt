@@ -18,7 +18,6 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -44,8 +43,7 @@ class ChargePointPaymentPreparerTest(
     }
 
     @Test
-    @DisplayName("PG 결제 요청 전 사전 검증을 할 수 있다.")
-    fun prepare() {
+    fun `PG 결제 요청 전 사전 검증을 할 수 있다`() {
         //given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -75,8 +73,7 @@ class ChargePointPaymentPreparerTest(
     }
 
     @Test
-    @DisplayName("결제 금액이 올바르지 않으면 예외가 발생한다.")
-    fun throwExceptionWhenWrongPaymentAmount() {
+    fun `결제 금액이 올바르지 않으면 예외가 발생한다`() {
         //given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -103,8 +100,7 @@ class ChargePointPaymentPreparerTest(
 
 
     @Test
-    @DisplayName("이미 진행중인 결제인 경우 예외가 발생한다.")
-    fun throwExceptionWhenAlreadyInProgress() {
+    fun `이미 진행중인 결제인 경우 예외가 발생한다`() {
         //given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
@@ -130,11 +126,7 @@ class ChargePointPaymentPreparerTest(
     }
 
     @Test
-    @DisplayName("결제 준비 요청 동시성 이슈를 방지할 수 있다.")
-    @Throws(
-        InterruptedException::class
-    )
-    fun preventPrepareConcurrency() {
+    fun `결제 준비 요청 동시성 이슈를 방지할 수 있다`() {
         //given
         val user = userRepository.save(
             Fixture.fixtureMonkey.giveMeKotlinBuilder<User>()
