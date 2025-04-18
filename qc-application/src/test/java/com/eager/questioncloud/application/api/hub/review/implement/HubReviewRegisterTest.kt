@@ -1,6 +1,5 @@
-package com.eager.questioncloud.application.api.review.implement
+package com.eager.questioncloud.application.api.hub.review.implement
 
-import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
 import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.CreatorFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.QuestionFixtureHelper
