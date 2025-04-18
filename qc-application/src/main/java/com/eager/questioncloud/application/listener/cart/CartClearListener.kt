@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.cart.implement
+package com.eager.questioncloud.application.listener.cart
 
 import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent
 import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartItemRepository
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class CartItemCleaner(
+class CartClearListener(
     private val cartItemRepository: CartItemRepository
 ) {
     @SqsListener("clear-cart-item.fifo")
