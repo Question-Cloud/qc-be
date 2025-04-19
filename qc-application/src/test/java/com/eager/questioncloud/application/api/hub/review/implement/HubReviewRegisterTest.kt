@@ -149,7 +149,11 @@ class HubReviewRegisterTest(
     private fun dummyQuestion(questionStatus: QuestionStatus = QuestionStatus.Available): Question {
         val dummyCreatorUser = UserFixtureHelper.createDefaultEmailUser(userRepository)
         val dummyCreator = CreatorFixtureHelper.createCreator(dummyCreatorUser.uid, creatorRepository)
-        return QuestionFixtureHelper.createQuestion(dummyCreator.id, questionStatus, questionRepository)
+        return QuestionFixtureHelper.createQuestion(
+            creatorId = dummyCreator.id,
+            questionStatus = questionStatus,
+            questionRepository = questionRepository
+        )
     }
 
     private fun saveUserQuestion(uid: Long, questionId: Long) {
