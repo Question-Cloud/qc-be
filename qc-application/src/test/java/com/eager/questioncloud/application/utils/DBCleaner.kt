@@ -35,15 +35,13 @@ class DBCleaner(
             .toList()
     }
 
-    @Transactional // 정리 작업은 원자적으로 실행
+    @Transactional
     fun cleanUp() {
         entityManager.flush()
         tableNames.forEach { tableName ->
-            val truncateSql = "TRUNCATE TABLE `$tableName`"
-            try {
+            if (tableName != "question_category") {
+                val truncateSql = "TRUNCATE TABLE `$tableName`"
                 entityManager.createNativeQuery(truncateSql).executeUpdate()
-            } catch (e: Exception) {
-
             }
         }
     }
