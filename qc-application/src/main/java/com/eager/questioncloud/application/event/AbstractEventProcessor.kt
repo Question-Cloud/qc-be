@@ -1,13 +1,8 @@
 package com.eager.questioncloud.application.event
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import org.springframework.scheduling.annotation.Scheduled
 
 abstract class AbstractEventProcessor<T : SQSEvent> {
-    val republishCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
     abstract fun saveEventLog(event: T)
 
     abstract fun publishEvent(event: T)

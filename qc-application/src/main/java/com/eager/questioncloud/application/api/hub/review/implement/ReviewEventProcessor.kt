@@ -5,7 +5,9 @@ import com.eager.questioncloud.application.event.AbstractEventProcessor
 import com.eager.questioncloud.application.event.SQSEvent
 import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewEventLogRepository
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewEventLog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
@@ -39,13 +41,13 @@ class ReviewEventProcessor(
     }
 
     override suspend fun republish(events: List<ReviewEvent>) {
-        republishCoroutineScope.launch {
-            events.map { event ->
-                launch {
+        supervisorScope {
+            events.forEach { event ->
+                launch(Dispatchers.IO) {
                     snsClient.publish(event.toRequest())
                     questionReviewEventLogRepository.publish(event.eventId)
                 }
             }
-        }.join()
+        }
     }
 }
