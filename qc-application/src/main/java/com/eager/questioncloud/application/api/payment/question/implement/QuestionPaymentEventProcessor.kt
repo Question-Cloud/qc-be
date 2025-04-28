@@ -6,26 +6,28 @@ import com.eager.questioncloud.application.event.SQSEvent
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentEventLogRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentEventLog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.springframework.context.ApplicationEventPublisher
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
-import software.amazon.awssdk.services.sns.SnsClient
+import software.amazon.awssdk.services.sns.SnsAsyncClient
 
 @Component
 class QuestionPaymentEventProcessor(
     private val questionPaymentEventLogRepository: QuestionPaymentEventLogRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
-    private val snsClient: SnsClient,
+    private val snsAsyncClient: SnsAsyncClient,
 ) : AbstractEventProcessor<QuestionPaymentEvent>() {
-    @Async
+
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     override fun publishEvent(event: QuestionPaymentEvent) {
-        snsClient.publish(event.toRequest())
-        questionPaymentEventLogRepository.publish(event.questionPayment.order.orderId)
+        snsAsyncClient.publish(event.toRequest())
+            .thenAcceptAsync {
+                questionPaymentEventLogRepository.publish(event.questionPayment.order.orderId)
+            }
     }
 
     override fun saveEventLog(event: QuestionPaymentEvent) {
@@ -44,7 +46,7 @@ class QuestionPaymentEventProcessor(
         supervisorScope {
             events.forEach { event ->
                 launch(Dispatchers.IO) {
-                    snsClient.publish(event.toRequest())
+                    snsAsyncClient.publish(event.toRequest()).await()
                     questionPaymentEventLogRepository.publish(event.eventId)
                 }
             }

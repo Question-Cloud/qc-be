@@ -6,6 +6,7 @@ import com.eager.questioncloud.application.event.SQSEvent
 import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewEventLogRepository
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewEventLog
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.springframework.context.ApplicationEventPublisher
@@ -13,19 +14,21 @@ import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
-import software.amazon.awssdk.services.sns.SnsClient
+import software.amazon.awssdk.services.sns.SnsAsyncClient
 
 @Component
 class ReviewEventProcessor(
     private val questionReviewEventLogRepository: QuestionReviewEventLogRepository,
-    private val snsClient: SnsClient,
+    private val snsAsyncClient: SnsAsyncClient,
     private val applicationEventPublisher: ApplicationEventPublisher
 ) : AbstractEventProcessor<ReviewEvent>() {
-    @Async
+    
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     override fun publishEvent(event: ReviewEvent) {
-        snsClient.publish(event.toRequest())
-        questionReviewEventLogRepository.publish(event.eventId)
+        snsAsyncClient.publish(event.toRequest())
+            .thenAcceptAsync {
+                questionReviewEventLogRepository.publish(event.eventId)
+            }
     }
 
     override fun saveEventLog(event: ReviewEvent) {
@@ -44,7 +47,7 @@ class ReviewEventProcessor(
         supervisorScope {
             events.forEach { event ->
                 launch(Dispatchers.IO) {
-                    snsClient.publish(event.toRequest())
+                    snsAsyncClient.publish(event.toRequest()).await()
                     questionReviewEventLogRepository.publish(event.eventId)
                 }
             }
