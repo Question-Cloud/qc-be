@@ -8,7 +8,7 @@ abstract class AbstractEventProcessor<T : SQSEvent> {
     abstract fun publishEvent(event: T)
 
     @Scheduled(fixedDelay = 10000)
-    suspend fun republishScheduled() {
+    open suspend fun republishScheduled() {
         var hasMoreEvents = true
 
         while (hasMoreEvents) {
