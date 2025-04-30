@@ -17,11 +17,11 @@ class ChargePointPaymentPostProcessor(
 ) {
     @Transactional
     fun chargeUserPoint(chargePointPayment: ChargePointPayment) {
-        try {
+        runCatching {
             userPointManager.chargePoint(chargePointPayment.userId, chargePointPayment.chargePointType.amount)
             chargePointPayment.charge()
             chargePointPaymentRepository.save(chargePointPayment)
-        } catch (e: Exception) {
+        }.onFailure {
             failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent.create(chargePointPayment.orderId))
             throw CoreException(Error.PAYMENT_ERROR)
         }

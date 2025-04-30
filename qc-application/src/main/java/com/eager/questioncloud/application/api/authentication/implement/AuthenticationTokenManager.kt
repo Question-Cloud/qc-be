@@ -49,14 +49,14 @@ class AuthenticationTokenManager(
     }
 
     private fun getClaims(token: String?): Claims {
-        try {
-            return Jwts
+        return runCatching {
+            Jwts
                 .parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .payload
-        } catch (e: Exception) {
+        }.getOrElse {
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
     }

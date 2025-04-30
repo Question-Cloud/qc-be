@@ -21,16 +21,14 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        try {
+        runCatching {
             val accessToken = parseToken(request.getHeader("Authorization"))
             authentication(accessToken)
-        } catch (e: Exception) {
+        }.onFailure {
             if (SecurityContextHolder.getContext().authentication == null) {
                 setGuestAuthentication()
             }
-        } finally {
-            filterChain.doFilter(request, response)
-        }
+        }.also { filterChain.doFilter(request, response) }
     }
 
     private fun parseToken(authorization: String): String? {

@@ -16,7 +16,7 @@ class HubReviewRegister(
     private val userQuestionRepository: UserQuestionRepository,
 ) {
     fun register(questionReview: QuestionReview) {
-        try {
+        runCatching {
             if (isUnAvailableQuestion(questionReview.questionId)) {
                 throw CoreException(Error.UNAVAILABLE_QUESTION)
             }
@@ -29,8 +29,12 @@ class HubReviewRegister(
                 throw CoreException(Error.ALREADY_REGISTER_REVIEW)
             }
             questionReviewRepository.save(questionReview)
-        } catch (e: DataIntegrityViolationException) {
-            throw CoreException(Error.ALREADY_REGISTER_REVIEW)
+        }.onFailure {
+            if (it is DataIntegrityViolationException) {
+                throw CoreException(Error.ALREADY_REGISTER_REVIEW)
+            }
+            
+            throw it
         }
     }
 
