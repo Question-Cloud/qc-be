@@ -15,7 +15,7 @@ class IdempotentEventAspect(
     private val eventProcessLogRepository: EventProcessLogRepository,
     private val transactionTemplate: TransactionTemplate,
 ) {
-    @Around("@annotation(io.awspring.cloud.sqs.annotation.SqsListener)")
+    @Around("@annotation(com.eager.questioncloud.application.event.IdempotentEvent)")
     fun processingEventIdempotency(joinPoint: ProceedingJoinPoint) {
         val event = joinPoint.args.first { it is SQSEvent } as SQSEvent
         val idempotentKey = event.eventId + "-" + joinPoint.signature.name

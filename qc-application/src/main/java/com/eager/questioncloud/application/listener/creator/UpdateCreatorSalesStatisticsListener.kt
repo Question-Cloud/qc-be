@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.listener.creator
 
 import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent
+import com.eager.questioncloud.application.event.IdempotentEvent
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.core.domain.question.model.Question
@@ -15,6 +16,7 @@ class UpdateCreatorSalesStatisticsListener(
     private val questionRepository: QuestionRepository,
 ) {
     @SqsListener("update-creator-sales-statistics.fifo")
+    @IdempotentEvent
     fun updateCreatorStatistics(@Payload event: QuestionPaymentEvent) {
         val questions = questionRepository.getQuestionsByQuestionIds(event.questionPayment.order.questionIds)
         val countQuestionByCreator = questions
