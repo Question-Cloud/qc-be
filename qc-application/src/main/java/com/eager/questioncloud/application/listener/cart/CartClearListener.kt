@@ -5,14 +5,12 @@ import com.eager.questioncloud.core.domain.cart.infrastructure.repository.CartIt
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CartClearListener(
     private val cartItemRepository: CartItemRepository
 ) {
     @SqsListener("clear-cart-item.fifo")
-    @Transactional
     fun clearCart(@Payload event: QuestionPaymentEvent) {
         cartItemRepository.deleteByQuestionIdInAndUserId(
             event.questionPayment.order.questionIds,

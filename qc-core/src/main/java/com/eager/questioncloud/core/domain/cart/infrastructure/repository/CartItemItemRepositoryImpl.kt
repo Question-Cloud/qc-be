@@ -50,6 +50,7 @@ class CartItemItemRepositoryImpl(
         cartItemJpaRepository.deleteByIdInAndUserId(ids, userId)
     }
 
+    @Transactional
     override fun deleteByQuestionIdInAndUserId(questionIds: List<Long>, userId: Long) {
         cartItemJpaRepository.deleteByQuestionIdInAndUserId(questionIds, userId)
     }
