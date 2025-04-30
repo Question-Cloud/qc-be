@@ -24,6 +24,6 @@ class PostFileConverter : AttributeConverter<List<PostFile?>?, String> {
 
         return runCatching {
             objectMapper.readValue(dbData, Array<PostFile>::class.java).toList()
-        }.getOrElse { emptyList() }
+        }.getOrDefault(emptyList())
     }
 }
