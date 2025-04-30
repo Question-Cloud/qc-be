@@ -24,6 +24,7 @@ class ChargePointPaymentPGProcessor(
         tossPaymentAPI.confirm(paymentId, orderId, amount)
     }
 
+    @Retryable(maxAttempts = 5)
     fun cancel(paymentId: String, amount: Int) {
         tossPaymentAPI.cancel(paymentId, amount)
     }

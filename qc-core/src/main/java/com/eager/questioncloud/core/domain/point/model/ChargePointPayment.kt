@@ -31,6 +31,10 @@ class ChargePointPayment(
         this.chargePointPaymentStatus = ChargePointPaymentStatus.CANCELED
     }
 
+    fun failCancel() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAYMENT_REQUEST
+    }
+
     fun validatePayment(paidAmount: Int) {
         validateStatus()
         validateAmount(paidAmount)
