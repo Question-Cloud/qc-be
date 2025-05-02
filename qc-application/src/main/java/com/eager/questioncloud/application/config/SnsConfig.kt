@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
+import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 
@@ -22,6 +23,10 @@ class SnsConfig {
     @Bean
     fun snsAsyncClient(): SnsAsyncClient {
         return SnsAsyncClient.builder()
+            .httpClientBuilder(
+                NettyNioAsyncHttpClient.builder()
+                    .maxConcurrency(200)
+            )
             .region(Region.of(awsRegion))
             .credentialsProvider(
                 StaticCredentialsProvider.create(

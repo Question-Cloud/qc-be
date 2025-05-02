@@ -32,6 +32,8 @@ dependencies {
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+    implementation("software.amazon.awssdk:netty-nio-client:2.31.32")
 }
 
 sourceSets {
