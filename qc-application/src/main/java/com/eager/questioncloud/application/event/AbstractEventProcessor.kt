@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.springframework.scheduling.annotation.Scheduled
 import software.amazon.awssdk.services.sns.SnsAsyncClient
+import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class AbstractEventProcessor<T : SQSEvent>(
     private val snsAsyncClient: SnsAsyncClient
@@ -33,7 +34,7 @@ abstract class AbstractEventProcessor<T : SQSEvent>(
     abstract fun getUnpublishedEvents(): List<T>
 
     private suspend fun republish(eventIds: List<T>): List<String> {
-        val publishedEventIds = mutableListOf<String>()
+        val publishedEventIds = CopyOnWriteArrayList<String>()
         supervisorScope {
             eventIds.forEach { event ->
                 launch(Dispatchers.IO) {
