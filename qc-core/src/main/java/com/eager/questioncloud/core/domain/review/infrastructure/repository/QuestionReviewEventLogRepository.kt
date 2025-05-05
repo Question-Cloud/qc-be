@@ -10,4 +10,6 @@ interface QuestionReviewEventLogRepository {
     fun save(questionReviewEventLog: QuestionReviewEventLog)
 
     fun publish(eventId: String)
+
+    fun publish(eventIds: List<String>)
 }

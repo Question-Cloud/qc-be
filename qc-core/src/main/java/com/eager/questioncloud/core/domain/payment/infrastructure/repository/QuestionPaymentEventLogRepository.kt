@@ -10,4 +10,6 @@ interface QuestionPaymentEventLogRepository {
     fun findByEventId(eventId: String): QuestionPaymentEventLog
 
     fun publish(eventId: String)
+
+    fun publish(eventIds: List<String>)
 }

@@ -5,10 +5,6 @@ import com.eager.questioncloud.application.event.AbstractEventProcessor
 import com.eager.questioncloud.application.event.SQSEvent
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentEventLogRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentEventLog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
@@ -20,7 +16,7 @@ class QuestionPaymentEventProcessor(
     private val questionPaymentEventLogRepository: QuestionPaymentEventLogRepository,
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val snsAsyncClient: SnsAsyncClient,
-) : AbstractEventProcessor<QuestionPaymentEvent>() {
+) : AbstractEventProcessor<QuestionPaymentEvent>(snsAsyncClient) {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     override fun publishEvent(event: QuestionPaymentEvent) {
@@ -42,14 +38,7 @@ class QuestionPaymentEventProcessor(
             .toList()
     }
 
-    override suspend fun republish(events: List<QuestionPaymentEvent>) {
-        supervisorScope {
-            events.forEach { event ->
-                launch(Dispatchers.IO) {
-                    snsAsyncClient.publish(event.toRequest()).await()
-                    questionPaymentEventLogRepository.publish(event.eventId)
-                }
-            }
-        }
+    override fun updateRepublishStatus(eventIds: List<String>) {
+        questionPaymentEventLogRepository.publish(eventIds)
     }
 }

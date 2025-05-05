@@ -41,4 +41,12 @@ class QuestionPaymentEventLogRepositoryImpl(
             .where(questionPaymentEventLogEntity.eventId.eq(eventId))
             .execute()
     }
+
+    @Transactional
+    override fun publish(eventIds: List<String>) {
+        jpaQueryFactory.update(questionPaymentEventLogEntity)
+            .set(questionPaymentEventLogEntity.isPublish, true)
+            .where(questionPaymentEventLogEntity.eventId.`in`(eventIds))
+            .execute()
+    }
 }

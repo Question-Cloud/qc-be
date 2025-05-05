@@ -44,4 +44,12 @@ class QuestionReviewEventLogRepositoryImpl(
             .set(questionReviewEventLogEntity.isPublish, true)
             .execute()
     }
+
+    @Transactional
+    override fun publish(eventIds: List<String>) {
+        jpaQueryFactory.update(questionReviewEventLogEntity)
+            .set(questionReviewEventLogEntity.isPublish, true)
+            .where(questionReviewEventLogEntity.eventId.`in`(eventIds))
+            .execute()
+    }
 }
