@@ -10,14 +10,12 @@ import org.springframework.transaction.annotation.Transactional
 class QuestionPaymentProcessor(
     private val questionPaymentRepository: QuestionPaymentRepository,
     private val questionPaymentCouponProcessor: QuestionPaymentCouponProcessor,
-    private val userPointManager: UserPointManager,
-    private val questionPaymentHistoryRegister: QuestionPaymentHistoryRegister
+    private val userPointManager: UserPointManager
 ) {
     @Transactional
     fun payment(questionPayment: QuestionPayment) {
         questionPaymentCouponProcessor.applyCoupon(questionPayment)
         userPointManager.usePoint(questionPayment.userId, questionPayment.amount)
-        questionPaymentHistoryRegister.saveQuestionPaymentHistory(questionPayment)
         questionPaymentRepository.save(questionPayment)
     }
 }
