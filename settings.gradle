@@ -12,4 +12,5 @@ include 'qc-core'
 include 'qc-application'
 include 'qc-lock-manager'
 include 'qc-social-api'
+include 'qc-logging'
 

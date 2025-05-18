@@ -22,8 +22,23 @@
     </encoder>
   </appender>
 
+  <appender name="METHOD_RECORD" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/method-record.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>logs/method-record-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
   <logger name="error-publish-fail-charge-point-event" level="WARN" additivity="false">
     <appender-ref ref="ERROR_PUBLISH_FAIL_CHARGE_POINT_EVENT"/>
+  </logger>
+
+  <logger name="method-record" level="INFO" additivity="false">
+    <appender-ref ref="METHOD_RECORD"/>
   </logger>
 
   <root level="INFO">
