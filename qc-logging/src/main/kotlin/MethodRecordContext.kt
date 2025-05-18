@@ -5,9 +5,6 @@ import java.util.*
 class MethodRecordContext(
     val requestId: String = UUID.randomUUID().toString(),
     val methodRecords: MutableList<MethodRecord> = mutableListOf(),
-    val startRequestTime: Long = System.currentTimeMillis(),
-    var endRequestTime: Long = 0,
-    var runningTime: Long = 0,
     var isOccurredException: Boolean = false,
     var exceptionRecordIndex: Int? = null,
     var exceptionMessage: String? = null,
@@ -24,8 +21,6 @@ class MethodRecordContext(
     }
 
     fun end() {
-        endRequestTime = System.currentTimeMillis()
-        runningTime = endRequestTime - startRequestTime
         callTree = CallTreeGenerator.generateCallTreeString(this)
     }
 
