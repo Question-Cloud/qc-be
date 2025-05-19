@@ -1,23 +1,22 @@
 package com.eager
 
-import java.util.*
-
 class MethodRecordContext(
-    val requestId: String = UUID.randomUUID().toString(),
     val methodRecords: MutableList<MethodRecord> = mutableListOf(),
     var isOccurredException: Boolean = false,
     var exceptionRecordIndex: Int? = null,
     var exceptionMessage: String? = null,
-    var callTree: String? = null
+    var callTree: String? = null,
+    var curDepth: Int = 0,
 ) {
-    fun startMethod(methodName: String, depth: Int): Int {
-        methodRecords.add(MethodRecord(methodName = methodName, depth = depth))
+    fun startMethod(methodName: String): Int {
+        methodRecords.add(MethodRecord(methodName, curDepth++))
         return methodRecords.size - 1
     }
 
     fun endMethod(target: Int) {
         val methodRecord = methodRecords[target]
         methodRecord.end()
+        curDepth--
     }
 
     fun end() {

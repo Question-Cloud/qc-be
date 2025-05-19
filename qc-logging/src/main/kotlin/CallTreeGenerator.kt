@@ -6,12 +6,8 @@ class CallTreeGenerator {
             context: MethodRecordContext,
             indentUnit: String = "  "
         ): String {
-            if (context.methodRecords.isEmpty()) {
-                return "Request ID: ${context.requestId}\n(메서드 호출 기록이 없습니다.)"
-            }
-
             val sb = StringBuilder()
-            
+
             for (record in context.methodRecords) {
                 repeat(record.depth) {
                     sb.append(indentUnit)
@@ -41,13 +37,7 @@ class CallTreeGenerator {
                 sb.append(" (").append(record.runningTime).append("ms)")
 
                 if (record.exceptionMessage != null) {
-                    sb.append(" [ERROR]")
-                    val firstLineOfMethodException = record.exceptionMessage!!.lines().firstOrNull()?.trim()
-                    if (!firstLineOfMethodException.isNullOrEmpty()) {
-                        sb.append(" - ").append(firstLineOfMethodException)
-                    }
-                } else if (!record.isProcessed) {
-                    sb.append(" [Not Fully Processed]")
+                    sb.append(" [EXCEPTION!!]")
                 }
 
                 sb.append("\n")

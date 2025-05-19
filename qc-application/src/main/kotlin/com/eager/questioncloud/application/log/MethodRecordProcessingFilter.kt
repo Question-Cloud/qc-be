@@ -1,6 +1,6 @@
 package com.eager.questioncloud.application.log
 
-import com.eager.MethodRecordContextHolder
+import com.eager.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.util.ContentCachingRequestWrapper
 
 @Component
 class MethodRecordProcessingFilter : OncePerRequestFilter() {
@@ -19,22 +20,23 @@ class MethodRecordProcessingFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val logger = LoggerFactory.getLogger("method-record")
+        val logger = LoggerFactory.getLogger("api-transaction")
         val objectMapper: ObjectMapper = ObjectMapper()
             .registerKotlinModule()
             .registerModule(JavaTimeModule())
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
+        val cachingRequestWrapper = ContentCachingRequestWrapper(request)
         runCatching {
-            MethodRecordContextHolder.init()
-            filterChain.doFilter(request, response)
+            ApiTransactionContextHolder.init()
+            filterChain.doFilter(cachingRequestWrapper, response)
         }.also {
-            if (MethodRecordContextHolder.isActive()) {
-                MethodRecordContextHolder.end()
+            if (ApiTransactionContextHolder.isActive()) {
+                ApiTransactionContextHolder.end()
 
-                val context = MethodRecordContextHolder.get()
+                val context = ApiTransactionContextHolder.get()
                 logger.info(objectMapper.writeValueAsString(context))
-                MethodRecordContextHolder.destroy()
+
+                ApiTransactionContextHolder.destroy()
             }
         }
     }

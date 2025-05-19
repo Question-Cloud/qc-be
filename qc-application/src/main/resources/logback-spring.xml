@@ -22,10 +22,10 @@
     </encoder>
   </appender>
 
-  <appender name="METHOD_RECORD" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>logs/method-record.log</file>
+  <appender name="API_TRANSACTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/api-transaction.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logs/method-record-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <fileNamePattern>logs/api-transaction-%d{yyyy-MM-dd}.log</fileNamePattern>
       <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
@@ -37,8 +37,8 @@
     <appender-ref ref="ERROR_PUBLISH_FAIL_CHARGE_POINT_EVENT"/>
   </logger>
 
-  <logger name="method-record" level="INFO" additivity="false">
-    <appender-ref ref="METHOD_RECORD"/>
+  <logger name="api-transaction" level="INFO" additivity="false">
+    <appender-ref ref="API_TRANSACTION"/>
   </logger>
 
   <root level="INFO">
