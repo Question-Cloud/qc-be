@@ -10,7 +10,7 @@ class QuestionPaymentRepositoryImpl(
 ) : QuestionPaymentRepository {
 
     override fun save(questionPayment: QuestionPayment): QuestionPayment {
-        questionPaymentJpaRepository.save(from(questionPayment))
+        val entity = questionPaymentJpaRepository.save(from(questionPayment))
         return questionPayment
     }
 
