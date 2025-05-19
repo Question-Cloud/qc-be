@@ -7,6 +7,7 @@ import java.util.*
 class ApiTransactionContext(
     val transactionId: String = UUID.randomUUID().toString(),
     var apiRequest: ApiRequest? = null,
+    var apiResponse: ApiResponse? = null,
     val methodRecordContext: MethodRecordContext = MethodRecordContext(),
     val startAt: LocalDateTime = LocalDateTime.now(),
     var endAt: LocalDateTime = LocalDateTime.now(),
@@ -32,5 +33,9 @@ class ApiTransactionContext(
 
     fun loggingApiRequest(apiRequest: ApiRequest) {
         this.apiRequest = apiRequest
+    }
+
+    fun loggingApiResponse(apiResponse: ApiResponse) {
+        this.apiResponse = apiResponse
     }
 }

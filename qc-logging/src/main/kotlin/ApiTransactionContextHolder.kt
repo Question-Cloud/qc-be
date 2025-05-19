@@ -13,6 +13,11 @@ class ApiTransactionContextHolder {
             context.loggingApiRequest(apiRequest)
         }
 
+        fun loggingApiResponse(apiResponse: ApiResponse) {
+            val context = apiTransactionContext.get()
+            context.loggingApiResponse(apiResponse)
+        }
+
         fun startMethod(methodName: String): Int {
             val context = apiTransactionContext.get()
             return context.startMethod(methodName)

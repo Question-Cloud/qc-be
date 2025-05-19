@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.log
 
 import com.eager.ApiRequest
+import com.eager.ApiResponse
 import com.eager.ApiTransactionContextHolder
 import com.eager.SensitiveBodyMasker
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
+import org.springframework.web.util.ContentCachingResponseWrapper
 import java.nio.charset.Charset
 
 @Component
@@ -30,18 +32,23 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         val cachingRequest = ContentCachingRequestWrapper(request)
+        val cachingResponse = ContentCachingResponseWrapper(response)
+
         runCatching {
             ApiTransactionContextHolder.init()
-            filterChain.doFilter(cachingRequest, response)
+            filterChain.doFilter(cachingRequest, cachingResponse)
+        }.onFailure {
+            toErrorResponse(cachingResponse)
         }.also {
-            ApiTransactionContextHolder.loggingApiRequest(toApiRequest(cachingRequest))
             ApiTransactionContextHolder.end()
-
-            val apiTransactionContext = ApiTransactionContextHolder.get()
-            fileLogger.info(objectMapper.writeValueAsString(apiTransactionContext))
+            ApiTransactionContextHolder.loggingApiRequest(toApiRequest(cachingRequest))
+            ApiTransactionContextHolder.loggingApiResponse(toApiResponse(cachingResponse))
+            fileLogger.info(objectMapper.writeValueAsString(ApiTransactionContextHolder.get()))
 
             ApiTransactionContextHolder.destroy()
-        }.getOrThrow()
+
+            cachingResponse.copyBodyToResponse()
+        }
     }
 
     private fun toApiRequest(request: ContentCachingRequestWrapper): ApiRequest {
@@ -52,6 +59,13 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
             request.remoteAddr,
             parseHeaders(request),
             request.parameterMap
+        )
+    }
+
+    private fun toApiResponse(response: ContentCachingResponseWrapper): ApiResponse {
+        return ApiResponse(
+            response.status,
+            response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8")),
         )
     }
 
@@ -77,5 +91,10 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
         }
 
         return inputStream.toString(Charset.forName("UTF-8"))
+    }
+
+    private fun toErrorResponse(response: ContentCachingResponseWrapper) {
+        response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        response.setHeader("Content-Type", "application/json")
     }
 }
