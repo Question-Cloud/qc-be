@@ -6,6 +6,7 @@ import java.util.*
 
 class ApiTransactionContext(
     val transactionId: String = UUID.randomUUID().toString(),
+    var apiRequest: ApiRequest? = null,
     val methodRecordContext: MethodRecordContext = MethodRecordContext(),
     val startAt: LocalDateTime = LocalDateTime.now(),
     var endAt: LocalDateTime = LocalDateTime.now(),
@@ -27,5 +28,9 @@ class ApiTransactionContext(
 
     fun markException(targetMethodRecordIndex: Int, exceptionMessage: String?) {
         methodRecordContext.markException(targetMethodRecordIndex, exceptionMessage)
+    }
+
+    fun loggingApiRequest(apiRequest: ApiRequest) {
+        this.apiRequest = apiRequest
     }
 }
