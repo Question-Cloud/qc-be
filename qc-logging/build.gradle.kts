@@ -12,6 +12,8 @@ repositories {
 dependencies {
     implementation("org.springframework:spring-context")
     testImplementation(kotlin("test"))
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
+
 }
 
 tasks.test {

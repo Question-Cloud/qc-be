@@ -2,6 +2,7 @@ package com.eager.questioncloud.application.log
 
 import com.eager.ApiRequest
 import com.eager.ApiTransactionContextHolder
+import com.eager.SensitiveBodyMasker
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -47,7 +48,7 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
         return ApiRequest(
             request.requestURI,
             request.method,
-            parseBody(request),
+            SensitiveBodyMasker.mask(parseBody(request)),
             request.remoteAddr,
             parseHeaders(request),
             request.parameterMap
