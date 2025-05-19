@@ -16,7 +16,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper
 import java.nio.charset.Charset
 
 @Component
-class MethodRecordProcessingFilter : OncePerRequestFilter() {
+class ApiTransactionContextFilter : OncePerRequestFilter() {
     private val fileLogger = LoggerFactory.getLogger("api-transaction")
     private val objectMapper: ObjectMapper = ObjectMapper()
         .registerKotlinModule()
