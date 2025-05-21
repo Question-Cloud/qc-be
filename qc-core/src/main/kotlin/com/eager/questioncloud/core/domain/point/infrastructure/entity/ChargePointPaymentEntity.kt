@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.point.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.enums.ChargePointType
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
@@ -16,7 +17,7 @@ class ChargePointPaymentEntity private constructor(
     @Enumerated(EnumType.STRING) @Column var chargePointPaymentStatus: ChargePointPaymentStatus,
     @Column var createdAt: LocalDateTime,
     @Column var requestAt: LocalDateTime?
-) {
+) : BaseCustomIdEntity<String>() {
     fun toModel(): ChargePointPayment {
         return ChargePointPayment(
             orderId,
@@ -42,5 +43,9 @@ class ChargePointPaymentEntity private constructor(
                 chargePointPayment.requestAt
             )
         }
+    }
+
+    override fun getId(): String {
+        return orderId
     }
 }

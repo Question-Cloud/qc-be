@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.review.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewEventLog
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -14,7 +15,7 @@ class QuestionReviewEventLogEntity(
     @Column val isPublish: Boolean,
     @Column(columnDefinition = "TEXT") val payload: String,
     @Column val createdAt: LocalDateTime
-) {
+) : BaseCustomIdEntity<String>() {
     fun toModel(): QuestionReviewEventLog {
         return QuestionReviewEventLog(eventId, isPublish, payload, createdAt)
     }
@@ -28,5 +29,9 @@ class QuestionReviewEventLogEntity(
                 reviewEventLog.createdAt
             )
         }
+    }
+
+    override fun getId(): String {
+        return eventId
     }
 }

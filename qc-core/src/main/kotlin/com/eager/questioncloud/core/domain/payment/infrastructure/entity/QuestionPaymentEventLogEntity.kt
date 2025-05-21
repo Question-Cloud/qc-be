@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentEventLog
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -14,7 +15,7 @@ class QuestionPaymentEventLogEntity(
     @Column val isPublish: Boolean,
     @Column(columnDefinition = "TEXT") val payload: String,
     @Column val createdAt: LocalDateTime
-) {
+) : BaseCustomIdEntity<String>() {
     fun toModel(): QuestionPaymentEventLog {
         return QuestionPaymentEventLog(eventId, isPublish, payload, createdAt)
     }
@@ -28,5 +29,9 @@ class QuestionPaymentEventLogEntity(
                 questionPaymentEventLog.createdAt
             )
         }
+    }
+
+    override fun getId(): String {
+        return eventId
     }
 }

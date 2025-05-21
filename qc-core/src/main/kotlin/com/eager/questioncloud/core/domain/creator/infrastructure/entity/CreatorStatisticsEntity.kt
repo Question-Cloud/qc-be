@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.creator.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -8,13 +9,13 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "creator_statistics")
-class CreatorStatisticsEntity private constructor(
+class CreatorStatisticsEntity(
     @Id var creatorId: Long,
     @Column var salesCount: Int,
     @Column var reviewCount: Int,
     @Column var totalReviewRate: Int,
     @Column var averageRateOfReview: Double
-) {
+) : BaseCustomIdEntity<Long>() {
     fun toModel(): CreatorStatistics {
         return CreatorStatistics(
             creatorId,
@@ -35,5 +36,9 @@ class CreatorStatisticsEntity private constructor(
                 creatorStatistics.averageRateOfReview
             )
         }
+    }
+
+    override fun getId(): Long {
+        return creatorId
     }
 }

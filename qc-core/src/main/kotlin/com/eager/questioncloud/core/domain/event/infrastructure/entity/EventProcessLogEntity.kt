@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.event.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.event.model.EventProcessLog
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -12,10 +13,14 @@ import java.time.LocalDateTime
 class EventProcessLogEntity(
     @Id val idempotentKey: String,
     @Column val createdAt: LocalDateTime
-) {
+) : BaseCustomIdEntity<String>() {
     companion object {
         fun from(eventProcessLog: EventProcessLog): EventProcessLogEntity {
             return EventProcessLogEntity(eventProcessLog.idempotentKey, eventProcessLog.createdAt)
         }
+    }
+
+    override fun getId(): String {
+        return idempotentKey
     }
 }

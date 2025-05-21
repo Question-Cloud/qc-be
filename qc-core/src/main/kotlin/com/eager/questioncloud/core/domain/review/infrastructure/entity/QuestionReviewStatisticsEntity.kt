@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.review.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -13,7 +14,7 @@ class QuestionReviewStatisticsEntity private constructor(
     @Column private var reviewCount: Int,
     @Column private var totalRate: Int,
     @Column private var averageRate: Double
-) {
+) : BaseCustomIdEntity<Long>() {
     fun toModel(): QuestionReviewStatistics {
         return QuestionReviewStatistics(questionId, reviewCount, totalRate, averageRate)
     }
@@ -27,5 +28,9 @@ class QuestionReviewStatisticsEntity private constructor(
                 questionReviewStatistics.averageRate
             )
         }
+    }
+
+    override fun getId(): Long {
+        return questionId
     }
 }

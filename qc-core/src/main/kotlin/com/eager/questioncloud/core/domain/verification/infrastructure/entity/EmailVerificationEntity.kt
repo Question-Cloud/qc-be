@@ -1,5 +1,6 @@
 package com.eager.questioncloud.core.domain.verification.infrastructure.entity
 
+import com.eager.questioncloud.core.common.BaseCustomIdEntity
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification
 import jakarta.persistence.*
@@ -13,7 +14,7 @@ class EmailVerificationEntity private constructor(
     @Column var email: String,
     @Enumerated(EnumType.STRING) @Column var emailVerificationType: EmailVerificationType,
     @Column var isVerified: Boolean
-) {
+) : BaseCustomIdEntity<String>() {
     fun toModel(): EmailVerification {
         return EmailVerification(token, resendToken, uid, email, emailVerificationType, isVerified)
     }
@@ -29,5 +30,9 @@ class EmailVerificationEntity private constructor(
                 emailVerification.isVerified
             )
         }
+    }
+
+    override fun getId(): String {
+        return token
     }
 }
