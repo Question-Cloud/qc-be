@@ -2,7 +2,7 @@ package com.eager.questioncloud.core.common
 
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.PostLoad
-import jakarta.persistence.PrePersist
+import jakarta.persistence.PostPersist
 import org.springframework.data.domain.Persistable
 
 @MappedSuperclass
@@ -16,13 +16,9 @@ abstract class BaseCustomIdEntity<T> : Persistable<T> {
         return isNewEntity
     }
 
-    @PrePersist
-    fun unmarkWhenPersist() {
-        this.isNewEntity = false
-    }
-
+    @PostPersist
     @PostLoad
-    fun unmarkWhenLoad() {
+    fun markNotNew() {
         this.isNewEntity = false
     }
 }
