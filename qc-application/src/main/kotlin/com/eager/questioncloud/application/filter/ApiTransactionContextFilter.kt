@@ -68,7 +68,7 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
     private fun toApiResponse(response: ContentCachingResponseWrapper): ApiResponse {
         return ApiResponse(
             response.status,
-            response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8")),
+            SensitiveBodyMasker.mask(response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8"))),
         )
     }
 
