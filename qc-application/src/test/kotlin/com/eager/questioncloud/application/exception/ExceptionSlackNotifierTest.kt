@@ -11,7 +11,7 @@ class ExceptionSlackNotifierTest(
     @Autowired val slackNotifier: ExceptionSlackNotifier,
 ) {
     @Test
-    fun send() {
-        slackNotifier.send("슬랙 전송 테스트")
+    fun sendApiException() {
+        slackNotifier.sendApiException(Exception(), "non API", "non API", "non API")
     }
 }
