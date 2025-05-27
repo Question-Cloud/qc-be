@@ -32,7 +32,6 @@ abstract class AbstractEventProcessor<T : SQSEvent>(
                 val publishedEventIds = republish(events)
                 updateRepublishStatus(publishedEventIds)
             }
-            throw RuntimeException("스케줄러 예외 발생!!")
         }.onFailure { e ->
             slackNotifier.sendApiException(e, "None", this.javaClass.name, this.javaClass.name)
         }
