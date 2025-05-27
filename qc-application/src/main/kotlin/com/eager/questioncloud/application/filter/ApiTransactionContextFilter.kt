@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.log
+package com.eager.questioncloud.application.filter
 
 import com.eager.ApiRequest
 import com.eager.ApiResponse
@@ -12,6 +12,8 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
@@ -19,6 +21,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper
 import java.nio.charset.Charset
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
 class ApiTransactionContextFilter : OncePerRequestFilter() {
     private val fileLogger = LoggerFactory.getLogger("api-transaction")
     private val objectMapper: ObjectMapper = ObjectMapper()
