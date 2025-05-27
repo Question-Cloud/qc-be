@@ -3,6 +3,7 @@ package com.eager.questioncloud.application.api.hub.review.implement
 import com.eager.questioncloud.application.api.hub.review.event.ReviewEvent
 import com.eager.questioncloud.application.event.AbstractEventProcessor
 import com.eager.questioncloud.application.event.SQSEvent
+import com.eager.questioncloud.application.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewEventLogRepository
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewEventLog
 import org.springframework.context.ApplicationEventPublisher
@@ -15,8 +16,9 @@ import software.amazon.awssdk.services.sns.SnsAsyncClient
 class ReviewEventProcessor(
     private val questionReviewEventLogRepository: QuestionReviewEventLogRepository,
     private val snsAsyncClient: SnsAsyncClient,
-    private val applicationEventPublisher: ApplicationEventPublisher
-) : AbstractEventProcessor<ReviewEvent>(snsAsyncClient) {
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val slackNotifier: ExceptionSlackNotifier,
+) : AbstractEventProcessor<ReviewEvent>(snsAsyncClient, slackNotifier) {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     override fun publishEvent(event: ReviewEvent) {
