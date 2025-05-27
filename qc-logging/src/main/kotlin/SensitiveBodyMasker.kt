@@ -10,7 +10,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 class SensitiveBodyMasker {
     companion object {
-        private val sensitiveKeys: Set<String> = setOf("password, newpassword")
+        private val sensitiveKeys: Set<String> = setOf("password", "newpassword")
         private val maskValue: String = "***************"
 
         private val objectMapper: ObjectMapper = ObjectMapper()
