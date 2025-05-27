@@ -35,6 +35,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     implementation("software.amazon.awssdk:netty-nio-client:2.31.32")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 sourceSets {
