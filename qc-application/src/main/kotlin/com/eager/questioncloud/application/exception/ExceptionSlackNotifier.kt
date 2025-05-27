@@ -25,7 +25,7 @@ class ExceptionSlackNotifier {
             .build()
     }
 
-    fun sendApiException(e: Exception, transactionId: String, url: String, method: String) {
+    fun sendApiException(e: Throwable, transactionId: String, url: String, method: String) {
         val payload = createPayload(e, transactionId, url, method)
         val request = Request.Builder()
             .url(SLACK_EXCEPTION_NOTIFY_WEBHOOK_URL)
@@ -35,7 +35,7 @@ class ExceptionSlackNotifier {
         client.newCall(request).execute()
     }
 
-    private fun createPayload(e: Exception, transactionId: String, url: String, method: String): SlackPayload {
+    private fun createPayload(e: Throwable, transactionId: String, url: String, method: String): SlackPayload {
         val builder = StringBuilder()
         builder.append("🚨 *서버 에러 발생* 🚨\n")
         builder.append("*Transaction ID:* `$transactionId`\n")
