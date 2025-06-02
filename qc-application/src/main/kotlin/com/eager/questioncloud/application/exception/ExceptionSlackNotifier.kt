@@ -32,7 +32,7 @@ class ExceptionSlackNotifier {
             .post(objectMapper.writeValueAsString(payload).toRequestBody("application/json".toMediaType()))
             .build()
 
-        client.newCall(request).execute()
+        client.newCall(request).execute().close()
     }
 
     private fun createPayload(e: Throwable, transactionId: String, url: String, method: String): SlackPayload {

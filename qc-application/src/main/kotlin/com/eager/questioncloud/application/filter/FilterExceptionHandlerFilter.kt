@@ -22,6 +22,9 @@ class FilterExceptionHandlerFilter(
     ) {
         runCatching { filterChain.doFilter(request, response) }
             .onFailure { e ->
+                if (ApiTransactionContextHolder.isMarkedException()) {
+                    return@onFailure
+                }
                 exceptionSlackNotifier.sendApiException(
                     e,
                     ApiTransactionContextHolder.get().transactionId,
