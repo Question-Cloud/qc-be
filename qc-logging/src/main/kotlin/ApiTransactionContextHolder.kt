@@ -18,24 +18,14 @@ class ApiTransactionContextHolder {
             context.loggingApiResponse(apiResponse)
         }
 
-        fun startMethod(methodName: String): Int {
-            val context = apiTransactionContext.get()
-            return context.startMethod(methodName)
-        }
-
-        fun endMethod(targetMethodRecordIndex: Int) {
-            val context = apiTransactionContext.get()
-            context.endMethod(targetMethodRecordIndex)
-        }
-
         fun end() {
             val context = apiTransactionContext.get()
             context.end()
         }
 
-        fun markException(targetMethodRecordIndex: Int, exceptionMessage: String?) {
+        fun markException() {
             val context = apiTransactionContext.get()
-            context.markException(targetMethodRecordIndex, exceptionMessage)
+            context.markException()
         }
 
         fun destroy() {

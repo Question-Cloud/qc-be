@@ -8,27 +8,18 @@ class ApiTransactionContext(
     val transactionId: String = UUID.randomUUID().toString(),
     var apiRequest: ApiRequest? = null,
     var apiResponse: ApiResponse? = null,
-    val methodRecordContext: MethodRecordContext = MethodRecordContext(),
+    var isMarkedException: Boolean = false,
     val startAt: LocalDateTime = LocalDateTime.now(),
     var endAt: LocalDateTime = LocalDateTime.now(),
     var runningTime: Long = 0
 ) {
-    fun startMethod(methodName: String): Int {
-        return methodRecordContext.startMethod(methodName)
-    }
-
-    fun endMethod(target: Int) {
-        methodRecordContext.endMethod(target)
-    }
-
     fun end() {
         endAt = LocalDateTime.now()
         runningTime = Duration.between(startAt, endAt).toMillis()
-        methodRecordContext.end()
     }
 
-    fun markException(targetMethodRecordIndex: Int, exceptionMessage: String?) {
-        methodRecordContext.markException(targetMethodRecordIndex, exceptionMessage)
+    fun markException() {
+        isMarkedException = true
     }
 
     fun loggingApiRequest(apiRequest: ApiRequest) {
