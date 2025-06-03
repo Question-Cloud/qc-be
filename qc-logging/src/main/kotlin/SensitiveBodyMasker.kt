@@ -18,20 +18,22 @@ class SensitiveBodyMasker {
             .registerModule(JavaTimeModule())
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-        fun mask(jsonBody: String): String {
-            if (jsonBody.isBlank()) {
-                return jsonBody
+        fun mask(body: String): String {
+            if (body.isBlank()) {
+                return body
             }
 
-            val rootNode: JsonNode = objectMapper.readTree(jsonBody)
+            return runCatching {
+                val rootNode: JsonNode = objectMapper.readTree(body)
 
-            if (rootNode.isObject) {
-                maskJsonNodeRecursively(rootNode)
-            } else if (rootNode.isArray) {
-                maskJsonNodeRecursively(rootNode)
-            }
+                if (rootNode.isObject) {
+                    maskJsonNodeRecursively(rootNode)
+                } else if (rootNode.isArray) {
+                    maskJsonNodeRecursively(rootNode)
+                }
 
-            return objectMapper.writeValueAsString(rootNode)
+                objectMapper.writeValueAsString(rootNode)
+            }.getOrDefault("")
         }
 
         private fun maskJsonNodeRecursively(node: JsonNode) {
