@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.creator.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity.Companion.from
+import com.eager.questioncloud.core.domain.creator.infrastructure.entity.CreatorStatisticsEntity
 import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorStatisticsEntity.creatorStatisticsEntity
 import com.eager.questioncloud.core.domain.creator.model.CreatorStatistics
 import com.eager.questioncloud.core.exception.CoreException
@@ -8,7 +8,6 @@ import com.eager.questioncloud.core.exception.Error
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.util.stream.Collectors
 
 @Repository
 class CreatorStatisticsRepositoryImpl(
@@ -16,13 +15,13 @@ class CreatorStatisticsRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : CreatorStatisticsRepository {
     override fun save(creatorStatistics: CreatorStatistics) {
-        creatorStatisticsJpaRepository.save(from(creatorStatistics))
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(creatorStatistics))
     }
 
-    override fun saveAll(creatorStatistics: List<CreatorStatistics>) {
-        creatorStatisticsJpaRepository.saveAll(
-            creatorStatistics.stream().map { entity: CreatorStatistics -> from(entity) }.collect(Collectors.toList())
-        )
+    override fun update(creatorStatistics: CreatorStatistics) {
+        val entity = CreatorStatisticsEntity.from(creatorStatistics)
+        entity.markNotNew()
+        creatorStatisticsJpaRepository.save(entity)
     }
 
     override fun findByCreatorId(creatorId: Long): CreatorStatistics {

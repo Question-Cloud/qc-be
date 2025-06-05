@@ -24,6 +24,6 @@ class UpdateCreatorReviewStatisticsListener(
             ReviewEventType.MODIFY -> creatorStatistics.updateReviewStatisticsByModifiedReview(event.varianceRate)
             ReviewEventType.DELETE -> creatorStatistics.updateReviewStatisticsByDeletedReview(event.varianceRate)
         }
-        creatorStatisticsRepository.save(creatorStatistics)
+        creatorStatisticsRepository.update(creatorStatistics)
     }
 }
