@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.review.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewStatisticsEntity.Companion.from
+import com.eager.questioncloud.core.domain.review.infrastructure.entity.QuestionReviewStatisticsEntity
 import com.eager.questioncloud.core.domain.review.model.QuestionReviewStatistics
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -23,7 +23,14 @@ class QuestionReviewStatisticsRepositoryImpl(
     }
 
     override fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics {
-        return questionReviewStatisticsJpaRepository.save(from(questionReviewStatistics)).toModel()
+        return questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.from(questionReviewStatistics))
+            .toModel()
+    }
+
+    override fun update(questionReviewStatistics: QuestionReviewStatistics) {
+        val entity = QuestionReviewStatisticsEntity.from(questionReviewStatistics)
+        entity.markNotNew()
+        questionReviewStatisticsJpaRepository.save(entity)
     }
 
     override fun deleteAllInBatch() {

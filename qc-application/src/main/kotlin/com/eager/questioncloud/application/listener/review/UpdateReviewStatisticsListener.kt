@@ -20,6 +20,6 @@ class UpdateReviewStatisticsListener(
             ReviewEventType.MODIFY -> reviewStatistics.updateByModifyReview(event.varianceRate)
             ReviewEventType.DELETE -> reviewStatistics.updateByDeleteReview(event.varianceRate)
         }
-        questionReviewStatisticsRepository.save(reviewStatistics)
+        questionReviewStatisticsRepository.update(reviewStatistics)
     }
 }

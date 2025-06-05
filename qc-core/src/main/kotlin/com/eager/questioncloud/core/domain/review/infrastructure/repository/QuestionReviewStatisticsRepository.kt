@@ -9,5 +9,7 @@ interface QuestionReviewStatisticsRepository {
 
     fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics
 
+    fun update(questionReviewStatistics: QuestionReviewStatistics)
+
     fun deleteAllInBatch()
 }
