@@ -23,14 +23,13 @@ class QuestionReviewStatisticsRepositoryImpl(
     }
 
     override fun save(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatistics {
-        return questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.from(questionReviewStatistics))
-            .toModel()
+        return questionReviewStatisticsJpaRepository.save(
+            QuestionReviewStatisticsEntity.createNewEntity(questionReviewStatistics)
+        ).toModel()
     }
 
     override fun update(questionReviewStatistics: QuestionReviewStatistics) {
-        val entity = QuestionReviewStatisticsEntity.from(questionReviewStatistics)
-        entity.markNotNew()
-        questionReviewStatisticsJpaRepository.save(entity)
+        questionReviewStatisticsJpaRepository.save(QuestionReviewStatisticsEntity.fromExisting(questionReviewStatistics))
     }
 
     override fun deleteAllInBatch() {

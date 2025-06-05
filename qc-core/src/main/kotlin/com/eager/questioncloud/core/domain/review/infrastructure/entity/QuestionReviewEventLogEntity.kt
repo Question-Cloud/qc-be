@@ -14,19 +14,21 @@ class QuestionReviewEventLogEntity(
     @Id var eventId: String,
     @Column val isPublish: Boolean,
     @Column(columnDefinition = "TEXT") val payload: String,
-    @Column val createdAt: LocalDateTime
-) : BaseCustomIdEntity<String>() {
+    @Column val createdAt: LocalDateTime,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<String>(isNewEntity) {
     fun toModel(): QuestionReviewEventLog {
         return QuestionReviewEventLog(eventId, isPublish, payload, createdAt)
     }
 
     companion object {
-        fun from(reviewEventLog: QuestionReviewEventLog): QuestionReviewEventLogEntity {
+        fun createNewEntity(reviewEventLog: QuestionReviewEventLog): QuestionReviewEventLogEntity {
             return QuestionReviewEventLogEntity(
                 reviewEventLog.eventId,
                 reviewEventLog.isPublish,
                 reviewEventLog.payload,
-                reviewEventLog.createdAt
+                reviewEventLog.createdAt,
+                true
             )
         }
     }

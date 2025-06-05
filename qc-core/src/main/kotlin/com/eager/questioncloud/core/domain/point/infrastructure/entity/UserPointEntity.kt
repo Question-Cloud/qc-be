@@ -11,15 +11,16 @@ import jakarta.persistence.Table
 @Table(name = "user_point")
 class UserPointEntity private constructor(
     @Id var userId: Long,
-    @Column var point: Int
-) : BaseCustomIdEntity<Long>() {
+    @Column var point: Int,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<Long>(isNewEntity) {
     fun toModel(): UserPoint {
         return UserPoint(userId, point)
     }
 
     companion object {
-        fun from(userPoint: UserPoint): UserPointEntity {
-            return UserPointEntity(userPoint.userId, userPoint.point)
+        fun createNewEntity(userPoint: UserPoint): UserPointEntity {
+            return UserPointEntity(userPoint.userId, userPoint.point, true)
         }
     }
 

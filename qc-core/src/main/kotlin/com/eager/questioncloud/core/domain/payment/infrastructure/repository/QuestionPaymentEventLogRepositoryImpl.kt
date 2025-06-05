@@ -13,7 +13,7 @@ class QuestionPaymentEventLogRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : QuestionPaymentEventLogRepository {
     override fun save(questionPaymentEventLog: QuestionPaymentEventLog) {
-        questionPaymentEventLogJpaRepository.save(QuestionPaymentEventLogEntity.from(questionPaymentEventLog))
+        questionPaymentEventLogJpaRepository.save(QuestionPaymentEventLogEntity.createNewEntity(questionPaymentEventLog))
     }
 
     override fun getUnPublishedEvent(): List<QuestionPaymentEventLog> {

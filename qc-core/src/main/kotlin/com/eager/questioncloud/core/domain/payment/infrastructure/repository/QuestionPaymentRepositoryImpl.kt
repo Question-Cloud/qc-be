@@ -1,6 +1,6 @@
 package com.eager.questioncloud.core.domain.payment.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.payment.infrastructure.entity.QuestionPaymentEntity.Companion.from
+import com.eager.questioncloud.core.domain.payment.infrastructure.entity.QuestionPaymentEntity
 import com.eager.questioncloud.core.domain.payment.model.QuestionPayment
 import org.springframework.stereotype.Repository
 
@@ -10,7 +10,7 @@ class QuestionPaymentRepositoryImpl(
 ) : QuestionPaymentRepository {
 
     override fun save(questionPayment: QuestionPayment): QuestionPayment {
-        val entity = questionPaymentJpaRepository.save(from(questionPayment))
+        questionPaymentJpaRepository.save(QuestionPaymentEntity.createNewEntity(questionPayment))
         return questionPayment
     }
 

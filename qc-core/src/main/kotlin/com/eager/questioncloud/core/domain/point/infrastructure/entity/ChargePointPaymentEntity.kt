@@ -16,8 +16,9 @@ class ChargePointPaymentEntity private constructor(
     @Enumerated(EnumType.STRING) @Column var chargePointType: ChargePointType,
     @Enumerated(EnumType.STRING) @Column var chargePointPaymentStatus: ChargePointPaymentStatus,
     @Column var createdAt: LocalDateTime,
-    @Column var requestAt: LocalDateTime?
-) : BaseCustomIdEntity<String>() {
+    @Column var requestAt: LocalDateTime?,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<String>(isNewEntity) {
     fun toModel(): ChargePointPayment {
         return ChargePointPayment(
             orderId,
@@ -31,8 +32,7 @@ class ChargePointPaymentEntity private constructor(
     }
 
     companion object {
-        @JvmStatic
-        fun from(chargePointPayment: ChargePointPayment): ChargePointPaymentEntity {
+        fun createNewEntity(chargePointPayment: ChargePointPayment): ChargePointPaymentEntity {
             return ChargePointPaymentEntity(
                 chargePointPayment.orderId,
                 chargePointPayment.paymentId,
@@ -40,7 +40,21 @@ class ChargePointPaymentEntity private constructor(
                 chargePointPayment.chargePointType,
                 chargePointPayment.chargePointPaymentStatus,
                 chargePointPayment.createdAt,
-                chargePointPayment.requestAt
+                chargePointPayment.requestAt,
+                true
+            )
+        }
+
+        fun fromExisting(chargePointPayment: ChargePointPayment): ChargePointPaymentEntity {
+            return ChargePointPaymentEntity(
+                chargePointPayment.orderId,
+                chargePointPayment.paymentId,
+                chargePointPayment.userId,
+                chargePointPayment.chargePointType,
+                chargePointPayment.chargePointPaymentStatus,
+                chargePointPayment.createdAt,
+                chargePointPayment.requestAt,
+                false
             )
         }
     }

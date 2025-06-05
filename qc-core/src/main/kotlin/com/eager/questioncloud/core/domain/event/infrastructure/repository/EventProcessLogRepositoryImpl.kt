@@ -13,6 +13,6 @@ class EventProcessLogRepositoryImpl(
     }
 
     override fun save(eventProcessLog: EventProcessLog) {
-        eventProcessLogJpaRepository.save(EventProcessLogEntity.from(eventProcessLog))
+        eventProcessLogJpaRepository.save(EventProcessLogEntity.createNewEntity(eventProcessLog))
     }
 }

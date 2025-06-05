@@ -17,13 +17,12 @@ class ChargePointPaymentRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : ChargePointPaymentRepository {
     override fun save(chargePointPayment: ChargePointPayment): ChargePointPayment {
-        return chargePointPaymentJpaRepository.save(ChargePointPaymentEntity.from(chargePointPayment)).toModel()
+        return chargePointPaymentJpaRepository.save(ChargePointPaymentEntity.createNewEntity(chargePointPayment))
+            .toModel()
     }
 
     override fun update(chargePointPayment: ChargePointPayment): ChargePointPayment {
-        val entity = ChargePointPaymentEntity.from(chargePointPayment)
-        entity.markNotNew()
-        return chargePointPaymentJpaRepository.save(entity).toModel()
+        return chargePointPaymentJpaRepository.save(ChargePointPaymentEntity.fromExisting(chargePointPayment)).toModel()
     }
 
     override fun isCompletedPayment(userId: Long, paymentId: String): Boolean {

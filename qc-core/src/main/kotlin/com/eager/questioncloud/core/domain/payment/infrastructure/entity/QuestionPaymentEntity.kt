@@ -14,17 +14,19 @@ class QuestionPaymentEntity(
     @Column var userCouponId: Long?,
     @Column var amount: Int,
     @Enumerated(EnumType.STRING) @Column var status: QuestionPaymentStatus,
-    @Column var createdAt: LocalDateTime
-) : BaseCustomIdEntity<String>() {
+    @Column var createdAt: LocalDateTime,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<String>(isNewEntity) {
     companion object {
-        fun from(questionPayment: QuestionPayment): QuestionPaymentEntity {
+        fun createNewEntity(questionPayment: QuestionPayment): QuestionPaymentEntity {
             return QuestionPaymentEntity(
                 questionPayment.order.orderId,
                 questionPayment.userId,
                 questionPayment.questionPaymentCoupon?.userCouponId,
                 questionPayment.amount,
                 questionPayment.status,
-                questionPayment.createdAt
+                questionPayment.createdAt,
+                true
             )
         }
     }

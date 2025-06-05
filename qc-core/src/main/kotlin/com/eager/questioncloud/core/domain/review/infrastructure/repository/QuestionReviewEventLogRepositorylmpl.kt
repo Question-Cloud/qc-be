@@ -34,7 +34,7 @@ class QuestionReviewEventLogRepositoryImpl(
     }
 
     override fun save(questionReviewEventLog: QuestionReviewEventLog) {
-        questionReviewEventLogJpaRepository.save(QuestionReviewEventLogEntity.from(questionReviewEventLog))
+        questionReviewEventLogJpaRepository.save(QuestionReviewEventLogEntity.createNewEntity(questionReviewEventLog))
     }
 
     @Transactional

@@ -13,19 +13,31 @@ class QuestionReviewStatisticsEntity private constructor(
     @Id private var questionId: Long,
     @Column private var reviewCount: Int,
     @Column private var totalRate: Int,
-    @Column private var averageRate: Double
-) : BaseCustomIdEntity<Long>() {
+    @Column private var averageRate: Double,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<Long>(isNewEntity) {
     fun toModel(): QuestionReviewStatistics {
         return QuestionReviewStatistics(questionId, reviewCount, totalRate, averageRate)
     }
 
     companion object {
-        fun from(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatisticsEntity {
+        fun createNewEntity(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatisticsEntity {
             return QuestionReviewStatisticsEntity(
                 questionReviewStatistics.questionId,
                 questionReviewStatistics.reviewCount,
                 questionReviewStatistics.totalRate,
-                questionReviewStatistics.averageRate
+                questionReviewStatistics.averageRate,
+                true
+            )
+        }
+
+        fun fromExisting(questionReviewStatistics: QuestionReviewStatistics): QuestionReviewStatisticsEntity {
+            return QuestionReviewStatisticsEntity(
+                questionReviewStatistics.questionId,
+                questionReviewStatistics.reviewCount,
+                questionReviewStatistics.totalRate,
+                questionReviewStatistics.averageRate,
+                false
             )
         }
     }

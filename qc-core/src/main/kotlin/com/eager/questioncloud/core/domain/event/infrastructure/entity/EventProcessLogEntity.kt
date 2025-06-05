@@ -12,11 +12,12 @@ import java.time.LocalDateTime
 @Table(name = "event_process_log")
 class EventProcessLogEntity(
     @Id val idempotentKey: String,
-    @Column val createdAt: LocalDateTime
-) : BaseCustomIdEntity<String>() {
+    @Column val createdAt: LocalDateTime,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<String>(isNewEntity) {
     companion object {
-        fun from(eventProcessLog: EventProcessLog): EventProcessLogEntity {
-            return EventProcessLogEntity(eventProcessLog.idempotentKey, eventProcessLog.createdAt)
+        fun createNewEntity(eventProcessLog: EventProcessLog): EventProcessLogEntity {
+            return EventProcessLogEntity(eventProcessLog.idempotentKey, eventProcessLog.createdAt, true)
         }
     }
 

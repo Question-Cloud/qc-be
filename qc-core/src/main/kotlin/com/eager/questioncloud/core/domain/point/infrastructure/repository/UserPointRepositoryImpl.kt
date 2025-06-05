@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.point.infrastructure.repository
 
 import com.eager.questioncloud.core.domain.point.infrastructure.entity.QUserPointEntity.userPointEntity
-import com.eager.questioncloud.core.domain.point.infrastructure.entity.UserPointEntity.Companion.from
+import com.eager.questioncloud.core.domain.point.infrastructure.entity.UserPointEntity.Companion.createNewEntity
 import com.eager.questioncloud.core.domain.point.model.UserPoint
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -41,7 +41,7 @@ class UserPointRepositoryImpl(
     }
 
     override fun save(userPoint: UserPoint): UserPoint {
-        return userPointJpaRepository.save(from(userPoint)).toModel()
+        return userPointJpaRepository.save(createNewEntity(userPoint)).toModel()
     }
 
     override fun deleteAllInBatch() {

@@ -15,13 +15,11 @@ class CreatorStatisticsRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : CreatorStatisticsRepository {
     override fun save(creatorStatistics: CreatorStatistics) {
-        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.from(creatorStatistics))
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.createNewEntity(creatorStatistics))
     }
 
     override fun update(creatorStatistics: CreatorStatistics) {
-        val entity = CreatorStatisticsEntity.from(creatorStatistics)
-        entity.markNotNew()
-        creatorStatisticsJpaRepository.save(entity)
+        creatorStatisticsJpaRepository.save(CreatorStatisticsEntity.fromExisting(creatorStatistics))
     }
 
     override fun findByCreatorId(creatorId: Long): CreatorStatistics {

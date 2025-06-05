@@ -14,8 +14,9 @@ class CreatorStatisticsEntity(
     @Column var salesCount: Int,
     @Column var reviewCount: Int,
     @Column var totalReviewRate: Int,
-    @Column var averageRateOfReview: Double
-) : BaseCustomIdEntity<Long>() {
+    @Column var averageRateOfReview: Double,
+    isNewEntity: Boolean
+) : BaseCustomIdEntity<Long>(isNewEntity) {
     fun toModel(): CreatorStatistics {
         return CreatorStatistics(
             creatorId,
@@ -27,13 +28,25 @@ class CreatorStatisticsEntity(
     }
 
     companion object {
-        fun from(creatorStatistics: CreatorStatistics): CreatorStatisticsEntity {
+        fun createNewEntity(creatorStatistics: CreatorStatistics): CreatorStatisticsEntity {
             return CreatorStatisticsEntity(
                 creatorStatistics.creatorId,
                 creatorStatistics.salesCount,
                 creatorStatistics.reviewCount,
                 creatorStatistics.totalReviewRate,
-                creatorStatistics.averageRateOfReview
+                creatorStatistics.averageRateOfReview,
+                true
+            )
+        }
+
+        fun fromExisting(creatorStatistics: CreatorStatistics): CreatorStatisticsEntity {
+            return CreatorStatisticsEntity(
+                creatorStatistics.creatorId,
+                creatorStatistics.salesCount,
+                creatorStatistics.reviewCount,
+                creatorStatistics.totalReviewRate,
+                creatorStatistics.averageRateOfReview,
+                false
             )
         }
     }
