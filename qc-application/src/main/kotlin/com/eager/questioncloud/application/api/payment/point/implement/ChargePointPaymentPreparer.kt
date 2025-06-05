@@ -15,6 +15,6 @@ class ChargePointPaymentPreparer(
         val chargePointPayment = chargePointPaymentRepository.findByOrderIdWithLock(pgPayment.orderId)
         chargePointPayment.validatePayment(pgPayment.amount)
         chargePointPayment.prepare(pgPayment.paymentId)
-        return chargePointPaymentRepository.save(chargePointPayment)
+        return chargePointPaymentRepository.update(chargePointPayment)
     }
 }

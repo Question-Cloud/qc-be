@@ -3,7 +3,6 @@ package com.eager.questioncloud.core.domain.point.infrastructure.repository
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.core.domain.point.infrastructure.entity.ChargePointPaymentEntity
-import com.eager.questioncloud.core.domain.point.infrastructure.entity.ChargePointPaymentEntity.Companion.from
 import com.eager.questioncloud.core.domain.point.infrastructure.entity.QChargePointPaymentEntity.chargePointPaymentEntity
 import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 import com.eager.questioncloud.core.exception.CoreException
@@ -18,7 +17,13 @@ class ChargePointPaymentRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : ChargePointPaymentRepository {
     override fun save(chargePointPayment: ChargePointPayment): ChargePointPayment {
-        return chargePointPaymentJpaRepository.save(from(chargePointPayment)).toModel()
+        return chargePointPaymentJpaRepository.save(ChargePointPaymentEntity.from(chargePointPayment)).toModel()
+    }
+
+    override fun update(chargePointPayment: ChargePointPayment): ChargePointPayment {
+        val entity = ChargePointPaymentEntity.from(chargePointPayment)
+        entity.markNotNew()
+        return chargePointPaymentJpaRepository.save(entity).toModel()
     }
 
     override fun isCompletedPayment(userId: Long, paymentId: String): Boolean {

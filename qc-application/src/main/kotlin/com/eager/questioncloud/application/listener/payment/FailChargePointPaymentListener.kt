@@ -22,7 +22,7 @@ class FailChargePointPaymentListener(
 
     private fun cancelChargePointPayment(chargePointPayment: ChargePointPayment) {
         chargePointPayment.cancel()
-        chargePointPaymentRepository.save(chargePointPayment)
+        chargePointPaymentRepository.update(chargePointPayment)
     }
 
     private fun cancelPG(chargePointPayment: ChargePointPayment) {
@@ -38,6 +38,6 @@ class FailChargePointPaymentListener(
 
     private fun failCancel(chargePointPayment: ChargePointPayment) {
         chargePointPayment.failCancel()
-        chargePointPaymentRepository.save(chargePointPayment)
+        chargePointPaymentRepository.update(chargePointPayment)
     }
 }

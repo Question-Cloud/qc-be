@@ -6,6 +6,8 @@ import com.eager.questioncloud.core.domain.point.model.ChargePointPayment
 interface ChargePointPaymentRepository {
     fun save(chargePointPayment: ChargePointPayment): ChargePointPayment
 
+    fun update(chargePointPayment: ChargePointPayment): ChargePointPayment
+
     fun isCompletedPayment(userId: Long, paymentId: String): Boolean
 
     fun findByOrderIdWithLock(paymentId: String): ChargePointPayment
