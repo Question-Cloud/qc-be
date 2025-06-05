@@ -51,6 +51,7 @@ class PostCommentRepositoryImpl(
             .leftJoin(userEntity).on(userEntity.uid.eq(postCommentEntity.writerId))
             .offset(pagingInformation.offset.toLong())
             .limit(pagingInformation.size.toLong())
+            .fetch()
             .stream()
             .map { tuple ->
                 PostCommentDetail(
@@ -80,10 +81,8 @@ class PostCommentRepositoryImpl(
     private fun getQuestionCreatorUserId(postId: Long): Long {
         return jpaQueryFactory.select(userEntity.uid)
             .from(postEntity)
-            .innerJoin(questionEntity)
-            .on(questionEntity.id.eq(postEntity.questionId))
-            .innerJoin(creatorEntity)
-            .on(creatorEntity.id.eq(questionEntity.creatorId))
+            .innerJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
+            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
             .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
             .where(postEntity.id.eq(postId))
             .fetchFirst() ?: throw CoreException(Error.NOT_FOUND)

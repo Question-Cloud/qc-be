@@ -19,7 +19,7 @@ class PostContentEntity private constructor(
 
     companion object {
         fun from(postContent: PostContent): PostContentEntity {
-            return PostContentEntity(postContent.title, postContent.title, postContent.files)
+            return PostContentEntity(postContent.title, postContent.content, postContent.files)
         }
     }
 }
