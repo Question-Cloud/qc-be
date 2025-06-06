@@ -12,4 +12,6 @@ interface EmailVerificationRepository {
     fun getForResend(resendToken: String): EmailVerification
 
     fun save(emailVerification: EmailVerification): EmailVerification
+
+    fun update(emailVerification: EmailVerification)
 }

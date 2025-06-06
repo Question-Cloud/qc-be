@@ -21,6 +21,18 @@ class EmailVerificationEntity private constructor(
     }
 
     companion object {
+        fun fromExisting(emailVerification: EmailVerification): EmailVerificationEntity {
+            return EmailVerificationEntity(
+                emailVerification.token,
+                emailVerification.resendToken,
+                emailVerification.uid,
+                emailVerification.email,
+                emailVerification.emailVerificationType,
+                emailVerification.isVerified,
+                false
+            )
+        }
+
         fun createNewEntity(emailVerification: EmailVerification): EmailVerificationEntity {
             return EmailVerificationEntity(
                 emailVerification.token,

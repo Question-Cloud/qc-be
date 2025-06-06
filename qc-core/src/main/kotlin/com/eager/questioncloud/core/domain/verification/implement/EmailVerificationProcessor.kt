@@ -25,6 +25,7 @@ class EmailVerificationProcessor(
     fun verifyEmailVerification(token: String, emailVerificationType: EmailVerificationType): EmailVerification {
         val emailVerification = emailVerificationRepository.get(token, emailVerificationType)
         emailVerification.verify()
-        return emailVerificationRepository.save(emailVerification)
+        emailVerificationRepository.update(emailVerification)
+        return emailVerification
     }
 }

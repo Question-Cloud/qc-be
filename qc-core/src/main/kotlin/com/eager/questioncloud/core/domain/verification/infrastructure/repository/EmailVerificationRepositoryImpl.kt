@@ -1,7 +1,7 @@
 package com.eager.questioncloud.core.domain.verification.infrastructure.repository
 
 import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
-import com.eager.questioncloud.core.domain.verification.infrastructure.entity.EmailVerificationEntity.Companion.createNewEntity
+import com.eager.questioncloud.core.domain.verification.infrastructure.entity.EmailVerificationEntity
 import com.eager.questioncloud.core.domain.verification.infrastructure.entity.QEmailVerificationEntity.emailVerificationEntity
 import com.eager.questioncloud.core.domain.verification.model.EmailVerification
 import com.eager.questioncloud.core.exception.CoreException
@@ -45,6 +45,10 @@ class EmailVerificationRepositoryImpl(
     }
 
     override fun save(emailVerification: EmailVerification): EmailVerification {
-        return emailVerificationJpaRepository.save(createNewEntity(emailVerification)).toModel()
+        return emailVerificationJpaRepository.save(EmailVerificationEntity.createNewEntity(emailVerification)).toModel()
+    }
+
+    override fun update(emailVerification: EmailVerification) {
+        emailVerificationJpaRepository.save(EmailVerificationEntity.fromExisting(emailVerification))
     }
 }
