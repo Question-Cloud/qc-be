@@ -11,12 +11,12 @@ import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRe
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.social.SocialAPIManager
-import com.eager.questioncloud.social.SocialPlatform
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -29,8 +29,10 @@ class UserRegisterTest(
     @Autowired val userRepository: UserRepository,
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val dbCleaner: DBCleaner,
-    @Autowired @MockBean val socialAPIManager: SocialAPIManager
 ) {
+    @MockBean
+    lateinit var socialAPIManager: SocialAPIManager
+
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
@@ -65,8 +67,7 @@ class UserRegisterTest(
     @Test
     fun `카카오 소셜 계정으로 사용자를 생성할 수 있다`() {
         //given
-        `when`(socialAPIManager.getSocialUid("mock_kakao_token", SocialPlatform.KAKAO))
-            .thenReturn("kakao_social_uid_12345")
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn("kakao_social_uid_12345")
 
         val createUser = CreateUser(
             email = "kakao@example.com",
@@ -92,8 +93,7 @@ class UserRegisterTest(
     @Test
     fun `구글 소셜 계정으로 사용자를 생성할 수 있다`() {
         //given
-        `when`(socialAPIManager.getSocialUid("mock_google_token", SocialPlatform.GOOGLE))
-            .thenReturn("google_social_uid_67890")
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn("google_social_uid_67890")
 
         val createUser = CreateUser(
             email = "google@example.com",
@@ -119,8 +119,7 @@ class UserRegisterTest(
     @Test
     fun `네이버 소셜 계정으로 사용자를 생성할 수 있다`() {
         //given
-        `when`(socialAPIManager.getSocialUid("mock_naver_token", SocialPlatform.NAVER))
-            .thenReturn("naver_social_uid_11111")
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn("naver_social_uid_11111")
 
         val createUser = CreateUser(
             email = "naver@example.com",
@@ -200,10 +199,9 @@ class UserRegisterTest(
         //given
         val duplicateSocialUid = "duplicate_social_uid_12345"
 
-        `when`(socialAPIManager.getSocialUid("token1", SocialPlatform.KAKAO))
-            .thenReturn(duplicateSocialUid)
-        `when`(socialAPIManager.getSocialUid("token2", SocialPlatform.KAKAO))
-            .thenReturn(duplicateSocialUid)
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(duplicateSocialUid)
+
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(duplicateSocialUid)
 
         val existingUser = CreateUser(
             email = "existing@kakao.com",

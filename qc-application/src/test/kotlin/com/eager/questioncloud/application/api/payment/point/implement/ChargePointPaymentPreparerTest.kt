@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
@@ -30,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class ChargePointPaymentPreparerTest(
     @Autowired val chargePointPaymentPreparer: ChargePointPaymentPreparer,
     @Autowired val userRepository: UserRepository,
-    @SpyBean @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
+    @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0

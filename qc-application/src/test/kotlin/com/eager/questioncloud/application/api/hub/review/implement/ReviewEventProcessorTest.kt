@@ -9,28 +9,31 @@ import org.assertj.core.api.Assertions
 import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
-import software.amazon.awssdk.services.sns.SnsClient
+import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.PublishRequest
 import software.amazon.awssdk.services.sns.model.PublishResponse
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 @SpringBootTest
 @ActiveProfiles("test")
 @RecordApplicationEvents
 class ReviewEventProcessorTest(
-    @Autowired @SpyBean private val snsClient: SnsClient,
     @Autowired private val reviewEventProcessor: ReviewEventProcessor,
     @Autowired private val questionReviewEventLogRepository: QuestionReviewEventLogRepository,
     @Autowired private val dbCleaner: DBCleaner
 ) {
+    @MockBean
+    private lateinit var snsAsyncClient: SnsAsyncClient
+
     @Autowired
     lateinit var events: ApplicationEvents;
 
@@ -48,7 +51,11 @@ class ReviewEventProcessorTest(
         val reviewEvent = ReviewEvent.create(dummyQuestionId, varianceRate, reviewEventType)
         questionReviewEventLogRepository.save(QuestionReviewEventLog.create(reviewEvent.eventId, reviewEvent.toJson()))
 
-        BDDMockito.willReturn(PublishResponse.builder().build()).given(snsClient).publish(any<PublishRequest>())
+        given(snsAsyncClient.publish(any<PublishRequest>())).willReturn(
+            CompletableFuture.completedFuture(
+                PublishResponse.builder().build()
+            )
+        )
 
         // when
         reviewEventProcessor.publishEvent(reviewEvent)
@@ -73,7 +80,11 @@ class ReviewEventProcessorTest(
         val varianceRate = 3
         val reviewEventType = ReviewEventType.REGISTER
         val reviewEvent = ReviewEvent.create(dummyQuestionId, varianceRate, reviewEventType)
-        BDDMockito.willReturn(PublishResponse.builder().build()).given(snsClient).publish(any<PublishRequest>())
+        given(snsAsyncClient.publish(any<PublishRequest>())).willReturn(
+            CompletableFuture.completedFuture(
+                PublishResponse.builder().build()
+            )
+        )
 
         // when
         reviewEventProcessor.saveEventLog(reviewEvent)

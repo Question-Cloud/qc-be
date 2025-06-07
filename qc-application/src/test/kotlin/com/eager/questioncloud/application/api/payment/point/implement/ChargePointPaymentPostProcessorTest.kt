@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
@@ -25,7 +24,7 @@ class ChargePointPaymentPostProcessorTest(
     @Autowired val userRepository: UserRepository,
     @Autowired val userPointRepository: UserPointRepository,
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
-    @SpyBean @Autowired val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
+    @Autowired val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
     @Autowired val dbCleaner: DBCleaner,
 ) {
     private var uid: Long = 0

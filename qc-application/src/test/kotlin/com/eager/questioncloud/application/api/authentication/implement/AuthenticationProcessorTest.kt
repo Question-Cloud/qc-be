@@ -12,8 +12,8 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -24,9 +24,11 @@ import org.springframework.test.context.ActiveProfiles
 class AuthenticationProcessorTest(
     @Autowired val authenticationProcessor: AuthenticationProcessor,
     @Autowired val userRepository: UserRepository,
-    @Autowired @MockBean val socialAPIManager: SocialAPIManager,
     @Autowired val dbCleaner: DBCleaner,
 ) {
+    @MockBean
+    lateinit var socialAPIManager: SocialAPIManager
+
     @BeforeEach
     fun setUp() {
         UserFixtureHelper.createDefaultEmailUser(userRepository)
@@ -109,10 +111,8 @@ class AuthenticationProcessorTest(
         val socialUid = UserFixtureHelper.defaultSocialUserSocialUid
         val accountType = UserFixtureHelper.defaultSocialUserAccountType
 
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
-            .willReturn(socialAccessToken)
-        BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
-            .willReturn(socialUid)
+        given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
         val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
@@ -131,10 +131,8 @@ class AuthenticationProcessorTest(
         val accountType = AccountType.KAKAO
         val socialUid = "unRegisteredSocialUid"
 
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
-            .willReturn(socialAccessToken)
-        BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
-            .willReturn(socialUid)
+        given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
         val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
@@ -155,8 +153,7 @@ class AuthenticationProcessorTest(
         //given
         val wrongCode = "socialCode"
         val accountType = AccountType.KAKAO
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
-            .willThrow(CoreException(Error.FAIL_SOCIAL_LOGIN))
+        given(socialAPIManager.getAccessToken(any(), any())).willThrow(CoreException(Error.FAIL_SOCIAL_LOGIN))
 
         //when then
         Assertions.assertThatThrownBy {

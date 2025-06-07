@@ -10,8 +10,9 @@ import com.eager.questioncloud.core.domain.point.infrastructure.repository.Charg
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -23,9 +24,11 @@ import java.util.*
 internal class FailChargePointPaymentListenerTest(
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @Autowired val failChargePointPaymentListener: FailChargePointPaymentListener,
-    @Autowired @MockBean val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
     @Autowired val dbCleaner: DBCleaner,
 ) {
+    @MockBean
+    lateinit var chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
+
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
@@ -42,7 +45,8 @@ internal class FailChargePointPaymentListenerTest(
             chargePointPaymentRepository = chargePointPaymentRepository,
             chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED,
         )
-        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor).cancel(any(), any())
+        
+        doNothing().whenever(chargePointPaymentPGProcessor).cancel(any(), any())
 
         //when
         failChargePointPaymentListener.failHandler(FailChargePointPaymentEvent.create(order.orderId))

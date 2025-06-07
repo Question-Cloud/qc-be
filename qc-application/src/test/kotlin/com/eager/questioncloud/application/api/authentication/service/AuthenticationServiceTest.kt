@@ -8,8 +8,8 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -20,8 +20,10 @@ import org.springframework.test.context.ActiveProfiles
 class AuthenticationServiceTest(
     @Autowired val authenticationService: AuthenticationService,
     @Autowired val userRepository: UserRepository,
-    @Autowired @MockBean val socialAPIManager: SocialAPIManager,
 ) {
+    @MockBean
+    lateinit var socialAPIManager: SocialAPIManager
+
     @BeforeEach
     fun setUp() {
         UserFixtureHelper.createDefaultEmailUser(userRepository)
@@ -55,10 +57,8 @@ class AuthenticationServiceTest(
         val socialAccessToken = "socialAccessToken"
 
 
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
-            .willReturn(socialAccessToken)
-        BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
-            .willReturn(socialUid)
+        given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
         val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
@@ -77,10 +77,8 @@ class AuthenticationServiceTest(
         val socialAccessToken = "socialAccessToken"
         val socialUid = "unregisterdSocialUid"
 
-        BDDMockito.given(socialAPIManager.getAccessToken(any(), any()))
-            .willReturn(socialAccessToken)
-        BDDMockito.given(socialAPIManager.getSocialUid(any(), any()))
-            .willReturn(socialUid)
+        given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
         val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)

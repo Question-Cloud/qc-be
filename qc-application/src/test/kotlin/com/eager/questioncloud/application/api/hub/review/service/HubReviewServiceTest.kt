@@ -21,17 +21,18 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.event.ApplicationEvents
 import org.springframework.test.context.event.RecordApplicationEvents
-import software.amazon.awssdk.services.sns.SnsClient
+import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.PublishRequest
 import software.amazon.awssdk.services.sns.model.PublishResponse
+import java.util.concurrent.CompletableFuture
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -43,11 +44,13 @@ class HubReviewServiceTest(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val creatorRepository: CreatorRepository,
     @Autowired private val questionRepository: QuestionRepository,
-    @Autowired @SpyBean private val snsClient: SnsClient,
     @Autowired private val dbCleaner: DBCleaner,
 ) {
     @Autowired
     lateinit var events: ApplicationEvents
+
+    @MockBean
+    lateinit var snsAsyncClient: SnsAsyncClient
 
     var creatorId: Long = 0
 
@@ -115,7 +118,12 @@ class HubReviewServiceTest(
         val question = createDummyQuestion()
         addUserQuestion(reviewer.uid, question.id)
         val questionReview = QuestionReview.create(question.id, reviewer.uid, "comment", 5)
-        BDDMockito.willReturn(PublishResponse.builder().build()).given(snsClient).publish(any<PublishRequest>())
+
+        given(snsAsyncClient.publish(any<PublishRequest>())).willReturn(
+            CompletableFuture.completedFuture(
+                PublishResponse.builder().build()
+            )
+        )
 
         // when
         hubReviewService.register(questionReview)
@@ -139,7 +147,12 @@ class HubReviewServiceTest(
         addUserQuestion(reviewer.uid, question.id)
         val questionReview =
             questionReviewRepository.save(QuestionReview.create(question.id, reviewer.uid, "comment", 5))
-        BDDMockito.willReturn(PublishResponse.builder().build()).given(snsClient).publish(any<PublishRequest>())
+
+        given(snsAsyncClient.publish(any<PublishRequest>())).willReturn(
+            CompletableFuture.completedFuture(
+                PublishResponse.builder().build()
+            )
+        )
 
         // when
         val newComment = "newComment"
@@ -163,7 +176,12 @@ class HubReviewServiceTest(
         addUserQuestion(reviewer.uid, question.id)
         val questionReview =
             questionReviewRepository.save(QuestionReview.create(question.id, reviewer.uid, "comment", 5))
-        BDDMockito.willReturn(PublishResponse.builder().build()).given(snsClient).publish(any<PublishRequest>())
+
+        given(snsAsyncClient.publish(any<PublishRequest>())).willReturn(
+            CompletableFuture.completedFuture(
+                PublishResponse.builder().build()
+            )
+        )
 
         // when
         hubReviewService.delete(questionReview.id, reviewer.uid)

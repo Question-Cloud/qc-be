@@ -12,8 +12,10 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.given
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -26,9 +28,11 @@ import org.springframework.test.context.event.RecordApplicationEvents
 internal class ChargePointPaymentServiceTest(
     @Autowired val chargePointPaymentService: ChargePointPaymentService,
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
-    @Autowired @MockBean val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
     @Autowired val dbCleaner: DBCleaner,
 ) {
+    @MockBean
+    lateinit var chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
+
     @AfterEach
     fun tearDown() {
         chargePointPaymentRepository.deleteAllInBatch()
@@ -64,8 +68,8 @@ internal class ChargePointPaymentServiceTest(
 
         val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
 
-        BDDMockito.willReturn(pgPayment).given(chargePointPaymentPGProcessor).getPayment(any())
-        BDDMockito.willDoNothing().given(chargePointPaymentPGProcessor).confirm(any(), any(), any())
+        given(chargePointPaymentPGProcessor.getPayment(any())).willReturn(pgPayment)
+        doNothing().whenever(chargePointPaymentPGProcessor).confirm(any(), any(), any())
 
         //then
         chargePointPaymentService.approvePayment(order.orderId)
