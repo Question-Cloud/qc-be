@@ -35,7 +35,7 @@ class CreatorInformationReaderTest(
     }
 
     @Test
-    fun `한 명의 크리에이터 정보를 조회할 수 있다`() {
+    fun `크리에이터 정보를 조회할 수 있다`() {
         //given
         val user = UserFixtureHelper.createEmailUser("user1@naver.com", "qwer1234", UserStatus.Active, userRepository)
         val creator = CreatorFixtureHelper.createCreator(user.uid, creatorRepository)
@@ -115,12 +115,19 @@ class CreatorInformationReaderTest(
     }
 
     fun createDummySubscribers(creatorId: Long, count: Int) {
-        val subscribers = Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
-            .set(Subscribe::creatorId, creatorId)
-            .sampleList(count)
+        val dummySubscribe = mutableListOf<Subscribe>()
 
-        subscribers.forEach { subscriber ->
-            subscribeRepository.save(subscriber)
+        for (i in 1..count) {
+            dummySubscribe.add(
+                Fixture.fixtureMonkey.giveMeKotlinBuilder<Subscribe>()
+                    .set(Subscribe::creatorId, creatorId)
+                    .set(Subscribe::subscriberId, i)
+                    .sample()
+            )
+        }
+
+        dummySubscribe.forEach {
+            subscribeRepository.save(Subscribe.create(it.subscriberId, it.creatorId))
         }
     }
 }
