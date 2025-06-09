@@ -1,5 +1,6 @@
 plugins {
     kotlin("plugin.spring") version "2.1.10"
+    id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
 dependencies {
@@ -37,6 +38,11 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
+
+    testImplementation("com.epages:restdocs-api-spec-restassured:0.19.4")
+    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
+    testImplementation("io.rest-assured:rest-assured:5.5.5")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
@@ -52,11 +58,14 @@ sourceSets {
     }
 }
 
-tasks.test {
-    useJUnitPlatform()
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "Question Cloud API"
+    description = "Question Cloud API Documentation"
+    version = "1.1.1"
+    format = "yaml"
 }
 
 tasks.getByName<Jar>("jar") {
     enabled = false
 }
-
