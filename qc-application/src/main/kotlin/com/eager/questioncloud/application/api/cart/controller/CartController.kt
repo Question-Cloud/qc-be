@@ -7,9 +7,6 @@ import com.eager.questioncloud.application.api.cart.service.CartService
 import com.eager.questioncloud.application.api.common.DefaultResponse
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.domain.cart.dto.CartItemDetail
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -19,16 +16,12 @@ class CartController(
     private val cartService: CartService
 ) {
     @GetMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "장바구니 조회", summary = "장바구니 조회", tags = ["cart"], description = "장바구니 조회")
     fun getCart(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetCartResponse {
         val items: List<CartItemDetail> = cartService.getCartItems(userPrincipal.user.uid)
         return GetCartResponse.create(items)
     }
 
     @PostMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "장바구니 담기", summary = "장바구니 담기", tags = ["cart"], description = "장바구니 담기")
     fun addItem(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: AddCartItemRequest
@@ -38,8 +31,6 @@ class CartController(
     }
 
     @DeleteMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "장바구니 빼기", summary = "장바구니 빼기", tags = ["cart"], description = "장바구니 빼기")
     fun removeItem(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: RemoveCartItemRequest
