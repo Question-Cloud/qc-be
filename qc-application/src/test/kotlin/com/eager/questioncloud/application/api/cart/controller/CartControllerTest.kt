@@ -192,7 +192,7 @@ class CartControllerTest {
                     "장바구니 담기 실패 - 이용할 수 없는 문제",
                     ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
-                        .description("이용할 수 없는 문제를 장바구니에 담으려 할 때 발생하는 오류입니다.")
+                        .description("문제를 사용자의 장바구니에 추가합니다.")
                         .tag("cart")
                         .requestFields(
                             fieldWithPath("questionId").description("이용할 수 없는 문제 ID")
@@ -225,7 +225,7 @@ class CartControllerTest {
                     "장바구니 담기 실패 - 이미 장바구니에 있는 문제",
                     ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
-                        .description("이미 장바구니에 담긴 문제를 다시 담으려 할 때 발생하는 오류입니다.")
+                        .description("문제를 사용자의 장바구니에 추가합니다.")
                         .tag("cart")
                         .requestFields(
                             fieldWithPath("questionId").description("이미 장바구니에 담겨 있는 문제 ID")
@@ -258,7 +258,7 @@ class CartControllerTest {
                     "장바구니 담기 실패 - 이미 보유한 문제",
                     ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
-                        .description("이미 구매하여 보유하고 있는 문제를 장바구니에 담으려 할 때 발생하는 오류입니다.")
+                        .description("문제를 사용자의 장바구니에 추가합니다.")
                         .tag("cart")
                         .requestFields(
                             fieldWithPath("questionId").description("이미 보유하고 있는 문제 ID")
