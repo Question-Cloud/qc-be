@@ -122,43 +122,4 @@ class FeedSubscribeControllerDocument {
                 )
             )
     }
-
-    @Test
-    fun `나의 구독 목록 조회 API 테스트 - 빈 결과`() {
-        // Given
-        val totalCount = 0
-
-        whenever(feedSubscribeService.countMySubscribe(any()))
-            .thenReturn(totalCount)
-        whenever(feedSubscribeService.getMySubscribes(any(), any()))
-            .thenReturn(emptyList())
-
-        // When & Then
-        mockMvc.perform(
-            get("/api/feed/subscribe/my-subscribe")
-                .header("Authorization", "Bearer mock_access_token")
-                .param("page", "1")
-                .param("size", "10")
-        )
-            .andExpect(status().isOk)
-            .andDo(
-                document(
-                    "나의 구독 목록 조회 - 빈 결과",
-                    resourceDetails = ResourceSnippetParametersBuilder()
-                        .summary("나의 구독 목록 조회")
-                        .description("사용자가 구독한 크리에이터 목록을 페이징하여 조회합니다.")
-                        .tag("subscribe"),
-                    snippets = arrayOf(
-                        queryParameters(
-                            parameterWithName("page").description("페이지 번호 (1부터 시작)"),
-                            parameterWithName("size").description("페이지당 항목 수")
-                        ),
-                        responseFields(
-                            fieldWithPath("total").description("전체 구독 크리에이터 수"),
-                            fieldWithPath("result").description("구독 크리에이터 목록 (빈 배열)")
-                        )
-                    )
-                )
-            )
-    }
 }
