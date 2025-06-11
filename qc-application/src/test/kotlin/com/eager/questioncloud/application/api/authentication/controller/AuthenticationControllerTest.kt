@@ -1,42 +1,43 @@
 package com.eager.questioncloud.application.api.authentication.controller
 
-import com.eager.questioncloud.application.api.authentication.dto.*
+import com.eager.questioncloud.application.api.authentication.dto.AuthenticationToken
+import com.eager.questioncloud.application.api.authentication.dto.LoginRequest
+import com.eager.questioncloud.application.api.authentication.dto.SocialAuthenticationResult
 import com.eager.questioncloud.application.api.authentication.service.AuthenticationService
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
-import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper.document
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.restassured.RestAssured
-import io.restassured.builder.RequestSpecBuilder
-import io.restassured.http.ContentType
-import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.restdocs.RestDocumentationContextProvider
-import org.springframework.restdocs.RestDocumentationExtension
+import org.springframework.http.MediaType
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
 import org.springframework.restdocs.payload.JsonFieldType
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
-import org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration
+import org.springframework.restdocs.request.RequestDocumentation.queryParameters
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ExtendWith(SpringExtension::class, RestDocumentationExtension::class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureRestDocs(outputDir = "build/generated-snippets")
+
+@SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
+@AutoConfigureRestDocs
 class AuthenticationControllerTest {
-    @LocalServerPort
-    private var port: Int = 0
+
+    @Autowired
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
@@ -44,22 +45,14 @@ class AuthenticationControllerTest {
     @MockBean
     private lateinit var authenticationService: AuthenticationService
 
-    private lateinit var spec: RequestSpecification
-
     private lateinit var sampleAuthenticationToken: AuthenticationToken
 
     @BeforeEach
-    fun setUp(restDocumentation: RestDocumentationContextProvider) {
+    fun setUp() {
         sampleAuthenticationToken = AuthenticationToken(
             accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
             refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.refresh_token_example"
         )
-
-        spec = RequestSpecBuilder()
-            .addFilter(documentationConfiguration(restDocumentation))
-            .setContentType(ContentType.JSON)
-            .setPort(port)
-            .build()
     }
 
     @Test
@@ -74,31 +67,32 @@ class AuthenticationControllerTest {
             .thenReturn(sampleAuthenticationToken)
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest))
+        )
+            .andExpect(status().isOk)
+            .andDo(
                 document(
                     "로그인",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("로그인")
                         .description("이메일과 비밀번호를 사용하여 로그인합니다.")
-                        .tag("authentication")
-                        .requestFields(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        requestFields(
                             fieldWithPath("email").description("사용자 이메일 주소"),
                             fieldWithPath("password").description("사용자 비밀번호")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("authenticationToken").description("인증 토큰 정보"),
                             fieldWithPath("authenticationToken.accessToken").description("액세스 토큰"),
                             fieldWithPath("authenticationToken.refreshToken").description("리프레시 토큰")
                         )
+                    )
                 )
             )
-            .body(objectMapper.writeValueAsString(loginRequest))
-            .`when`()
-            .post("/api/auth")
-            .then()
-            .statusCode(200)
-            .extract().response().`as`(LoginResponse::class.java)
     }
 
     @Test
@@ -113,29 +107,31 @@ class AuthenticationControllerTest {
             .thenThrow(CoreException(Error.FAIL_LOGIN))
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest))
+        )
+            .andExpect(status().isUnauthorized)
+            .andDo(
                 document(
                     "로그인 실패 - 존재하지 않는 사용자",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("로그인")
                         .description("이메일과 비밀번호를 사용하여 로그인합니다.")
-                        .tag("authentication")
-                        .requestFields(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        requestFields(
                             fieldWithPath("email").description("존재하지 않는 사용자의 이메일 주소"),
                             fieldWithPath("password").description("사용자 비밀번호")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
                         )
+                    )
                 )
             )
-            .body(objectMapper.writeValueAsString(loginRequest))
-            .`when`()
-            .post("/api/auth")
-            .then()
-            .statusCode(401)
     }
 
     @Test
@@ -150,29 +146,31 @@ class AuthenticationControllerTest {
             .thenThrow(CoreException(Error.FAIL_LOGIN))
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest))
+        )
+            .andExpect(status().isUnauthorized)
+            .andDo(
                 document(
                     "로그인 실패 - 잘못된 비밀번호",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("로그인")
                         .description("이메일과 비밀번호를 사용하여 로그인합니다.")
-                        .tag("authentication")
-                        .requestFields(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        requestFields(
                             fieldWithPath("email").description("사용자 이메일 주소"),
                             fieldWithPath("password").description("잘못된 비밀번호")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
                         )
+                    )
                 )
             )
-            .body(objectMapper.writeValueAsString(loginRequest))
-            .`when`()
-            .post("/api/auth")
-            .then()
-            .statusCode(401)
     }
 
     @Test
@@ -187,29 +185,31 @@ class AuthenticationControllerTest {
             .thenThrow(CoreException(Error.PENDING_EMAIL_VERIFICATION))
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest))
+        )
+            .andExpect(status().isForbidden)
+            .andDo(
                 document(
                     "로그인 실패 - 이메일 인증 미완료",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("로그인")
                         .description("이메일과 비밀번호를 사용하여 로그인합니다.")
-                        .tag("authentication")
-                        .requestFields(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        requestFields(
                             fieldWithPath("email").description("이메일 인증이 완료되지 않은 사용자의 이메일 주소"),
                             fieldWithPath("password").description("사용자 비밀번호")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
                         )
+                    )
                 )
             )
-            .body(objectMapper.writeValueAsString(loginRequest))
-            .`when`()
-            .post("/api/auth")
-            .then()
-            .statusCode(403)
     }
 
     @Test
@@ -224,29 +224,31 @@ class AuthenticationControllerTest {
             .thenThrow(CoreException(Error.NOT_ACTIVE_USER))
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest))
+        )
+            .andExpect(status().isForbidden)
+            .andDo(
                 document(
                     "로그인 실패 - 탈퇴 또는 정지된 사용자",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("로그인")
                         .description("이메일과 비밀번호를 사용하여 로그인합니다.")
-                        .tag("authentication")
-                        .requestFields(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        requestFields(
                             fieldWithPath("email").description("탈퇴하거나 정지된 사용자의 이메일 주소"),
                             fieldWithPath("password").description("사용자 비밀번호")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
                         )
+                    )
                 )
             )
-            .body(objectMapper.writeValueAsString(loginRequest))
-            .`when`()
-            .post("/api/auth")
-            .then()
-            .statusCode(403)
     }
 
     @Test
@@ -258,30 +260,30 @@ class AuthenticationControllerTest {
             .thenReturn(sampleAuthenticationToken)
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth/refresh")
+                .queryParam("refreshToken", refreshToken)
+        )
+            .andExpect(status().isOk)
+            .andDo(
                 document(
                     "토큰 리프레시",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("토큰 리프레시")
                         .description("리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급받습니다.")
-                        .tag("authentication")
-                        .queryParameters(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        queryParameters(
                             parameterWithName("refreshToken").description("리프레시 토큰")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("authenticationToken").description("새로 발급된 인증 토큰 정보"),
                             fieldWithPath("authenticationToken.accessToken").description("새 액세스 토큰"),
                             fieldWithPath("authenticationToken.refreshToken").description("새 리프레시 토큰")
                         )
+                    )
                 )
             )
-            .queryParam("refreshToken", refreshToken)
-            .`when`()
-            .post("/api/auth/refresh")
-            .then()
-            .statusCode(200)
-            .extract().response().`as`(RefreshResponse::class.java)
     }
 
     @Test
@@ -293,28 +295,29 @@ class AuthenticationControllerTest {
             .thenThrow(CoreException(Error.UNAUTHORIZED_TOKEN))
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            post("/api/auth/refresh")
+                .queryParam("refreshToken", invalidRefreshToken)
+        )
+            .andExpect(status().isUnauthorized)
+            .andDo(
                 document(
                     "토큰 리프레시 실패 - 유효하지 않은 리프레시 토큰",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("토큰 리프레시")
                         .description("리프레시 토큰을 사용하여 새로운 액세스 토큰을 발급받습니다.")
-                        .tag("authentication")
-                        .queryParameters(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        queryParameters(
                             parameterWithName("refreshToken").description("유효하지 않은 리프레시 토큰")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
                         )
+                    )
                 )
             )
-            .queryParam("refreshToken", invalidRefreshToken)
-            .`when`()
-            .post("/api/auth/refresh")
-            .then()
-            .statusCode(401)
     }
 
     @Test
@@ -326,19 +329,25 @@ class AuthenticationControllerTest {
             .thenReturn(socialAuthenticationResult)
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            get("/api/auth/social")
+                .param("accountType", "KAKAO")
+                .param("code", "test_authorization_code")
+        )
+            .andExpect(status().isOk)
+            .andDo(
                 document(
                     "소셜 로그인 - 기존 사용자",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("소셜 로그인")
                         .description("소셜 계정으로 로그인합니다. 기존 사용자인 경우 인증 토큰을, 신규 사용자인 경우 회원가입 토큰을 반환합니다.")
-                        .tag("authentication")
-                        .queryParameters(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        queryParameters(
                             parameterWithName("accountType").description("소셜 계정 타입 (KAKAO, GOOGLE, NAVER)"),
                             parameterWithName("code").description("OAuth 인증 코드")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("isRegistered").description("기존 등록 사용자 여부"),
                             fieldWithPath("authenticationToken").description("인증 토큰 정보 (기존 사용자인 경우)").optional(),
                             fieldWithPath("authenticationToken.accessToken").description("액세스 토큰").optional(),
@@ -346,15 +355,9 @@ class AuthenticationControllerTest {
                             fieldWithPath("registerToken").description("회원가입 토큰 (신규 사용자인 경우)").optional()
                                 .type(JsonFieldType.STRING)
                         )
+                    )
                 )
             )
-            .queryParam("accountType", "KAKAO")
-            .queryParam("code", "test_authorization_code")
-            .`when`()
-            .get("/api/auth/social")
-            .then()
-            .statusCode(200)
-            .extract().response().`as`(SocialAuthenticateResponse::class.java)
     }
 
     @Test
@@ -366,32 +369,32 @@ class AuthenticationControllerTest {
             .thenReturn(socialAuthenticationResult)
 
         // When & Then
-        RestAssured.given(spec)
-            .filter(
+        mockMvc.perform(
+            get("/api/auth/social")
+                .param("accountType", "GOOGLE")
+                .param("code", "test_authorization_code")
+        )
+            .andExpect(status().isOk)
+            .andDo(
                 document(
                     "소셜 로그인 - 신규 사용자",
-                    ResourceSnippetParametersBuilder()
+                    resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("소셜 로그인")
                         .description("소셜 계정으로 로그인합니다. 기존 사용자인 경우 인증 토큰을, 신규 사용자인 경우 회원가입 토큰을 반환합니다.")
-                        .tag("authentication")
-                        .queryParameters(
+                        .tag("authentication"),
+                    snippets = arrayOf(
+                        queryParameters(
                             parameterWithName("accountType").description("소셜 계정 타입 (KAKAO, GOOGLE, NAVER)"),
                             parameterWithName("code").description("OAuth 인증 코드")
-                        )
-                        .responseFields(
+                        ),
+                        responseFields(
                             fieldWithPath("isRegistered").description("기존 등록 사용자 여부"),
                             fieldWithPath("authenticationToken").description("인증 토큰 정보 (기존 사용자인 경우)"),
                             fieldWithPath("registerToken").description("회원가입 토큰 (신규 사용자인 경우)").optional()
                                 .type(JsonFieldType.STRING)
                         )
+                    )
                 )
             )
-            .queryParam("accountType", "GOOGLE")
-            .queryParam("code", "test_authorization_code")
-            .`when`()
-            .get("/api/auth/social")
-            .then()
-            .statusCode(200)
-            .extract().response().`as`(SocialAuthenticateResponse::class.java)
     }
 }

@@ -1,6 +1,6 @@
 plugins {
     kotlin("plugin.spring") version "2.1.10"
-    id("com.epages.restdocs-api-spec") version "0.19.4"
+    id("com.epages.restdocs-api-spec") version "0.19.2"
 }
 
 dependencies {
@@ -39,9 +39,8 @@ dependencies {
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
 
-    testImplementation("com.epages:restdocs-api-spec-restassured:0.19.4")
-    testImplementation("org.springframework.restdocs:spring-restdocs-restassured")
-    testImplementation("io.rest-assured:rest-assured:5.5.5")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.2")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
