@@ -11,9 +11,6 @@ import com.eager.questioncloud.application.api.payment.question.service.Question
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
@@ -26,8 +23,6 @@ class QuestionPaymentController(
     private val questionPaymentHistoryService: QuestionPaymentHistoryService,
 ) {
     @PostMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "문제 구매", summary = "문제 구매", tags = ["question-payment"], description = "문제 구매")
     fun questionPayment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: QuestionPaymentRequest
@@ -42,13 +37,6 @@ class QuestionPaymentController(
     }
 
     @GetMapping("/history")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "문제 구매 내역 조회",
-        summary = "문제 구매 내역 조회",
-        tags = ["question-payment"],
-        description = "문제 구매 내역 조회"
-    )
     fun getQuestionPaymentHistory(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<QuestionPaymentHistory> {
