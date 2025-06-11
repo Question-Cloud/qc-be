@@ -11,12 +11,15 @@ import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentCoupon
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistory
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.core.domain.question.enums.Subject
+import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.core.exception.Error
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -148,6 +151,162 @@ class QuestionPaymentControllerDocument {
                         ),
                         responseFields(
                             fieldWithPath("success").description("요청 성공 여부")
+                        )
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `문제 구매 API 테스트 - 쿠폰 없이`() {
+        // Given
+        val questionPaymentRequest = QuestionPaymentRequest(
+            questionIds = listOf(101L),
+            userCouponId = null
+        )
+
+        // When & Then
+        mockMvc.perform(
+            post("/api/payment/question")
+                .header("Authorization", "Bearer mock_access_token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(questionPaymentRequest))
+        )
+            .andExpect(status().isOk)
+            .andDo(
+                document(
+                    "문제 구매 - 쿠폰 없이",
+                    resourceDetails = ResourceSnippetParametersBuilder()
+                        .summary("문제 구매")
+                        .description("선택한 문제들을 구매합니다. 쿠폰을 사용할 수 있습니다.")
+                        .tag("question-payment"),
+                    snippets = arrayOf(
+                        requestFields(
+                            fieldWithPath("questionIds").description("구매할 문제 ID 목록"),
+                            fieldWithPath("userCouponId").description("사용할 쿠폰 ID (null)")
+                        ),
+                        responseFields(
+                            fieldWithPath("success").description("요청 성공 여부")
+                        )
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `문제 구매 API 실패 테스트 - 이미 구매한 문제`() {
+        // Given
+        val questionPaymentRequest = QuestionPaymentRequest(
+            questionIds = listOf(101L),
+            userCouponId = null
+        )
+
+        whenever(questionOrderService.generateQuestionOrder(any(), any()))
+            .thenThrow(CoreException(Error.ALREADY_OWN_QUESTION))
+
+        // When & Then
+        mockMvc.perform(
+            post("/api/payment/question")
+                .header("Authorization", "Bearer mock_access_token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(questionPaymentRequest))
+        )
+            .andExpect(status().isConflict)
+            .andDo(
+                document(
+                    "문제 구매 실패 - 이미 구매한 문제",
+                    resourceDetails = ResourceSnippetParametersBuilder()
+                        .summary("문제 구매")
+                        .description("선택한 문제들을 구매합니다. 쿠폰을 사용할 수 있습니다.")
+                        .tag("question-payment"),
+                    snippets = arrayOf(
+                        requestFields(
+                            fieldWithPath("questionIds").description("구매할 문제 ID 목록"),
+                            fieldWithPath("userCouponId").description("사용할 쿠폰 ID (null)")
+                        ),
+                        responseFields(
+                            fieldWithPath("status").description("HTTP 상태 코드"),
+                            fieldWithPath("message").description("에러 메시지")
+                        )
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `문제 구매 API 실패 테스트 - 사용할 수 없는 문제`() {
+        // Given
+        val questionPaymentRequest = QuestionPaymentRequest(
+            questionIds = listOf(999L, 1000L),
+            userCouponId = null
+        )
+
+        whenever(questionOrderService.generateQuestionOrder(any(), any()))
+            .thenThrow(CoreException(Error.UNAVAILABLE_QUESTION))
+
+        // When & Then
+        mockMvc.perform(
+            post("/api/payment/question")
+                .header("Authorization", "Bearer mock_access_token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(questionPaymentRequest))
+        )
+            .andExpect(status().isBadRequest)
+            .andDo(
+                document(
+                    "문제 구매 실패 - 사용할 수 없는 문제",
+                    resourceDetails = ResourceSnippetParametersBuilder()
+                        .summary("문제 구매")
+                        .description("선택한 문제들을 구매합니다. 쿠폰을 사용할 수 있습니다.")
+                        .tag("question-payment"),
+                    snippets = arrayOf(
+                        requestFields(
+                            fieldWithPath("questionIds").description("구매할 문제 ID 목록"),
+                            fieldWithPath("userCouponId").description("사용할 쿠폰 ID (null)")
+                        ),
+                        responseFields(
+                            fieldWithPath("status").description("HTTP 상태 코드"),
+                            fieldWithPath("message").description("에러 메시지")
+                        )
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `문제 구매 API 실패 테스트 - 포인트 부족`() {
+        // Given
+        val questionPaymentRequest = QuestionPaymentRequest(
+            questionIds = listOf(101L, 102L),
+            userCouponId = null
+        )
+
+        whenever(questionPaymentService.payment(anyOrNull(), anyOrNull(), anyOrNull()))
+            .thenThrow(CoreException(Error.NOT_ENOUGH_POINT))
+
+        // When & Then
+        mockMvc.perform(
+            post("/api/payment/question")
+                .header("Authorization", "Bearer mock_access_token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(questionPaymentRequest))
+        )
+            .andExpect(status().isForbidden)
+            .andDo(
+                document(
+                    "문제 구매 실패 - 포인트 부족",
+                    resourceDetails = ResourceSnippetParametersBuilder()
+                        .summary("문제 구매")
+                        .description("선택한 문제들을 구매합니다. 쿠폰을 사용할 수 있습니다.")
+                        .tag("question-payment"),
+                    snippets = arrayOf(
+                        requestFields(
+                            fieldWithPath("questionIds").description("구매할 문제 ID 목록"),
+                            fieldWithPath("userCouponId").description("사용할 쿠폰 ID (null)")
+                        ),
+                        responseFields(
+                            fieldWithPath("status").description("HTTP 상태 코드"),
+                            fieldWithPath("message").description("에러 메시지")
                         )
                     )
                 )
