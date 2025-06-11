@@ -31,7 +31,7 @@ enum class Error(
     ALREADY_SUBSCRIBE_CREATOR(409, "이미 구독중인 크리에이터입니다."),
     NOT_PASSWORD_SUPPORT_ACCOUNT(400, "비밀번호를 사용하지 않는 계정 유형입니다."),
     ALREADY_REGISTER_REVIEW(409, "이미 후기를 남긴 문제입니다."),
-    NOT_OWNED_QUESTION(400, "보유하고 있는 문제가 아닙니다."),
+    NOT_OWNED_QUESTION(403, "보유하고 있는 문제가 아닙니다."),
     FORBIDDEN(403, "권한이 없습니다."),
     UNAVAILABLE_QUESTION(400, "현재 이용할 수 없는 문제 입니다."),
     ALREADY_VERIFIED_EMAIL(409, "이미 인증 완료 된 메일입니다."),

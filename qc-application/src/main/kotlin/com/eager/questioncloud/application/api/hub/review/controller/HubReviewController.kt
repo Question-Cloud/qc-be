@@ -11,11 +11,6 @@ import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
 import com.eager.questioncloud.core.domain.review.model.QuestionReview.Companion.create
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.validation.Valid
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -26,15 +21,6 @@ class HubReviewController(
     private val hubReviewService: HubReviewService
 ) {
     @GetMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "문제 리뷰 목록 조회",
-        summary = "문제 리뷰 목록 조회",
-        tags = ["question-review"],
-        description = "문제 리뷰 조회"
-    )
-    @Parameter(name = "size", description = "paging size", schema = Schema(type = "integer"))
-    @Parameter(name = "page", description = "paging page", schema = Schema(type = "integer"))
     fun getQuestionReviews(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestParam questionId: Long,
@@ -50,14 +36,6 @@ class HubReviewController(
     }
 
     @GetMapping("/me")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "내가 작성한 리뷰 조회", summary = "내가 작성한 리뷰 조회", tags = ["question-review"], description = """
-                작성한 리뷰가 있다면 review 정보를 응답으로 반환하며
-                작성한 리뷰가 없다면 404를 반환합니다.
-            
-            """
-    )
     fun getMyQuestionReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestParam questionId: Long
@@ -67,8 +45,6 @@ class HubReviewController(
     }
 
     @PostMapping
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "문제 리뷰 등록", summary = "문제 리뷰 등록", tags = ["question-review"], description = "문제 리뷰 등록")
     fun registerQuestionReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid RegisterQuestionReviewRequest
@@ -85,8 +61,6 @@ class HubReviewController(
     }
 
     @PatchMapping("/{reviewId}")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "문제 리뷰 수정", summary = "문제 리뷰 수정", tags = ["question-review"], description = "문제 리뷰 수정")
     fun modifyQuestionReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable reviewId: Long,
         @RequestBody request: @Valid ModifyQuestionReviewRequest
@@ -96,8 +70,6 @@ class HubReviewController(
     }
 
     @DeleteMapping("/{reviewId}")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "문제 리뷰 삭제", summary = "문제 리뷰 삭제", tags = ["question-review"], description = "문제 리뷰 삭제")
     fun deleteQuestionReview(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable reviewId: Long
