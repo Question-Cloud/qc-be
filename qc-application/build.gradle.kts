@@ -10,7 +10,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     compileOnly("org.springframework:spring-tx")
 
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0"))
@@ -32,12 +31,15 @@ dependencies {
     implementation(project(":qc-social-api"))
     implementation(project(":qc-logging"))
 
+    implementation("org.apache.commons:commons-lang3:3.17.0")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testImplementation("org.springframework:spring-tx")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
     testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
+    testImplementation("org.springframework.security:spring-security-test")
 
     testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.2")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

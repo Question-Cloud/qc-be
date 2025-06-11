@@ -4,7 +4,6 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.feed.library.service.FeedLibraryService
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter
 import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail
-import org.springdoc.core.annotations.ParameterObject
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -15,7 +14,7 @@ class FeedLibraryController(
     private val feedLibraryService: FeedLibraryService
 ) {
     @GetMapping
-    fun getUserQuestionLibraryList(@ParameterObject questionFilter: QuestionFilter): PagingResponse<UserQuestionDetail> {
+    fun getUserQuestionLibraryList(questionFilter: QuestionFilter): PagingResponse<UserQuestionDetail> {
         val total = feedLibraryService.countUserQuestions(questionFilter)
         val userQuestions = feedLibraryService.getUserQuestions(questionFilter)
         return PagingResponse(total, userQuestions)

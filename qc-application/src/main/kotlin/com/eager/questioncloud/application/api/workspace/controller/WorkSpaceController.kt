@@ -12,11 +12,6 @@ import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.post.dto.PostListItem
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.media.Schema
-import io.swagger.v3.oas.annotations.responses.ApiResponse
-import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -32,8 +27,6 @@ class WorkSpaceController(
 ) {
     @PostMapping("/register")
     @PreAuthorize("hasAnyRole('ROLE_NormalUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "크리에이터 등록 신청", summary = "크리에이터 등록 신청", tags = ["workspace"], description = "크리에이터 등록 신청")
     fun registerCreator(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody request: @Valid RegisterCreatorRequest
     ): RegisterCreatorResponse {
@@ -43,13 +36,6 @@ class WorkSpaceController(
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "크리에이터 정보 조회 (나)",
-        summary = "크리에이터 정보 조회 (나)",
-        tags = ["workspace"],
-        description = "크리에이터 정보 조회 (나)"
-    )
     fun getMyCreatorInformation(@AuthenticationPrincipal userPrincipal: UserPrincipal): CreatorProfileResponse {
         val me = userPrincipal.creator!!
         return CreatorProfileResponse(me.mainSubject, me.introduction)
@@ -57,8 +43,6 @@ class WorkSpaceController(
 
     @PatchMapping("/me")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "크리에이터 정보 수정", summary = "크리에이터 정보 수정", tags = ["workspace"], description = "크리에이터 정보 수정")
     fun updateMyCreatorInformation(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid UpdateCreatorProfileRequest
@@ -69,15 +53,6 @@ class WorkSpaceController(
 
     @GetMapping("/question")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "나의 자작 문제 목록 조회",
-        summary = "나의 자작 문제 목록 조회",
-        tags = ["workspace"],
-        description = "나의 자작 문제 목록 조회"
-    )
-    @Parameter(name = "size", description = "paging size", schema = Schema(type = "integer"))
-    @Parameter(name = "page", description = "paging page", schema = Schema(type = "integer"))
     fun getQuestions(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<QuestionInformation> {
@@ -90,13 +65,6 @@ class WorkSpaceController(
 
     @GetMapping("/question/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "나의 자작 문제 상세 조회",
-        summary = "나의 자작 문제 상세 조회",
-        tags = ["workspace"],
-        description = "나의 자작 문제 상세 조회"
-    )
     fun getQuestion(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @PathVariable questionId: Long
@@ -107,8 +75,6 @@ class WorkSpaceController(
 
     @PostMapping("/question")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "나의 자작 문제 등록", summary = "나의 자작 문제 등록", tags = ["workspace"], description = "나의 자작 문제 등록")
     fun register(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestBody request: @Valid RegisterQuestionRequest
@@ -119,8 +85,6 @@ class WorkSpaceController(
 
     @PatchMapping("/question/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "나의 자작 문제 수정", summary = "나의 자작 문제 수정", tags = ["workspace"], description = "나의 자작 문제 수정")
     fun modify(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable questionId: Long,
         @RequestBody request: @Valid ModifyQuestionRequest
@@ -131,8 +95,6 @@ class WorkSpaceController(
 
     @DeleteMapping("/question/{questionId}")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(operationId = "나의 자작 문제 삭제", summary = "나의 자작 문제 삭제", tags = ["workspace"], description = "나의 자작 문제 삭제")
     fun delete(@AuthenticationPrincipal userPrincipal: UserPrincipal, @PathVariable questionId: Long): DefaultResponse {
         workspaceQuestionService.deleteQuestion(userPrincipal.creator!!.id, questionId)
         return success()
@@ -140,12 +102,6 @@ class WorkSpaceController(
 
     @GetMapping("/board")
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
-    @ApiResponses(value = [ApiResponse(responseCode = "200", description = "요청 성공")])
-    @Operation(
-        operationId = "나의 자작 문제 게시판 목록 조회", summary = "나의 자작 문제 게시판 목록 조회", tags = ["workspace"], description = """
-                나의 자작 문제 게시판에 등록된 게시글들을 통합 조회 합니다.            
-            """
-    )
     fun creatorQuestionBoardList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
     ): PagingResponse<PostListItem> {
