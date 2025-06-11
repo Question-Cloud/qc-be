@@ -1,5 +1,8 @@
 package com.eager.questioncloud.application.api.payment.point.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 class CheckCompletePaymentResponse(
-    isCompleted: Boolean
+    @JsonProperty("isCompleted")
+    val isCompleted: Boolean
 )
