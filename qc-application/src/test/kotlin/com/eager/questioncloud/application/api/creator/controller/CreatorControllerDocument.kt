@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-class CreatorControllerTest {
+class CreatorControllerDocument {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

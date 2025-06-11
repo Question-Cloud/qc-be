@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-class CartControllerTest {
+class CartControllerDocument {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
