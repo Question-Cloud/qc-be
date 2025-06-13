@@ -1,6 +1,7 @@
 package com.eager.questioncloud.application.security
 
 import com.eager.questioncloud.application.api.authentication.implement.AuthenticationTokenManager
+import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -14,7 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     private val authenticationTokenManager: AuthenticationTokenManager,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val creatorRepository: CreatorRepository,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -43,8 +45,9 @@ class JwtAuthenticationFilter(
 
     private fun authentication(accessToken: String?) {
         val uid = authenticationTokenManager.parseUidFromAccessToken(accessToken)
-        val userWithCreator = userRepository.getUserWithCreator(uid)
-        val userPrincipal: UserPrincipal = UserPrincipal.create(userWithCreator.user, userWithCreator.creator)
+        val user = userRepository.getUser(uid)
+        val creator = creatorRepository.findByUserId(uid)
+        val userPrincipal: UserPrincipal = UserPrincipal.create(user, creator)
         val authentication = UsernamePasswordAuthenticationToken(
             userPrincipal,
             userPrincipal.user.userInformation.name,

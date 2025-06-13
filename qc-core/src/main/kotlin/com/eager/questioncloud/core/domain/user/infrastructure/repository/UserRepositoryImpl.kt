@@ -1,10 +1,7 @@
 package com.eager.questioncloud.core.domain.user.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
-import com.eager.questioncloud.core.domain.user.dto.UserWithCreator
 import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
 import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
 import com.eager.questioncloud.core.domain.user.infrastructure.entity.UserEntity.Companion.from
 import com.eager.questioncloud.core.domain.user.model.User
@@ -36,33 +33,6 @@ class UserRepositoryImpl(
         return userJpaRepository.findById(uid)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
-    }
-
-    //TODO 메서드 분리하기
-    override fun getUserWithCreator(uid: Long): UserWithCreator {
-        val result = jpaQueryFactory.select(userEntity, creatorEntity)
-            .from(userEntity)
-            .leftJoin(creatorEntity)
-            .on(creatorEntity.userId.eq(userEntity.uid))
-            .where(userEntity.uid.eq(uid))
-            .fetchFirst()
-
-        if (result == null) {
-            throw CoreException(Error.NOT_FOUND)
-        }
-
-        val user = result.get(userEntity)
-        val creator = result.get(creatorEntity)
-
-        if (user == null) {
-            throw CoreException(Error.NOT_FOUND)
-        }
-
-        if (user.userType == UserType.CreatorUser && creator != null) {
-            return UserWithCreator(user.toModel(), creator.toModel())
-        }
-
-        return UserWithCreator(user.toModel(), null)
     }
 
     override fun save(user: User): User {

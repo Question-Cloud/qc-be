@@ -23,6 +23,10 @@ class CreatorRepositoryImpl(
             .toModel()
     }
 
+    override fun findByUserId(userId: Long): Creator? {
+        return creatorJpaRepository.findByUserId(userId)?.toModel()
+    }
+
     override fun findByIdIn(creatorIds: List<Long>): List<Creator> {
         return creatorJpaRepository.findByIdIn(creatorIds).map { it.toModel() }
     }

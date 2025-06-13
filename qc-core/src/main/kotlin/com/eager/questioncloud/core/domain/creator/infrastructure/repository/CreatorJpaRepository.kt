@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CreatorJpaRepository : JpaRepository<CreatorEntity, Long> {
     fun findByIdIn(creatorIds: List<Long>): List<CreatorEntity>
+
+    fun findByUserId(userId: Long): CreatorEntity?
 }
