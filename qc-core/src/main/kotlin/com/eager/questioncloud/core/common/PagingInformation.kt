@@ -7,4 +7,8 @@ class PagingInformation(
 ) {
     val page: Int
         get() = offset / size
+
+    companion object {
+        val max = PagingInformation(0, Int.MAX_VALUE)
+    }
 }

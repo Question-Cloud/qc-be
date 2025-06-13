@@ -15,7 +15,7 @@ class WorkspaceQuestionService(
     private val questionReviewStatisticsGenerator: QuestionReviewStatisticsGenerator
 ) {
     fun getMyQuestions(creatorId: Long, pagingInformation: PagingInformation): List<QuestionInformation> {
-        return questionRepository.findByCreatorIdWithPaging(creatorId, pagingInformation)
+        return questionRepository.getQuestionInformationByCreatorIdWithPaging(creatorId, pagingInformation)
     }
 
     fun countMyQuestions(creatorId: Long): Int {

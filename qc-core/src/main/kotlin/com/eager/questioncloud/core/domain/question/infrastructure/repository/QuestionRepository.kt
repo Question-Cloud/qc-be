@@ -10,7 +10,7 @@ interface QuestionRepository {
 
     fun getQuestionInformation(questionFilter: QuestionFilter): List<QuestionInformation>
 
-    fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation
+    fun getQuestionInformation(questionId: Long, userId: Long = -1): QuestionInformation
 
     fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question>
 
@@ -22,7 +22,12 @@ interface QuestionRepository {
 
     fun save(question: Question): Question
 
-    fun findByCreatorIdWithPaging(creatorId: Long, pagingInformation: PagingInformation): List<QuestionInformation>
+    fun getQuestionInformationByCreatorIdWithPaging(
+        creatorId: Long,
+        pagingInformation: PagingInformation
+    ): List<QuestionInformation>
+
+    fun findByCreatorId(creatorId: Long): List<Question>
 
     fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation>
 

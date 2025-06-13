@@ -140,7 +140,7 @@ class QuestionRepositoryImpl(
         return questionJpaRepository.save(from(question)).toModel()
     }
 
-    override fun findByCreatorIdWithPaging(
+    override fun getQuestionInformationByCreatorIdWithPaging(
         creatorId: Long,
         pagingInformation: PagingInformation
     ): List<QuestionInformation> {
@@ -164,6 +164,14 @@ class QuestionRepositoryImpl(
             .stream()
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
             .collect(Collectors.toList())
+    }
+
+    override fun findByCreatorId(creatorId: Long): List<Question> {
+        return jpaQueryFactory.select(questionEntity)
+            .from(questionEntity)
+            .where(questionEntity.creatorId.eq(creatorId))
+            .fetch()
+            .map { it.toModel() }
     }
 
     override fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation> {

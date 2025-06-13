@@ -4,7 +4,7 @@ import com.eager.questioncloud.application.api.post.dto.ModifyPostRequest
 import com.eager.questioncloud.application.api.post.dto.RegisterPostRequest
 import com.eager.questioncloud.application.api.post.service.PostService
 import com.eager.questioncloud.core.domain.post.dto.PostDetail
-import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.dto.PostPreview
 import com.eager.questioncloud.core.domain.post.model.PostFile
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -44,19 +44,19 @@ class PostControllerDocument {
     @MockBean
     private lateinit var postService: PostService
 
-    private lateinit var samplePostListItems: List<PostListItem>
+    private lateinit var samplePostPreviews: List<PostPreview>
     private lateinit var samplePostDetail: PostDetail
 
     @BeforeEach
     fun setUp() {
-        samplePostListItems = listOf(
-            PostListItem(
+        samplePostPreviews = listOf(
+            PostPreview(
                 id = 1L,
                 title = "미적분 극한 문제 질문드립니다",
                 writer = "김학생",
                 createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
             ),
-            PostListItem(
+            PostPreview(
                 id = 2L,
                 title = "이 문제 풀이가 맞나요?",
                 writer = "이질문",
@@ -97,8 +97,8 @@ class PostControllerDocument {
 
         whenever(postService.countPost(any()))
             .thenReturn(totalCount)
-        whenever(postService.getPostList(any(), any(), any()))
-            .thenReturn(samplePostListItems)
+        whenever(postService.getPostPreviews(any(), any(), any()))
+            .thenReturn(samplePostPreviews)
 
         // When & Then
         mockMvc.perform(
@@ -140,7 +140,7 @@ class PostControllerDocument {
         // Given
         val questionId = 101L
 
-        whenever(postService.getPostList(any(), any(), any()))
+        whenever(postService.getPostPreviews(any(), any(), any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
 
         // When & Then

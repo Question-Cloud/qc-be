@@ -127,7 +127,7 @@ class PostServiceTest(
         val pagingInformation = PagingInformation(offset = 0, size = 10)
 
         //when
-        val postList = postService.getPostList(creatorUser.uid, question.id, pagingInformation)
+        val postList = postService.getPostPreviews(creatorUser.uid, question.id, pagingInformation)
 
         //then
         Assertions.assertThat(postList).hasSizeGreaterThanOrEqualTo(3)
@@ -148,7 +148,7 @@ class PostServiceTest(
 
         //when & then
         val exception = assertThrows<CoreException> {
-            postService.getPostList(unauthorizedUser.uid, question.id, pagingInformation)
+            postService.getPostPreviews(unauthorizedUser.uid, question.id, pagingInformation)
         }
         Assertions.assertThat(exception.error).isEqualTo(Error.FORBIDDEN)
     }

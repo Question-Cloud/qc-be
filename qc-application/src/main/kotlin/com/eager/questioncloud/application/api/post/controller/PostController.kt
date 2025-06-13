@@ -9,7 +9,7 @@ import com.eager.questioncloud.application.api.post.dto.RegisterPostRequest
 import com.eager.questioncloud.application.api.post.service.PostService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.dto.PostPreview
 import com.eager.questioncloud.core.domain.post.model.Post.Companion.create
 import com.eager.questioncloud.core.domain.post.model.PostContent.Companion.create
 import jakarta.validation.Valid
@@ -52,9 +52,9 @@ class PostController(
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @RequestParam questionId: Long,
         pagingInformation: PagingInformation
-    ): PagingResponse<PostListItem> {
+    ): PagingResponse<PostPreview> {
         val total = postService.countPost(questionId)
-        val boards = postService.getPostList(userPrincipal.user.uid, questionId, pagingInformation)
+        val boards = postService.getPostPreviews(userPrincipal.user.uid, questionId, pagingInformation)
         return PagingResponse(total, boards)
     }
 

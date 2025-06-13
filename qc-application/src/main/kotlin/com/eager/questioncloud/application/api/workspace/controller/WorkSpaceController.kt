@@ -10,7 +10,7 @@ import com.eager.questioncloud.application.api.workspace.service.WorkspaceQuesti
 import com.eager.questioncloud.application.api.workspace.service.WorkspaceRegisterService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostListItem
+import com.eager.questioncloud.core.domain.post.dto.PostPreview
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
 import jakarta.validation.Valid
 import org.springframework.security.access.prepost.PreAuthorize
@@ -104,7 +104,7 @@ class WorkSpaceController(
     @PreAuthorize("hasAnyRole('ROLE_CreatorUser')")
     fun creatorQuestionBoardList(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, pagingInformation: PagingInformation
-    ): PagingResponse<PostListItem> {
+    ): PagingResponse<PostPreview> {
         val total = workspacePostService.countCreatorPost(userPrincipal.creator!!.id)
         val boards = workspacePostService.getCreatorPosts(
             userPrincipal.creator.id,
