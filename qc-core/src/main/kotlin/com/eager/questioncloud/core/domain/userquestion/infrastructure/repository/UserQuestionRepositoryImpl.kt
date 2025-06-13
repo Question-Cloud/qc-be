@@ -79,6 +79,14 @@ class UserQuestionRepositoryImpl(
         userQuestionJpaRepository.deleteAllInBatch()
     }
 
+    override fun findByQuestionIdInAndUserId(questionIds: List<Long>, userId: Long): List<UserQuestion> {
+        return jpaQueryFactory.select(userQuestionEntity)
+            .from(userQuestionEntity)
+            .where(userQuestionEntity.questionId.`in`(questionIds), userQuestionEntity.userId.eq(userId))
+            .fetch()
+            .map { it.toModel() }
+    }
+
     private fun questionEntityJoinCondition(questionFilter: QuestionFilter): BooleanBuilder {
         val builder = BooleanBuilder()
         if (!questionFilter.levels.isNullOrEmpty()) {

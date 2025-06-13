@@ -16,4 +16,6 @@ interface UserQuestionRepository {
     fun countUserQuestions(questionFilter: QuestionFilter): Int
 
     fun deleteAllInBatch()
+
+    fun findByQuestionIdInAndUserId(questionIds: List<Long>, userId: Long): List<UserQuestion>
 }

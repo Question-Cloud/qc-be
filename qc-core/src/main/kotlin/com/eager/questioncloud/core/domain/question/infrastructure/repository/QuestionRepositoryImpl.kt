@@ -1,7 +1,6 @@
 package com.eager.questioncloud.core.domain.question.infrastructure.repository
 
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter
 import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
@@ -14,8 +13,6 @@ import com.eager.questioncloud.core.domain.question.infrastructure.entity.Questi
 import com.eager.questioncloud.core.domain.question.infrastructure.entity.QuestionEntity.Companion.from
 import com.eager.questioncloud.core.domain.question.model.Question
 import com.eager.questioncloud.core.domain.review.infrastructure.entity.QQuestionReviewStatisticsEntity.questionReviewStatisticsEntity
-import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
-import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.QUserQuestionEntity.userQuestionEntity
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
 import com.querydsl.core.Tuple
@@ -52,15 +49,8 @@ class QuestionRepositoryImpl(
         return questionInformationSelectFrom()
             .offset(questionFilter.pagingInformation.offset.toLong())
             .limit(questionFilter.pagingInformation.size.toLong())
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(userQuestionEntity)
-            .on(
-                userQuestionEntity.questionId.eq(questionEntity.id),
-                userQuestionEntity.userId.eq(questionFilter.userId)
-            )
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionReviewStatisticsEntity)
             .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .groupBy(questionEntity.id)
@@ -80,16 +70,8 @@ class QuestionRepositoryImpl(
 
     override fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation {
         val tuple = questionInformationSelectFrom()
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity)
-            .on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .leftJoin(userQuestionEntity)
-            .on(
-                userQuestionEntity.questionId.eq(questionEntity.id),
-                userQuestionEntity.userId.eq(userId)
-            )
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionReviewStatisticsEntity)
             .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
@@ -149,17 +131,10 @@ class QuestionRepositoryImpl(
                 questionEntity.creatorId.eq(creatorId),
                 questionEntity.questionStatus.ne(QuestionStatus.Delete)
             )
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionReviewStatisticsEntity)
             .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .leftJoin(userQuestionEntity)
-            .on(
-                userQuestionEntity.questionId.eq(questionEntity.id),
-                userQuestionEntity.userId.eq(userEntity.uid)
-            )
             .fetch()
             .stream()
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
@@ -177,18 +152,10 @@ class QuestionRepositoryImpl(
     override fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation> {
         return questionInformationSelectFrom()
             .where(questionEntity.id.`in`(questionIds))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity)
-            .on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionReviewStatisticsEntity)
             .on(questionReviewStatisticsEntity.questionId.eq(questionEntity.id))
-            .leftJoin(userQuestionEntity)
-            .on(
-                userQuestionEntity.questionId.eq(questionEntity.id),
-                userQuestionEntity.userId.eq(userEntity.uid)
-            )
             .fetch()
             .stream()
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
@@ -271,16 +238,15 @@ class QuestionRepositoryImpl(
     private fun parseQuestionInformationTuple(tuple: Tuple): QuestionInformation {
         return QuestionInformation(
             tuple.get(questionEntity.id)!!,
+            tuple.get(questionEntity.creatorId)!!,
             tuple.get(questionEntity.questionContentEntity.title)!!,
             tuple.get(questionEntity.questionContentEntity.subject)!!,
             tuple.get(parent.title)!!,
             tuple.get(child.title)!!,
             tuple.get(questionEntity.questionContentEntity.thumbnail)!!,
-            tuple.get(userEntity.userInformationEntity.name)!!,
             tuple.get(questionEntity.questionContentEntity.questionLevel)!!,
             tuple.get(questionEntity.questionContentEntity.price)!!,
             tuple.get(questionReviewStatisticsEntity.averageRate)!!,
-            tuple.get(userQuestionEntity.id.isNotNull())!!
         )
     }
 
@@ -289,14 +255,13 @@ class QuestionRepositoryImpl(
             .select(
                 questionEntity.id,
                 questionEntity.questionContentEntity.title,
+                questionEntity.creatorId,
                 questionEntity.count,
                 parent.title,
                 child.title,
                 questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.price,
-                userQuestionEntity.id.isNotNull(),
                 questionReviewStatisticsEntity.averageRate,
                 questionEntity.questionContentEntity.subject
             )

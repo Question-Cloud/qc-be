@@ -14,14 +14,13 @@ class QuestionPaymentHistoryOrder(
     val subCategory: String,
 ) {
     companion object {
-        @JvmStatic
         fun from(questionInformation: QuestionInformation): QuestionPaymentHistoryOrder {
             return QuestionPaymentHistoryOrder(
                 questionInformation.id,
                 questionInformation.price,
                 questionInformation.title,
                 questionInformation.thumbnail,
-                questionInformation.creatorName,
+                "temp",
                 questionInformation.subject,
                 questionInformation.parentCategory,
                 questionInformation.childCategory

@@ -1,28 +1,28 @@
 package com.eager.questioncloud.application.api.hub.question.service
 
+import com.eager.questioncloud.application.api.hub.question.dto.QuestionHubDetail
+import com.eager.questioncloud.application.api.hub.question.implement.QuestionHubDetailReader
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject
 import com.eager.questioncloud.core.domain.question.dto.QuestionCategoryGroupBySubject.Companion.create
-import com.eager.questioncloud.core.domain.question.dto.QuestionInformation
 import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionCategoryRepository
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
 import org.springframework.stereotype.Service
 
 @Service
 class HubQuestionService(
-    private val questionRepository: QuestionRepository,
+    private val questionHubDetailReader: QuestionHubDetailReader,
     private val questionCategoryRepository: QuestionCategoryRepository,
 ) {
     fun getTotalFiltering(questionFilter: QuestionFilter): Int {
-        return questionRepository.countByQuestionFilter(questionFilter)
+        return questionHubDetailReader.count(questionFilter)
     }
 
-    fun getQuestionListByFiltering(questionFilter: QuestionFilter): List<QuestionInformation> {
-        return questionRepository.getQuestionInformation(questionFilter)
+    fun getQuestionListByFiltering(questionFilter: QuestionFilter): List<QuestionHubDetail> {
+        return questionHubDetailReader.getQuestionHubDetails(questionFilter)
     }
 
-    fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation {
-        return questionRepository.getQuestionInformation(questionId, userId)
+    fun getQuestionInformation(questionId: Long, userId: Long): QuestionHubDetail {
+        return questionHubDetailReader.getQuestionHubDetail(questionId, userId)
     }
 
     fun getQuestionCategories(): List<QuestionCategoryGroupBySubject> {

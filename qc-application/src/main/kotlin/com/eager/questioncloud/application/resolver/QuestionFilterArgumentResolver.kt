@@ -29,7 +29,7 @@ class QuestionFilterArgumentResolver(
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): QuestionFilter {
-        val userId = userIdFromRequest
+        val userId = userIdFromRequest()
         val categories = getCategoriesFromRequest(webRequest)
         val levels = getLevelsFromRequest(webRequest)
         val questionType = getQuestionTypeFromRequest(webRequest)
@@ -40,13 +40,11 @@ class QuestionFilterArgumentResolver(
         return QuestionFilter(userId, categories, levels, questionType, creatorId, sort!!, pagingInformation)
     }
 
-    private val userIdFromRequest: Long?
-        get() {
-            val userPrincipal =
-                SecurityContextHolder.getContext().authentication.principal as UserPrincipal
-            return userPrincipal.user.uid
-        }
-
+    private fun userIdFromRequest(): Long {
+        val userPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
+        return userPrincipal.user.uid
+    }
+    
     private fun getCategoriesFromRequest(webRequest: NativeWebRequest): List<Long>? {
         val input = webRequest.getParameter("categories") ?: return null
 

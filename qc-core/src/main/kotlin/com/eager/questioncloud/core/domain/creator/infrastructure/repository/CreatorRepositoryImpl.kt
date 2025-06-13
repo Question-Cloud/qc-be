@@ -16,11 +16,15 @@ class CreatorRepositoryImpl(
     private val creatorJpaRepository: CreatorJpaRepository,
     private val jpaQueryFactory: JPAQueryFactory
 ) : CreatorRepository {
-    
+
     override fun findById(creatorId: Long): Creator {
         return creatorJpaRepository.findById(creatorId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
+    }
+
+    override fun findByIdIn(creatorIds: List<Long>): List<Creator> {
+        return creatorJpaRepository.findByIdIn(creatorIds).map { it.toModel() }
     }
 
     override fun existsById(creatorId: Long): Boolean {

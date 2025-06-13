@@ -6,7 +6,7 @@ import com.eager.questioncloud.core.domain.question.enums.QuestionSortType
 import com.eager.questioncloud.core.domain.question.enums.QuestionType
 
 class QuestionFilter(
-    val userId: Long? = null,
+    val userId: Long = -1,
     val categories: List<Long>? = null,
     val levels: List<QuestionLevel>? = null,
     val questionType: QuestionType? = null,
