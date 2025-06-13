@@ -61,7 +61,7 @@ class HubReviewRegisterTest(
         hubReviewRegister.register(questionReview)
 
         // then
-        val registeredReview = questionReviewRepository.getMyQuestionReview(question.id, reviewerId)
+        val registeredReview = questionReviewRepository.findByQuestionIdAndUserId(question.id, reviewerId)
         Assertions.assertThat(registeredReview).isNotNull
         Assertions.assertThat(registeredReview.comment).isEqualTo(questionReview.comment)
         Assertions.assertThat(registeredReview.rate).isEqualTo(questionReview.rate)
@@ -142,7 +142,7 @@ class HubReviewRegisterTest(
         latch.await()
 
         //then
-        val reviewCount = questionReviewRepository.getTotal(question.id)
+        val reviewCount = questionReviewRepository.countByQuestionId(question.id)
         Assertions.assertThat(reviewCount).isEqualTo(1)
     }
 

@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.hub.review.controller
 
 import com.eager.questioncloud.application.api.hub.review.dto.ModifyQuestionReviewRequest
+import com.eager.questioncloud.application.api.hub.review.dto.MyQuestionReview
 import com.eager.questioncloud.application.api.hub.review.dto.RegisterQuestionReviewRequest
 import com.eager.questioncloud.application.api.hub.review.service.HubReviewService
-import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -51,7 +51,7 @@ class HubReviewControllerDocument {
         sampleQuestionReviews = listOf(
             QuestionReviewDetail(
                 id = 1L,
-                name = "김리뷰",
+                reviewerName = "김리뷰",
                 isCreator = false,
                 isWriter = false,
                 reviewCount = 15,
@@ -62,7 +62,7 @@ class HubReviewControllerDocument {
             ),
             QuestionReviewDetail(
                 id = 2L,
-                name = "이학생",
+                reviewerName = "이학생",
                 isCreator = false,
                 isWriter = true,
                 reviewCount = 8,
@@ -86,9 +86,9 @@ class HubReviewControllerDocument {
         val questionId = 101L
         val totalCount = 50
 
-        whenever(hubReviewService.getTotal(questionId))
+        whenever(hubReviewService.count(questionId))
             .thenReturn(totalCount)
-        whenever(hubReviewService.getQuestionReviews(any(), any(), any()))
+        whenever(hubReviewService.getQuestionReviewDetails(any(), any(), any()))
             .thenReturn(sampleQuestionReviews)
 
         // When & Then

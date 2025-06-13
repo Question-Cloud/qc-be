@@ -77,7 +77,7 @@ class HubReviewServiceTest(
         }
 
         // when
-        val reviewCount = hubReviewService.getTotal(questionId)
+        val reviewCount = hubReviewService.count(questionId)
 
         // then
         Assertions.assertThat(reviewCount).isEqualTo(dummyReviewCount)
@@ -129,7 +129,7 @@ class HubReviewServiceTest(
         hubReviewService.register(questionReview)
 
         // then
-        val registeredReview = questionReviewRepository.getMyQuestionReview(question.id, reviewer.uid)
+        val registeredReview = questionReviewRepository.findByQuestionIdAndUserId(question.id, reviewer.uid)
         Assertions.assertThat(registeredReview).isNotNull()
         Assertions.assertThat(registeredReview.reviewerId).isEqualTo(reviewer.uid)
         Assertions.assertThat(registeredReview.questionId).isEqualTo(question.id)
@@ -160,7 +160,7 @@ class HubReviewServiceTest(
         hubReviewService.modify(questionReview.id, reviewer.uid, newComment, newRate)
 
         // then
-        val modifiedReview = questionReviewRepository.getMyQuestionReview(question.id, reviewer.uid)
+        val modifiedReview = questionReviewRepository.findByQuestionIdAndUserId(question.id, reviewer.uid)
         Assertions.assertThat(modifiedReview).isNotNull()
         Assertions.assertThat(modifiedReview.comment).isEqualTo(newComment)
         Assertions.assertThat(modifiedReview.rate).isEqualTo(newRate)

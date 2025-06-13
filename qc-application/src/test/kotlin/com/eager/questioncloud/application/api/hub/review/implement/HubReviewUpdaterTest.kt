@@ -39,7 +39,7 @@ class HubReviewUpdaterTest(
         hubReviewUpdater.modify(review.id, reviewer.uid, newComment, newRate)
 
         // then
-        val updatedReview = questionReviewRepository.getMyQuestionReview(dummyQuestionId, reviewer.uid)
+        val updatedReview = questionReviewRepository.findByQuestionIdAndUserId(dummyQuestionId, reviewer.uid)
         Assertions.assertThat(updatedReview).isNotNull
         Assertions.assertThat(updatedReview.comment).isEqualTo(newComment)
         Assertions.assertThat(updatedReview.rate).isEqualTo(newRate)

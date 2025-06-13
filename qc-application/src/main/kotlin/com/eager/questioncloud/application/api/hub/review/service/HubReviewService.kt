@@ -1,43 +1,37 @@
 package com.eager.questioncloud.application.api.hub.review.service
 
+import com.eager.questioncloud.application.api.hub.review.dto.MyQuestionReview
 import com.eager.questioncloud.application.api.hub.review.event.ReviewEvent
 import com.eager.questioncloud.application.api.hub.review.event.ReviewEventType
-import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRegister
-import com.eager.questioncloud.application.api.hub.review.implement.HubReviewRemover
-import com.eager.questioncloud.application.api.hub.review.implement.HubReviewUpdater
-import com.eager.questioncloud.application.api.hub.review.implement.ReviewEventProcessor
+import com.eager.questioncloud.application.api.hub.review.implement.*
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview
-import com.eager.questioncloud.core.domain.review.dto.MyQuestionReview.Companion.from
 import com.eager.questioncloud.core.domain.review.dto.QuestionReviewDetail
-import com.eager.questioncloud.core.domain.review.infrastructure.repository.QuestionReviewRepository
 import com.eager.questioncloud.core.domain.review.model.QuestionReview
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class HubReviewService(
-    private val questionReviewRepository: QuestionReviewRepository,
+    private val hubReviewReader: HubReviewReader,
     private val hubReviewRegister: HubReviewRegister,
     private val hubReviewUpdater: HubReviewUpdater,
     private val hubReviewRemover: HubReviewRemover,
     private val reviewEventProcessor: ReviewEventProcessor,
 ) {
-    fun getTotal(questionId: Long): Int {
-        return questionReviewRepository.getTotal(questionId)
+    fun count(questionId: Long): Int {
+        return hubReviewReader.count(questionId)
     }
 
-    fun getQuestionReviews(
+    fun getQuestionReviewDetails(
         questionId: Long,
         userId: Long,
         pagingInformation: PagingInformation
     ): List<QuestionReviewDetail> {
-        return questionReviewRepository.getQuestionReviews(questionId, userId, pagingInformation)
+        return hubReviewReader.getQuestionReviewDetails(questionId, userId, pagingInformation)
     }
 
     fun getMyQuestionReview(questionId: Long, userId: Long): MyQuestionReview {
-        val questionReview = questionReviewRepository.getMyQuestionReview(questionId, userId)
-        return from(questionReview)
+        return hubReviewReader.getMyQuestionReview(questionId, userId)
     }
 
     @Transactional

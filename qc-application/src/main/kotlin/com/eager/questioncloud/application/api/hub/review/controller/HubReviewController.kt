@@ -26,8 +26,8 @@ class HubReviewController(
         @RequestParam questionId: Long,
         pagingInformation: PagingInformation
     ): PagingResponse<QuestionReviewDetail> {
-        val total = hubReviewService.getTotal(questionId)
-        val questionReviewDetails = hubReviewService.getQuestionReviews(
+        val total = hubReviewService.count(questionId)
+        val questionReviewDetails = hubReviewService.getQuestionReviewDetails(
             questionId,
             userPrincipal.user.uid,
             pagingInformation

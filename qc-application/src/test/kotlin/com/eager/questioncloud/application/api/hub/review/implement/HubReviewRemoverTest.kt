@@ -41,7 +41,7 @@ class HubReviewRemoverTest(
 
         // then
         Assertions.assertThatThrownBy {
-            questionReviewRepository.getMyQuestionReview(dummyQuestionId, dummyReviewer.uid)
+            questionReviewRepository.findByQuestionIdAndUserId(dummyQuestionId, dummyReviewer.uid)
         }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.NOT_FOUND)
