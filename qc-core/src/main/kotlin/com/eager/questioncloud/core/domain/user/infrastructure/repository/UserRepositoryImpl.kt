@@ -94,7 +94,10 @@ class UserRepositoryImpl(
             .fetchFirst() != null
     }
 
-    override fun deleteAllInBatch() {
-        userJpaRepository.deleteAllInBatch()
+    override fun findByUidIn(ids: List<Long>): List<User> {
+        return userJpaRepository.findByUidIn(ids)
+            .stream()
+            .map { it.toModel() }
+            .toList()
     }
 }

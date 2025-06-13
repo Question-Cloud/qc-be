@@ -1,7 +1,6 @@
 package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
 import com.eager.questioncloud.core.domain.post.model.PostComment
 
 interface PostCommentRepository {
@@ -9,11 +8,10 @@ interface PostCommentRepository {
 
     fun findByIdAndWriterId(commentId: Long, userId: Long): PostComment
 
-    fun getPostCommentDetails(
+    fun findByPostIdWithPagination(
         postId: Long,
-        userId: Long,
         pagingInformation: PagingInformation
-    ): List<PostCommentDetail>
+    ): List<PostComment>
 
     fun delete(postComment: PostComment)
 

@@ -9,7 +9,6 @@ import com.eager.questioncloud.application.api.post.service.PostCommentService
 import com.eager.questioncloud.application.security.UserPrincipal
 import com.eager.questioncloud.core.common.PagingInformation
 import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
-import com.eager.questioncloud.core.domain.post.model.PostComment.Companion.create
 import jakarta.validation.Valid
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -26,7 +25,7 @@ class PostCommentController(
         pagingInformation: PagingInformation
     ): PagingResponse<PostCommentDetail> {
         val total = postCommentService.count(postId)
-        val comments = postCommentService.getPostComments(
+        val comments = postCommentService.getPostCommentDetails(
             postId,
             userPrincipal.user.uid, pagingInformation
         )
@@ -37,7 +36,7 @@ class PostCommentController(
     fun addPostComment(
         @AuthenticationPrincipal userPrincipal: UserPrincipal, @RequestBody request: @Valid AddPostCommentRequest
     ): DefaultResponse {
-        postCommentService.addPostComment(create(request.postId, userPrincipal.user.uid, request.comment))
+        postCommentService.addPostComment(request.postId, userPrincipal.user.uid, request.comment)
         return success()
     }
 

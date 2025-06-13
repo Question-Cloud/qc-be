@@ -23,5 +23,5 @@ interface UserRepository {
 
     fun checkDuplicateSocialUidAndAccountType(socialUid: String, accountType: AccountType): Boolean
 
-    fun deleteAllInBatch()
+    fun findByUidIn(ids: List<Long>): List<User>
 }

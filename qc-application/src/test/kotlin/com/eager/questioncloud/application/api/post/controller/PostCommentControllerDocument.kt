@@ -76,7 +76,7 @@ class PostCommentControllerDocument {
 
         whenever(postCommentService.count(any()))
             .thenReturn(totalCount)
-        whenever(postCommentService.getPostComments(any(), any(), any()))
+        whenever(postCommentService.getPostCommentDetails(any(), any(), any()))
             .thenReturn(samplePostComments)
 
         // When & Then
@@ -122,7 +122,7 @@ class PostCommentControllerDocument {
         // Given
         val postId = 101L
 
-        whenever(postCommentService.getPostComments(any(), any(), any()))
+        whenever(postCommentService.getPostCommentDetails(any(), any(), any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
 
         // When & Then

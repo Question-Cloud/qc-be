@@ -7,6 +7,7 @@ class PostComment(
     val postId: Long,
     val writerId: Long,
     var comment: String,
+    val isCreator: Boolean,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun modify(comment: String) {
@@ -14,8 +15,8 @@ class PostComment(
     }
 
     companion object {
-        fun create(postId: Long, writerId: Long, comment: String): PostComment {
-            return PostComment(postId = postId, writerId = writerId, comment = comment)
+        fun create(postId: Long, writerId: Long, comment: String, isCreator: Boolean): PostComment {
+            return PostComment(postId = postId, writerId = writerId, comment = comment, isCreator = isCreator)
         }
     }
 }

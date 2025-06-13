@@ -6,11 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface UserJpaRepository : JpaRepository<UserEntity, Long> {
-    fun existsByUserAccountInformationEntityAccountTypeAndUserAccountInformationEntitySocialUid(
-        accountType: AccountType,
-        socialUid: String
-    ): Boolean
-
     fun existsByUserInformationEntityPhone(phone: String): Boolean
 
     fun existsByUserInformationEntityEmail(email: String): Boolean
@@ -23,4 +18,6 @@ interface UserJpaRepository : JpaRepository<UserEntity, Long> {
     fun findByUserInformationEntityEmail(email: String): Optional<UserEntity>
 
     fun findByUserInformationEntityPhone(phone: String): Optional<UserEntity>
+
+    fun findByUidIn(ids: List<Long>): List<UserEntity>
 }

@@ -1,13 +1,9 @@
 package com.eager.questioncloud.core.domain.post.infrastructure.repository
 
 import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
 import com.eager.questioncloud.core.domain.post.infrastructure.entity.PostCommentEntity.Companion.from
 import com.eager.questioncloud.core.domain.post.infrastructure.entity.QPostCommentEntity.postCommentEntity
-import com.eager.questioncloud.core.domain.post.infrastructure.entity.QPostEntity.postEntity
 import com.eager.questioncloud.core.domain.post.model.PostComment
-import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity
 import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
 import com.eager.questioncloud.core.exception.CoreException
 import com.eager.questioncloud.core.exception.Error
@@ -21,7 +17,6 @@ class PostCommentRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : PostCommentRepository {
 
-
     override fun save(postComment: PostComment): PostComment {
         return postCommentJpaRepository.save(from(postComment)).toModel()
     }
@@ -32,20 +27,11 @@ class PostCommentRepositoryImpl(
             .toModel()
     }
 
-    override fun getPostCommentDetails(
+    override fun findByPostIdWithPagination(
         postId: Long,
-        userId: Long,
         pagingInformation: PagingInformation
-    ): List<PostCommentDetail> {
-        val questionCreatorUserId = getQuestionCreatorUserId(postId)
-        return jpaQueryFactory.select(
-            postCommentEntity.id,
-            userEntity.uid,
-            userEntity.userInformationEntity.name,
-            userEntity.userInformationEntity.profileImage,
-            postCommentEntity.comment,
-            postCommentEntity.createdAt
-        )
+    ): List<PostComment> {
+        return jpaQueryFactory.select(postCommentEntity)
             .from(postCommentEntity)
             .where(postCommentEntity.postId.eq(postId))
             .leftJoin(userEntity).on(userEntity.uid.eq(postCommentEntity.writerId))
@@ -53,17 +39,7 @@ class PostCommentRepositoryImpl(
             .limit(pagingInformation.size.toLong())
             .fetch()
             .stream()
-            .map { tuple ->
-                PostCommentDetail(
-                    tuple.get(postCommentEntity.id),
-                    tuple.get(userEntity.userInformationEntity.name),
-                    tuple.get(userEntity.userInformationEntity.profileImage),
-                    tuple.get(postCommentEntity.comment),
-                    questionCreatorUserId == tuple.get(userEntity.uid),
-                    userId == tuple.get(userEntity.uid),
-                    tuple.get(postCommentEntity.createdAt)
-                )
-            }
+            .map { it.toModel() }
             .collect(Collectors.toList())
     }
 
@@ -76,15 +52,5 @@ class PostCommentRepositoryImpl(
             .from(postCommentEntity)
             .where(postCommentEntity.postId.eq(postId))
             .fetchFirst() ?: 0
-    }
-
-    private fun getQuestionCreatorUserId(postId: Long): Long {
-        return jpaQueryFactory.select(userEntity.uid)
-            .from(postEntity)
-            .innerJoin(questionEntity).on(questionEntity.id.eq(postEntity.questionId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
-            .where(postEntity.id.eq(postId))
-            .fetchFirst() ?: throw CoreException(Error.NOT_FOUND)
     }
 }

@@ -11,10 +11,11 @@ class PostCommentEntity private constructor(
     @Column var postId: Long,
     @Column var writerId: Long,
     @Column var comment: String,
+    @Column var isCreator: Boolean,
     @Column var createdAt: LocalDateTime
 ) {
     fun toModel(): PostComment {
-        return PostComment(id, postId, writerId, comment, createdAt)
+        return PostComment(id, postId, writerId, comment, isCreator, createdAt)
     }
 
     companion object {
@@ -24,6 +25,7 @@ class PostCommentEntity private constructor(
                 postComment.postId,
                 postComment.writerId,
                 postComment.comment,
+                postComment.isCreator,
                 postComment.createdAt
             )
         }
