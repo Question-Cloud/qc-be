@@ -5,7 +5,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "cart_item")
-class CartItemEntity private constructor(
+class CartItemEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private val id: Long = 0,
     @Column private val userId: Long,
     @Column private val questionId: Long

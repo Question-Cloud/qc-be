@@ -17,7 +17,7 @@ class CartController(
 ) {
     @GetMapping
     fun getCart(@AuthenticationPrincipal userPrincipal: UserPrincipal): GetCartResponse {
-        val items: List<CartItemDetail> = cartService.getCartItems(userPrincipal.user.uid)
+        val items: List<CartItemDetail> = cartService.getCartItemDetails(userPrincipal.user.uid)
         return GetCartResponse.create(items)
     }
 
