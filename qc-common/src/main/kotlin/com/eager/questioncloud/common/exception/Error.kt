@@ -10,6 +10,7 @@ enum class Error(
     FAIL_SOCIAL_LOGIN(401, "소셜 로그인 실패"),
     PENDING_EMAIL_VERIFICATION(403, "이메일 인증이 완료되지 않은 계정입니다."),
     NOT_ACTIVE_USER(403, "탈퇴 혹은 정지 된 계정입니다."),
+    NOT_REGISTERED_SOCIAL_USER(401, "가입되지 않은 소셜 계정입니다."),
     DUPLICATE_EMAIL(409, "이미 사용중인 이메일입니다."),
     DUPLICATE_PHONE(409, "이미 사용중인 핸드폰입니다."),
     DUPLICATE_SOCIAL_UID(409, "이미 가입 된 소셜 계정입니다."),
