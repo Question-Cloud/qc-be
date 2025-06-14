@@ -4,7 +4,6 @@ import com.eager.questioncloud.application.api.common.PagingResponse
 import com.eager.questioncloud.application.api.creator.dto.CreatorInformation
 import com.eager.questioncloud.application.api.feed.subscribe.service.FeedSubscribeService
 import com.eager.questioncloud.application.security.UserPrincipal
-import com.eager.questioncloud.core.common.PagingInformation
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
