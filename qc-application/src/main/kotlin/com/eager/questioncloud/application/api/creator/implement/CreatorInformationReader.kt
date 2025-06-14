@@ -1,11 +1,11 @@
 package com.eager.questioncloud.application.api.creator.implement
 
 import com.eager.questioncloud.application.api.creator.dto.CreatorInformation
+import com.eager.questioncloud.core.domain.creator.dto.CreatorProfile
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
 import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,11 +13,22 @@ class CreatorInformationReader(
     private val creatorRepository: CreatorRepository,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val subscribeRepository: SubscribeRepository,
+    private val userRepository: UserRepository,
 ) {
     fun getCreatorInformation(creatorId: Long): CreatorInformation {
-        val creatorProfile = creatorRepository.getCreatorProfile(creatorId)
+        val creator = creatorRepository.findById(creatorId)
+        val creatorUser = userRepository.getUser(creator.userId)
         val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creatorId)
         val subscriberCount = subscribeRepository.countSubscriber(creatorId)
+        val creatorProfile = CreatorProfile(
+            creator.id,
+            creatorUser.userInformation.name,
+            creatorUser.userInformation.profileImage,
+            creator.mainSubject,
+            creatorUser.userInformation.email,
+            creator.introduction
+        )
+
         return CreatorInformation(
             creatorProfile,
             creatorStatistics.salesCount,
@@ -27,18 +38,26 @@ class CreatorInformationReader(
     }
 
     fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation> {
-        val creatorProfiles = creatorRepository.getCreatorProfile(creatorIds)
-        val creatorStatistics = creatorStatisticsRepository.findByCreatorIdIn(creatorIds)
-        val subscriberCount = subscribeRepository.countSubscriber(creatorIds)
+        val creators = creatorRepository.findByIdIn(creatorIds)
+        val creatorUserMap = userRepository.findByUidIn(creators.map { it.userId }).associateBy { it.uid }
+        val creatorStatisticsMap = creatorStatisticsRepository.findByCreatorIdIn(creatorIds)
+        val subscriberCountMap = subscribeRepository.countSubscriber(creatorIds)
 
-        return creatorIds.map { creatorId ->
-            val statistics = creatorStatistics[creatorId] ?: throw CoreException(Error.NOT_FOUND)
-
+        return creators.map {
+            val creatorUser = creatorUserMap.getValue(it.userId)
+            val creatorProfile = CreatorProfile(
+                it.id,
+                creatorUser.userInformation.name,
+                creatorUser.userInformation.profileImage,
+                it.mainSubject,
+                creatorUser.userInformation.email,
+                it.introduction
+            )
             CreatorInformation(
-                creatorProfiles[creatorId] ?: throw CoreException(Error.NOT_FOUND),
-                statistics.salesCount,
-                statistics.averageRateOfReview,
-                subscriberCount[creatorId] ?: 0
+                creatorProfile,
+                creatorStatisticsMap.getValue(it.id).salesCount,
+                creatorStatisticsMap.getValue(it.id).averageRateOfReview,
+                subscriberCountMap.getValue(it.id)
             )
         }
     }
