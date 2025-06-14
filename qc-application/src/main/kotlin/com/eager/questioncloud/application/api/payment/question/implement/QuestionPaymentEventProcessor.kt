@@ -1,9 +1,9 @@
 package com.eager.questioncloud.application.api.payment.question.implement
 
+import com.eager.ExceptionSlackNotifier
 import com.eager.questioncloud.application.api.payment.question.event.QuestionPaymentEvent
 import com.eager.questioncloud.application.event.AbstractEventProcessor
 import com.eager.questioncloud.application.event.SQSEvent
-import com.eager.questioncloud.application.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.core.domain.payment.infrastructure.repository.QuestionPaymentEventLogRepository
 import com.eager.questioncloud.core.domain.payment.model.QuestionPaymentEventLog
 import org.springframework.context.ApplicationEventPublisher

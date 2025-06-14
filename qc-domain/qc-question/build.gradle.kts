@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.jpa") version "2.1.10"
 }
 
-group = "com.eager"
+group = "com.eager.questioncloud"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
@@ -14,8 +14,13 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    kapt("jakarta.annotation:jakarta.annotation-api")
+    kapt("jakarta.persistence:jakarta.persistence-api")
+
+    implementation(project(":qc-common"))
     implementation(project(":qc-rdb"))
+
     testImplementation(kotlin("test"))
 }
 

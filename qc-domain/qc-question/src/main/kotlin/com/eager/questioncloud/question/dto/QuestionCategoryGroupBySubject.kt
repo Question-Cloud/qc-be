@@ -19,7 +19,6 @@ class QuestionCategoryGroupBySubject(
     )
 
     companion object {
-        @JvmStatic
         fun create(mainQuestionCategoryList: List<MainQuestionCategory>): List<QuestionCategoryGroupBySubject> {
             val result: MutableList<QuestionCategoryGroupBySubject> = ArrayList()
             mainQuestionCategoryList

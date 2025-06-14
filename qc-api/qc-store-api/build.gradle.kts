@@ -3,7 +3,6 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
-    kotlin("plugin.jpa") version "2.1.10"
 }
 
 group = "com.eager"
@@ -14,8 +13,15 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation(project(":qc-rdb"))
+    implementation(project(":qc-common"))
+    implementation(project(":qc-event"))
+
+    implementation(project(":qc-domain:qc-question"))
+    implementation(project(":qc-domain:qc-review"))
+    implementation(project(":qc-domain:qc-cart"))
+    implementation(project(":qc-domain:qc-user"))
+    implementation(project(":qc-domain:qc-creator"))
+
     testImplementation(kotlin("test"))
 }
 

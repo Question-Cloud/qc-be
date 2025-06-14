@@ -19,7 +19,10 @@ dependencies {
 
     implementation(project(":qc-common"))
     implementation(project(":qc-domain:qc-user"))
+    implementation(project(":qc-domain:qc-question"))
+
     implementation(project(":qc-api:qc-auth-api"))
+    implementation(project(":qc-api:qc-store-api"))
 
     testImplementation(kotlin("test"))
 }
