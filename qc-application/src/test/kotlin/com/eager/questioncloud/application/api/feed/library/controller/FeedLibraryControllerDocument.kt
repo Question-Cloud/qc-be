@@ -2,7 +2,7 @@ package com.eager.questioncloud.application.api.feed.library.controller
 
 import com.eager.questioncloud.application.api.feed.library.service.FeedLibraryService
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
-import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail
+import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionContent
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import org.junit.jupiter.api.BeforeEach
@@ -35,12 +35,12 @@ class FeedLibraryControllerDocument {
     @MockBean
     private lateinit var feedLibraryService: FeedLibraryService
 
-    private lateinit var sampleUserQuestions: List<UserQuestionDetail>
+    private lateinit var sampleUserQuestions: List<UserQuestionContent>
 
     @BeforeEach
     fun setUp() {
         sampleUserQuestions = listOf(
-            UserQuestionDetail(
+            UserQuestionContent(
                 questionId = 1L,
                 title = "수학 기본 문제 1",
                 parentCategory = "수학",
@@ -51,7 +51,7 @@ class FeedLibraryControllerDocument {
                 fileUrl = "https://example.com/question1.pdf",
                 explanationUrl = "https://example.com/explanation1.pdf"
             ),
-            UserQuestionDetail(
+            UserQuestionContent(
                 questionId = 2L,
                 title = "물리 역학 문제 1",
                 parentCategory = "물리",

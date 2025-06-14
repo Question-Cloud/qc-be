@@ -3,7 +3,7 @@ package com.eager.questioncloud.core.domain.question.dto
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
 import com.eager.questioncloud.core.domain.question.enums.Subject
 
-class QuestionInformation(
+open class QuestionInformation(
     val id: Long,
     val creatorId: Long,
     val title: String,

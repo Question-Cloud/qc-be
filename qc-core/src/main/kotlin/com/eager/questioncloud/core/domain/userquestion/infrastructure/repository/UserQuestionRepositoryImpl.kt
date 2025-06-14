@@ -1,11 +1,9 @@
 package com.eager.questioncloud.core.domain.userquestion.infrastructure.repository
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.entity.QCreatorEntity.creatorEntity
 import com.eager.questioncloud.core.domain.question.common.QuestionFilter
 import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionCategoryEntity
 import com.eager.questioncloud.core.domain.question.infrastructure.entity.QQuestionEntity.questionEntity
-import com.eager.questioncloud.core.domain.user.infrastructure.entity.QUserEntity.userEntity
-import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionDetail
+import com.eager.questioncloud.core.domain.userquestion.dto.UserQuestionContent
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.QUserQuestionEntity.userQuestionEntity
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.UserQuestionEntity.Companion.from
 import com.eager.questioncloud.core.domain.userquestion.infrastructure.entity.UserQuestionEntity.Companion.toModel
@@ -32,18 +30,18 @@ class UserQuestionRepositoryImpl(
         return userQuestionJpaRepository.existsByUserIdAndQuestionId(userId, questionId)
     }
 
-    override fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionDetail> {
+    override fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionContent> {
         val parent = QQuestionCategoryEntity("parent")
         val child = QQuestionCategoryEntity("child")
         return jpaQueryFactory.select(
             Projections.constructor(
-                UserQuestionDetail::class.java,
+                UserQuestionContent::class.java,
                 questionEntity.id,
+                questionEntity.creatorId,
                 questionEntity.questionContentEntity.title,
                 parent.title,
                 child.title,
                 questionEntity.questionContentEntity.thumbnail,
-                userEntity.userInformationEntity.name,
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.fileUrl,
                 questionEntity.questionContentEntity.explanationUrl
@@ -51,11 +49,9 @@ class UserQuestionRepositoryImpl(
         )
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.userId))
-            .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .offset(questionFilter.pagingInformation.offset.toLong())
             .limit(questionFilter.pagingInformation.size.toLong())
             .fetch()
@@ -67,11 +63,9 @@ class UserQuestionRepositoryImpl(
         return jpaQueryFactory.select(userQuestionEntity.id.count().intValue())
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(questionFilter.userId))
-            .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
-            .innerJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
-            .innerJoin(parent).on(parent.id.eq(child.parentId))
-            .innerJoin(creatorEntity).on(creatorEntity.id.eq(questionEntity.creatorId))
-            .innerJoin(userEntity).on(userEntity.uid.eq(creatorEntity.userId))
+            .leftJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
+            .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
+            .leftJoin(parent).on(parent.id.eq(child.parentId))
             .fetchFirst() ?: 0
     }
 

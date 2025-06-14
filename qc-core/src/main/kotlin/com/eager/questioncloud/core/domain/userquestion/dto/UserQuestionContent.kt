@@ -2,13 +2,13 @@ package com.eager.questioncloud.core.domain.userquestion.dto
 
 import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
 
-class UserQuestionDetail(
+class UserQuestionContent(
     val questionId: Long,
+    val creatorId: Long,
     val title: String,
     val parentCategory: String,
     val childCategory: String,
     val thumbnail: String,
-    val creatorName: String,
     val questionLevel: QuestionLevel,
     val fileUrl: String,
     val explanationUrl: String,
