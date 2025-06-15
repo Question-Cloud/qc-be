@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.user.coupon.service
+package com.eager.questioncloud.payment.coupon.service
 
-import com.eager.questioncloud.application.api.user.coupon.implement.UserCouponRegister
-import com.eager.questioncloud.core.domain.coupon.dto.AvailableUserCoupon
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
+import com.eager.questioncloud.coupon.dto.AvailableUserCoupon
+import com.eager.questioncloud.coupon.infrastructure.repository.UserCouponRepository
 import com.eager.questioncloud.lock.LockKeyGenerator.generateRegisterCouponKey
 import com.eager.questioncloud.lock.LockManager
+import com.eager.questioncloud.payment.coupon.implement.UserCouponRegister
 import org.springframework.stereotype.Service
 
 @Service

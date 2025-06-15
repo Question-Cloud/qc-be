@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.user.coupon.implement
+package com.eager.questioncloud.payment.coupon.implement
 
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.CouponRepository
-import com.eager.questioncloud.core.domain.coupon.infrastructure.repository.UserCouponRepository
-import com.eager.questioncloud.core.domain.coupon.model.UserCoupon.Companion.create
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.coupon.domain.UserCoupon
+import com.eager.questioncloud.coupon.infrastructure.repository.CouponRepository
+import com.eager.questioncloud.coupon.infrastructure.repository.UserCouponRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -25,6 +25,6 @@ class UserCouponRegister(
             throw CoreException(Error.LIMITED_COUPON)
         }
 
-        userCouponRepository.save(create(userId, coupon))
+        userCouponRepository.save(UserCoupon.create(userId, coupon))
     }
 }
