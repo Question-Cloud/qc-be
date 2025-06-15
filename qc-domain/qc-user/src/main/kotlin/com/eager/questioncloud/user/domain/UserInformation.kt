@@ -6,9 +6,9 @@ class UserInformation(
     var email: String,
     var phone: String,
     var name: String,
-    var profileImage: String? = null,
+    var profileImage: String = "default",
 ) {
-    fun updateUserInformation(name: String, profileImage: String?): UserInformation {
+    fun updateUserInformation(name: String, profileImage: String): UserInformation {
         return UserInformation(this.email, this.phone, name, profileImage)
     }
 

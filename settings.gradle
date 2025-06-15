@@ -36,6 +36,8 @@ include 'qc-logging'
 include 'qc-common'
 include 'qc-rdb'
 include 'qc-event'
-
-
+include 'qc-api:qc-subscribe'
+findProject(':qc-api:qc-subscribe')?.name = 'qc-subscribe'
+include 'qc-api:qc-subscribe-api'
+findProject(':qc-api:qc-subscribe-api')?.name = 'qc-subscribe-api'
 

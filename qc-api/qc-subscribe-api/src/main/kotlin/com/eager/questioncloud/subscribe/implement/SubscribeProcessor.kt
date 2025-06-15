@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.subscribe.implement
+package com.eager.questioncloud.subscribe.implement
 
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
-import com.eager.questioncloud.core.domain.subscribe.model.Subscribe.Companion.create
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.subscribe.domain.Subscribe
+import com.eager.questioncloud.subscribe.infrastructure.repository.SubscribeRepository
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,7 +21,7 @@ class SubscribeProcessor(
             throw CoreException(Error.ALREADY_SUBSCRIBE_CREATOR)
         }
 
-        subscribeRepository.save(create(userId, creatorId))
+        subscribeRepository.save(Subscribe.create(userId, creatorId))
     }
 
     fun unSubscribe(userId: Long, creatorId: Long) {

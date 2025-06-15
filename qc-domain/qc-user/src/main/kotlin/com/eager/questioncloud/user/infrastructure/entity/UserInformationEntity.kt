@@ -8,7 +8,7 @@ class UserInformationEntity private constructor(
     private var email: String,
     private var phone: String,
     private var name: String,
-    private var profileImage: String? = null
+    private var profileImage: String = "default"
 ) {
     fun toModel(): UserInformation {
         return UserInformation(email, phone, name, profileImage)

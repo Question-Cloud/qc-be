@@ -34,7 +34,7 @@ class User(
         userAccountInformation.validatePassword(rawPassword)
     }
 
-    fun updateUserInformation(name: String, profileImage: String?) {
+    fun updateUserInformation(name: String, profileImage: String) {
         userInformation = userInformation.updateUserInformation(name, profileImage)
     }
 
