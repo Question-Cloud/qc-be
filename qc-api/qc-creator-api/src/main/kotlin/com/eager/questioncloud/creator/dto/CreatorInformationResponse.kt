@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.creator.dto
+package com.eager.questioncloud.creator.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

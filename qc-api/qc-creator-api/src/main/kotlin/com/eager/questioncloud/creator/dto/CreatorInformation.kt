@@ -1,6 +1,4 @@
-package com.eager.questioncloud.application.api.creator.dto
-
-import com.eager.questioncloud.core.domain.creator.dto.CreatorProfile
+package com.eager.questioncloud.creator.dto
 
 class CreatorInformation(
     val creatorProfile: CreatorProfile,

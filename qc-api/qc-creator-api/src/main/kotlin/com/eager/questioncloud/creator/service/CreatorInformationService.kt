@@ -1,7 +1,7 @@
-package com.eager.questioncloud.application.api.creator.service
+package com.eager.questioncloud.creator.service
 
-import com.eager.questioncloud.application.api.creator.dto.CreatorInformation
-import com.eager.questioncloud.application.api.creator.implement.CreatorInformationReader
+import com.eager.questioncloud.creator.dto.CreatorInformation
+import com.eager.questioncloud.creator.implement.CreatorInformationReader
 import org.springframework.stereotype.Service
 
 @Service

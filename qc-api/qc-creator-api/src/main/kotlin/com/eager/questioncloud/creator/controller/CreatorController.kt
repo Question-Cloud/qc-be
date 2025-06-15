@@ -1,7 +1,7 @@
-package com.eager.questioncloud.application.api.creator.controller
+package com.eager.questioncloud.creator.controller
 
-import com.eager.questioncloud.application.api.creator.dto.CreatorInformationResponse
-import com.eager.questioncloud.application.api.creator.service.CreatorInformationService
+import com.eager.questioncloud.creator.dto.CreatorInformationResponse
+import com.eager.questioncloud.creator.service.CreatorInformationService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping

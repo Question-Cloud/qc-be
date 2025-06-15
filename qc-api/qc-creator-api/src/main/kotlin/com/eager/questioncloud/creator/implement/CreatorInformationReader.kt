@@ -1,11 +1,11 @@
-package com.eager.questioncloud.application.api.creator.implement
+package com.eager.questioncloud.creator.implement
 
-import com.eager.questioncloud.application.api.creator.dto.CreatorInformation
-import com.eager.questioncloud.core.domain.creator.dto.CreatorProfile
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.core.domain.creator.infrastructure.repository.CreatorStatisticsRepository
-import com.eager.questioncloud.core.domain.subscribe.infrastructure.repository.SubscribeRepository
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.creator.dto.CreatorInformation
+import com.eager.questioncloud.creator.dto.CreatorProfile
+import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.subscribe.infrastructure.repository.SubscribeRepository
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
