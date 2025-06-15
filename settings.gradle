@@ -40,4 +40,8 @@ include 'qc-api:qc-subscribe'
 findProject(':qc-api:qc-subscribe')?.name = 'qc-subscribe'
 include 'qc-api:qc-subscribe-api'
 findProject(':qc-api:qc-subscribe-api')?.name = 'qc-subscribe-api'
+include 'qc-api:qc-library-api'
+findProject(':qc-api:qc-library-api')?.name = 'qc-library-api'
+include 'qc-api:qc-library-api'
+findProject(':qc-api:qc-library-api')?.name = 'qc-library-api'
 
