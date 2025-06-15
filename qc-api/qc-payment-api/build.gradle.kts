@@ -20,7 +20,7 @@ dependencies {
 
     implementation(project(":qc-common"))
     implementation(project(":qc-event"))
-    implementation(project(":qc-external-pg-api"))
+    api(project(":qc-external-pg-api"))
     implementation(project(":qc-lock-manager"))
 
     testImplementation(kotlin("test"))

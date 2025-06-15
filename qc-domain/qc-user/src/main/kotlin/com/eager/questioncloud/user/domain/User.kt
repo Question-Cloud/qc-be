@@ -4,7 +4,6 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
-import com.eager.questioncloud.user.exception.NotVerificationUserException
 
 class User(
     var uid: Long = 0,
@@ -19,7 +18,7 @@ class User(
 
     fun checkUserStatus() {
         if (userStatus == UserStatus.PendingEmailVerification) {
-            throw NotVerificationUserException(uid)
+            throw CoreException(Error.PENDING_EMAIL_VERIFICATION)
         }
         if (userStatus != UserStatus.Active) {
             throw CoreException(Error.NOT_ACTIVE_USER)

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.filter
+package com.eager.questioncloud.filter
 
 import com.eager.ApiRequest
 import com.eager.ApiResponse

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.config
+package com.eager.questioncloud.config
 
 import io.micrometer.observation.ObservationPredicate
 import org.springframework.context.annotation.Bean

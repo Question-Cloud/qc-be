@@ -4,7 +4,6 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.exception.InvalidPointChargeException
 import io.hypersistence.tsid.TSID
 import java.time.LocalDateTime
 
@@ -42,7 +41,7 @@ class ChargePointPayment(
 
     private fun validateAmount(paidAmount: Int) {
         if (chargePointType.amount != paidAmount) {
-            throw InvalidPointChargeException(paymentId!!)
+            throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
         }
     }
 

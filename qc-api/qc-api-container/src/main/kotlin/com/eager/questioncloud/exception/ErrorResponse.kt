@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.exception
+package com.eager.questioncloud.exception
 
-import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.common.exception.CoreException
 import org.springframework.http.ResponseEntity
 
 class ErrorResponse(

@@ -24,6 +24,7 @@ enum class Error(
     LIMITED_COUPON(400, "쿠폰 물량이 전부 소진되었습니다."),
     WRONG_COUPON(400, "잘못된 쿠폰 사용입니다."),
     PAYMENT_ERROR(500, "결제 실패"),
+    INVALID_CHARGE_POINT_PAYMENT(400, "올바른 포인트 충전 요청이 아닙니다."),
     ALREADY_PROCESSED_PAYMENT(409, "이미 처리된 결제입니다."),
     NOT_AVAILABLE_CANCEL_PAYMENT(409, "취소 가능한 결제가 아닙니다."),
     ALREADY_ORDERED(409, "이미 요청된 주문입니다."),

@@ -11,13 +11,21 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation(platform("io.micrometer:micrometer-tracing-bom:latest.release"))
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
     implementation(project(":qc-common"))
+    implementation(project(":qc-logging"))
+
+
     implementation(project(":qc-domain:qc-user"))
     implementation(project(":qc-domain:qc-question"))
 
