@@ -23,6 +23,7 @@ dependencies {
 
     implementation(project(":qc-api:qc-auth-api"))
     implementation(project(":qc-api:qc-store-api"))
+    implementation(project(":qc-api:qc-payment-api"))
 
     testImplementation(kotlin("test"))
 }
