@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/payment/point")
-class ChargePointPaymentController(
+class ChargePointController(
     private val chargePointPaymentService: ChargePointPaymentService,
     private val chargePointPaymentHistoryService: ChargePointPaymentHistoryService,
 ) {
