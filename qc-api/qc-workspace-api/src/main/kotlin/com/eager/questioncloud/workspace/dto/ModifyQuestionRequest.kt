@@ -1,14 +1,14 @@
-package com.eager.questioncloud.application.api.workspace.dto
+package com.eager.questioncloud.workspace.dto
 
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
-import com.eager.questioncloud.core.domain.question.enums.QuestionType
-import com.eager.questioncloud.core.domain.question.enums.Subject
-import com.eager.questioncloud.core.domain.question.model.QuestionContent
+import com.eager.questioncloud.question.domain.QuestionContent
+import com.eager.questioncloud.question.enums.QuestionLevel
+import com.eager.questioncloud.question.enums.QuestionType
+import com.eager.questioncloud.question.enums.Subject
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 
-class RegisterQuestionRequest(
+class ModifyQuestionRequest(
     @NotNull val questionCategoryId: Long,
     @NotNull val subject: Subject,
     @NotBlank val title: String,

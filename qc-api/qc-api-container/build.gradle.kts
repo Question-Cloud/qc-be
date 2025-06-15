@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":qc-api:qc-subscribe-api"))
     implementation(project(":qc-api:qc-library-api"))
     implementation(project(":qc-api:qc-user-api"))
+    implementation(project(":qc-api:qc-workspace-api"))
 
     testImplementation(kotlin("test"))
 }

@@ -1,8 +1,8 @@
-package com.eager.questioncloud.application.api.workspace.service
+package com.eager.questioncloud.workspace.service
 
-import com.eager.questioncloud.application.api.workspace.implement.WorkspacePostReader
-import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostPreview
+import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.dto.PostPreview
+import com.eager.questioncloud.workspace.implement.WorkspacePostReader
 import org.springframework.stereotype.Component
 
 @Component

@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.workspace.implement
+package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostPreview
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.dto.PostPreview
+import com.eager.questioncloud.post.infrastructure.repository.PostRepository
+import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
