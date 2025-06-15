@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.api.post.dto
+package com.eager.questioncloud.post.dto
 
 import jakarta.validation.constraints.NotBlank
 

@@ -13,6 +13,7 @@ include 'qc-api:qc-auth-api'
 include 'qc-api:qc-store-api'
 include 'qc-api:qc-payment-api'
 include 'qc-api:qc-creator-api'
+include 'qc-api:qc-post-api'
 
 include 'qc-domain:qc-question'
 include 'qc-domain:qc-payment'
@@ -35,6 +36,6 @@ include 'qc-logging'
 include 'qc-common'
 include 'qc-rdb'
 include 'qc-event'
-include 'qc-api:qc-creator-api'
-findProject(':qc-api:qc-creator-api')?.name = 'qc-creator-api'
+
+
 

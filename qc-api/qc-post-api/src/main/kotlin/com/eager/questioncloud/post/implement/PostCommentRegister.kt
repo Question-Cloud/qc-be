@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.post.implement
+package com.eager.questioncloud.post.implement
 
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostCommentRepository
-import com.eager.questioncloud.core.domain.post.model.PostComment
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.post.domain.PostComment
+import com.eager.questioncloud.post.infrastructure.repository.PostCommentRepository
+import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
 import org.springframework.stereotype.Component
 
 @Component

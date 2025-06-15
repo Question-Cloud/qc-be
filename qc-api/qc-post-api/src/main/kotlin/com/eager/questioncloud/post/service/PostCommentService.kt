@@ -1,10 +1,10 @@
-package com.eager.questioncloud.application.api.post.service
+package com.eager.questioncloud.post.service
 
-import com.eager.questioncloud.application.api.post.implement.PostCommentDetailReader
-import com.eager.questioncloud.application.api.post.implement.PostCommentRegister
-import com.eager.questioncloud.core.common.PagingInformation
-import com.eager.questioncloud.core.domain.post.dto.PostCommentDetail
-import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostCommentRepository
+import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.dto.PostCommentDetail
+import com.eager.questioncloud.post.implement.PostCommentDetailReader
+import com.eager.questioncloud.post.implement.PostCommentRegister
+import com.eager.questioncloud.post.infrastructure.repository.PostCommentRepository
 import org.springframework.stereotype.Service
 
 @Service

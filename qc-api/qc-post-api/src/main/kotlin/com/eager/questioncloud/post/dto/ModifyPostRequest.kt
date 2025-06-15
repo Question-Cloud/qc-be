@@ -1,6 +1,6 @@
-package com.eager.questioncloud.application.api.post.dto
+package com.eager.questioncloud.post.dto
 
-import com.eager.questioncloud.core.domain.post.model.PostFile
+import com.eager.questioncloud.post.domain.PostFile
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls
 import jakarta.validation.constraints.NotBlank

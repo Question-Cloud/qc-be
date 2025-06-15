@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":qc-api:qc-store-api"))
     implementation(project(":qc-api:qc-payment-api"))
     implementation(project(":qc-api:qc-creator-api"))
+    implementation(project(":qc-api:qc-post-api"))
 
     testImplementation(kotlin("test"))
 }
