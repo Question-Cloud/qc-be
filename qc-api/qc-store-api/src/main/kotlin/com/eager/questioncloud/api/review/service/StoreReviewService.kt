@@ -1,10 +1,10 @@
 package com.eager.questioncloud.api.review.service
 
 import com.eager.questioncloud.api.review.dto.MyQuestionReview
-import com.eager.questioncloud.api.review.event.ReviewEvent
-import com.eager.questioncloud.api.review.event.ReviewEventType
 import com.eager.questioncloud.api.review.implement.*
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.event.model.ReviewEvent
+import com.eager.questioncloud.event.model.ReviewEventType
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
 import org.springframework.stereotype.Service

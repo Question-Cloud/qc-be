@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class QuestionPaymentRepositoryImpl(
-    private val questionPaymentJpaRepository: QuestionPaymentJpaRepository
+    private val questionPaymentJpaRepository: QuestionPaymentJpaRepository,
 ) : QuestionPaymentRepository {
 
     override fun save(questionPayment: QuestionPayment): QuestionPayment {

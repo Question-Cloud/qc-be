@@ -9,12 +9,13 @@ import java.time.LocalDateTime
 @Entity
 @Table(name = "question_payment")
 class QuestionPaymentEntity(
-    @Id var orderId: String,
-    @Column var userId: Long,
-    @Column var userCouponId: Long?,
-    @Column var amount: Int,
-    @Enumerated(EnumType.STRING) @Column var status: QuestionPaymentStatus,
-    @Column var createdAt: LocalDateTime,
+    @Id val orderId: String,
+    @Column val userId: Long,
+    @Column val userCouponId: Long?,
+    @Column val couponId: Long?,
+    @Column val amount: Int,
+    @Enumerated(EnumType.STRING) @Column val status: QuestionPaymentStatus,
+    @Column val createdAt: LocalDateTime,
     isNewEntity: Boolean
 ) : BaseCustomIdEntity<String>(isNewEntity) {
     companion object {
@@ -23,6 +24,7 @@ class QuestionPaymentEntity(
                 questionPayment.order.orderId,
                 questionPayment.userId,
                 questionPayment.questionPaymentCoupon?.userCouponId,
+                questionPayment.questionPaymentCoupon?.couponId,
                 questionPayment.amount,
                 questionPayment.status,
                 questionPayment.createdAt,

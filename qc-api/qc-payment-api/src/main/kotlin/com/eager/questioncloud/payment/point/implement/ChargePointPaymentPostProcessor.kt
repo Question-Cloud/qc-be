@@ -2,7 +2,7 @@ package com.eager.questioncloud.payment.point.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.point.event.FailChargePointPaymentEvent
+import com.eager.questioncloud.event.model.FailChargePointPaymentEvent
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.implement.UserPointManager
 import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository

@@ -6,4 +6,8 @@ interface QuestionMetadataRepository {
     fun save(questionMetadata: QuestionMetadata): QuestionMetadata
 
     fun update(questionMetadata: QuestionMetadata): QuestionMetadata
+
+    fun increaseSales(questionId: Long)
+
+    fun getForUpdate(questionId: Long): QuestionMetadata
 }

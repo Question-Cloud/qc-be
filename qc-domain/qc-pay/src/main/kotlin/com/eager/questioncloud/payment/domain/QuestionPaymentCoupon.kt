@@ -9,6 +9,7 @@ import kotlin.math.max
 
 class QuestionPaymentCoupon(
     var userCouponId: Long,
+    var couponId: Long,
     var title: String,
     var couponType: CouponType,
     var value: Int,
@@ -31,6 +32,7 @@ class QuestionPaymentCoupon(
         fun create(userCouponId: Long, coupon: Coupon): QuestionPaymentCoupon {
             return QuestionPaymentCoupon(
                 userCouponId,
+                coupon.id,
                 coupon.title,
                 coupon.couponType,
                 coupon.value

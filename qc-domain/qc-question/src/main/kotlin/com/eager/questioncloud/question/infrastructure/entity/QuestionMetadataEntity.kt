@@ -13,6 +13,7 @@ class QuestionMetadataEntity(
     @Id var questionId: Long,
     @Column val sales: Int,
     @Column val reviewCount: Int,
+    @Column val totalRate: Int,
     @Column val reviewAverageRate: Double,
     isNewEntity: Boolean
 ) : BaseCustomIdEntity<Long>(isNewEntity) {
@@ -23,6 +24,7 @@ class QuestionMetadataEntity(
                 questionMetadata.questionId,
                 questionMetadata.sales,
                 questionMetadata.reviewCount,
+                questionMetadata.totalRate,
                 questionMetadata.reviewAverageRate,
                 true
             )
@@ -33,6 +35,7 @@ class QuestionMetadataEntity(
                 questionMetadata.questionId,
                 questionMetadata.sales,
                 questionMetadata.reviewCount,
+                questionMetadata.totalRate,
                 questionMetadata.reviewAverageRate,
                 false
             )
@@ -40,7 +43,7 @@ class QuestionMetadataEntity(
     }
 
     fun toModel(): QuestionMetadata {
-        return QuestionMetadata(questionId, sales, reviewCount, reviewAverageRate)
+        return QuestionMetadata(questionId, sales, reviewCount, totalRate, reviewAverageRate)
     }
 
     override fun getId(): Long {

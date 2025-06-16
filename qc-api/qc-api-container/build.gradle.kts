@@ -24,7 +24,7 @@ dependencies {
 
     implementation(project(":qc-common"))
     implementation(project(":qc-logging"))
-
+    implementation(project(":qc-event"))
 
     implementation(project(":qc-domain:qc-user"))
     implementation(project(":qc-domain:qc-question"))

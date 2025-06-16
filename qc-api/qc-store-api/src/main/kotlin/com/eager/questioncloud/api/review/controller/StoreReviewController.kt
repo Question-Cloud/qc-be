@@ -14,7 +14,7 @@ import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/hub/question/review")
+@RequestMapping("/api/store/review")
 class StoreReviewController(
     private val storeReviewService: StoreReviewService
 ) {

@@ -52,6 +52,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
 
         return QuestionPaymentCoupon(
             coupon.getLong("userCouponId"),
+            coupon.getLong("couponId"),
             coupon.getString("title"),
             CouponType.valueOf(coupon.getString("couponType")),
             coupon.getInteger("value")

@@ -16,10 +16,12 @@ class QuestionPaymentHistory(
 ) {
 
     companion object {
-        @JvmStatic
         fun create(
-            questionPayment: QuestionPayment,
-            questions: List<QuestionInformation>
+            orderId: String,
+            userId: Long,
+            questions: List<QuestionInformation>,
+            questionPaymentCoupon: QuestionPaymentCoupon?,
+            amount: Int,
         ): QuestionPaymentHistory {
             val orders = questions.stream()
                 .map { question: QuestionInformation ->
@@ -28,14 +30,14 @@ class QuestionPaymentHistory(
                 .toList()
 
             return QuestionPaymentHistory(
-                questionPayment.order.orderId,
-                questionPayment.userId,
+                orderId,
+                userId,
                 orders,
-                questionPayment.questionPaymentCoupon,
-                questionPayment.amount,
-                questionPayment.isUsedCoupon(),
-                questionPayment.status,
-                questionPayment.createdAt,
+                questionPaymentCoupon,
+                amount,
+                questionPaymentCoupon != null,
+                QuestionPaymentStatus.SUCCESS,
+                LocalDateTime.now(),
             )
         }
     }

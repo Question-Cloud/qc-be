@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.point.implement
 
-import com.eager.questioncloud.payment.point.event.FailChargePointPaymentEvent
+import com.eager.questioncloud.event.model.FailChargePointPaymentEvent
 import io.awspring.cloud.sqs.operations.SqsTemplate
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component

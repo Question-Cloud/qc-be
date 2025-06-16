@@ -3,9 +3,9 @@ package com.eager.questioncloud.payment.question.implement
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.event.SQSEvent
 import com.eager.questioncloud.event.implement.AbstractEventProcessor
+import com.eager.questioncloud.event.model.QuestionPaymentEvent
 import com.eager.questioncloud.payment.domain.QuestionPaymentEventLog
 import com.eager.questioncloud.payment.infrastructure.repository.QuestionPaymentEventLogRepository
-import com.eager.questioncloud.payment.question.event.QuestionPaymentEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.event.TransactionPhase
@@ -24,7 +24,7 @@ class QuestionPaymentEventProcessor(
     override fun publishEvent(event: QuestionPaymentEvent) {
         snsAsyncClient.publish(event.toRequest())
             .thenAcceptAsync {
-                questionPaymentEventLogRepository.publish(event.questionPayment.order.orderId)
+                questionPaymentEventLogRepository.publish(event.data.orderId)
             }
     }
 

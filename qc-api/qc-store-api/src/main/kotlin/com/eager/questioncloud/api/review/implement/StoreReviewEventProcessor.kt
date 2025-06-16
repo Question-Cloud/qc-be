@@ -1,9 +1,9 @@
 package com.eager.questioncloud.api.review.implement
 
-import com.eager.questioncloud.api.review.event.ReviewEvent
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.event.SQSEvent
 import com.eager.questioncloud.event.implement.AbstractEventProcessor
+import com.eager.questioncloud.event.model.ReviewEvent
 import com.eager.questioncloud.review.domain.QuestionReviewEventLog
 import com.eager.questioncloud.review.infrastructure.repository.QuestionReviewEventLogRepository
 import org.springframework.context.ApplicationEventPublisher

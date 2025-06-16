@@ -9,6 +9,6 @@ class QuestionMetadataInitializer(
     private val questionMetadataRepository: QuestionMetadataRepository
 ) {
     fun init(questionId: Long) {
-        questionMetadataRepository.save(QuestionMetadata(questionId, 0, 0, 0.0))
+        questionMetadataRepository.save(QuestionMetadata(questionId, 0, 0, 0, 0.0))
     }
 }
