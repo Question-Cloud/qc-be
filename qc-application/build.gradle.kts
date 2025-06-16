@@ -24,10 +24,10 @@ dependencies {
     implementation(platform("io.micrometer:micrometer-tracing-bom:latest.release"))
     implementation("io.micrometer:micrometer-tracing-bridge-brave")
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
-    
+
     implementation(project(":qc-lock-manager"))
     implementation(project(":qc-external-pg-api"))
-    implementation(project(":qc-social-api"))
+    implementation(project(":qc-social"))
     implementation(project(":qc-logging"))
 
     implementation("org.apache.commons:commons-lang3:3.17.0")

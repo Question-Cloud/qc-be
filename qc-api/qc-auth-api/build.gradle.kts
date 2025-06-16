@@ -19,7 +19,7 @@ dependencies {
 
     implementation(project(":qc-domain:qc-user"))
     implementation(project(":qc-common"))
-    implementation(project(":qc-social-api"))
+    implementation(project(":qc-social"))
 
     testImplementation(kotlin("test"))
 }
