@@ -20,7 +20,6 @@ dependencies {
 
     implementation(project(":qc-common"))
     implementation(project(":qc-rdb"))
-    implementation(project(":qc-domain:qc-question"))
 
     testImplementation(kotlin("test"))
 }
