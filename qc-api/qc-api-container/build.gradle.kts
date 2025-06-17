@@ -76,7 +76,9 @@ openapi3 {
     format = "yaml"
 }
 
-
+tasks.getByName<Jar>("jar") {
+    enabled = false
+}
 
 tasks.test {
     useJUnitPlatform()
