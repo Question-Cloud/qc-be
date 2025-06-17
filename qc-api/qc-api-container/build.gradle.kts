@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
+    id("com.epages.restdocs-api-spec") version "0.19.2"
 }
 
 group = "com.eager.questioncloud"
@@ -42,13 +43,40 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir("../../qc-config")
-        }
-    }
+tasks.register<Copy>("collectSnippets") {
+    dependsOn(":qc-api:qc-user-api:test")
+    dependsOn(":qc-api:qc-payment-api:test")
+    dependsOn(":qc-api:qc-creator-api:test")
+    dependsOn(":qc-api:qc-post-api:test")
+    dependsOn(":qc-api:qc-store-api:test")
+    dependsOn(":qc-api:qc-auth-api:test")
+    dependsOn(":qc-api:qc-library-api:test")
+    dependsOn(":qc-api:qc-subscribe-api:test")
+    dependsOn(":qc-api:qc-workspace-api:test")
+
+    from("../qc-user-api/build/generated-snippets")
+    from("../qc-payment-api/build/generated-snippets")
+    from("../qc-creator-api/build/generated-snippets")
+    from("../qc-post-api/build/generated-snippets")
+    from("../qc-store-api/build/generated-snippets")
+    from("../qc-auth-api/build/generated-snippets")
+    from("../qc-library-api/build/generated-snippets")
+    from("../qc-subscribe-api/build/generated-snippets")
+    from("../qc-workspace-api/build/generated-snippets")
+
+    into("build/generated-snippets")
 }
+
+// OpenAPI 3 생성 설정
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "Question Cloud API"
+    description = "Question Cloud Unified API Documentation"
+    version = "1.1.1"
+    format = "yaml"
+}
+
+
 
 tasks.test {
     useJUnitPlatform()

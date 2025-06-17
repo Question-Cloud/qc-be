@@ -9,7 +9,7 @@ import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/user/payment/coupon")
+@RequestMapping("/api/payment/coupon")
 class UserCouponController(
     private val userCouponService: UserCouponService
 ) {

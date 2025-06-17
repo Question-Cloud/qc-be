@@ -6,7 +6,6 @@ import com.eager.questioncloud.core.domain.user.enums.AccountType
 import com.eager.questioncloud.core.domain.user.enums.UserStatus
 import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
 import com.eager.questioncloud.social.SocialAPIManager
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach

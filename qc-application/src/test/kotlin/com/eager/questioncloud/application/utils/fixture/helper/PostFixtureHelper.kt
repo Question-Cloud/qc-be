@@ -1,6 +1,5 @@
 package com.eager.questioncloud.application.utils.fixture.helper
 
-import com.eager.questioncloud.application.utils.fixture.Fixture
 import com.eager.questioncloud.core.domain.post.infrastructure.repository.PostRepository
 import com.eager.questioncloud.core.domain.post.model.Post
 import com.eager.questioncloud.core.domain.post.model.PostContent

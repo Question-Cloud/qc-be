@@ -2,7 +2,6 @@ package com.eager.questioncloud.application.api.authentication.implement
 
 import com.eager.questioncloud.core.domain.token.RefreshTokenRepository
 import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders

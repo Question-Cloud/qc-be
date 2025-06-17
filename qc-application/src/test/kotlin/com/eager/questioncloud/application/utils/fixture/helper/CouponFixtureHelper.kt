@@ -26,10 +26,10 @@ class CouponFixtureHelper {
                 .set(Coupon::value, value)
                 .set(Coupon::remainingCount, remainingCount)
                 .set(Coupon::endAt, endAt)
-            
+
             code?.let { builder.set(Coupon::code, it) }
             title?.let { builder.set(Coupon::title, it) }
-            
+
             return couponRepository.save(builder.sample())
         }
     }
