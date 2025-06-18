@@ -4,7 +4,6 @@ import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
-import com.eager.questioncloud.question.enums.Subject
 import org.bson.Document
 import org.springframework.core.convert.converter.Converter
 import java.time.LocalDateTime
@@ -35,7 +34,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
                     orderDocument.getString("title"),
                     orderDocument.getString("thumbnail"),
                     orderDocument.getString("creatorName"),
-                    Subject.valueOf(orderDocument.getString("subject")),
+                    orderDocument.getString("subject"),
                     orderDocument.getString("mainCategory"),
                     orderDocument.getString("subCategory")
                 )

@@ -10,6 +10,15 @@ repositories {
 }
 
 dependencies {
+    subprojects {
+        sourceSets {
+            main {
+                resources {
+                    srcDir("../qc-config")
+                }
+            }
+        }
+    }
     testImplementation(kotlin("test"))
 }
 

@@ -1,7 +1,6 @@
 package com.eager.questioncloud.event.model
 
 import com.eager.questioncloud.event.SQSEvent
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class QuestionPaymentEvent(
@@ -29,5 +28,13 @@ class QuestionPaymentEventData(
     val buyerUserId: Long,
     val questionIds: List<Long>,
     val amount: Int,
-    val questionPaymentCoupon: QuestionPaymentCoupon?,
+    val questionPaymentCoupon: QuestionPaymentEventCouponData?,
+)
+
+class QuestionPaymentEventCouponData(
+    val userCouponId: Long,
+    val couponId: Long,
+    val title: String,
+    val couponType: String,
+    val value: Int,
 )

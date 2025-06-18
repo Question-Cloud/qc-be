@@ -25,6 +25,8 @@ dependencies {
     implementation(project(":qc-common"))
     implementation(project(":qc-rdb"))
 
+    implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
+
     testImplementation(kotlin("test"))
 }
 

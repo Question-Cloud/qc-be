@@ -1,7 +1,6 @@
 package com.eager.questioncloud.payment.domain
 
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
-import com.eager.questioncloud.question.dto.QuestionInformation
 import java.time.LocalDateTime
 
 class QuestionPaymentHistory(
@@ -19,16 +18,10 @@ class QuestionPaymentHistory(
         fun create(
             orderId: String,
             userId: Long,
-            questions: List<QuestionInformation>,
+            orders: List<QuestionPaymentHistoryOrder>,
             questionPaymentCoupon: QuestionPaymentCoupon?,
             amount: Int,
         ): QuestionPaymentHistory {
-            val orders = questions.stream()
-                .map { question: QuestionInformation ->
-                    QuestionPaymentHistoryOrder.from(question)
-                }
-                .toList()
-
             return QuestionPaymentHistory(
                 orderId,
                 userId,

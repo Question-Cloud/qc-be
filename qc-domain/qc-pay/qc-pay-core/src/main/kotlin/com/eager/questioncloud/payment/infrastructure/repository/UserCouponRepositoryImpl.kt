@@ -2,13 +2,10 @@ package com.eager.questioncloud.payment.infrastructure.repository
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.coupon.domain.UserCoupon
-import com.eager.questioncloud.coupon.dto.AvailableUserCoupon
-import com.eager.questioncloud.coupon.infrastructure.entity.QCouponEntity.couponEntity
-import com.eager.questioncloud.coupon.infrastructure.entity.QUserCouponEntity.userCouponEntity
-import com.eager.questioncloud.coupon.infrastructure.entity.UserCouponEntity
 import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.dto.AvailableUserCoupon
+import com.eager.questioncloud.payment.infrastructure.entity.QCouponEntity.couponEntity
+import com.eager.questioncloud.payment.infrastructure.entity.QUserCouponEntity.userCouponEntity
 import com.eager.questioncloud.payment.infrastructure.entity.UserCouponEntity
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQueryFactory

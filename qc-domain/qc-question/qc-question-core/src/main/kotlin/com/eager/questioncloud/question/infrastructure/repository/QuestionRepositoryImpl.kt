@@ -31,7 +31,9 @@ class QuestionRepositoryImpl(
     private val parent = QQuestionCategoryEntity("parent")
     private val child = QQuestionCategoryEntity("child")
 
-    override fun countByQuestionFilter(questionFilter: QuestionFilter): Int {
+    override fun countByQuestionFilter(
+        questionFilter: QuestionFilter,
+    ): Int {
         return jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
             .where(
@@ -44,10 +46,13 @@ class QuestionRepositoryImpl(
             .fetchFirst() ?: 0
     }
 
-    override fun getQuestionInformation(questionFilter: QuestionFilter): List<QuestionInformation> {
+    override fun getQuestionInformation(
+        questionFilter: QuestionFilter,
+        pagingInformation: PagingInformation
+    ): List<QuestionInformation> {
         return questionInformationSelectFrom()
-            .offset(questionFilter.pagingInformation.offset.toLong())
-            .limit(questionFilter.pagingInformation.size.toLong())
+            .offset(pagingInformation.offset.toLong())
+            .limit(pagingInformation.size.toLong())
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
@@ -67,7 +72,7 @@ class QuestionRepositoryImpl(
             .collect(Collectors.toList())
     }
 
-    override fun getQuestionInformation(questionId: Long, userId: Long): QuestionInformation {
+    override fun getQuestionInformation(questionId: Long): QuestionInformation {
         val tuple = questionInformationSelectFrom()
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))

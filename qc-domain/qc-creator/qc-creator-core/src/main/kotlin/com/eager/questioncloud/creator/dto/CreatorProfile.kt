@@ -7,5 +7,4 @@ class CreatorProfile(
     val mainSubject: String,
     val email: String,
     val introduction: String,
-) {
-}
+)

@@ -1,7 +1,5 @@
 package com.eager.questioncloud.payment.infrastructure.repository
 
-import com.eager.questioncloud.coupon.domain.UserCoupon
-import com.eager.questioncloud.coupon.dto.AvailableUserCoupon
 import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.dto.AvailableUserCoupon
 

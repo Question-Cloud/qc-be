@@ -6,54 +6,100 @@ pluginManagement {
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
+
+// =============================================================================
+// Question Cloud - Settings Configuration
+// =============================================================================
+
 rootProject.name = 'questioncloud'
-include 'qc-api'
-include 'qc-api:qc-api-container'
-include 'qc-api:qc-auth-api'
-include 'qc-api:qc-creator-api'
-include 'qc-api:qc-library-api'
-include 'qc-api:qc-payment-api'
-include 'qc-api:qc-post-api'
-include 'qc-api:qc-store-api'
-include 'qc-api:qc-subscribe-api'
-include 'qc-api:qc-user-api'
-include 'qc-api:qc-workspace-api'
 
-include 'qc-domain:qc-question'
-include 'qc-domain:qc-payment'
+// =============================================================================
+// 📦 Application Modules
+// =============================================================================
+
+include 'qc-api-container'
+
+// =============================================================================
+// 🏗️ Domain Modules (도메인별 멀티모듈)
+// =============================================================================
+
+// User Domain
 include 'qc-domain:qc-user'
-include 'qc-domain:qc-creator'
-include 'qc-domain:qc-review'
-include 'qc-domain:qc-post'
-include 'qc-domain:qc-subscribe'
-include 'qc-domain:qc-cart'
-include 'qc-domain:qc-coupon'
-include 'qc-domain:qc-point'
-include 'qc-domain:qc-pay'
+include 'qc-domain:qc-user:qc-user-core'
+include 'qc-domain:qc-user:qc-user-api'
+include 'qc-domain:qc-user:qc-user-internal-api'
 
-include 'qc-external-pg-api'
-include 'qc-application'
-include 'qc-lock-manager'
-include 'qc-social'
-include 'qc-logging'
-include 'qc-common'
-include 'qc-rdb'
-include 'qc-event'
+// Question Domain
+include 'qc-domain:qc-question'
+include 'qc-domain:qc-question:qc-question-core'
+include 'qc-domain:qc-question:qc-question-api'
+include 'qc-domain:qc-question:qc-question-internal-api'
+
+// Creator Domain
+include 'qc-domain:qc-creator'
+include 'qc-domain:qc-creator:qc-creator-core'
+include 'qc-domain:qc-creator:qc-creator-api'
+include 'qc-domain:qc-creator:qc-creator-internal-api'
+
+// Point Domain
+include 'qc-domain:qc-point'
+include 'qc-domain:qc-point:qc-point-core'
+include 'qc-domain:qc-point:qc-point-api'
+include 'qc-domain:qc-point:qc-point-internal-api'
+
+// Post Domain
+include 'qc-domain:qc-post'
+include 'qc-domain:qc-post:qc-post-core'
+include 'qc-domain:qc-post:qc-post-api'
+include 'qc-domain:qc-post:qc-post-internal-api'
+
+// Cart Domain
+include 'qc-domain:qc-cart'
 include 'qc-domain:qc-cart:qc-cart-core'
 include 'qc-domain:qc-cart:qc-cart-api'
-include 'qc-domain:qc-coupon:qc-coupon-core'
-include 'qc-domain:qc-coupon:qc-coupon-api'
-include 'qc-domain:qc-coupon:qc-coupon-core'
-include 'qc-domain:qc-coupon:qc-coupon-api'
-include 'qc-domain:qc-creator:qc-creator-core'
-include 'qc-domain:qc-pay:qc-pay-core'
-include 'qc-domain:qc-point:qc-point-core'
-include 'qc-domain:qc-post:qc-post-core'
-include 'qc-domain:qc-question:qc-question-core'
+
+// Review Domain
+include 'qc-domain:qc-review'
 include 'qc-domain:qc-review:qc-review-core'
-findProject(':qc-domain:qc-review:qc-review-core')?.name = 'qc-review-core'
+include 'qc-domain:qc-review:qc-review-api'
+
+// Subscribe Domain
+include 'qc-domain:qc-subscribe'
 include 'qc-domain:qc-subscribe:qc-subscribe-core'
-findProject(':qc-domain:qc-subscribe:qc-subscribe-core')?.name = 'qc-subscribe-core'
-include 'qc-domain:qc-user:qc-user-core'
-findProject(':qc-domain:qc-user:qc-user-core')?.name = 'qc-user-core'
+include 'qc-domain:qc-subscribe:qc-subscribe-api'
+
+// Pay Domain
+include 'qc-domain:qc-pay'
+include 'qc-domain:qc-pay:qc-pay-core'
+include 'qc-domain:qc-pay:qc-pay-api'
+
+// Coupon Domain
+include 'qc-domain:qc-coupon'
+include 'qc-domain:qc-coupon:qc-coupon-core'
+include 'qc-domain:qc-coupon:qc-coupon-api'
+
+// =============================================================================
+// 🔌 Internal API Interface Modules (도메인 간 통신 인터페이스)
+// =============================================================================
+include 'qc-internal-api-interface'
+include 'qc-internal-api-interface:qc-user-internal-api-interface'
+include 'qc-internal-api-interface:qc-question-internal-api-interface'
+include 'qc-internal-api-interface:qc-creator-internal-api-interface'
+include 'qc-internal-api-interface:qc-point-internal-api-interface'
+include 'qc-internal-api-interface:qc-post-internal-api-interface'
+
+// =============================================================================
+// 🛠️ Infrastructure Modules (인프라스트럭처)
+// =============================================================================
+include 'qc-rdb'                    // 데이터베이스
+include 'qc-event'                  // 이벤트 처리
+include 'qc-logging'                // 로깅
+include 'qc-external-pg-api'        // 외부 결제 게이트웨이
+include 'qc-lock-manager'           // 분산 락
+include 'qc-social'                 // 소셜 로그인
+
+// =============================================================================
+// 🔧 Shared Modules (공통 모듈)
+// =============================================================================
+include 'qc-common'                 // 공통 유틸리티
 

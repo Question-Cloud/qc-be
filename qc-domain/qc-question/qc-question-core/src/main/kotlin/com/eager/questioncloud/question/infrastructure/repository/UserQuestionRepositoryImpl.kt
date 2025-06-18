@@ -1,5 +1,6 @@
 package com.eager.questioncloud.question.infrastructure.repository
 
+import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.question.common.QuestionFilter
 import com.eager.questioncloud.question.domain.UserQuestion
 import com.eager.questioncloud.question.dto.UserQuestionContent
@@ -35,7 +36,11 @@ class UserQuestionRepositoryImpl(
         return userQuestionJpaRepository.existsByUserIdAndQuestionId(userId, questionId)
     }
 
-    override fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionContent> {
+    override fun getUserQuestions(
+        userId: Long,
+        questionFilter: QuestionFilter,
+        pagingInformation: PagingInformation
+    ): List<UserQuestionContent> {
         val parent = QQuestionCategoryEntity("parent")
         val child = QQuestionCategoryEntity("child")
         return jpaQueryFactory.select(
@@ -53,21 +58,21 @@ class UserQuestionRepositoryImpl(
             )
         )
             .from(userQuestionEntity)
-            .where(userQuestionEntity.userId.eq(questionFilter.userId))
+            .where(userQuestionEntity.userId.eq(userId))
             .leftJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
-            .offset(questionFilter.pagingInformation.offset.toLong())
-            .limit(questionFilter.pagingInformation.size.toLong())
+            .offset(pagingInformation.offset.toLong())
+            .limit(pagingInformation.size.toLong())
             .fetch()
     }
 
-    override fun countUserQuestions(questionFilter: QuestionFilter): Int {
+    override fun countUserQuestions(userId: Long, questionFilter: QuestionFilter): Int {
         val parent = QQuestionCategoryEntity("parent")
         val child = QQuestionCategoryEntity("child")
         return jpaQueryFactory.select(userQuestionEntity.id.count().intValue())
             .from(userQuestionEntity)
-            .where(userQuestionEntity.userId.eq(questionFilter.userId))
+            .where(userQuestionEntity.userId.eq(userId))
             .leftJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))

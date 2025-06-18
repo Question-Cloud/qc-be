@@ -15,6 +15,7 @@ class CreatorStatisticsEntity(
     @Column var reviewCount: Int,
     @Column var totalReviewRate: Int,
     @Column var averageRateOfReview: Double,
+    @Column var subscriberCount: Int,
     isNewEntity: Boolean
 ) : BaseCustomIdEntity<Long>(isNewEntity) {
     fun toModel(): CreatorStatistics {
@@ -23,7 +24,8 @@ class CreatorStatisticsEntity(
             salesCount,
             reviewCount,
             totalReviewRate,
-            averageRateOfReview
+            averageRateOfReview,
+            subscriberCount
         )
     }
 
@@ -35,6 +37,7 @@ class CreatorStatisticsEntity(
                 creatorStatistics.reviewCount,
                 creatorStatistics.totalReviewRate,
                 creatorStatistics.averageRateOfReview,
+                creatorStatistics.subscriberCount,
                 true
             )
         }
@@ -46,6 +49,7 @@ class CreatorStatisticsEntity(
                 creatorStatistics.reviewCount,
                 creatorStatistics.totalReviewRate,
                 creatorStatistics.averageRateOfReview,
+                creatorStatistics.subscriberCount,
                 false
             )
         }

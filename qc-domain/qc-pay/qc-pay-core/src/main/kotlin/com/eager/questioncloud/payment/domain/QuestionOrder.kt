@@ -1,6 +1,5 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.question.domain.Question
 import io.hypersistence.tsid.TSID
 import java.util.stream.Collectors
 
@@ -22,17 +21,9 @@ class QuestionOrder(
             .collect(Collectors.toList())
 
     companion object {
-        fun createOrder(questions: List<Question>): QuestionOrder {
+        fun createOrder(orderItems: List<QuestionOrderItem>): QuestionOrder {
             val orderId = TSID.Factory.getTsid().toString()
-            val items = questions
-                .stream()
-                .map { question: Question ->
-                    QuestionOrderItem.create(
-                        question
-                    )
-                }
-                .collect(Collectors.toList())
-            return QuestionOrder(orderId, items)
+            return QuestionOrder(orderId, orderItems)
         }
     }
 }

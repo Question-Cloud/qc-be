@@ -1,7 +1,7 @@
 package com.eager.questioncloud.pg.toss
 
-import com.eager.questioncloud.pg.exception.InvalidPaymentIdException
-import com.eager.questioncloud.pg.exception.PGException
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import okhttp3.MediaType.Companion.toMediaType
@@ -72,11 +72,11 @@ class TossPaymentAPI {
         }
 
         if (response.code == 404) {
-            throw InvalidPaymentIdException()
+            throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
         }
 
         if (response.body == null) {
-            throw PGException()
+            throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
         }
     }
 

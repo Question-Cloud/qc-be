@@ -2,9 +2,9 @@ package com.eager.questioncloud.payment.infrastructure.repository
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.coupon.infrastructure.entity.QCouponEntity.couponEntity
 import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.infrastructure.entity.CouponEntity
+import com.eager.questioncloud.payment.infrastructure.entity.QCouponEntity.couponEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 

@@ -18,12 +18,6 @@ java {
     }
 }
 
-kotlin {
-    compilerOptions {
-        freeCompilerArgs.addAll("-Xjsr305=strict")
-    }
-}
-
 subprojects {
     group = "com.eager"
     version = "0.0.1-SNAPSHOT"

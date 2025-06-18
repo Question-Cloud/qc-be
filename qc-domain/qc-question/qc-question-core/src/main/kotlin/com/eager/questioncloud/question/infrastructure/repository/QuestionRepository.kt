@@ -8,9 +8,12 @@ import com.eager.questioncloud.question.dto.QuestionInformation
 interface QuestionRepository {
     fun countByQuestionFilter(questionFilter: QuestionFilter): Int
 
-    fun getQuestionInformation(questionFilter: QuestionFilter): List<QuestionInformation>
+    fun getQuestionInformation(
+        questionFilter: QuestionFilter,
+        pagingInformation: PagingInformation
+    ): List<QuestionInformation>
 
-    fun getQuestionInformation(questionId: Long, userId: Long = -1): QuestionInformation
+    fun getQuestionInformation(questionId: Long): QuestionInformation // TODO Del userId Param
 
     fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question>
 
@@ -29,7 +32,7 @@ interface QuestionRepository {
 
     fun findByCreatorId(creatorId: Long): List<Question>
 
-    fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation>
+    fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation> // TODO Refactor Fun Name
 
     fun countByCreatorId(creatorId: Long): Int
 

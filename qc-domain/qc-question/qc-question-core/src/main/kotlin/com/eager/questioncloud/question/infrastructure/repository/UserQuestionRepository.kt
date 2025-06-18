@@ -1,5 +1,6 @@
 package com.eager.questioncloud.question.infrastructure.repository
 
+import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.question.common.QuestionFilter
 import com.eager.questioncloud.question.domain.UserQuestion
 import com.eager.questioncloud.question.dto.UserQuestionContent
@@ -11,9 +12,13 @@ interface UserQuestionRepository {
 
     fun isOwned(userId: Long, questionId: Long): Boolean
 
-    fun getUserQuestions(questionFilter: QuestionFilter): List<UserQuestionContent>
+    fun getUserQuestions(
+        userId: Long,
+        questionFilter: QuestionFilter,
+        pagingInformation: PagingInformation
+    ): List<UserQuestionContent>
 
-    fun countUserQuestions(questionFilter: QuestionFilter): Int
+    fun countUserQuestions(userId: Long, questionFilter: QuestionFilter): Int
 
     fun deleteAllInBatch()
 

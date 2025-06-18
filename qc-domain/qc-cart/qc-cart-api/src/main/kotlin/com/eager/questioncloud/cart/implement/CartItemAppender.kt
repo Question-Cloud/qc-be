@@ -3,13 +3,14 @@ package com.eager.questioncloud.cart.implement
 import com.eager.questioncloud.cart.domain.CartItem
 import com.eager.questioncloud.cart.infrastructure.repository.CartItemRepository
 import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
 
 @Component
 class CartItemAppender(
-    private val questionRepository: QuestionRepository,
     private val cartItemRepository: CartItemRepository,
-    private val userQuestionRepository: UserQuestionRepository,
+    private val questionQueryAPI: QuestionQueryAPI,
 ) {
     fun append(userId: Long, questionId: Long) {
         if (isUnAvailableQuestion(questionId)) {
@@ -28,7 +29,7 @@ class CartItemAppender(
     }
 
     private fun isUnAvailableQuestion(questionId: Long): Boolean {
-        return !questionRepository.isAvailable(questionId)
+        return !questionQueryAPI.isAvailable(questionId)
     }
 
     private fun isAlreadyInCart(userId: Long, questionId: Long): Boolean {
@@ -36,6 +37,6 @@ class CartItemAppender(
     }
 
     private fun isAlreadyOwned(userId: Long, questionId: Long): Boolean {
-        return userQuestionRepository.isOwned(userId, questionId)
+        return questionQueryAPI.isOwned(userId, questionId)
     }
 }
