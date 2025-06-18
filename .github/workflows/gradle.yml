@@ -31,7 +31,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew :qc-api:qc-api-container:build -x test
+        run: ./gradlew :qc-api-container:build -x test
 
       - name: docker image build
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/questioncloud .
