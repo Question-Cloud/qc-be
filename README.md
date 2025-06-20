@@ -23,16 +23,33 @@
 
 ---
 
-## 🏗️ 아키텍처 구조
+## 🏗️ 시스템 아키텍처
 
-### 모듈러 모놀리식 아키텍처 적용
+### 전체 인프라 구성
+
+<img width="667" alt="QuestionCloud System Architecture" src="https://github.com/user-attachments/assets/fc48cbd0-6181-4ca8-95cc-e7d29e867b84" />
+
+### 🎯 인프라 구성
+
+- **AWS EC2**: Docker 기반 Spring Boot 애플리케이션
+- **AWS RDS**: MariaDB 관리형 데이터베이스
+- **AWS ElastiCache**: Redis
+- **MongoDB Atlas**: 조회용 NoSQL 데이터베이스
+- **AWS SNS/SQS**: 비동기 메시지 처리
+- **모니터링**: Prometheus + Grafana
+
+---
+
+### 모듈러 모놀리식 아키텍처 + 런타임 컨테이너 패턴
 
 ```
-📱 Application Layer
-    ├── qc-api-container (메인 API 서버)
-    └── qc-admin-application (관리자 앱, 계획중)
+📱 Runtime Container
+    └── qc-api-container (Spring Boot Application)
+        ├── 🏗️ Domain Modules Loading
+        ├── 🌐 API Endpoints Aggregation  
+        └── 🔄 Dependency Injection
 
-🏗️ Domain Layer  
+🏗️ Domain Modules (Loaded by Container)
     ├── 👤 qc-user (Core + API + Internal API)
     ├── ❓ qc-question (Core + API + Internal API)  
     ├── 👨‍🎨 qc-creator (Core + API + Internal API)
@@ -58,6 +75,29 @@
 🔧 Shared Layer
     └── qc-common (공통 유틸리티)
 ```
+
+#### 🎯 **런타임 아키텍처 특징**
+
+**🚀 Container 역할 (`qc-api-container`)**
+
+- 모든 도메인 모듈을 Spring Context에 로딩
+- 도메인별 API 엔드포인트를 단일 애플리케이션으로 통합
+- 공통 설정 및 인프라 구성 관리
+- 실제 배포되는 유일한 실행 가능한 애플리케이션
+
+**📦 Domain Module 역할**
+
+- **Core**: 비즈니스 로직 및 도메인 엔티티
+- **API**: REST Controller 및 DTO 정의
+- **Internal API**: 다른 도메인과의 통신 인터페이스 (선택적)
+- Container에 의해 런타임에 로딩되어 API 엔드포인트 제공
+
+**🔄 모듈 로딩 과정**
+
+1. `qc-api-container` 시작
+2. Classpath에서 모든 도메인 모듈 스캔
+3. 각 도메인의 `@RestController`, `@Service`, `@Repository` 등을 Spring Context에 등록
+4. 통합된 API 서버로 동작
 
 #### 모듈 구성 (총 45개 모듈)
 
