@@ -98,7 +98,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 목록 조회")
                         .description("특정 문제에 대한 리뷰 목록을 페이징하여 조회합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         queryParameters(
                             parameterWithName("questionId").description("리뷰를 조회할 문제 ID"),
@@ -144,7 +144,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("내가 작성한 리뷰 조회")
                         .description("특정 문제에 대해 내가 작성한 리뷰를 조회합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         queryParameters(
                             parameterWithName("questionId").description("리뷰를 조회할 문제 ID")
@@ -181,7 +181,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("내가 작성한 리뷰 조회")
                         .description("특정 문제에 대해 내가 작성한 리뷰를 조회합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         queryParameters(
                             parameterWithName("questionId").description("리뷰를 조회할 문제 ID")
@@ -218,7 +218,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 등록")
                         .description("문제에 대한 리뷰를 등록합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("리뷰를 등록할 문제 ID"),
@@ -260,7 +260,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 등록")
                         .description("문제에 대한 리뷰를 등록합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("리뷰를 등록할 문제 ID"),
@@ -302,7 +302,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 등록")
                         .description("문제에 대한 리뷰를 등록합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("리뷰를 등록할 문제 ID"),
@@ -341,7 +341,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 수정")
                         .description("기존에 작성한 리뷰를 수정합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("reviewId").description("수정할 리뷰 ID")
@@ -384,7 +384,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 수정")
                         .description("기존에 작성한 리뷰를 수정합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("reviewId").description("수정할 리뷰 ID")
@@ -419,7 +419,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 삭제")
                         .description("기존에 작성한 리뷰를 삭제합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("reviewId").description("삭제할 리뷰 ID")
@@ -452,7 +452,7 @@ class StoreReviewControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 리뷰 삭제")
                         .description("기존에 작성한 리뷰를 삭제합니다.")
-                        .tag("hub-review"),
+                        .tag("store-review"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("reviewId").description("삭제할 리뷰 ID")

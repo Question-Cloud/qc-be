@@ -55,8 +55,8 @@ include 'qc-domain:qc-post:qc-post-internal-api'
 
 // Cart Domain
 include 'qc-domain:qc-cart'
-include 'qc-domain:qc-cart:qc-cart-core'
 include 'qc-domain:qc-cart:qc-cart-api'
+include 'qc-domain:qc-cart:qc-cart-core'
 
 // Review Domain
 include 'qc-domain:qc-review'
@@ -72,11 +72,6 @@ include 'qc-domain:qc-subscribe:qc-subscribe-api'
 include 'qc-domain:qc-pay'
 include 'qc-domain:qc-pay:qc-pay-core'
 include 'qc-domain:qc-pay:qc-pay-api'
-
-// Coupon Domain
-include 'qc-domain:qc-coupon'
-include 'qc-domain:qc-coupon:qc-coupon-core'
-include 'qc-domain:qc-coupon:qc-coupon-api'
 
 // =============================================================================
 // 🔌 Internal API Interface Modules (도메인 간 통신 인터페이스)

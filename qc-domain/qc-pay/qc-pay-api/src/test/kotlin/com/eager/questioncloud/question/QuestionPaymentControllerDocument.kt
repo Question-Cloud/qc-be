@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.pay.question.dto.QuestionPaymentRequest
 import com.eager.questioncloud.pay.question.service.QuestionOrderService
+import com.eager.questioncloud.pay.question.service.QuestionPaymentCouponService
 import com.eager.questioncloud.pay.question.service.QuestionPaymentHistoryService
 import com.eager.questioncloud.pay.question.service.QuestionPaymentService
 import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
@@ -55,6 +56,9 @@ class QuestionPaymentControllerDocument {
 
     @MockBean
     private lateinit var questionOrderService: QuestionOrderService
+
+    @MockBean
+    private lateinit var questionPaymentCouponService: QuestionPaymentCouponService
 
     private lateinit var sampleQuestionPaymentHistories: List<QuestionPaymentHistory>
 

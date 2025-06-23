@@ -102,7 +102,7 @@ class ChargePointControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("포인트 충전 완료 여부 조회")
                         .description("포인트 충전 결제가 완료되었는지 확인합니다.")
-                        .tag("charge-point"),
+                        .tag("point"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("paymentId").description("확인할 결제 ID")
@@ -140,7 +140,7 @@ class ChargePointControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("포인트 충전 주문 생성")
                         .description("포인트 충전 주문을 생성합니다. 포트원 결제창 호출 전 필수로 요청해야 합니다.")
-                        .tag("charge-point"),
+                        .tag("point"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("chargePointType").description("충전할 포인트 패키지 타입 (PackageA: 1000원, PackageB: 5000원, PackageC: 10000원, PackageD: 30000원, PackageE: 50000원, PackageF: 100000원)")
@@ -173,7 +173,7 @@ class ChargePointControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("포인트 충전 결제 승인 요청")
                         .description("포인트 충전 결제 승인을 요청합니다.")
-                        .tag("charge-point"),
+                        .tag("point"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("orderId").description("승인할 주문 ID")
@@ -210,7 +210,7 @@ class ChargePointControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("포인트 충전 내역 조회")
                         .description("사용자의 포인트 충전 내역을 페이징하여 조회합니다.")
-                        .tag("charge-point"),
+                        .tag("point"),
                     snippets = arrayOf(
                         queryParameters(
                             parameterWithName("page").description("페이지 번호 (1부터 시작)"),

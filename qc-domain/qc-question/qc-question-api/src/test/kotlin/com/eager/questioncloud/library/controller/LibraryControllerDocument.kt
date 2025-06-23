@@ -1,9 +1,9 @@
 package com.eager.questioncloud.library.controller
 
-import com.eager.questioncloud.library.dto.LibraryContent
 import com.eager.questioncloud.question.dto.UserQuestionContent
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.library.dto.ContentCreator
+import com.eager.questioncloud.question.library.dto.LibraryContent
 import com.eager.questioncloud.question.library.service.LibraryService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
@@ -76,10 +76,10 @@ class LibraryControllerDocument {
         // Given
         val totalCount = 10
 
-        whenever(libraryService.countUserQuestions(any()))
+        whenever(libraryService.countUserQuestions(any(), any()))
             .thenReturn(totalCount)
 
-        whenever(libraryService.getUserQuestions(any()))
+        whenever(libraryService.getUserQuestions(any(), any(), any()))
             .thenReturn(sampleUserQuestionContent.map {
                 LibraryContent(it, sampleContentCreator)
             })

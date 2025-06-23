@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -30,7 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 class CartControllerDocument {
-
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -76,6 +76,7 @@ class CartControllerDocument {
         mockMvc.perform(
             get("/api/store/cart")
                 .header("Authorization", "Bearer mock_access_token")
+                .with(csrf())
         )
             .andExpect(status().isOk)
             .andDo(
@@ -84,7 +85,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 조회")
                         .description("사용자의 장바구니에 담긴 아이템 목록을 조회합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         responseFields(
                             fieldWithPath("success").description("요청 성공 여부"),
@@ -113,6 +114,7 @@ class CartControllerDocument {
                 .header("Authorization", "Bearer mock_access_token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addCartItemRequest))
+                .with(csrf())
         )
             .andExpect(status().isOk)
             .andDo(
@@ -121,7 +123,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
                         .description("문제를 사용자의 장바구니에 추가합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("장바구니에 담을 문제 ID")
@@ -149,6 +151,7 @@ class CartControllerDocument {
                 .header("Authorization", "Bearer mock_access_token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addCartItemRequest))
+                .with(csrf())
         )
             .andExpect(status().isBadRequest)
             .andDo(
@@ -157,7 +160,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
                         .description("문제를 사용자의 장바구니에 추가합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("장바구니에 담을 문제 ID")
@@ -185,6 +188,7 @@ class CartControllerDocument {
                 .header("Authorization", "Bearer mock_access_token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addCartItemRequest))
+                .with(csrf())
         )
             .andExpect(status().isConflict)
             .andDo(
@@ -193,7 +197,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
                         .description("문제를 사용자의 장바구니에 추가합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("장바구니에 담을 문제 ID")
@@ -221,6 +225,7 @@ class CartControllerDocument {
                 .header("Authorization", "Bearer mock_access_token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(addCartItemRequest))
+                .with(csrf())
         )
             .andExpect(status().isConflict)
             .andDo(
@@ -229,7 +234,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 담기")
                         .description("문제를 사용자의 장바구니에 추가합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("questionId").description("장바구니에 담을 문제 ID")
@@ -254,6 +259,7 @@ class CartControllerDocument {
                 .header("Authorization", "Bearer mock_access_token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(removeCartItemRequest))
+                .with(csrf())
         )
             .andExpect(status().isOk)
             .andDo(
@@ -262,7 +268,7 @@ class CartControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("장바구니 빼기")
                         .description("선택한 아이템들을 장바구니에서 제거합니다.")
-                        .tag("cart"),
+                        .tag("store-cart"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("ids").description("제거할 장바구니 아이템 ID 목록")

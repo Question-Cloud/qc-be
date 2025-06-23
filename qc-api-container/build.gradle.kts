@@ -28,7 +28,6 @@ dependencies {
     implementation(project(":qc-event"))
 
     implementation(project(":qc-domain:qc-cart:qc-cart-api"))
-    implementation(project(":qc-domain:qc-coupon:qc-coupon-api"))
     implementation(project(":qc-domain:qc-creator:qc-creator-api"))
     implementation(project(":qc-domain:qc-pay:qc-pay-api"))
     implementation(project(":qc-domain:qc-point:qc-point-api"))
@@ -42,6 +41,16 @@ dependencies {
     implementation(project(":qc-domain:qc-post:qc-post-internal-api"))
     implementation(project(":qc-domain:qc-creator:qc-creator-internal-api"))
     implementation(project(":qc-domain:qc-user:qc-user-internal-api"))
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+    testImplementation("org.springframework:spring-tx")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
+    testImplementation("org.springframework.security:spring-security-test")
+
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.2")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
 
 sourceSets {
@@ -56,6 +65,34 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.getByName<Jar>("jar") {
-    enabled = false
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "Question Cloud API"
+    description = "Question Cloud Unified API Documentation"
+    version = "1.1.1"
+    format = "yaml"
+}
+
+tasks.register<Copy>("collectSnippets") {
+    dependsOn(":qc-domain:qc-cart:qc-cart-api:test")
+    dependsOn(":qc-domain:qc-creator:qc-creator-api:test")
+    dependsOn(":qc-domain:qc-pay:qc-pay-api:test")
+    dependsOn(":qc-domain:qc-point:qc-point-api:test")
+    dependsOn(":qc-domain:qc-post:qc-post-api:test")
+    dependsOn(":qc-domain:qc-question:qc-question-api:test")
+    dependsOn(":qc-domain:qc-review:qc-review-api:test")
+    dependsOn(":qc-domain:qc-subscribe:qc-subscribe-api:test")
+    dependsOn(":qc-domain:qc-user:qc-user-api:test")
+
+    from("../qc-domain/qc-cart/qc-cart-api/build/generated-snippets")
+    from("../qc-domain/qc-creator/qc-creator-api/build/generated-snippets")
+    from("../qc-domain/qc-pay/qc-pay-api/build/generated-snippets")
+    from("../qc-domain/qc-point/qc-point-api/build/generated-snippets")
+    from("../qc-domain/qc-post/qc-post-api/build/generated-snippets")
+    from("../qc-domain/qc-question/qc-question-api/build/generated-snippets")
+    from("../qc-domain/qc-review/qc-review-api/build/generated-snippets")
+    from("../qc-domain/qc-subscribe/qc-subscribe-api/build/generated-snippets")
+    from("../qc-domain/qc-user/qc-user-api/build/generated-snippets")
+
+    into("build/generated-snippets")
 }

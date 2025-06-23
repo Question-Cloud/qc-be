@@ -9,17 +9,19 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
-    subprojects {
-        sourceSets {
-            main {
-                resources {
-                    srcDir("../qc-config")
-                }
-            }
-        }
+}
+
+subprojects {
+    dependencies {
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.security:spring-security-test")
+
+        testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.2")
+        testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+        testImplementation(project(":qc-api-container"))
     }
-    testImplementation(kotlin("test"))
 }
 
 tasks.test {

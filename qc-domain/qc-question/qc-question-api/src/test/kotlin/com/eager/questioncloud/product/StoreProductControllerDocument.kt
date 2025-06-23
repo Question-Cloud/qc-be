@@ -2,12 +2,12 @@ package com.eager.questioncloud.product
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.product.dto.StoreProductDetail
-import com.eager.questioncloud.product.service.StoreProductService
 import com.eager.questioncloud.question.dto.QuestionCategoryGroupBySubject
 import com.eager.questioncloud.question.dto.QuestionInformation
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.Subject
+import com.eager.questioncloud.question.product.dto.StoreProductDetail
+import com.eager.questioncloud.question.product.service.StoreProductService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import org.junit.jupiter.api.BeforeEach
@@ -131,7 +131,7 @@ class StoreProductControllerDocument {
 
         whenever(storeProductService.getTotalFiltering(any()))
             .thenReturn(totalCount)
-        whenever(storeProductService.getQuestionListByFiltering(any()))
+        whenever(storeProductService.getQuestionListByFiltering(any(), any(), any()))
             .thenReturn(sampleStoreProductDetails)
 
         // When & Then
@@ -148,7 +148,7 @@ class StoreProductControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 목록 조회")
                         .description("필터링 조건에 따라 문제 목록을 페이징하여 조회합니다.")
-                        .tag("hub-question"),
+                        .tag("store-product"),
                     snippets = arrayOf(
                         queryParameters(
                             parameterWithName("page").description("페이지 번호 (1부터 시작)"),
@@ -200,7 +200,7 @@ class StoreProductControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 카테고리 목록 조회")
                         .description("과목별로 분류된 문제 카테고리 목록을 조회합니다.")
-                        .tag("hub-question"),
+                        .tag("store-product"),
                     snippets = arrayOf(
                         responseFields(
                             fieldWithPath("categories").description("과목별 카테고리 목록"),
@@ -237,7 +237,7 @@ class StoreProductControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 상세 조회")
                         .description("특정 문제의 상세 정보를 조회합니다.")
-                        .tag("hub-question"),
+                        .tag("store-product"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("questionId").description("조회할 문제 ID")
@@ -282,7 +282,7 @@ class StoreProductControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("문제 상세 조회")
                         .description("특정 문제의 상세 정보를 조회합니다.")
-                        .tag("hub-question"),
+                        .tag("store-product"),
                     snippets = arrayOf(
                         pathParameters(
                             parameterWithName("questionId").description("조회할 문제 ID")

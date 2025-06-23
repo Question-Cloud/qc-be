@@ -88,7 +88,7 @@ class UserCouponControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("사용 가능한 쿠폰 목록 조회")
                         .description("사용자가 보유한 사용 가능한 쿠폰 목록을 조회합니다.")
-                        .tag("coupon"),
+                        .tag("payment-coupon"),
                     snippets = arrayOf(
                         responseFields(
                             fieldWithPath("coupons").description("사용 가능한 쿠폰 목록"),
@@ -124,7 +124,7 @@ class UserCouponControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("쿠폰 등록")
                         .description("쿠폰 코드를 입력하여 쿠폰을 등록합니다.")
-                        .tag("coupon"),
+                        .tag("payment-coupon"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("code").description("등록할 쿠폰 코드")
@@ -161,7 +161,7 @@ class UserCouponControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("쿠폰 등록")
                         .description("쿠폰 코드를 입력하여 쿠폰을 등록합니다.")
-                        .tag("coupon"),
+                        .tag("payment-coupon"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("code").description("등록할 쿠폰 코드")
@@ -199,7 +199,7 @@ class UserCouponControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("쿠폰 등록")
                         .description("쿠폰 코드를 입력하여 쿠폰을 등록합니다.")
-                        .tag("coupon"),
+                        .tag("payment-coupon"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("code").description("등록할 쿠폰 코드")
@@ -237,7 +237,7 @@ class UserCouponControllerDocument {
                     resourceDetails = ResourceSnippetParametersBuilder()
                         .summary("쿠폰 등록")
                         .description("쿠폰 코드를 입력하여 쿠폰을 등록합니다.")
-                        .tag("coupon"),
+                        .tag("payment-coupon"),
                     snippets = arrayOf(
                         requestFields(
                             fieldWithPath("code").description("등록할 쿠폰 코드")
