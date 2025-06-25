@@ -1,4 +1,4 @@
-package com.eager.questioncloud.question.utils
+package com.eager.questioncloud.question.fixture
 
 import com.eager.questioncloud.question.domain.Question
 import com.eager.questioncloud.question.domain.QuestionMetadata
@@ -34,7 +34,7 @@ class QuestionFixtureHelper {
                     .set("questionStatus", questionStatus)
                     .sample()
             )
-            
+
             // QuestionMetadata 생성
             questionMetadataRepository?.let {
                 val questionMetadata = QuestionMetadata(
@@ -46,7 +46,7 @@ class QuestionFixtureHelper {
                 )
                 it.save(questionMetadata)
             }
-            
+
             return question
         }
 
@@ -70,7 +70,7 @@ class QuestionFixtureHelper {
                     .set("questionStatus", questionStatus)
                     .sample()
             )
-            
+
             // QuestionMetadata 생성
             questionMetadataRepository?.let {
                 val questionMetadata = QuestionMetadata(
@@ -82,7 +82,7 @@ class QuestionFixtureHelper {
                 )
                 it.save(questionMetadata)
             }
-            
+
             return question
         }
     }

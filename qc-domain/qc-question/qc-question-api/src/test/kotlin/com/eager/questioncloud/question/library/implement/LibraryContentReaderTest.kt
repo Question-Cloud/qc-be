@@ -8,10 +8,10 @@ import com.eager.questioncloud.question.domain.UserQuestion
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.QuestionSortType
 import com.eager.questioncloud.question.enums.QuestionType
-import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.question.fixture.QuestionFixtureHelper
 import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
+import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.question.infrastructure.repository.UserQuestionRepository
-import com.eager.questioncloud.question.utils.QuestionFixtureHelper
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner
@@ -104,11 +104,31 @@ class LibraryContentReaderTest(
     fun `사용자의 문제 개수를 조회할 수 있다`() {
         //given
         val questions = listOf(
-            QuestionFixtureHelper.createQuestion(creatorId1, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId1, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId2, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId2, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId2, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository)
+            QuestionFixtureHelper.createQuestion(
+                creatorId1,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId1,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId2,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId2,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId2,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            )
         )
 
         saveUserQuestions(userId, questions.map { it.id })
@@ -126,13 +146,33 @@ class LibraryContentReaderTest(
     fun `특정 크리에이터의 문제만 필터링하여 조회할 수 있다`() {
         //given
         val creator1Questions = listOf(
-            QuestionFixtureHelper.createQuestion(creatorId1, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId1, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId1, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository)
+            QuestionFixtureHelper.createQuestion(
+                creatorId1,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId1,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId1,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            )
         )
         val creator2Questions = listOf(
-            QuestionFixtureHelper.createQuestion(creatorId2, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository),
-            QuestionFixtureHelper.createQuestion(creatorId2, questionRepository = questionRepository, questionMetadataRepository = questionMetadataRepository)
+            QuestionFixtureHelper.createQuestion(
+                creatorId2,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            ),
+            QuestionFixtureHelper.createQuestion(
+                creatorId2,
+                questionRepository = questionRepository,
+                questionMetadataRepository = questionMetadataRepository
+            )
         )
 
         val allQuestions = creator1Questions + creator2Questions
@@ -340,7 +380,7 @@ class LibraryContentReaderTest(
             Assertions.assertThat(content.creator.name).isEqualTo("최자작")
         }
     }
-    
+
     private fun saveUserQuestions(userId: Long, questionIds: List<Long>) {
         val userQuestions = UserQuestion.create(userId, questionIds)
         userQuestionRepository.saveAll(userQuestions)

@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":qc-common"))
 
     testImplementation(kotlin("test"))
+    testImplementation(project(":qc-domain:qc-question:qc-question-fixture"))
 }
 
 tasks.test {

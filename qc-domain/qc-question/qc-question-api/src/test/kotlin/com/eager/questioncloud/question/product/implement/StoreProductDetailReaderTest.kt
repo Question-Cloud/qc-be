@@ -7,10 +7,10 @@ import com.eager.questioncloud.question.common.QuestionFilter
 import com.eager.questioncloud.question.domain.UserQuestion
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.QuestionSortType
+import com.eager.questioncloud.question.fixture.QuestionFixtureHelper
 import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
 import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
 import com.eager.questioncloud.question.infrastructure.repository.UserQuestionRepository
-import com.eager.questioncloud.question.utils.QuestionFixtureHelper
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner

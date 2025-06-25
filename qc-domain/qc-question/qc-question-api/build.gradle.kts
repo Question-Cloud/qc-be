@@ -23,6 +23,8 @@ dependencies {
     implementation(project(":qc-domain:qc-question:qc-question-core"))
     implementation(project(":qc-common"))
     implementation(project(":qc-event"))
+
+    testImplementation(project(":qc-domain:qc-question:qc-question-fixture"))
 }
 
 tasks.test {
