@@ -1,11 +1,12 @@
-package com.eager.questioncloud.application.utils.fixture.helper
+package com.eager.questioncloud.question.utils
 
-import com.eager.questioncloud.application.utils.fixture.Fixture
-import com.eager.questioncloud.core.domain.question.enums.QuestionLevel
-import com.eager.questioncloud.core.domain.question.enums.QuestionStatus
-import com.eager.questioncloud.core.domain.question.enums.QuestionType
-import com.eager.questioncloud.core.domain.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.core.domain.question.model.Question
+import com.eager.questioncloud.question.domain.Question
+import com.eager.questioncloud.question.domain.QuestionMetadata
+import com.eager.questioncloud.question.enums.QuestionLevel
+import com.eager.questioncloud.question.enums.QuestionStatus
+import com.eager.questioncloud.question.enums.QuestionType
+import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
+import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
 
 class QuestionFixtureHelper {
     companion object {
@@ -19,9 +20,10 @@ class QuestionFixtureHelper {
             questionStatus: QuestionStatus = QuestionStatus.Available,
             questionType: QuestionType = QuestionType.SelfMade,
             questionLevel: QuestionLevel = QuestionLevel.LEVEL1,
-            questionRepository: QuestionRepository
+            questionRepository: QuestionRepository,
+            questionMetadataRepository: QuestionMetadataRepository? = null
         ): Question {
-            return questionRepository.save(
+            val question = questionRepository.save(
                 Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
                     .set("id", null)
                     .set("creatorId", creatorId)
@@ -32,6 +34,20 @@ class QuestionFixtureHelper {
                     .set("questionStatus", questionStatus)
                     .sample()
             )
+            
+            // QuestionMetadata 생성
+            questionMetadataRepository?.let {
+                val questionMetadata = QuestionMetadata(
+                    questionId = question.id,
+                    sales = 0,
+                    reviewCount = 0,
+                    totalRate = 0,
+                    reviewAverageRate = 0.0
+                )
+                it.save(questionMetadata)
+            }
+            
+            return question
         }
 
         fun createQuestion(
@@ -41,8 +57,9 @@ class QuestionFixtureHelper {
             questionType: QuestionType = QuestionType.SelfMade,
             questionLevel: QuestionLevel = QuestionLevel.LEVEL1,
             questionRepository: QuestionRepository,
+            questionMetadataRepository: QuestionMetadataRepository? = null
         ): Question {
-            return questionRepository.save(
+            val question = questionRepository.save(
                 Fixture.fixtureMonkey.giveMeBuilder(Question::class.java)
                     .set("id", null)
                     .set("creatorId", creatorId)
@@ -53,6 +70,20 @@ class QuestionFixtureHelper {
                     .set("questionStatus", questionStatus)
                     .sample()
             )
+            
+            // QuestionMetadata 생성
+            questionMetadataRepository?.let {
+                val questionMetadata = QuestionMetadata(
+                    questionId = question.id,
+                    sales = 0,
+                    reviewCount = 0,
+                    totalRate = 0,
+                    reviewAverageRate = 0.0
+                )
+                it.save(questionMetadata)
+            }
+            
+            return question
         }
     }
 }

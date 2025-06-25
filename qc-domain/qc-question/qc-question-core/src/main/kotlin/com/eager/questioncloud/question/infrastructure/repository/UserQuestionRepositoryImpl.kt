@@ -59,7 +59,7 @@ class UserQuestionRepositoryImpl(
         )
             .from(userQuestionEntity)
             .where(userQuestionEntity.userId.eq(userId))
-            .leftJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
+            .innerJoin(questionEntity).on(questionEntityJoinCondition(questionFilter))
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .offset(pagingInformation.offset.toLong())
@@ -103,6 +103,10 @@ class UserQuestionRepositoryImpl(
 
         if (questionFilter.questionType != null) {
             builder.and(questionEntity.questionContentEntity.questionType.eq(questionFilter.questionType))
+        }
+
+        if (questionFilter.creatorId != null) {
+            builder.and(questionEntity.creatorId.eq(questionFilter.creatorId))
         }
 
         builder.and(questionEntity.id.eq(userQuestionEntity.questionId))

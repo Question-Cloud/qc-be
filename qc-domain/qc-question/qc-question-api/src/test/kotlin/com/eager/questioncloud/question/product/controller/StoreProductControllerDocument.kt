@@ -1,4 +1,4 @@
-package com.eager.questioncloud.product
+package com.eager.questioncloud.question.product.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error

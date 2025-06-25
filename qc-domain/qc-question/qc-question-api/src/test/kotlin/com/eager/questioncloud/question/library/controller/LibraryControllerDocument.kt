@@ -1,4 +1,4 @@
-package com.eager.questioncloud.library.controller
+package com.eager.questioncloud.question.library.controller
 
 import com.eager.questioncloud.question.dto.UserQuestionContent
 import com.eager.questioncloud.question.enums.QuestionLevel
