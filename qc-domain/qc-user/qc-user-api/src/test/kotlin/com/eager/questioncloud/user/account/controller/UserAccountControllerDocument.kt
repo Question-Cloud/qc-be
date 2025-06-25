@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user.account
+package com.eager.questioncloud.user.account.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error

@@ -1,16 +1,16 @@
-package com.eager.questioncloud.application.api.user.register.implement
+package com.eager.questioncloud.user.register.implement
 
-import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserInformation
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.user.domain.User
+import com.eager.questioncloud.user.domain.UserAccountInformation
+import com.eager.questioncloud.user.domain.UserInformation
+import com.eager.questioncloud.user.enums.AccountType
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.enums.UserType
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

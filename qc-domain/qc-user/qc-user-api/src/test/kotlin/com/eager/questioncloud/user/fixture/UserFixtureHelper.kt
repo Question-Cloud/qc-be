@@ -1,15 +1,13 @@
 package com.eager.questioncloud.application.utils.fixture.helper
 
-import com.eager.questioncloud.core.domain.user.dto.CreateUser
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.user.model.User
-import com.eager.questioncloud.core.domain.user.model.User.Companion.create
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createEmailAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserAccountInformation.Companion.createSocialAccountInformation
-import com.eager.questioncloud.core.domain.user.model.UserInformation.Companion.create
+import com.eager.questioncloud.user.domain.User
+import com.eager.questioncloud.user.domain.UserAccountInformation
+import com.eager.questioncloud.user.domain.UserInformation
+import com.eager.questioncloud.user.dto.CreateUser
+import com.eager.questioncloud.user.enums.AccountType
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.enums.UserType
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
 import kotlin.random.Random
 
 class UserFixtureHelper {
@@ -32,10 +30,10 @@ class UserFixtureHelper {
                 "01012345678",
                 "김승환"
             )
-            val userAccountInformation = createEmailAccountInformation(defaultEmailUserPassword)
-            val userInformation = create(createUser)
+            val userAccountInformation = UserAccountInformation.createEmailAccountInformation(defaultEmailUserPassword)
+            val userInformation = UserInformation.create(createUser)
             return userRepository.save(
-                create(
+                User.create(
                     userAccountInformation = userAccountInformation,
                     userInformation = userInformation,
                     userType = UserType.NormalUser,
@@ -58,10 +56,10 @@ class UserFixtureHelper {
                 "010${randomPhoneNumber()}",
                 "김승환"
             )
-            val userAccountInformation = createEmailAccountInformation(defaultEmailUserPassword)
-            val userInformation = create(createUser)
+            val userAccountInformation = UserAccountInformation.createEmailAccountInformation(defaultEmailUserPassword)
+            val userInformation = UserInformation.create(createUser)
             return userRepository.save(
-                create(
+                User.create(
                     userAccountInformation,
                     userInformation,
                     UserType.NormalUser,
@@ -82,10 +80,13 @@ class UserFixtureHelper {
                 )
 
             val userAccountInformation =
-                createSocialAccountInformation(defaultSocialUserSocialUid, defaultSocialUserAccountType)
-            val userInformation = create(createUser)
+                UserAccountInformation.createSocialAccountInformation(
+                    defaultSocialUserSocialUid,
+                    defaultSocialUserAccountType
+                )
+            val userInformation = UserInformation.create(createUser)
             return userRepository.save(
-                create(
+                User.create(
                     userAccountInformation = userAccountInformation,
                     userInformation = userInformation,
                     userType = UserType.NormalUser,

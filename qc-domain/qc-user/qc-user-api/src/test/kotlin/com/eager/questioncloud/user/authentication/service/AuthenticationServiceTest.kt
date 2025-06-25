@@ -1,9 +1,9 @@
-package com.eager.questioncloud.application.api.authentication.service
+package com.eager.questioncloud.user.authentication.service
 
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
 import com.eager.questioncloud.social.SocialAPIManager
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -20,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles
 class AuthenticationServiceTest(
     @Autowired val authenticationService: AuthenticationService,
     @Autowired val userRepository: UserRepository,
+    @Autowired val dbCleaner: DBCleaner,
 ) {
     @MockBean
     lateinit var socialAPIManager: SocialAPIManager
@@ -32,11 +33,11 @@ class AuthenticationServiceTest(
 
     @AfterEach
     fun tearDown() {
-        userRepository.deleteAllInBatch()
+        dbCleaner.cleanUp()
     }
 
     @Test
-    fun 이메일_계정_로그인을_할_수_있다() {
+    fun `이메일 계정 로그인을 할 수 있다`() {
         //given
         val email = UserFixtureHelper.defaultEmailUserEmail
         val password = UserFixtureHelper.defaultEmailUserPassword
@@ -46,48 +47,43 @@ class AuthenticationServiceTest(
 
         //then
         Assertions.assertThat(authenticationToken).isNotNull()
+        Assertions.assertThat(authenticationToken.accessToken).isNotBlank()
+        Assertions.assertThat(authenticationToken.refreshToken).isNotBlank()
     }
 
     @Test
-    fun `등록된 소셜 계정 인증 성공`() {
+    fun `등록된 소셜 계정으로 로그인할 수 있다`() {
         //given
         val accountType = UserFixtureHelper.defaultSocialUserAccountType
         val socialUid = UserFixtureHelper.defaultSocialUserSocialUid
         val code = "socialAuthenticationCode"
         val socialAccessToken = "socialAccessToken"
 
-
         given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
         given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
-        val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
+        val authenticationToken = authenticationService.socialLogin(accountType, code)
 
         //then
-        Assertions.assertThat(socialAuthenticationResult.isRegistered).isTrue()
-        Assertions.assertThat(socialAuthenticationResult.authenticationToken).isNotNull()
-        Assertions.assertThat(socialAuthenticationResult.registerToken).isNull()
+        Assertions.assertThat(authenticationToken).isNotNull()
+        Assertions.assertThat(authenticationToken.accessToken).isNotBlank()
+        Assertions.assertThat(authenticationToken.refreshToken).isNotBlank()
     }
 
     @Test
-    fun `등록되지 않은 소셜 계정 인증 성공`() {
+    fun `토큰을 갱신할 수 있다`() {
         //given
-        val code = "socialAuthenticationCode"
-        val accountType = AccountType.KAKAO
-        val socialAccessToken = "socialAccessToken"
-        val socialUid = "unregisterdSocialUid"
-
-        given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
-        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
+        val email = UserFixtureHelper.defaultEmailUserEmail
+        val password = UserFixtureHelper.defaultEmailUserPassword
+        val originalToken = authenticationService.login(email, password)
 
         //when
-        val socialAuthenticationResult = authenticationService.socialLogin(accountType, code)
+        val refreshedToken = authenticationService.refresh(originalToken.refreshToken)
 
         //then
-        Assertions.assertThat(socialAuthenticationResult.isRegistered).isFalse()
-
-        Assertions.assertThat(socialAuthenticationResult.registerToken)
-            .isNotNull()
-            .isEqualTo(socialAccessToken)
+        Assertions.assertThat(refreshedToken).isNotNull()
+        Assertions.assertThat(refreshedToken.accessToken).isNotBlank()
+        Assertions.assertThat(refreshedToken.refreshToken).isNotBlank()
     }
 }

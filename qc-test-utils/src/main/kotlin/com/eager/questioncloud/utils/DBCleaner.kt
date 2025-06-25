@@ -1,4 +1,4 @@
-package com.eager.questioncloud.application.utils
+package com.eager.questioncloud.utils
 
 import jakarta.annotation.PostConstruct
 import jakarta.persistence.Entity

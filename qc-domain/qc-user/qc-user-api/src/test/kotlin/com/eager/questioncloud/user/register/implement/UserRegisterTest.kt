@@ -1,22 +1,24 @@
-package com.eager.questioncloud.application.api.user.register.implement
+package com.eager.questioncloud.user.register.implement
 
-import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.UserPointRepository
-import com.eager.questioncloud.core.domain.user.dto.CreateUser
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.enums.UserType
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.social.SocialAPIManager
+import com.eager.questioncloud.user.dto.CreateUser
+import com.eager.questioncloud.user.enums.AccountType
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.enums.UserType
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -27,11 +29,13 @@ import org.springframework.test.context.ActiveProfiles
 class UserRegisterTest(
     @Autowired val userRegister: UserRegister,
     @Autowired val userRepository: UserRepository,
-    @Autowired val userPointRepository: UserPointRepository,
     @Autowired val dbCleaner: DBCleaner,
 ) {
     @MockBean
     lateinit var socialAPIManager: SocialAPIManager
+
+    @MockBean
+    lateinit var pointCommandAPI: PointCommandAPI
 
     @AfterEach
     fun tearDown() {
@@ -246,9 +250,6 @@ class UserRegisterTest(
 
         //then
         Assertions.assertThat(createdUser.uid).isNotNull()
-
-        val userPoint = userPointRepository.getUserPoint(createdUser.uid)
-        Assertions.assertThat(userPoint).isNotNull()
-        Assertions.assertThat(userPoint.point).isGreaterThanOrEqualTo(0)
+        verify(pointCommandAPI, times(1)).initialize(any())
     }
 }

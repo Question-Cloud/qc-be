@@ -1,12 +1,14 @@
-package com.eager.questioncloud.application.api.authentication.implement
+package com.eager.questioncloud.user.authentication.implement
 
-import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.exception.CoreException
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.social.FailSocialLoginException
 import com.eager.questioncloud.social.SocialAPIManager
+import com.eager.questioncloud.user.enums.AccountType
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -20,8 +22,8 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AuthenticationProcessorTest(
-    @Autowired val authenticationProcessor: AuthenticationProcessor,
+class UserAuthenticatorTest(
+    @Autowired val userAuthenticator: UserAuthenticator,
     @Autowired val userRepository: UserRepository,
     @Autowired val dbCleaner: DBCleaner,
 ) {
@@ -46,10 +48,11 @@ class AuthenticationProcessorTest(
         val password = UserFixtureHelper.defaultEmailUserPassword
 
         //when
-        val result = authenticationProcessor.emailPasswordAuthentication(email, password)
+        val result = userAuthenticator.emailPasswordAuthentication(email, password)
 
         //then
         Assertions.assertThat(result.uid).isNotNull()
+        Assertions.assertThat(result.userInformation.email).isEqualTo(email)
     }
 
     @Test
@@ -60,10 +63,7 @@ class AuthenticationProcessorTest(
 
         //when then
         Assertions.assertThatThrownBy {
-            authenticationProcessor.emailPasswordAuthentication(
-                wrongEmail,
-                password
-            )
+            userAuthenticator.emailPasswordAuthentication(wrongEmail, password)
         }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN)
@@ -72,15 +72,12 @@ class AuthenticationProcessorTest(
     @Test
     fun `비밀번호가 일치하지 않는 경우 로그인 실패`() {
         //given
-        val email = UserFixtureHelper.defaultEmailUserPassword
+        val email = UserFixtureHelper.defaultEmailUserEmail
         val wrongPassword = "wrongPassword"
 
         //when //then
         Assertions.assertThatThrownBy {
-            authenticationProcessor.emailPasswordAuthentication(
-                email,
-                wrongPassword
-            )
+            userAuthenticator.emailPasswordAuthentication(email, wrongPassword)
         }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN)
@@ -95,11 +92,25 @@ class AuthenticationProcessorTest(
 
         //when //then
         Assertions.assertThatThrownBy {
-            authenticationProcessor.emailPasswordAuthentication(
-                email,
-                password
-            )
+            userAuthenticator.emailPasswordAuthentication(email, password)
         }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.NOT_ACTIVE_USER)
+    }
+
+    @Test
+    fun `이메일 인증 대기 중인 계정은 로그인 실패`() {
+        //given
+        val email = "pending@test.com"
+        val password = "qwer1234"
+        UserFixtureHelper.createEmailUser(email, password, UserStatus.PendingEmailVerification, userRepository)
+
+        //when //then
+        Assertions.assertThatThrownBy {
+            userAuthenticator.emailPasswordAuthentication(email, password)
+        }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.PENDING_EMAIL_VERIFICATION)
     }
 
     @Test
@@ -114,52 +125,43 @@ class AuthenticationProcessorTest(
         given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
 
         //when
-        val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
+        val user = userAuthenticator.socialAuthentication(code, accountType)
 
         //then
-        Assertions.assertThat(socialAuthentication)
-            .extracting("user")
-            .isNotNull()
+        Assertions.assertThat(user).isNotNull()
+        Assertions.assertThat(user.uid).isNotNull()
+        Assertions.assertThat(user.userAccountInformation.accountType).isEqualTo(accountType)
     }
 
     @Test
-    fun `미가입 소셜 계정이라면 socialAccessToken 반환`() {
+    fun `등록되지 않은 소셜 계정은 로그인 실패`() {
         //given
         val code = "socialAuthenticationCode"
         val socialAccessToken = "socialAccessToken"
+        val unregisteredSocialUid = "unregisteredSocialUid"
         val accountType = AccountType.KAKAO
-        val socialUid = "unRegisteredSocialUid"
 
         given(socialAPIManager.getAccessToken(any(), any())).willReturn(socialAccessToken)
-        given(socialAPIManager.getSocialUid(any(), any())).willReturn(socialUid)
-
-        //when
-        val socialAuthentication = authenticationProcessor.socialAuthentication(code, accountType)
-
-        //then
-        Assertions.assertThat(socialAuthentication)
-            .extracting("socialAccessToken")
-            .isNotNull()
-            .isEqualTo(socialAccessToken)
-
-        Assertions.assertThat(socialAuthentication)
-            .extracting("user")
-            .isNull()
-    }
-
-    @Test
-    fun `소셜 계정 로그인 실패`() {
-        //given
-        val wrongCode = "socialCode"
-        val accountType = AccountType.KAKAO
-        given(socialAPIManager.getAccessToken(any(), any())).willThrow(CoreException(Error.FAIL_SOCIAL_LOGIN))
+        given(socialAPIManager.getSocialUid(any(), any())).willReturn(unregisteredSocialUid)
 
         //when then
         Assertions.assertThatThrownBy {
-            authenticationProcessor.socialAuthentication(
-                wrongCode,
-                accountType
-            )
+            userAuthenticator.socialAuthentication(code, accountType)
+        }
+            .isInstanceOf(CoreException::class.java)
+            .hasFieldOrPropertyWithValue("error", Error.NOT_REGISTERED_SOCIAL_USER)
+    }
+
+    @Test
+    fun `소셜 API 호출 실패 시 로그인 실패`() {
+        //given
+        val wrongCode = "invalidSocialCode"
+        val accountType = AccountType.KAKAO
+        given(socialAPIManager.getAccessToken(any(), any())).willThrow(FailSocialLoginException())
+
+        //when then
+        Assertions.assertThatThrownBy {
+            userAuthenticator.socialAuthentication(wrongCode, accountType)
         }
             .isInstanceOf(CoreException::class.java)
             .hasFieldOrPropertyWithValue("error", Error.FAIL_SOCIAL_LOGIN)

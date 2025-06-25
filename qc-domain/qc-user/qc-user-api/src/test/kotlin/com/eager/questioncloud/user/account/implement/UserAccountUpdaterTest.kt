@@ -1,12 +1,12 @@
-package com.eager.questioncloud.application.api.user.account.implement
+package com.eager.questioncloud.user.account.implement
 
-import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.implement.PasswordProcessor
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.implement.PasswordProcessor
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -51,8 +51,7 @@ class UserAccountUpdaterTest(
 
         Assertions.assertThatThrownBy {
             updatedUser.passwordAuthentication(originalPassword)
-        }.isInstanceOf(CoreException::class.java)
-            .hasMessage(Error.FAIL_LOGIN.message)
+        }.isInstanceOf(CoreException::class.java).hasFieldOrPropertyWithValue("error", Error.FAIL_LOGIN)
 
         Assertions.assertThat(updatedUser.userAccountInformation.password).isNotEqualTo(newPassword)
         Assertions.assertThat(PasswordProcessor.matches(newPassword, updatedUser.userAccountInformation.password!!))
@@ -70,6 +69,6 @@ class UserAccountUpdaterTest(
         Assertions.assertThatThrownBy {
             userAccountUpdater.changePassword(socialUser.uid, newPassword)
         }.isInstanceOf(CoreException::class.java)
-            .hasMessage(Error.NOT_PASSWORD_SUPPORT_ACCOUNT.message)
+            .hasFieldOrPropertyWithValue("error", Error.NOT_PASSWORD_SUPPORT_ACCOUNT)
     }
 }

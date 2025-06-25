@@ -1,17 +1,17 @@
-package com.eager.questioncloud.application.api.user.register.service
+package com.eager.questioncloud.user.register.service
 
-import com.eager.questioncloud.application.mail.EmailSender
-import com.eager.questioncloud.application.utils.DBCleaner
-import com.eager.questioncloud.application.utils.fixture.helper.EmailVerificationFixtureHelper
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.dto.CreateUser
-import com.eager.questioncloud.core.domain.user.enums.AccountType
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.domain.verification.enums.EmailVerificationType
-import com.eager.questioncloud.core.domain.verification.infrastructure.repository.EmailVerificationRepository
 import com.eager.questioncloud.social.SocialAPIManager
 import com.eager.questioncloud.social.SocialPlatform
+import com.eager.questioncloud.user.dto.CreateUser
+import com.eager.questioncloud.user.enums.AccountType
+import com.eager.questioncloud.user.enums.EmailVerificationType
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.fixture.EmailVerificationFixtureHelper
+import com.eager.questioncloud.user.infrastructure.repository.EmailVerificationRepository
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.mail.EmailSender
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

@@ -50,6 +50,12 @@ class AuthenticationTokenParser(
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
 
+        val userId = claims["uid"].toString().toLong()
+
+        if (!refreshTokenRepository.getByUserId(userId).equals(token)) {
+            throw CoreException(Error.UNAUTHORIZED_TOKEN)
+        }
+
         return claims
     }
 }

@@ -97,4 +97,6 @@ include 'qc-social'                 // 소셜 로그인
 // 🔧 Shared Modules (공통 모듈)
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
+include 'qc-test-utils'
+include 'qc-application'
 

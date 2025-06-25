@@ -1,4 +1,4 @@
-package com.eager.questioncloud.user.authentication
+package com.eager.questioncloud.user.authentication.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error

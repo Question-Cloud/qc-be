@@ -1,9 +1,9 @@
-package com.eager.questioncloud.application.api.user.profile.service
+package com.eager.questioncloud.user.profile.service
 
-import com.eager.questioncloud.application.utils.DBCleaner
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.user.enums.UserStatus
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.enums.UserStatus
+import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -37,7 +37,7 @@ class UserProfileServiceTest(
         val newProfileImage = "https://example.com/new-profile.jpg"
 
         // when
-        userProfileService.updateUserInformation(user, newName, newProfileImage)
+        userProfileService.updateUserInformation(user.uid, newName, newProfileImage)
 
         // then
         val updatedUser = userRepository.getUser(user.uid)
