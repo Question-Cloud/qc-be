@@ -16,7 +16,7 @@ class QuestionCommandAPIImpl(
     private val questionMetadataInitializer: QuestionMetadataInitializer
 ) : QuestionCommandAPI {
     @Transactional
-    override fun register(creatorId: Long, command: RegisterQuestionCommand) {
+    override fun register(creatorId: Long, command: RegisterQuestionCommand): Long {
         val question = questionRepository.save(
             Question.create(
                 creatorId,
@@ -35,6 +35,8 @@ class QuestionCommandAPIImpl(
             )
         )
         questionMetadataInitializer.init(question.id)
+
+        return question.id
     }
 
     override fun modify(questionId: Long, command: ModifyQuestionCommand) {

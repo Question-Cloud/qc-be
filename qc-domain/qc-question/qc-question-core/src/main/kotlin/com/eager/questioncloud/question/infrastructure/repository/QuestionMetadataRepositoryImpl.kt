@@ -28,6 +28,7 @@ class QuestionMetadataRepositoryImpl(
             .execute()
     }
 
+    @Transactional
     override fun getForUpdate(questionId: Long): QuestionMetadata {
         return questionMetadataJpaRepository.findByQuestionId(questionId).toModel()
     }
