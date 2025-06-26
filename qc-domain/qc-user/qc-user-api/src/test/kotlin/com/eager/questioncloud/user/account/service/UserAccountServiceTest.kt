@@ -38,7 +38,7 @@ class UserAccountServiceTest(
     }
 
     @Test
-    fun `전화번호로 잊어버린 이메일을 찾을 수 있다`() {
+    fun `전화번호로 계정(이메일)을 찾을 수 있다`() {
         // given
         val phoneNumber = "010-1234-5678"
         val expectedEmail = "qaws5656@naver.com"
@@ -61,7 +61,7 @@ class UserAccountServiceTest(
     }
 
     @Test
-    fun `존재하지 않는 전화번호로 이메일 찾기 시 예외가 발생한다`() {
+    fun `존재하지 않는 전화번호로 계정을 찾는 경우 예외가 발생한다`() {
         // given
         val nonExistentPhoneNumber = "010-9999-9999"
 

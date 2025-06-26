@@ -43,7 +43,7 @@ class UserRegisterTest(
     }
 
     @Test
-    fun `이메일 계정으로 사용자를 생성할 수 있다`() {
+    fun `이메일 계정 사용자를 생성할 수 있다`() {
         //given
         val createUser = CreateUser(
             email = "test@example.com",
@@ -147,7 +147,7 @@ class UserRegisterTest(
     }
 
     @Test
-    fun `중복된 이메일로 사용자를 생성하려고 하면 예외가 발생한다`() {
+    fun `이미 등록된 이메일로 사용자를 생성하려고 하면 예외가 발생한다`() {
         //given
         UserFixtureHelper.createEmailUser("duplicate@example.com", "password123", UserStatus.Active, userRepository)
 
@@ -168,7 +168,7 @@ class UserRegisterTest(
     }
 
     @Test
-    fun `중복된 전화번호로 사용자를 생성하려고 하면 예외가 발생한다`() {
+    fun `이미 등록된 전화번호로 사용자를 생성하려고 하면 예외가 발생한다`() {
         //given
         val duplicatePhone = "010-0000-0000"
 
@@ -199,7 +199,7 @@ class UserRegisterTest(
     }
 
     @Test
-    fun `중복된 소셜 UID로 사용자를 생성하려고 하면 예외가 발생한다`() {
+    fun `이미 등록된 소셜 UID로 사용자를 생성하려고 하면 예외가 발생한다`() {
         //given
         val duplicateSocialUid = "duplicate_social_uid_12345"
 
