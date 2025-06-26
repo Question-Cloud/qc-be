@@ -24,7 +24,7 @@ class ChargePointPaymentRepositoryImpl(
         )
             .toModel()
     }
-
+    
     override fun update(chargePointPayment: ChargePointPayment): ChargePointPayment {
         return chargePointPaymentJpaRepository.save(
             ChargePointPaymentEntity.fromExisting(
@@ -32,30 +32,30 @@ class ChargePointPaymentRepositoryImpl(
             )
         ).toModel()
     }
-
-    override fun isCompletedPayment(userId: Long, paymentId: String): Boolean {
-        return jpaQueryFactory.select(chargePointPaymentEntity.paymentId)
+    
+    override fun isCompletedPayment(userId: Long, orderId: String): Boolean {
+        return jpaQueryFactory.select(chargePointPaymentEntity.orderId)
             .from(chargePointPaymentEntity)
             .where(
-                chargePointPaymentEntity.paymentId.eq(paymentId),
+                chargePointPaymentEntity.orderId.eq(orderId),
                 chargePointPaymentEntity.userId.eq(userId),
                 chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.CHARGED)
             )
             .fetchFirst() != null
     }
-
-    override fun findByOrderIdWithLock(paymentId: String): ChargePointPayment {
-        return chargePointPaymentJpaRepository.findByOrderIdWithLock(paymentId)
+    
+    override fun findByOrderIdWithLock(orderId: String): ChargePointPayment {
+        return chargePointPaymentJpaRepository.findByOrderIdWithLock(orderId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
     }
-
+    
     override fun findByOrderId(orderId: String): ChargePointPayment {
         return chargePointPaymentJpaRepository.findById(orderId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
     }
-
+    
     override fun getChargePointPayments(
         userId: Long,
         pagingInformation: PagingInformation
@@ -71,14 +71,14 @@ class ChargePointPaymentRepositoryImpl(
             .map { entity: ChargePointPaymentEntity -> entity.toModel() }
             .collect(Collectors.toList())
     }
-
+    
     override fun countByUserId(userId: Long): Int {
         return jpaQueryFactory.select(chargePointPaymentEntity.paymentId.count())
             .from(chargePointPaymentEntity)
             .where(chargePointPaymentEntity.userId.eq(userId))
             .fetchFirst()?.toInt() ?: 0
     }
-
+    
     override fun deleteAllInBatch() {
         chargePointPaymentJpaRepository.deleteAllInBatch()
     }

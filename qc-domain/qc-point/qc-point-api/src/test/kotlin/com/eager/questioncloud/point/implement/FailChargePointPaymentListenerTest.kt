@@ -1,12 +1,13 @@
-package com.eager.questioncloud.application.api.payment.point.implement
+package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.application.api.payment.point.event.FailChargePointPaymentEvent
-import com.eager.questioncloud.application.listener.payment.FailChargePointPaymentListener
-import com.eager.questioncloud.application.utils.DBCleaner
-import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
-import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
-import com.eager.questioncloud.core.domain.point.enums.ChargePointType
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.event.model.FailChargePointPaymentEvent
+import com.eager.questioncloud.pg.toss.TossPaymentAPI
+import com.eager.questioncloud.point.domain.ChargePointPayment
+import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
+import com.eager.questioncloud.point.enums.ChargePointType
+import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.listener.FailChargePointPaymentListener
+import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import java.util.*
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -27,7 +27,7 @@ internal class FailChargePointPaymentListenerTest(
     @Autowired val dbCleaner: DBCleaner,
 ) {
     @MockBean
-    lateinit var chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
+    lateinit var tossPaymentAPI: TossPaymentAPI
 
     @AfterEach
     fun tearDown() {
@@ -37,16 +37,13 @@ internal class FailChargePointPaymentListenerTest(
     @Test
     fun `FailChargePointPaymentEvent를 처리할 수 있다`() {
         //given
-        val paymentId = UUID.randomUUID().toString()
-        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
-            uid = 1L,
-            paymentId = paymentId,
-            chargePointType = ChargePointType.PackageA,
-            chargePointPaymentRepository = chargePointPaymentRepository,
-            chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED,
-        )
-        
-        doNothing().whenever(chargePointPaymentPGProcessor).cancel(any(), any())
+        val userId = 1L
+        val order = ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
+        order.prepare("paymentId")
+        order.charge()
+        chargePointPaymentRepository.save(order)
+
+        doNothing().whenever(tossPaymentAPI).cancel(any(), any())
 
         //when
         failChargePointPaymentListener.failHandler(FailChargePointPaymentEvent.create(order.orderId))

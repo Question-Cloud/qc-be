@@ -19,7 +19,7 @@ class ChargePointPaymentService(
         val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointType))
         return order.orderId
     }
-
+    
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
@@ -30,8 +30,8 @@ class ChargePointPaymentService(
         )
         chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
     }
-
-    fun isCompletePayment(userId: Long, paymentId: String): Boolean {
-        return chargePointPaymentRepository.isCompletedPayment(userId, paymentId)
+    
+    fun isCompletePayment(userId: Long, orderId: String): Boolean {
+        return chargePointPaymentRepository.isCompletedPayment(userId, orderId)
     }
 }

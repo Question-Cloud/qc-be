@@ -1,21 +1,17 @@
-package com.eager.questioncloud.application.api.payment.point.implement
+package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.application.utils.DBCleaner
-import com.eager.questioncloud.application.utils.fixture.helper.ChargePointPaymentFixtureHelper
-import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.core.domain.point.enums.ChargePointPaymentStatus
-import com.eager.questioncloud.core.domain.point.enums.ChargePointType
-import com.eager.questioncloud.core.domain.point.infrastructure.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.core.domain.user.infrastructure.repository.UserRepository
-import com.eager.questioncloud.core.exception.CoreException
-import com.eager.questioncloud.core.exception.Error
-import com.eager.questioncloud.core.exception.InvalidPaymentException
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.pg.dto.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
+import com.eager.questioncloud.point.domain.ChargePointPayment
+import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
+import com.eager.questioncloud.point.enums.ChargePointType
+import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.utils.DBCleaner
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -28,17 +24,9 @@ import java.util.concurrent.atomic.AtomicInteger
 @ActiveProfiles("test")
 class ChargePointPaymentPreparerTest(
     @Autowired val chargePointPaymentPreparer: ChargePointPaymentPreparer,
-    @Autowired val userRepository: UserRepository,
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
     @Autowired val dbCleaner: DBCleaner,
 ) {
-    private var uid: Long = 0
-
-    @BeforeEach
-    fun setUp() {
-        uid = UserFixtureHelper.createDefaultSocialUser(userRepository).uid
-    }
-
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
@@ -47,13 +35,10 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `포인트 결제 검증 성공`() {
         //given
+        val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
-            uid = uid,
-            chargePointType = ChargePointType.PackageA,
-            chargePointPaymentRepository = chargePointPaymentRepository,
-        )
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
 
         //when
         chargePointPaymentPreparer.prepare(pgPayment)
@@ -67,32 +52,30 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 금액이 올바르지 않으면 예외가 발생한다`() {
         //given
+        val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
-            uid = uid,
-            chargePointType = ChargePointType.PackageA,
-            chargePointPaymentRepository = chargePointPaymentRepository,
-        )
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
         val wrongPaymentAmount = order.chargePointType.amount - 500
-        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.DONE)
+        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.READY)
 
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
-            .isInstanceOf(InvalidPaymentException::class.java)
+            .isInstanceOf(CoreException::class.java)
     }
 
 
     @Test
     fun `이미 결제 처리가 완료된 경우 예외가 발생한다`() {
         //given
+        val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
-            uid = uid,
-            chargePointType = ChargePointType.PackageA,
-            chargePointPaymentRepository = chargePointPaymentRepository,
-            chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED,
-        )
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
+
+        val order = ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
+        order.charge()
+
+        chargePointPaymentRepository.save(order)
+
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
 
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
@@ -103,13 +86,10 @@ class ChargePointPaymentPreparerTest(
     @Test
     fun `결제 준비 요청 동시성 이슈를 방지할 수 있다`() {
         //given
+        val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = ChargePointPaymentFixtureHelper.createChargePointPayment(
-            uid = uid,
-            chargePointType = ChargePointType.PackageA,
-            chargePointPaymentRepository = chargePointPaymentRepository,
-        )
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.DONE)
+        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
 
         //when
         val numberOfThreads = 100

@@ -15,14 +15,14 @@ class ChargePointController(
     private val chargePointPaymentService: ChargePointPaymentService,
     private val chargePointPaymentHistoryService: ChargePointPaymentHistoryService,
 ) {
-    @GetMapping("/status/{paymentId}")
+    @GetMapping("/status/{orderId}")
     fun isCompletePayment(
-        userPrincipal: UserPrincipal, @PathVariable paymentId: String
+        userPrincipal: UserPrincipal, @PathVariable orderId: String
     ): CheckCompletePaymentResponse {
-        val isCompletePayment = chargePointPaymentService.isCompletePayment(userPrincipal.userId, paymentId)
+        val isCompletePayment = chargePointPaymentService.isCompletePayment(userPrincipal.userId, orderId)
         return CheckCompletePaymentResponse(isCompletePayment)
     }
-
+    
     @PostMapping("/order")
     fun createOrder(
         userPrincipal: UserPrincipal, @RequestBody chargePointOrderRequest: ChargePointOrderRequest
@@ -31,13 +31,13 @@ class ChargePointController(
             chargePointPaymentService.createOrder(userPrincipal.userId, chargePointOrderRequest.chargePointType)
         return ChargePointOrderResponse(orderId)
     }
-
+    
     @PostMapping
     fun payment(@RequestBody request: ChargePointPaymentRequest): DefaultResponse {
         chargePointPaymentService.approvePayment(request.orderId)
         return DefaultResponse.success()
     }
-
+    
     @GetMapping("/history")
     fun getChargePointHistory(
         userPrincipal: UserPrincipal, pagingInformation: PagingInformation

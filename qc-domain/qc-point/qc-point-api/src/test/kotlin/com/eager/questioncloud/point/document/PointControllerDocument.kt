@@ -1,4 +1,4 @@
-package com.eager.questioncloud.point
+package com.eager.questioncloud.point.document
 
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.service.PointService
