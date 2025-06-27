@@ -1,4 +1,4 @@
-package com.eager.questioncloud.pay.coupon
+package com.eager.questioncloud.pay.coupon.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
@@ -34,15 +34,15 @@ import java.time.LocalDateTime
 class UserCouponControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockBean
     private lateinit var userCouponService: UserCouponService
-
+    
     private lateinit var sampleAvailableUserCoupons: List<AvailableUserCoupon>
-
+    
     @BeforeEach
     fun setUp() {
         sampleAvailableUserCoupons = listOf(
@@ -69,13 +69,13 @@ class UserCouponControllerDocument {
             )
         )
     }
-
+    
     @Test
     fun `사용 가능한 쿠폰 목록 조회 API 테스트`() {
         // Given
         whenever(userCouponService.getAvailableUserCoupons(any()))
             .thenReturn(sampleAvailableUserCoupons)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/payment/coupon")
@@ -102,14 +102,14 @@ class UserCouponControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `쿠폰 등록 API 테스트`() {
         // Given
         val registerCouponRequest = RegisterCouponRequest(
             code = "WELCOME2024"
         )
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/coupon")
@@ -136,17 +136,17 @@ class UserCouponControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `쿠폰 등록 API 실패 테스트 - 존재하지 않는 쿠폰`() {
         // Given
         val registerCouponRequest = RegisterCouponRequest(
             code = "INVALID_CODE"
         )
-
+        
         whenever(userCouponService.registerCoupon(any(), any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/coupon")
@@ -174,17 +174,17 @@ class UserCouponControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `쿠폰 등록 API 실패 테스트 - 이미 등록한 쿠폰`() {
         // Given
         val registerCouponRequest = RegisterCouponRequest(
             code = "WELCOME2024"
         )
-
+        
         whenever(userCouponService.registerCoupon(any(), any()))
             .thenThrow(CoreException(Error.ALREADY_REGISTER_COUPON))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/coupon")
@@ -212,17 +212,17 @@ class UserCouponControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `쿠폰 등록 API 실패 테스트 - 쿠폰 수량 부족`() {
         // Given
         val registerCouponRequest = RegisterCouponRequest(
             code = "LIMITED_COUPON"
         )
-
+        
         whenever(userCouponService.registerCoupon(any(), any()))
             .thenThrow(CoreException(Error.LIMITED_COUPON))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/coupon")

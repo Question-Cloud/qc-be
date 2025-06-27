@@ -34,6 +34,7 @@ include 'qc-domain:qc-question'
 include 'qc-domain:qc-question:qc-question-core'
 include 'qc-domain:qc-question:qc-question-api'
 include 'qc-domain:qc-question:qc-question-internal-api'
+include 'qc-domain:qc-question:qc-question-fixture'
 
 // Creator Domain
 include 'qc-domain:qc-creator'
@@ -98,7 +99,4 @@ include 'qc-social'                 // 소셜 로그인
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-include 'qc-application'
-include 'qc-domain:qc-question:qc-question-fixture'
-findProject(':qc-domain:qc-question:qc-question-fixture')?.name = 'qc-question-fixture'
 

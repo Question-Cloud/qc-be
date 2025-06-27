@@ -30,7 +30,7 @@ class QuestionRepositoryImpl(
 ) : QuestionRepository {
     private val parent = QQuestionCategoryEntity("parent")
     private val child = QQuestionCategoryEntity("child")
-
+    
     override fun countByQuestionFilter(
         questionFilter: QuestionFilter,
     ): Int {
@@ -45,7 +45,7 @@ class QuestionRepositoryImpl(
             )
             .fetchFirst() ?: 0
     }
-
+    
     override fun getQuestionInformation(
         questionFilter: QuestionFilter,
         pagingInformation: PagingInformation
@@ -71,7 +71,7 @@ class QuestionRepositoryImpl(
             .map { tuple: Tuple -> this.parseQuestionInformationTuple(tuple) }
             .collect(Collectors.toList())
     }
-
+    
     override fun getQuestionInformation(questionId: Long): QuestionInformation {
         val tuple = questionInformationSelectFrom()
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
@@ -81,10 +81,10 @@ class QuestionRepositoryImpl(
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst()
             ?: throw CoreException(Error.NOT_FOUND)
-
+        
         return parseQuestionInformationTuple(tuple)
     }
-
+    
     override fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question> {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
@@ -94,16 +94,16 @@ class QuestionRepositoryImpl(
             .map { entity: QuestionEntity -> entity.toModel() }
             .collect(Collectors.toList())
     }
-
+    
     override fun isAvailable(questionId: Long): Boolean {
         val result = jpaQueryFactory.select(questionEntity.id)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst()
-
+        
         return result != null
     }
-
+    
     override fun findByQuestionIdAndCreatorId(questionId: Long, creatorId: Long): Question {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
@@ -114,18 +114,18 @@ class QuestionRepositoryImpl(
             )
             .fetchFirst()?.toModel() ?: throw CoreException(Error.NOT_FOUND)
     }
-
+    
     override fun get(questionId: Long): Question {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst()?.toModel() ?: throw CoreException(Error.UNAVAILABLE_QUESTION)
     }
-
+    
     override fun save(question: Question): Question {
         return questionJpaRepository.save(QuestionEntity.from(question)).toModel()
     }
-
+    
     override fun getQuestionInformationByCreatorIdWithPaging(
         creatorId: Long,
         pagingInformation: PagingInformation
@@ -144,7 +144,7 @@ class QuestionRepositoryImpl(
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
             .collect(Collectors.toList())
     }
-
+    
     override fun findByCreatorId(creatorId: Long): List<Question> {
         return jpaQueryFactory.select(questionEntity)
             .from(questionEntity)
@@ -152,10 +152,10 @@ class QuestionRepositoryImpl(
             .fetch()
             .map { it.toModel() }
     }
-
+    
     override fun findByQuestionIdIn(questionIds: List<Long>): List<QuestionInformation> {
         return questionInformationSelectFrom()
-            .where(questionEntity.id.`in`(questionIds))
+            .where(questionEntity.id.`in`(questionIds), questionStatusFilter())
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
@@ -165,7 +165,7 @@ class QuestionRepositoryImpl(
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
             .collect(Collectors.toList())
     }
-
+    
     override fun countByCreatorId(creatorId: Long): Int {
         return jpaQueryFactory.select(questionEntity.id.count().intValue())
             .from(questionEntity)
@@ -175,7 +175,7 @@ class QuestionRepositoryImpl(
             )
             .fetchFirst() ?: 0
     }
-
+    
     @Transactional
     override fun increaseQuestionCount(questionId: Long) {
         jpaQueryFactory.update(questionEntity)
@@ -183,62 +183,62 @@ class QuestionRepositoryImpl(
             .where(questionEntity.id.eq(questionId))
             .execute()
     }
-
+    
     override fun deleteAllInBatch() {
         questionJpaRepository.deleteAllInBatch()
     }
-
+    
     private fun sort(sort: QuestionSortType): OrderSpecifier<*> {
         return when (sort) {
             QuestionSortType.Popularity -> {
                 questionEntity.count.desc()
             }
-
+            
             QuestionSortType.Rate -> {
                 questionMetadataEntity.reviewAverageRate.desc()
             }
-
+            
             QuestionSortType.Latest -> {
                 questionEntity.createdAt.desc()
             }
-
+            
             QuestionSortType.LEVEL -> {
                 questionEntity.questionContentEntity.questionLevel.desc()
             }
         }
     }
-
+    
     private fun questionLevelFilter(levels: List<QuestionLevel?>?): BooleanExpression? {
         if (levels.isNullOrEmpty()) {
             return null
         }
         return questionEntity.questionContentEntity.questionLevel.`in`(levels)
     }
-
+    
     private fun questionCategoryFilter(categories: List<Long?>?): BooleanExpression? {
         if (categories.isNullOrEmpty()) {
             return null
         }
         return questionEntity.questionContentEntity.questionCategoryId.`in`(categories)
     }
-
+    
     private fun questionTypeFilter(questionType: QuestionType?): BooleanExpression? {
         return questionType?.let {
             questionEntity.questionContentEntity.questionType.eq(questionType)
         }
     }
-
+    
     private fun questionCreatorFilter(creatorId: Long?): BooleanExpression? {
         return creatorId?.let {
             questionEntity.creatorId.eq(creatorId)
         }
     }
-
+    
     private fun questionStatusFilter(): BooleanExpression {
         return questionEntity.questionStatus.ne(QuestionStatus.Delete)
             .and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable))
     }
-
+    
     private fun parseQuestionInformationTuple(tuple: Tuple): QuestionInformation {
         return QuestionInformation(
             tuple.get(questionEntity.id)!!,
@@ -253,7 +253,7 @@ class QuestionRepositoryImpl(
             tuple.get(questionMetadataEntity.reviewAverageRate)!!,
         )
     }
-
+    
     private fun questionInformationSelectFrom(): JPAQuery<Tuple> {
         return jpaQueryFactory.query()
             .select(

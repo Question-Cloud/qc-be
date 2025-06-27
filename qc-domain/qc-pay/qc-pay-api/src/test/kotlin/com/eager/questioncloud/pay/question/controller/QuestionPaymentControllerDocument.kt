@@ -1,4 +1,4 @@
-package com.eager.questioncloud.question
+package com.eager.questioncloud.pay.question.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
@@ -44,24 +44,24 @@ import java.time.LocalDateTime
 class QuestionPaymentControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockBean
     private lateinit var questionPaymentHistoryService: QuestionPaymentHistoryService
-
+    
     @MockBean
     private lateinit var questionPaymentService: QuestionPaymentService
-
+    
     @MockBean
     private lateinit var questionOrderService: QuestionOrderService
-
+    
     @MockBean
     private lateinit var questionPaymentCouponService: QuestionPaymentCouponService
-
+    
     private lateinit var sampleQuestionPaymentHistories: List<QuestionPaymentHistory>
-
+    
     @BeforeEach
     fun setUp() {
         val sampleOrders = listOf(
@@ -86,7 +86,7 @@ class QuestionPaymentControllerDocument {
                 subCategory = "운동"
             )
         )
-
+        
         val sampleCoupon = QuestionPaymentCoupon(
             userCouponId = 1L,
             couponId = 1L,
@@ -94,7 +94,7 @@ class QuestionPaymentControllerDocument {
             couponType = CouponType.Percent,
             value = 10
         )
-
+        
         sampleQuestionPaymentHistories = listOf(
             QuestionPaymentHistory(
                 orderId = "order-123456",
@@ -118,7 +118,7 @@ class QuestionPaymentControllerDocument {
             )
         )
     }
-
+    
     @Test
     fun `문제 구매 API 테스트`() {
         // Given
@@ -126,7 +126,7 @@ class QuestionPaymentControllerDocument {
             questionIds = listOf(101L, 102L),
             userCouponId = 1L
         )
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/question")
@@ -155,7 +155,7 @@ class QuestionPaymentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 구매 API 실패 테스트 - 이미 구매한 문제`() {
         // Given
@@ -163,10 +163,10 @@ class QuestionPaymentControllerDocument {
             questionIds = listOf(101L),
             userCouponId = null
         )
-
+        
         whenever(questionOrderService.generateQuestionOrder(any(), any()))
             .thenThrow(CoreException(Error.ALREADY_OWN_QUESTION))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/question")
@@ -195,7 +195,7 @@ class QuestionPaymentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 구매 API 실패 테스트 - 사용할 수 없는 문제`() {
         // Given
@@ -203,10 +203,10 @@ class QuestionPaymentControllerDocument {
             questionIds = listOf(999L, 1000L),
             userCouponId = null
         )
-
+        
         whenever(questionOrderService.generateQuestionOrder(any(), any()))
             .thenThrow(CoreException(Error.UNAVAILABLE_QUESTION))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/question")
@@ -235,7 +235,7 @@ class QuestionPaymentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 구매 API 실패 테스트 - 포인트 부족`() {
         // Given
@@ -243,10 +243,10 @@ class QuestionPaymentControllerDocument {
             questionIds = listOf(101L, 102L),
             userCouponId = null
         )
-
+        
         whenever(questionPaymentService.payment(anyOrNull(), anyOrNull(), anyOrNull()))
             .thenThrow(CoreException(Error.NOT_ENOUGH_POINT))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/question")
@@ -275,17 +275,17 @@ class QuestionPaymentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 구매 내역 조회 API 테스트`() {
         // Given
         val totalCount = 25
-
+        
         whenever(questionPaymentHistoryService.countQuestionPaymentHistory(any()))
             .thenReturn(totalCount)
         whenever(questionPaymentHistoryService.getQuestionPaymentHistory(any(), any()))
             .thenReturn(sampleQuestionPaymentHistories)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/payment/question/history")
