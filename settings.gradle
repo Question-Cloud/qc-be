@@ -24,55 +24,55 @@ include 'qc-api-container'
 // =============================================================================
 
 // User Domain
-include 'qc-domain:qc-user'
-include 'qc-domain:qc-user:qc-user-core'
-include 'qc-domain:qc-user:qc-user-api'
-include 'qc-domain:qc-user:qc-user-internal-api'
+include 'qc-core:qc-user'
+include 'qc-core:qc-user:qc-user-core'
+include 'qc-core:qc-user:qc-user-api'
+include 'qc-core:qc-user:qc-user-internal-api'
 
 // Question Domain
-include 'qc-domain:qc-question'
-include 'qc-domain:qc-question:qc-question-core'
-include 'qc-domain:qc-question:qc-question-api'
-include 'qc-domain:qc-question:qc-question-internal-api'
-include 'qc-domain:qc-question:qc-question-fixture'
+include 'qc-core:qc-question'
+include 'qc-core:qc-question:qc-question-core'
+include 'qc-core:qc-question:qc-question-api'
+include 'qc-core:qc-question:qc-question-internal-api'
+include 'qc-core:qc-question:qc-question-fixture'
 
 // Creator Domain
-include 'qc-domain:qc-creator'
-include 'qc-domain:qc-creator:qc-creator-core'
-include 'qc-domain:qc-creator:qc-creator-api'
-include 'qc-domain:qc-creator:qc-creator-internal-api'
+include 'qc-core:qc-creator'
+include 'qc-core:qc-creator:qc-creator-core'
+include 'qc-core:qc-creator:qc-creator-api'
+include 'qc-core:qc-creator:qc-creator-internal-api'
 
 // Point Domain
-include 'qc-domain:qc-point'
-include 'qc-domain:qc-point:qc-point-core'
-include 'qc-domain:qc-point:qc-point-api'
-include 'qc-domain:qc-point:qc-point-internal-api'
+include 'qc-core:qc-point'
+include 'qc-core:qc-point:qc-point-core'
+include 'qc-core:qc-point:qc-point-api'
+include 'qc-core:qc-point:qc-point-internal-api'
 
 // Post Domain
-include 'qc-domain:qc-post'
-include 'qc-domain:qc-post:qc-post-core'
-include 'qc-domain:qc-post:qc-post-api'
-include 'qc-domain:qc-post:qc-post-internal-api'
+include 'qc-core:qc-post'
+include 'qc-core:qc-post:qc-post-core'
+include 'qc-core:qc-post:qc-post-api'
+include 'qc-core:qc-post:qc-post-internal-api'
 
 // Cart Domain
-include 'qc-domain:qc-cart'
-include 'qc-domain:qc-cart:qc-cart-api'
-include 'qc-domain:qc-cart:qc-cart-core'
+include 'qc-core:qc-cart'
+include 'qc-core:qc-cart:qc-cart-api'
+include 'qc-core:qc-cart:qc-cart-core'
 
 // Review Domain
-include 'qc-domain:qc-review'
-include 'qc-domain:qc-review:qc-review-core'
-include 'qc-domain:qc-review:qc-review-api'
+include 'qc-core:qc-review'
+include 'qc-core:qc-review:qc-review-core'
+include 'qc-core:qc-review:qc-review-api'
 
 // Subscribe Domain
-include 'qc-domain:qc-subscribe'
-include 'qc-domain:qc-subscribe:qc-subscribe-core'
-include 'qc-domain:qc-subscribe:qc-subscribe-api'
+include 'qc-core:qc-subscribe'
+include 'qc-core:qc-subscribe:qc-subscribe-core'
+include 'qc-core:qc-subscribe:qc-subscribe-api'
 
 // Pay Domain
-include 'qc-domain:qc-pay'
-include 'qc-domain:qc-pay:qc-pay-core'
-include 'qc-domain:qc-pay:qc-pay-api'
+include 'qc-core:qc-pay'
+include 'qc-core:qc-pay:qc-pay-core'
+include 'qc-core:qc-pay:qc-pay-api'
 
 // =============================================================================
 // 🔌 Internal API Interface Modules (도메인 간 통신 인터페이스)

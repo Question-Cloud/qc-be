@@ -16,27 +16,27 @@ dependencies {
     api(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0"))
     api("io.awspring.cloud:spring-cloud-aws-starter-sqs")
     api("io.awspring.cloud:spring-cloud-aws-starter-sns")
-
+    
     compileOnly("org.springframework:spring-tx")
-
+    
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
+    
     api("software.amazon.awssdk:netty-nio-client:2.31.32")
-
+    
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
-
+    
     implementation(project(":qc-common"))
-    implementation(project(":qc-domain:qc-cart"))
-    implementation(project(":qc-domain:qc-pay"))
-    implementation(project(":qc-domain:qc-point"))
-    implementation(project(":qc-domain:qc-question"))
-    implementation(project(":qc-domain:qc-creator"))
-    implementation(project(":qc-domain:qc-user"))
-
+    implementation(project(":qc-core:qc-cart"))
+    implementation(project(":qc-core:qc-pay"))
+    implementation(project(":qc-core:qc-point"))
+    implementation(project(":qc-core:qc-question"))
+    implementation(project(":qc-core:qc-creator"))
+    implementation(project(":qc-core:qc-user"))
+    
     implementation(project(":qc-external-pg-api"))
-
+    
     testImplementation(kotlin("test"))
 }
 
