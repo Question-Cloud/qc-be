@@ -1,4 +1,4 @@
-package com.eager.questioncloud.common.event.model
+package com.eager.questioncloud.event.model
 
 import java.time.LocalDateTime
 

@@ -1,6 +1,6 @@
-package com.eager.questioncloud.common.event.infrastructure.repository
+package com.eager.questioncloud.event.infrastructure.repository
 
-import com.eager.questioncloud.common.event.infrastructure.entity.EventProcessLogEntity
+import com.eager.questioncloud.event.infrastructure.entity.EventProcessLogEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface EventProcessLogJpaRepository : JpaRepository<EventProcessLogEntity, String> {

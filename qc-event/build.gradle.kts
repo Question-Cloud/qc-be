@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
+    kotlin("plugin.jpa") version "2.1.10"
 }
 
 group = "com.eager.questioncloud"
@@ -28,14 +29,15 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
     
     implementation(project(":qc-common"))
+    implementation(project(":qc-rdb"))
+    implementation(project(":qc-external-pg-api"))
+    
     implementation(project(":qc-core:qc-cart"))
     implementation(project(":qc-core:qc-pay"))
     implementation(project(":qc-core:qc-point"))
     implementation(project(":qc-core:qc-question"))
     implementation(project(":qc-core:qc-creator"))
     implementation(project(":qc-core:qc-user"))
-    
-    implementation(project(":qc-external-pg-api"))
     
     testImplementation(kotlin("test"))
 }

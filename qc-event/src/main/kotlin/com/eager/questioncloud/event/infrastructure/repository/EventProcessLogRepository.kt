@@ -1,6 +1,6 @@
-package com.eager.questioncloud.common.event.infrastructure.repository
+package com.eager.questioncloud.event.infrastructure.repository
 
-import com.eager.questioncloud.common.event.model.EventProcessLog
+import com.eager.questioncloud.event.model.EventProcessLog
 
 interface EventProcessLogRepository {
     fun existsByIdempotentKey(idempotentKey: String): Boolean
