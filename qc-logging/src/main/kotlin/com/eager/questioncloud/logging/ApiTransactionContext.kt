@@ -1,4 +1,4 @@
-package com.eager
+package com.eager.questioncloud.logging
 
 import java.time.Duration
 import java.time.LocalDateTime
@@ -17,15 +17,15 @@ class ApiTransactionContext(
         endAt = LocalDateTime.now()
         runningTime = Duration.between(startAt, endAt).toMillis()
     }
-
+    
     fun markException() {
         isMarkedException = true
     }
-
+    
     fun loggingApiRequest(apiRequest: ApiRequest) {
         this.apiRequest = apiRequest
     }
-
+    
     fun loggingApiResponse(apiResponse: ApiResponse) {
         this.apiResponse = apiResponse
     }

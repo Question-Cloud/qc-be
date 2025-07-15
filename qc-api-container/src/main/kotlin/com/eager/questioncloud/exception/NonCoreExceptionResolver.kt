@@ -1,8 +1,8 @@
 package com.eager.questioncloud.exception
 
-import com.eager.ApiTransactionContextHolder
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
+import com.eager.questioncloud.logging.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.http.HttpServletRequest
@@ -21,7 +21,7 @@ class NonCoreExceptionResolver(private val slackNotifier: ExceptionSlackNotifier
     private val cacheResponse =
         ErrorResponse(Error.INTERNAL_SERVER_ERROR.httpStatus, Error.INTERNAL_SERVER_ERROR.message)
     private val objectMapper = ObjectMapper().registerKotlinModule()
-
+    
     override fun resolveException(
         req: HttpServletRequest,
         res: HttpServletResponse,
@@ -34,7 +34,7 @@ class NonCoreExceptionResolver(private val slackNotifier: ExceptionSlackNotifier
         writeResponse(res)
         return ModelAndView()
     }
-
+    
     private fun writeResponse(response: HttpServletResponse) {
         response.status = HttpStatus.INTERNAL_SERVER_ERROR.value()
         response.contentType = MediaType.APPLICATION_JSON_VALUE

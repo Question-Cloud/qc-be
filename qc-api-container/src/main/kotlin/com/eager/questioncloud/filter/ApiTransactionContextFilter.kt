@@ -1,9 +1,9 @@
 package com.eager.questioncloud.filter
 
-import com.eager.ApiRequest
-import com.eager.ApiResponse
-import com.eager.ApiTransactionContextHolder
-import com.eager.SensitiveBodyMasker
+import com.eager.questioncloud.logging.ApiRequest
+import com.eager.questioncloud.logging.ApiResponse
+import com.eager.questioncloud.logging.ApiTransactionContextHolder
+import com.eager.questioncloud.logging.SensitiveBodyMasker
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -28,7 +28,7 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
         .registerKotlinModule()
         .registerModule(JavaTimeModule())
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
+    
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -36,7 +36,7 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
     ) {
         val cachingRequest = ContentCachingRequestWrapper(request)
         val cachingResponse = ContentCachingResponseWrapper(response)
-
+        
         runCatching {
             ApiTransactionContextHolder.init()
             filterChain.doFilter(cachingRequest, cachingResponse)
@@ -47,13 +47,13 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
             ApiTransactionContextHolder.loggingApiRequest(toApiRequest(cachingRequest))
             ApiTransactionContextHolder.loggingApiResponse(toApiResponse(cachingResponse))
             fileLogger.info(objectMapper.writeValueAsString(ApiTransactionContextHolder.get()))
-
+            
             ApiTransactionContextHolder.destroy()
-
+            
             cachingResponse.copyBodyToResponse()
         }
     }
-
+    
     private fun toApiRequest(request: ContentCachingRequestWrapper): ApiRequest {
         return ApiRequest(
             request.requestURI,
@@ -64,38 +64,38 @@ class ApiTransactionContextFilter : OncePerRequestFilter() {
             request.parameterMap
         )
     }
-
+    
     private fun toApiResponse(response: ContentCachingResponseWrapper): ApiResponse {
         return ApiResponse(
             response.status,
             SensitiveBodyMasker.mask(response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8"))),
         )
     }
-
+    
     private fun parseHeaders(request: ContentCachingRequestWrapper): Map<String, String> {
         val headers = HashMap<String, String>()
-
+        
         for (key in request.headerNames) {
             headers[key] = request.getHeader(key)
         }
-
+        
         return headers
     }
-
+    
     private fun parseBody(request: ContentCachingRequestWrapper): String {
         if (request.contentAsString.isNotEmpty()) {
             return request.contentAsString
         }
-
+        
         val inputStream = request.inputStream.readAllBytes()
-
+        
         if (inputStream.isEmpty()) {
             return ""
         }
-
+        
         return inputStream.toString(Charset.forName("UTF-8"))
     }
-
+    
     private fun toErrorResponse(response: ContentCachingResponseWrapper) {
         response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         response.setHeader("Content-Type", "application/json")

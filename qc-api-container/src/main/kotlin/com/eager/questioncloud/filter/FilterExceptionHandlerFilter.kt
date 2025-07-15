@@ -1,7 +1,7 @@
 package com.eager.questioncloud.filter
 
-import com.eager.ApiTransactionContextHolder
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
+import com.eager.questioncloud.logging.ApiTransactionContextHolder
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

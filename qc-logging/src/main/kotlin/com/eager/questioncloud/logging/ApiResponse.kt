@@ -1,4 +1,4 @@
-package com.eager
+package com.eager.questioncloud.logging
 
 class ApiResponse(
     val status: Int,
