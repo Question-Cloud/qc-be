@@ -15,8 +15,7 @@ class LockManager(private val redissonClient: RedissonClient) {
         val lock = redissonClient.getLock(lockKey)
         
         runCatching {
-            lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)
-            if (!lock.isLocked) {
+            if (!lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
                 throw LockException()
             }
             task.run()
