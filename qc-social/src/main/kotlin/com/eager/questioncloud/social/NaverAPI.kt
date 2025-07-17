@@ -64,9 +64,9 @@ class NaverAPI : SocialAPI {
         return SocialPlatform.NAVER
     }
     
-    internal data class NaverUserInfoAPIResponse(val response: NaverUserInfo)
+    private data class NaverUserInfoAPIResponse(val response: NaverUserInfo)
     
-    internal data class NaverUserInfo(
+    private data class NaverUserInfo(
         val id: String,
         val email: String,
         val nickname: String,

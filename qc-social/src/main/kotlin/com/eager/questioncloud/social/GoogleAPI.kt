@@ -61,7 +61,7 @@ class GoogleAPI : SocialAPI {
         return SocialPlatform.GOOGLE
     }
     
-    internal data class GoogleUserInfo(val id: String, val email: String, val name: String, val picture: String)
+    private data class GoogleUserInfo(val id: String, val email: String, val name: String, val picture: String)
     
     companion object {
         private val objectMapper =

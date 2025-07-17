@@ -61,7 +61,7 @@ class KakaoAPI : SocialAPI {
         return SocialPlatform.KAKAO
     }
     
-    internal data class KakaoUserInfo(val sub: String, val email: String?, val nickname: String?)
+    private data class KakaoUserInfo(val sub: String, val email: String?, val nickname: String?)
     
     companion object {
         private val objectMapper =
