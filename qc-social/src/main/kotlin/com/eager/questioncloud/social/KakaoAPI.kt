@@ -14,13 +14,13 @@ import java.util.concurrent.TimeUnit
 class KakaoAPI : SocialAPI {
     @Value("\${KAKAO_API_KEY}")
     private lateinit var KAKAO_API_KEY: String
-
+    
     @Value("\${KAKAO_API_SECRET}")
     private lateinit var KAKAO_API_SECRET: String
-
+    
     @Value("\${CLIENT_URL}")
     private lateinit var CLIENT_URL: String
-
+    
     override fun getAccessToken(code: String): String {
         val formBody = FormBody.Builder()
             .add("grant_type", "authorization_code")
@@ -29,46 +29,47 @@ class KakaoAPI : SocialAPI {
             .add("code", code)
             .add("client_secret", KAKAO_API_SECRET)
             .build()
-
+        
         val request = Request.Builder()
             .url("https://kauth.kakao.com/oauth/token")
             .post(formBody)
             .build()
-
+        
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw FailSocialLoginException()
             return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
         }
     }
-
+    
     override fun getUserInfo(accessToken: String): SocialUserInfo {
         val request = Request.Builder()
             .url("https://kapi.kakao.com/v1/oidc/userinfo")
             .addHeader("Authorization", "Bearer $accessToken")
             .get()
             .build()
-
+        
         val kakaoUserInfo = client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw FailSocialLoginException()
-
+            
             objectMapper.readValue(response.body?.string(), KakaoUserInfo::class.java)
         }
-
+        
         return SocialUserInfo(kakaoUserInfo.sub, kakaoUserInfo.email, kakaoUserInfo.nickname, SocialPlatform.KAKAO)
     }
-
+    
     override fun getSocialPlatform(): SocialPlatform {
         return SocialPlatform.KAKAO
     }
-
+    
     internal data class KakaoUserInfo(val sub: String, val email: String?, val nickname: String?)
-
+    
     companion object {
         private val objectMapper =
             ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         private val client = OkHttpClient().newBuilder()
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.SECONDS)
             .callTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
             .build()
     }
 }

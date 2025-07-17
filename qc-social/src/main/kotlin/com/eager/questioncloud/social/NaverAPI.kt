@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit
 class NaverAPI : SocialAPI {
     @Value("\${NAVER_CLIENT_ID}")
     private lateinit var NAVER_CLIENT_ID: String
-
+    
     @Value("\${NAVER_CLIENT_SECRET}")
     private lateinit var NAVER_CLIENT_SECRET: String
-
+    
     override fun getAccessToken(code: String): String {
         val request = Request.Builder()
             .url(
@@ -31,27 +31,27 @@ class NaverAPI : SocialAPI {
             )
             .get()
             .build()
-
+        
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw FailSocialLoginException()
-
+            
             return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
         }
     }
-
+    
     override fun getUserInfo(accessToken: String): SocialUserInfo {
         val request = Request.Builder()
             .url("https://openapi.naver.com/v1/nid/me")
             .addHeader("Authorization", "Bearer $accessToken")
             .get()
             .build()
-
+        
         val naverUserInfo = client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw FailSocialLoginException()
-
+            
             objectMapper.readValue(response.body?.string(), NaverUserInfoAPIResponse::class.java).response
         }
-
+        
         return SocialUserInfo(
             naverUserInfo.id,
             naverUserInfo.email,
@@ -59,13 +59,13 @@ class NaverAPI : SocialAPI {
             SocialPlatform.NAVER
         )
     }
-
+    
     override fun getSocialPlatform(): SocialPlatform {
         return SocialPlatform.NAVER
     }
-
+    
     internal data class NaverUserInfoAPIResponse(val response: NaverUserInfo)
-
+    
     internal data class NaverUserInfo(
         val id: String,
         val email: String,
@@ -73,13 +73,14 @@ class NaverAPI : SocialAPI {
         val mobile: String,
         val profile_image: String
     )
-
+    
     companion object {
         private val objectMapper =
             ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         private val client = OkHttpClient().newBuilder()
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.SECONDS)
             .callTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
             .build()
     }
 }
