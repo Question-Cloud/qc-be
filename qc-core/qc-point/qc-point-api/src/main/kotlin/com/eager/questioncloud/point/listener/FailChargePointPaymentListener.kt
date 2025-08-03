@@ -16,28 +16,19 @@ class FailChargePointPaymentListener(
     @SqsListener("fail-charge-point-payment.fifo")
     fun failHandler(@Payload event: FailChargePointPaymentEvent) {
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(event.orderId)
-        cancelChargePointPayment(chargePointPayment)
         cancelPG(chargePointPayment)
+        cancelChargePointPayment(chargePointPayment)
     }
-
+    
     private fun cancelChargePointPayment(chargePointPayment: ChargePointPayment) {
         chargePointPayment.cancel()
         chargePointPaymentRepository.update(chargePointPayment)
     }
-
+    
     private fun cancelPG(chargePointPayment: ChargePointPayment) {
-        runCatching {
-            tossPaymentAPI.cancel(
-                chargePointPayment.paymentId!!,
-                chargePointPayment.chargePointType.amount
-            )
-        }.onFailure {
-            failCancel(chargePointPayment)
-        }
-    }
-
-    private fun failCancel(chargePointPayment: ChargePointPayment) {
-        chargePointPayment.failCancel()
-        chargePointPaymentRepository.update(chargePointPayment)
+        tossPaymentAPI.cancel(
+            chargePointPayment.paymentId!!,
+            chargePointPayment.chargePointType.amount
+        )
     }
 }
