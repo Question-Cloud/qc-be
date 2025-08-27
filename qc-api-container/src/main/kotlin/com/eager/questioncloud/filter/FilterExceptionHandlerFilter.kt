@@ -31,6 +31,6 @@ class FilterExceptionHandlerFilter(
                     request.requestURI,
                     request.method
                 )
-            }
+            }.getOrThrow();
     }
 }
