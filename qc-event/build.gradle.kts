@@ -32,13 +32,6 @@ dependencies {
     implementation(project(":qc-rdb"))
     implementation(project(":qc-external-pg-api"))
     
-    implementation(project(":qc-core:qc-cart"))
-    implementation(project(":qc-core:qc-pay"))
-    implementation(project(":qc-core:qc-point"))
-    implementation(project(":qc-core:qc-question"))
-    implementation(project(":qc-core:qc-creator"))
-    implementation(project(":qc-core:qc-user"))
-    
     testImplementation(kotlin("test"))
 }
 
