@@ -14,25 +14,26 @@ class SubscribeService(
     private val subscribedCreatorInformationReader: SubscribedCreatorInformationReader
 ) {
     fun subscribe(userId: Long, creatorId: Long) {
+        //TODO Event Publish
         subscribeProcessor.subscribe(userId, creatorId)
     }
-
+    
     fun unSubscribe(userId: Long, creatorId: Long) {
         subscribeProcessor.unSubscribe(userId, creatorId)
     }
-
+    
     fun isSubscribed(userId: Long, creatorId: Long): Boolean {
         return subscribeRepository.isSubscribed(userId, creatorId)
     }
-
+    
     fun countCreatorSubscriber(creatorId: Long): Int {
         return subscribeRepository.countSubscriber(creatorId)
     }
-
+    
     fun getMySubscribes(userId: Long, pagingInformation: PagingInformation): List<SubscribedCreatorInformation> {
         return subscribedCreatorInformationReader.getSubscribedCreatorInformation(userId, pagingInformation)
     }
-
+    
     fun countMySubscribe(userId: Long): Int {
         return subscribeRepository.countMySubscribe(userId)
     }
