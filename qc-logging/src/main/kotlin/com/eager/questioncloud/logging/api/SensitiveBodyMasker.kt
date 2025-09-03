@@ -1,4 +1,4 @@
-package com.eager.questioncloud.logging
+package com.eager.questioncloud.logging.api
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode

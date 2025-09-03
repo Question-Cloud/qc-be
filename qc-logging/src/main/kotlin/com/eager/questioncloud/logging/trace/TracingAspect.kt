@@ -1,6 +1,6 @@
-package com.eager.questioncloud.aspect
+package com.eager.questioncloud.logging.trace
 
-import com.eager.questioncloud.logging.ApiTransactionContextHolder
+import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import io.micrometer.tracing.Tracer
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around

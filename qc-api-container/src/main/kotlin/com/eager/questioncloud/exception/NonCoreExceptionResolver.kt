@@ -2,7 +2,7 @@ package com.eager.questioncloud.exception
 
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
-import com.eager.questioncloud.logging.ApiTransactionContextHolder
+import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.http.HttpServletRequest

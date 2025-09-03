@@ -1,4 +1,4 @@
-package com.eager.questioncloud.logging
+package com.eager.questioncloud.logging.api
 
 import java.time.Duration
 import java.time.LocalDateTime

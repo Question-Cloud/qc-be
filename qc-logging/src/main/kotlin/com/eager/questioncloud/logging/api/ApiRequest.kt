@@ -1,4 +1,4 @@
-package com.eager.questioncloud.logging
+package com.eager.questioncloud.logging.api
 
 data class ApiRequest(
     val url: String,

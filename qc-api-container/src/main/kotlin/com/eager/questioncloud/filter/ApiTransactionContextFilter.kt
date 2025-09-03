@@ -1,9 +1,9 @@
 package com.eager.questioncloud.filter
 
-import com.eager.questioncloud.logging.ApiRequest
-import com.eager.questioncloud.logging.ApiResponse
-import com.eager.questioncloud.logging.ApiTransactionContextHolder
-import com.eager.questioncloud.logging.SensitiveBodyMasker
+import com.eager.questioncloud.logging.api.ApiRequest
+import com.eager.questioncloud.logging.api.ApiResponse
+import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
+import com.eager.questioncloud.logging.api.SensitiveBodyMasker
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
