@@ -1,7 +1,7 @@
 package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.supervisorScope
 import org.springframework.scheduling.annotation.Scheduled
@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.PublishBatchRequest
 import java.util.concurrent.CopyOnWriteArrayList
 
-abstract class AbstractEventProcessor<T : SQSEvent>(
+abstract class AbstractEventProcessor<T : SNSEvent>(
     private val snsAsyncClient: SnsAsyncClient,
     private val slackNotifier: ExceptionSlackNotifier
 ) {

@@ -1,18 +1,18 @@
 package com.eager.questioncloud.event.model
 
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class QuestionPaymentEvent(
     override val eventId: String,
     val data: QuestionPaymentEventData
-) : SQSEvent {
+) : SNSEvent {
     override fun toRequest(): PublishRequest {
         return PublishRequest.builder()
             .messageGroupId(data.orderId)
             .messageDeduplicationId(data.orderId)
-            .message(SQSEvent.objectMapper.writeValueAsString(this))
+            .message(SNSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     
@@ -21,7 +21,7 @@ class QuestionPaymentEvent(
             .id(eventId)
             .messageGroupId(data.orderId)
             .messageDeduplicationId(data.orderId)
-            .message(SQSEvent.objectMapper.writeValueAsString(this))
+            .message(SNSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     

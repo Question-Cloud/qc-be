@@ -1,13 +1,13 @@
 package com.eager.questioncloud.event.model
 
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class FailChargePointPaymentEvent(
     override val eventId: String,
     val orderId: String,
-) : SQSEvent {
+) : SNSEvent {
     companion object {
         fun create(orderId: String): FailChargePointPaymentEvent {
             return FailChargePointPaymentEvent(orderId, orderId)
@@ -19,7 +19,7 @@ class FailChargePointPaymentEvent(
             .topicArn("arn:aws:sns:ap-northeast-2:503561444273:fail-charge-point-payment.fifo")
             .messageGroupId(orderId)
             .messageDeduplicationId(orderId)
-            .message(SQSEvent.objectMapper.writeValueAsString(this))
+            .message(SNSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     

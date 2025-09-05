@@ -1,6 +1,6 @@
 package com.eager.questioncloud.event.model
 
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import io.hypersistence.tsid.TSID
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
@@ -10,13 +10,13 @@ class ReviewEvent(
     val questionId: Long,
     val varianceRate: Int,
     val reviewEventType: ReviewEventType
-) : SQSEvent {
+) : SNSEvent {
     override fun toRequest(): PublishRequest {
         return PublishRequest.builder()
             .topicArn(topicArn)
             .messageDeduplicationId(eventId)
             .messageGroupId(questionId.toString())
-            .message(SQSEvent.objectMapper.writeValueAsString(this))
+            .message(SNSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     
@@ -25,7 +25,7 @@ class ReviewEvent(
             .id(eventId)
             .messageDeduplicationId(eventId)
             .messageGroupId(questionId.toString())
-            .message(SQSEvent.objectMapper.writeValueAsString(this))
+            .message(SNSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     

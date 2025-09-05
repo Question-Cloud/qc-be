@@ -1,6 +1,6 @@
 package com.eager.questioncloud.event.aspect
 
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import com.eager.questioncloud.event.infrastructure.repository.EventProcessLogRepository
 import com.eager.questioncloud.event.model.EventProcessLog
 import org.aspectj.lang.ProceedingJoinPoint
@@ -17,7 +17,7 @@ class IdempotentEventAspect(
 ) {
     @Around("@annotation(com.eager.questioncloud.event.annotation.IdempotentEvent)")
     fun processingEventIdempotency(joinPoint: ProceedingJoinPoint) {
-        val event = joinPoint.args.first { it is SQSEvent } as SQSEvent
+        val event = joinPoint.args.first { it is SNSEvent } as SNSEvent
         val idempotentKey = event.eventId + "-" + joinPoint.signature.name
         
         if (eventProcessLogRepository.existsByIdempotentKey(idempotentKey)) {

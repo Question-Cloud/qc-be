@@ -1,7 +1,7 @@
 package com.eager.questioncloud.review.implement
 
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
-import com.eager.questioncloud.event.SQSEvent
+import com.eager.questioncloud.event.SNSEvent
 import com.eager.questioncloud.event.implement.AbstractEventProcessor
 import com.eager.questioncloud.event.model.ReviewEvent
 import com.eager.questioncloud.review.domain.QuestionReviewEventLog
@@ -19,7 +19,7 @@ class StoreReviewEventProcessor(
     private val applicationEventPublisher: ApplicationEventPublisher,
     slackNotifier: ExceptionSlackNotifier,
 ) : AbstractEventProcessor<ReviewEvent>(snsAsyncClient, slackNotifier) {
-
+    
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     override fun publishEvent(event: ReviewEvent) {
         snsAsyncClient.publish(event.toRequest())
@@ -27,19 +27,19 @@ class StoreReviewEventProcessor(
                 questionReviewEventLogRepository.publish(event.eventId)
             }
     }
-
+    
     override fun saveEventLog(event: ReviewEvent) {
         questionReviewEventLogRepository.save(QuestionReviewEventLog.create(event.eventId, event.toJson()))
         applicationEventPublisher.publishEvent(event)
     }
-
+    
     override fun getUnpublishedEvents(): List<ReviewEvent> {
         return questionReviewEventLogRepository.getUnPublishedEvent()
             .stream()
-            .map { log -> SQSEvent.objectMapper.readValue(log.payload, ReviewEvent::class.java) }
+            .map { log -> SNSEvent.objectMapper.readValue(log.payload, ReviewEvent::class.java) }
             .toList()
     }
-
+    
     override fun updateRepublishStatus(eventIds: List<String>) {
         questionReviewEventLogRepository.publish(eventIds)
     }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
-interface SQSEvent {
+interface SNSEvent {
     val eventId: String
     
     fun toRequest(): PublishRequest
