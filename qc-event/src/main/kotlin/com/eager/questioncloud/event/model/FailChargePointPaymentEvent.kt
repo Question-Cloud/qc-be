@@ -1,6 +1,7 @@
 package com.eager.questioncloud.event.model
 
 import com.eager.questioncloud.event.SQSEvent
+import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 class FailChargePointPaymentEvent(
@@ -12,7 +13,7 @@ class FailChargePointPaymentEvent(
             return FailChargePointPaymentEvent(orderId, orderId)
         }
     }
-
+    
     override fun toRequest(): PublishRequest {
         return PublishRequest.builder()
             .topicArn("arn:aws:sns:ap-northeast-2:503561444273:fail-charge-point-payment.fifo")
@@ -20,5 +21,13 @@ class FailChargePointPaymentEvent(
             .messageDeduplicationId(orderId)
             .message(SQSEvent.objectMapper.writeValueAsString(this))
             .build()
+    }
+    
+    override fun toBatchRequestEntry(): PublishBatchRequestEntry {
+        TODO("Not yet implemented")
+    }
+    
+    override fun getTopicArn(): String {
+        TODO("Not yet implemented")
     }
 }

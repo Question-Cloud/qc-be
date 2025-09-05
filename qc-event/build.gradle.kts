@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":qc-external-pg-api"))
     
     testImplementation(kotlin("test"))
+    testImplementation(project(":qc-api-container"))
 }
 
 tasks.test {

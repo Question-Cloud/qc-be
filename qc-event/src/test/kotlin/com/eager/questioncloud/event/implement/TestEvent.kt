@@ -1,21 +1,19 @@
-package com.eager.questioncloud.event.model
+package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.event.SQSEvent
-import io.hypersistence.tsid.TSID
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
+import java.util.*
 
-class ReviewEvent(
+class TestEvent(
     override val eventId: String,
-    val questionId: Long,
-    val varianceRate: Int,
-    val reviewEventType: ReviewEventType
+    val message: String,
 ) : SQSEvent {
     override fun toRequest(): PublishRequest {
         return PublishRequest.builder()
-            .topicArn(topicArn)
-            .messageDeduplicationId(eventId)
-            .messageGroupId(questionId.toString())
+            .topicArn("arn:aws:sns:ap-northeast-2:503561444273:test.fifo")
+            .messageGroupId(UUID.randomUUID().toString())
+            .messageDeduplicationId(UUID.randomUUID().toString())
             .message(SQSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
@@ -24,19 +22,12 @@ class ReviewEvent(
         return PublishBatchRequestEntry.builder()
             .id(eventId)
             .messageDeduplicationId(eventId)
-            .messageGroupId(questionId.toString())
+            .messageGroupId(eventId)
             .message(SQSEvent.objectMapper.writeValueAsString(this))
             .build()
     }
     
     override fun getTopicArn(): String {
-        return topicArn
-    }
-    
-    companion object {
-        private const val topicArn = "arn:aws:sns:ap-northeast-2:503561444273:question-review.fifo"
-        fun create(questionId: Long, varianceRate: Int, reviewEventType: ReviewEventType): ReviewEvent {
-            return ReviewEvent(TSID.Factory.getTsid().toString(), questionId, varianceRate, reviewEventType)
-        }
+        return "arn:aws:sns:ap-northeast-2:503561444273:test.fifo"
     }
 }
