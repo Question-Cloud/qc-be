@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.listener
 
-import com.eager.questioncloud.event.model.FailChargePointPaymentEvent
+import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
 import com.eager.questioncloud.pg.toss.TossPaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
@@ -14,7 +14,7 @@ class FailChargePointPaymentListener(
     private val tossPaymentAPI: TossPaymentAPI
 ) {
     @SqsListener("fail-charge-point-payment.fifo")
-    fun failHandler(@Payload event: FailChargePointPaymentEvent) {
+    fun failHandler(@Payload event: FailChargePointPaymentMessage) {
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(event.orderId)
         cancelPG(chargePointPayment)
         cancelChargePointPayment(chargePointPayment)

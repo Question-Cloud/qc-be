@@ -2,7 +2,7 @@ package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.event.model.FailChargePointPaymentEvent
+import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 class ChargePointPaymentPostProcessor(
     private val userPointManager: UserPointManager,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
-    private val failChargePointPaymentEventProcessor: FailChargePointPaymentEventProcessor,
+    private val failChargePointPaymentMessageSender: FailChargePointPaymentMessageSender,
 ) {
     @Transactional
     fun chargeUserPoint(chargePointPayment: ChargePointPayment) {
@@ -21,7 +21,7 @@ class ChargePointPaymentPostProcessor(
             chargePointPayment.charge()
             chargePointPaymentRepository.update(chargePointPayment)
         }.onFailure {
-            failChargePointPaymentEventProcessor.publishEvent(FailChargePointPaymentEvent.create(chargePointPayment.orderId))
+            failChargePointPaymentMessageSender.publishMessage(FailChargePointPaymentMessage.create(chargePointPayment.orderId))
             throw CoreException(Error.PAYMENT_ERROR)
         }
     }
