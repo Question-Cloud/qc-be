@@ -1,12 +1,7 @@
 # 📚 QuestionCloud - 수능 문제 거래 플랫폼
 
-> 수학, 물리, 지구과학, 화학, 생명과학 문제를 거래할 수 있는 **개인 학습용 프로젝트**  
-> 모듈러 모놀리식 아키텍처와 안정적인 결제 시스템 구현에 중점을 둔 **백엔드 개발 연습 프로젝트**
-
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0+-6DB33F?style=flat-square&logo=spring)](https://spring.io/projects/spring-boot)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.8+-7F52FF?style=flat-square&logo=kotlin)](https://kotlinlang.org/)
-[![MariaDB](https://img.shields.io/badge/MariaDB-10.6+-003545?style=flat-square&logo=mariadb)](https://mariadb.org/)
-
+> 이커머스 백엔드 개발 학습을 위해 진행하는 개인 프로젝트입니다.  
+> 수능 문제 거래 플랫폼을 주제로 결제 시스템의 안정성과 확장 가능한 아키텍처 설계를 연습하고 있습니다.
 ---
 
 ## 📋 프로젝트 소개
@@ -20,6 +15,30 @@
 - 안전한 결제 시스템 구현 (메시지 유실 방지, 데이터 정합성)
 - 모듈러 모놀리식 아키텍처 설계 및 적용
 - 실제 운영을 고려한 모니터링 및 로깅 구현
+
+---
+
+## 🛠️ 사용 기술
+
+**Backend Framework**
+
+- Spring Boot 3.x, Kotlin
+- Spring Data JPA, Querydsl
+
+**Database**
+
+- MariaDB (메인 RDBMS)
+- MongoDB (조회용 데이터)
+- Redis (캐시 & 분산 락)
+
+**Message Queue**
+
+- AWS SNS + SQS (비동기 이벤트 처리)
+
+**Infrastructure**
+
+- Docker, AWS EC2, AWS RDS
+- Prometheus + Grafana + Tempo(모니터링)
 
 ---
 
@@ -40,7 +59,7 @@
 
 ---
 
-### 모듈러 모놀리식 아키텍처 + 런타임 컨테이너 패턴
+### 모듈러 모놀리식 아키텍처
 
 ```
 📱 Runtime Container
@@ -76,8 +95,6 @@
     └── qc-common (공통 유틸리티)
 ```
 
-#### 🎯 **런타임 아키텍처 특징**
-
 **🚀 Container 역할 (`qc-api-container`)**
 
 - 모든 도메인 모듈을 Spring Context에 로딩
@@ -98,78 +115,6 @@
 2. Classpath에서 모든 도메인 모듈 스캔
 3. 각 도메인의 `@RestController`, `@Service`, `@Repository` 등을 Spring Context에 등록
 4. 통합된 API 서버로 동작
-
-#### 모듈 구성 (총 45개 모듈)
-
-```
-📱 Application (2개)     - API Container, Admin API Container(계획)
-🏗️ Domain (30개)         - 10개 비즈니스 도메인  
-🔌 Interface (6개)       - 도메인 간 통신 인터페이스
-🛠️ Infrastructure (6개)  - 기술적 기반 모듈
-🔧 Shared (1개)          - 공통 유틸리티
-```
-
-#### 주요 도메인 모듈
-
-| 도메인           | 구성                        | 설명       |
-|---------------|---------------------------|----------|
-| 👤 User       | Core + API + Internal API | 사용자 관리   |
-| ❓ Question    | Core + API + Internal API | 문제 관리    |
-| 👨‍🎨 Creator | Core + API + Internal API | 크리에이터 관리 |
-| 🏆 Point      | Core + API + Internal API | 포인트 시스템  |
-| 🛒 Cart       | Core + API                | 장바구니     |
-| 💳 Pay        | Core + API                | 결제 처리    |
-| ⭐ Review      | Core + API                | 리뷰 시스템   |
-
----
-
-## 🛠️ 사용 기술
-
-**Backend Framework**
-
-- Spring Boot 3.x, Kotlin
-- Spring Data JPA, Querydsl
-
-**Database**
-
-- MariaDB (메인 RDBMS)
-- MongoDB (조회용 데이터)
-- Redis (캐시 & 분산 락)
-
-**Message Queue**
-
-- AWS SNS + SQS (비동기 이벤트 처리)
-
-**Infrastructure**
-
-- Docker, AWS EC2, AWS RDS
-- Prometheus + Grafana (모니터링)
-
----
-
-## 📁 모듈 구조
-
-### Application Layer
-
-- **`qc-api-container`** - 메인 API 서버
-
-### Domain Layer
-
-- **`qc-domain/*`** - 도메인별 모듈
-    - `*-core`: 비즈니스 로직
-    - `*-api`: REST Controller
-    - `*-internal-api`: 도메인 간 통신 (필요시)
-
-### Infrastructure Layer
-
-- **`qc-rdb`** - 데이터베이스 설정
-- **`qc-event`** - 이벤트 처리 (AWS SNS/SQS)
-- **`qc-external-pg-api`** - 결제 게이트웨이 (TossPayments)
-- **`qc-lock-manager`** - 분산 락 (Redis)
-- **`qc-logging`** - API 로깅
-- **`qc-social`** - 소셜 로그인
-
----
 
 ## 🚀 구현 API
 
