@@ -6,6 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @EnableScheduling
-@Profile("prod")
+@Profile("prod", "local")
 class ScheduleConfig {
 }

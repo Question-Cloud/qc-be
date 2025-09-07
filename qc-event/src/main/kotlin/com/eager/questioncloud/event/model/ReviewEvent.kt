@@ -16,7 +16,7 @@ class ReviewEvent(
         return PublishRequest.builder()
             .topicArn(topicArn)
             .messageDeduplicationId(eventId)
-            .messageGroupId(questionId.toString())
+            .messageGroupId(eventId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }
@@ -25,7 +25,7 @@ class ReviewEvent(
         return PublishBatchRequestEntry.builder()
             .id(eventId)
             .messageDeduplicationId(eventId)
-            .messageGroupId(questionId.toString())
+            .messageGroupId(eventId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }

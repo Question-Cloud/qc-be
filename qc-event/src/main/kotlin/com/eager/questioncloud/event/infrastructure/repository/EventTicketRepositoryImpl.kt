@@ -13,6 +13,16 @@ class EventTicketRepositoryImpl(
     private val eventTicketJpaRepository: EventTicketJpaRepository,
     private val jpaQueryFactory: JPAQueryFactory
 ) : EventTicketRepository {
+    override fun getUnPublishEventTickets(): List<EventTicket> {
+        return jpaQueryFactory.select(eventTicketEntity)
+            .from(eventTicketEntity)
+            .where(eventTicketEntity.isPublish.isFalse)
+            .limit(1000)
+            .orderBy(eventTicketEntity.eventId.asc())
+            .fetch()
+            .map { it.toModel() }
+    }
+    
     override fun save(eventTicket: EventTicket): EventTicket {
         return eventTicketJpaRepository.save(EventTicketEntity.createNewEntity(eventTicket)).toModel()
     }
@@ -23,6 +33,15 @@ class EventTicketRepositoryImpl(
             .set(eventTicketEntity.isPublish, true)
             .set(eventTicketEntity.publishedAt, LocalDateTime.now())
             .where(eventTicketEntity.eventId.eq(eventId))
+            .execute()
+    }
+    
+    @Transactional
+    override fun publish(eventIds: List<String>) {
+        jpaQueryFactory.update(eventTicketEntity)
+            .set(eventTicketEntity.isPublish, true)
+            .set(eventTicketEntity.publishedAt, LocalDateTime.now())
+            .where(eventTicketEntity.eventId.`in`(eventIds))
             .execute()
     }
 }
