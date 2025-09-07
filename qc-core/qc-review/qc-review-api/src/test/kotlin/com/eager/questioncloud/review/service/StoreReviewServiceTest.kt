@@ -1,6 +1,7 @@
 package com.eager.questioncloud.review.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.event.implement.EventPublisher
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.infrastructure.repository.QuestionReviewRepository
@@ -32,7 +33,7 @@ class StoreReviewServiceTest(
     lateinit var questionQueryAPI: QuestionQueryAPI
     
     @MockBean
-    lateinit var storeReviewEventProcessor: StoreReviewEventPublisher
+    lateinit var eventPublisher: EventPublisher
     
     @AfterEach
     fun tearDown() {
@@ -112,7 +113,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(isWritten).isTrue()
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(storeReviewEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     @Test
@@ -132,7 +133,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(updatedReview.rate).isEqualTo(5)
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(storeReviewEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     @Test
@@ -150,7 +151,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(questionReviewRepository.isWritten(userId, questionId)).isFalse()
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(storeReviewEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     @Test

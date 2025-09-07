@@ -1,5 +1,6 @@
 package com.eager.questioncloud.pay.question.service
 
+import com.eager.questioncloud.event.implement.EventPublisher
 import com.eager.questioncloud.payment.domain.*
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.infrastructure.repository.CouponRepository
@@ -30,7 +31,7 @@ class QuestionPaymentServiceTest(
     lateinit var pointCommandAPI: PointCommandAPI
     
     @MockBean
-    lateinit var questionPaymentEventProcessor: QuestionPaymentEventPublisher
+    lateinit var eventPublisher: EventPublisher
     
     @AfterEach
     fun tearDown() {
@@ -49,7 +50,7 @@ class QuestionPaymentServiceTest(
         )
         
         doNothing().`when`(pointCommandAPI).usePoint(userId, 25000)
-        doNothing().`when`(questionPaymentEventProcessor).saveEventTicket(any())
+        doNothing().`when`(eventPublisher).saveEventTicket(any())
         
         //when
         val result = questionPaymentService.payment(userId, order, null)
@@ -63,7 +64,7 @@ class QuestionPaymentServiceTest(
         Assertions.assertThat(result.isUsedCoupon()).isFalse()
         
         verify(pointCommandAPI).usePoint(userId, 25000)
-        verify(questionPaymentEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     @Test
@@ -91,7 +92,7 @@ class QuestionPaymentServiceTest(
         val coupon = QuestionPaymentCoupon.create(userCoupon.id, percentCoupon)
         
         doNothing().`when`(pointCommandAPI).usePoint(userId, 18000)
-        doNothing().`when`(questionPaymentEventProcessor).saveEventTicket(any())
+        doNothing().`when`(eventPublisher).saveEventTicket(any())
         
         //when
         val result = questionPaymentService.payment(userId, order, coupon)
@@ -105,7 +106,7 @@ class QuestionPaymentServiceTest(
         Assertions.assertThat(result.questionPaymentCoupon!!.title).isEqualTo("10% 할인")
         
         verify(pointCommandAPI).usePoint(userId, 18000)
-        verify(questionPaymentEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     @Test
@@ -132,7 +133,7 @@ class QuestionPaymentServiceTest(
         val coupon = QuestionPaymentCoupon.create(userCoupon.id, fixedCoupon)
         
         doNothing().`when`(pointCommandAPI).usePoint(userId, 10000)
-        doNothing().`when`(questionPaymentEventProcessor).saveEventTicket(any())
+        doNothing().`when`(eventPublisher).saveEventTicket(any())
         
         //when
         val result = questionPaymentService.payment(userId, order, coupon)
@@ -146,7 +147,7 @@ class QuestionPaymentServiceTest(
         Assertions.assertThat(result.questionPaymentCoupon!!.couponType).isEqualTo(CouponType.Fixed)
         
         verify(pointCommandAPI).usePoint(userId, 10000)
-        verify(questionPaymentEventProcessor).saveEventTicket(any())
+        verify(eventPublisher).saveEventTicket(any())
     }
     
     private fun createQuestionOrder(orderItems: List<QuestionOrderItem>): QuestionOrder {
