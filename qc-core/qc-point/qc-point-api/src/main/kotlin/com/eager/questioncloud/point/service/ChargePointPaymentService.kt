@@ -23,11 +23,7 @@ class ChargePointPaymentService(
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
-        chargePointPaymentPGProcessor.confirm(
-            pgPayment.paymentId,
-            pgPayment.orderId,
-            chargePointPayment.chargePointType.amount
-        )
+        chargePointPaymentPGProcessor.confirm(pgPayment)
         chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
     }
     

@@ -33,8 +33,8 @@ dependencies {
     kapt("jakarta.persistence:jakarta.persistence-api")
     
     implementation(project(":qc-common"))
-    implementation(project(":qc-infra::qc-rdb"))
-    implementation(project(":qc-external-pg-api"))
+    implementation(project(":qc-infra:qc-rdb"))
+    implementation(project(":qc-infra:qc-external-pg"))
     
     testImplementation(kotlin("test"))
     testImplementation(project(":qc-api-container"))

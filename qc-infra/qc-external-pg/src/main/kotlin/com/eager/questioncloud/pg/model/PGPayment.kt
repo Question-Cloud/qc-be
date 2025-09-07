@@ -1,4 +1,4 @@
-package com.eager.questioncloud.pg.dto
+package com.eager.questioncloud.pg.model
 
 import com.eager.questioncloud.pg.toss.PaymentStatus
 

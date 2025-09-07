@@ -23,7 +23,7 @@ dependencies {
     
     implementation(project(":qc-common"))
     implementation(project(":qc-event"))
-    implementation(project(":qc-external-pg-api"))
+    implementation(project(":qc-infra:qc-external-pg"))
 }
 
 tasks.test {

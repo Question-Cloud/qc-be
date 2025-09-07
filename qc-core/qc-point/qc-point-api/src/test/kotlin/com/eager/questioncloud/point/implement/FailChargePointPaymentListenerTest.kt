@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
-import com.eager.questioncloud.pg.toss.TossPaymentAPI
+import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
@@ -27,7 +27,7 @@ internal class FailChargePointPaymentListenerTest(
     @Autowired val dbCleaner: DBCleaner,
 ) {
     @MockBean
-    lateinit var tossPaymentAPI: TossPaymentAPI
+    lateinit var paymentAPI: PaymentAPI
     
     @AfterEach
     fun tearDown() {
@@ -43,7 +43,7 @@ internal class FailChargePointPaymentListenerTest(
         order.charge()
         chargePointPaymentRepository.save(order)
         
-        doNothing().whenever(tossPaymentAPI).cancel(any(), any())
+        doNothing().whenever(paymentAPI).cancel(any())
         
         //when
         failChargePointPaymentListener.failHandler(FailChargePointPaymentMessage.create(order.orderId))

@@ -1,26 +1,20 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.pg.dto.PGPayment
-import com.eager.questioncloud.pg.toss.TossPaymentAPI
+import com.eager.questioncloud.pg.PaymentAPI
+import com.eager.questioncloud.pg.model.PGPayment
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
 
 @Component
 class ChargePointPaymentPGProcessor(
-    private val tossPaymentAPI: TossPaymentAPI,
+    private val paymentAPI: PaymentAPI,
 ) {
     fun getPayment(orderId: String): PGPayment {
-        val tossPayment = tossPaymentAPI.getPayment(orderId)
-        return PGPayment(
-            tossPayment.paymentKey,
-            tossPayment.orderId,
-            tossPayment.totalAmount,
-            tossPayment.status,
-        )
+        return paymentAPI.getPayment(orderId)
     }
     
     @Retryable(maxAttempts = 5)
-    fun confirm(paymentId: String, orderId: String, amount: Int) {
-        tossPaymentAPI.confirm(paymentId, orderId, amount)
+    fun confirm(pgPayment: PGPayment) {
+        paymentAPI.confirm(pgPayment)
     }
 }

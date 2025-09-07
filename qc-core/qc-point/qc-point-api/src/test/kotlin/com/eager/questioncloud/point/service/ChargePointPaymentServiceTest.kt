@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.service
 
-import com.eager.questioncloud.pg.dto.PGPayment
+import com.eager.questioncloud.pg.model.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.domain.UserPoint
@@ -68,7 +68,7 @@ class ChargePointPaymentServiceTest(
             PGPayment("paymentId", order.orderId, chargePointType.amount, PaymentStatus.READY)
         )
         
-        doNothing().whenever(chargePointPaymentPGProcessor).confirm(any(), any(), any())
+        doNothing().whenever(chargePointPaymentPGProcessor).confirm(any())
         
         // when
         chargePointPaymentService.approvePayment(order.orderId)
