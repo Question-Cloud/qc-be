@@ -21,13 +21,12 @@ class UserAuthenticator(
         user.checkUserStatus()
         return user
     }
-
+    
     fun socialAuthentication(code: String, accountType: AccountType): User {
         return runCatching {
             val socialAccessToken = socialAPIManager.getAccessToken(code, SocialPlatform.valueOf(accountType.value))
             val socialUid = socialAPIManager.getSocialUid(socialAccessToken, SocialPlatform.valueOf(accountType.value))
-            userRepository.getSocialUser(accountType, socialUid)
-                ?: throw CoreException(Error.NOT_REGISTERED_SOCIAL_USER)
+            userRepository.getSocialUser(accountType, socialUid) ?: throw CoreException(Error.NOT_REGISTERED_SOCIAL_USER)
         }.onFailure { e ->
             if (e is FailSocialLoginException) {
                 throw CoreException(Error.FAIL_SOCIAL_LOGIN)
