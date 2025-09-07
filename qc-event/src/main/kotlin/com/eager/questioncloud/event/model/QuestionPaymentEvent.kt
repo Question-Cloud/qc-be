@@ -1,6 +1,7 @@
 package com.eager.questioncloud.event.model
 
 import com.eager.questioncloud.event.SNSEvent
+import com.fasterxml.jackson.databind.ObjectMapper
 import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
@@ -8,20 +9,20 @@ class QuestionPaymentEvent(
     override val eventId: String,
     val data: QuestionPaymentEventData
 ) : SNSEvent {
-    override fun toRequest(): PublishRequest {
+    override fun toRequest(objectMapper: ObjectMapper): PublishRequest {
         return PublishRequest.builder()
             .messageGroupId(data.orderId)
             .messageDeduplicationId(data.orderId)
-            .message(SNSEvent.objectMapper.writeValueAsString(this))
+            .message(objectMapper.writeValueAsString(this))
             .build()
     }
     
-    override fun toBatchRequestEntry(): PublishBatchRequestEntry {
+    override fun toBatchRequestEntry(objectMapper: ObjectMapper): PublishBatchRequestEntry {
         return PublishBatchRequestEntry.builder()
             .id(eventId)
             .messageGroupId(data.orderId)
             .messageDeduplicationId(data.orderId)
-            .message(SNSEvent.objectMapper.writeValueAsString(this))
+            .message(objectMapper.writeValueAsString(this))
             .build()
     }
     

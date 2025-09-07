@@ -2,6 +2,7 @@ package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.event.SNSEvent
+import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.supervisorScope
 import org.springframework.scheduling.annotation.Scheduled
@@ -11,7 +12,8 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 abstract class AbstractEventProcessor<T : SNSEvent>(
     private val snsAsyncClient: SnsAsyncClient,
-    private val slackNotifier: ExceptionSlackNotifier
+    private val slackNotifier: ExceptionSlackNotifier,
+    private val objectMapper: ObjectMapper,
 ) {
     abstract fun saveEventLog(event: T)
     
@@ -45,7 +47,7 @@ abstract class AbstractEventProcessor<T : SNSEvent>(
             events.chunked(10).forEach { chunk ->
                 val request = PublishBatchRequest.builder()
                     .topicArn(events.first().getTopicArn())
-                    .publishBatchRequestEntries(chunk.mapIndexed { _, e -> e.toBatchRequestEntry() })
+                    .publishBatchRequestEntries(chunk.mapIndexed { _, e -> e.toBatchRequestEntry(objectMapper) })
                     .build()
                 
                 val response = snsAsyncClient.publishBatch(request).await();

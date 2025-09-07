@@ -4,10 +4,7 @@ import com.eager.questioncloud.logging.api.ApiRequest
 import com.eager.questioncloud.logging.api.ApiResponse
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.eager.questioncloud.logging.api.SensitiveBodyMasker
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -22,12 +19,10 @@ import java.nio.charset.Charset
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class ApiTransactionContextFilter : OncePerRequestFilter() {
+class ApiTransactionContextFilter(
+    private val objectMapper: ObjectMapper,
+) : OncePerRequestFilter() {
     private val fileLogger = LoggerFactory.getLogger("api-transaction")
-    private val objectMapper: ObjectMapper = ObjectMapper()
-        .registerKotlinModule()
-        .registerModule(JavaTimeModule())
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     
     override fun doFilterInternal(
         request: HttpServletRequest,
