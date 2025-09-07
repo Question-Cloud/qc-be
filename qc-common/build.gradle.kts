@@ -14,8 +14,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(project(":qc-infra::qc-http"))
     implementation(project(":qc-infra::qc-rdb"))
+    
     testImplementation(kotlin("test"))
 }
 

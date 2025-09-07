@@ -1,17 +1,19 @@
 package com.eager.questioncloud.social.naver
 
-import com.eager.questioncloud.social.*
+import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpRequest
+import com.eager.questioncloud.social.SocialAPI
+import com.eager.questioncloud.social.SocialAccessToken
+import com.eager.questioncloud.social.SocialPlatform
+import com.eager.questioncloud.social.SocialUserInfo
 import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class NaverAPI(
     private val objectMapper: ObjectMapper,
-    private val client: OkHttpClient,
+    private val httpClient: HttpClient,
 ) : SocialAPI {
     @Value("\${NAVER_CLIENT_ID}")
     private lateinit var NAVER_CLIENT_ID: String
@@ -20,43 +22,26 @@ class NaverAPI(
     private lateinit var NAVER_CLIENT_SECRET: String
     
     override fun getAccessToken(code: String): String {
-        val request = Request.Builder()
-            .url(
-                "https://nid.naver.com/oauth2.0/token".toHttpUrl()
-                    .newBuilder()
-                    .addQueryParameter("grant_type", "authorization_code")
-                    .addQueryParameter("client_id", NAVER_CLIENT_ID)
-                    .addQueryParameter("client_secret", NAVER_CLIENT_SECRET)
-                    .addQueryParameter("code", code)
-                    .build()
-            )
-            .get()
-            .build()
+        val query = mutableMapOf<String, String>()
+        query["grant_type"] = "authorization_code"
+        query["client_id"] = NAVER_CLIENT_ID
+        query["client_secret"] = NAVER_CLIENT_SECRET
+        query["code"] = code
         
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException()
-            
-            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
-        }
+        val request = HttpRequest(url = "https://nid.naver.com/oauth2.0/token", query = query)
+        val response = httpClient.get(request, SocialAccessToken::class.java)
+        return response.access_token
     }
     
     override fun getUserInfo(accessToken: String): SocialUserInfo {
-        val request = Request.Builder()
-            .url("https://openapi.naver.com/v1/nid/me")
-            .addHeader("Authorization", "Bearer $accessToken")
-            .get()
-            .build()
-        
-        val naverUserInfo = client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException()
-            
-            objectMapper.readValue(response.body?.string(), NaverUserInfoAPIResponse::class.java).response
-        }
+        val headers = mapOf("Authorization" to "Bearer $accessToken")
+        val request = HttpRequest("https://openapi.naver.com/v1/nid/me", headers = headers)
+        val response = httpClient.get(request, NaverUserInfoAPIResponse::class.java).response
         
         return SocialUserInfo(
-            naverUserInfo.id,
-            naverUserInfo.email,
-            naverUserInfo.nickname,
+            response.id,
+            response.email,
+            response.nickname,
             SocialPlatform.NAVER
         )
     }

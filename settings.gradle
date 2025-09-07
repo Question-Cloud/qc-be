@@ -100,4 +100,6 @@ include 'qc-social'                 // 소셜 로그인
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
 include 'qc-infra'
+include 'qc-infra:qc-http'
+findProject(':qc-infra:qc-http')?.name = 'qc-http'
 

@@ -1,29 +1,22 @@
 package com.eager.questioncloud.common.exception
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
+import com.eager.questioncloud.http.ContentType
+import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class ExceptionSlackNotifier(
-    private val objectMapper: ObjectMapper,
-    private val client: OkHttpClient,
+    private val httpClient: HttpClient,
 ) {
     @Value("\${SLACK_EXCEPTION_NOTIFY_WEBHOOK_URL}")
     private lateinit var SLACK_EXCEPTION_NOTIFY_WEBHOOK_URL: String
     
     fun sendApiException(e: Throwable, transactionId: String, url: String, method: String) {
         val payload = createPayload(e, transactionId, url, method)
-        val request = Request.Builder()
-            .url(SLACK_EXCEPTION_NOTIFY_WEBHOOK_URL)
-            .post(objectMapper.writeValueAsString(payload).toRequestBody("application/json".toMediaType()))
-            .build()
-        
-        client.newCall(request).execute().close()
+        val request = HttpRequest(url = SLACK_EXCEPTION_NOTIFY_WEBHOOK_URL, body = payload, contentType = ContentType.JSON)
+        httpClient.post(request)
     }
     
     private fun createPayload(e: Throwable, transactionId: String, url: String, method: String): SlackPayload {

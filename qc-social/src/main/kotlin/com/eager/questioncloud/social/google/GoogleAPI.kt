@@ -1,17 +1,18 @@
 package com.eager.questioncloud.social.google
 
-import com.eager.questioncloud.social.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.eager.questioncloud.http.ContentType
+import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpRequest
+import com.eager.questioncloud.social.SocialAPI
+import com.eager.questioncloud.social.SocialAccessToken
+import com.eager.questioncloud.social.SocialPlatform
+import com.eager.questioncloud.social.SocialUserInfo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class GoogleAPI(
-    private val objectMapper: ObjectMapper,
-    private val client: OkHttpClient,
+    private val httpClient: HttpClient
 ) : SocialAPI {
     @Value("\${GOOGLE_CLIENT_ID}")
     private lateinit var GOOGLE_CLIENT_ID: String
@@ -23,39 +24,23 @@ class GoogleAPI(
     private lateinit var CLIENT_URL: String
     
     override fun getAccessToken(code: String): String {
-        val formBody = FormBody.Builder()
-            .add("client_id", GOOGLE_CLIENT_ID)
-            .add("client_secret", GOOGLE_CLIENT_SECRET)
-            .add("code", code)
-            .add("grant_type", "authorization_code")
-            .add("redirect_uri", "$CLIENT_URL/user/social/kakao")
-            .build()
+        val form = mutableMapOf<String, String>()
+        form["client_id"] = GOOGLE_CLIENT_ID
+        form["client_secret"] = GOOGLE_CLIENT_SECRET
+        form["code"] = code
+        form["grant_type"] = "authorization_code"
+        form["redirect_uri"] = "$CLIENT_URL/user/social/kakao"
         
-        val request = Request.Builder()
-            .url("https://oauth2.googleapis.com/token")
-            .post(formBody)
-            .build()
-        
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException();
-            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
-        }
+        val request = HttpRequest(url = "https://oauth2.googleapis.com/token", form = form, contentType = ContentType.FORM)
+        val response = httpClient.post(request, SocialAccessToken::class.java)
+        return response.access_token
     }
     
     override fun getUserInfo(accessToken: String): SocialUserInfo {
-        val request = Request.Builder()
-            .url("https://www.googleapis.com/oauth2/v1/userinfo?alt=json")
-            .addHeader("Authorization", "Bearer $accessToken")
-            .get()
-            .build()
-        
-        val googleUserInfo = client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException()
-            
-            objectMapper.readValue(response.body?.string(), GoogleUserInfo::class.java)
-        }
-        
-        return SocialUserInfo(googleUserInfo.id, googleUserInfo.email, googleUserInfo.name, SocialPlatform.GOOGLE)
+        val headers = mapOf("Authorization" to "Bearer $accessToken")
+        val request = HttpRequest(url = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json", headers = headers)
+        val response = httpClient.get(request, GoogleUserInfo::class.java)
+        return SocialUserInfo(response.id, response.email, response.name, SocialPlatform.GOOGLE)
     }
     
     override fun getSocialPlatform(): SocialPlatform {

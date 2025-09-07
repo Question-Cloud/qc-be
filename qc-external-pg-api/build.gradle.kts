@@ -5,9 +5,8 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":qc-infra:qc-http"))
     implementation("org.springframework:spring-context")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
     implementation(project(":qc-common"))
 }
 

@@ -1,17 +1,18 @@
 package com.eager.questioncloud.social.kakao
 
-import com.eager.questioncloud.social.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.eager.questioncloud.http.ContentType
+import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpRequest
+import com.eager.questioncloud.social.SocialAPI
+import com.eager.questioncloud.social.SocialAccessToken
+import com.eager.questioncloud.social.SocialPlatform
+import com.eager.questioncloud.social.SocialUserInfo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class KakaoAPI(
-    private val objectMapper: ObjectMapper,
-    private val client: OkHttpClient,
+    private val httpClient: HttpClient
 ) : SocialAPI {
     @Value("\${KAKAO_API_KEY}")
     private lateinit var KAKAO_API_KEY: String
@@ -23,39 +24,23 @@ class KakaoAPI(
     private lateinit var CLIENT_URL: String
     
     override fun getAccessToken(code: String): String {
-        val formBody = FormBody.Builder()
-            .add("grant_type", "authorization_code")
-            .add("client_id", KAKAO_API_KEY)
-            .add("redirect_uri", "$CLIENT_URL/user/social/kakao")
-            .add("code", code)
-            .add("client_secret", KAKAO_API_SECRET)
-            .build()
+        val form = mutableMapOf<String, String>()
+        form["grant_type"] = "authorization_code"
+        form["client_id"] = KAKAO_API_KEY
+        form["redirect_uri"] = "$CLIENT_URL/user/social/kakao"
+        form["code"] = code
+        form["client_secret"] = KAKAO_API_SECRET
         
-        val request = Request.Builder()
-            .url("https://kauth.kakao.com/oauth/token")
-            .post(formBody)
-            .build()
-        
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException()
-            return objectMapper.readValue(response.body?.string(), SocialAccessToken::class.java).access_token
-        }
+        val request = HttpRequest(url = "https://kauth.kakao.com/oauth/token", form = form, contentType = ContentType.FORM)
+        val response = httpClient.post(request, SocialAccessToken::class.java)
+        return response.access_token
     }
     
     override fun getUserInfo(accessToken: String): SocialUserInfo {
-        val request = Request.Builder()
-            .url("https://kapi.kakao.com/v1/oidc/userinfo")
-            .addHeader("Authorization", "Bearer $accessToken")
-            .get()
-            .build()
-        
-        val kakaoUserInfo = client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw FailSocialLoginException()
-            
-            objectMapper.readValue(response.body?.string(), KakaoUserInfo::class.java)
-        }
-        
-        return SocialUserInfo(kakaoUserInfo.sub, kakaoUserInfo.email, kakaoUserInfo.nickname, SocialPlatform.KAKAO)
+        val headers = mapOf("Authorization" to "Bearer $accessToken")
+        val request = HttpRequest(url = "https://kapi.kakao.com/v1/oidc/userinfo", headers = headers)
+        val response = httpClient.get(request, KakaoUserInfo::class.java)
+        return SocialUserInfo(response.sub, response.email, response.nickname, SocialPlatform.KAKAO)
     }
     
     override fun getSocialPlatform(): SocialPlatform {

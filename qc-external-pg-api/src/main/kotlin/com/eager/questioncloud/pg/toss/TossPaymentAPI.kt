@@ -1,84 +1,53 @@
 package com.eager.questioncloud.pg.toss
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
-import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
+import com.eager.questioncloud.http.ContentType
+import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class TossPaymentAPI(
-    private val client: OkHttpClient,
-    private val objectMapper: ObjectMapper,
+    private val httpClient: HttpClient,
 ) {
     @Value("\${TOSS_SECRET_KEY}")
     private lateinit var TOSS_SECRET_KEY: String
     
     fun getPayment(orderId: String): TossPayment {
-        val request = Request.Builder()
-            .url("${BASE_URL}/payments/orders/$orderId")
-            .header("Authorization", "Basic $TOSS_SECRET_KEY")
-            .get()
-            .build()
+        val headers = mapOf("Authorization" to "Basic $TOSS_SECRET_KEY")
+        val request = HttpRequest(url = "${BASE_URL}/payments/orders/$orderId", headers = headers)
         
-        client.newCall(request).execute().use { response ->
-            validatePaymentResponse(response)
-            return objectMapper.readValue(response.body!!.string(), TossPayment::class.java)
-        }
+        return httpClient.get(request, TossPayment::class.java)
     }
     
     fun confirm(paymentId: String, orderId: String, amount: Int) {
-        val request = Request.Builder()
-            .url("${BASE_URL}/payments/confirm")
-            .header("Authorization", "Basic $TOSS_SECRET_KEY")
-            .header("Idempotency-Key", paymentId)
-            .post(getConfirmRequestBody(TossPaymentConfirmRequest(paymentId, orderId, amount)))
-            .build()
+        val headers = mutableMapOf<String, String>()
+        headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
+        headers["Idempotency-Key"] = paymentId
         
-        client.newCall(request).execute().use { response ->
-            validatePaymentResponse(response)
-        }
+        val request = HttpRequest(
+            url = "${BASE_URL}/payments/confirm",
+            headers = headers,
+            body = TossPaymentConfirmRequest(paymentId, orderId, amount),
+            contentType = ContentType.JSON,
+        )
+        
+        httpClient.post(request)
     }
     
     fun cancel(paymentId: String, amount: Int) {
-        val request = Request.Builder()
-            .url("${BASE_URL}/payments/$paymentId/cancel")
-            .header("Authorization", "Basic $TOSS_SECRET_KEY")
-            .header("Idempotency-Key", paymentId)
-            .post(getCancelRequestBody(TossPaymentCancelRequest(amount)))
-            .build()
+        val headers = mutableMapOf<String, String>()
+        headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
+        headers["Idempotency-Key"] = paymentId
         
-        client.newCall(request).execute().use { response ->
-            validatePaymentResponse(response)
-        }
-    }
-    
-    private fun getConfirmRequestBody(request: TossPaymentConfirmRequest): RequestBody {
-        return objectMapper.writeValueAsString(request).toRequestBody("application/json".toMediaType())
-    }
-    
-    private fun getCancelRequestBody(request: TossPaymentCancelRequest): RequestBody {
-        return objectMapper.writeValueAsString(request).toRequestBody("application/json".toMediaType())
-    }
-    
-    private fun validatePaymentResponse(response: Response) {
-        if (response.code == 200) {
-            return
-        }
+        val request = HttpRequest(
+            url = "${BASE_URL}/payments/$paymentId/cancel",
+            headers = headers,
+            body = TossPaymentCancelRequest(amount),
+            contentType = ContentType.JSON,
+        )
         
-        if (response.code == 404) {
-            throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
-        }
-        
-        if (response.body == null) {
-            throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
-        }
+        httpClient.post(request)
     }
     
     companion object {

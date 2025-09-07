@@ -1,12 +1,13 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
+    kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
 }
 
 dependencies {
     implementation("org.springframework:spring-context")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation(project(":qc-infra:qc-http"))
 }
 
 tasks.getByName<BootJar>("bootJar") {

@@ -21,27 +21,27 @@ java {
 subprojects {
     group = "com.eager"
     version = "0.0.1-SNAPSHOT"
-
+    
     apply(plugin = "java")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.kapt")
-
+    
     repositories {
         mavenCentral()
     }
-
+    
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("io.hypersistence:hypersistence-tsid:2.1.4")
-        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3")
-
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     }
-
+    
     tasks.test {
         useJUnitPlatform()
     }
