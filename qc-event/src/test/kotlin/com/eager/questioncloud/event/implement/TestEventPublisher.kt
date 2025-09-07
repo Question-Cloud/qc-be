@@ -6,13 +6,13 @@ import software.amazon.awssdk.services.sns.SnsAsyncClient
 import java.util.*
 
 @Component
-class TestEventProcessor(
+class TestEventPublisher(
     private val snsAsyncClient: SnsAsyncClient,
     private val slackNotifier: ExceptionSlackNotifier,
-) : AbstractEventProcessor<TestEvent>(snsAsyncClient, slackNotifier) {
+) : EventPublisher<TestEvent>(snsAsyncClient, slackNotifier) {
     private var isSend: Boolean = false
     
-    override fun saveEventLog(event: TestEvent) {
+    override fun saveEventTicket(event: TestEvent) {
     }
     
     override fun publishEvent(event: TestEvent) {

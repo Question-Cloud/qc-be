@@ -26,7 +26,7 @@ class QuestionPaymentHistoryRegisterListener(
         val creators = creatorQueryAPI.getCreators(questions.map { it.creatorId })
         val creatorMap = creators.associateBy { it.creatorId }
         val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
-
+        
         val orders = questions.map {
             val creator = creatorMap.getValue(it.creatorId)
             val creatorUser = creatorUserMap.getValue(creator.userId)
@@ -41,7 +41,7 @@ class QuestionPaymentHistoryRegisterListener(
                 it.childCategory
             )
         }
-
+        
         val couponData = event.data.questionPaymentCoupon
         
         questionPaymentHistoryRepository.save(

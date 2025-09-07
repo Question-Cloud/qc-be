@@ -11,6 +11,7 @@ class QuestionPaymentEvent(
 ) : SNSEvent {
     override fun toRequest(objectMapper: ObjectMapper): PublishRequest {
         return PublishRequest.builder()
+            .topicArn(topicArn)
             .messageGroupId(data.orderId)
             .messageDeduplicationId(data.orderId)
             .message(objectMapper.writeValueAsString(this))

@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("test")
 class EventProcessorTest(
-    @Autowired private val eventProcessor: TestEventProcessor
+    @Autowired private val eventProcessor: TestEventPublisher
 ) {
     @Test
     fun repulish() {

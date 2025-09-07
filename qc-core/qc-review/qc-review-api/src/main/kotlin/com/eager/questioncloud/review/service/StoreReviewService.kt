@@ -1,12 +1,16 @@
 package com.eager.questioncloud.review.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.event.implement.EventPublisher
 import com.eager.questioncloud.event.model.ReviewEvent
 import com.eager.questioncloud.event.model.ReviewEventType
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.dto.MyQuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
-import com.eager.questioncloud.review.implement.*
+import com.eager.questioncloud.review.implement.StoreReviewReader
+import com.eager.questioncloud.review.implement.StoreReviewRegister
+import com.eager.questioncloud.review.implement.StoreReviewRemover
+import com.eager.questioncloud.review.implement.StoreReviewUpdater
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,12 +20,12 @@ class StoreReviewService(
     private val storeReviewRegister: StoreReviewRegister,
     private val storeReviewUpdater: StoreReviewUpdater,
     private val storeReviewRemover: StoreReviewRemover,
-    private val storeReviewEventProcessor: StoreReviewEventProcessor,
+    private val eventPublisher: EventPublisher,
 ) {
     fun count(questionId: Long): Int {
         return storeReviewReader.count(questionId)
     }
-
+    
     fun getReviewDetails(
         questionId: Long,
         userId: Long,
@@ -29,15 +33,15 @@ class StoreReviewService(
     ): List<QuestionReviewDetail> {
         return storeReviewReader.getQuestionReviewDetails(questionId, userId, pagingInformation)
     }
-
+    
     fun getMyReview(questionId: Long, userId: Long): MyQuestionReview {
         return storeReviewReader.getMyQuestionReview(questionId, userId)
     }
-
+    
     @Transactional
     fun register(questionReview: QuestionReview) {
         storeReviewRegister.register(questionReview)
-        storeReviewEventProcessor.saveEventLog(
+        eventPublisher.saveEventTicket(
             ReviewEvent.create(
                 questionReview.questionId,
                 questionReview.rate,
@@ -45,11 +49,11 @@ class StoreReviewService(
             )
         )
     }
-
+    
     @Transactional
     fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
         val (questionId, varianceRate) = storeReviewUpdater.modify(reviewId, userId, comment, rate)
-        storeReviewEventProcessor.saveEventLog(
+        eventPublisher.saveEventTicket(
             ReviewEvent.create(
                 questionId,
                 varianceRate,
@@ -57,11 +61,11 @@ class StoreReviewService(
             )
         )
     }
-
+    
     @Transactional
     fun delete(reviewId: Long, userId: Long) {
         val (questionId, varianceRate) = storeReviewRemover.delete(reviewId, userId)
-        storeReviewEventProcessor.saveEventLog(
+        eventPublisher.saveEventTicket(
             ReviewEvent.create(
                 questionId,
                 varianceRate,

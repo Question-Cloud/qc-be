@@ -22,7 +22,7 @@ class UpdateCreatorSalesStatisticsListener(
         val countQuestionByCreator = questions
             .stream()
             .collect(Collectors.groupingBy(QuestionInformationQueryResult::creatorId, Collectors.counting()))
-
+        
         countQuestionByCreator
             .forEach { (creatorId: Long, count: Long) ->
                 creatorStatisticsRepository.addSalesCount(
