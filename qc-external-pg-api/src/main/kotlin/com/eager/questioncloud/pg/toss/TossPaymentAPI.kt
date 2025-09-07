@@ -3,7 +3,6 @@ package com.eager.questioncloud.pg.toss
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -12,10 +11,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.util.concurrent.TimeUnit
 
 @Component
-class TossPaymentAPI {
+class TossPaymentAPI(
+    private val client: OkHttpClient,
+    private val objectMapper: ObjectMapper,
+) {
     @Value("\${TOSS_SECRET_KEY}")
     private lateinit var TOSS_SECRET_KEY: String
     
@@ -82,11 +83,5 @@ class TossPaymentAPI {
     
     companion object {
         private const val BASE_URL = "https://api.tosspayments.com/v1"
-        private val objectMapper = ObjectMapper().registerKotlinModule()
-        private val client = OkHttpClient().newBuilder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .callTimeout(15, TimeUnit.SECONDS)
-            .build()
     }
 }

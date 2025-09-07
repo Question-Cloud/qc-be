@@ -4,7 +4,6 @@ import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.core.Ordered
@@ -17,10 +16,12 @@ import org.springframework.web.servlet.ModelAndView
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
-class NonCoreExceptionResolver(private val slackNotifier: ExceptionSlackNotifier) : HandlerExceptionResolver {
+class NonCoreExceptionResolver(
+    private val slackNotifier: ExceptionSlackNotifier,
+    private val objectMapper: ObjectMapper
+) : HandlerExceptionResolver {
     private val cacheResponse =
         ErrorResponse(Error.INTERNAL_SERVER_ERROR.httpStatus, Error.INTERNAL_SERVER_ERROR.message)
-    private val objectMapper = ObjectMapper().registerKotlinModule()
     
     override fun resolveException(
         req: HttpServletRequest,
