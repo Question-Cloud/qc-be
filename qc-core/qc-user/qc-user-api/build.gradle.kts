@@ -23,10 +23,10 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     
     api(project(":qc-core:qc-user:qc-user-core"))
+    
     implementation(project(":qc-internal-api-interface:qc-point-internal-api-interface"))
     implementation(project(":qc-common"))
-    
-    implementation(project(":qc-social"))
+    implementation(project(":qc-infra:qc-social"))
 }
 
 tasks.test {

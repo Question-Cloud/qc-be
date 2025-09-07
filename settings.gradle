@@ -87,19 +87,16 @@ include 'qc-internal-api-interface:qc-post-internal-api-interface'
 // =============================================================================
 // 🛠️ Infrastructure Modules (인프라스트럭처)
 // =============================================================================
-include 'qc-infra:qc-rdb'                    // 데이터베이스
+include 'qc-infra:qc-rdb'           // 데이터베이스
+include 'qc-infra:qc-http'          // Http
+include 'qc-infra:qc-social'        // 소셜 API
 include 'qc-event'                  // 이벤트 처리
 include 'qc-logging'                // 로깅
 include 'qc-external-pg-api'        // 외부 결제 게이트웨이
 include 'qc-lock-manager'           // 분산 락
-include 'qc-social'                 // 소셜 로그인
 
 // =============================================================================
 // 🔧 Shared Modules (공통 모듈)
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-include 'qc-infra'
-include 'qc-infra:qc-http'
-findProject(':qc-infra:qc-http')?.name = 'qc-http'
-
