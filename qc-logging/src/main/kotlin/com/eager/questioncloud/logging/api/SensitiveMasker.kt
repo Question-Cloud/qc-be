@@ -1,24 +1,16 @@
 package com.eager.questioncloud.logging.api
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-class SensitiveBodyMasker {
+class SensitiveMasker {
     companion object {
         private val sensitiveKeys: Set<String> = setOf("password", "newpassword", "accesstoken", "refreshtoken")
         private val maskValue: String = "***************"
         
-        private val objectMapper: ObjectMapper = ObjectMapper()
-            .registerKotlinModule()
-            .registerModule(JavaTimeModule())
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        
-        fun mask(body: String): String {
+        fun mask(body: String, objectMapper: ObjectMapper): String {
             if (body.isBlank()) {
                 return body
             }

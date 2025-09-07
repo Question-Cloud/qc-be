@@ -3,7 +3,7 @@ package com.eager.questioncloud.filter
 import com.eager.questioncloud.logging.api.ApiRequest
 import com.eager.questioncloud.logging.api.ApiResponse
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
-import com.eager.questioncloud.logging.api.SensitiveBodyMasker
+import com.eager.questioncloud.logging.api.SensitiveMasker
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -50,10 +50,11 @@ class ApiTransactionContextFilter(
     }
     
     private fun toApiRequest(request: ContentCachingRequestWrapper): ApiRequest {
+        val requestString = parseRequest(request)
         return ApiRequest(
             request.requestURI,
             request.method,
-            SensitiveBodyMasker.mask(parseBody(request)),
+            SensitiveMasker.mask(requestString, objectMapper),
             request.remoteAddr,
             parseHeaders(request),
             request.parameterMap
@@ -61,10 +62,8 @@ class ApiTransactionContextFilter(
     }
     
     private fun toApiResponse(response: ContentCachingResponseWrapper): ApiResponse {
-        return ApiResponse(
-            response.status,
-            SensitiveBodyMasker.mask(response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8"))),
-        )
+        val responseString = parseResponse(response)
+        return ApiResponse(response.status, SensitiveMasker.mask(responseString, objectMapper))
     }
     
     private fun parseHeaders(request: ContentCachingRequestWrapper): Map<String, String> {
@@ -77,7 +76,7 @@ class ApiTransactionContextFilter(
         return headers
     }
     
-    private fun parseBody(request: ContentCachingRequestWrapper): String {
+    private fun parseRequest(request: ContentCachingRequestWrapper): String {
         if (request.contentAsString.isNotEmpty()) {
             return request.contentAsString
         }
@@ -89,6 +88,10 @@ class ApiTransactionContextFilter(
         }
         
         return inputStream.toString(Charset.forName("UTF-8"))
+    }
+    
+    private fun parseResponse(response: ContentCachingResponseWrapper): String {
+        return response.contentInputStream.readAllBytes().toString(Charset.forName("UTF-8"))
     }
     
     private fun toErrorResponse(response: ContentCachingResponseWrapper) {
