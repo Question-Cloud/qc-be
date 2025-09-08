@@ -20,7 +20,6 @@ dependencies {
     
     implementation(project(":qc-common"))
     implementation(project(":qc-logging"))
-    implementation(project(":qc-event"))
     
     implementation(project(":qc-core:qc-cart:qc-cart-api"))
     implementation(project(":qc-core:qc-creator:qc-creator-api"))
@@ -38,6 +37,7 @@ dependencies {
     implementation(project(":qc-core:qc-user:qc-user-internal-api"))
     
     implementation(project(":qc-infra:qc-rdb"))
+    implementation(project(":qc-infra:qc-event"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")

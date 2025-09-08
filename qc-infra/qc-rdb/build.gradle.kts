@@ -23,7 +23,7 @@ dependencies {
     implementation(project(":qc-core:qc-review:qc-review-core"))
     implementation(project(":qc-core:qc-subscribe:qc-subscribe-core"))
     implementation(project(":qc-core:qc-user:qc-user-core"))
-    implementation(project(":qc-event"))
+    implementation(project(":qc-infra:qc-event"))
     
     implementation(project(":qc-common"))
     api("org.springframework.boot:spring-boot-starter-data-jpa")

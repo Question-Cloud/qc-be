@@ -91,7 +91,7 @@ include 'qc-infra:qc-rdb'           // 데이터베이스
 include 'qc-infra:qc-http'          // Http
 include 'qc-infra:qc-social'        // 소셜 API
 include 'qc-infra:qc-external-pg'   // 외부 결제 게이트웨이
-include 'qc-event'                  // 이벤트 처리
+include 'qc-infra:qc-event'         // 이벤트 처리
 include 'qc-logging'                // 로깅
 include 'qc-lock-manager'           // 분산 락
 
