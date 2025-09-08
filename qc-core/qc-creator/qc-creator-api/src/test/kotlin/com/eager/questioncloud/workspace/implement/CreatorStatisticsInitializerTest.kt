@@ -1,6 +1,6 @@
 package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
@@ -17,17 +17,17 @@ class CreatorStatisticsInitializerTest(
     @Autowired val dbCleaner: DBCleaner,
 ) {
     private val creatorId = 1L
-
+    
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
     }
-
+    
     @Test
     fun `크리에이터 통계를 초기화할 수 있다`() {
         //when
         creatorStatisticsInitializer.initializeCreatorStatistics(creatorId)
-
+        
         //then
         val foundStatistics = creatorStatisticsRepository.findByCreatorId(creatorId)
         Assertions.assertThat(foundStatistics).isNotNull

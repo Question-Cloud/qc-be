@@ -2,8 +2,8 @@ package com.eager.questioncloud.creator.api.internal
 
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.domain.CreatorStatistics
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach

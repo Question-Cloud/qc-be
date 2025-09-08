@@ -1,7 +1,7 @@
-package com.eager.questioncloud.event.infrastructure.repository
+package com.eager.questioncloud.event.repository
 
-import com.eager.questioncloud.event.infrastructure.entity.EventTicketEntity
-import com.eager.questioncloud.event.infrastructure.entity.QEventTicketEntity.eventTicketEntity
+import com.eager.questioncloud.event.entity.EventTicketEntity
+import com.eager.questioncloud.event.entity.QEventTicketEntity.eventTicketEntity
 import com.eager.questioncloud.event.model.EventTicket
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository

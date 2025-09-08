@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event.infrastructure.entity
+package com.eager.questioncloud.event.entity
 
 import com.eager.questioncloud.common.entity.BaseCustomIdEntity
 import com.eager.questioncloud.event.model.EventTicket

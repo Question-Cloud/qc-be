@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event.infrastructure.repository
+package com.eager.questioncloud.event.repository
 
 import com.eager.questioncloud.event.model.EventProcessLog
 

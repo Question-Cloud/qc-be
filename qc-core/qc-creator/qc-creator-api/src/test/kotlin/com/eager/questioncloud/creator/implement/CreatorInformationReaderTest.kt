@@ -2,8 +2,8 @@ package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.domain.CreatorStatistics
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner

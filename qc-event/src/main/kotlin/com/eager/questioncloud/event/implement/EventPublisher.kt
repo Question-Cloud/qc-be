@@ -1,7 +1,7 @@
 package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.event.SNSEvent
-import com.eager.questioncloud.event.infrastructure.repository.EventTicketRepository
+import com.eager.questioncloud.event.repository.EventTicketRepository
 import com.eager.questioncloud.event.model.EventTicket
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.ApplicationEventPublisher

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.event.aspect
 
 import com.eager.questioncloud.event.SNSEvent
-import com.eager.questioncloud.event.infrastructure.repository.EventProcessLogRepository
+import com.eager.questioncloud.event.repository.EventProcessLogRepository
 import com.eager.questioncloud.event.model.EventProcessLog
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation.Around

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.workspace.service
 
 import com.eager.questioncloud.creator.domain.Creator
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach

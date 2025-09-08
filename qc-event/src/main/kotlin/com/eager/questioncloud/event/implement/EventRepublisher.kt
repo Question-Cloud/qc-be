@@ -1,6 +1,6 @@
 package com.eager.questioncloud.event.implement
 
-import com.eager.questioncloud.event.infrastructure.repository.EventTicketRepository
+import com.eager.questioncloud.event.repository.EventTicketRepository
 import com.eager.questioncloud.event.model.EventTicket
 import kotlinx.coroutines.future.await
 import org.springframework.scheduling.annotation.Scheduled

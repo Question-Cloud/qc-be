@@ -1,6 +1,6 @@
-package com.eager.questioncloud.event.infrastructure.repository
+package com.eager.questioncloud.event.repository
 
-import com.eager.questioncloud.event.infrastructure.entity.EventProcessLogEntity
+import com.eager.questioncloud.event.entity.EventProcessLogEntity
 import com.eager.questioncloud.event.model.EventProcessLog
 import org.springframework.stereotype.Repository
 

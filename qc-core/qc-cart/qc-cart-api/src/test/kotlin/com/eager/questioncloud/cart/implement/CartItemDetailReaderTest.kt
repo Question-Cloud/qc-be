@@ -1,7 +1,7 @@
 package com.eager.questioncloud.cart.implement
 
 import com.eager.questioncloud.cart.domain.CartItem
-import com.eager.questioncloud.cart.infrastructure.repository.CartItemRepository
+import com.eager.questioncloud.cart.repository.CartItemRepository
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.creator.api.internal.CreatorQueryData
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult

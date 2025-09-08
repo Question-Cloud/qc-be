@@ -2,7 +2,7 @@ package com.eager.questioncloud.workspace.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.domain.Creator
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
+import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.*
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions.assertThat
