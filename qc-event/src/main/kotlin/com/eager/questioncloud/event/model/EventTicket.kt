@@ -1,6 +1,7 @@
 package com.eager.questioncloud.event.model
 
-import com.eager.questioncloud.event.SNSEvent
+import com.eager.questioncloud.common.event.Event
+import com.eager.questioncloud.event.Topic
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.time.LocalDateTime
 
@@ -13,8 +14,15 @@ class EventTicket(
     var publishedAt: LocalDateTime?
 ) {
     companion object {
-        fun <T : SNSEvent> create(event: T, objectMapper: ObjectMapper): EventTicket {
-            return EventTicket(event.eventId, false, event.getTopicArn(), event.toJson(objectMapper), LocalDateTime.now(), null)
+        fun create(event: Event, objectMapper: ObjectMapper): EventTicket {
+            return EventTicket(
+                event.eventId,
+                false,
+                Topic.valueOf(event.eventType.name).topicArn,
+                objectMapper.writeValueAsString(event.payload),
+                LocalDateTime.now(),
+                null
+            )
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.eager.questioncloud.question.listener
 
+import com.eager.questioncloud.common.event.ReviewEventPayload
+import com.eager.questioncloud.common.event.ReviewEventType
 import com.eager.questioncloud.event.annotation.IdempotentEvent
-import com.eager.questioncloud.event.model.ReviewEvent
-import com.eager.questioncloud.event.model.ReviewEventType
 import com.eager.questioncloud.question.repository.QuestionMetadataRepository
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.stereotype.Component
@@ -15,7 +15,7 @@ class UpdateReviewStatisticsListener(
     @SqsListener("update-question-review-statistics.fifo")
     @IdempotentEvent
     @Transactional
-    fun updateByRegisteredReview(event: ReviewEvent) {
+    fun updateByRegisteredReview(event: ReviewEventPayload) {
         val questionMetadata = questionMetadataRepository.getForUpdate(event.questionId)
         when (event.reviewEventType) {
             ReviewEventType.REGISTER -> questionMetadata.updateByNewReview(event.varianceRate)

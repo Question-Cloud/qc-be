@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.listener
 
-import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
+import com.eager.questioncloud.common.event.FailChargePointPaymentMessage
 import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.pg.model.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
+import com.eager.questioncloud.common.event.FailChargePointPaymentMessage
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.awspring.cloud.sqs.operations.SqsTemplate
 import org.slf4j.LoggerFactory

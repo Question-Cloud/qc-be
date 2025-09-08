@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event.model
+package com.eager.questioncloud.common.event
 
 enum class ReviewEventType(
     val type: String,

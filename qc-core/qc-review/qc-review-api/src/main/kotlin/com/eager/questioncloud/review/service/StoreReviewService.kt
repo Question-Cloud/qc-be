@@ -1,9 +1,7 @@
 package com.eager.questioncloud.review.service
 
+import com.eager.questioncloud.common.event.*
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.event.implement.EventPublisher
-import com.eager.questioncloud.event.model.ReviewEvent
-import com.eager.questioncloud.event.model.ReviewEventType
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.dto.MyQuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
@@ -41,11 +39,14 @@ class StoreReviewService(
     @Transactional
     fun register(questionReview: QuestionReview) {
         storeReviewRegister.register(questionReview)
-        eventPublisher.saveEventTicket(
-            ReviewEvent.create(
-                questionReview.questionId,
-                questionReview.rate,
-                ReviewEventType.REGISTER
+        eventPublisher.publish(
+            Event.create(
+                EventType.ReviewEvent,
+                ReviewEventPayload.create(
+                    questionReview.questionId,
+                    questionReview.rate,
+                    ReviewEventType.REGISTER
+                )
             )
         )
     }
@@ -53,11 +54,14 @@ class StoreReviewService(
     @Transactional
     fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
         val (questionId, varianceRate) = storeReviewUpdater.modify(reviewId, userId, comment, rate)
-        eventPublisher.saveEventTicket(
-            ReviewEvent.create(
-                questionId,
-                varianceRate,
-                ReviewEventType.MODIFY
+        eventPublisher.publish(
+            Event.create(
+                EventType.ReviewEvent,
+                ReviewEventPayload.create(
+                    questionId,
+                    varianceRate,
+                    ReviewEventType.MODIFY
+                )
             )
         )
     }
@@ -65,11 +69,14 @@ class StoreReviewService(
     @Transactional
     fun delete(reviewId: Long, userId: Long) {
         val (questionId, varianceRate) = storeReviewRemover.delete(reviewId, userId)
-        eventPublisher.saveEventTicket(
-            ReviewEvent.create(
-                questionId,
-                varianceRate,
-                ReviewEventType.DELETE
+        eventPublisher.publish(
+            Event.create(
+                EventType.ReviewEvent,
+                ReviewEventPayload.create(
+                    questionId,
+                    varianceRate,
+                    ReviewEventType.DELETE
+                )
             )
         )
     }

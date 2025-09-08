@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event.model
+package com.eager.questioncloud.common.event
 
 class FailChargePointPaymentMessage(
     val orderId: String,

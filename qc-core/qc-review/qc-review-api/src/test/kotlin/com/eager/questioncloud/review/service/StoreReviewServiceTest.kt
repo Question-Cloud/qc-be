@@ -1,7 +1,7 @@
 package com.eager.questioncloud.review.service
 
+import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.event.implement.EventPublisher
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
@@ -113,7 +113,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(isWritten).isTrue()
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).saveEventTicket(any())
+        verify(eventPublisher).publish(any())
     }
     
     @Test
@@ -133,7 +133,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(updatedReview.rate).isEqualTo(5)
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).saveEventTicket(any())
+        verify(eventPublisher).publish(any())
     }
     
     @Test
@@ -151,7 +151,7 @@ class StoreReviewServiceTest(
         Assertions.assertThat(questionReviewRepository.isWritten(userId, questionId)).isFalse()
         
         // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).saveEventTicket(any())
+        verify(eventPublisher).publish(any())
     }
     
     @Test

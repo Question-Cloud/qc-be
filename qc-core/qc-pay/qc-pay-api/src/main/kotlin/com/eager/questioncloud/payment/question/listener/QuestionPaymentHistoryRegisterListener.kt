@@ -1,7 +1,7 @@
 package com.eager.questioncloud.payment.question.listener
 
+import com.eager.questioncloud.common.event.QuestionPaymentEventPayload
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
-import com.eager.questioncloud.event.model.QuestionPaymentEvent
 import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
@@ -21,8 +21,8 @@ class QuestionPaymentHistoryRegisterListener(
     private val questionPaymentHistoryRepository: QuestionPaymentHistoryRepository,
 ) {
     @SqsListener("question-payment-history-register.fifo")
-    fun saveQuestionPaymentHistory(@Payload event: QuestionPaymentEvent) {
-        val questions = questionQueryAPI.getQuestionInformation(event.data.questionIds)
+    fun saveQuestionPaymentHistory(@Payload event: QuestionPaymentEventPayload) {
+        val questions = questionQueryAPI.getQuestionInformation(event.questionIds)
         val creators = creatorQueryAPI.getCreators(questions.map { it.creatorId })
         val creatorMap = creators.associateBy { it.creatorId }
         val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
@@ -42,12 +42,12 @@ class QuestionPaymentHistoryRegisterListener(
             )
         }
         
-        val couponData = event.data.questionPaymentCoupon
+        val couponData = event.questionPaymentCoupon
         
         questionPaymentHistoryRepository.save(
             QuestionPaymentHistory.create(
-                event.data.orderId,
-                event.data.buyerUserId,
+                event.orderId,
+                event.buyerUserId,
                 orders,
                 couponData?.let {
                     QuestionPaymentCoupon(
@@ -58,7 +58,7 @@ class QuestionPaymentHistoryRegisterListener(
                         couponData.value
                     )
                 },
-                event.data.amount
+                event.amount
             )
         )
     }

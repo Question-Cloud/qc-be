@@ -1,9 +1,9 @@
 package com.eager.questioncloud.creator.listener
 
+import com.eager.questioncloud.common.event.ReviewEventPayload
+import com.eager.questioncloud.common.event.ReviewEventType
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.event.annotation.IdempotentEvent
-import com.eager.questioncloud.event.model.ReviewEvent
-import com.eager.questioncloud.event.model.ReviewEventType
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload
@@ -16,7 +16,7 @@ class UpdateCreatorReviewStatisticsListener(
 ) {
     @SqsListener("update-creator-review-statistics.fifo")
     @IdempotentEvent
-    fun updateCreatorReviewStatistics(@Payload event: ReviewEvent) {
+    fun updateCreatorReviewStatistics(@Payload event: ReviewEventPayload) {
         val question = questionQueryAPI.getQuestionInformation(event.questionId)
         val creatorStatistics = creatorStatisticsRepository.getForUpdate(question.creatorId)
         when (event.reviewEventType) {
