@@ -24,7 +24,7 @@ dependencies {
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     
     implementation(project(":qc-common"))
-    implementation(project(":qc-lock-manager"))
+    implementation(project(":qc-infra:qc-lock"))
 }
 
 tasks.test {

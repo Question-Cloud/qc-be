@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class LockManager(private val redissonClient: RedissonClient) {
+class LockManager(
+    private val redissonClient: RedissonClient
+) {
     private val WAIT_TIME = 3L
     private val LEASE_TIME = 5L
     
