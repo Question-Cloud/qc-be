@@ -1,12 +1,11 @@
 package com.eager.questioncloud.user.register.service
 
-import com.eager.questioncloud.user.domain.Email
+import com.eager.questioncloud.common.mail.EmailSender
 import com.eager.questioncloud.user.domain.EmailVerification
 import com.eager.questioncloud.user.domain.User
 import com.eager.questioncloud.user.dto.CreateUser
 import com.eager.questioncloud.user.enums.EmailVerificationType
 import com.eager.questioncloud.user.implement.EmailVerificationProcessor
-import com.eager.questioncloud.user.mail.EmailSender
 import com.eager.questioncloud.user.register.implement.UserRegister
 import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Component
@@ -28,13 +27,13 @@ class RegisterUserService(
             user.userInformation.email,
             EmailVerificationType.CreateUser
         )
-        emailSender.sendMail(Email.of(emailVerification))
+        emailSender.send(emailVerification.toEmail())
         return emailVerification
     }
     
     fun resend(resendToken: String) {
         val emailVerification = emailVerificationProcessor.getByResendToken(resendToken)
-        emailSender.sendMail(Email.of(emailVerification))
+        emailSender.send(emailVerification.toEmail())
     }
     
     fun verifyCreateUser(token: String, emailVerificationType: EmailVerificationType) {

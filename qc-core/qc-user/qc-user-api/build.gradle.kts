@@ -15,7 +15,6 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
     compileOnly("org.springframework:spring-tx")
     
     api("io.jsonwebtoken:jjwt-api:0.12.6")

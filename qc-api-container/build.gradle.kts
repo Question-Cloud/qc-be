@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":qc-infra:qc-mongo"))
     implementation(project(":qc-infra:qc-event"))
     implementation(project(":qc-infra:qc-redis"))
+    implementation(project(":qc-infra:qc-mail"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")

@@ -1,6 +1,8 @@
 package com.eager.questioncloud.user.domain
 
+import com.eager.questioncloud.common.mail.Email
 import com.eager.questioncloud.user.enums.EmailVerificationType
+import com.eager.questioncloud.user.template.EmailVerificationTemplateCreator
 import java.util.*
 
 class EmailVerification(
@@ -14,7 +16,7 @@ class EmailVerification(
     fun verify() {
         this.isVerified = true
     }
-
+    
     companion object {
         fun create(
             uid: Long,
@@ -27,5 +29,10 @@ class EmailVerification(
                 emailVerificationType = emailVerificationType
             )
         }
+    }
+    
+    fun toEmail(): Email {
+        val template = EmailVerificationTemplateCreator.getTemplate(emailVerificationType, token)
+        return Email(email, template.title, template.content)
     }
 }

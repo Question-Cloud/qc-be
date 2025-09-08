@@ -1,10 +1,9 @@
 package com.eager.questioncloud.user.account.service
 
+import com.eager.questioncloud.common.mail.EmailSender
 import com.eager.questioncloud.user.account.implement.UserAccountUpdater
-import com.eager.questioncloud.user.domain.Email
 import com.eager.questioncloud.user.enums.EmailVerificationType
 import com.eager.questioncloud.user.implement.EmailVerificationProcessor
-import com.eager.questioncloud.user.mail.EmailSender
 import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
@@ -27,7 +26,7 @@ class UserAccountService(
             email,
             EmailVerificationType.ChangePassword
         )
-        emailSender.sendMail(Email.of(emailVerification))
+        emailSender.send(emailVerification.toEmail())
     }
     
     fun sendChangePasswordMail(userId: Long) {
@@ -37,12 +36,11 @@ class UserAccountService(
             user.userInformation.email,
             EmailVerificationType.ChangePassword
         )
-        emailSender.sendMail(Email.of(emailVerification))
+        emailSender.send(emailVerification.toEmail())
     }
     
     fun changePassword(token: String, newPassword: String) {
-        val emailVerification =
-            emailVerificationProcessor.verifyEmailVerification(token, EmailVerificationType.ChangePassword)
+        val emailVerification = emailVerificationProcessor.verifyEmailVerification(token, EmailVerificationType.ChangePassword)
         userAccountUpdater.changePassword(emailVerification.uid, newPassword)
     }
 }
