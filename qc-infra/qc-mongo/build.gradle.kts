@@ -14,6 +14,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation(project(":qc-core:qc-pay:qc-pay-core"))
     implementation(project(":qc-common"))
     testImplementation(kotlin("test"))
 }

@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":qc-core:qc-user:qc-user-internal-api"))
     
     implementation(project(":qc-infra:qc-rdb"))
+    implementation(project(":qc-infra:qc-mongo"))
     implementation(project(":qc-infra:qc-event"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")

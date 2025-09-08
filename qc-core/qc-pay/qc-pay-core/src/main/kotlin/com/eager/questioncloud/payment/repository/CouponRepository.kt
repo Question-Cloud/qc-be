@@ -1,9 +1,7 @@
 package com.eager.questioncloud.payment.repository
 
 import com.eager.questioncloud.payment.domain.Coupon
-import org.springframework.stereotype.Repository
 
-@Repository
 interface CouponRepository {
     fun findById(id: Long): Coupon
     
