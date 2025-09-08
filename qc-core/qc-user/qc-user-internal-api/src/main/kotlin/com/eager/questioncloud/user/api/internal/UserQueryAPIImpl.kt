@@ -1,6 +1,6 @@
 package com.eager.questioncloud.user.api.internal
 
-import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,7 +16,7 @@ class UserQueryAPIImpl(
             user.userInformation.email,
         )
     }
-
+    
     override fun getUsers(userIds: List<Long>): List<UserQueryData> {
         val users = userRepository.findByUidIn(userIds)
         return users.map {

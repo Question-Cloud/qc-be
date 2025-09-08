@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
 import com.eager.questioncloud.subscribe.implement.SubscribeProcessor
 import com.eager.questioncloud.subscribe.implement.SubscribedCreatorInformationReader
-import com.eager.questioncloud.subscribe.infrastructure.repository.SubscribeRepository
+import com.eager.questioncloud.subscribe.repository.SubscribeRepository
 import org.springframework.stereotype.Service
 
 @Service

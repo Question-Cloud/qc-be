@@ -7,18 +7,18 @@ import com.eager.questioncloud.user.dto.CreateUser
 import com.eager.questioncloud.user.enums.AccountType
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
-import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.repository.UserRepository
 import kotlin.random.Random
 
 class UserFixtureHelper {
     companion object {
         val defaultEmailUserEmail = "test@test.com"
         val defaultEmailUserPassword = "qwer1234"
-
+        
         val defaultSocialUserEmail = "social@test.com"
         val defaultSocialUserAccountType = AccountType.KAKAO
         val defaultSocialUserSocialUid = "12345678"
-
+        
         fun createDefaultEmailUser(
             userRepository: UserRepository
         ): User {
@@ -41,7 +41,7 @@ class UserFixtureHelper {
                 )
             )
         }
-
+        
         fun createEmailUser(
             email: String,
             password: String,
@@ -67,7 +67,7 @@ class UserFixtureHelper {
                 )
             )
         }
-
+        
         fun createDefaultSocialUser(userRepository: UserRepository): User {
             val createUser =
                 CreateUser(
@@ -78,7 +78,7 @@ class UserFixtureHelper {
                     "010${randomPhoneNumber()}",
                     "김승환"
                 )
-
+            
             val userAccountInformation =
                 UserAccountInformation.createSocialAccountInformation(
                     defaultSocialUserSocialUid,
@@ -94,7 +94,7 @@ class UserFixtureHelper {
                 )
             )
         }
-
+        
         private fun randomPhoneNumber(): String {
             val randomNumber = Random.nextInt(100_000_000)
             return randomNumber.toString().padStart(8, '0')

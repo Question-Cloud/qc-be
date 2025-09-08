@@ -2,7 +2,7 @@ package com.eager.questioncloud.post.api.internal
 
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.api.CreatorPostQueryAPIResult
-import com.eager.questioncloud.post.infrastructure.repository.PostRepository
+import com.eager.questioncloud.post.repository.PostRepository
 import org.springframework.stereotype.Component
 
 @Component
@@ -24,7 +24,7 @@ class PostQueryAPIImpl(
             )
         }
     }
-
+    
     override fun countByQuestionIdIn(questionIds: List<Long>): Int {
         return postRepository.countByQuestionIdIn(questionIds)
     }

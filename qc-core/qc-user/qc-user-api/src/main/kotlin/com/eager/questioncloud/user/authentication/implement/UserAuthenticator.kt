@@ -7,7 +7,7 @@ import com.eager.questioncloud.social.SocialAPIManager
 import com.eager.questioncloud.social.SocialPlatform
 import com.eager.questioncloud.user.domain.User
 import com.eager.questioncloud.user.enums.AccountType
-import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component

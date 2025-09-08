@@ -3,7 +3,7 @@ package com.eager.questioncloud.question.listener
 import com.eager.questioncloud.event.annotation.IdempotentEvent
 import com.eager.questioncloud.event.model.QuestionPaymentEvent
 import com.eager.questioncloud.question.domain.UserQuestion
-import com.eager.questioncloud.question.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.question.repository.UserQuestionRepository
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component

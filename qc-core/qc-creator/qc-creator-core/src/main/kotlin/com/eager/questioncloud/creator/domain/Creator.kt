@@ -10,7 +10,7 @@ class Creator(
         this.mainSubject = mainSubject
         this.introduction = introduction
     }
-
+    
     companion object {
         fun create(userId: Long, mainSubject: String, introduction: String): Creator {
             return Creator(userId = userId, mainSubject = mainSubject, introduction = introduction)

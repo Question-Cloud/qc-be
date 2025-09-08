@@ -3,8 +3,8 @@ package com.eager.questioncloud.question.product.implement
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.question.common.QuestionFilter
-import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
-import com.eager.questioncloud.question.infrastructure.repository.UserQuestionRepository
+import com.eager.questioncloud.question.repository.QuestionRepository
+import com.eager.questioncloud.question.repository.UserQuestionRepository
 import com.eager.questioncloud.question.product.dto.StoreProductDetail
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import org.springframework.stereotype.Component
@@ -28,7 +28,7 @@ class StoreProductDetailReader(
         val ownedQuestionIds =
             userQuestionRepository.findByQuestionIdInAndUserId(questionInformation.map { it.id }, userId)
                 .associateBy { it.questionId }
-
+        
         return questionInformation.map {
             val creator = creatorMap.getValue(it.creatorId)
             val creatorUser = creatorUsers.getValue(creator.userId)
@@ -39,20 +39,20 @@ class StoreProductDetailReader(
             )
         }
     }
-
+    
     fun getStoreProductDetail(questionId: Long, userId: Long): StoreProductDetail {
         val questionInformation = questionRepository.getQuestionInformation(questionId)
         val creator = creatorQueryAPI.getCreator(questionInformation.creatorId)
         val creatorUsers = userQueryAPI.getUser(creator.userId)
         val isOwned = userQuestionRepository.isOwned(userId, questionId)
-
+        
         return StoreProductDetail(
             questionInformation,
             creatorUsers.name,
             isOwned
         )
     }
-
+    
     fun count(questionFilter: QuestionFilter): Int {
         return questionRepository.countByQuestionFilter(questionFilter)
     }

@@ -37,6 +37,8 @@ dependencies {
     implementation(project(":qc-core:qc-creator:qc-creator-internal-api"))
     implementation(project(":qc-core:qc-user:qc-user-internal-api"))
     
+    implementation(project(":qc-infra:qc-rdb"))
+    
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testImplementation("org.springframework:spring-tx")

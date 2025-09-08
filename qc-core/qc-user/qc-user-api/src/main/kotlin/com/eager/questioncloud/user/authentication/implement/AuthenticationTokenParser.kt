@@ -2,7 +2,7 @@ package com.eager.questioncloud.user.authentication.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.user.infrastructure.repository.RefreshTokenRepository
+import com.eager.questioncloud.user.repository.RefreshTokenRepository
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
@@ -17,12 +17,12 @@ class AuthenticationTokenParser(
     private val refreshTokenRepository: RefreshTokenRepository
 ) {
     private lateinit var secretKey: SecretKey
-
+    
     init {
         val keyBytes = Decoders.BASE64.decode(secretKey)
         this.secretKey = Keys.hmacShaKeyFor(keyBytes)
     }
-
+    
     fun parseAccessToken(token: String): Claims {
         val claims = Jwts
             .parser()
@@ -30,14 +30,14 @@ class AuthenticationTokenParser(
             .build()
             .parseSignedClaims(token)
             .payload
-
+        
         if (claims.subject != "accessToken") {
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
-
+        
         return claims
     }
-
+    
     fun parseRefreshToken(token: String): Claims {
         val claims = Jwts
             .parser()
@@ -45,17 +45,17 @@ class AuthenticationTokenParser(
             .build()
             .parseSignedClaims(token)
             .payload
-
+        
         if (claims.subject != "refreshToken") {
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
-
+        
         val userId = claims["uid"].toString().toLong()
-
+        
         if (!refreshTokenRepository.getByUserId(userId).equals(token)) {
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
         }
-
+        
         return claims
     }
 }

@@ -9,7 +9,7 @@ import com.eager.questioncloud.post.dto.PostDetail
 import com.eager.questioncloud.post.dto.PostPreview
 import com.eager.questioncloud.post.implement.PostPermissionChecker
 import com.eager.questioncloud.post.implement.PostReader
-import com.eager.questioncloud.post.infrastructure.repository.PostRepository
+import com.eager.questioncloud.post.repository.PostRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,28 +22,28 @@ class PostService(
         if (!postPermissionChecker.hasPermission(post.writerId, post.questionId)) {
             throw CoreException(Error.FORBIDDEN)
         }
-
+        
         return postRepository.save(post)
     }
-
+    
     fun getPostPreviews(userId: Long, questionId: Long, pagingInformation: PagingInformation): List<PostPreview> {
         return postReader.getPostPreviews(userId, questionId, pagingInformation)
     }
-
+    
     fun countPost(questionId: Long): Int {
         return postReader.countPost(questionId)
     }
-
+    
     fun getPostDetail(userId: Long, postId: Long): PostDetail {
         return postReader.getPostDetail(userId, postId)
     }
-
+    
     fun modify(postId: Long, userId: Long, postContent: PostContent) {
         val post = postRepository.findByIdAndWriterId(postId, userId)
         post.updateQuestionBoardContent(postContent)
         postRepository.save(post)
     }
-
+    
     fun delete(postId: Long, userId: Long) {
         val post = postRepository.findByIdAndWriterId(postId, userId)
         postRepository.delete(post)

@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions

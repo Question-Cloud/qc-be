@@ -5,7 +5,7 @@ import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.implement.ChargePointPaymentPGProcessor
 import com.eager.questioncloud.point.implement.ChargePointPaymentPostProcessor
 import com.eager.questioncloud.point.implement.ChargePointPaymentPreparer
-import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component
 
 @Component

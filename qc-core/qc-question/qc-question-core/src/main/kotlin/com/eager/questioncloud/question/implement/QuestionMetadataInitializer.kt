@@ -1,7 +1,7 @@
 package com.eager.questioncloud.question.implement
 
 import com.eager.questioncloud.question.domain.QuestionMetadata
-import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
+import com.eager.questioncloud.question.repository.QuestionMetadataRepository
 import org.springframework.stereotype.Component
 
 @Component

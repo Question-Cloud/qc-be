@@ -2,8 +2,8 @@ package com.eager.questioncloud.creator.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.creator.domain.CreatorProfile
 import com.eager.questioncloud.creator.dto.CreatorInformation
-import com.eager.questioncloud.creator.dto.CreatorProfile
 import com.eager.questioncloud.creator.service.CreatorInformationService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
@@ -31,12 +31,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class CreatorControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @MockBean
     private lateinit var creatorInformationService: CreatorInformationService
-
+    
     private lateinit var sampleCreatorInformation: CreatorInformation
-
+    
     @BeforeEach
     fun setUp() {
         val sampleCreatorProfile = CreatorProfile(
@@ -47,7 +47,7 @@ class CreatorControllerDocument {
             email = "creator@example.com",
             introduction = "수학 전문 크리에이터입니다."
         )
-
+        
         sampleCreatorInformation = CreatorInformation(
             creatorProfile = sampleCreatorProfile,
             salesCount = 150,
@@ -55,15 +55,15 @@ class CreatorControllerDocument {
             subscriberCount = 523
         )
     }
-
+    
     @Test
     fun `크리에이터 정보 조회 API 테스트`() {
         // Given
         val creatorId = 1L
-
+        
         whenever(creatorInformationService.getCreatorInformation(creatorId))
             .thenReturn(sampleCreatorInformation)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/creator/info/{creatorId}", creatorId)
@@ -98,15 +98,15 @@ class CreatorControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `크리에이터 정보 조회 API 실패 테스트 - 존재하지 않는 크리에이터`() {
         // Given
         val nonExistentCreatorId = 999L
-
+        
         whenever(creatorInformationService.getCreatorInformation(nonExistentCreatorId))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/creator/info/{creatorId}", nonExistentCreatorId)

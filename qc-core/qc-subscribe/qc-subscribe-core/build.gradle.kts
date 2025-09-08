@@ -14,12 +14,7 @@ repositories {
 }
 
 dependencies {
-    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
-    kapt("jakarta.annotation:jakarta.annotation-api")
-    kapt("jakarta.persistence:jakarta.persistence-api")
-    
     implementation(project(":qc-common"))
-    implementation(project(":qc-infra::qc-rdb"))
     
     testImplementation(kotlin("test"))
 }

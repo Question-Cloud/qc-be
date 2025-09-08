@@ -1,6 +1,6 @@
 package com.eager.questioncloud.review.implement
 
-import com.eager.questioncloud.review.infrastructure.repository.QuestionReviewRepository
+import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import org.springframework.stereotype.Component
 
 @Component

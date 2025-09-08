@@ -1,6 +1,6 @@
 package com.eager.questioncloud.cart.listener
 
-import com.eager.questioncloud.cart.infrastructure.repository.CartItemRepository
+import com.eager.questioncloud.cart.repository.CartItemRepository
 import com.eager.questioncloud.event.model.QuestionPaymentEvent
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload

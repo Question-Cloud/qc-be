@@ -1,6 +1,6 @@
 package com.eager.questioncloud.creator.listener
 
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.event.annotation.IdempotentEvent
 import com.eager.questioncloud.event.model.ReviewEvent
 import com.eager.questioncloud.event.model.ReviewEventType

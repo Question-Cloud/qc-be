@@ -5,8 +5,8 @@ import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.point.listener.FailChargePointPaymentListener
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach

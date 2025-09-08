@@ -5,7 +5,7 @@ import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.pg.model.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
-import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component

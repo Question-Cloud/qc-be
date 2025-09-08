@@ -2,7 +2,7 @@ package com.eager.questioncloud.user.authentication.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.user.infrastructure.repository.RefreshTokenRepository
+import com.eager.questioncloud.user.repository.RefreshTokenRepository
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
@@ -23,12 +23,12 @@ class AuthenticationTokenParserTest(
     @Value("\${JWT_SECRET_KEY}") secretKey: String,
 ) {
     private lateinit var secretKey: SecretKey
-
+    
     init {
         val keyBytes = Decoders.BASE64.decode(secretKey)
         this.secretKey = Keys.hmacShaKeyFor(keyBytes)
     }
-
+    
     @Test
     fun `accessToken에서 UID를 가져올 수 있다`() {
         //given
@@ -40,14 +40,14 @@ class AuthenticationTokenParserTest(
             .expiration(Date(Date().time + AuthenticationTokenGenerator.ACCESS_TOKEN_VALID_TIME))
             .signWith(secretKey)
             .compact()
-
+        
         //when
         val claims = authenticationTokenParser.parseAccessToken(accessToken)
-
+        
         //then
         Assertions.assertThat(claims["uid"].toString().toLong()).isEqualTo(userId)
     }
-
+    
     @Test
     fun `만료된 accessToken 파싱 시 예외가 발생한다`() {
         //given
@@ -60,12 +60,12 @@ class AuthenticationTokenParserTest(
             .expiration(Date(currentTime.time - 1000L))
             .signWith(secretKey)
             .compact()
-
+        
         // when then
         Assertions.assertThatThrownBy { authenticationTokenParser.parseAccessToken(expiredAccessToken) }
             .isInstanceOf(Exception::class.java)
     }
-
+    
     @Test
     fun `잘못된 subject를 가진 토큰 파싱 시 예외가 발생한다`() {
         //given
@@ -77,7 +77,7 @@ class AuthenticationTokenParserTest(
             .expiration(Date(Date().time + AuthenticationTokenGenerator.ACCESS_TOKEN_VALID_TIME))
             .signWith(secretKey)
             .compact()
-
+        
         // when then
         Assertions.assertThatThrownBy { authenticationTokenParser.parseAccessToken(invalidToken) }
             .isInstanceOf(CoreException::class.java)

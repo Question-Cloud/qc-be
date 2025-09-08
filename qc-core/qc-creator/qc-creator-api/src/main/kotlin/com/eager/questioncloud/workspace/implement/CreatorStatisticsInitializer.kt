@@ -1,7 +1,7 @@
 package com.eager.questioncloud.workspace.implement
 
 import com.eager.questioncloud.creator.domain.CreatorStatistics
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import org.springframework.stereotype.Component
 
 @Component

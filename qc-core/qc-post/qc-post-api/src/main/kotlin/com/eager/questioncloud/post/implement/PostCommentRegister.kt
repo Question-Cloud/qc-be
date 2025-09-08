@@ -3,7 +3,7 @@ package com.eager.questioncloud.post.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.post.domain.PostComment
-import com.eager.questioncloud.post.infrastructure.repository.PostCommentRepository
+import com.eager.questioncloud.post.repository.PostCommentRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
 

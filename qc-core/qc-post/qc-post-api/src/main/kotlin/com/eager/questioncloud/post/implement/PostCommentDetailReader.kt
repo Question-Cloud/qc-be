@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.dto.PostCommentDetail
-import com.eager.questioncloud.post.infrastructure.repository.PostCommentRepository
+import com.eager.questioncloud.post.repository.PostCommentRepository
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import org.springframework.stereotype.Component
 
@@ -25,9 +25,9 @@ class PostCommentDetailReader(
         val postComments = postCommentRepository.findByPostIdWithPagination(postId, pagingInformation)
         val writerIds = postComments.map { it.writerId }
         val writers = userQueryAPI.getUsers(writerIds).associateBy { it.userId }
-
+        
         val postCommentDetails = mutableListOf<PostCommentDetail>()
-
+        
         for (postComment in postComments) {
             val writer = writers.getValue(postComment.writerId)
             postCommentDetails.add(
@@ -42,7 +42,7 @@ class PostCommentDetailReader(
                 )
             )
         }
-
+        
         return postCommentDetails
     }
 }

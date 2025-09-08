@@ -5,8 +5,8 @@ import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.QuestionStatus
 import com.eager.questioncloud.question.enums.Subject
 import com.eager.questioncloud.question.fixture.QuestionFixtureHelper
-import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
-import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.question.repository.QuestionMetadataRepository
+import com.eager.questioncloud.question.repository.QuestionRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
@@ -24,12 +24,12 @@ class QuestionCommandAPIImplTest(
     @Autowired val dbCleaner: DBCleaner,
 ) {
     private val creatorId = 101L
-
+    
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
     }
-
+    
     @Test
     fun `새로운 문제를 등록할 수 있다`() {
         //given
@@ -44,13 +44,13 @@ class QuestionCommandAPIImplTest(
             questionLevel = "LEVEL3",
             price = 2000
         )
-
+        
         //when
         val newQuestionId = questionCommandAPI.register(creatorId, registerCommand)
-
+        
         //then
         val createdQuestion = questionRepository.get(newQuestionId)
-
+        
         Assertions.assertThat(createdQuestion.creatorId).isEqualTo(creatorId)
         Assertions.assertThat(createdQuestion.questionContent.title).isEqualTo("수학 문제 제목")
         Assertions.assertThat(createdQuestion.questionContent.description).isEqualTo("수학 문제 설명")
@@ -58,14 +58,14 @@ class QuestionCommandAPIImplTest(
         Assertions.assertThat(createdQuestion.questionContent.questionLevel).isEqualTo(QuestionLevel.LEVEL3)
         Assertions.assertThat(createdQuestion.questionContent.price).isEqualTo(2000)
         Assertions.assertThat(createdQuestion.questionStatus).isEqualTo(QuestionStatus.Available)
-
+        
         val questionMetadata = questionMetadataRepository.getForUpdate(createdQuestion.id)
         Assertions.assertThat(questionMetadata.questionId).isEqualTo(createdQuestion.id)
         Assertions.assertThat(questionMetadata.sales).isEqualTo(0)
         Assertions.assertThat(questionMetadata.reviewCount).isEqualTo(0)
         Assertions.assertThat(questionMetadata.reviewAverageRate).isEqualTo(0.0)
     }
-
+    
     @Test
     fun `기존 문제를 수정할 수 있다`() {
         //given
@@ -75,7 +75,7 @@ class QuestionCommandAPIImplTest(
             questionRepository = questionRepository,
             questionMetadataRepository = questionMetadataRepository
         )
-
+        
         val modifyCommand = ModifyQuestionCommand(
             questionCategoryId = 2L,
             subject = "Physics",
@@ -87,10 +87,10 @@ class QuestionCommandAPIImplTest(
             questionLevel = "LEVEL5",
             price = 3000
         )
-
+        
         //when
         questionCommandAPI.modify(existingQuestion.id, modifyCommand)
-
+        
         //then
         val modifiedQuestion = questionRepository.get(existingQuestion.id)
         Assertions.assertThat(modifiedQuestion.id).isEqualTo(existingQuestion.id)
@@ -105,7 +105,7 @@ class QuestionCommandAPIImplTest(
         Assertions.assertThat(modifiedQuestion.questionContent.questionLevel).isEqualTo(QuestionLevel.LEVEL5)
         Assertions.assertThat(modifiedQuestion.questionContent.price).isEqualTo(3000)
     }
-
+    
     @Test
     fun `문제를 삭제할 수 있다`() {
         //given
@@ -114,12 +114,12 @@ class QuestionCommandAPIImplTest(
             questionRepository = questionRepository,
             questionMetadataRepository = questionMetadataRepository
         )
-
+        
         Assertions.assertThat(existingQuestion.questionStatus).isEqualTo(QuestionStatus.Available)
-
+        
         //when
         questionCommandAPI.delete(existingQuestion.id, creatorId)
-
+        
         //then
         Assertions.assertThatThrownBy {
             questionRepository.get(existingQuestion.id)

@@ -2,7 +2,7 @@ package com.eager.questioncloud.user.fixture
 
 import com.eager.questioncloud.user.domain.EmailVerification
 import com.eager.questioncloud.user.enums.EmailVerificationType
-import com.eager.questioncloud.user.infrastructure.repository.EmailVerificationRepository
+import com.eager.questioncloud.user.repository.EmailVerificationRepository
 
 class EmailVerificationFixtureHelper {
     companion object {

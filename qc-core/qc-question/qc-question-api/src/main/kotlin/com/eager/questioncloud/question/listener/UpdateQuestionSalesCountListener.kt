@@ -2,7 +2,7 @@ package com.eager.questioncloud.question.listener
 
 import com.eager.questioncloud.event.annotation.IdempotentEvent
 import com.eager.questioncloud.event.model.QuestionPaymentEvent
-import com.eager.questioncloud.question.infrastructure.repository.QuestionMetadataRepository
+import com.eager.questioncloud.question.repository.QuestionMetadataRepository
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component

@@ -26,15 +26,15 @@ class CreatorInformationServiceTest(
 ) {
     @MockBean
     lateinit var userQueryAPI: UserQueryAPI
-
+    
     private val creatorId = 1L
     private val userId = 100L
-
+    
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
     }
-
+    
     @Test
     fun `크리에이터 정보를 조회할 수 있다`() {
         //given
@@ -45,7 +45,7 @@ class CreatorInformationServiceTest(
             introduction = "안녕하세요. 테스트 크리에이터입니다."
         )
         creatorRepository.save(creator)
-
+        
         val creatorStatistics = CreatorStatistics(
             creatorId = creatorId,
             salesCount = 100,
@@ -53,19 +53,19 @@ class CreatorInformationServiceTest(
             subscriberCount = 50
         )
         creatorStatisticsRepository.save(creatorStatistics)
-
+        
         val userQueryData = UserQueryData(
             userId = userId,
             name = "테스트 유저",
             profileImage = "profile.jpg",
             email = "test@test.com"
         )
-
+        
         given(userQueryAPI.getUser(userId)).willReturn(userQueryData)
-
+        
         //when
         val result = creatorInformationService.getCreatorInformation(creatorId)
-
+        
         //then
         Assertions.assertThat(result.creatorProfile.name).isEqualTo("테스트 유저")
         Assertions.assertThat(result.salesCount).isEqualTo(100)

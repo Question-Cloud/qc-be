@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.event.model.FailChargePointPaymentMessage
 import com.eager.questioncloud.point.domain.ChargePointPayment
-import com.eager.questioncloud.point.infrastructure.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 

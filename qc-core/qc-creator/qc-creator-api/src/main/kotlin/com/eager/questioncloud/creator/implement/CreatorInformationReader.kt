@@ -1,9 +1,9 @@
 package com.eager.questioncloud.creator.implement
 
+import com.eager.questioncloud.creator.domain.CreatorProfile
 import com.eager.questioncloud.creator.dto.CreatorInformation
-import com.eager.questioncloud.creator.dto.CreatorProfile
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorRepository
-import com.eager.questioncloud.creator.infrastructure.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.creator.repository.CreatorRepository
+import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import org.springframework.stereotype.Component
 
@@ -25,7 +25,7 @@ class CreatorInformationReader(
             creatorUser.email,
             creator.introduction
         )
-
+        
         return CreatorInformation(
             creatorProfile,
             creatorStatistics.salesCount,
@@ -33,12 +33,12 @@ class CreatorInformationReader(
             creatorStatistics.subscriberCount
         )
     }
-
+    
     fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation> {
         val creators = creatorRepository.findByIdIn(creatorIds)
         val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
         val creatorStatisticsMap = creatorStatisticsRepository.findByCreatorIdIn(creatorIds)
-
+        
         return creators.map {
             val creatorUser = creatorUserMap.getValue(it.userId)
             val creatorStatistics = creatorStatisticsMap.getValue(it.id)

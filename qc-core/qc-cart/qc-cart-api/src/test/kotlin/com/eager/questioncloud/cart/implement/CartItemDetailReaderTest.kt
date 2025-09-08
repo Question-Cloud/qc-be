@@ -28,18 +28,18 @@ class CartItemDetailReaderTest(
 ) {
     @MockBean
     lateinit var questionQueryAPI: QuestionQueryAPI
-
+    
     @MockBean
     lateinit var creatorQueryAPI: CreatorQueryAPI
-
+    
     @MockBean
     lateinit var userQueryAPI: UserQueryAPI
-
+    
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
     }
-
+    
     @Test
     fun `장바구니 아이템 상세 정보를 조회할 수 있다`() {
         //given
@@ -50,12 +50,12 @@ class CartItemDetailReaderTest(
         val creatorId2 = 301L
         val creatorUserId1 = 400L
         val creatorUserId2 = 401L
-
+        
         val cartItem1 = CartItem.create(userId, questionId1)
         val cartItem2 = CartItem.create(userId, questionId2)
         val savedCartItem1 = cartItemRepository.save(cartItem1)
         val savedCartItem2 = cartItemRepository.save(cartItem2)
-
+        
         given(questionQueryAPI.getQuestionInformation(any<List<Long>>()))
             .willReturn(
                 listOf(
@@ -63,7 +63,7 @@ class CartItemDetailReaderTest(
                     createQuestionInformation(questionId2, creatorId2, "두 번째 문제", "영어", "thumbnail2.jpg", 15000)
                 )
             )
-
+        
         given(creatorQueryAPI.getCreators(any()))
             .willReturn(
                 listOf(
@@ -71,7 +71,7 @@ class CartItemDetailReaderTest(
                     createCreatorQueryData(creatorUserId2, creatorId2)
                 )
             )
-
+        
         given(userQueryAPI.getUsers(any()))
             .willReturn(
                 listOf(
@@ -79,13 +79,13 @@ class CartItemDetailReaderTest(
                     UserQueryData(creatorUserId2, "크리에이터2", "profile2.jpg", "creator2@test.com")
                 )
             )
-
+        
         //when
         val result = cartItemDetailReader.getCartItemDetails(userId)
-
+        
         //then
         Assertions.assertThat(result).hasSize(2)
-
+        
         val detail1 = result.find { it.questionId == questionId1 }
         Assertions.assertThat(detail1).isNotNull
         Assertions.assertThat(detail1!!.id).isEqualTo(savedCartItem1.id)
@@ -94,7 +94,7 @@ class CartItemDetailReaderTest(
         Assertions.assertThat(detail1.creatorName).isEqualTo("크리에이터1")
         Assertions.assertThat(detail1.subject).isEqualTo("수학")
         Assertions.assertThat(detail1.price).isEqualTo(10000)
-
+        
         val detail2 = result.find { it.questionId == questionId2 }
         Assertions.assertThat(detail2).isNotNull
         Assertions.assertThat(detail2!!.id).isEqualTo(savedCartItem2.id)
@@ -104,7 +104,7 @@ class CartItemDetailReaderTest(
         Assertions.assertThat(detail2.subject).isEqualTo("영어")
         Assertions.assertThat(detail2.price).isEqualTo(15000)
     }
-
+    
     private fun createQuestionInformation(
         questionId: Long,
         creatorId: Long,
@@ -126,7 +126,7 @@ class CartItemDetailReaderTest(
             rate = 4.5
         )
     }
-
+    
     private fun createCreatorQueryData(userId: Long, creatorId: Long): CreatorQueryData {
         return CreatorQueryData(
             userId = userId,

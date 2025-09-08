@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.user.authentication.implement.AuthenticationTokenParser
 import com.eager.questioncloud.user.enums.UserType
-import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.repository.UserRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -36,7 +36,7 @@ class JwtAuthenticationFilter(
             }
         }.also { filterChain.doFilter(request, response) }
     }
-
+    
     private fun parseToken(authorization: String): String {
         if (!StringUtils.hasText(authorization)) {
             throw CoreException(Error.UNAUTHORIZED_TOKEN)
@@ -46,11 +46,11 @@ class JwtAuthenticationFilter(
         }
         return authorization.substring(7)
     }
-
+    
     private fun authentication(accessToken: String) {
         val claims = authenticationTokenParser.parseAccessToken(accessToken)
         val user = userRepository.getUser(claims["uid"].toString().toLong())
-
+        
         val userPrincipal = UserPrincipal(user.uid)
         val authentication = UsernamePasswordAuthenticationToken(
             userPrincipal,
@@ -59,7 +59,7 @@ class JwtAuthenticationFilter(
         )
         SecurityContextHolder.getContext().authentication = authentication
     }
-
+    
     private fun setGuestAuthentication() {
         val userPrincipal = UserPrincipal(-1L)
         val authentication = UsernamePasswordAuthenticationToken(
@@ -69,7 +69,7 @@ class JwtAuthenticationFilter(
         )
         SecurityContextHolder.getContext().authentication = authentication
     }
-
+    
     private fun createAuthorities(userType: UserType): Collection<GrantedAuthority> {
         when (userType) {
             UserType.NormalUser -> return@createAuthorities listOf(SimpleGrantedAuthority("ROLE_NormalUser"))

@@ -6,7 +6,7 @@ import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.QuestionType
 import com.eager.questioncloud.question.enums.Subject
 import com.eager.questioncloud.question.implement.QuestionMetadataInitializer
-import com.eager.questioncloud.question.infrastructure.repository.QuestionRepository
+import com.eager.questioncloud.question.repository.QuestionRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -35,10 +35,10 @@ class QuestionCommandAPIImpl(
             )
         )
         questionMetadataInitializer.init(question.id)
-
+        
         return question.id
     }
-
+    
     override fun modify(questionId: Long, command: ModifyQuestionCommand) {
         val question = questionRepository.get(questionId)
         question.modify(
@@ -55,10 +55,10 @@ class QuestionCommandAPIImpl(
                 command.price
             )
         )
-
+        
         questionRepository.save(question)
     }
-
+    
     override fun delete(questionId: Long, creatorId: Long) {
         val question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId)
         question.delete()

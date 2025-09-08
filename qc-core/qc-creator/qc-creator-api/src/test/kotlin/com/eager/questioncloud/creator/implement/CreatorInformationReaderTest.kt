@@ -27,12 +27,12 @@ class CreatorInformationReaderTest(
 ) {
     @MockBean
     lateinit var userQueryAPI: UserQueryAPI
-
+    
     @AfterEach
     fun tearDown() {
         dbCleaner.cleanUp()
     }
-
+    
     @Test
     fun `단일 Creator 정보를 조회할 수 있다`() {
         // given
@@ -42,7 +42,7 @@ class CreatorInformationReaderTest(
             introduction = "수학을 가르칩니다."
         )
         val savedCreator = creatorRepository.save(creator)
-
+        
         val creatorStatistics = CreatorStatistics(
             creatorId = savedCreator.id,
             salesCount = 100,
@@ -50,7 +50,7 @@ class CreatorInformationReaderTest(
             subscriberCount = 50
         )
         creatorStatisticsRepository.save(creatorStatistics)
-
+        
         val userQueryData = UserQueryData(
             userId = 1L,
             email = "test@example.com",
@@ -58,10 +58,10 @@ class CreatorInformationReaderTest(
             profileImage = "profile.jpg"
         )
         given(userQueryAPI.getUser(any())).willReturn(userQueryData)
-
+        
         // when
         val result = creatorInformationReader.getCreatorInformation(savedCreator.id)
-
+        
         // then
         assertThat(result.creatorProfile.creatorId).isEqualTo(savedCreator.id)
         assertThat(result.creatorProfile.name).isEqualTo(userQueryData.name)
@@ -73,7 +73,7 @@ class CreatorInformationReaderTest(
         assertThat(result.averageRateOfReview).isEqualTo(creatorStatistics.averageRateOfReview)
         assertThat(result.subscriberCount).isEqualTo(creatorStatistics.subscriberCount)
     }
-
+    
     @Test
     fun `여러 Creator 정보를 조회할 수 있다`() {
         // given
@@ -89,7 +89,7 @@ class CreatorInformationReaderTest(
         )
         val savedCreator1 = creatorRepository.save(creator1)
         val savedCreator2 = creatorRepository.save(creator2)
-
+        
         val creatorStatistics1 = CreatorStatistics(
             creatorId = savedCreator1.id,
             salesCount = 100,
@@ -104,7 +104,7 @@ class CreatorInformationReaderTest(
         )
         creatorStatisticsRepository.save(creatorStatistics1)
         creatorStatisticsRepository.save(creatorStatistics2)
-
+        
         val userQueryData1 = UserQueryData(
             userId = 1L,
             email = "test1@example.com",
@@ -118,18 +118,18 @@ class CreatorInformationReaderTest(
             profileImage = "profile2.jpg"
         )
         given(userQueryAPI.getUsers(any())).willReturn(listOf(userQueryData1, userQueryData2))
-
+        
         // when
         val results = creatorInformationReader.getCreatorInformation(listOf(savedCreator1.id, savedCreator2.id))
-
+        
         // then
         assertThat(results).hasSize(2)
-
+        
         val result1 = results.find { it.creatorProfile.creatorId == savedCreator1.id }
         assertThat(result1).isNotNull
         assertThat(result1!!.creatorProfile.name).isEqualTo(userQueryData1.name)
         assertThat(result1.salesCount).isEqualTo(creatorStatistics1.salesCount)
-
+        
         val result2 = results.find { it.creatorProfile.creatorId == savedCreator2.id }
         assertThat(result2).isNotNull
         assertThat(result2!!.creatorProfile.name).isEqualTo(userQueryData2.name)

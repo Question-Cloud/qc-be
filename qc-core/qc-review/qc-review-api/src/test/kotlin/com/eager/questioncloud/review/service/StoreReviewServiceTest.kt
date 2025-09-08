@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.event.implement.EventPublisher
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.review.domain.QuestionReview
-import com.eager.questioncloud.review.infrastructure.repository.QuestionReviewRepository
+import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner

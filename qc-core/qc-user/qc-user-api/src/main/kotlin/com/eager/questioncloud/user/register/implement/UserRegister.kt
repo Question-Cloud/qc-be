@@ -10,7 +10,7 @@ import com.eager.questioncloud.user.dto.CreateUser
 import com.eager.questioncloud.user.enums.AccountType
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
-import com.eager.questioncloud.user.infrastructure.repository.UserRepository
+import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -26,7 +26,7 @@ class UserRegister(
         val userAccountInformation = createUserAccountInformation(createUser)
         val userInformation = UserInformation.create(createUser)
         userRegistrationValidator.validate(userAccountInformation, userInformation)
-
+        
         val user = userRepository.save(
             User.create(
                 userAccountInformation,
@@ -35,21 +35,21 @@ class UserRegister(
                 UserStatus.PendingEmailVerification
             )
         )
-
+        
         pointCommandAPI.initialize(user.uid)
         return user
     }
-
+    
     private fun createUserAccountInformation(createUser: CreateUser): UserAccountInformation {
         if (createUser.accountType == AccountType.EMAIL) {
             return UserAccountInformation.createEmailAccountInformation(createUser.password!!)
         }
-
+        
         val socialUid = socialAPIManager.getSocialUid(
             createUser.socialRegisterToken!!,
             SocialPlatform.valueOf(createUser.accountType.value)
         )
-
+        
         return UserAccountInformation.createSocialAccountInformation(socialUid, createUser.accountType)
     }
 }

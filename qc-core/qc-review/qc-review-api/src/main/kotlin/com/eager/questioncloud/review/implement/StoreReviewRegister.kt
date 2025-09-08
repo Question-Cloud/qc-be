@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.review.domain.QuestionReview
-import com.eager.questioncloud.review.infrastructure.repository.QuestionReviewRepository
+import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Component
 
@@ -18,11 +18,11 @@ class StoreReviewRegister(
             if (isUnAvailableQuestion(questionReview.questionId)) {
                 throw CoreException(Error.UNAVAILABLE_QUESTION)
             }
-
+            
             if (isNotOwnedQuestion(questionReview.reviewerId, questionReview.questionId)) {
                 throw CoreException(Error.NOT_OWNED_QUESTION)
             }
-
+            
             if (isAlreadyWrittenReview(questionReview.reviewerId, questionReview.questionId)) {
                 throw CoreException(Error.ALREADY_REGISTER_REVIEW)
             }
@@ -31,19 +31,19 @@ class StoreReviewRegister(
             if (it is DataIntegrityViolationException) {
                 throw CoreException(Error.ALREADY_REGISTER_REVIEW)
             }
-
+            
             throw it
         }
     }
-
+    
     private fun isUnAvailableQuestion(questionId: Long): Boolean {
         return !questionQueryAPI.isAvailable(questionId)
     }
-
+    
     private fun isNotOwnedQuestion(userId: Long, questionId: Long): Boolean {
         return !questionQueryAPI.isOwned(userId, questionId)
     }
-
+    
     private fun isAlreadyWrittenReview(userId: Long, questionId: Long): Boolean {
         return questionReviewRepository.isWritten(userId, questionId)
     }

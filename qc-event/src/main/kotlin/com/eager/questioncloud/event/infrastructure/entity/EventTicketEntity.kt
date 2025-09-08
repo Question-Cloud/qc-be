@@ -1,6 +1,6 @@
 package com.eager.questioncloud.event.infrastructure.entity
 
-import com.eager.questioncloud.entity.BaseCustomIdEntity
+import com.eager.questioncloud.common.entity.BaseCustomIdEntity
 import com.eager.questioncloud.event.model.EventTicket
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
