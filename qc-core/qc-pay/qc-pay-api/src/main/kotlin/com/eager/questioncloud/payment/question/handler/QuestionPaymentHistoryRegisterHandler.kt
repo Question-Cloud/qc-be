@@ -1,6 +1,6 @@
-package com.eager.questioncloud.payment.question.listener
+package com.eager.questioncloud.payment.question.handler
 
-import com.eager.questioncloud.common.event.QuestionPaymentEventPayload
+import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
@@ -9,19 +9,16 @@ import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.repository.QuestionPaymentHistoryRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import io.awspring.cloud.sqs.annotation.SqsListener
-import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
-class QuestionPaymentHistoryRegisterListener(
+class QuestionPaymentHistoryRegisterHandler(
     private val questionQueryAPI: QuestionQueryAPI,
     private val creatorQueryAPI: CreatorQueryAPI,
     private val userQueryAPI: UserQueryAPI,
     private val questionPaymentHistoryRepository: QuestionPaymentHistoryRepository,
 ) {
-    @SqsListener("question-payment-history-register.fifo")
-    fun saveQuestionPaymentHistory(@Payload event: QuestionPaymentEventPayload) {
+    fun saveQuestionPaymentHistory(event: QuestionPaymentEvent) {
         val questions = questionQueryAPI.getQuestionInformation(event.questionIds)
         val creators = creatorQueryAPI.getCreators(questions.map { it.creatorId })
         val creatorMap = creators.associateBy { it.creatorId }

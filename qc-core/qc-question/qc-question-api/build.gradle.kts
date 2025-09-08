@@ -22,7 +22,6 @@ dependencies {
     
     implementation(project(":qc-core:qc-question:qc-question-core"))
     implementation(project(":qc-common"))
-    implementation(project(":qc-event"))
     
     testImplementation(project(":qc-core:qc-question:qc-question-fixture"))
 }

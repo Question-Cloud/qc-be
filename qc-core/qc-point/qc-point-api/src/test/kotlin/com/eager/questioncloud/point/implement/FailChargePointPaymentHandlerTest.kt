@@ -1,11 +1,11 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.common.event.FailChargePointPaymentMessage
+import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
 import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.listener.FailChargePointPaymentListener
+import com.eager.questioncloud.point.handler.FailChargePointPaymentHandler
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
 import org.assertj.core.api.Assertions
@@ -21,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
-internal class FailChargePointPaymentListenerTest(
+internal class FailChargePointPaymentHandlerTest(
     @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
-    @Autowired val failChargePointPaymentListener: FailChargePointPaymentListener,
+    @Autowired val failChargePointPaymentHandler: FailChargePointPaymentHandler,
     @Autowired val dbCleaner: DBCleaner,
 ) {
     @MockBean
@@ -46,7 +46,7 @@ internal class FailChargePointPaymentListenerTest(
         doNothing().whenever(paymentAPI).cancel(any())
         
         //when
-        failChargePointPaymentListener.failHandler(FailChargePointPaymentMessage.create(order.orderId))
+        failChargePointPaymentHandler.failHandler(FailChargePointPaymentMessagePayload.create(order.orderId))
         
         //then
         val failChargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)

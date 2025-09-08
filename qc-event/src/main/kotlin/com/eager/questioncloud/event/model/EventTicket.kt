@@ -19,7 +19,7 @@ class EventTicket(
                 event.eventId,
                 false,
                 Topic.valueOf(event.eventType.name).topicArn,
-                objectMapper.writeValueAsString(event.payload),
+                objectMapper.writeValueAsString(event),
                 LocalDateTime.now(),
                 null
             )

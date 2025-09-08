@@ -1,8 +1,8 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.common.event.FailChargePointPaymentMessage
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component
@@ -21,7 +21,7 @@ class ChargePointPaymentPostProcessor(
             chargePointPayment.charge()
             chargePointPaymentRepository.update(chargePointPayment)
         }.onFailure {
-            failChargePointPaymentMessageSender.publishMessage(FailChargePointPaymentMessage.create(chargePointPayment.orderId))
+            failChargePointPaymentMessageSender.publishMessage(FailChargePointPaymentMessagePayload.create(chargePointPayment.orderId))
             throw CoreException(Error.PAYMENT_ERROR)
         }
     }

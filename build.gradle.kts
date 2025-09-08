@@ -36,6 +36,10 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("io.hypersistence:hypersistence-tsid:2.1.4")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+        implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
+        
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
         
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")

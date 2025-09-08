@@ -1,6 +1,8 @@
 package com.eager.questioncloud.review.service
 
-import com.eager.questioncloud.common.event.*
+import com.eager.questioncloud.common.event.EventPublisher
+import com.eager.questioncloud.common.event.ReviewEvent
+import com.eager.questioncloud.common.event.ReviewEventType
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.dto.MyQuestionReview
@@ -39,45 +41,18 @@ class StoreReviewService(
     @Transactional
     fun register(questionReview: QuestionReview) {
         storeReviewRegister.register(questionReview)
-        eventPublisher.publish(
-            Event.create(
-                EventType.ReviewEvent,
-                ReviewEventPayload.create(
-                    questionReview.questionId,
-                    questionReview.rate,
-                    ReviewEventType.REGISTER
-                )
-            )
-        )
+        eventPublisher.publish(ReviewEvent.create(questionReview.questionId, questionReview.rate, ReviewEventType.REGISTER))
     }
     
     @Transactional
     fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
         val (questionId, varianceRate) = storeReviewUpdater.modify(reviewId, userId, comment, rate)
-        eventPublisher.publish(
-            Event.create(
-                EventType.ReviewEvent,
-                ReviewEventPayload.create(
-                    questionId,
-                    varianceRate,
-                    ReviewEventType.MODIFY
-                )
-            )
-        )
+        eventPublisher.publish(ReviewEvent.create(questionId, varianceRate, ReviewEventType.MODIFY))
     }
     
     @Transactional
     fun delete(reviewId: Long, userId: Long) {
         val (questionId, varianceRate) = storeReviewRemover.delete(reviewId, userId)
-        eventPublisher.publish(
-            Event.create(
-                EventType.ReviewEvent,
-                ReviewEventPayload.create(
-                    questionId,
-                    varianceRate,
-                    ReviewEventType.DELETE
-                )
-            )
-        )
+        eventPublisher.publish(ReviewEvent.create(questionId, varianceRate, ReviewEventType.DELETE))
     }
 }

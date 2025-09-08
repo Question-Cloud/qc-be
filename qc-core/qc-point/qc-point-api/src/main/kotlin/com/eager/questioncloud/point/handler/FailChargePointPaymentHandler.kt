@@ -1,22 +1,19 @@
-package com.eager.questioncloud.point.listener
+package com.eager.questioncloud.point.handler
 
-import com.eager.questioncloud.common.event.FailChargePointPaymentMessage
+import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
 import com.eager.questioncloud.pg.PaymentAPI
 import com.eager.questioncloud.pg.model.PGPayment
 import com.eager.questioncloud.pg.toss.PaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
-import io.awspring.cloud.sqs.annotation.SqsListener
-import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
-class FailChargePointPaymentListener(
+class FailChargePointPaymentHandler(
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val paymentAPI: PaymentAPI,
 ) {
-    @SqsListener("fail-charge-point-payment.fifo")
-    fun failHandler(@Payload event: FailChargePointPaymentMessage) {
+    fun failHandler(event: FailChargePointPaymentMessagePayload) {
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(event.orderId)
         val pgPayment = PGPayment(
             chargePointPayment.paymentId!!,

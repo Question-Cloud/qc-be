@@ -22,7 +22,6 @@ dependencies {
     implementation(project(":qc-core:qc-point:qc-point-core"))
     
     implementation(project(":qc-common"))
-    implementation(project(":qc-event"))
     implementation(project(":qc-infra:qc-external-pg"))
 }
 

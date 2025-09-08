@@ -28,7 +28,7 @@ class SNSEventPublisher(
             .topicArn(Topic.valueOf(eventType.name).topicArn)
             .messageGroupId(eventId)
             .messageDeduplicationId(eventId)
-            .message(objectMapper.writeValueAsString(payload))
+            .message(objectMapper.writeValueAsString(this))
             .build()
     }
     
@@ -37,7 +37,7 @@ class SNSEventPublisher(
             .id(eventId)
             .messageDeduplicationId(eventId)
             .messageGroupId(eventId)
-            .message(objectMapper.writeValueAsString(payload))
+            .message(objectMapper.writeValueAsString(this))
             .build()
     }
     
