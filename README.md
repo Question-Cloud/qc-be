@@ -64,35 +64,42 @@
 ```
 📱 Runtime Container
     └── qc-api-container (Spring Boot Application)
-        ├── 🏗️ Domain Modules Loading
-        ├── 🌐 API Endpoints Aggregation  
-        └── 🔄 Dependency Injection
+        ├── Domain Modules Loading
+        ├── API Endpoints Aggregation
+        └── Dependency Injection
+        
+🏗️ Domain Modules
+    ├── qc-user (Core + API + Internal API)
+    ├── qc-question (Core + API + Internal API)
+    ├── qc-creator (Core + API + Internal API)
+    ├── qc-point (Core + API + Internal API)
+    ├── qc-post (Core + API + Internal API)
+    ├── qc-cart (Core + API)
+    ├── qc-review (Core + API)
+    ├── qc-subscribe (Core + API)
+    └── qc-pay (Core + API)
 
-🏗️ Domain Modules (Loaded by Container)
-    ├── 👤 qc-user (Core + API + Internal API)
-    ├── ❓ qc-question (Core + API + Internal API)  
-    ├── 👨‍🎨 qc-creator (Core + API + Internal API)
-    ├── 🏆 qc-point (Core + API + Internal API)
-    ├── 📝 qc-post (Core + API + Internal API)
-    ├── 🛒 qc-cart (Core + API)
-    ├── ⭐ qc-review (Core + API)
-    ├── 💳 qc-pay (Core + API)
-    ├── 🔔 qc-subscribe (Core + API)
-    └── 🎫 qc-coupon (Core + API)
+🔌 Internal API Interface Layer (도메인 간 통신 인터페이스 모듈)
+    ├── qc-user-internal-api-interface
+    ├── qc-question-internal-api-interface
+    ├── qc-creator-internal-api-interface
+    ├── qc-point-internal-api-interface
+    └── qc-post-internal-api-interface
 
-🔌 Interface Layer
-    └── qc-internal-api-interface/* (도메인 간 통신)
+🛠️ Infrastructure Modules
+    ├── qc-rdb
+    ├── qc-mongo
+    ├── qc-redis 
+    ├── qc-http
+    ├── qc-social
+    ├── qc-external-pg
+    ├── qc-event
+    ├── qc-lock
+    └── qc-logging
 
-🛠️ Infrastructure Layer  
-    ├── qc-rdb (데이터베이스)
-    ├── qc-event (이벤트 처리)
-    ├── qc-external-pg-api (결제 게이트웨이)
-    ├── qc-lock-manager (분산 락)
-    ├── qc-logging (API 로깅)
-    └── qc-social (소셜 로그인)
-
-🔧 Shared Layer
-    └── qc-common (공통 유틸리티)
+🔧 Shared Modules
+    ├── qc-common (Response, DTO, HttpClient, MailSender...)
+    └── qc-test-utils
 ```
 
 **🚀 Container 역할 (`qc-api-container`)**
@@ -104,16 +111,16 @@
 
 **📦 Domain Module 역할**
 
-- **Core**: 비즈니스 로직 및 도메인 엔티티
-- **API**: REST Controller 및 DTO 정의
-- **Internal API**: 다른 도메인과의 통신 인터페이스 (선택적)
-- Container에 의해 런타임에 로딩되어 API 엔드포인트 제공
+- **Core**: 도메인 클래스 및 도메인 로직
+- **API**: 비즈니스 로직 제공 및 REST Controller End Point
+- **Internal API**: 도메인 간 통신 인터페이스 구현체
+- Container에 의해 런타임에 로딩
 
 **🔄 모듈 로딩 과정**
 
 1. `qc-api-container` 시작
 2. Classpath에서 모든 도메인 모듈 스캔
-3. 각 도메인의 `@RestController`, `@Service`, `@Repository` 등을 Spring Context에 등록
+3. 각 모듈의 `@RestController`, `@Service`, `@Repository` 등을 Spring Context에 등록
 4. 통합된 API 서버로 동작
 
 ## 🚀 구현 API
