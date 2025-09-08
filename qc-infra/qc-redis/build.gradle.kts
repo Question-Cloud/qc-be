@@ -14,11 +14,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework:spring-context")
-    implementation("org.springframework.security:spring-security-crypto")
-    implementation(project(":qc-common"))
-    implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
-    
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation(project(":qc-core:qc-user:qc-user-core"))
     testImplementation(kotlin("test"))
 }
 
