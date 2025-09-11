@@ -18,39 +18,39 @@ class ChargePointPayment(
 ) {
     fun prepare(paymentId: String) {
         this.paymentId = paymentId
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAYMENT_REQUEST
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
         this.requestAt = LocalDateTime.now()
     }
-
+    
     fun charge() {
         this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
     }
-
+    
     fun cancel() {
         this.chargePointPaymentStatus = ChargePointPaymentStatus.CANCELED
     }
-
+    
     fun failCancel() {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.PAYMENT_REQUEST
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
     }
-
+    
     fun validatePayment(paidAmount: Int) {
         validateStatus()
         validateAmount(paidAmount)
     }
-
+    
     private fun validateAmount(paidAmount: Int) {
         if (chargePointType.amount != paidAmount) {
             throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
         }
     }
-
+    
     private fun validateStatus() {
         if (chargePointPaymentStatus != ChargePointPaymentStatus.ORDERED) {
             throw CoreException(Error.ALREADY_PROCESSED_PAYMENT)
         }
     }
-
+    
     companion object {
         fun createOrder(
             userId: Long,

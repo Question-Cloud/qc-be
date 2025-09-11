@@ -46,7 +46,7 @@ class ChargePointPaymentPreparerTest(
         //then
         val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
         Assertions.assertThat(chargePointPayment.chargePointPaymentStatus)
-            .isEqualTo(ChargePointPaymentStatus.PAYMENT_REQUEST)
+            .isEqualTo(ChargePointPaymentStatus.PENDING_PG_PAYMENT)
     }
     
     @Test
