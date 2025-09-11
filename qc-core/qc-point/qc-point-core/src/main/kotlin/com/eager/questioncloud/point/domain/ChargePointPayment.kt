@@ -26,12 +26,13 @@ class ChargePointPayment(
         this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
     }
     
-    fun cancel() {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.CANCELED
-    }
-    
-    fun failCancel() {
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
+    fun recovery(): Boolean {
+        if (chargePointPaymentStatus != ChargePointPaymentStatus.PENDING_PG_PAYMENT) {
+            return false
+        }
+        
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
+        return true;
     }
     
     fun validatePayment(paidAmount: Int) {
