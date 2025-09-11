@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.pg.PaymentAPI
-import com.eager.questioncloud.pg.model.PGPayment
+import com.eager.questioncloud.common.pg.PaymentAPI
+import com.eager.questioncloud.common.pg.domain.PGPayment
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
 

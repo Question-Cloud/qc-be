@@ -2,8 +2,8 @@ package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.pg.model.PGPayment
-import com.eager.questioncloud.pg.toss.PaymentStatus
+import com.eager.questioncloud.common.pg.domain.PGPayment
+import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
@@ -38,7 +38,7 @@ class ChargePointPaymentPreparerTest(
         val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
         val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PGPaymentStatus.READY)
         
         //when
         chargePointPaymentPreparer.prepare(pgPayment)
@@ -56,7 +56,7 @@ class ChargePointPaymentPreparerTest(
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
         val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
         val wrongPaymentAmount = order.chargePointType.amount - 500
-        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PaymentStatus.READY)
+        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PGPaymentStatus.READY)
         
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
@@ -75,7 +75,7 @@ class ChargePointPaymentPreparerTest(
         
         chargePointPaymentRepository.save(order)
         
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PGPaymentStatus.READY)
         
         //when then
         Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
@@ -89,7 +89,7 @@ class ChargePointPaymentPreparerTest(
         val userId = 1L
         val paymentId = RandomStringUtils.randomAlphanumeric(10)
         val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PaymentStatus.READY)
+        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PGPaymentStatus.READY)
         
         //when
         val numberOfThreads = 100

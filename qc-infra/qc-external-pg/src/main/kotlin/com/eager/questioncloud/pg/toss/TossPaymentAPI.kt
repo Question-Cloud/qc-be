@@ -1,10 +1,11 @@
 package com.eager.questioncloud.pg.toss
 
+import com.eager.questioncloud.common.pg.PaymentAPI
+import com.eager.questioncloud.common.pg.domain.PGPayment
+import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
 import com.eager.questioncloud.http.ContentType
 import com.eager.questioncloud.http.HttpClient
 import com.eager.questioncloud.http.HttpRequest
-import com.eager.questioncloud.pg.PaymentAPI
-import com.eager.questioncloud.pg.model.PGPayment
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -19,7 +20,7 @@ class TossPaymentAPI(
         val headers = mapOf("Authorization" to "Basic $TOSS_SECRET_KEY")
         val request = HttpRequest(url = "${BASE_URL}/payments/orders/$orderId", headers = headers)
         val response = httpClient.get(request, TossPayment::class.java)
-        return PGPayment(response.paymentKey, response.orderId, response.totalAmount, response.status)
+        return PGPayment(response.paymentKey, response.orderId, response.totalAmount, PGPaymentStatus.valueOf(response.status.name))
     }
     
     override fun confirm(pgPayment: PGPayment) {

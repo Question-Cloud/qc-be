@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
-import com.eager.questioncloud.pg.PaymentAPI
+import com.eager.questioncloud.common.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType

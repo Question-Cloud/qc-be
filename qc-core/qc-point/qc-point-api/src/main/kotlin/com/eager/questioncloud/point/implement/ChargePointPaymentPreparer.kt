@@ -1,6 +1,6 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.pg.model.PGPayment
+import com.eager.questioncloud.common.pg.domain.PGPayment
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component

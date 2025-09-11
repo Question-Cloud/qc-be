@@ -1,6 +1,6 @@
-package com.eager.questioncloud.pg
+package com.eager.questioncloud.common.pg
 
-import com.eager.questioncloud.pg.model.PGPayment
+import com.eager.questioncloud.common.pg.domain.PGPayment
 
 interface PaymentAPI {
     fun getPayment(id: String): PGPayment

@@ -7,5 +7,5 @@ class TossPayment(
     val paymentKey: String,
     val orderId: String,
     val totalAmount: Int,
-    val status: PaymentStatus
+    val status: TossPaymentStatus
 )
