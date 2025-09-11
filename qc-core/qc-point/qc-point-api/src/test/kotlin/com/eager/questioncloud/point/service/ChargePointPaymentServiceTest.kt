@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.service
 
-import com.eager.questioncloud.common.pg.domain.PGPayment
-import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGPayment
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus

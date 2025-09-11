@@ -1,7 +1,9 @@
 package com.eager.questioncloud.point.implement
 
+import com.eager.questioncloud.common.pg.PGConfirmRequest
+import com.eager.questioncloud.common.pg.PGConfirmResponse
+import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PaymentAPI
-import com.eager.questioncloud.common.pg.domain.PGPayment
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Component
 
@@ -14,7 +16,7 @@ class ChargePointPaymentPGProcessor(
     }
     
     @Retryable(maxAttempts = 5)
-    fun confirm(pgPayment: PGPayment): PGPayment {
-        return paymentAPI.confirm(pgPayment)
+    fun confirm(pgConfirmRequest: PGConfirmRequest): PGConfirmResponse {
+        return paymentAPI.confirm(pgConfirmRequest)
     }
 }

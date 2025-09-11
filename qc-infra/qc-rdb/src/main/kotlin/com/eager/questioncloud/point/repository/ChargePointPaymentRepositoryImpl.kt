@@ -9,6 +9,7 @@ import com.eager.questioncloud.point.entity.QChargePointPaymentEntity.chargePoin
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 @Repository
@@ -77,6 +78,18 @@ class ChargePointPaymentRepositoryImpl(
             .from(chargePointPaymentEntity)
             .where(chargePointPaymentEntity.userId.eq(userId))
             .fetchFirst()?.toInt() ?: 0
+    }
+    
+    override fun getPendingPayments(): List<ChargePointPayment> {
+        val limitRequestAt = LocalDateTime.now().minusMinutes(5)
+        return jpaQueryFactory.select(chargePointPaymentEntity)
+            .from(chargePointPaymentEntity)
+            .where(
+                chargePointPaymentEntity.chargePointPaymentStatus.eq(ChargePointPaymentStatus.PENDING_PG_PAYMENT),
+                chargePointPaymentEntity.requestAt.before(limitRequestAt)
+            )
+            .fetch()
+            .map { entity: ChargePointPaymentEntity -> entity.toModel() }
     }
     
     override fun deleteAllInBatch() {

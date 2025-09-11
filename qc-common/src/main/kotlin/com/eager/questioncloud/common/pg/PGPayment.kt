@@ -1,4 +1,4 @@
-package com.eager.questioncloud.common.pg.domain
+package com.eager.questioncloud.common.pg
 
 class PGPayment(
     val paymentId: String,

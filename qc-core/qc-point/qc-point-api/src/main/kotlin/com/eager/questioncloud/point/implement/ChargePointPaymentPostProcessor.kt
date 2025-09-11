@@ -3,8 +3,8 @@ package com.eager.questioncloud.point.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
-import com.eager.questioncloud.common.pg.domain.PGPayment
-import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGConfirmResponse
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import org.springframework.stereotype.Component
@@ -17,11 +17,13 @@ class ChargePointPaymentPostProcessor(
     private val failChargePointPaymentMessageSender: FailChargePointPaymentMessageSender,
 ) {
     @Transactional
-    fun postProcess(chargePointPayment: ChargePointPayment, pgPayment: PGPayment) {
-        if (pgPayment.status != PGPaymentStatus.DONE) {
+    fun postProcess(chargePointPayment: ChargePointPayment, pgConfirmRequest: PGConfirmResponse) {
+        if (pgConfirmRequest.status == PGPaymentStatus.IN_PROGRESS) return
+        
+        if (pgConfirmRequest.status != PGPaymentStatus.DONE) {
             chargePointPayment.fail()
             chargePointPaymentRepository.update(chargePointPayment)
-            return;
+            return
         }
         
         runCatching {

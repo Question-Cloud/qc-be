@@ -1,5 +1,6 @@
 package com.eager.questioncloud.point.service
 
+import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.implement.ChargePointPaymentPGProcessor
@@ -23,7 +24,8 @@ class ChargePointPaymentService(
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
-        val confirmResult = chargePointPaymentPGProcessor.confirm(pgPayment)
+        val confirmResult =
+            chargePointPaymentPGProcessor.confirm(PGConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount))
         chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResult)
     }
     

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.common.pg.domain
+package com.eager.questioncloud.common.pg
 
 enum class PGPaymentStatus(val status: String) {
     READY("READY"), IN_PROGRESS("IN_PROGRESS"), WAITING_FOR_DEPOSIT("WAITING_FOR_DEPOSIT"),

@@ -1,8 +1,6 @@
 package com.eager.questioncloud.pg.toss
 
-import com.eager.questioncloud.common.pg.PaymentAPI
-import com.eager.questioncloud.common.pg.domain.PGPayment
-import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
+import com.eager.questioncloud.common.pg.*
 import com.eager.questioncloud.http.ContentType
 import com.eager.questioncloud.http.HttpClient
 import com.eager.questioncloud.http.HttpRequest
@@ -23,30 +21,31 @@ class TossPaymentAPI(
         return PGPayment(response.paymentKey, response.orderId, response.totalAmount, PGPaymentStatus.valueOf(response.status.name))
     }
     
-    override fun confirm(pgPayment: PGPayment): PGPayment {
+    override fun confirm(pgConfirmRequest: PGConfirmRequest): PGConfirmResponse {
         val headers = mutableMapOf<String, String>()
         headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
-        headers["Idempotency-Key"] = pgPayment.paymentId
+        headers["Idempotency-Key"] = pgConfirmRequest.paymentId
         
         val request = HttpRequest(
             url = "${BASE_URL}/payments/confirm",
             headers = headers,
-            body = TossPaymentConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount),
+            body = TossPaymentConfirmRequest(pgConfirmRequest.paymentId, pgConfirmRequest.orderId, pgConfirmRequest.amount),
             contentType = ContentType.JSON,
         )
+        val response = httpClient.post(request, TossPayment::class.java)
         
-        return httpClient.post(request, PGPayment::class.java)
+        return PGConfirmResponse(PGPaymentStatus.valueOf(response.status.name))
     }
     
-    override fun cancel(pgPayment: PGPayment) {
+    override fun cancel(pgConfirmRequest: PGConfirmRequest) {
         val headers = mutableMapOf<String, String>()
         headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
-        headers["Idempotency-Key"] = pgPayment.paymentId
+        headers["Idempotency-Key"] = pgConfirmRequest.paymentId
         
         val request = HttpRequest(
-            url = "${BASE_URL}/payments/${pgPayment.paymentId}/cancel",
+            url = "${BASE_URL}/payments/${pgConfirmRequest.paymentId}/cancel",
             headers = headers,
-            body = TossPaymentCancelRequest(pgPayment.amount),
+            body = TossPaymentCancelRequest(pgConfirmRequest.amount),
             contentType = ContentType.JSON,
         )
         

@@ -21,5 +21,7 @@ interface ChargePointPaymentRepository {
     
     fun countByUserId(userId: Long): Int
     
+    fun getPendingPayments(): List<ChargePointPayment>
+    
     fun deleteAllInBatch()
 }

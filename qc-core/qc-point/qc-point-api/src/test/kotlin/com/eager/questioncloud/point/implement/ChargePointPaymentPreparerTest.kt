@@ -2,8 +2,8 @@ package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.common.pg.domain.PGPayment
-import com.eager.questioncloud.common.pg.domain.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGPayment
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType

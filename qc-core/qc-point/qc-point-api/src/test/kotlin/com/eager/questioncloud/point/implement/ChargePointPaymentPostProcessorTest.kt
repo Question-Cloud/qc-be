@@ -1,5 +1,7 @@
 package com.eager.questioncloud.point.implement
 
+import com.eager.questioncloud.common.pg.PGConfirmResponse
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.enums.ChargePointType
@@ -37,8 +39,13 @@ class ChargePointPaymentPostProcessorTest(
         chargePointPayment.charge()
         chargePointPaymentRepository.save(chargePointPayment)
         
+        val pgConfirmResponse = PGConfirmResponse(
+            PGPaymentStatus.DONE
+        )
+        
+        
         // when
-        chargePointPaymentPostProcessor.postProcess(chargePointPayment)
+        chargePointPaymentPostProcessor.postProcess(chargePointPayment, pgConfirmResponse)
         
         //then
         val userPoint = userPointRepository.getUserPoint(userId)
