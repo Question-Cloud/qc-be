@@ -23,8 +23,8 @@ class ChargePointPaymentService(
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
-        chargePointPaymentPGProcessor.confirm(pgPayment)
-        chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
+        val confirmResult = chargePointPaymentPGProcessor.confirm(pgPayment)
+        chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResult)
     }
     
     fun isCompletePayment(userId: Long, orderId: String): Boolean {

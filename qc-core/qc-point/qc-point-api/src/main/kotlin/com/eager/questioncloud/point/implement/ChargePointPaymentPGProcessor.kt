@@ -14,7 +14,7 @@ class ChargePointPaymentPGProcessor(
     }
     
     @Retryable(maxAttempts = 5)
-    fun confirm(pgPayment: PGPayment) {
-        paymentAPI.confirm(pgPayment)
+    fun confirm(pgPayment: PGPayment): PGPayment {
+        return paymentAPI.confirm(pgPayment)
     }
 }

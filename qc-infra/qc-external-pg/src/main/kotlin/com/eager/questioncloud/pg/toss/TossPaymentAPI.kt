@@ -23,7 +23,7 @@ class TossPaymentAPI(
         return PGPayment(response.paymentKey, response.orderId, response.totalAmount, PGPaymentStatus.valueOf(response.status.name))
     }
     
-    override fun confirm(pgPayment: PGPayment) {
+    override fun confirm(pgPayment: PGPayment): PGPayment {
         val headers = mutableMapOf<String, String>()
         headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
         headers["Idempotency-Key"] = pgPayment.paymentId
@@ -35,7 +35,7 @@ class TossPaymentAPI(
             contentType = ContentType.JSON,
         )
         
-        httpClient.post(request)
+        return httpClient.post(request, PGPayment::class.java)
     }
     
     override fun cancel(pgPayment: PGPayment) {

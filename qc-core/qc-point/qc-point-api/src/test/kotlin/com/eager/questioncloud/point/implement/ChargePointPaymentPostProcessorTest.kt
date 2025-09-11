@@ -38,7 +38,7 @@ class ChargePointPaymentPostProcessorTest(
         chargePointPaymentRepository.save(chargePointPayment)
         
         // when
-        chargePointPaymentPostProcessor.chargeUserPoint(chargePointPayment)
+        chargePointPaymentPostProcessor.postProcess(chargePointPayment)
         
         //then
         val userPoint = userPointRepository.getUserPoint(userId)

@@ -26,6 +26,10 @@ class ChargePointPayment(
         this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
     }
     
+    fun fail() {
+        this.chargePointPaymentStatus = ChargePointPaymentStatus.FAILED
+    }
+    
     fun recovery(): Boolean {
         if (chargePointPaymentStatus != ChargePointPaymentStatus.PENDING_PG_PAYMENT) {
             return false
