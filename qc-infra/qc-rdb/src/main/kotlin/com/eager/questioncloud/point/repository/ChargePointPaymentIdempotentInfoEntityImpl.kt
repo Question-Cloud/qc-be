@@ -23,8 +23,12 @@ class ChargePointPaymentIdempotentInfoEntityImpl(
     }
     
     override fun findByOrderId(orderId: String): ChargePointPaymentIdempotentInfo? {
-        return chargePointPaymentIdempotentInfoJpaRepository.findById(orderId)
-            .orElse(null)
-            .toModel()
+        val result = chargePointPaymentIdempotentInfoJpaRepository.findById(orderId)
+        
+        if (result.isPresent) {
+            return result.get().toModel()
+        }
+        
+        return null
     }
 }

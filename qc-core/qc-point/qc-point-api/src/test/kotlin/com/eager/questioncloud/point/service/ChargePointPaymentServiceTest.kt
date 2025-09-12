@@ -1,5 +1,6 @@
 package com.eager.questioncloud.point.service
 
+import com.eager.questioncloud.common.pg.PGConfirmResponse
 import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
@@ -14,13 +15,14 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.given
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDateTime
+import java.util.*
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -68,7 +70,7 @@ class ChargePointPaymentServiceTest(
             PGPayment("paymentId", order.orderId, chargePointType.amount, PGPaymentStatus.READY)
         )
         
-        doNothing().whenever(chargePointPaymentPGProcessor).confirm(any())
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
         
         // when
         chargePointPaymentService.approvePayment(order.orderId)
@@ -97,5 +99,38 @@ class ChargePointPaymentServiceTest(
         
         Assertions.assertThat(order1Status).isTrue()
         Assertions.assertThat(order2Status).isFalse()
+    }
+    
+    @Test
+    fun `결제 승인 대기 중인 건이 다시 요청오면 이어서 처리할 수 있다`() {
+        // given
+        val userId = 1L
+        userPointRepository.save(UserPoint.create(userId))
+        
+        val chargePointType = ChargePointType.PackageA
+        val chargePointPayment = ChargePointPayment(
+            orderId = UUID.randomUUID().toString(),
+            paymentId = UUID.randomUUID().toString(),
+            userId = userId,
+            chargePointType = chargePointType,
+            chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT,
+            createdAt = LocalDateTime.now(),
+            requestAt = LocalDateTime.now(),
+        )
+        chargePointPaymentRepository.save(chargePointPayment)
+        
+        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
+            val orderId = e.getArgument<String>(0)
+            PGPayment(UUID.randomUUID().toString(), orderId, ChargePointType.PackageA.amount, PGPaymentStatus.DONE)
+        }
+        
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        
+        // when
+        chargePointPaymentService.approvePayment(chargePointPayment.orderId)
+        
+        // then
+        val userPoint = userPointRepository.getUserPoint(userId)
+        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
     }
 }

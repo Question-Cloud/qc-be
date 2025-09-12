@@ -35,15 +35,6 @@ class ChargePointPayment(
         this.chargePointPaymentStatus = ChargePointPaymentStatus.FAILED
     }
     
-    fun recovery(): Boolean {
-        if (chargePointPaymentStatus != ChargePointPaymentStatus.PENDING_PG_PAYMENT) {
-            return false
-        }
-        
-        this.chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
-        return true;
-    }
-    
     private fun validatePaymentAmount(paidAmount: Int) {
         if (chargePointType.amount != paidAmount) {
             throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)

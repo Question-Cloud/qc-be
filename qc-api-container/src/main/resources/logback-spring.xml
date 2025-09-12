@@ -11,17 +11,6 @@
     </encoder>
   </appender>
 
-  <appender name="ERROR_PUBLISH_FAIL_CHARGE_POINT_EVENT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>logs/error-publish-fail-charge-point-event.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logs/sns-fail-%d{yyyy-MM-dd}.log</fileNamePattern>
-      <maxHistory>30</maxHistory>
-    </rollingPolicy>
-    <encoder>
-      <pattern>%d{yyyy-MM-dd HH:mm:ss} | %msg%n</pattern>
-    </encoder>
-  </appender>
-
   <appender name="API_TRANSACTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>logs/api-transaction.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -32,11 +21,7 @@
       <pattern>%msg%n</pattern>
     </encoder>
   </appender>
-
-  <logger name="error-publish-fail-charge-point-event" level="WARN" additivity="false">
-    <appender-ref ref="ERROR_PUBLISH_FAIL_CHARGE_POINT_EVENT"/>
-  </logger>
-
+  
   <logger name="api-transaction" level="INFO" additivity="false">
     <appender-ref ref="API_TRANSACTION"/>
   </logger>

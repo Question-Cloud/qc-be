@@ -1,8 +1,5 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
 import com.eager.questioncloud.common.pg.PGConfirmResponse
 import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
@@ -17,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 class ChargePointPaymentPostProcessor(
     private val userPointManager: UserPointManager,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
-    private val failChargePointPaymentMessageSender: FailChargePointPaymentMessageSender,
     private val chargePointPaymentIdempotentInfoRepository: ChargePointPaymentIdempotentInfoRepository
 ) {
     @Transactional
@@ -37,23 +33,18 @@ class ChargePointPaymentPostProcessor(
             return ChargePointPaymentStatus.FAILED
         }
         
-        return runCatching {
-            val idempotentInfo = ChargePointPaymentIdempotentInfo(
-                orderId = chargePointPayment.orderId,
-                paymentId = chargePointPayment.paymentId!!,
-                chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
-            )
-            
-            if (chargePointPaymentIdempotentInfoRepository.save(idempotentInfo)) {
-                userPointManager.chargePoint(chargePointPayment.userId, chargePointPayment.chargePointType.amount)
-                chargePointPayment.charge()
-                chargePointPaymentRepository.update(chargePointPayment)
-            }
-            
-            ChargePointPaymentStatus.CHARGED
-        }.getOrElse {
-            failChargePointPaymentMessageSender.publishMessage(FailChargePointPaymentMessagePayload.create(chargePointPayment.orderId))
-            throw CoreException(Error.PAYMENT_ERROR)
+        val idempotentInfo = ChargePointPaymentIdempotentInfo(
+            orderId = chargePointPayment.orderId,
+            paymentId = chargePointPayment.paymentId!!,
+            chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
+        )
+        
+        if (chargePointPaymentIdempotentInfoRepository.save(idempotentInfo)) {
+            userPointManager.chargePoint(chargePointPayment.userId, chargePointPayment.chargePointType.amount)
+            chargePointPayment.charge()
+            chargePointPaymentRepository.update(chargePointPayment)
         }
+        
+        return ChargePointPaymentStatus.CHARGED
     }
 }
