@@ -1,7 +1,6 @@
 package com.eager.questioncloud.point.controller
 
 import com.eager.questioncloud.common.auth.UserPrincipal
-import com.eager.questioncloud.common.dto.DefaultResponse
 import com.eager.questioncloud.common.dto.PagingResponse
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.point.dto.*
@@ -33,9 +32,9 @@ class ChargePointController(
     }
     
     @PostMapping
-    fun payment(@RequestBody request: ChargePointPaymentRequest): DefaultResponse {
-        chargePointPaymentService.approvePayment(request.orderId)
-        return DefaultResponse.success()
+    fun payment(@RequestBody request: ChargePointPaymentRequest): ChargePointPaymentResponse {
+        val result = chargePointPaymentService.approvePayment(request.orderId)
+        return ChargePointPaymentResponse(result)
     }
     
     @GetMapping("/history")
