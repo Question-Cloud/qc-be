@@ -17,6 +17,7 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.retry:spring-retry")
     
     implementation(project(":qc-common"))
     implementation(project(":qc-logging"))

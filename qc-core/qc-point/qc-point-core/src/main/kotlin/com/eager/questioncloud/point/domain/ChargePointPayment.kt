@@ -18,7 +18,9 @@ class ChargePointPayment(
     var requestAt: LocalDateTime? = null,
 ) {
     fun prepare(pgPayment: PGPayment) {
-        validatePayment(pgPayment.amount)
+        if (chargePointPaymentStatus != ChargePointPaymentStatus.ORDERED) return
+        
+        validatePaymentAmount(pgPayment.amount)
         
         this.paymentId = pgPayment.paymentId
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
@@ -42,20 +44,9 @@ class ChargePointPayment(
         return true;
     }
     
-    private fun validatePayment(paidAmount: Int) {
-        validateStatus()
-        validateAmount(paidAmount)
-    }
-    
-    private fun validateAmount(paidAmount: Int) {
+    private fun validatePaymentAmount(paidAmount: Int) {
         if (chargePointType.amount != paidAmount) {
             throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
-        }
-    }
-    
-    private fun validateStatus() {
-        if (chargePointPaymentStatus != ChargePointPaymentStatus.ORDERED) {
-            throw CoreException(Error.ALREADY_PROCESSED_PAYMENT)
         }
     }
     

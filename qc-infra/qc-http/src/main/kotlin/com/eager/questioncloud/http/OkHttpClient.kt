@@ -26,7 +26,14 @@ class OkHttpClient(
         setHttpHeader(req, okHttpReqBuilder)
         
         client.newCall(okHttpReqBuilder.get().build()).execute().use { response ->
-            if (!response.isSuccessful) throw RuntimeException()
+            if (response.code in 400..499) {
+                throw HttpClientException.Response4xxException()
+            }
+            
+            if (response.code in 500..599) {
+                throw HttpClientException.Response5xxException()
+            }
+            
             return objectMapper.readValue(response.body?.string(), valueType)
         }
     }
@@ -38,6 +45,14 @@ class OkHttpClient(
         setBody(req, okHttpReqBuilder)
         
         client.newCall(okHttpReqBuilder.build()).execute().use { response ->
+            if (response.code in 400..499) {
+                throw HttpClientException.Response4xxException()
+            }
+            
+            if (response.code in 500..599) {
+                throw HttpClientException.Response5xxException()
+            }
+            
             return objectMapper.readValue(response.body?.string(), valueType)
         }
     }
@@ -48,7 +63,15 @@ class OkHttpClient(
         setHttpHeader(req, okHttpReqBuilder)
         setBody(req, okHttpReqBuilder)
         
-        client.newCall(okHttpReqBuilder.build()).execute().close()
+        client.newCall(okHttpReqBuilder.build()).execute().use { response ->
+            if (response.code in 400..499) {
+                throw HttpClientException.Response4xxException()
+            }
+            
+            if (response.code in 500..599) {
+                throw HttpClientException.Response5xxException()
+            }
+        }
     }
     
     private fun setHttpUrl(req: HttpRequest, builder: Request.Builder) {

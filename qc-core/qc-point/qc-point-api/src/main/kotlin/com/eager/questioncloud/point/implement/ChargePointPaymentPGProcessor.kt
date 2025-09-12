@@ -1,5 +1,6 @@
 package com.eager.questioncloud.point.implement
 
+import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.common.pg.PGConfirmResponse
 import com.eager.questioncloud.common.pg.PGPayment
@@ -15,7 +16,7 @@ class ChargePointPaymentPGProcessor(
         return paymentAPI.getPayment(orderId)
     }
     
-    @Retryable(maxAttempts = 5)
+    @Retryable(maxAttempts = 5, exclude = [CoreException::class])
     fun confirm(pgConfirmRequest: PGConfirmRequest): PGConfirmResponse {
         return paymentAPI.confirm(pgConfirmRequest)
     }

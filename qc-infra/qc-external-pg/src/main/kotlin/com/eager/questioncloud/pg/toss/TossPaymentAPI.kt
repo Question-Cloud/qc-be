@@ -1,8 +1,11 @@
 package com.eager.questioncloud.pg.toss
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pg.*
 import com.eager.questioncloud.http.ContentType
 import com.eager.questioncloud.http.HttpClient
+import com.eager.questioncloud.http.HttpClientException
 import com.eager.questioncloud.http.HttpRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -32,9 +35,16 @@ class TossPaymentAPI(
             body = TossPaymentConfirmRequest(pgConfirmRequest.paymentId, pgConfirmRequest.orderId, pgConfirmRequest.amount),
             contentType = ContentType.JSON,
         )
-        val response = httpClient.post(request, TossPayment::class.java)
         
-        return PGConfirmResponse(PGPaymentStatus.valueOf(response.status.name))
+        try {
+            val response = httpClient.post(request, TossPayment::class.java)
+            return PGConfirmResponse(PGPaymentStatus.valueOf(response.status.name))
+        } catch (e: Exception) {
+            if (e is HttpClientException.Response4xxException) {
+                throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
+            }
+            throw e
+        }
     }
     
     override fun cancel(pgConfirmRequest: PGConfirmRequest) {

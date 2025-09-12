@@ -1,5 +1,7 @@
 package com.eager.questioncloud.point.service
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointType
@@ -24,9 +26,15 @@ class ChargePointPaymentService(
     fun approvePayment(orderId: String) {
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
-        val confirmResult =
-            chargePointPaymentPGProcessor.confirm(PGConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount))
-        chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResult)
+        val confirmRequest = PGConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount)
+        
+        runCatching {
+            val confirmResponse = chargePointPaymentPGProcessor.confirm(confirmRequest)
+            chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResponse)
+        }.getOrElse { e ->
+            if (e is CoreException) throw e
+            throw CoreException(Error.PAYMENT_ERROR)
+        }
     }
     
     fun isCompletePayment(userId: Long, orderId: String): Boolean {
