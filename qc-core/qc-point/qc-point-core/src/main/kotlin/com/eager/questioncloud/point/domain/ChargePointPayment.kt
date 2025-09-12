@@ -2,6 +2,7 @@ package com.eager.questioncloud.point.domain
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
 import io.hypersistence.tsid.TSID
@@ -16,8 +17,10 @@ class ChargePointPayment(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     var requestAt: LocalDateTime? = null,
 ) {
-    fun prepare(paymentId: String) {
-        this.paymentId = paymentId
+    fun prepare(pgPayment: PGPayment) {
+        validatePayment(pgPayment.amount)
+        
+        this.paymentId = pgPayment.paymentId
         this.chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
         this.requestAt = LocalDateTime.now()
     }
@@ -39,7 +42,7 @@ class ChargePointPayment(
         return true;
     }
     
-    fun validatePayment(paidAmount: Int) {
+    private fun validatePayment(paidAmount: Int) {
         validateStatus()
         validateAmount(paidAmount)
     }

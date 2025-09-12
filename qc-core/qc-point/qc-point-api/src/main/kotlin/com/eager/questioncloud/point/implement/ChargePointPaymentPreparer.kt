@@ -13,8 +13,7 @@ class ChargePointPaymentPreparer(
     @Transactional
     fun prepare(pgPayment: PGPayment): ChargePointPayment {
         val chargePointPayment = chargePointPaymentRepository.findByOrderIdWithLock(pgPayment.orderId)
-        chargePointPayment.validatePayment(pgPayment.amount)
-        chargePointPayment.prepare(pgPayment.paymentId)
+        chargePointPayment.prepare(pgPayment)
         return chargePointPaymentRepository.update(chargePointPayment)
     }
 }
