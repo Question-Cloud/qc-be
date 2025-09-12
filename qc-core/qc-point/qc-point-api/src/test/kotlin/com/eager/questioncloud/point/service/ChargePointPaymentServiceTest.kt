@@ -23,6 +23,9 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -132,5 +135,57 @@ class ChargePointPaymentServiceTest(
         // then
         val userPoint = userPointRepository.getUserPoint(userId)
         Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
+    }
+    
+    @Test
+    fun `포인트 충전 부하 테스트`() {
+        // given
+        val userId = 1L
+        val chargePointType = ChargePointType.PackageA
+        userPointRepository.save(UserPoint.create(userId))
+        
+        val cppList = mutableListOf<ChargePointPayment>()
+        for (i in 1..300) {
+            cppList.add(
+                chargePointPaymentRepository.save(
+                    ChargePointPayment(
+                        paymentId = UUID.randomUUID().toString(),
+                        userId = 1L,
+                        chargePointType = chargePointType,
+                        chargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
+                        requestAt = LocalDateTime.now()
+                    )
+                )
+            )
+        }
+        
+        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
+            val orderId = e.getArgument<String>(0)
+            PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
+        }
+        
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        
+        // when
+        val countDownLatch = CountDownLatch(cppList.size)
+        val executorService: ExecutorService = Executors.newFixedThreadPool(300)
+        cppList.forEach { cpp ->
+            executorService.submit {
+                try {
+                    chargePointPaymentService.approvePayment(cpp.orderId)
+                } catch (e: Exception) {
+                    println(e.message)
+                } finally {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+        
+        countDownLatch.await()
+        executorService.shutdown()
+        
+        // then
+        val userPoint = userPointRepository.getUserPoint(userId)
+        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount * cppList.size)
     }
 }
