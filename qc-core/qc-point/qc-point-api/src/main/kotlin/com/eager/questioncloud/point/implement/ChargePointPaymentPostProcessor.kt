@@ -18,8 +18,6 @@ class ChargePointPaymentPostProcessor(
 ) {
     @Transactional
     fun postProcess(chargePointPayment: ChargePointPayment, pgConfirmRequest: PGConfirmResponse) {
-        if (pgConfirmRequest.status == PGPaymentStatus.IN_PROGRESS) return
-        
         if (pgConfirmRequest.status != PGPaymentStatus.DONE) {
             chargePointPayment.fail()
             chargePointPaymentRepository.update(chargePointPayment)
