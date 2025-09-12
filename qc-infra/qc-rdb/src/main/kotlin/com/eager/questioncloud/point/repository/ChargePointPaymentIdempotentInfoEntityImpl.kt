@@ -1,8 +1,6 @@
 package com.eager.questioncloud.point.repository
 
 import com.eager.questioncloud.point.domain.ChargePointPaymentIdempotentInfo
-import com.eager.questioncloud.point.entity.ChargePointPaymentIdempotentInfoEntity
-import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -10,16 +8,11 @@ class ChargePointPaymentIdempotentInfoEntityImpl(
     private val chargePointPaymentIdempotentInfoJpaRepository: ChargePointPaymentIdempotentInfoJpaRepository
 ) : ChargePointPaymentIdempotentInfoRepository {
     override fun save(chargePointPaymentIdempotentInfo: ChargePointPaymentIdempotentInfo): Boolean {
-        try {
-            chargePointPaymentIdempotentInfoJpaRepository.save(
-                ChargePointPaymentIdempotentInfoEntity.createNewEntity(
-                    chargePointPaymentIdempotentInfo
-                )
-            )
-            return true
-        } catch (_: DataIntegrityViolationException) {
-            return false
-        }
+        return chargePointPaymentIdempotentInfoJpaRepository.insertIfAbsent(
+            chargePointPaymentIdempotentInfo.orderId,
+            chargePointPaymentIdempotentInfo.paymentId,
+            chargePointPaymentIdempotentInfo.chargePointPaymentStatus.name
+        ) == 1
     }
     
     override fun findByOrderId(orderId: String): ChargePointPaymentIdempotentInfo? {

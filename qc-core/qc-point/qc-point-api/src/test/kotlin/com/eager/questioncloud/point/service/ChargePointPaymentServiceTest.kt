@@ -188,4 +188,50 @@ class ChargePointPaymentServiceTest(
         val userPoint = userPointRepository.getUserPoint(userId)
         Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount * cppList.size)
     }
+    
+    @Test
+    fun `포인트 충전 동시성 테스트`() {
+        // given
+        val userId = 1L
+        val chargePointType = ChargePointType.PackageA
+        userPointRepository.save(UserPoint.create(userId))
+        val chargePointPayment = chargePointPaymentRepository.save(
+            ChargePointPayment(
+                paymentId = UUID.randomUUID().toString(),
+                userId = 1L,
+                chargePointType = chargePointType,
+                chargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
+                requestAt = LocalDateTime.now()
+            )
+        )
+        
+        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
+            val orderId = e.getArgument<String>(0)
+            PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
+        }
+        
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        
+        // when
+        val requestCount = 100
+        val countDownLatch = CountDownLatch(requestCount)
+        val executorService: ExecutorService = Executors.newFixedThreadPool(300)
+        for (i in 1..requestCount) {
+            executorService.submit {
+                try {
+                    chargePointPaymentService.approvePayment(chargePointPayment.orderId)
+                } catch (_: Exception) {
+                } finally {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+        
+        countDownLatch.await()
+        executorService.shutdown()
+        
+        // then
+        val userPoint = userPointRepository.getUserPoint(userId)
+        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
+    }
 }
