@@ -1,18 +1,20 @@
 package com.eager.questioncloud.point.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.common.pg.PGPayment
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.apache.commons.lang3.RandomStringUtils
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import java.util.*
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -80,7 +82,7 @@ class ChargePointPaymentHistoryServiceTest(
     
     private fun createChargedPayment(userId: Long, chargePointType: ChargePointType): ChargePointPayment {
         val payment = ChargePointPayment.createOrder(userId, chargePointType)
-        payment.prepare(RandomStringUtils.randomAlphabetic(10))
+        payment.prepare(PGPayment(UUID.randomUUID().toString(), payment.orderId, chargePointType.amount, PGPaymentStatus.READY))
         payment.charge() // CHARGED 상태로 변경
         return payment
     }

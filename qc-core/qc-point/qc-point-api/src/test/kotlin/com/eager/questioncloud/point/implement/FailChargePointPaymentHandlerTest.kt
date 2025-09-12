@@ -1,6 +1,8 @@
 package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.message.FailChargePointPaymentMessagePayload
+import com.eager.questioncloud.common.pg.PGPayment
+import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.common.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
@@ -39,7 +41,7 @@ internal class FailChargePointPaymentHandlerTest(
         //given
         val userId = 1L
         val order = ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
-        order.prepare("paymentId")
+        order.prepare(PGPayment("paymentId", order.orderId, order.chargePointType.amount, PGPaymentStatus.DONE))
         order.charge()
         chargePointPaymentRepository.save(order)
         
