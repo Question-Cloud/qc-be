@@ -27,6 +27,7 @@ import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -228,11 +229,15 @@ class ChargePointPaymentServiceTest(
         // when
         val requestCount = 100
         val countDownLatch = CountDownLatch(requestCount)
-        val executorService: ExecutorService = Executors.newFixedThreadPool(300)
+        val successCount = AtomicInteger(0)
+        val executorService: ExecutorService = Executors.newFixedThreadPool(requestCount)
         for (i in 1..requestCount) {
             executorService.submit {
                 try {
-                    chargePointPaymentService.approvePayment(chargePointPayment.orderId)
+                    val result = chargePointPaymentService.approvePayment(chargePointPayment.orderId)
+                    if (result == ChargePointPaymentStatus.CHARGED) {
+                        successCount.getAndIncrement()
+                    }
                 } catch (_: Exception) {
                 } finally {
                     countDownLatch.countDown()
@@ -246,5 +251,6 @@ class ChargePointPaymentServiceTest(
         // then
         val userPoint = userPointRepository.getUserPoint(userId)
         Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
+        Assertions.assertThat(successCount.get()).isEqualTo(requestCount)
     }
 }
