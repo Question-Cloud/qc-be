@@ -1,5 +1,6 @@
 package com.eager.questioncloud.point.service
 
+import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.common.pg.PGConfirmResponse
 import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PGPaymentStatus
@@ -73,7 +74,13 @@ class ChargePointPaymentServiceTest(
             PGPayment("paymentId", order.orderId, chargePointType.amount, PGPaymentStatus.READY)
         )
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(
+            PGConfirmResponse(
+                order.orderId,
+                "paymentId",
+                PGPaymentStatus.DONE
+            )
+        )
         
         // when
         chargePointPaymentService.approvePayment(order.orderId)
@@ -109,11 +116,12 @@ class ChargePointPaymentServiceTest(
         // given
         val userId = 1L
         userPointRepository.save(UserPoint.create(userId))
-        
+        val orderId = UUID.randomUUID().toString()
+        val paymentId = UUID.randomUUID().toString()
         val chargePointType = ChargePointType.PackageA
         val chargePointPayment = ChargePointPayment(
-            orderId = UUID.randomUUID().toString(),
-            paymentId = UUID.randomUUID().toString(),
+            orderId = orderId,
+            paymentId = paymentId,
             userId = userId,
             chargePointType = chargePointType,
             chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT,
@@ -122,12 +130,11 @@ class ChargePointPaymentServiceTest(
         )
         chargePointPaymentRepository.save(chargePointPayment)
         
-        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
-            val orderId = e.getArgument<String>(0)
-            PGPayment(UUID.randomUUID().toString(), orderId, ChargePointType.PackageA.amount, PGPaymentStatus.DONE)
+        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer {
+            PGPayment(paymentId, orderId, ChargePointType.PackageA.amount, PGPaymentStatus.DONE)
         }
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(orderId, paymentId, PGPaymentStatus.DONE))
         
         // when
         chargePointPaymentService.approvePayment(chargePointPayment.orderId)
@@ -164,7 +171,10 @@ class ChargePointPaymentServiceTest(
             PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
         }
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
+            val request = e.getArgument<PGConfirmRequest>(0)
+            PGConfirmResponse(request.orderId, request.paymentId, PGPaymentStatus.DONE)
+        }
         
         // when
         val countDownLatch = CountDownLatch(cppList.size)
@@ -210,7 +220,10 @@ class ChargePointPaymentServiceTest(
             PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
         }
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(PGPaymentStatus.DONE))
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
+            val request = e.getArgument<PGConfirmRequest>(0)
+            PGConfirmResponse(request.orderId, request.paymentId, PGPaymentStatus.DONE)
+        }
         
         // when
         val requestCount = 100

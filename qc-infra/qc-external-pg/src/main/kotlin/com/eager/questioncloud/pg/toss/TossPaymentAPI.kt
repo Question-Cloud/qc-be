@@ -38,7 +38,7 @@ class TossPaymentAPI(
         
         try {
             val response = httpClient.post(request, TossPayment::class.java)
-            return PGConfirmResponse(PGPaymentStatus.valueOf(response.status.name))
+            return PGConfirmResponse(response.orderId, response.paymentKey, PGPaymentStatus.valueOf(response.status.name))
         } catch (e: Exception) {
             if (e is HttpClientException.Response4xxException) {
                 throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)

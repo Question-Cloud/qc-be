@@ -23,8 +23,8 @@ class ChargePointPaymentPostProcessor(
         try {
             if (pgConfirmResponse.status != PGPaymentStatus.DONE) {
                 val idempotentInfo = ChargePointPaymentIdempotentInfo(
-                    orderId = chargePointPayment.orderId,
-                    paymentId = chargePointPayment.paymentId!!,
+                    orderId = pgConfirmResponse.orderId,
+                    paymentId = pgConfirmResponse.paymentId,
                     chargePointPaymentStatus = ChargePointPaymentStatus.FAILED
                 )
                 
@@ -37,8 +37,8 @@ class ChargePointPaymentPostProcessor(
             }
             
             val idempotentInfo = ChargePointPaymentIdempotentInfo(
-                orderId = chargePointPayment.orderId,
-                paymentId = chargePointPayment.paymentId!!,
+                orderId = pgConfirmResponse.orderId,
+                paymentId = pgConfirmResponse.paymentId,
                 chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
             )
             
