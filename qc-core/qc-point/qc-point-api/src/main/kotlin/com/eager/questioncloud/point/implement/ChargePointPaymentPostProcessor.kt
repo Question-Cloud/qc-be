@@ -2,8 +2,7 @@ package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.common.pg.PGConfirmResponse
-import com.eager.questioncloud.common.pg.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.domain.ChargePointPaymentIdempotentInfo
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
@@ -20,16 +19,16 @@ class ChargePointPaymentPostProcessor(
     private val chargePointPaymentIdempotentInfoRepository: ChargePointPaymentIdempotentInfoRepository
 ) {
     @Transactional
-    fun postProcess(chargePointPayment: ChargePointPayment, pgConfirmResponse: PGConfirmResponse): ChargePointPaymentStatus {
+    fun postProcess(chargePointPayment: ChargePointPayment, pgConfirmResult: PGConfirmResult): ChargePointPaymentStatus {
         try {
-            if (pgConfirmResponse.status != PGPaymentStatus.DONE) {
-                chargePointPaymentFailHandler.fail(pgConfirmResponse.orderId, pgConfirmResponse.paymentId)
+            if (pgConfirmResult is PGConfirmResult.Fail) {
+                chargePointPaymentFailHandler.fail(pgConfirmResult.orderId, pgConfirmResult.paymentId)
                 return ChargePointPaymentStatus.FAILED
             }
             
             val idempotentInfo = ChargePointPaymentIdempotentInfo(
-                orderId = pgConfirmResponse.orderId,
-                paymentId = pgConfirmResponse.paymentId,
+                orderId = pgConfirmResult.orderId,
+                paymentId = pgConfirmResult.paymentId,
                 chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
             )
             

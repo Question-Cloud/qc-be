@@ -1,8 +1,7 @@
 package com.eager.questioncloud.point.scheduler
 
 import com.eager.questioncloud.common.pg.PGConfirmRequest
-import com.eager.questioncloud.common.pg.PGConfirmResponse
-import com.eager.questioncloud.common.pg.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
@@ -46,7 +45,7 @@ class ChargePointPaymentCheckSchedulerTest(
         
         whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
             val request = e.getArgument<PGConfirmRequest>(0)
-            PGConfirmResponse(request.orderId, request.paymentId, PGPaymentStatus.DONE)
+            PGConfirmResult.Success(request.orderId, request.paymentId)
         }
         
         // when

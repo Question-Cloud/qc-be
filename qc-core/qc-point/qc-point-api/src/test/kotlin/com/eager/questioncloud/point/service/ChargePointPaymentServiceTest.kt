@@ -1,7 +1,7 @@
 package com.eager.questioncloud.point.service
 
 import com.eager.questioncloud.common.pg.PGConfirmRequest
-import com.eager.questioncloud.common.pg.PGConfirmResponse
+import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
@@ -76,10 +76,9 @@ class ChargePointPaymentServiceTest(
         )
         
         whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(
-            PGConfirmResponse(
+            PGConfirmResult.Success(
                 order.orderId,
                 "paymentId",
-                PGPaymentStatus.DONE
             )
         )
         
@@ -135,7 +134,7 @@ class ChargePointPaymentServiceTest(
             PGPayment(paymentId, orderId, ChargePointType.PackageA.amount, PGPaymentStatus.DONE)
         }
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResponse(orderId, paymentId, PGPaymentStatus.DONE))
+        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResult.Success(orderId, paymentId))
         
         // when
         chargePointPaymentService.approvePayment(chargePointPayment.orderId)
@@ -174,7 +173,7 @@ class ChargePointPaymentServiceTest(
         
         whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
             val request = e.getArgument<PGConfirmRequest>(0)
-            PGConfirmResponse(request.orderId, request.paymentId, PGPaymentStatus.DONE)
+            PGConfirmResult.Success(request.orderId, request.paymentId)
         }
         
         // when
@@ -223,7 +222,7 @@ class ChargePointPaymentServiceTest(
         
         whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
             val request = e.getArgument<PGConfirmRequest>(0)
-            PGConfirmResponse(request.orderId, request.paymentId, PGPaymentStatus.DONE)
+            PGConfirmResult.Success(request.orderId, request.paymentId)
         }
         
         // when

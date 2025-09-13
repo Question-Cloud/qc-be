@@ -1,7 +1,6 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.common.pg.PGConfirmResponse
-import com.eager.questioncloud.common.pg.PGPaymentStatus
+import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
@@ -49,17 +48,48 @@ class ChargePointPaymentPostProcessorTest(
         
         chargePointPaymentRepository.save(chargePointPayment)
         
-        val pgConfirmResponse = PGConfirmResponse(
+        val pgConfirmResult = PGConfirmResult.Success(
             orderId,
-            paymentId,
-            PGPaymentStatus.DONE
+            paymentId
         )
         
         // when
-        chargePointPaymentPostProcessor.postProcess(chargePointPayment, pgConfirmResponse)
+        chargePointPaymentPostProcessor.postProcess(chargePointPayment, pgConfirmResult)
         
         //then
         val userPoint = userPointRepository.getUserPoint(userId)
         Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
+    }
+    
+    @Test
+    fun `결제 승인에 실패했을 경우 Fail 처리 된다`() {
+        // given
+        val userId = 1L
+        val orderId = UUID.randomUUID().toString()
+        val paymentId = UUID.randomUUID().toString()
+        val chargePointType = ChargePointType.PackageA
+        userPointRepository.save(UserPoint.create(userId))
+        
+        val savedChargePointPayment = ChargePointPayment(
+            orderId = orderId,
+            paymentId = paymentId,
+            userId = userId,
+            chargePointType = chargePointType,
+            ChargePointPaymentStatus.PENDING_PG_PAYMENT
+        )
+        
+        chargePointPaymentRepository.save(savedChargePointPayment)
+        
+        val pgConfirmResult = PGConfirmResult.Fail(
+            orderId,
+            paymentId
+        )
+        
+        // when
+        chargePointPaymentPostProcessor.postProcess(savedChargePointPayment, pgConfirmResult)
+        
+        //then
+        val chargePointPayment = chargePointPaymentRepository.findByOrderId(orderId)
+        Assertions.assertThat(chargePointPayment.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.FAILED)
     }
 }

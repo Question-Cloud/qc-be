@@ -1,7 +1,5 @@
 package com.eager.questioncloud.pg.toss
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pg.*
 import com.eager.questioncloud.http.ContentType
 import com.eager.questioncloud.http.HttpClient
@@ -24,7 +22,7 @@ class TossPaymentAPI(
         return PGPayment(response.paymentKey, response.orderId, response.totalAmount, PGPaymentStatus.valueOf(response.status.name))
     }
     
-    override fun confirm(pgConfirmRequest: PGConfirmRequest): PGConfirmResponse {
+    override fun confirm(pgConfirmRequest: PGConfirmRequest): PGConfirmResult {
         val headers = mutableMapOf<String, String>()
         headers["Authorization"] = "Basic $TOSS_SECRET_KEY"
         headers["Idempotency-Key"] = pgConfirmRequest.paymentId
@@ -38,10 +36,10 @@ class TossPaymentAPI(
         
         try {
             val response = httpClient.post(request, TossPayment::class.java)
-            return PGConfirmResponse(response.orderId, response.paymentKey, PGPaymentStatus.valueOf(response.status.name))
+            return PGConfirmResult.Success(response.orderId, response.paymentKey)
         } catch (e: Exception) {
             if (e is HttpClientException.Response4xxException) {
-                throw CoreException(Error.INVALID_CHARGE_POINT_PAYMENT)
+                return PGConfirmResult.Fail(pgConfirmRequest.orderId, pgConfirmRequest.paymentId)
             }
             throw e
         }
