@@ -11,21 +11,25 @@
     </encoder>
   </appender>
 
-  <springProfile name="prod">
-    <appender name="API_TRANSACTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <file>logs/api-transaction.log</file>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>logs/api-transaction-%d{yyyy-MM-dd}.log</fileNamePattern>
-        <maxHistory>30</maxHistory>
-      </rollingPolicy>
-      <encoder>
-        <pattern>%msg%n</pattern>
-      </encoder>
-    </appender>
+  <appender name="API_TRANSACTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>logs/api-transaction.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>logs/api-transaction-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
 
+  <springProfile name="!test">
     <logger name="api-transaction" level="INFO" additivity="false">
       <appender-ref ref="API_TRANSACTION"/>
     </logger>
+  </springProfile>
+
+  <springProfile name="test">
+    <logger name="api-transaction" level="OFF" additivity="false"/>
   </springProfile>
 
   <root level="INFO">

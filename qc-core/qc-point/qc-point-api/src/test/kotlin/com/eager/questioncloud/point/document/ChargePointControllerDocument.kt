@@ -36,18 +36,18 @@ import java.time.LocalDateTime
 class ChargePointControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockBean
     private lateinit var chargePointPaymentService: ChargePointPaymentService
-
+    
     @MockBean
     private lateinit var chargePointPaymentHistoryService: ChargePointPaymentHistoryService
-
+    
     private lateinit var sampleChargePointPayment: List<ChargePointPayment>
-
+    
     @BeforeEach
     fun setUp() {
         sampleChargePointPayment = listOf(
@@ -80,16 +80,16 @@ class ChargePointControllerDocument {
             )
         )
     }
-
+    
     @Test
     fun `포인트 충전 완료 여부 조회 API 테스트`() {
         // Given
         val paymentId = "payment-123456"
         val isComplete = true
-
+        
         whenever(chargePointPaymentService.isCompletePayment(any(), any()))
             .thenReturn(isComplete)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/payment/point/status/{paymentId}", paymentId)
@@ -114,7 +114,7 @@ class ChargePointControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `포인트 충전 주문 생성 API 테스트`() {
         // Given
@@ -122,10 +122,10 @@ class ChargePointControllerDocument {
             chargePointType = ChargePointType.PackageB
         )
         val orderId = "order-123456789"
-
+        
         whenever(chargePointPaymentService.createOrder(any(), any()))
             .thenReturn(orderId)
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/point/order")
@@ -152,14 +152,17 @@ class ChargePointControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `포인트 충전 결제 승인 요청 API 테스트`() {
         // Given
         val paymentRequest = ChargePointPaymentRequest(
             orderId = "order-123456789"
         )
-
+        
+        whenever(chargePointPaymentService.approvePayment(any()))
+            .thenReturn(ChargePointPaymentStatus.CHARGED)
+        
         // When & Then
         mockMvc.perform(
             post("/api/payment/point")
@@ -179,23 +182,23 @@ class ChargePointControllerDocument {
                             fieldWithPath("orderId").description("승인할 주문 ID")
                         ),
                         responseFields(
-                            fieldWithPath("success").description("요청 성공 여부")
+                            fieldWithPath("result").description("요청 성공 여부")
                         )
                     )
                 )
             )
     }
-
+    
     @Test
     fun `포인트 충전 내역 조회 API 테스트`() {
         // Given
         val totalCount = 15
-
+        
         whenever(chargePointPaymentHistoryService.countChargePointPayment(any()))
             .thenReturn(totalCount)
         whenever(chargePointPaymentHistoryService.getChargePointPayments(any(), any()))
             .thenReturn(sampleChargePointPayment)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/payment/point/history")
