@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class ChargePointPaymentPostProcessor(
     private val userPointManager: UserPointManager,
+    private val chargePointPaymentFailHandler: ChargePointPaymentFailHandler,
     private val chargePointPaymentRepository: ChargePointPaymentRepository,
     private val chargePointPaymentIdempotentInfoRepository: ChargePointPaymentIdempotentInfoRepository
 ) {
@@ -22,17 +23,7 @@ class ChargePointPaymentPostProcessor(
     fun postProcess(chargePointPayment: ChargePointPayment, pgConfirmResponse: PGConfirmResponse): ChargePointPaymentStatus {
         try {
             if (pgConfirmResponse.status != PGPaymentStatus.DONE) {
-                val idempotentInfo = ChargePointPaymentIdempotentInfo(
-                    orderId = pgConfirmResponse.orderId,
-                    paymentId = pgConfirmResponse.paymentId,
-                    chargePointPaymentStatus = ChargePointPaymentStatus.FAILED
-                )
-                
-                if (chargePointPaymentIdempotentInfoRepository.insert(idempotentInfo)) {
-                    chargePointPayment.fail()
-                    chargePointPaymentRepository.update(chargePointPayment)
-                }
-                
+                chargePointPaymentFailHandler.fail(pgConfirmResponse.orderId, pgConfirmResponse.paymentId)
                 return ChargePointPaymentStatus.FAILED
             }
             

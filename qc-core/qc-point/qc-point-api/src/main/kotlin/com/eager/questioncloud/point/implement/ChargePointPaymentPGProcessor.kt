@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 class ChargePointPaymentPGProcessor(
     private val paymentAPI: PaymentAPI,
+    private val chargePointPaymentFailHandler: ChargePointPaymentFailHandler
 ) {
     fun getPayment(orderId: String): PGPayment {
         return paymentAPI.getPayment(orderId)
@@ -26,6 +27,7 @@ class ChargePointPaymentPGProcessor(
     @Recover
     fun recover(ex: Exception, pgConfirmRequest: PGConfirmRequest): PGConfirmResponse {
         if (ex is CoreException) {
+            chargePointPaymentFailHandler.fail(pgConfirmRequest.orderId, pgConfirmRequest.paymentId)
             throw ex
         }
         
