@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 class ChargePointPaymentIdempotentInfoEntityImpl(
     private val chargePointPaymentIdempotentInfoJpaRepository: ChargePointPaymentIdempotentInfoJpaRepository
 ) : ChargePointPaymentIdempotentInfoRepository {
-    override fun save(chargePointPaymentIdempotentInfo: ChargePointPaymentIdempotentInfo): Boolean {
-        return chargePointPaymentIdempotentInfoJpaRepository.insertIfAbsent(
+    override fun insert(chargePointPaymentIdempotentInfo: ChargePointPaymentIdempotentInfo): Boolean {
+        return chargePointPaymentIdempotentInfoJpaRepository.insert(
             chargePointPaymentIdempotentInfo.orderId,
             chargePointPaymentIdempotentInfo.paymentId,
             chargePointPaymentIdempotentInfo.chargePointPaymentStatus.name

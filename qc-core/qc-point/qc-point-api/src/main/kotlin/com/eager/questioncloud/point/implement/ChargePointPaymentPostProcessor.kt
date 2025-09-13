@@ -25,7 +25,7 @@ class ChargePointPaymentPostProcessor(
                 chargePointPaymentStatus = ChargePointPaymentStatus.FAILED
             )
             
-            if (chargePointPaymentIdempotentInfoRepository.save(idempotentInfo)) {
+            if (chargePointPaymentIdempotentInfoRepository.insert(idempotentInfo)) {
                 chargePointPayment.fail()
                 chargePointPaymentRepository.update(chargePointPayment)
             }
@@ -39,7 +39,7 @@ class ChargePointPaymentPostProcessor(
             chargePointPaymentStatus = ChargePointPaymentStatus.CHARGED
         )
         
-        if (chargePointPaymentIdempotentInfoRepository.save(idempotentInfo)) {
+        if (chargePointPaymentIdempotentInfoRepository.insert(idempotentInfo)) {
             userPointManager.chargePoint(chargePointPayment.userId, chargePointPayment.chargePointType.amount)
             chargePointPayment.charge()
             chargePointPaymentRepository.update(chargePointPayment)

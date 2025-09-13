@@ -11,5 +11,5 @@ interface ChargePointPaymentIdempotentInfoJpaRepository : JpaRepository<ChargePo
         value = "INSERT IGNORE INTO charge_point_payment_idempotent_info(order_id, payment_id, charge_point_payment_status, created_at) VALUES (:orderId, :paymentId, :status, NOW())",
         nativeQuery = true
     )
-    fun insertIfAbsent(orderId: String, paymentId: String, status: String): Int
+    fun insert(orderId: String, paymentId: String, status: String): Int
 }
