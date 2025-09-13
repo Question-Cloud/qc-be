@@ -2,11 +2,11 @@ package com.eager.questioncloud.user.account.service
 
 import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
 import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.mail.EmailSender
 import com.eager.questioncloud.user.domain.EmailVerification
 import com.eager.questioncloud.user.enums.EmailVerificationType
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.fixture.EmailVerificationFixtureHelper
-import com.eager.questioncloud.user.mail.EmailSender
 import com.eager.questioncloud.user.repository.EmailVerificationRepository
 import com.eager.questioncloud.user.repository.UserRepository
 import com.eager.questioncloud.utils.DBCleaner
@@ -81,7 +81,7 @@ class UserAccountServiceTest(
             UserStatus.Active,
             userRepository
         )
-        doNothing().whenever(emailSender).sendMail(any())
+        doNothing().whenever(emailSender).send(any())
         
         // when
         userAccountService.sendRecoverForgottenPasswordMail(email)

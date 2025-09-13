@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
@@ -19,4 +21,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true
 }

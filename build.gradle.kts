@@ -32,6 +32,12 @@ subprojects {
         mavenCentral()
     }
     
+    configure<JavaPluginExtension> {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    }
+    
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("io.hypersistence:hypersistence-tsid:2.1.4")
