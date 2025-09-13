@@ -1,7 +1,5 @@
 package com.eager.questioncloud.point.service
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
@@ -36,14 +34,10 @@ class ChargePointPaymentService(
         val pgPayment = chargePointPaymentPGProcessor.getPayment(orderId)
         val chargePointPayment = chargePointPaymentPreparer.prepare(pgPayment)
         
-        return runCatching {
-            val confirmRequest = PGConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount)
-            val confirmResponse = chargePointPaymentPGProcessor.confirm(confirmRequest)
-            chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResponse)
-        }.getOrElse { e ->
-            if (e is CoreException) throw e
-            throw CoreException(Error.PAYMENT_ERROR)
-        }
+        val confirmRequest = PGConfirmRequest(pgPayment.paymentId, pgPayment.orderId, pgPayment.amount)
+        val confirmResponse = chargePointPaymentPGProcessor.confirm(confirmRequest)
+        
+        return chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResponse)
     }
     
     fun isCompletePayment(userId: Long, orderId: String): Boolean {
