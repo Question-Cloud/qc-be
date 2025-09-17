@@ -14,6 +14,7 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":qc-common"))
     implementation(project(":qc-core:qc-cart:qc-cart-core"))
     implementation(project(":qc-infra:qc-rdb"))
     
