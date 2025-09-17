@@ -97,7 +97,6 @@ include 'qc-internal-api-interface:qc-post-internal-api-interface'
 // 🛠️ Infrastructure Modules (인프라스트럭처)
 // =============================================================================
 include 'qc-infra:qc-rdb'           // RDB
-include 'qc-infra:qc-mongo'         // MognoDB
 include 'qc-infra:qc-redis'         // Redis
 include 'qc-infra:qc-http'          // Http
 include 'qc-infra:qc-social'        // 소셜 API
@@ -115,4 +114,6 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
+include 'qc-core:qc-pay:qc-pay-mongo'
+findProject(':qc-core:qc-pay:qc-pay-mongo')?.name = 'qc-pay-mongo'
 

@@ -38,7 +38,6 @@ dependencies {
     implementation(project(":qc-core:qc-user:qc-user-internal-api"))
     
     implementation(project(":qc-infra:qc-rdb"))
-    implementation(project(":qc-infra:qc-mongo"))
     implementation(project(":qc-infra:qc-redis"))
     implementation(project(":qc-infra:qc-mail"))
     implementation(project(":qc-infra:qc-event:qc-event-core"))
@@ -46,7 +45,10 @@ dependencies {
     
     implementation(project(":qc-core:qc-cart:qc-cart-rdb"))
     implementation(project(":qc-core:qc-creator:qc-creator-rdb"))
+    
     implementation(project(":qc-core:qc-pay:qc-pay-rdb"))
+    implementation(project(":qc-core:qc-pay:qc-pay-mongo"))
+    
     implementation(project(":qc-core:qc-point:qc-point-rdb"))
     implementation(project(":qc-core:qc-post:qc-post-rdb"))
     implementation(project(":qc-core:qc-question:qc-question-rdb"))
