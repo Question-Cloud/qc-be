@@ -59,47 +59,16 @@
 
 ---
 
-### 모듈러 모놀리식 아키텍처
+# Question Cloud Multi-Module Architecture
+
+## 📱 Runtime Container
 
 ```
-📱 Runtime Container
-    └── qc-api-container (Spring Boot Application)
-        ├── Domain Modules Loading
-        ├── API Endpoints Aggregation
-        └── Dependency Injection
-        
-🏗️ Domain Modules
-    ├── qc-user (Core + API + Internal API)
-    ├── qc-question (Core + API + Internal API)
-    ├── qc-creator (Core + API + Internal API)
-    ├── qc-point (Core + API + Internal API)
-    ├── qc-post (Core + API + Internal API)
-    ├── qc-cart (Core + API)
-    ├── qc-review (Core + API)
-    ├── qc-subscribe (Core + API)
-    └── qc-pay (Core + API)
-
-🔌 Internal API Interface Layer (도메인 간 통신 인터페이스 모듈)
-    ├── qc-user-internal-api-interface
-    ├── qc-question-internal-api-interface
-    ├── qc-creator-internal-api-interface
-    ├── qc-point-internal-api-interface
-    └── qc-post-internal-api-interface
-
-🛠️ Infrastructure Modules
-    ├── qc-rdb
-    ├── qc-mongo
-    ├── qc-redis 
-    ├── qc-http
-    ├── qc-social
-    ├── qc-external-pg
-    ├── qc-event
-    ├── qc-lock
-    └── qc-logging
-
-🔧 Shared Modules
-    ├── qc-common (Response, DTO, HttpClient, MailSender...)
-    └── qc-test-utils
+qc-api-container (Spring Boot Application)
+├── Domain Modules Integration
+├── REST API Endpoints Aggregation  
+├── Dependency Injection & Bean Management
+└── Application Configuration
 ```
 
 **🚀 Container 역할 (`qc-api-container`)**
@@ -107,21 +76,68 @@
 - 모든 도메인 모듈을 Spring Context에 로딩
 - 도메인별 API 엔드포인트를 단일 애플리케이션으로 통합
 - 공통 설정 및 인프라 구성 관리
-- 실제 배포되는 유일한 실행 가능한 애플리케이션
+- 실제 배포되는 실행 가능한 애플리케이션
 
-**📦 Domain Module 역할**
+---
 
-- **Core**: 도메인 클래스 및 도메인 로직
-- **API**: 비즈니스 로직 제공 및 REST Controller End Point
-- **Internal API**: 도메인 간 통신 인터페이스 구현체
-- Container에 의해 런타임에 로딩
+## 🏗️ Core Domain Modules
 
-**🔄 모듈 로딩 과정**
+- **qc-user** - 사용자 관리 (Core + API + Internal API + RDB + Redis + Social)
+- **qc-question** - 문제(상품) 관리 (Core + API + Internal API + RDB + Fixture)
+- **qc-creator** - 크리에이터 관리 (Core + API + Internal API + RDB)
+- **qc-point** - 포인트 시스템 (Core + API + Internal API + RDB + PG)
+- **qc-post** - 게시글 관리 (Core + API + Internal API + RDB)
+- **qc-pay** - 결제 처리 (Core + API + RDB + Mongo)
+- **qc-cart** - 장바구니 (Core + API + RDB)
+- **qc-review** - 리뷰 시스템 (Core + API + RDB)
+- **qc-subscribe** - 구독 관리 (Core + API + RDB)
 
-1. `qc-api-container` 시작
-2. Classpath에서 모든 도메인 모듈 스캔
-3. 각 모듈의 `@RestController`, `@Service`, `@Repository` 등을 Spring Context에 등록
-4. 통합된 API 서버로 동작
+### 🔧 각 도메인의 모듈 구조
+
+```
+qc-{domain}/
+├── qc-{domain}-api/          # REST API & Service Layer  
+├── qc-{domain}-core/         # 도메인 클래스 & 도메인 로직 & Repository 인터페이스
+├── qc-{domain}-internal-api/ # 도메인 간 통신 구현체
+├── qc-{domain}-rdb/          # JPA Repository 구현체
+└── qc-{domain}-{infra}/      # 이외 Infra (Redis, Mongo, PG API 등)
+```
+
+## 🔌 Internal API Interface Layer
+
+도메인 간 통신을 위한 인터페이스 정의 모듈:
+
+```
+qc-internal-api-interface/
+├── qc-user-internal-api-interface
+├── qc-question-internal-api-interface  
+├── qc-creator-internal-api-interface
+├── qc-point-internal-api-interface
+└── qc-post-internal-api-interface
+```
+
+## 🛠️ Infrastructure Modules
+
+```
+qc-infra/
+├── qc-event/
+│   ├── qc-event-core/       # 이벤트 처리 구현체 (AWS SNS, AWS SQS)
+│   └── qc-event-rdb/        # 이벤트 관련 Repository 구현체
+├── qc-rdb/                  # 공통 JPA 설정
+├── qc-redis/                # Redis 연동
+├── qc-http/                 # HTTP Client
+├── qc-mail/                 # 이메일 발송
+├── qc-lock/                 # 분산 락
+└── qc-external-pg/          # 외부 PG 연동
+```
+
+## 🔧 Shared Modules
+
+```
+├── qc-common/               # 공통 유틸리티, Response, Exception, Common Infra Interface,...
+├── qc-logging/              # 로깅 설정  
+└── qc-test-utils/           # 테스트 유틸리티
+```
 
 ## 🚀 구현 API
 
