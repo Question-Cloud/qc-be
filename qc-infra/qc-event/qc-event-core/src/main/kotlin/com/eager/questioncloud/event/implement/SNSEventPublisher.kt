@@ -25,7 +25,7 @@ class SNSEventPublisher(
 ) : EventPublisher {
     fun Event.toPublishRequest(): PublishRequest {
         return PublishRequest.builder()
-            .topicArn(Topic.valueOf(eventType.name).topicArn)
+            .topicArn(com.eager.questioncloud.event.Topic.valueOf(eventType.name).topicArn)
             .messageGroupId(eventId)
             .messageDeduplicationId(eventId)
             .message(objectMapper.writeValueAsString(this))

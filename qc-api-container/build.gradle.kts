@@ -39,9 +39,9 @@ dependencies {
     
     implementation(project(":qc-infra:qc-rdb"))
     implementation(project(":qc-infra:qc-mongo"))
-    implementation(project(":qc-infra:qc-event"))
     implementation(project(":qc-infra:qc-redis"))
     implementation(project(":qc-infra:qc-mail"))
+    implementation(project(":qc-infra:qc-event:qc-event-core"))
     implementation(project(":qc-infra:qc-event:qc-event-rdb"))
     
     implementation(project(":qc-core:qc-cart:qc-cart-rdb"))

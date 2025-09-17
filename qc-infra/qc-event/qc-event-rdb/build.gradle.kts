@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":qc-infra:qc-event"))
+    implementation(project(":qc-infra:qc-event:qc-event-core"))
     implementation(project(":qc-infra:qc-rdb"))
     implementation(project(":qc-common"))
     

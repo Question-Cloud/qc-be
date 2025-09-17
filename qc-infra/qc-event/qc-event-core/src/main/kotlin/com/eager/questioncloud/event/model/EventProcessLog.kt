@@ -7,8 +7,8 @@ class EventProcessLog(
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun create(idempotentKey: String): EventProcessLog {
-            return EventProcessLog(idempotentKey, LocalDateTime.now())
+        fun create(idempotentKey: String): com.eager.questioncloud.event.model.EventProcessLog {
+            return com.eager.questioncloud.event.model.EventProcessLog(idempotentKey, LocalDateTime.now())
         }
     }
 }
