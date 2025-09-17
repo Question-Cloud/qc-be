@@ -106,9 +106,10 @@ include 'qc-infra:qc-event'         // 이벤트 처리
 include 'qc-infra:qc-lock'          // 분산 락
 include 'qc-infra:qc-mail'          // Mail
 include 'qc-logging'                // 로깅
-
+include 'qc-infra:qc-event:qc-event-rdb'
 // =============================================================================
 // 🔧 Shared Modules (공통 모듈)
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
+
