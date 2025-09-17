@@ -68,6 +68,7 @@ include 'qc-core:qc-cart:qc-cart-rdb'
 include 'qc-core:qc-review'
 include 'qc-core:qc-review:qc-review-core'
 include 'qc-core:qc-review:qc-review-api'
+include 'qc-core:qc-review:qc-review-rdb'
 
 // Subscribe Domain
 include 'qc-core:qc-subscribe'
@@ -109,4 +110,3 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-
