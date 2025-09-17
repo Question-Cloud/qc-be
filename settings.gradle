@@ -51,6 +51,7 @@ include 'qc-core:qc-point:qc-point-core'
 include 'qc-core:qc-point:qc-point-api'
 include 'qc-core:qc-point:qc-point-internal-api'
 include 'qc-core:qc-point:qc-point-rdb'
+include 'qc-core:qc-point:qc-point-pg'
 
 // Post Domain
 include 'qc-core:qc-post'
@@ -100,7 +101,6 @@ include 'qc-infra:qc-rdb'           // RDB
 include 'qc-infra:qc-redis'         // Redis
 include 'qc-infra:qc-http'          // Http
 include 'qc-infra:qc-social'        // 소셜 API
-include 'qc-infra:qc-external-pg'   // 외부 결제 게이트웨이
 
 include 'qc-infra:qc-event'         // 이벤트 처리
 include 'qc-infra:qc-event:qc-event-core'

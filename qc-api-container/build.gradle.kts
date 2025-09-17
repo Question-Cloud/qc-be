@@ -50,6 +50,8 @@ dependencies {
     implementation(project(":qc-core:qc-pay:qc-pay-mongo"))
     
     implementation(project(":qc-core:qc-point:qc-point-rdb"))
+    implementation(project(":qc-core:qc-point:qc-point-pg"))
+    
     implementation(project(":qc-core:qc-post:qc-post-rdb"))
     implementation(project(":qc-core:qc-question:qc-question-rdb"))
     implementation(project(":qc-core:qc-review:qc-review-rdb"))

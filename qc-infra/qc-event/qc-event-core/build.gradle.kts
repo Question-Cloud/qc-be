@@ -29,7 +29,6 @@ dependencies {
     implementation(project(":qc-core:qc-pay:qc-pay-api"))
     implementation(project(":qc-core:qc-creator:qc-creator-api"))
     
-    implementation(project(":qc-infra:qc-external-pg"))
     implementation(project(":qc-common"))
     
     testImplementation(kotlin("test"))
