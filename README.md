@@ -59,7 +59,7 @@
 
 ---
 
-# Question Cloud Multi-Module Architecture
+# Modular Monolith Architecture
 
 ## 📱 Runtime Container
 
