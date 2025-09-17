@@ -1,4 +1,4 @@
-package com.eager.questioncloud.http
+package com.eager.questioncloud.common.http
 
 class HttpRequest(
     val url: String,

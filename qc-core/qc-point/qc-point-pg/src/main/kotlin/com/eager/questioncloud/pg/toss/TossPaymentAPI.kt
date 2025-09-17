@@ -1,10 +1,10 @@
 package com.eager.questioncloud.pg.toss
 
+import com.eager.questioncloud.common.http.ContentType
+import com.eager.questioncloud.common.http.HttpClient
+import com.eager.questioncloud.common.http.HttpClientException
+import com.eager.questioncloud.common.http.HttpRequest
 import com.eager.questioncloud.common.pg.*
-import com.eager.questioncloud.http.ContentType
-import com.eager.questioncloud.http.HttpClient
-import com.eager.questioncloud.http.HttpClientException
-import com.eager.questioncloud.http.HttpRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 

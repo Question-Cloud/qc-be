@@ -1,5 +1,9 @@
 package com.eager.questioncloud.http
 
+import com.eager.questioncloud.common.http.ContentType
+import com.eager.questioncloud.common.http.HttpClient
+import com.eager.questioncloud.common.http.HttpClientException
+import com.eager.questioncloud.common.http.HttpRequest
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.FormBody
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -88,9 +92,13 @@ class OkHttpClient(
     }
     
     private fun setBody(req: HttpRequest, builder: Request.Builder) {
-        if ((req.body == null && req.form.isEmpty()) || req.contentType == null) return
+        val body = req.body
+        val form = req.form
+        val contentType = req.contentType
         
-        when (req.contentType) {
+        if ((body == null && form.isEmpty()) || contentType == null) return
+        
+        when (contentType) {
             ContentType.JSON -> {
                 builder.post(objectMapper.writeValueAsString(req.body).toRequestBody("application/json".toMediaType()))
             }

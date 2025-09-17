@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
     implementation("org.springframework:spring-context")
-    implementation(project(":qc-infra:qc-http"))
+    implementation(project(":qc-common"))
 }
 
 tasks.getByName<BootJar>("bootJar") {

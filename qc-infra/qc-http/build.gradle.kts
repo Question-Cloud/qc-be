@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation("org.springframework:spring-context")
     implementation("com.squareup.okhttp3:okhttp")
+    implementation(project(":qc-common"))
     testImplementation(kotlin("test"))
 }
 

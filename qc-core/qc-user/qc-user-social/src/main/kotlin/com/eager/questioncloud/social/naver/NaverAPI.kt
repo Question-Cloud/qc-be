@@ -1,7 +1,7 @@
 package com.eager.questioncloud.social.naver
 
-import com.eager.questioncloud.http.HttpClient
-import com.eager.questioncloud.http.HttpRequest
+import com.eager.questioncloud.common.http.HttpClient
+import com.eager.questioncloud.common.http.HttpRequest
 import com.eager.questioncloud.social.SocialAPI
 import com.eager.questioncloud.social.SocialAccessToken
 import com.eager.questioncloud.social.SocialPlatform

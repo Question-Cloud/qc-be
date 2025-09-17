@@ -1,4 +1,4 @@
-package com.eager.questioncloud.http
+package com.eager.questioncloud.common.http
 
 interface HttpClient {
     fun <T> get(req: HttpRequest, valueType: Class<T>): T

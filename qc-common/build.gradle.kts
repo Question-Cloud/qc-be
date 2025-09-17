@@ -15,7 +15,6 @@ repositories {
 
 dependencies {
     implementation("org.springframework:spring-context")
-    implementation(project(":qc-infra::qc-http"))
     testImplementation(kotlin("test"))
 }
 
