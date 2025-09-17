@@ -55,6 +55,7 @@ include 'qc-core:qc-post'
 include 'qc-core:qc-post:qc-post-core'
 include 'qc-core:qc-post:qc-post-api'
 include 'qc-core:qc-post:qc-post-internal-api'
+include 'qc-core:qc-post:qc-post-rdb'
 
 // Cart Domain
 include 'qc-core:qc-cart'
@@ -107,4 +108,3 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-
