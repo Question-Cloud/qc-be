@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":qc-core:qc-pay:qc-pay-rdb"))
     implementation(project(":qc-core:qc-point:qc-point-rdb"))
     implementation(project(":qc-core:qc-post:qc-post-rdb"))
+    implementation(project(":qc-core:qc-question:qc-question-rdb"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")

@@ -35,6 +35,7 @@ include 'qc-core:qc-question:qc-question-core'
 include 'qc-core:qc-question:qc-question-api'
 include 'qc-core:qc-question:qc-question-internal-api'
 include 'qc-core:qc-question:qc-question-fixture'
+include 'qc-core:qc-question:qc-question-rdb'
 
 // Creator Domain
 include 'qc-core:qc-creator'
@@ -108,3 +109,4 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
+
