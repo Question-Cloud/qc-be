@@ -28,6 +28,7 @@ include 'qc-core:qc-user'
 include 'qc-core:qc-user:qc-user-core'
 include 'qc-core:qc-user:qc-user-api'
 include 'qc-core:qc-user:qc-user-internal-api'
+include 'qc-core:qc-user:qc-user-rdb'
 
 // Question Domain
 include 'qc-core:qc-question'
@@ -111,4 +112,3 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-
