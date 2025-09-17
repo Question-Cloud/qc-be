@@ -20,6 +20,8 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     
     implementation(project(":qc-core:qc-point:qc-point-core"))
+    implementation(project(":qc-core:qc-point:qc-point-rdb"))
+    implementation(project(":qc-core:qc-point:qc-point-pg"))
     
     implementation(project(":qc-common"))
 }

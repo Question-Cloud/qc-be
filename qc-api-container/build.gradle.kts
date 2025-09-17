@@ -19,13 +19,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.retry:spring-retry")
     
-    implementation(project(":qc-common"))
-    implementation(project(":qc-logging"))
-    
     implementation(project(":qc-core:qc-cart:qc-cart-api"))
     implementation(project(":qc-core:qc-creator:qc-creator-api"))
     implementation(project(":qc-core:qc-pay:qc-pay-api"))
     implementation(project(":qc-core:qc-point:qc-point-api"))
+    implementation(project(":qc-core:qc-post:qc-post-api"))
     implementation(project(":qc-core:qc-question:qc-question-api"))
     implementation(project(":qc-core:qc-review:qc-review-api"))
     implementation(project(":qc-core:qc-subscribe:qc-subscribe-api"))
@@ -40,23 +38,10 @@ dependencies {
     implementation(project(":qc-infra:qc-rdb"))
     implementation(project(":qc-infra:qc-redis"))
     implementation(project(":qc-infra:qc-mail"))
-    implementation(project(":qc-infra:qc-event:qc-event-core"))
-    implementation(project(":qc-infra:qc-event:qc-event-rdb"))
+    implementation(project(":qc-infra:qc-event"))
     
-    implementation(project(":qc-core:qc-cart:qc-cart-rdb"))
-    implementation(project(":qc-core:qc-creator:qc-creator-rdb"))
-    
-    implementation(project(":qc-core:qc-pay:qc-pay-rdb"))
-    implementation(project(":qc-core:qc-pay:qc-pay-mongo"))
-    
-    implementation(project(":qc-core:qc-point:qc-point-rdb"))
-    implementation(project(":qc-core:qc-point:qc-point-pg"))
-    
-    implementation(project(":qc-core:qc-post:qc-post-rdb"))
-    implementation(project(":qc-core:qc-question:qc-question-rdb"))
-    implementation(project(":qc-core:qc-review:qc-review-rdb"))
-    implementation(project(":qc-core:qc-subscribe:qc-subscribe-rdb"))
-    implementation(project(":qc-core:qc-user:qc-user-rdb"))
+    implementation(project(":qc-common"))
+    implementation(project(":qc-logging"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")

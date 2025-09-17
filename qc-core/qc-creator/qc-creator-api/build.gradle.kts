@@ -18,6 +18,7 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     
     implementation(project(":qc-core:qc-creator:qc-creator-core"))
+    implementation(project(":qc-core:qc-creator:qc-creator-rdb"))
     implementation(project(":qc-common"))
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))

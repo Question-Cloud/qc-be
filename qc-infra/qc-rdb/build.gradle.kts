@@ -14,17 +14,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":qc-core:qc-cart:qc-cart-core"))
-    implementation(project(":qc-core:qc-creator:qc-creator-core"))
-    implementation(project(":qc-core:qc-pay:qc-pay-core"))
-    implementation(project(":qc-core:qc-point:qc-point-core"))
-    implementation(project(":qc-core:qc-post:qc-post-core"))
-    implementation(project(":qc-core:qc-question:qc-question-core"))
-    implementation(project(":qc-core:qc-review:qc-review-core"))
-    implementation(project(":qc-core:qc-subscribe:qc-subscribe-core"))
-    implementation(project(":qc-core:qc-user:qc-user-core"))
-    implementation(project(":qc-infra:qc-event"))
-    
     implementation(project(":qc-common"))
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")

@@ -17,11 +17,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.springframework:spring-tx")
     
+    implementation(project(":qc-core:qc-question:qc-question-core"))
+    implementation(project(":qc-core:qc-question:qc-question-rdb"))
+    implementation(project(":qc-common"))
+    
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
-    
-    implementation(project(":qc-core:qc-question:qc-question-core"))
-    implementation(project(":qc-common"))
     
     testImplementation(project(":qc-core:qc-question:qc-question-fixture"))
 }

@@ -19,6 +19,7 @@ dependencies {
     
     implementation(project(":qc-common"))
     implementation(project(":qc-core:qc-cart:qc-cart-core"))
+    implementation(project(":qc-core:qc-cart:qc-cart-rdb"))
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))

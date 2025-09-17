@@ -85,6 +85,7 @@ include 'qc-core:qc-pay'
 include 'qc-core:qc-pay:qc-pay-core'
 include 'qc-core:qc-pay:qc-pay-api'
 include 'qc-core:qc-pay:qc-pay-rdb'
+include 'qc-core:qc-pay:qc-pay-mongo'
 
 // =============================================================================
 // 🔌 Internal API Interface Modules (도메인 간 통신 인터페이스)
@@ -115,5 +116,4 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
-include 'qc-core:qc-pay:qc-pay-mongo'
 

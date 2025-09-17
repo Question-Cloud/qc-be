@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
@@ -12,9 +14,19 @@ repositories {
 }
 
 dependencies {
+    api(project(":qc-infra:qc-event:qc-event-core"))
+    implementation(project(":qc-infra:qc-event:qc-event-rdb"))
     testImplementation(kotlin("test"))
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true
 }

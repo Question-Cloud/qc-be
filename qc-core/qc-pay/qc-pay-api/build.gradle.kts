@@ -18,13 +18,18 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     
     implementation(project(":qc-core:qc-pay:qc-pay-core"))
+    implementation(project(":qc-core:qc-pay:qc-pay-rdb"))
+    implementation(project(":qc-core:qc-pay:qc-pay-mongo"))
+    
+    implementation(project(":qc-common"))
+    implementation(project(":qc-infra:qc-lock"))
+    
     implementation(project(":qc-internal-api-interface:qc-point-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-question-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     
-    implementation(project(":qc-common"))
-    implementation(project(":qc-infra:qc-lock"))
+    
 }
 
 tasks.test {
