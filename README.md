@@ -82,15 +82,15 @@ qc-api-container (Spring Boot Application)
 
 ## 🏗️ Core Domain Modules
 
-- **qc-user** - 사용자 관리 (Core + API + Internal API + RDB + Redis + Social)
-- **qc-question** - 문제(상품) 관리 (Core + API + Internal API + RDB + Fixture)
-- **qc-creator** - 크리에이터 관리 (Core + API + Internal API + RDB)
-- **qc-point** - 포인트 시스템 (Core + API + Internal API + RDB + PG)
-- **qc-post** - 게시글 관리 (Core + API + Internal API + RDB)
-- **qc-pay** - 결제 처리 (Core + API + RDB + Mongo)
-- **qc-cart** - 장바구니 (Core + API + RDB)
-- **qc-review** - 리뷰 시스템 (Core + API + RDB)
-- **qc-subscribe** - 구독 관리 (Core + API + RDB)
+- **qc-user** - 유저 도메인 (Core + API + Internal API + RDB + Redis + Social)
+- **qc-question** - 문제 도메인 (Core + API + Internal API + RDB + Fixture)
+- **qc-creator** - 크리에이터 도메인 (Core + API + Internal API + RDB)
+- **qc-point** - 포인트 시스템 도메인 (Core + API + Internal API + RDB + PG)
+- **qc-post** - 문제 게시판 도메인 (Core + API + Internal API + RDB)
+- **qc-pay** - 결제 도메인 (Core + API + RDB + Mongo)
+- **qc-cart** - 장바구니 도메인 (Core + API + RDB)
+- **qc-review** - 리뷰 도메인 (Core + API + RDB)
+- **qc-subscribe** - 구독 도메인 (Core + API + RDB)
 
 ### 🔧 각 도메인의 모듈 구조
 
