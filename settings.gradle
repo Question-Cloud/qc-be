@@ -74,6 +74,7 @@ include 'qc-core:qc-review:qc-review-rdb'
 include 'qc-core:qc-subscribe'
 include 'qc-core:qc-subscribe:qc-subscribe-core'
 include 'qc-core:qc-subscribe:qc-subscribe-api'
+include 'qc-core:qc-subscribe:qc-subscribe-rdb'
 
 // Pay Domain
 include 'qc-core:qc-pay'
@@ -110,3 +111,4 @@ include 'qc-logging'                // 로깅
 // =============================================================================
 include 'qc-common'                 // 공통 유틸리티
 include 'qc-test-utils'
+
