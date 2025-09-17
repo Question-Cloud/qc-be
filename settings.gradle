@@ -48,6 +48,7 @@ include 'qc-core:qc-point'
 include 'qc-core:qc-point:qc-point-core'
 include 'qc-core:qc-point:qc-point-api'
 include 'qc-core:qc-point:qc-point-internal-api'
+include 'qc-core:qc-point:qc-point-rdb'
 
 // Post Domain
 include 'qc-core:qc-post'
