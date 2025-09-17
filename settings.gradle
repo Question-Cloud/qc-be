@@ -30,6 +30,7 @@ include 'qc-core:qc-user:qc-user-api'
 include 'qc-core:qc-user:qc-user-internal-api'
 include 'qc-core:qc-user:qc-user-rdb'
 include 'qc-core:qc-user:qc-user-social'
+include 'qc-core:qc-user:qc-user-redis'
 
 // Question Domain
 include 'qc-core:qc-question'

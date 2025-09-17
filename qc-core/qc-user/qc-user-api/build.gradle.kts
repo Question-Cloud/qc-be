@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":qc-internal-api-interface:qc-point-internal-api-interface"))
     implementation(project(":qc-common"))
     implementation(project(":qc-core:qc-user:qc-user-social"))
+    implementation(project(":qc-core:qc-user:qc-user-redis"))
 }
 
 tasks.test {
