@@ -1,13 +1,13 @@
 package com.eager.questioncloud.event.scheduler
 
 import com.eager.questioncloud.event.repository.EventTicketRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import software.amazon.awssdk.services.sns.SnsAsyncClient
-import java.util.concurrent.CopyOnWriteArrayList
 
 @Component
 class EventTicketRepublishScheduler(
@@ -20,16 +20,14 @@ class EventTicketRepublishScheduler(
             val tickets = eventTicketRepository.getUnPublishEventTickets();
             if (tickets.isEmpty()) break
             
-            val sentIds = CopyOnWriteArrayList<String>()
-            
-            supervisorScope {
-                for (ticket in tickets) {
-                    launch {
+            val sentIds = supervisorScope {
+                tickets.map { ticket ->
+                    async {
                         snsAsyncClient.publish(ticket.toPublishRequest()).await()
-                        sentIds.add(ticket.eventId)
+                        ticket.eventId
                     }
                 }
-            }
+            }.awaitAll()
             
             eventTicketRepository.publish(sentIds)
         }
