@@ -1,6 +1,6 @@
 package com.eager.questioncloud.event
 
-enum class Topic(
+enum class TopicArn(
     val topicArn: String
 ) {
     QuestionPaymentEvent("arn:aws:sns:ap-northeast-2:503561444273:question-payment-sns.fifo"),

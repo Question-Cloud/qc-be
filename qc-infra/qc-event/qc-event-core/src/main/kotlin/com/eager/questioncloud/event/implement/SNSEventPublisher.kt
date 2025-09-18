@@ -2,7 +2,7 @@ package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.common.event.Event
 import com.eager.questioncloud.common.event.EventPublisher
-import com.eager.questioncloud.event.Topic
+import com.eager.questioncloud.event.TopicArn
 import com.eager.questioncloud.event.model.EventTicket
 import com.eager.questioncloud.event.repository.EventTicketRepository
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.event.TransactionPhase
 import org.springframework.transaction.event.TransactionalEventListener
 import software.amazon.awssdk.services.sns.SnsAsyncClient
-import software.amazon.awssdk.services.sns.model.PublishBatchRequestEntry
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
 @Component
@@ -25,18 +24,9 @@ class SNSEventPublisher(
 ) : EventPublisher {
     fun Event.toPublishRequest(): PublishRequest {
         return PublishRequest.builder()
-            .topicArn(com.eager.questioncloud.event.Topic.valueOf(eventType.name).topicArn)
+            .topicArn(TopicArn.valueOf(eventType.name).topicArn)
             .messageGroupId(eventId)
             .messageDeduplicationId(eventId)
-            .message(objectMapper.writeValueAsString(this))
-            .build()
-    }
-    
-    fun Event.toBatchRequestEntry(): PublishBatchRequestEntry {
-        return PublishBatchRequestEntry.builder()
-            .id(eventId)
-            .messageDeduplicationId(eventId)
-            .messageGroupId(eventId)
             .message(objectMapper.writeValueAsString(this))
             .build()
     }

@@ -1,11 +1,9 @@
 package com.eager.questioncloud.event.entity
 
 import com.eager.questioncloud.common.entity.BaseCustomIdEntity
+import com.eager.questioncloud.common.event.EventType
 import com.eager.questioncloud.event.model.EventTicket
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
@@ -13,7 +11,8 @@ import java.time.LocalDateTime
 class EventTicketEntity(
     @Id val eventId: String,
     @Column val isPublish: Boolean,
-    @Column val eventType: String,
+    @Enumerated(EnumType.STRING) @Column val eventType: EventType,
+    @Column val topicArn: String,
     @Column val payload: String,
     @Column val createdAt: LocalDateTime,
     @Column var publishedAt: LocalDateTime?,
@@ -25,6 +24,7 @@ class EventTicketEntity(
                 eventTicket.eventId,
                 false,
                 eventTicket.eventType,
+                eventTicket.topicArn,
                 eventTicket.payload,
                 LocalDateTime.now(),
                 null,
@@ -38,6 +38,6 @@ class EventTicketEntity(
     }
     
     fun toModel(): EventTicket {
-        return EventTicket(eventId, isPublish, eventType, payload, createdAt, publishedAt)
+        return EventTicket(eventId, isPublish, eventType, topicArn, payload, createdAt, publishedAt)
     }
 }
