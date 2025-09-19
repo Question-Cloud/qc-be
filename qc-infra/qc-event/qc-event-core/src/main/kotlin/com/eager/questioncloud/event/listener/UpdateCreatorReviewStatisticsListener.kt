@@ -1,7 +1,7 @@
 package com.eager.questioncloud.event.listener
 
 import com.eager.questioncloud.common.event.ReviewEvent
-import com.eager.questioncloud.creator.listener.UpdateCreatorReviewStatisticsHandler
+import com.eager.questioncloud.creator.handler.UpdateCreatorReviewStatisticsHandler
 import com.eager.questioncloud.event.annotation.IdempotentEvent
 import io.awspring.cloud.sqs.annotation.SqsListener
 import org.springframework.messaging.handler.annotation.Payload

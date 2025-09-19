@@ -6,7 +6,7 @@ class CreatorStatistics(
     var reviewCount: Int = 0,
     var totalReviewRate: Int = 0,
     var averageRateOfReview: Double = 0.0,
-    var subscriberCount: Int = 0, // TODO Need Logic
+    var subscriberCount: Int = 0,
 ) {
     fun addSaleCount(count: Int) {
         this.salesCount += count

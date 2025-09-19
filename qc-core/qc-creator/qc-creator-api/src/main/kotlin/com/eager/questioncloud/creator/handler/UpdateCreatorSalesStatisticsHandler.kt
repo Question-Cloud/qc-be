@@ -1,4 +1,4 @@
-package com.eager.questioncloud.creator.listener
+package com.eager.questioncloud.creator.handler
 
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
