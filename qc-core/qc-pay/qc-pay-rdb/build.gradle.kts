@@ -22,6 +22,10 @@ dependencies {
     kapt("jakarta.annotation:jakarta.annotation-api")
     kapt("jakarta.persistence:jakarta.persistence-api")
     
+    kaptTest("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    kaptTest("jakarta.annotation:jakarta.annotation-api")
+    kaptTest("jakarta.persistence:jakarta.persistence-api")
+    
     implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
     
     testImplementation(kotlin("test"))
