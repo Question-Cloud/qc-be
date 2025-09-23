@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("kapt") version "2.1.10"
+    kotlin("jvm") version "2.2.0"
+    kotlin("kapt") version "2.2.0"
     id("org.springframework.boot") version "3.3.2"
     id("io.spring.dependency-management") version "1.1.6"
     id("io.kotest") version "6.0.3"
@@ -53,11 +53,11 @@ subprojects {
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
         testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
         
-        testImplementation("io.kotest:kotest-framework-engine:6.0.3")
         testImplementation("io.kotest:kotest-runner-junit5:6.0.3")
         testImplementation("io.kotest:kotest-assertions-core:6.0.3")
         testImplementation("io.kotest:kotest-property:6.0.3")
         testImplementation("io.kotest:kotest-extensions-spring:6.0.3")
+        testImplementation("com.ninja-squad:springmockk:4.0.2")
     }
     
     tasks.test {

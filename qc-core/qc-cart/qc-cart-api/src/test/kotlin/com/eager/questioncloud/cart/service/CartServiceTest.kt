@@ -9,170 +9,112 @@ import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class CartServiceTest(
-    @Autowired val cartService: CartService,
-    @Autowired val cartItemRepository: CartItemRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val cartService: CartService,
+    private val cartItemRepository: CartItemRepository,
+    private val dbCleaner: DBCleaner,
+) : FunSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
     
-    @MockBean
-    lateinit var creatorQueryAPI: CreatorQueryAPI
+    @MockkBean
+    private lateinit var creatorQueryAPI: CreatorQueryAPI
     
-    @MockBean
-    lateinit var userQueryAPI: UserQueryAPI
+    @MockkBean
+    private lateinit var userQueryAPI: UserQueryAPI
     
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `장바구니 아이템을 추가할 수 있다`() {
-        //given
-        val userId = 100L
-        val questionId = 200L
+    init {
+        afterTest { dbCleaner.cleanUp() }
         
-        given(questionQueryAPI.isAvailable(questionId))
-            .willReturn(true)
+        test("장바구니에 문제를 추가할 수 있다") {
+            val userId = 100L
+            val questionId = 200L
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns true
+            every { questionQueryAPI.isOwned(userId, questionId) } returns false
+            
+            cartService.appendCartItem(userId, questionId)
+            
+            val cartItems = cartItemRepository.findByUserId(userId)
+            cartItems shouldHaveSize 1
+            cartItems[0].questionId shouldBe questionId
+        }
         
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(false)
-        
-        //when
-        cartService.appendCartItem(userId, questionId)
-        
-        //then
-        val cartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(cartItems).hasSize(1)
-        Assertions.assertThat(cartItems[0].questionId).isEqualTo(questionId)
-    }
-    
-    @Test
-    fun `장바구니 아이템 상세 목록을 조회할 수 있다`() {
-        //given
-        val userId = 101L
-        val questionId1 = 201L
-        val questionId2 = 202L
-        val creatorId1 = 301L
-        val creatorId2 = 302L
-        val creatorUserId1 = 401L
-        val creatorUserId2 = 402L
-        
-        val cartItem1 = CartItem.create(userId, questionId1)
-        val cartItem2 = CartItem.create(userId, questionId2)
-        cartItemRepository.save(cartItem1)
-        cartItemRepository.save(cartItem2)
-        
-        given(questionQueryAPI.getQuestionInformation(any<List<Long>>()))
-            .willReturn(
-                listOf(
-                    createQuestionInformation(questionId1, creatorId1, "문제1", "수학", "thumb1.jpg", 10000),
-                    createQuestionInformation(questionId2, creatorId2, "문제2", "영어", "thumb2.jpg", 15000)
+        test("장바구니 아이템 상세 목록을 조회할 수 있다") {
+            val userId = 101L
+            val questionId1 = 201L
+            val questionId2 = 202L
+            val creatorId1 = 301L
+            val creatorId2 = 302L
+            val creatorUserId1 = 401L
+            val creatorUserId2 = 402L
+            
+            cartItemRepository.save(CartItem.create(userId, questionId1))
+            cartItemRepository.save(CartItem.create(userId, questionId2))
+            
+            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns listOf(
+                QuestionInformationQueryResult(
+                    id = questionId1, creatorId = creatorId1, title = "문제1", subject = "수학",
+                    parentCategory = "수학", childCategory = "수학_하위",
+                    thumbnail = "thumb1.jpg", questionLevel = "중급", price = 10000, rate = 4.5
+                ),
+                QuestionInformationQueryResult(
+                    id = questionId2, creatorId = creatorId2, title = "문제2", subject = "영어",
+                    parentCategory = "영어", childCategory = "영어_하위",
+                    thumbnail = "thumb2.jpg", questionLevel = "중급", price = 15000, rate = 4.5
                 )
             )
-        
-        given(creatorQueryAPI.getCreators(any()))
-            .willReturn(
-                listOf(
-                    createCreatorQueryData(creatorUserId1, creatorId1),
-                    createCreatorQueryData(creatorUserId2, creatorId2)
-                )
+            
+            every { creatorQueryAPI.getCreators(any()) } returns listOf(
+                CreatorQueryData(creatorUserId1, creatorId1, "전체", 4.5, 100, 500),
+                CreatorQueryData(creatorUserId2, creatorId2, "전체", 4.5, 100, 500)
             )
-        
-        given(userQueryAPI.getUsers(any()))
-            .willReturn(
-                listOf(
-                    UserQueryData(creatorUserId1, "크리에이터1", "profile1.jpg", "creator1@test.com"),
-                    UserQueryData(creatorUserId2, "크리에이터2", "profile2.jpg", "creator2@test.com")
-                )
+            
+            every { userQueryAPI.getUsers(any()) } returns listOf(
+                UserQueryData(creatorUserId1, "크리에이터1", "profile1.jpg", "creator1@test.com"),
+                UserQueryData(creatorUserId2, "크리에이터2", "profile2.jpg", "creator2@test.com")
             )
+            
+            val result = cartService.getCartItemDetails(userId)
+            
+            result shouldHaveSize 2
+            result.map { it.title } shouldContainExactlyInAnyOrder listOf("문제1", "문제2")
+            result.map { it.creatorName } shouldContainExactlyInAnyOrder listOf("크리에이터1", "크리에이터2")
+            result.map { it.price } shouldContainExactlyInAnyOrder listOf(10000, 15000)
+        }
         
-        //when
-        val result = cartService.getCartItemDetails(userId)
-        
-        //then
-        Assertions.assertThat(result).hasSize(2)
-        
-        val titles = result.map { it.title }
-        val creatorNames = result.map { it.creatorName }
-        val prices = result.map { it.price }
-        
-        Assertions.assertThat(titles).containsExactlyInAnyOrder("문제1", "문제2")
-        Assertions.assertThat(creatorNames).containsExactlyInAnyOrder("크리에이터1", "크리에이터2")
-        Assertions.assertThat(prices).containsExactlyInAnyOrder(10000, 15000)
-    }
-    
-    @Test
-    fun `장바구니 아이템을 삭제할 수 있다`() {
-        //given
-        val userId = 102L
-        val questionId1 = 203L
-        val questionId2 = 204L
-        val questionId3 = 205L
-        
-        val cartItem1 = CartItem.create(userId, questionId1)
-        val cartItem2 = CartItem.create(userId, questionId2)
-        val cartItem3 = CartItem.create(userId, questionId3)
-        val savedCartItem1 = cartItemRepository.save(cartItem1)
-        val savedCartItem2 = cartItemRepository.save(cartItem2)
-        val savedCartItem3 = cartItemRepository.save(cartItem3)
-        
-        val idsToDelete = listOf(savedCartItem1.id, savedCartItem3.id)
-        
-        //when
-        cartService.removeCartItem(idsToDelete, userId)
-        
-        //then
-        val remainingCartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(remainingCartItems).hasSize(1)
-        Assertions.assertThat(remainingCartItems[0].id).isEqualTo(savedCartItem2.id)
-        Assertions.assertThat(remainingCartItems[0].questionId).isEqualTo(questionId2)
-    }
-    
-    private fun createQuestionInformation(
-        questionId: Long,
-        creatorId: Long,
-        title: String,
-        subject: String,
-        thumbnail: String,
-        price: Int
-    ): QuestionInformationQueryResult {
-        return QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = title,
-            subject = subject,
-            parentCategory = subject,
-            childCategory = "${subject}_하위",
-            thumbnail = thumbnail,
-            questionLevel = "중급",
-            price = price,
-            rate = 4.5
-        )
-    }
-    
-    private fun createCreatorQueryData(userId: Long, creatorId: Long): CreatorQueryData {
-        return CreatorQueryData(
-            userId = userId,
-            creatorId = creatorId,
-            mainSubject = "전체",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
+        test("장바구니에서 문제를 삭제할 수 있다") {
+            val userId = 102L
+            val questionId1 = 203L
+            val questionId2 = 204L
+            val questionId3 = 205L
+            
+            val savedItem1 = cartItemRepository.save(CartItem.create(userId, questionId1))
+            val savedItem2 = cartItemRepository.save(CartItem.create(userId, questionId2))
+            val savedItem3 = cartItemRepository.save(CartItem.create(userId, questionId3))
+            
+            val idsToDelete = listOf(savedItem1.id, savedItem3.id)
+            
+            cartService.removeCartItem(idsToDelete, userId)
+            
+            val remainingItems = cartItemRepository.findByUserId(userId)
+            remainingItems shouldHaveSize 1
+            remainingItems[0].id shouldBe savedItem2.id
+            remainingItems[0].questionId shouldBe questionId2
+        }
     }
 }

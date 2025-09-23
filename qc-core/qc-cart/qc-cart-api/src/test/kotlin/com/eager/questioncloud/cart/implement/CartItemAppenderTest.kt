@@ -5,112 +5,98 @@ import com.eager.questioncloud.cart.repository.CartItemRepository
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class CartItemAppenderTest(
-    @Autowired val cartItemAppender: CartItemAppender,
-    @Autowired val cartItemRepository: CartItemRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val cartItemAppender: CartItemAppender,
+    private val cartItemRepository: CartItemRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
     
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `장바구니에 문제를 추가할 수 있다`() {
-        //given
-        val userId = 100L
-        val questionId = 200L
-        
-        given(questionQueryAPI.isAvailable(questionId))
-            .willReturn(true)
-        
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(false)
-        
-        //when
-        cartItemAppender.append(userId, questionId)
-        
-        //then
-        val cartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(cartItems).hasSize(1)
-        
-        val cartItem = cartItems[0]
-        Assertions.assertThat(cartItem.userId).isEqualTo(userId)
-        Assertions.assertThat(cartItem.questionId).isEqualTo(questionId)
-    }
-    
-    @Test
-    fun `이용할 수 없는 문제는 장바구니에 추가할 수 없다`() {
-        //given
-        val userId = 101L
-        val questionId = 201L
-        
-        given(questionQueryAPI.isAvailable(questionId))
-            .willReturn(false)
-        
-        //when & then
-        assertThrows<CoreException> {
-            cartItemAppender.append(userId, questionId)
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
         }
         
-        val cartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(cartItems).isEmpty()
-    }
-    
-    @Test
-    fun `이미 장바구니에 있는 문제는 추가할 수 없다`() {
-        //given
-        val userId = 102L
-        val questionId = 202L
-        
-        val existingCartItem = CartItem.create(userId, questionId)
-        cartItemRepository.save(existingCartItem)
-        
-        given(questionQueryAPI.isAvailable(questionId))
-            .willReturn(true)
-        
-        //when & then
-        assertThrows<CoreException> {
-            cartItemAppender.append(userId, questionId)
+        Given("장바구니에 문제를 추가하는 상황에서") {
+            When("이용 가능하고 소유하지 않은 문제라면") {
+                val userId = 100L
+                val questionId = 200L
+                
+                every { questionQueryAPI.isAvailable(questionId) } returns true
+                every { questionQueryAPI.isOwned(userId, questionId) } returns false
+                
+                cartItemAppender.append(userId, questionId)
+                
+                Then("장바구니에 추가된다") {
+                    val cartItems = cartItemRepository.findByUserId(userId)
+                    cartItems shouldHaveSize 1
+                    
+                    val cartItem = cartItems[0]
+                    cartItem.userId shouldBe userId
+                    cartItem.questionId shouldBe questionId
+                }
+            }
+            
+            When("이용할 수 없는 문제라면") {
+                val userId = 101L
+                val questionId = 201L
+                
+                every { questionQueryAPI.isAvailable(questionId) } returns false
+                
+                Then("CoreException(Error.UNAVAILABLE_QUESTION)이 발생한다") {
+                    shouldThrow<CoreException> {
+                        cartItemAppender.append(userId, questionId)
+                    }
+                    cartItemRepository.findByUserId(userId).shouldBeEmpty()
+                }
+            }
+            
+            When("이미 장바구니에 있는 문제라면") {
+                val userId = 102L
+                val questionId = 202L
+                
+                cartItemRepository.save(CartItem.create(userId, questionId))
+                
+                every { questionQueryAPI.isAvailable(questionId) } returns true
+                
+                Then("CoreException(Error.ALREADY_IN_CART)이 발생한다") {
+                    shouldThrow<CoreException> {
+                        cartItemAppender.append(userId, questionId)
+                    }
+                    cartItemRepository.findByUserId(userId) shouldHaveSize 1
+                }
+            }
+            
+            When("이미 소유한 문제라면") {
+                val userId = 103L
+                val questionId = 203L
+                
+                every { questionQueryAPI.isAvailable(questionId) } returns true
+                every { questionQueryAPI.isOwned(userId, questionId) } returns true
+                
+                Then("CoreException(Error.ALREADY_OWN_QUESTION)이 발생한다") {
+                    shouldThrow<CoreException> {
+                        cartItemAppender.append(userId, questionId)
+                    }
+                    cartItemRepository.findByUserId(userId).shouldBeEmpty()
+                }
+            }
         }
-        
-        val cartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(cartItems).hasSize(1)
-    }
-    
-    @Test
-    fun `이미 소유한 문제는 장바구니에 추가할 수 없다`() {
-        //given
-        val userId = 103L
-        val questionId = 203L
-        
-        given(questionQueryAPI.isAvailable(questionId))
-            .willReturn(true)
-        
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(true)
-        
-        //when & then
-        assertThrows<CoreException> {
-            cartItemAppender.append(userId, questionId)
-        }
-        
-        val cartItems = cartItemRepository.findByUserId(userId)
-        Assertions.assertThat(cartItems).isEmpty()
     }
 }
