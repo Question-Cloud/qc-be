@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
 }
 
-group = "com.eager"
+group = "com.eager.questioncloud"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
@@ -19,7 +19,7 @@ java {
 }
 
 subprojects {
-    group = "com.eager"
+    group = "com.eager.questioncloud"
     version = "0.0.1-SNAPSHOT"
     
     apply(plugin = "java")

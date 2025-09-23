@@ -6,7 +6,7 @@ plugins {
     kotlin("plugin.jpa") version "2.1.10"
 }
 
-group = "com.eager"
+group = "com.eager.questioncloud"
 version = "0.0.1-SNAPSHOT"
 
 repositories {
