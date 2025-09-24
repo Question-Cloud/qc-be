@@ -9,6 +9,8 @@ import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.utils.Fixture
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.FunSpec
@@ -55,46 +57,66 @@ class CartServiceTest(
         }
         
         test("장바구니 아이템 상세 목록을 조회할 수 있다") {
-            val userId = 101L
-            val questionId1 = 201L
-            val questionId2 = 202L
-            val creatorId1 = 301L
-            val creatorId2 = 302L
-            val creatorUserId1 = 401L
-            val creatorUserId2 = 402L
+            val userId = 100L
+            val question1Id = 200L
+            val question2Id = 201L
             
-            cartItemRepository.save(CartItem.create(userId, questionId1))
-            cartItemRepository.save(CartItem.create(userId, questionId2))
+            val question1CreatorId = 1L
+            val question2CreatorId = 2L
+            
+            val question1CreatorUserId = 1L
+            val question2CreatorUserId = 2L
+            
+            cartItemRepository.save(CartItem.create(userId, question1Id))
+            cartItemRepository.save(CartItem.create(userId, question2Id))
+            
+            val question1QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                .set(QuestionInformationQueryResult::id, question1Id)
+                .set(QuestionInformationQueryResult::creatorId, question1CreatorId)
+                .sample()
+            
+            val question2QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                .set(QuestionInformationQueryResult::id, question2Id)
+                .set(QuestionInformationQueryResult::creatorId, question2CreatorId)
+                .sample()
+            
+            val question1CreatorData = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorQueryData>()
+                .set(CreatorQueryData::userId, question1CreatorUserId)
+                .set(CreatorQueryData::creatorId, question1CreatorId)
+                .sample()
+            
+            val question2CreatorData = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorQueryData>()
+                .set(CreatorQueryData::userId, question2CreatorUserId)
+                .set(CreatorQueryData::creatorId, question2CreatorId)
+                .sample()
+            
+            val question1CreatorUserData =
+                Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>().set(UserQueryData::userId, question1CreatorUserId).sample()
+            
+            val question2CreatorUserData =
+                Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>().set(UserQueryData::userId, question2CreatorUserId).sample()
             
             every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns listOf(
-                QuestionInformationQueryResult(
-                    id = questionId1, creatorId = creatorId1, title = "문제1", subject = "수학",
-                    parentCategory = "수학", childCategory = "수학_하위",
-                    thumbnail = "thumb1.jpg", questionLevel = "중급", price = 10000, rate = 4.5
-                ),
-                QuestionInformationQueryResult(
-                    id = questionId2, creatorId = creatorId2, title = "문제2", subject = "영어",
-                    parentCategory = "영어", childCategory = "영어_하위",
-                    thumbnail = "thumb2.jpg", questionLevel = "중급", price = 15000, rate = 4.5
-                )
+                question1QueryData, question2QueryData,
             )
             
             every { creatorQueryAPI.getCreators(any()) } returns listOf(
-                CreatorQueryData(creatorUserId1, creatorId1, "전체", 4.5, 100, 500),
-                CreatorQueryData(creatorUserId2, creatorId2, "전체", 4.5, 100, 500)
+                question1CreatorData, question2CreatorData,
             )
             
             every { userQueryAPI.getUsers(any()) } returns listOf(
-                UserQueryData(creatorUserId1, "크리에이터1", "profile1.jpg", "creator1@test.com"),
-                UserQueryData(creatorUserId2, "크리에이터2", "profile2.jpg", "creator2@test.com")
+                question1CreatorUserData, question2CreatorUserData
             )
             
             val result = cartService.getCartItemDetails(userId)
             
             result shouldHaveSize 2
-            result.map { it.title } shouldContainExactlyInAnyOrder listOf("문제1", "문제2")
-            result.map { it.creatorName } shouldContainExactlyInAnyOrder listOf("크리에이터1", "크리에이터2")
-            result.map { it.price } shouldContainExactlyInAnyOrder listOf(10000, 15000)
+            result.map { it.title } shouldContainExactlyInAnyOrder listOf(question1QueryData.title, question2QueryData.title)
+            result.map { it.creatorName } shouldContainExactlyInAnyOrder listOf(
+                question1CreatorUserData.name,
+                question2CreatorUserData.name
+            )
+            result.map { it.price } shouldContainExactlyInAnyOrder listOf(question1QueryData.price, question2QueryData.price)
         }
         
         test("장바구니에서 문제를 삭제할 수 있다") {
