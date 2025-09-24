@@ -5,12 +5,14 @@ import com.eager.questioncloud.common.event.ReviewEventType
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class UpdateCreatorReviewStatisticsHandler(
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val questionQueryAPI: QuestionQueryAPI
 ) {
+    @Transactional
     fun updateCreatorReviewStatistics(event: ReviewEvent) {
         val question = questionQueryAPI.getQuestionInformation(event.questionId)
         val creatorStatistics = creatorStatisticsRepository.getForUpdate(question.creatorId)

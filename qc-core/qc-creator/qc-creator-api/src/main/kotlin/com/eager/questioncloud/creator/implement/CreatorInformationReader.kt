@@ -33,29 +33,4 @@ class CreatorInformationReader(
             creatorStatistics.subscriberCount
         )
     }
-    
-    fun getCreatorInformation(creatorIds: List<Long>): List<CreatorInformation> {
-        val creators = creatorRepository.findByIdIn(creatorIds)
-        val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
-        val creatorStatisticsMap = creatorStatisticsRepository.findByCreatorIdIn(creatorIds)
-        
-        return creators.map {
-            val creatorUser = creatorUserMap.getValue(it.userId)
-            val creatorStatistics = creatorStatisticsMap.getValue(it.id)
-            val creatorProfile = CreatorProfile(
-                it.id,
-                creatorUser.name,
-                creatorUser.profileImage,
-                it.mainSubject,
-                creatorUser.email,
-                it.introduction
-            )
-            CreatorInformation(
-                creatorProfile,
-                creatorStatistics.salesCount,
-                creatorStatistics.averageRateOfReview,
-                creatorStatistics.subscriberCount
-            )
-        }
-    }
 }

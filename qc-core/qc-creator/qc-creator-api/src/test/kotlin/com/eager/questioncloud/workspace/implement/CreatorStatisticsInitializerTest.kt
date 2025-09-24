@@ -2,40 +2,45 @@ package com.eager.questioncloud.workspace.implement
 
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class CreatorStatisticsInitializerTest(
-    @Autowired val creatorStatisticsInitializer: CreatorStatisticsInitializer,
-    @Autowired val creatorStatisticsRepository: CreatorStatisticsRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    private val creatorId = 1L
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `크리에이터 통계를 초기화할 수 있다`() {
-        //when
-        creatorStatisticsInitializer.initializeCreatorStatistics(creatorId)
+    private val creatorStatisticsInitializer: CreatorStatisticsInitializer,
+    private val creatorStatisticsRepository: CreatorStatisticsRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
         
-        //then
-        val foundStatistics = creatorStatisticsRepository.findByCreatorId(creatorId)
-        Assertions.assertThat(foundStatistics).isNotNull
-        Assertions.assertThat(foundStatistics.creatorId).isEqualTo(creatorId)
-        Assertions.assertThat(foundStatistics.salesCount).isEqualTo(0)
-        Assertions.assertThat(foundStatistics.reviewCount).isEqualTo(0)
-        Assertions.assertThat(foundStatistics.totalReviewRate).isEqualTo(0)
-        Assertions.assertThat(foundStatistics.averageRateOfReview).isEqualTo(0.0)
-        Assertions.assertThat(foundStatistics.subscriberCount).isEqualTo(0)
+        Given("크리에이터 통계 초기화") {
+            val creatorId = 1L
+            
+            When("크리에이터 통계를 초기화하면") {
+                creatorStatisticsInitializer.initializeCreatorStatistics(creatorId)
+                
+                Then("초기값으로 통계가 생성된다") {
+                    val foundStatistics = creatorStatisticsRepository.findByCreatorId(creatorId)
+                    
+                    foundStatistics shouldNotBe null
+                    foundStatistics.creatorId shouldBe creatorId
+                    foundStatistics.salesCount shouldBe 0
+                    foundStatistics.reviewCount shouldBe 0
+                    foundStatistics.totalReviewRate shouldBe 0
+                    foundStatistics.averageRateOfReview shouldBe 0.0
+                    foundStatistics.subscriberCount shouldBe 0
+                }
+            }
+        }
     }
 }

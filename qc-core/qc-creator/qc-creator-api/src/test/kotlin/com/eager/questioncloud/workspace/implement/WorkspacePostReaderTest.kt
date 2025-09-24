@@ -8,160 +8,116 @@ import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.eager.questioncloud.utils.Fixture
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class WorkspacePostReaderTest(
-    @Autowired val workspacePostReader: WorkspacePostReader,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
-
-    @MockBean
-    lateinit var postQueryAPI: PostQueryAPI
-
-    @MockBean
-    lateinit var userQueryAPI: UserQueryAPI
-
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-
-    @Test
-    fun `크리에이터의 게시글 목록을 조회할 수 있다`() {
-        //given
-        val creatorId = 1L
-        val userId = 100L
-        val questionId1 = 1001L
-        val questionId2 = 1002L
-        val postId1 = 2001L
-        val postId2 = 2002L
-
-        val pagingInformation = PagingInformation(0, 10)
-
-        val question1 = QuestionInformationQueryResult(
-            id = questionId1,
-            creatorId = creatorId,
-            title = "문제1",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "미적분",
-            thumbnail = "thumb1.jpg",
-            questionLevel = "LEVEL3",
-            price = 1000,
-            rate = 4.5
-        )
-        val question2 = QuestionInformationQueryResult(
-            id = questionId2,
-            creatorId = creatorId,
-            title = "문제2",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "확률과 통계",
-            thumbnail = "thumb2.jpg",
-            questionLevel = "LEVEL4",
-            price = 1500,
-            rate = 4.0
-        )
-
-        given(questionQueryAPI.getCreatorQuestions(creatorId, pagingInformation))
-            .willReturn(listOf(question1, question2))
-
-        val post1 = CreatorPostQueryAPIResult(
-            id = postId1,
-            writerId = userId,
-            title = "게시글1",
-            content = "게시글 내용1",
-            createdAt = LocalDateTime.now().minusDays(1)
-        )
-        val post2 = CreatorPostQueryAPIResult(
-            id = postId2,
-            writerId = userId,
-            title = "게시글2",
-            content = "게시글 내용2",
-            createdAt = LocalDateTime.now()
-        )
-
-        given(postQueryAPI.getCreatorPosts(any(), any()))
-            .willReturn(listOf(post1, post2))
-
-        val user = UserQueryData(
-            userId = userId,
-            name = "테스트 유저",
-            profileImage = "user_profile.jpg",
-            email = "user@test.com"
-        )
-
-        given(userQueryAPI.getUsers(any()))
-            .willReturn(listOf(user))
-
-        //when
-        val result = workspacePostReader.getCreatorPosts(creatorId, pagingInformation)
-
-        //then
-        Assertions.assertThat(result).hasSize(2)
-        Assertions.assertThat(result[0].id).isEqualTo(postId1)
-        Assertions.assertThat(result[0].title).isEqualTo("게시글1")
-        Assertions.assertThat(result[0].writer).isEqualTo("테스트 유저")
-        Assertions.assertThat(result[1].id).isEqualTo(postId2)
-        Assertions.assertThat(result[1].title).isEqualTo("게시글2")
-        Assertions.assertThat(result[1].writer).isEqualTo("테스트 유저")
-    }
-
-    @Test
-    fun `크리에이터의 게시글 개수를 조회할 수 있다`() {
-        //given
-        val creatorId = 1L
-        val questionId1 = 1001L
-        val questionId2 = 1002L
-
-        val question1 = QuestionInformationQueryResult(
-            id = questionId1,
-            creatorId = creatorId,
-            title = "문제1",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "미적분",
-            thumbnail = "thumb1.jpg",
-            questionLevel = "LEVEL3",
-            price = 1000,
-            rate = 4.5
-        )
-        val question2 = QuestionInformationQueryResult(
-            id = questionId2,
-            creatorId = creatorId,
-            title = "문제2",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "확률과 통계",
-            thumbnail = "thumb2.jpg",
-            questionLevel = "LEVEL4",
-            price = 1500,
-            rate = 4.0
-        )
-
-        given(questionQueryAPI.getCreatorQuestions(creatorId, PagingInformation.max))
-            .willReturn(listOf(question1, question2))
-
-        given(postQueryAPI.countByQuestionIdIn(any()))
-            .willReturn(5)
-
-        //when
-        val result = workspacePostReader.countCreatorPost(creatorId)
-
-        //then
-        Assertions.assertThat(result).isEqualTo(5)
+    private val workspacePostReader: WorkspacePostReader,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
+    
+    @MockkBean
+    private lateinit var postQueryAPI: PostQueryAPI
+    
+    @MockkBean
+    private lateinit var userQueryAPI: UserQueryAPI
+    
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
+        
+        Given("워크스페이스에서 크리에이터 게시글 조회") {
+            When("크리에이터 문제와 관련된 게시글을 조회하면") {
+                val creatorId = 1L
+                
+                val writer1Id = 1L
+                val writer2Id = 2L
+                
+                val question1Id = 1L
+                val question2Id = 2L
+                
+                val post1Id = 1L
+                val post2Id = 2L
+                
+                val pagingInformation = PagingInformation.max
+                
+                val question1QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                    .set(QuestionInformationQueryResult::id, question1Id)
+                    .set(QuestionInformationQueryResult::creatorId, creatorId)
+                    .sample()
+                
+                val question2QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                    .set(QuestionInformationQueryResult::id, question2Id)
+                    .set(QuestionInformationQueryResult::creatorId, creatorId)
+                    .sample()
+                
+                every { questionQueryAPI.getCreatorQuestions(any(), any()) } returns listOf(question1QueryData, question2QueryData)
+                
+                val post1QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorPostQueryAPIResult>()
+                    .set(CreatorPostQueryAPIResult::id, post1Id)
+                    .set(CreatorPostQueryAPIResult::writerId, writer1Id)
+                    .sample()
+                
+                val post2QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorPostQueryAPIResult>()
+                    .set(CreatorPostQueryAPIResult::id, post2Id)
+                    .set(CreatorPostQueryAPIResult::writerId, writer2Id)
+                    .sample()
+                
+                every { postQueryAPI.getCreatorPosts(any(), any()) } returns listOf(post1QueryData, post2QueryData)
+                
+                val user1QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>()
+                    .set(UserQueryData::userId, 1)
+                    .sample()
+                
+                val user2QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>()
+                    .set(UserQueryData::userId, 2)
+                    .sample()
+                
+                every { userQueryAPI.getUsers(any()) } returns listOf(user1QueryData, user2QueryData)
+                
+                val result = workspacePostReader.getCreatorPosts(creatorId, pagingInformation)
+                
+                Then("게시글 목록이 반환된다") {
+                    result shouldHaveSize 2
+                    result[0].id shouldBe post1Id
+                    result[0].title shouldBe post1QueryData.title
+                    result[0].writer shouldBe user1QueryData.name
+                    result[1].id shouldBe post2Id
+                    result[1].title shouldBe post2QueryData.title
+                    result[1].writer shouldBe user2QueryData.name
+                }
+            }
+            
+            When("크리에이터의 게시글 개수를 조회하면") {
+                val creatorId = 1L
+                val question = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                    .set(QuestionInformationQueryResult::id, 1L)
+                    .sample()
+                
+                every { questionQueryAPI.getCreatorQuestions(creatorId, PagingInformation.max) } returns listOf(question)
+                every { postQueryAPI.countByQuestionIdIn(any()) } returns 5
+                
+                val result = workspacePostReader.countCreatorPost(creatorId)
+                
+                Then("게시글 개수가 반환된다") {
+                    result shouldBe 5
+                }
+            }
+        }
     }
 }

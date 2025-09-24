@@ -7,7 +7,6 @@ import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.*
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class WorkspaceQuestionService(
@@ -41,7 +40,6 @@ class WorkspaceQuestionService(
         )
     }
     
-    @Transactional
     fun registerQuestion(userId: Long, command: RegisterQuestionCommand) {
         val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
         questionCommandAPI.register(creator.id, command)

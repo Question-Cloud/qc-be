@@ -39,6 +39,7 @@ class QuestionCommandAPIImpl(
         return question.id
     }
     
+    @Transactional
     override fun modify(questionId: Long, command: ModifyQuestionCommand) {
         val question = questionRepository.get(questionId)
         question.modify(
@@ -59,6 +60,7 @@ class QuestionCommandAPIImpl(
         questionRepository.save(question)
     }
     
+    @Transactional
     override fun delete(questionId: Long, creatorId: Long) {
         val question = questionRepository.findByQuestionIdAndCreatorId(questionId, creatorId)
         question.delete()
