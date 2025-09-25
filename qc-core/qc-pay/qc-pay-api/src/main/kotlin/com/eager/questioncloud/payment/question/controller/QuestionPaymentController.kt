@@ -5,9 +5,8 @@ import com.eager.questioncloud.common.dto.DefaultResponse
 import com.eager.questioncloud.common.dto.PagingResponse
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
+import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.question.dto.QuestionPaymentRequest
-import com.eager.questioncloud.payment.question.service.QuestionOrderService
-import com.eager.questioncloud.payment.question.service.QuestionPaymentCouponService
 import com.eager.questioncloud.payment.question.service.QuestionPaymentHistoryService
 import com.eager.questioncloud.payment.question.service.QuestionPaymentService
 import org.springframework.web.bind.annotation.*
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/payment/question")
 class QuestionPaymentController(
     private val questionPaymentService: QuestionPaymentService,
-    private val questionOrderService: QuestionOrderService,
-    private val questionPaymentCouponService: QuestionPaymentCouponService,
     private val questionPaymentHistoryService: QuestionPaymentHistoryService,
 ) {
     @PostMapping
@@ -25,12 +22,7 @@ class QuestionPaymentController(
         userPrincipal: UserPrincipal,
         @RequestBody request: QuestionPaymentRequest
     ): DefaultResponse {
-        val questionOrder = questionOrderService.generateQuestionOrder(userPrincipal.userId, request.questionIds!!)
-        val questionPaymentCoupon = questionPaymentCouponService.getQuestionPaymentCoupon(
-            request.userCouponId,
-            userPrincipal.userId
-        )
-        questionPaymentService.payment(userPrincipal.userId, questionOrder, questionPaymentCoupon)
+        questionPaymentService.payment(QuestionPaymentCommand(userPrincipal.userId, request.questionIds, request.userCouponId))
         return DefaultResponse.success()
     }
     

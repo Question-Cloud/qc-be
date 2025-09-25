@@ -244,8 +244,7 @@ class QuestionPaymentControllerDocument {
             userCouponId = null
         )
         
-        whenever(questionPaymentService.payment(anyOrNull(), anyOrNull(), anyOrNull()))
-            .thenThrow(CoreException(Error.NOT_ENOUGH_POINT))
+        whenever(questionPaymentService.payment(anyOrNull())).thenThrow(CoreException(Error.NOT_ENOUGH_POINT))
         
         // When & Then
         mockMvc.perform(
