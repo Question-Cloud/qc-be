@@ -5,157 +5,94 @@ import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.eager.questioncloud.utils.Fixture
+import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class QuestionOrderGeneratorTest(
-    @Autowired val questionOrderGenerator: QuestionOrderGenerator,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val questionOrderGenerator: QuestionOrderGenerator,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
     
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `Question 주문을 생성할 수 있다`() {
-        // given
-        val userId = 1L
-        val questionIds = listOf(1L, 2L, 3L)
-        given(questionQueryAPI.isOwned(any(), any<List<Long>>())).willReturn(false)
-        given(questionQueryAPI.getQuestionInformation(any<List<Long>>()))
-            .willReturn(
-                listOf(
-                    QuestionInformationQueryResult(
-                        id = 1L,
-                        creatorId = 1L,
-                        title = "테스트 문제",
-                        subject = "수학",
-                        parentCategory = "수학",
-                        childCategory = "미적",
-                        thumbnail = "thumbnail.jpg",
-                        questionLevel = "중급",
-                        price = 1000,
-                        rate = 4.5
-                    ), QuestionInformationQueryResult(
-                        id = 2L,
-                        creatorId = 1L,
-                        title = "테스트 문제",
-                        subject = "수학",
-                        parentCategory = "수학",
-                        childCategory = "미적",
-                        thumbnail = "thumbnail.jpg",
-                        questionLevel = "중급",
-                        price = 1000,
-                        rate = 4.5
-                    ), QuestionInformationQueryResult(
-                        id = 3L,
-                        creatorId = 1L,
-                        title = "테스트 문제",
-                        subject = "수학",
-                        parentCategory = "수학",
-                        childCategory = "미적",
-                        thumbnail = "thumbnail.jpg",
-                        questionLevel = "중급",
-                        price = 1000,
-                        rate = 4.5
-                    )
-                )
-            )
-        
-        // when
-        val questionOrder = questionOrderGenerator.generateQuestionOrder(userId, questionIds)
-        
-        // then
-        Assertions.assertThat(questionOrder.questionIds).containsExactlyInAnyOrderElementsOf(questionIds)
-    }
-    
-    @Test
-    fun `비활성화 된 Question을 포함한 주문을 생성할 수 없다`() {
-        // given
-        val userId = 1L
-        val questionIds = listOf(1L, 2L, 3L) // 3L is unAvailable
-        given(questionQueryAPI.isOwned(any(), any<List<Long>>())).willReturn(false)
-        given(questionQueryAPI.getQuestionInformation(any<List<Long>>())).willReturn(
-            listOf(
-                QuestionInformationQueryResult(
-                    id = 1L,
-                    creatorId = 1L,
-                    title = "테스트 문제",
-                    subject = "수학",
-                    parentCategory = "수학",
-                    childCategory = "미적",
-                    thumbnail = "thumbnail.jpg",
-                    questionLevel = "중급",
-                    price = 1000,
-                    rate = 4.5
-                ),
-                QuestionInformationQueryResult(
-                    id = 2L,
-                    creatorId = 1L,
-                    title = "테스트 문제",
-                    subject = "수학",
-                    parentCategory = "수학",
-                    childCategory = "미적",
-                    thumbnail = "thumbnail.jpg",
-                    questionLevel = "중급",
-                    price = 1000,
-                    rate = 4.5
-                ),
-//                QuestionInformationQueryResult(
-//                    id = 3L,
-//                    creatorId = 1L,
-//                    title = "테스트 문제",
-//                    subject = "수학",
-//                    parentCategory = "수학",
-//                    childCategory = "미적",
-//                    thumbnail = "thumbnail.jpg",
-//                    questionLevel = "중급",
-//                    price = 1000,
-//                    rate = 4.5
-//                )
-            )
-        
-        )
-        //when then
-        Assertions.assertThatThrownBy {
-            questionOrderGenerator.generateQuestionOrder(
-                userId, questionIds
-            )
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
         }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.UNAVAILABLE_QUESTION)
-    }
-    
-    @Test
-    fun `이미 구매한 Question은 주문에 포함할 수 없다`() {
-        // given
-        val userId = 1L
-        val alreadyOwnedQuestionId = 1L
-        val normalQuestionId = 2L
         
-        given(questionQueryAPI.isOwned(any(), any<List<Long>>())).willReturn(true)
-        
-        // when then
-        Assertions.assertThatThrownBy {
-            questionOrderGenerator.generateQuestionOrder(
-                userId,
-                listOf(alreadyOwnedQuestionId, normalQuestionId)
-            )
+        Given("사용자가 구매 가능한 문제들로 주문을 생성할 때") {
+            val userId = 1L
+            val questions = (1..10).map {
+                Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                    .set(QuestionInformationQueryResult::id, it)
+                    .sample()
+            }
+            
+            every { questionQueryAPI.isOwned(any(), any<List<Long>>()) } returns false
+            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns questions
+            
+            When("주문 생성을 요청하면") {
+                val questionOrder = questionOrderGenerator.generateQuestionOrder(userId, questions.map { it.id })
+                
+                Then("요청한 문제들로 주문이 생성된다") {
+                    questionOrder.questionIds shouldContainExactlyInAnyOrder questions.map { it.id }
+                }
+            }
         }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.ALREADY_OWN_QUESTION)
+        
+        Given("비활성화된 문제가 포함된 주문을 생성할 때") {
+            val userId = 1L
+            
+            val questions = (1..10).map {
+                Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                    .set(QuestionInformationQueryResult::id, it)
+                    .sample()
+            }
+            
+            val availableQuestions = questions.subList(0, questions.size / 2)
+            
+            every { questionQueryAPI.isOwned(any(), any<List<Long>>()) } returns false
+            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns availableQuestions
+            
+            When("주문 생성을 요청하면") {
+                Then("UNAVAILABLE_QUESTION 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        questionOrderGenerator.generateQuestionOrder(userId, questions.map { it.id })
+                    }
+                    exception.error shouldBe Error.UNAVAILABLE_QUESTION
+                }
+            }
+        }
+        
+        Given("사용자가 이미 구매한 문제로 주문을 생성할 때") {
+            val userId = 1L
+            val alreadyOwnedQuestionId = 1L
+            val normalQuestionId = 2L
+            val questionIds = listOf(alreadyOwnedQuestionId, normalQuestionId)
+            
+            every { questionQueryAPI.isOwned(any(), any<List<Long>>()) } returns true
+            
+            When("주문 생성을 요청하면") {
+                Then("ALREADY_OWN_QUESTION 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        questionOrderGenerator.generateQuestionOrder(userId, questionIds)
+                    }
+                    exception.error shouldBe Error.ALREADY_OWN_QUESTION
+                }
+            }
+        }
     }
 }

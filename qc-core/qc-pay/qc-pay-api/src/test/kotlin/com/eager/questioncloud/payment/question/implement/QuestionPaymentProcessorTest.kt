@@ -2,136 +2,122 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.*
-import com.eager.questioncloud.payment.enums.CouponType
+import com.eager.questioncloud.payment.domain.QuestionOrder
+import com.eager.questioncloud.payment.domain.QuestionOrderItem
+import com.eager.questioncloud.payment.domain.QuestionPayment
+import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.QuestionPaymentRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
+import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doNothing
-import org.mockito.kotlin.given
-import org.mockito.kotlin.whenever
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.justRun
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 import java.util.*
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class QuestionPaymentProcessorTest(
-    @Autowired val questionPaymentProcessor: QuestionPaymentProcessor,
-    @Autowired val couponRepository: CouponRepository,
-    @Autowired val userCouponRepository: UserCouponRepository,
-    @Autowired val questionPaymentRepository: QuestionPaymentRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var pointCommandAPI: PointCommandAPI
+    private val questionPaymentProcessor: QuestionPaymentProcessor,
+    private val couponRepository: CouponRepository,
+    private val userCouponRepository: UserCouponRepository,
+    private val questionPaymentRepository: QuestionPaymentRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var pointCommandAPI: PointCommandAPI
     
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `문제 결제 처리를 할 수 있다 (쿠폰 O)`() {
-        // given
-        val userId = 1L
-        val discount = 1000
-        val fixedCoupon = couponRepository.save(
-            Coupon(
-                code = "coupon-code",
-                title = "할인 쿠폰 1000",
-                couponType = CouponType.Fixed,
-                value = discount,
-                remainingCount = 100,
-                endAt = LocalDateTime.now().plusDays(10)
-            )
-        )
-        val userCoupon = userCouponRepository.save(UserCoupon.create(userId, fixedCoupon))
-        
-        val orderItems = listOf(
+    private fun createDefaultOrderItems(): List<QuestionOrderItem> {
+        return listOf(
             QuestionOrderItem(questionId = 1L, price = 1000),
             QuestionOrderItem(questionId = 2L, price = 1000),
             QuestionOrderItem(questionId = 3L, price = 1000)
         )
-        val questionOrder = QuestionOrder(UUID.randomUUID().toString(), orderItems)
-        val questionPaymentCoupon = QuestionPaymentCoupon.create(userCoupon.id, fixedCoupon)
-        val questionPayment = QuestionPayment.create(userId, questionPaymentCoupon, questionOrder)
-        
-        val originalAmount = questionPayment.amount
-        val discountedAmount = questionPayment.questionPaymentCoupon!!.calcDiscount(originalAmount)
-        
-        doNothing().whenever(pointCommandAPI).usePoint(any(), any())
-        // when
-        questionPaymentProcessor.payment(questionPayment)
-        
-        // then
-        val afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
-        assertThat(afterUserCoupon.isUsed).isTrue()
-        assertThat(questionPayment.amount).isEqualTo(discountedAmount)
-        
-        val paymentCount = questionPaymentRepository.countByUserId(userId)
-        assertThat(paymentCount).isEqualTo(1)
     }
     
-    @Test
-    fun `문제 결제 처리를 할 수 있다 (쿠폰 X)`() {
-        // given
-        val userId = 1L
-        
-        val orderItems = listOf(
-            QuestionOrderItem(questionId = 1L, price = 1000),
-            QuestionOrderItem(questionId = 2L, price = 1000),
-            QuestionOrderItem(questionId = 3L, price = 1000)
-        )
-        
+    private fun createQuestionPayment(
+        userId: Long,
+        questionPaymentCoupon: QuestionPaymentCoupon? = null,
+        orderItems: List<QuestionOrderItem> = createDefaultOrderItems()
+    ): QuestionPayment {
         val questionOrder = QuestionOrder(UUID.randomUUID().toString(), orderItems)
-        val questionPayment = QuestionPayment.create(userId, null, questionOrder)
-        
-        doNothing().whenever(pointCommandAPI).usePoint(any(), any())
-        
-        // when
-        questionPaymentProcessor.payment(questionPayment)
-        
-        // then
-        val paymentCount = questionPaymentRepository.countByUserId(userId)
-        assertThat(paymentCount).isEqualTo(1)
+        return QuestionPayment.create(userId, questionPaymentCoupon, questionOrder)
     }
     
-    @Test
-    fun `보유 포인트가 부족하면 포인트 부족 예외가 발생한다`() {
-        // given
-        val userId = 1L
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
         
-        val orderItems = listOf(
-            QuestionOrderItem(questionId = 1L, price = 1000),
-            QuestionOrderItem(questionId = 2L, price = 1000),
-            QuestionOrderItem(questionId = 3L, price = 1000)
-        )
+        Given("사용자가 할인 쿠폰을 사용하여 문제를 결제할 때") {
+            val userId = 1L
+            
+            val coupon = CouponScenario.available(1, couponRepository).coupons[0]
+            val userCoupon = coupon.setUserCoupon(userId, userCouponRepository)
+            val questionPaymentCoupon = QuestionPaymentCoupon.create(userCoupon.id, coupon)
+            val questionPayment = createQuestionPayment(userId, questionPaymentCoupon)
+            
+            val originalAmount = questionPayment.amount
+            val discountedAmount = questionPayment.questionPaymentCoupon!!.calcDiscount(originalAmount)
+            
+            justRun { pointCommandAPI.usePoint(any(), any()) }
+            
+            When("결제 처리를 요청하면") {
+                questionPaymentProcessor.payment(questionPayment)
+                
+                Then("쿠폰이 사용됨으로 처리되고 할인된 금액으로 결제가 완료된다") {
+                    val afterUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
+                    afterUserCoupon.isUsed shouldBe true
+                    
+                    questionPayment.amount shouldBe discountedAmount
+                    
+                    val paymentCount = questionPaymentRepository.countByUserId(userId)
+                    paymentCount shouldBe 1
+                }
+            }
+        }
         
-        val questionOrder = QuestionOrder(UUID.randomUUID().toString(), orderItems)
-        val questionPayment = QuestionPayment.create(userId, null, questionOrder)
+        Given("사용자가 쿠폰 없이 문제를 결제할 때") {
+            val userId = 1L
+            val questionPayment = createQuestionPayment(userId, null)
+            
+            justRun { pointCommandAPI.usePoint(any(), any()) }
+            
+            When("결제 처리를 요청하면") {
+                questionPaymentProcessor.payment(questionPayment)
+                
+                Then("정가로 결제가 완료된다") {
+                    val paymentCount = questionPaymentRepository.countByUserId(userId)
+                    paymentCount shouldBe 1
+                }
+            }
+        }
         
-        given(
-            pointCommandAPI.usePoint(
-                any(),
-                any()
-            )
-        ).willThrow(CoreException(Error.NOT_ENOUGH_POINT))
-        
-        // when
-        assertThatThrownBy {
-            questionPaymentProcessor.payment(questionPayment)
-        }.isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.NOT_ENOUGH_POINT)
+        Given("사용자의 보유 포인트가 부족할 때") {
+            val userId = 1L
+            val questionPayment = createQuestionPayment(userId, null)
+            
+            every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
+            
+            When("결제 처리를 요청하면") {
+                Then("NOT_ENOUGH_POINT 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        questionPaymentProcessor.payment(questionPayment)
+                    }
+                    exception.error shouldBe Error.NOT_ENOUGH_POINT
+                }
+            }
+        }
     }
 }

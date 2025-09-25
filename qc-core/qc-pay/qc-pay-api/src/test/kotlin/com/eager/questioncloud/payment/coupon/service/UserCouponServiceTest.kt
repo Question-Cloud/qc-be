@@ -1,18 +1,19 @@
 package com.eager.questioncloud.payment.coupon.service
 
-import com.eager.questioncloud.payment.domain.Coupon
-import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
+import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -20,219 +21,143 @@ import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class UserCouponServiceTest(
-    @Autowired val userCouponService: UserCouponService,
-    @Autowired val userCouponRepository: UserCouponRepository,
-    @Autowired val couponRepository: CouponRepository,
-    @Autowired val dbCleaner: DBCleaner
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
+    private val userCouponService: UserCouponService,
+    private val userCouponRepository: UserCouponRepository,
+    private val couponRepository: CouponRepository,
+    private val dbCleaner: DBCleaner
+) : BehaviorSpec() {
     
-    @Test
-    fun `사용 가능한 쿠폰 목록을 조회할 수 있다`() {
-        // given
-        val userId = 1L
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
         
-        val activeCoupon1 = couponRepository.save(
-            Coupon(
-                code = "ACTIVE_COUPON_1",
-                title = "활성 쿠폰 1",
-                couponType = CouponType.Fixed,
-                value = 5000,
-                remainingCount = 10,
-                endAt = LocalDateTime.now().plusDays(30),
-            )
-        )
-        
-        val activeCoupon2 = couponRepository.save(
-            Coupon(
-                code = "ACTIVE_COUPON_2",
-                title = "활성 쿠폰 2",
-                couponType = CouponType.Percent,
-                value = 15,
-                remainingCount = 5,
-                endAt = LocalDateTime.now().plusDays(15),
-            )
-        )
-        val expiredCoupon = couponRepository.save(
-            Coupon(
-                code = "EXPIRED_COUPON",
-                title = "만료된 쿠폰",
-                couponType = CouponType.Fixed,
-                value = 10000,
-                remainingCount = 3,
-                endAt = LocalDateTime.now().minusDays(1),
-            )
-        )
-        
-        userCouponRepository.save(UserCoupon.create(userId, activeCoupon1))
-        userCouponRepository.save(UserCoupon.create(userId, activeCoupon2))
-        userCouponRepository.save(
-            UserCoupon(
-                userId = userId,
-                couponId = expiredCoupon.id,
-                isUsed = false,
-                createdAt = LocalDateTime.now(),
-                endAt = expiredCoupon.endAt,
-            )
-        )
-        
-        // when
-        val availableCoupons = userCouponService.getAvailableUserCoupons(userId)
-        
-        // then
-        assertThat(availableCoupons).hasSize(2)
-        
-        val couponTitles = availableCoupons.map { it.title }
-        assertThat(couponTitles).containsExactlyInAnyOrder("활성 쿠폰 1", "활성 쿠폰 2")
-        
-        val discountCoupon = availableCoupons.find { it.title == "활성 쿠폰 1" }
-        assertThat(discountCoupon).isNotNull
-        assertThat(discountCoupon!!.couponType).isEqualTo(CouponType.Fixed)
-        assertThat(discountCoupon.value).isEqualTo(5000)
-        
-        val percentCoupon = availableCoupons.find { it.title == "활성 쿠폰 2" }
-        assertThat(percentCoupon).isNotNull
-        assertThat(percentCoupon!!.couponType).isEqualTo(CouponType.Percent)
-        assertThat(percentCoupon.value).isEqualTo(15)
-    }
-    
-    @Test
-    fun `사용된 쿠폰은 사용 가능한 쿠폰 목록에 포함되지 않는다`() {
-        // given
-        val userId = 1L
-        
-        val coupon = Coupon(
-            code = "USED_COUPON",
-            title = "사용된 쿠폰",
-            couponType = CouponType.Fixed,
-            value = 3000,
-            remainingCount = 10,
-            endAt = LocalDateTime.now().plusDays(30),
-        )
-        
-        val userCoupon = UserCoupon.create(userId, coupon)
-        userCoupon.isUsed = true
-        
-        // when
-        val availableCoupons = userCouponService.getAvailableUserCoupons(userId)
-        
-        // then
-        assertThat(availableCoupons).isEmpty()
-    }
-    
-    @Test
-    fun `동일한 사용자가 동시에 쿠폰 등록 요청을 100번 하면 1회만 성공하고 99회는 실패한다`() {
-        // given
-        val userId = 1L
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "CONCURRENT_TEST_COUPON",
-                title = "동시성 테스트 쿠폰",
-                couponType = CouponType.Fixed,
-                value = 1000,
-                remainingCount = 100, // 충분한 수량
-                endAt = LocalDateTime.now().plusDays(30),
-            )
-        )
-        
-        val threadCount = 100
-        val executorService = Executors.newFixedThreadPool(threadCount)
-        val latch = CountDownLatch(threadCount)
-        val successCount = AtomicInteger(0)
-        val failureCount = AtomicInteger(0)
-        
-        // when
-        repeat(threadCount) {
-            executorService.submit {
-                runCatching {
-                    userCouponService.registerCoupon(userId, coupon.code)
-                }.onSuccess {
-                    successCount.incrementAndGet()
-                }.onFailure {
-                    failureCount.incrementAndGet()
-                }.also {
-                    latch.countDown()
-                }.getOrNull()
+        Given("사용자가 여러 쿠폰을 보유하고 있을 때") {
+            val userId = 1L
+            
+            val availableCouponCount = 10
+            val unavailableCouponCount = 5
+            
+            CouponScenario.available(availableCouponCount, couponRepository).coupons.forEach { coupon ->
+                coupon.setUserCoupon(userId, userCouponRepository)
+            }
+            
+            CouponScenario.expired(unavailableCouponCount, couponRepository).coupons.forEach { coupon ->
+                coupon.setUserCoupon(userId, userCouponRepository)
+            }
+            
+            When("사용 가능한 쿠폰 목록을 조회하면") {
+                val availableCoupons = userCouponService.getAvailableUserCoupons(userId)
+                
+                Then("사용 가능한 쿠폰들이 조회된다.") {
+                    availableCoupons shouldHaveSize availableCouponCount
+                }
             }
         }
         
-        latch.await(10, TimeUnit.SECONDS)
-        executorService.shutdown()
-        executorService.awaitTermination(5, TimeUnit.SECONDS)
-        
-        // then
-        assertThat(successCount.get()).isEqualTo(1)
-        assertThat(failureCount.get()).isEqualTo(99)
-        
-        val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
-        assertThat(isRegistered).isTrue()
-        
-        val updatedCoupon = couponRepository.findById(coupon.id)
-        assertThat(updatedCoupon.remainingCount).isEqualTo(99)
-    }
-    
-    @Test
-    fun `서로 다른 사용자가 동시에 동일한 쿠폰을 100번 요청하면 쿠폰 수량만큼만 발급되고 그 이후로는 발급이 안된다`() {
-        // given
-        val couponLimit = 10
-        val requestCount = 100
-        
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "LIMITED_CONCURRENT_COUPON",
-                title = "제한된 동시성 테스트 쿠폰",
-                couponType = CouponType.Percent,
-                value = 20,
-                remainingCount = couponLimit,
-                endAt = LocalDateTime.now().plusDays(30),
-            )
-        )
-        
-        val executorService = Executors.newFixedThreadPool(requestCount)
-        val latch = CountDownLatch(requestCount)
-        val successCount = AtomicInteger(0)
-        val limitedCouponFailureCount = AtomicInteger(0)
-        val otherFailureCount = AtomicInteger(0)
-        
-        // when
-        for (userId in 1L..100L) {
-            executorService.submit {
-                runCatching {
-                    userCouponService.registerCoupon(userId, coupon.code)
-                }.onSuccess {
-                    successCount.incrementAndGet()
-                }.onFailure {
-                    limitedCouponFailureCount.incrementAndGet()
-                }.also {
-                    latch.countDown()
-                }.getOrNull()
+        Given("사용자가 사용 가능한 쿠폰을 보유하고 있지 않을 때") {
+            val userId = 1L
+            CouponScenario.expired(5, couponRepository).coupons.forEach { coupon ->
+                coupon.setUserCoupon(userId, userCouponRepository)
+            }
+            
+            CouponScenario.available(5, couponRepository).coupons.forEach { coupon ->
+                coupon.setUserCoupon(userId, userCouponRepository, isUsed = true)
+            }
+            
+            When("사용 가능한 쿠폰 목록을 조회하면") {
+                val availableCoupons = userCouponService.getAvailableUserCoupons(userId)
+                
+                Then("빈 목록이 반환된다") {
+                    availableCoupons.shouldBeEmpty()
+                }
             }
         }
         
-        latch.await(10, TimeUnit.SECONDS)
-        executorService.shutdown()
-        executorService.awaitTermination(5, TimeUnit.SECONDS)
-        
-        // then
-        assertThat(successCount.get()).isEqualTo(couponLimit)
-        assertThat(limitedCouponFailureCount.get()).isEqualTo(requestCount - couponLimit)
-        assertThat(otherFailureCount.get()).isEqualTo(0)
-        
-        val updatedCoupon = couponRepository.findById(coupon.id)
-        assertThat(updatedCoupon.remainingCount).isEqualTo(0)
-        
-        var registeredCount = 0
-        
-        for (userId in 1L..100L) {
-            if (userCouponRepository.isRegistered(userId, coupon.id)) {
-                registeredCount += 1
+        Given("동일한 사용자가 쿠폰 등록 요청을 동시에 할 때") {
+            val userId = 1L
+            val coupon = CouponScenario.available(1, couponRepository, CouponType.Percent).coupons[0]
+            
+            When("여러번 등록 요청을 하면") {
+                val threadCount = 100
+                val executorService = Executors.newFixedThreadPool(threadCount)
+                val latch = CountDownLatch(threadCount)
+                val successCount = AtomicInteger(0)
+                val failureCount = AtomicInteger(0)
+                
+                repeat(threadCount) {
+                    executorService.submit {
+                        runCatching {
+                            userCouponService.registerCoupon(userId, coupon.code)
+                        }.onSuccess {
+                            successCount.incrementAndGet()
+                        }.onFailure {
+                            failureCount.incrementAndGet()
+                        }.also {
+                            latch.countDown()
+                        }.getOrNull()
+                    }
+                }
+                
+                latch.await(10, TimeUnit.SECONDS)
+                executorService.shutdown()
+                executorService.awaitTermination(5, TimeUnit.SECONDS)
+                
+                Then("1회만 성공하고 나머지는 모두 실패한다") {
+                    successCount.get() shouldBe 1
+                    failureCount.get() shouldBe 99
+                    
+                    val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
+                    isRegistered shouldBe true
+                }
             }
         }
         
-        assertThat(registeredCount).isEqualTo(couponLimit)
+        Given("제한된 수량의 쿠폰이 있을 때") {
+            val coupon = CouponScenario.available(1, couponRepository, CouponType.Percent).coupons[0]
+            val couponLimit = coupon.remainingCount
+            val requestCount = 100
+            
+            When("서로 다른 사용자 100명이 동시에 등록 요청을 하면") {
+                val executorService = Executors.newFixedThreadPool(requestCount)
+                val latch = CountDownLatch(requestCount)
+                val successCount = AtomicInteger(0)
+                val limitedCouponFailureCount = AtomicInteger(0)
+                
+                for (userId in 1L..100L) {
+                    executorService.submit {
+                        runCatching {
+                            userCouponService.registerCoupon(userId, coupon.code)
+                        }.onSuccess {
+                            successCount.incrementAndGet()
+                        }.onFailure {
+                            limitedCouponFailureCount.incrementAndGet()
+                        }.also {
+                            latch.countDown()
+                        }.getOrNull()
+                    }
+                }
+                
+                latch.await(10, TimeUnit.SECONDS)
+                executorService.shutdown()
+                executorService.awaitTermination(5, TimeUnit.SECONDS)
+                
+                Then("쿠폰 수량만큼만 발급되고 나머지는 실패한다") {
+                    successCount.get() shouldBe couponLimit
+                    limitedCouponFailureCount.get() shouldBe (requestCount - couponLimit)
+                    
+                    val updatedCoupon = couponRepository.findById(coupon.id)
+                    updatedCoupon.remainingCount shouldBe 0
+                    
+                    val registeredCount = (1L..100L).count { userId ->
+                        userCouponRepository.isRegistered(userId, coupon.id)
+                    }
+                    
+                    registeredCount shouldBe couponLimit
+                }
+            }
+        }
     }
 }

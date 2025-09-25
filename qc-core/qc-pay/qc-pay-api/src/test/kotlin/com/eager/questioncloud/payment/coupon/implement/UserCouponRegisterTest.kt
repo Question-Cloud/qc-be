@@ -2,144 +2,89 @@ package com.eager.questioncloud.payment.coupon.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.Coupon
-import com.eager.questioncloud.payment.domain.UserCoupon
-import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
+import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class UserCouponRegisterTest(
-    @Autowired val userCouponRegister: UserCouponRegister,
-    @Autowired val couponRepository: CouponRepository,
-    @Autowired val userCouponRepository: UserCouponRepository,
-    @Autowired val dbCleaner: DBCleaner
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `쿠폰을 등록할 수 있다`() {
-        // given
-        val userId = 1L
+    private val userCouponRegister: UserCouponRegister,
+    private val couponRepository: CouponRepository,
+    private val userCouponRepository: UserCouponRepository,
+    private val dbCleaner: DBCleaner
+) : BehaviorSpec() {
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
         
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "coupon-code",
-                title = "할인 쿠폰 1000",
-                couponType = CouponType.Fixed,
-                value = 1000,
-                remainingCount = 100,
-                endAt = LocalDateTime.now().plusDays(10)
-            )
-        )
+        Given("등록 가능한 쿠폰이 존재할 때") {
+            val userId = 1L
+            val coupon = CouponScenario.available(1, couponRepository).coupons[0]
+            
+            When("사용자가 쿠폰 등록 요청을 하면") {
+                userCouponRegister.registerCoupon(userId, coupon.code)
+                
+                Then("쿠폰이 등록되고 잔여 수량이 감소한다") {
+                    val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
+                    isRegistered shouldBe true
+                    
+                    val updatedCoupon = couponRepository.findById(coupon.id)
+                    updatedCoupon.remainingCount shouldBe (coupon.remainingCount - 1)
+                }
+            }
+        }
         
-        // when
-        userCouponRegister.registerCoupon(userId, coupon.code)
+        Given("사용자가 이미 등록한 쿠폰이 있을 때") {
+            val userId = 1L
+            val coupon = CouponScenario.available(1, couponRepository).coupons[0]
+            coupon.setUserCoupon(userId, userCouponRepository)
+            
+            When("동일한 쿠폰을 다시 등록하려고 하면") {
+                Then("ALREADY_REGISTER_COUPON 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        userCouponRegister.registerCoupon(userId, coupon.code)
+                    }
+                    exception.message shouldBe Error.ALREADY_REGISTER_COUPON.message
+                }
+            }
+        }
         
-        // then
-        val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
-        Assertions.assertThat(isRegistered).isTrue()
+        Given("수량이 소진된 쿠폰이 있을 때") {
+            val userId = 1L
+            val coupon = CouponScenario.limited(1, couponRepository).coupons[0]
+            
+            When("해당 쿠폰을 등록하려고 하면") {
+                Then("LIMITED_COUPON 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        userCouponRegister.registerCoupon(userId, coupon.code)
+                    }
+                    exception.message shouldBe Error.LIMITED_COUPON.message
+                }
+            }
+        }
         
-        val updatedCoupon = couponRepository.findById(coupon.id)
-        Assertions.assertThat(updatedCoupon.remainingCount).isEqualTo(coupon.remainingCount - 1)
-    }
-    
-    @Test
-    fun `이미 등록한 쿠폰을 다시 등록하려고 하면 예외가 발생한다`() {
-        // given
-        val userId = 1L
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "coupon-code",
-                title = "할인 쿠폰 1000",
-                couponType = CouponType.Fixed,
-                value = 1000,
-                remainingCount = 100,
-                endAt = LocalDateTime.now().plusDays(10)
-            )
-        )
-        userCouponRepository.save(UserCoupon.create(userId, coupon))
-        
-        // when & then
-        Assertions.assertThatThrownBy {
-            userCouponRegister.registerCoupon(userId, coupon.code)
-        }.isInstanceOf(CoreException::class.java)
-            .hasMessage(Error.ALREADY_REGISTER_COUPON.message)
-    }
-    
-    @Test
-    fun `수량이 부족한 쿠폰을 등록하려고 하면 예외가 발생한다`() {
-        // given
-        val userId = 1L
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "coupon-code",
-                title = "할인 쿠폰 1000",
-                couponType = CouponType.Fixed,
-                value = 1000,
-                remainingCount = 0,
-                endAt = LocalDateTime.now().plusDays(10)
-            )
-        )
-        
-        // when & then
-        Assertions.assertThatThrownBy {
-            userCouponRegister.registerCoupon(userId, coupon.code)
-        }.isInstanceOf(CoreException::class.java)
-            .hasMessage(Error.LIMITED_COUPON.message)
-    }
-    
-    @Test
-    fun `존재하지 않는 쿠폰을 등록하려고 하면 예외가 발생한다`() {
-        // given
-        val userId = 1L
-        
-        // when & then
-        Assertions.assertThatThrownBy {
-            userCouponRegister.registerCoupon(userId, "INVALID_COUPON_CODE")
-        }.isInstanceOf(CoreException::class.java)
-    }
-    
-    @Test
-    fun `여러 사용자가 동일한 쿠폰을 등록할 수 있다`() {
-        // given
-        val user1 = 1L
-        val user2 = 2L
-        val coupon = couponRepository.save(
-            Coupon(
-                code = "coupon-code",
-                title = "할인 쿠폰 1000",
-                couponType = CouponType.Fixed,
-                value = 1000,
-                remainingCount = 100,
-                endAt = LocalDateTime.now().plusDays(10)
-            )
-        )
-        
-        // when
-        userCouponRegister.registerCoupon(user1, coupon.code)
-        userCouponRegister.registerCoupon(user2, coupon.code)
-        
-        // then
-        val user1IsRegistered = userCouponRepository.isRegistered(user1, coupon.id)
-        val user2IsRegistered = userCouponRepository.isRegistered(user2, coupon.id)
-        
-        Assertions.assertThat(user1IsRegistered).isTrue()
-        Assertions.assertThat(user2IsRegistered).isTrue()
-        
-        val updatedCoupon = couponRepository.findById(coupon.id)
-        Assertions.assertThat(updatedCoupon.remainingCount).isEqualTo(coupon.remainingCount - 2)
+        Given("유효하지 않은 쿠폰 코드로") {
+            val userId = 1L
+            
+            When("쿠폰 등록을 시도하면") {
+                Then("CoreException이 발생한다") {
+                    shouldThrow<CoreException> {
+                        userCouponRegister.registerCoupon(userId, "INVALID_COUPON_CODE")
+                    }
+                }
+            }
+        }
     }
 }

@@ -15,18 +15,18 @@ class QuestionPaymentCoupon(
 ) {
     fun calcDiscount(originalAmount: Int): Int {
         if (couponType == CouponType.Fixed) {
-            return max((originalAmount - value).toDouble(), 0.0).toInt()
+            return max(originalAmount - value, 0)
         }
-
+        
         if (couponType == CouponType.Percent) {
             val discountRate = value / 100.0
             val discountAmount = floor(originalAmount * discountRate).toInt()
             return originalAmount - discountAmount
         }
-
+        
         throw CoreException(Error.FAIL_USE_COUPON)
     }
-
+    
     companion object {
         fun create(userCouponId: Long, coupon: Coupon): QuestionPaymentCoupon {
             return QuestionPaymentCoupon(
