@@ -1,10 +1,10 @@
 package com.eager.questioncloud.creator.handler
 
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
-import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.eager.questioncloud.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
@@ -34,59 +34,42 @@ class UpdateCreatorSalesStatisticsHandlerTest(
             dbCleaner.cleanUp()
         }
         
-        Given("Question Review Event") {
+        Given("Update CreatorSalesStatistics By QuestionPaymentEvent") {
             val userId = 1L
             
-            val creator1Id = 1L
-            val creator2Id = 2L
+            val creatorScenario = CreatorScenario.create(5)
+            creatorScenario.creatorStatisticses.forEach { creatorStatisticsRepository.save(it) }
             
-            val originCreator1Statistics = CreatorStatistics.create(creator1Id)
-            val originCreator2Statistics = CreatorStatistics.create(creator2Id)
+            var questionId = 1
             
-            val questionIds = listOf(1L, 2L, 3L)
+            val questionQueryDatas = creatorScenario.creators.flatMap { creator ->
+                val cnt = (1..5).random()
+                (1..cnt).map {
+                    Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
+                        .set(QuestionInformationQueryResult::id, questionId++)
+                        .set(QuestionInformationQueryResult::creatorId, creator.id)
+                        .sample()
+                }
+            }
             
-            creatorStatisticsRepository.save(originCreator1Statistics)
-            creatorStatisticsRepository.save(originCreator2Statistics)
-            
-            val question1QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
-                .set(QuestionInformationQueryResult::id, questionIds[0])
-                .set(QuestionInformationQueryResult::creatorId, creator1Id)
-                .sample()
-            
-            val question2QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
-                .set(QuestionInformationQueryResult::id, questionIds[1])
-                .set(QuestionInformationQueryResult::creatorId, creator1Id)
-                .sample()
-            
-            val question3QueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
-                .set(QuestionInformationQueryResult::id, questionIds[2])
-                .set(QuestionInformationQueryResult::creatorId, creator2Id)
-                .sample()
-            
-            val questionQueryDatas = mutableListOf<QuestionInformationQueryResult>()
-            questionQueryDatas.addAll(listOf(question1QueryData, question2QueryData, question3QueryData))
+            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns questionQueryDatas
             
             val event = QuestionPaymentEvent(
                 orderId = UUID.randomUUID().toString(),
                 buyerUserId = userId,
-                questionIds = questionIds,
+                questionIds = questionQueryDatas.map { it.id }.toList(),
                 amount = 10000,
                 questionPaymentCoupon = null
             )
             
-            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns questionQueryDatas
-            
             When("QuestionPaymentEvent가 발행되어 처리되면") {
                 updateCreatorSalesStatisticsHandler.updateCreatorStatistics(event)
                 Then("크리에이터 통계의 판매 관련 데이터가 갱신된다.") {
-                    val creator1Statistics = creatorStatisticsRepository.findByCreatorId(creator1Id)
-                    val creator2Statistics = creatorStatisticsRepository.findByCreatorId(creator2Id)
-                    
-                    creator1Statistics.salesCount shouldBeEqual questionQueryDatas.stream().filter { it.creatorId == creator1Id }.count()
-                        .toInt()
-                    
-                    creator2Statistics.salesCount shouldBeEqual questionQueryDatas.stream().filter { it.creatorId == creator2Id }.count()
-                        .toInt()
+                    creatorScenario.creators.forEach { creator ->
+                        val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
+                        statistics.salesCount shouldBeEqual questionQueryDatas.stream().filter { it.creatorId == creator.id }.count()
+                            .toInt()
+                    }
                 }
             }
         }

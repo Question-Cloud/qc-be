@@ -1,15 +1,11 @@
 package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.creator.domain.Creator
-import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
+import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.user.api.internal.UserQueryData
 import com.eager.questioncloud.utils.DBCleaner
-import com.eager.questioncloud.utils.Fixture
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
@@ -38,39 +34,24 @@ class CreatorInformationReaderTest(
         }
         
         Given("크리에이터 정보 조회") {
+            val creatorScenario = CreatorScenario.create(1)
+            creatorRepository.save(creatorScenario.creators[0])
+            creatorStatisticsRepository.save(creatorScenario.creatorStatisticses[0])
+            every { userQueryAPI.getUser(any()) } returns creatorScenario.creatorUserQueryDatas[0]
+            
             When("유효한 CreatorId라면") {
-                val creatorId = 1L
-                val userId = 1L
-                val savedCreator = creatorRepository.save(
-                    Fixture.fixtureMonkey.giveMeKotlinBuilder<Creator>()
-                        .set(Creator::id, creatorId)
-                        .set(Creator::userId, userId)
-                        .sample()
-                )
-                
-                val creatorStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-                    .set(CreatorStatistics::creatorId, creatorId)
-                    .sample()
-                creatorStatisticsRepository.save(creatorStatistics)
-                
-                val userQueryData = Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>()
-                    .set(UserQueryData::userId, userId)
-                    .sample()
-                
-                every { userQueryAPI.getUser(any()) } returns userQueryData
-                
-                val result = creatorInformationReader.getCreatorInformation(savedCreator.id)
+                val result = creatorInformationReader.getCreatorInformation(creatorScenario.creators[0].id)
                 
                 Then("크리에이터의 정보가 조회된다.") {
-                    result.creatorProfile.creatorId shouldBe savedCreator.id
-                    result.creatorProfile.name shouldBe userQueryData.name
-                    result.creatorProfile.profileImage shouldBe userQueryData.profileImage
-                    result.creatorProfile.mainSubject shouldBe savedCreator.mainSubject
-                    result.creatorProfile.email shouldBe userQueryData.email
-                    result.creatorProfile.introduction shouldBe savedCreator.introduction
-                    result.salesCount shouldBe creatorStatistics.salesCount
-                    result.averageRateOfReview shouldBe creatorStatistics.averageRateOfReview
-                    result.subscriberCount shouldBe creatorStatistics.subscriberCount
+                    result.creatorProfile.creatorId shouldBe creatorScenario.creators[0].id
+                    result.creatorProfile.name shouldBe creatorScenario.creatorUserQueryDatas[0].name
+                    result.creatorProfile.profileImage shouldBe creatorScenario.creatorUserQueryDatas[0].profileImage
+                    result.creatorProfile.mainSubject shouldBe creatorScenario.creators[0].mainSubject
+                    result.creatorProfile.email shouldBe creatorScenario.creatorUserQueryDatas[0].email
+                    result.creatorProfile.introduction shouldBe creatorScenario.creators[0].introduction
+                    result.salesCount shouldBe creatorScenario.creatorStatisticses[0].salesCount
+                    result.averageRateOfReview shouldBe creatorScenario.creatorStatisticses[0].averageRateOfReview
+                    result.subscriberCount shouldBe creatorScenario.creatorStatisticses[0].subscriberCount
                 }
             }
             

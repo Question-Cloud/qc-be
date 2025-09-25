@@ -2,10 +2,10 @@ package com.eager.questioncloud.creator.handler
 
 import com.eager.questioncloud.common.event.ReviewEvent
 import com.eager.questioncloud.common.event.ReviewEventType
-import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.eager.questioncloud.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
@@ -36,76 +36,80 @@ class UpdateCreatorReviewStatisticsHandlerTest(
         }
         
         Given("Register Review Event") {
-            val creatorId = 1L
-            val questionId = 1L
-            val originStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-                .set(CreatorStatistics::creatorId, creatorId)
-                .sample()
+            val creatorScenario = CreatorScenario.create(1)
+            val creator = creatorScenario.creators[0]
+            val originStatistics = creatorScenario.creatorStatisticses[0]
             creatorStatisticsRepository.save(originStatistics)
+            
+            val questionId = 1L
             val reviewEvent = ReviewEvent.create(questionId, 3, ReviewEventType.REGISTER)
             
             every {
                 questionQueryAPI.getQuestionInformation(any<Long>())
             } returns Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
                 .set(QuestionInformationQueryResult::id, questionId)
-                .set(QuestionInformationQueryResult::creatorId, creatorId)
+                .set(QuestionInformationQueryResult::creatorId, creator.id)
                 .sample()
             
             When("Register Review Event가 발행되어 처리되면") {
                 updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 갱신된다.") {
-                    val statistics = creatorStatisticsRepository.findByCreatorId(creatorId)
+                    val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     abs(originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
                 }
             }
         }
         
         Given("Modify Review Event") {
-            val creatorId = 1L
-            val questionId = 1L
-            val originStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-                .set(CreatorStatistics::creatorId, creatorId)
-                .sample()
+            val creatorScenario = CreatorScenario.create(1)
+            val creator = creatorScenario.creators[0]
+            val originStatistics = creatorScenario.creatorStatisticses[0]
             creatorStatisticsRepository.save(originStatistics)
-            val reviewEvent = ReviewEvent.create(questionId, 3, ReviewEventType.MODIFY)
+            
+            val questionId = 1L
+            
+            val varianceRate = 3
+            val reviewEvent = ReviewEvent.create(questionId, varianceRate, ReviewEventType.MODIFY)
             
             every {
                 questionQueryAPI.getQuestionInformation(any<Long>())
             } returns Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
                 .set(QuestionInformationQueryResult::id, questionId)
-                .set(QuestionInformationQueryResult::creatorId, creatorId)
+                .set(QuestionInformationQueryResult::creatorId, creator.id)
                 .sample()
             
             When("Modify Review Event가 발행되어 처리되면") {
                 updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 갱신된다.") {
-                    val statistics = creatorStatisticsRepository.findByCreatorId(creatorId)
-                    abs(originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
+                    val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
+                    (statistics.totalReviewRate - originStatistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
                 }
             }
         }
         
         Given("Delete Review Event") {
-            val creatorId = 1L
-            val questionId = 1L
-            val originStatistics = Fixture.fixtureMonkey.giveMeKotlinBuilder<CreatorStatistics>()
-                .set(CreatorStatistics::creatorId, creatorId)
-                .sample()
+            val creatorScenario = CreatorScenario.create(1)
+            val creator = creatorScenario.creators[0]
+            val originStatistics = creatorScenario.creatorStatisticses[0]
             creatorStatisticsRepository.save(originStatistics)
-            val reviewEvent = ReviewEvent.create(questionId, 3, ReviewEventType.DELETE)
+            
+            val questionId = 1L
+            
+            val varianceRate = 3
+            val reviewEvent = ReviewEvent.create(questionId, varianceRate, ReviewEventType.DELETE)
             
             every {
                 questionQueryAPI.getQuestionInformation(any<Long>())
             } returns Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
                 .set(QuestionInformationQueryResult::id, questionId)
-                .set(QuestionInformationQueryResult::creatorId, creatorId)
+                .set(QuestionInformationQueryResult::creatorId, creator.id)
                 .sample()
             
             When("Delete Review Event가 발행되어 처리되면") {
                 updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 데이터가 갱신된다.") {
-                    val statistics = creatorStatisticsRepository.findByCreatorId(creatorId)
-                    abs(originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
+                    val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
+                    (originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
                 }
             }
         }
