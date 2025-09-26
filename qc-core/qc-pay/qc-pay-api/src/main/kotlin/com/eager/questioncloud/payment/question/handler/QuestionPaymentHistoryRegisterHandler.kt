@@ -2,10 +2,8 @@ package com.eager.questioncloud.payment.question.handler
 
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.repository.QuestionPaymentHistoryRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
@@ -39,22 +37,12 @@ class QuestionPaymentHistoryRegisterHandler(
             )
         }
         
-        val couponData = event.questionPaymentCoupon
-        
         questionPaymentHistoryRepository.save(
             QuestionPaymentHistory.create(
                 event.orderId,
                 event.buyerUserId,
                 orders,
-                couponData?.let {
-                    QuestionPaymentCoupon(
-                        couponData.userCouponId,
-                        couponData.couponId,
-                        couponData.title,
-                        CouponType.valueOf(couponData.couponType),
-                        couponData.value
-                    )
-                },
+                event.couponUsageInformation,
                 event.amount
             )
         )

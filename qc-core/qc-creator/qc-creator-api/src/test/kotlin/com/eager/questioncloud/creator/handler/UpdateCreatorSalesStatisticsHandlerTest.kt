@@ -1,5 +1,6 @@
 package com.eager.questioncloud.creator.handler
 
+import com.eager.questioncloud.common.event.CouponUsageInformation
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
@@ -59,7 +60,7 @@ class UpdateCreatorSalesStatisticsHandlerTest(
                 buyerUserId = userId,
                 questionIds = questionQueryDatas.map { it.id }.toList(),
                 amount = 10000,
-                questionPaymentCoupon = null
+                couponUsageInformation = CouponUsageInformation("할인 미적용", 0)
             )
             
             When("QuestionPaymentEvent가 발행되어 처리되면") {

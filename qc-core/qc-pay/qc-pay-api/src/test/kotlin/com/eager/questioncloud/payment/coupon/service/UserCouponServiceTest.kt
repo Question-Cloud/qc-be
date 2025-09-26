@@ -1,9 +1,9 @@
 package com.eager.questioncloud.payment.coupon.service
 
-import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.save
 import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
@@ -40,11 +40,13 @@ class UserCouponServiceTest(
             val availableCouponCount = 10
             val unavailableCouponCount = 5
             
-            CouponScenario.available(availableCouponCount, couponRepository).coupons.forEach { coupon ->
+            (1..availableCouponCount).forEach { _ ->
+                val coupon = CouponScenario.available().coupon.save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
-            CouponScenario.expired(unavailableCouponCount, couponRepository).coupons.forEach { coupon ->
+            (1..unavailableCouponCount).forEach { _ ->
+                val coupon = CouponScenario.expired().coupon.save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
@@ -59,12 +61,15 @@ class UserCouponServiceTest(
         
         Given("사용자가 사용 가능한 쿠폰을 보유하고 있지 않을 때") {
             val userId = 1L
-            CouponScenario.expired(5, couponRepository).coupons.forEach { coupon ->
+            val couponCount = 5
+            (1..couponCount).forEach { _ ->
+                val coupon = CouponScenario.expired().coupon.save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
-            CouponScenario.available(5, couponRepository).coupons.forEach { coupon ->
-                coupon.setUserCoupon(userId, userCouponRepository, isUsed = true)
+            (1..couponCount).forEach { _ ->
+                val coupon = CouponScenario.available().coupon.save(couponRepository)
+                coupon.setUserCoupon(userId, userCouponRepository, true)
             }
             
             When("사용 가능한 쿠폰 목록을 조회하면") {
@@ -78,7 +83,7 @@ class UserCouponServiceTest(
         
         Given("동일한 사용자가 쿠폰 등록 요청을 동시에 할 때") {
             val userId = 1L
-            val coupon = CouponScenario.available(1, couponRepository, CouponType.Percent).coupons[0]
+            val coupon = CouponScenario.available().coupon.save(couponRepository)
             
             When("여러번 등록 요청을 하면") {
                 val threadCount = 100
@@ -116,7 +121,7 @@ class UserCouponServiceTest(
         }
         
         Given("제한된 수량의 쿠폰이 있을 때") {
-            val coupon = CouponScenario.available(1, couponRepository, CouponType.Percent).coupons[0]
+            val coupon = CouponScenario.available().coupon.save(couponRepository)
             val couponLimit = coupon.remainingCount
             val requestCount = 100
             

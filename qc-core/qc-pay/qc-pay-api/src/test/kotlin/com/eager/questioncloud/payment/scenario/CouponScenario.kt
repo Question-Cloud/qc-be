@@ -10,60 +10,50 @@ import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import java.time.LocalDateTime
 
 class CouponScenario(
-    val coupons: List<Coupon>,
+    val coupon: Coupon,
 ) {
     companion object {
-        fun available(count: Int, repo: CouponRepository, type: CouponType = CouponType.Fixed): CouponScenario {
+        fun available(type: CouponType = CouponType.Fixed): CouponScenario {
             val value = if (type == CouponType.Fixed) 1000 else 10
-            
-            val coupons = (1..count).map {
-                repo.save(
-                    Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                        .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
-                        .set(Coupon::remainingCount, 10)
-                        .set(Coupon::value, value)
-                        .set(Coupon::couponType, type)
-                        .sample()
-                )
-            }
-            
-            return CouponScenario(coupons)
+            val coupon = Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
+                .set(Coupon::endAt, LocalDateTime.now().plusDays(10))
+                .set(Coupon::remainingCount, 10)
+                .set(Coupon::value, value)
+                .set(Coupon::couponType, type)
+                .sample()
+            return CouponScenario(coupon)
         }
         
-        fun expired(count: Int, repo: CouponRepository, type: CouponType = CouponType.Fixed): CouponScenario {
+        fun expired(type: CouponType = CouponType.Fixed): CouponScenario {
             val value = if (type == CouponType.Fixed) 1000 else 10
             
-            val coupons = (1..count).map {
-                repo.save(
-                    Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                        .set(Coupon::endAt, LocalDateTime.now().minusDays(10))
-                        .set(Coupon::remainingCount, 10)
-                        .set(Coupon::value, value)
-                        .set(Coupon::couponType, type)
-                        .sample()
-                )
-            }
+            val coupon = Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
+                .set(Coupon::endAt, LocalDateTime.now().minusDays(10))
+                .set(Coupon::remainingCount, 10)
+                .set(Coupon::value, value)
+                .set(Coupon::couponType, type)
+                .sample()
             
-            return CouponScenario(coupons)
+            return CouponScenario(coupon)
         }
         
-        fun limited(count: Int, repo: CouponRepository, type: CouponType = CouponType.Fixed): CouponScenario {
+        fun limited(type: CouponType = CouponType.Fixed): CouponScenario {
             val value = if (type == CouponType.Fixed) 1000 else 10
             
-            val coupons = (1..count).map {
-                repo.save(
-                    Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
-                        .set(Coupon::endAt, LocalDateTime.now().minusDays(10))
-                        .set(Coupon::remainingCount, 0)
-                        .set(Coupon::value, value)
-                        .set(Coupon::couponType, type)
-                        .sample()
-                )
-            }
+            val coupont = Fixture.fixtureMonkey.giveMeKotlinBuilder<Coupon>()
+                .set(Coupon::endAt, LocalDateTime.now().minusDays(10))
+                .set(Coupon::remainingCount, 0)
+                .set(Coupon::value, value)
+                .set(Coupon::couponType, type)
+                .sample()
             
-            return CouponScenario(coupons)
+            return CouponScenario(coupont)
         }
     }
+}
+
+fun Coupon.save(couponRepository: CouponRepository): Coupon {
+    return couponRepository.save(this)
 }
 
 fun Coupon.setUserCoupon(userId: Long, userCouponRepository: UserCouponRepository, isUsed: Boolean = false): UserCoupon {

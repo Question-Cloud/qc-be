@@ -1,12 +1,15 @@
 package com.eager.questioncloud.payment.scenario
 
-import com.eager.questioncloud.payment.domain.*
+import com.eager.questioncloud.payment.domain.Coupon
+import com.eager.questioncloud.payment.domain.QuestionOrder
+import com.eager.questioncloud.payment.domain.QuestionOrderItem
+import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 
 class QuestionPaymentScenario(
-    val questionPayment: QuestionPayment,
+    val order: QuestionOrder,
     val questionInformationQueryResult: List<QuestionInformationQueryResult>,
 ) {
     companion object {
@@ -18,19 +21,12 @@ class QuestionPaymentScenario(
                     .sample()
             }
             
-            val questionOrder = QuestionOrder.createOrder(
+            val order = QuestionOrder.createOrder(
                 questionInformationQueryResult
                     .map { QuestionOrderItem(questionId = it.id, price = it.price) }
             )
             
-            val questionPaymentCoupon = if (userCoupon != null && coupon != null) {
-                QuestionPaymentCoupon.create(userCoupon.id, coupon)
-            } else null
-            
-            return QuestionPaymentScenario(
-                QuestionPayment.create(userId, questionPaymentCoupon, questionOrder),
-                questionInformationQueryResult
-            )
+            return QuestionPaymentScenario(order, questionInformationQueryResult)
         }
     }
 }

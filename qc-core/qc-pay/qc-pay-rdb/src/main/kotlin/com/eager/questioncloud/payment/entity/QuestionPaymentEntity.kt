@@ -23,8 +23,8 @@ class QuestionPaymentEntity(
             return QuestionPaymentEntity(
                 questionPayment.order.orderId,
                 questionPayment.userId,
-                questionPayment.questionPaymentCoupon?.userCouponId,
-                questionPayment.questionPaymentCoupon?.couponId,
+                questionPayment.questionPaymentCoupon.userCouponId,
+                questionPayment.questionPaymentCoupon.couponId,
                 questionPayment.amount,
                 questionPayment.status,
                 questionPayment.createdAt,

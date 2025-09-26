@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
+import com.eager.questioncloud.common.event.CouponUsageInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
@@ -14,9 +14,8 @@ class QuestionPaymentHistoryDocument(
     val orderId: String,
     val userId: Long,
     val orders: List<QuestionPaymentHistoryOrder>,
-    val coupon: QuestionPaymentCoupon?,
+    val coupon: CouponUsageInformation,
     val amount: Int,
-    val isUsedCoupon: Boolean,
     val status: QuestionPaymentStatus,
     val createdAt: LocalDateTime,
 ) {
@@ -27,7 +26,6 @@ class QuestionPaymentHistoryDocument(
             orders,
             coupon,
             amount,
-            isUsedCoupon,
             status,
             createdAt
         )
@@ -41,7 +39,6 @@ class QuestionPaymentHistoryDocument(
                 questionPaymentHistory.orders,
                 questionPaymentHistory.coupon,
                 questionPaymentHistory.amount,
-                questionPaymentHistory.isUsedCoupon,
                 questionPaymentHistory.status,
                 questionPaymentHistory.createdAt,
             )

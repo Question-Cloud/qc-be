@@ -1,8 +1,7 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
+import com.eager.questioncloud.common.event.CouponUsageInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
 import org.bson.Document
 import org.springframework.core.convert.converter.Converter
@@ -19,7 +18,6 @@ class QuestionPaymentHistoryDocumentReadConverter :
             orders = (convertOrders(source.getList("orders", Document::class.java))),
             coupon = (convertCoupon(source)),
             amount = (source.getInteger("amount")),
-            isUsedCoupon = (source.getBoolean("isUsedCoupon")),
             status = (QuestionPaymentStatus.valueOf(source.getString("status"))),
             createdAt = (convertDate(source.get("createdAt", Date::class.java)))
         )
@@ -42,20 +40,10 @@ class QuestionPaymentHistoryDocumentReadConverter :
             .toList()
     }
     
-    private fun convertCoupon(source: Document): QuestionPaymentCoupon? {
-        if (!source.getBoolean("isUsedCoupon", false)) {
-            return null
-        }
-        
+    private fun convertCoupon(source: Document): CouponUsageInformation {
         val coupon = source.get("coupon", Document::class.java)
         
-        return QuestionPaymentCoupon(
-            coupon.getLong("userCouponId"),
-            coupon.getLong("couponId"),
-            coupon.getString("title"),
-            CouponType.valueOf(coupon.getString("couponType")),
-            coupon.getInteger("value")
-        )
+        return CouponUsageInformation(coupon.getString("title"), coupon.getInteger("value"))
     }
     
     private fun convertDate(date: Date): LocalDateTime {
