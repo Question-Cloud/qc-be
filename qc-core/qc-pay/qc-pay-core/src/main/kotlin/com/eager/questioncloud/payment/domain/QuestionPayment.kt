@@ -1,41 +1,46 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.common.event.CouponUsageInformation
+import com.eager.questioncloud.common.event.DiscountInformation
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
 import java.time.LocalDateTime
 
 class QuestionPayment(
     var order: QuestionOrder,
     var userId: Long,
-    var questionPaymentCoupon: QuestionPaymentCoupon,
-    var amount: Int,
+    var discountPolicy: MutableList<DiscountPolicy> = mutableListOf(),
+    var originalAmount: Int,
+    var realAmount: Int,
     var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    fun applyCoupon() {
-        amount = questionPaymentCoupon.calcDiscount(amount)
+    fun applyDiscountPolicy() {
+        realAmount -= discountPolicy.sumOf { it.getDiscountAmount(originalAmount) }
+        
+        if (realAmount < 0) {
+            throw CoreException(Error.WRONG_COUPON)
+        }
     }
     
-    fun getCouponUsageInformation(): CouponUsageInformation {
-        return CouponUsageInformation(
-            questionPaymentCoupon.getCouponName(),
-            order.calcAmount() - questionPaymentCoupon.calcDiscount(amount)
-        )
+    fun getDiscountInformation(): List<DiscountInformation> {
+        return discountPolicy.map { DiscountInformation(it.getPolicyName(), it.getDiscountAmount(originalAmount)) }
     }
     
     companion object {
         fun payment(
             userId: Long,
-            questionPaymentCoupon: QuestionPaymentCoupon,
+            coupon: DiscountPolicy,
             order: QuestionOrder
         ): QuestionPayment {
             val payment = QuestionPayment(
                 order = order,
                 userId = userId,
-                questionPaymentCoupon = questionPaymentCoupon,
-                amount = order.calcAmount(),
+                originalAmount = order.calcAmount(),
+                realAmount = order.calcAmount()
             )
-            payment.applyCoupon()
+            payment.discountPolicy.add(coupon)
+            payment.applyDiscountPolicy()
             return payment
         }
     }

@@ -11,9 +11,8 @@ import java.time.LocalDateTime
 class QuestionPaymentEntity(
     @Id val orderId: String,
     @Column val userId: Long,
-    @Column val userCouponId: Long?,
-    @Column val couponId: Long?,
-    @Column val amount: Int,
+    @Column val realAmount: Int,
+    @Column val originalAmount: Int,
     @Enumerated(EnumType.STRING) @Column val status: QuestionPaymentStatus,
     @Column val createdAt: LocalDateTime,
     isNewEntity: Boolean
@@ -23,9 +22,8 @@ class QuestionPaymentEntity(
             return QuestionPaymentEntity(
                 questionPayment.order.orderId,
                 questionPayment.userId,
-                questionPayment.questionPaymentCoupon.userCouponId,
-                questionPayment.questionPaymentCoupon.couponId,
-                questionPayment.amount,
+                questionPayment.realAmount,
+                questionPayment.originalAmount,
                 questionPayment.status,
                 questionPayment.createdAt,
                 true

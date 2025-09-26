@@ -2,7 +2,7 @@ package com.eager.questioncloud.cart.handler
 
 import com.eager.questioncloud.cart.domain.CartItem
 import com.eager.questioncloud.cart.repository.CartItemRepository
-import com.eager.questioncloud.common.event.CouponUsageInformation
+import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
@@ -44,7 +44,7 @@ class CartClearHandlerTest(
                 buyerUserId = userId,
                 questionIds = listOf(boughtQuestionId1, boughtQuestionId2),
                 amount = 10000,
-                couponUsageInformation = CouponUsageInformation("할인 미적용", 0)
+                discountInformation = listOf(DiscountInformation("할인 미적용", 0))
             )
             
             When("QuestionPaymentEvent를 처리하면") {

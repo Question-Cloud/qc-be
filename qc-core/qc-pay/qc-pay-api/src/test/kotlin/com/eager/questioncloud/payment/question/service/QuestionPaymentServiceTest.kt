@@ -4,10 +4,10 @@ import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.FixedCouponDiscount
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
+import com.eager.questioncloud.payment.domain.NoDiscount
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
+import com.eager.questioncloud.payment.question.implement.CouponPolicyProcessor
 import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
-import com.eager.questioncloud.payment.question.implement.QuestionPaymentCouponSelector
 import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.utils.DBCleaner
@@ -37,7 +37,7 @@ class QuestionPaymentServiceTest(
     private lateinit var questionOrderGenerator: QuestionOrderGenerator
     
     @MockkBean
-    private lateinit var questionPaymentCouponSelector: QuestionPaymentCouponSelector
+    private lateinit var couponPolicyProcessor: CouponPolicyProcessor
     
     @MockkBean
     private lateinit var pointCommandAPI: PointCommandAPI
@@ -52,16 +52,16 @@ class QuestionPaymentServiceTest(
         
         Given("사용자가 쿠폰 없이 문제를 결제할 때") {
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(userId, 10)
+            val questionPaymentScenario = QuestionPaymentScenario.create(10)
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, null)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
-                questionPaymentCouponSelector.select(
+                couponPolicyProcessor.select(
                     any(),
                     any()
                 )
-            } returns QuestionPaymentCoupon.noDiscount()
+            } returns NoDiscount()
             
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
@@ -70,7 +70,7 @@ class QuestionPaymentServiceTest(
                 val paymentResult = questionPaymentService.payment(command)
                 
                 Then("정가로 결제가 완료되고 이벤트가 발행된다") {
-                    paymentResult.amount shouldBeEqual paymentResult.order.calcAmount()
+                    paymentResult.realAmount shouldBeEqual paymentResult.order.calcAmount()
                     verify(exactly(1)) { eventPublisher.publish(any()) }
                 }
             }
@@ -78,17 +78,17 @@ class QuestionPaymentServiceTest(
         
         Given("사용자가 쿠폰을 사용해서 문제를 결제할 때") {
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(userId, 10)
+            val questionPaymentScenario = QuestionPaymentScenario.create(10)
             val couponId = 1L
             val userCouponId = 1L
             val discountAmount = 1000
             val discountTitle = "FIXED COUPON"
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
-            val questionPaymentCoupon = QuestionPaymentCoupon(FixedCouponDiscount(discountTitle, discountAmount), couponId, userCouponId)
+            val questionPaymentCoupon = FixedCouponDiscount(couponId, userCouponId, discountTitle, discountAmount)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
-                questionPaymentCouponSelector.select(
+                couponPolicyProcessor.select(
                     any(),
                     any()
                 )
@@ -100,7 +100,7 @@ class QuestionPaymentServiceTest(
                 val paymentResult = questionPaymentService.payment(command)
                 
                 Then("할인된 금액으로 결제가 완료되고 이벤트가 발행된다") {
-                    paymentResult.amount shouldBeEqual questionPaymentCoupon.calcDiscount(questionPaymentScenario.order.calcAmount())
+                    paymentResult.realAmount shouldBeEqual paymentResult.originalAmount - discountAmount
                     verify(exactly(1)) { eventPublisher.publish(any()) }
                 }
             }
@@ -108,18 +108,18 @@ class QuestionPaymentServiceTest(
         
         Given("사용자가 포인트가 부족할 때") {
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(userId, 10)
+            val questionPaymentScenario = QuestionPaymentScenario.create(10)
             val userCouponId = 1L
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             
             every {
-                questionPaymentCouponSelector.select(
+                couponPolicyProcessor.select(
                     any(),
                     any()
                 )
-            } returns QuestionPaymentCoupon.noDiscount()
+            } returns NoDiscount()
             every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
             
             When("결제를 요청하면") {

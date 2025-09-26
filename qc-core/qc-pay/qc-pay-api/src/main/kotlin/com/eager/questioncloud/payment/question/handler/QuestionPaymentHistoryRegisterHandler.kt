@@ -42,7 +42,7 @@ class QuestionPaymentHistoryRegisterHandler(
                 event.orderId,
                 event.buyerUserId,
                 orders,
-                event.couponUsageInformation,
+                event.discountInformation,
                 event.amount
             )
         )

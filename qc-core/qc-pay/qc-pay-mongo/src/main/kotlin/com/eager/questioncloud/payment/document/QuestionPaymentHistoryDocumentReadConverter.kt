@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.common.event.CouponUsageInformation
+import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
 import org.bson.Document
@@ -16,7 +16,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
             orderId = (source.getString("_id")),
             userId = (source.getLong("userId")),
             orders = (convertOrders(source.getList("orders", Document::class.java))),
-            coupon = (convertCoupon(source)),
+            discountInformation = (convertDiscountInformation(source.getList("discountInformation", Document::class.java))),
             amount = (source.getInteger("amount")),
             status = (QuestionPaymentStatus.valueOf(source.getString("status"))),
             createdAt = (convertDate(source.get("createdAt", Date::class.java)))
@@ -40,10 +40,8 @@ class QuestionPaymentHistoryDocumentReadConverter :
             .toList()
     }
     
-    private fun convertCoupon(source: Document): CouponUsageInformation {
-        val coupon = source.get("coupon", Document::class.java)
-        
-        return CouponUsageInformation(coupon.getString("title"), coupon.getInteger("value"))
+    private fun convertDiscountInformation(discountInformation: List<Document>): List<DiscountInformation> {
+        return discountInformation.map { DiscountInformation(it.getString("title"), it.getInteger("value")) }
     }
     
     private fun convertDate(date: Date): LocalDateTime {

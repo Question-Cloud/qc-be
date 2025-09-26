@@ -1,10 +1,10 @@
 package com.eager.questioncloud.payment.question.controller
 
-import com.eager.questioncloud.common.event.CouponUsageInformation
+import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.domain.NoDiscount
 import com.eager.questioncloud.payment.domain.QuestionPayment
-import com.eager.questioncloud.payment.domain.QuestionPaymentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
@@ -58,10 +58,10 @@ class QuestionPaymentControllerDocument(
                 userCouponId = 1L
             )
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(userId, questionPaymentRequest.questionIds.size)
+            val questionPaymentScenario = QuestionPaymentScenario.create(questionPaymentRequest.questionIds.size)
             every { questionPaymentService.payment(any()) } returns QuestionPayment.payment(
                 userId,
-                QuestionPaymentCoupon.noDiscount(),
+                NoDiscount(),
                 questionPaymentScenario.order
             )
             
@@ -243,7 +243,7 @@ class QuestionPaymentControllerDocument(
                     orderId = "order-123456",
                     userId = 1L,
                     orders = sampleOrders,
-                    coupon = CouponUsageInformation("coupon", 1000),
+                    discountInformation = listOf(DiscountInformation("coupon", 1000)),
                     amount = 7200,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
@@ -252,7 +252,7 @@ class QuestionPaymentControllerDocument(
                     orderId = "order-789012",
                     userId = 1L,
                     orders = listOf(sampleOrders[0]),
-                    coupon = CouponUsageInformation("coupon", 3000),
+                    discountInformation = listOf(DiscountInformation("coupon", 3000)),
                     amount = 5000,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
@@ -298,9 +298,9 @@ class QuestionPaymentControllerDocument(
                                         fieldWithPath("result[].orders[].subject").description("과목 (Mathematics, Physics, Chemistry, Biology, EarthScience)"),
                                         fieldWithPath("result[].orders[].mainCategory").description("대분류"),
                                         fieldWithPath("result[].orders[].subCategory").description("소분류"),
-                                        fieldWithPath("result[].coupon").description("쿠폰 정보"),
-                                        fieldWithPath("result[].coupon.title").description("쿠폰 제목"),
-                                        fieldWithPath("result[].coupon.value").description("쿠폰 값 (할인율 또는 할인금액)"),
+                                        fieldWithPath("result[].discountInformation[]").description("할인 정보"),
+                                        fieldWithPath("result[].discountInformation[].title").description("할인 종류"),
+                                        fieldWithPath("result[].discountInformation[].value").description("할인금액"),
                                         fieldWithPath("result[].amount").description("최종 결제 금액"),
                                         fieldWithPath("result[].status").description("결제 상태 (SUCCESS, FAIL)"),
                                         fieldWithPath("result[].createdAt").description("구매일시")
