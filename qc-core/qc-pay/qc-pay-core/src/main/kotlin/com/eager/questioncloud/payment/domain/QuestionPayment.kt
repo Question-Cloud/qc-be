@@ -15,12 +15,14 @@ class QuestionPayment(
     var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    fun applyDiscountPolicy() {
-        realAmount -= discountPolicy.sumOf { it.getDiscountAmount(originalAmount) }
+    fun applyDiscountPolicy(policy: DiscountPolicy) {
+        realAmount -= policy.getDiscountAmount(originalAmount)
         
         if (realAmount < 0) {
             throw CoreException(Error.WRONG_COUPON)
         }
+        
+        discountPolicy.add(policy)
     }
     
     fun getDiscountInformation(): List<DiscountInformation> {
@@ -28,20 +30,16 @@ class QuestionPayment(
     }
     
     companion object {
-        fun payment(
+        fun create(
             userId: Long,
-            coupon: DiscountPolicy,
             order: QuestionOrder
         ): QuestionPayment {
-            val payment = QuestionPayment(
+            return QuestionPayment(
                 order = order,
                 userId = userId,
                 originalAmount = order.calcAmount(),
                 realAmount = order.calcAmount()
             )
-            payment.discountPolicy.add(coupon)
-            payment.applyDiscountPolicy()
-            return payment
         }
     }
 }

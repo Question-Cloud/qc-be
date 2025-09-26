@@ -61,9 +61,10 @@ class UserCouponRepositoryImpl(
     }
     
     @Transactional
-    override fun use(userCouponId: Long): Boolean {
+    override fun use(userCouponId: Long, orderId: String): Boolean {
         return jpaQueryFactory.update(userCouponEntity)
             .set(userCouponEntity.isUsed, true)
+            .set(userCouponEntity.usedOrderId, orderId)
             .where(
                 userCouponEntity.id.eq(userCouponId),
                 userCouponEntity.isUsed.isFalse()

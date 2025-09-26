@@ -14,7 +14,7 @@ interface UserCouponRepository {
     
     fun getAvailableUserCoupons(userId: Long): List<AvailableUserCoupon>
     
-    fun use(userCouponId: Long): Boolean
+    fun use(userCouponId: Long, orderId: String): Boolean
     
     fun deleteAllInBatch()
 }

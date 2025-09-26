@@ -4,30 +4,31 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.*
 import com.eager.questioncloud.payment.enums.CouponType
+import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import org.springframework.stereotype.Component
 
 @Component
-class CouponPolicyProcessor(
+class CouponPolicyApplier(
     private val userCouponRepository: UserCouponRepository,
     private val couponRepository: CouponRepository,
 ) {
-    fun select(userCouponId: Long?, userId: Long): DiscountPolicy {
-        if (userCouponId == null) {
-            return NoDiscount()
+    fun apply(questionPayment: QuestionPayment, command: QuestionPaymentCommand) {
+        if (command.userCouponId == null) {
+            return questionPayment.applyDiscountPolicy(NoDiscount())
         }
         
-        val userCoupon = userCouponRepository.getUserCoupon(userCouponId, userId)
+        val userCoupon = userCouponRepository.getUserCoupon(command.userCouponId, command.userId)
         userCoupon.validate()
         
-        if (!userCouponRepository.use(userCoupon.id)) {
+        if (!userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)) {
             throw CoreException(Error.FAIL_USE_COUPON)
         }
         
         val coupon = couponRepository.findById(userCoupon.couponId)
         
-        return createCouponDiscountPolicy(coupon, userCoupon)
+        questionPayment.applyDiscountPolicy(createCouponDiscountPolicy(coupon, userCoupon))
     }
     
     private fun createCouponDiscountPolicy(coupon: Coupon, userCoupon: UserCoupon): DiscountPolicy {

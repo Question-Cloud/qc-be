@@ -5,8 +5,9 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.FixedCouponDiscount
 import com.eager.questioncloud.payment.domain.NoDiscount
+import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.question.implement.CouponPolicyProcessor
+import com.eager.questioncloud.payment.question.implement.CouponPolicyApplier
 import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
 import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
@@ -37,7 +38,7 @@ class QuestionPaymentServiceTest(
     private lateinit var questionOrderGenerator: QuestionOrderGenerator
     
     @MockkBean
-    private lateinit var couponPolicyProcessor: CouponPolicyProcessor
+    private lateinit var couponPolicyApplier: CouponPolicyApplier
     
     @MockkBean
     private lateinit var pointCommandAPI: PointCommandAPI
@@ -57,11 +58,11 @@ class QuestionPaymentServiceTest(
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
-                couponPolicyProcessor.select(
-                    any(),
-                    any()
-                )
-            } returns NoDiscount()
+                couponPolicyApplier.apply(any(), any())
+            } answers {
+                val questionPayment = firstArg<QuestionPayment>()
+                questionPayment.applyDiscountPolicy(NoDiscount())
+            }
             
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
@@ -84,15 +85,15 @@ class QuestionPaymentServiceTest(
             val discountAmount = 1000
             val discountTitle = "FIXED COUPON"
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
-            val questionPaymentCoupon = FixedCouponDiscount(couponId, userCouponId, discountTitle, discountAmount)
+            val fixedCouponPolicy = FixedCouponDiscount(couponId, userCouponId, discountTitle, discountAmount)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
-                couponPolicyProcessor.select(
-                    any(),
-                    any()
-                )
-            } returns questionPaymentCoupon
+                couponPolicyApplier.apply(any(), any())
+            } answers {
+                val questionPayment = firstArg<QuestionPayment>()
+                questionPayment.applyDiscountPolicy(fixedCouponPolicy)
+            }
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
             
@@ -115,11 +116,11 @@ class QuestionPaymentServiceTest(
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             
             every {
-                couponPolicyProcessor.select(
-                    any(),
-                    any()
-                )
-            } returns NoDiscount()
+                couponPolicyApplier.apply(any(), any())
+            } answers {
+                val questionPayment = firstArg<QuestionPayment>()
+                questionPayment.applyDiscountPolicy(NoDiscount())
+            }
             every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
             
             When("결제를 요청하면") {

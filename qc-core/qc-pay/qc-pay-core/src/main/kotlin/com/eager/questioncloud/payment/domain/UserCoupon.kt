@@ -9,23 +9,20 @@ class UserCoupon(
     var userId: Long,
     var couponId: Long,
     var isUsed: Boolean,
+    var usedOrderId: String? = null,
     var createdAt: LocalDateTime,
-    var endAt: LocalDateTime
+    var endAt: LocalDateTime,
 ) {
     fun validate() {
         if (endAt.isBefore(LocalDateTime.now())) {
             throw CoreException(Error.EXPIRED_COUPON)
         }
-
+        
         if (this.isUsed) {
             throw CoreException(Error.FAIL_USE_COUPON)
         }
     }
-
-    fun rollback() {
-        this.isUsed = false
-    }
-
+    
     companion object {
         fun create(userId: Long, coupon: Coupon): UserCoupon {
             if (coupon.endAt.isBefore(LocalDateTime.now())) {

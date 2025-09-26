@@ -3,7 +3,6 @@ package com.eager.questioncloud.payment.question.controller
 import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.NoDiscount
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
@@ -59,9 +58,8 @@ class QuestionPaymentControllerDocument(
             )
             val userId = 1L
             val questionPaymentScenario = QuestionPaymentScenario.create(questionPaymentRequest.questionIds.size)
-            every { questionPaymentService.payment(any()) } returns QuestionPayment.payment(
+            every { questionPaymentService.payment(any()) } returns QuestionPayment.create(
                 userId,
-                NoDiscount(),
                 questionPaymentScenario.order
             )
             

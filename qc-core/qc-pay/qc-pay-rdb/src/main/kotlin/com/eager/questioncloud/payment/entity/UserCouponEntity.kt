@@ -11,11 +11,12 @@ class UserCouponEntity(
     @Column var userId: Long,
     @Column var couponId: Long,
     @Column var isUsed: Boolean,
+    @Column var usedOrderId: String? = null,
     @Column var createdAt: LocalDateTime,
     @Column var endAt: LocalDateTime
 ) {
     fun toModel(): UserCoupon {
-        return UserCoupon(id, userId, couponId, isUsed, createdAt, endAt)
+        return UserCoupon(id, userId, couponId, isUsed, usedOrderId, createdAt, endAt)
     }
     
     companion object {
@@ -25,6 +26,7 @@ class UserCouponEntity(
                 userCoupon.userId,
                 userCoupon.couponId,
                 userCoupon.isUsed,
+                userCoupon.usedOrderId,
                 userCoupon.createdAt,
                 userCoupon.endAt
             )
