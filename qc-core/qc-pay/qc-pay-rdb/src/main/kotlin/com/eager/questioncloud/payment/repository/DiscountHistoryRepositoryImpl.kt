@@ -11,4 +11,9 @@ class DiscountHistoryRepositoryImpl(
     override fun saveAll(discountHistory: List<DiscountHistory>) {
         discountHistoryJpaRepository.saveAll(discountHistory.map { DiscountHistoryEntity.from(it) })
     }
+    
+    override fun findByOrderId(orderId: String): List<DiscountHistory> {
+        return discountHistoryJpaRepository.findByOrderId(orderId)
+            .map { it.toModel() }
+    }
 }

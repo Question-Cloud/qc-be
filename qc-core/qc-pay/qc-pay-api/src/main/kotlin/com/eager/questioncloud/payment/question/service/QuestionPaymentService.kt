@@ -38,7 +38,6 @@ class QuestionPaymentService(
             questionPayment.userId,
             questionPayment.order.questionIds,
             questionPayment.realAmount,
-            questionPayment.getDiscountInformation()
         )
     }
 }

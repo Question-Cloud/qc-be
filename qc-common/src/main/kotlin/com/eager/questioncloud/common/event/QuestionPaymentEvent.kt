@@ -7,10 +7,5 @@ class QuestionPaymentEvent(
     val buyerUserId: Long,
     val questionIds: List<Long>,
     val amount: Int,
-    val discountInformation: List<DiscountInformation>,
 ) : Event(TSID.Factory.getTsid().toString(), EventType.QuestionPaymentEvent)
 
-class DiscountInformation(
-    val title: String,
-    val value: Int,
-)

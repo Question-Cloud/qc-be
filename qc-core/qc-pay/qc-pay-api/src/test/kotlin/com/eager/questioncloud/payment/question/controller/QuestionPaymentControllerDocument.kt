@@ -216,7 +216,7 @@ class QuestionPaymentControllerDocument(
             val sampleOrders = listOf(
                 QuestionPaymentHistoryOrder(
                     questionId = 101L,
-                    amount = 5000,
+                    realPrice = 5000,
                     title = "미적분 기본 문제집",
                     thumbnail = "https://example.com/thumbnail1.jpg",
                     creatorName = "김수학",
@@ -226,7 +226,7 @@ class QuestionPaymentControllerDocument(
                 ),
                 QuestionPaymentHistoryOrder(
                     questionId = 102L,
-                    amount = 3000,
+                    realPrice = 3000,
                     title = "물리 역학 문제집",
                     thumbnail = "https://example.com/thumbnail2.jpg",
                     creatorName = "이물리",
@@ -242,7 +242,7 @@ class QuestionPaymentControllerDocument(
                     userId = 1L,
                     orders = sampleOrders,
                     discountInformation = listOf(DiscountInformation("coupon", 1000)),
-                    amount = 7200,
+                    realAmount = 7200,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
                 ),
@@ -251,7 +251,7 @@ class QuestionPaymentControllerDocument(
                     userId = 1L,
                     orders = listOf(sampleOrders[0]),
                     discountInformation = listOf(DiscountInformation("coupon", 3000)),
-                    amount = 5000,
+                    realAmount = 5000,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
                 )

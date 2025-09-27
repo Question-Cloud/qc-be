@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.common.event.DiscountInformation
+import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
 import org.bson.Document
@@ -17,7 +17,8 @@ class QuestionPaymentHistoryDocumentReadConverter :
             userId = (source.getLong("userId")),
             orders = (convertOrders(source.getList("orders", Document::class.java))),
             discountInformation = (convertDiscountInformation(source.getList("discountInformation", Document::class.java))),
-            amount = (source.getInteger("amount")),
+            originalAmount = (source.getInteger("originalAmount")),
+            realAmount = (source.getInteger("realAmount")),
             status = (QuestionPaymentStatus.valueOf(source.getString("status"))),
             createdAt = (convertDate(source.get("createdAt", Date::class.java)))
         )
@@ -28,7 +29,10 @@ class QuestionPaymentHistoryDocumentReadConverter :
             .map { orderDocument: Document ->
                 QuestionPaymentHistoryOrder(
                     orderDocument.getLong("questionId"),
-                    orderDocument.getInteger("amount"),
+                    orderDocument.getInteger("originalPrice"),
+                    orderDocument.getInteger("realPrice"),
+                    orderDocument.getString("promotionName"),
+                    orderDocument.getInteger("appliedPromotionDiscountAmount"),
                     orderDocument.getString("title"),
                     orderDocument.getString("thumbnail"),
                     orderDocument.getString("creatorName"),

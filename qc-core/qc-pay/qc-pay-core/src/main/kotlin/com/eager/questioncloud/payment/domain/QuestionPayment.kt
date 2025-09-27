@@ -1,6 +1,5 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
@@ -23,10 +22,6 @@ class QuestionPayment(
         }
         
         appliedDiscountList.add(policy)
-    }
-    
-    fun getDiscountInformation(): List<DiscountInformation> {
-        return appliedDiscountList.map { DiscountInformation(it.getName(), it.getDiscountAmount(order.getCurrentPrice())) }
     }
     
     companion object {

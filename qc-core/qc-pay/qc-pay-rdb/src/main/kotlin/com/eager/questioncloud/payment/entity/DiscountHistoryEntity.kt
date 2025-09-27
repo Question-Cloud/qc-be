@@ -26,4 +26,8 @@ class DiscountHistoryEntity(
             )
         }
     }
+    
+    fun toModel(): DiscountHistory {
+        return DiscountHistory(id, orderId, discountType, appliedAmount, name, sourceId)
+    }
 }
