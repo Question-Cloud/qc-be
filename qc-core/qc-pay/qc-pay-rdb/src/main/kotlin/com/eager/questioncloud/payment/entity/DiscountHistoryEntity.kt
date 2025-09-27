@@ -10,6 +10,8 @@ class DiscountHistoryEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
     @Column val orderId: String,
     @Enumerated(EnumType.STRING) @Column val discountType: DiscountType,
+    @Column val appliedAmount: Int,
+    @Column val name: String,
     @Column val sourceId: Long,
 ) {
     companion object {
@@ -18,6 +20,8 @@ class DiscountHistoryEntity(
                 discountHistory.id,
                 discountHistory.orderId,
                 discountHistory.discountType,
+                discountHistory.appliedAmount,
+                discountHistory.name,
                 discountHistory.sourceId,
             )
         }
