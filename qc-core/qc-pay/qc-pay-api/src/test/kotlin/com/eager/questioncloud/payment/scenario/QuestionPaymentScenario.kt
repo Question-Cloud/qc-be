@@ -21,7 +21,7 @@ class QuestionPaymentScenario(
             
             val order = QuestionOrder.createOrder(
                 questionInformationQueryResult
-                    .map { QuestionOrderItem(questionId = it.id, price = it.price) }
+                    .map { QuestionOrderItem(questionId = it.id, originalPrice = it.price) }
             )
             
             return QuestionPaymentScenario(order, questionInformationQueryResult)

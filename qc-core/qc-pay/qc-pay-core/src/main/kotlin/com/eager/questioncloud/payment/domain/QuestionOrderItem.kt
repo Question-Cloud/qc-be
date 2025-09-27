@@ -3,5 +3,13 @@ package com.eager.questioncloud.payment.domain
 class QuestionOrderItem(
     var id: Long = 0,
     var questionId: Long,
-    var price: Int,
-)
+    var originalPrice: Int,
+    var realPrice: Int = originalPrice,
+    val promotion: DiscountPolicy? = null,
+) {
+    init {
+        if (promotion != null) {
+            realPrice -= promotion.getDiscountAmount(originalPrice)
+        }
+    }
+}

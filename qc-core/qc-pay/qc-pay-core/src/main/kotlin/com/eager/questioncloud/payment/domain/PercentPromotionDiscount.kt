@@ -2,9 +2,8 @@ package com.eager.questioncloud.payment.domain
 
 import kotlin.math.floor
 
-class PercentCouponDiscount(
-    val couponId: Long,
-    val userCouponId: Long,
+class PercentPromotionDiscount(
+    val promotionId: Long,
     val title: String,
     val value: Int,
     var appliedDiscountAmount: Int = 0,
@@ -21,11 +20,11 @@ class PercentCouponDiscount(
     }
     
     override fun getDiscountType(): DiscountType {
-        return DiscountType.COUPON
+        return DiscountType.PROMOTION
     }
     
     override fun getSourceId(): Long {
-        return userCouponId
+        return promotionId
     }
     
     override fun getAppliedDiscountAmount(): Int {

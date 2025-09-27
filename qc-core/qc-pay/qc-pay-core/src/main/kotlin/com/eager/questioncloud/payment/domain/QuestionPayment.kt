@@ -16,7 +16,7 @@ class QuestionPayment(
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun applyDiscountPolicy(policy: DiscountPolicy) {
-        realAmount -= policy.getDiscountAmount(originalAmount)
+        realAmount -= policy.getDiscountAmount(order.getPriceAppliedPromotion())
         
         if (realAmount < 0) {
             throw CoreException(Error.WRONG_COUPON)
@@ -26,7 +26,7 @@ class QuestionPayment(
     }
     
     fun getDiscountInformation(): List<DiscountInformation> {
-        return discountPolicy.map { DiscountInformation(it.getPolicyName(), it.getDiscountAmount(originalAmount)) }
+        return discountPolicy.map { DiscountInformation(it.getPolicyName(), it.getDiscountAmount(order.getPriceAppliedPromotion())) }
     }
     
     companion object {
@@ -37,8 +37,8 @@ class QuestionPayment(
             return QuestionPayment(
                 order = order,
                 userId = userId,
-                originalAmount = order.calcAmount(),
-                realAmount = order.calcAmount()
+                originalAmount = order.getOriginalPrice(),
+                realAmount = order.getPriceAppliedPromotion()
             )
         }
     }

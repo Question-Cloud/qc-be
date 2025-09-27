@@ -8,9 +8,17 @@ class DiscountHistory(
 ) {
     companion object {
         fun create(questionPayment: QuestionPayment): List<DiscountHistory> {
-            return questionPayment.discountPolicy.map {
-                DiscountHistory(orderId = questionPayment.order.orderId, discountType = it.getDiscountType(), sourceId = it.getSourceId())
+            val discountList = mutableListOf<DiscountHistory>()
+            questionPayment.discountPolicy.forEach {
+                discountList.add(
+                    DiscountHistory(
+                        orderId = questionPayment.order.orderId,
+                        discountType = it.getDiscountType(),
+                        sourceId = it.getSourceId()
+                    )
+                )
             }
+            return discountList
         }
     }
 }

@@ -1,9 +1,8 @@
 package com.eager.questioncloud.payment.domain
 
-class FixedCouponDiscount(
-    val couponId: Long,
-    val userCouponId: Long,
-    var title: String,
+class FixedPromotionDiscount(
+    val promotionId: Long,
+    val title: String,
     val value: Int,
 ) : DiscountPolicy {
     override fun getDiscountAmount(originAmount: Int): Int {
@@ -15,11 +14,11 @@ class FixedCouponDiscount(
     }
     
     override fun getDiscountType(): DiscountType {
-        return DiscountType.COUPON
+        return DiscountType.PROMOTION
     }
     
     override fun getSourceId(): Long {
-        return userCouponId
+        return promotionId
     }
     
     override fun getAppliedDiscountAmount(): Int {

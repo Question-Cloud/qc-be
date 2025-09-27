@@ -1,5 +1,5 @@
 package com.eager.questioncloud.payment.domain
 
-enum class DiscountType {
-    COUPON, PROMOTION
+enum class PromotionType {
+    FIXED, PERCENT
 }

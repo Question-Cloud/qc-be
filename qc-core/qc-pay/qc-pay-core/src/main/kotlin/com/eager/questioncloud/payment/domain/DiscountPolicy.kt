@@ -8,4 +8,6 @@ interface DiscountPolicy {
     fun getDiscountType(): DiscountType
     
     fun getSourceId(): Long
+    
+    fun getAppliedDiscountAmount(): Int
 }

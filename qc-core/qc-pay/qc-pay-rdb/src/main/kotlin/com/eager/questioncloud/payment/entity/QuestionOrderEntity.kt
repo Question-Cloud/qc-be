@@ -10,14 +10,23 @@ class QuestionOrderEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY) @Id var id: Long = 0,
     @Column var orderId: String,
     @Column var questionId: Long,
-    @Column var price: Int
+    @Column var originalPrice: Int,
+    @Column var realPrice: Int,
+    @Column var promotionId: Long? = null,
 ) {
     companion object {
         fun from(questionOrder: QuestionOrder): List<QuestionOrderEntity> {
             return questionOrder.items
                 .stream()
                 .map { item: QuestionOrderItem ->
-                    QuestionOrderEntity(item.id, questionOrder.orderId, item.questionId, item.price)
+                    QuestionOrderEntity(
+                        item.id,
+                        questionOrder.orderId,
+                        item.questionId,
+                        item.originalPrice,
+                        item.realPrice,
+                        item.promotion?.getSourceId()
+                    )
                 }
                 .toList()
         }
