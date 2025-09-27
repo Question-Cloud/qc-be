@@ -8,6 +8,7 @@ import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.question.implement.CouponPolicyApplier
 import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
+import com.eager.questioncloud.payment.question.implement.QuestionPaymentRecorder
 import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.utils.DBCleaner
@@ -40,6 +41,9 @@ class QuestionPaymentServiceTest(
     private lateinit var couponPolicyApplier: CouponPolicyApplier
     
     @MockkBean
+    private lateinit var questionPaymentRecorder: QuestionPaymentRecorder
+    
+    @MockkBean
     private lateinit var pointCommandAPI: PointCommandAPI
     
     @MockkBean
@@ -57,7 +61,7 @@ class QuestionPaymentServiceTest(
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             justRun { couponPolicyApplier.apply(any(), any()) }
-            
+            justRun { questionPaymentRecorder.record(any()) }
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
             
@@ -88,6 +92,7 @@ class QuestionPaymentServiceTest(
                 val questionPayment = firstArg<QuestionPayment>()
                 questionPayment.applyDiscountPolicy(fixedCouponPolicy)
             }
+            justRun { questionPaymentRecorder.record(any()) }
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
             
@@ -108,8 +113,8 @@ class QuestionPaymentServiceTest(
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
-            
             justRun { couponPolicyApplier.apply(any(), any()) }
+            justRun { questionPaymentRecorder.record(any()) }
             every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
             
             When("결제를 요청하면") {

@@ -6,7 +6,7 @@ import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.question.implement.CouponPolicyApplier
 import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
-import com.eager.questioncloud.payment.repository.QuestionPaymentRepository
+import com.eager.questioncloud.payment.question.implement.QuestionPaymentRecorder
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 class QuestionPaymentService(
     private val questionOrderGenerator: QuestionOrderGenerator,
     private val couponPolicyApplier: CouponPolicyApplier,
-    private val questionPaymentRepository: QuestionPaymentRepository,
+    private val questionPaymentRecorder: QuestionPaymentRecorder,
     private val pointCommandAPI: PointCommandAPI,
     private val eventPublisher: EventPublisher,
 ) {
@@ -26,7 +26,7 @@ class QuestionPaymentService(
         
         couponPolicyApplier.apply(questionPayment, command)
         pointCommandAPI.usePoint(questionPayment.userId, questionPayment.realAmount)
-        questionPaymentRepository.save(questionPayment)
+        questionPaymentRecorder.record(questionPayment)
         
         eventPublisher.publish(toEvent(questionPayment))
         return questionPayment

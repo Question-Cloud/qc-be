@@ -13,4 +13,12 @@ class FixedCouponDiscount(
     override fun getPolicyName(): String {
         return title
     }
+    
+    override fun getDiscountType(): DiscountType {
+        return DiscountType.COUPON
+    }
+    
+    override fun getSourceId(): Long {
+        return userCouponId
+    }
 }
