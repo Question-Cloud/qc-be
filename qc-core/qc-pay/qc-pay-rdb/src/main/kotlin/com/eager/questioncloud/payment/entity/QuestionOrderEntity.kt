@@ -13,6 +13,8 @@ class QuestionOrderEntity(
     @Column var originalPrice: Int,
     @Column var realPrice: Int,
     @Column var promotionId: Long? = null,
+    @Column var promotionName: String? = null,
+    @Column var appliedPromotionDiscountAmount: Int = 0,
 ) {
     companion object {
         fun from(questionOrder: QuestionOrder): List<QuestionOrderEntity> {
@@ -25,7 +27,9 @@ class QuestionOrderEntity(
                         item.questionId,
                         item.originalPrice,
                         item.realPrice,
-                        item.promotion?.getSourceId()
+                        item.promotion?.getSourceId(),
+                        item.promotion?.getName(),
+                        item.promotion?.getAppliedDiscountAmount() ?: 0
                     )
                 }
                 .toList()
