@@ -16,7 +16,7 @@ class CouponPolicyApplier(
 ) {
     fun apply(questionPayment: QuestionPayment, command: QuestionPaymentCommand) {
         if (command.userCouponId == null) {
-            return questionPayment.applyDiscountPolicy(NoDiscount())
+            return
         }
         
         val userCoupon = userCouponRepository.getUserCoupon(command.userCouponId, command.userId)

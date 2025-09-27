@@ -3,7 +3,6 @@ package com.eager.questioncloud.payment.question.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.FixedCouponDiscount
-import com.eager.questioncloud.payment.domain.NoDiscount
 import com.eager.questioncloud.payment.domain.PercentCouponDiscount
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.enums.CouponType
@@ -26,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
@@ -50,8 +50,7 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("기본 정책이 적용된다.") {
-                    questionPayment.discountPolicy.size shouldBeEqual 1
-                    questionPayment.discountPolicy[0].shouldBeTypeOf<NoDiscount>()
+                    questionPayment.discountPolicy.size shouldBeEqual 0
                     questionPayment.realAmount shouldBeEqual questionPayment.originalAmount
                 }
             }
@@ -163,7 +162,7 @@ class CouponPolicyApplierTest(
                         }
                     }
                 }
-                latch.await()
+                latch.await(10, TimeUnit.SECONDS)
                 excutors.shutdown()
                 Then("1개의 결제만 성공한다.") {
                     successCount.get() shouldBe 1
