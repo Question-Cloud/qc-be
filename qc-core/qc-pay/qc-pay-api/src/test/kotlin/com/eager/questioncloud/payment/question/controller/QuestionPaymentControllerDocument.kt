@@ -1,8 +1,8 @@
 package com.eager.questioncloud.payment.question.controller
 
-import com.eager.questioncloud.common.event.DiscountInformation
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
@@ -216,7 +216,10 @@ class QuestionPaymentControllerDocument(
             val sampleOrders = listOf(
                 QuestionPaymentHistoryOrder(
                     questionId = 101L,
+                    originalPrice = 5000,
                     realPrice = 5000,
+                    promotionName = null,
+                    appliedPromotionDiscountAmount = 0,
                     title = "미적분 기본 문제집",
                     thumbnail = "https://example.com/thumbnail1.jpg",
                     creatorName = "김수학",
@@ -226,7 +229,10 @@ class QuestionPaymentControllerDocument(
                 ),
                 QuestionPaymentHistoryOrder(
                     questionId = 102L,
-                    realPrice = 3000,
+                    originalPrice = 5000,
+                    realPrice = 4000,
+                    promotionName = "첫 문제 기념 할인",
+                    appliedPromotionDiscountAmount = 1000,
                     title = "물리 역학 문제집",
                     thumbnail = "https://example.com/thumbnail2.jpg",
                     creatorName = "이물리",
@@ -242,7 +248,8 @@ class QuestionPaymentControllerDocument(
                     userId = 1L,
                     orders = sampleOrders,
                     discountInformation = listOf(DiscountInformation("coupon", 1000)),
-                    realAmount = 7200,
+                    originalAmount = 10000,
+                    realAmount = 8000,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
                 ),
@@ -251,7 +258,8 @@ class QuestionPaymentControllerDocument(
                     userId = 1L,
                     orders = listOf(sampleOrders[0]),
                     discountInformation = listOf(DiscountInformation("coupon", 3000)),
-                    realAmount = 5000,
+                    originalAmount = 5000,
+                    realAmount = 4000,
                     status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
                 )
@@ -287,9 +295,14 @@ class QuestionPaymentControllerDocument(
                                         fieldWithPath("result").description("구매 내역 목록"),
                                         fieldWithPath("result[].orderId").description("주문 ID"),
                                         fieldWithPath("result[].userId").description("사용자 ID"),
+                                        fieldWithPath("result[].originalAmount").description("할인 적용 전 총 결제 금액"),
+                                        fieldWithPath("result[].realAmount").description("할인 적용 후 최종 결제 금액"),
                                         fieldWithPath("result[].orders").description("주문한 문제 목록"),
                                         fieldWithPath("result[].orders[].questionId").description("문제 ID"),
-                                        fieldWithPath("result[].orders[].amount").description("문제 가격"),
+                                        fieldWithPath("result[].orders[].originalPrice").description("문제 금액"),
+                                        fieldWithPath("result[].orders[].realPrice").description("할인이 적용된 금액"),
+                                        fieldWithPath("result[].orders[].promotionName").description("프로모션(할인) 이름").optional(),
+                                        fieldWithPath("result[].orders[].appliedPromotionDiscountAmount").description("프로모션(할인) 금액"),
                                         fieldWithPath("result[].orders[].title").description("문제 제목"),
                                         fieldWithPath("result[].orders[].thumbnail").description("문제 썸네일 URL"),
                                         fieldWithPath("result[].orders[].creatorName").description("문제 출제자 이름"),
@@ -299,7 +312,6 @@ class QuestionPaymentControllerDocument(
                                         fieldWithPath("result[].discountInformation[]").description("할인 정보"),
                                         fieldWithPath("result[].discountInformation[].title").description("할인 종류"),
                                         fieldWithPath("result[].discountInformation[].value").description("할인금액"),
-                                        fieldWithPath("result[].amount").description("최종 결제 금액"),
                                         fieldWithPath("result[].status").description("결제 상태 (SUCCESS, FAIL)"),
                                         fieldWithPath("result[].createdAt").description("구매일시")
                                     )
