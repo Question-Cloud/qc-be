@@ -14,7 +14,7 @@ class QuestionOrder(
             .sum()
     }
     
-    fun getPriceAppliedPromotion(): Int {
+    fun getCurrentPrice(): Int {
         return items.sumOf { it.realPrice }
     }
     

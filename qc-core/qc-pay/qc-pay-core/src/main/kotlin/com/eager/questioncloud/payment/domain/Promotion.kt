@@ -8,10 +8,10 @@ class Promotion(
     val value: Int,
     val isActive: Boolean,
 ) {
-    fun toDiscountPolicy(): DiscountPolicy {
+    fun toDiscountable(): Discountable {
         return when (promotionType) {
-            PromotionType.PERCENT -> PercentPromotionDiscount(id, title, value)
-            PromotionType.FIXED -> FixedPromotionDiscount(id, title, value)
+            PromotionType.PERCENT -> PercentPromotion(id, title, value)
+            PromotionType.FIXED -> FixedPromotion(id, title, value)
         }
     }
 }

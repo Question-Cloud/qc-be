@@ -1,9 +1,9 @@
 package com.eager.questioncloud.payment.domain
 
-interface DiscountPolicy {
+interface Discountable {
     fun getDiscountAmount(originAmount: Int): Int
     
-    fun getPolicyName(): String
+    fun getName(): String
     
     fun getDiscountType(): DiscountType
     

@@ -5,7 +5,7 @@ class QuestionOrderItem(
     var questionId: Long,
     var originalPrice: Int,
     var realPrice: Int = originalPrice,
-    val promotion: DiscountPolicy? = null,
+    val promotion: Discountable? = null,
 ) {
     init {
         if (promotion != null) {

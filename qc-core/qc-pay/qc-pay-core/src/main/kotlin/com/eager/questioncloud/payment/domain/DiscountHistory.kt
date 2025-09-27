@@ -9,7 +9,7 @@ class DiscountHistory(
     companion object {
         fun create(questionPayment: QuestionPayment): List<DiscountHistory> {
             val discountList = mutableListOf<DiscountHistory>()
-            questionPayment.discountPolicy.forEach {
+            questionPayment.appliedDiscountList.forEach {
                 discountList.add(
                     DiscountHistory(
                         orderId = questionPayment.order.orderId,

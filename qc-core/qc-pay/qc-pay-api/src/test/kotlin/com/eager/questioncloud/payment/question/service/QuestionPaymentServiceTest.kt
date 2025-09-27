@@ -3,7 +3,7 @@ package com.eager.questioncloud.payment.question.service
 import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.FixedCouponDiscount
+import com.eager.questioncloud.payment.domain.FixedCoupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.question.implement.CouponPolicyApplier
@@ -83,14 +83,14 @@ class QuestionPaymentServiceTest(
             val discountAmount = 1000
             val discountTitle = "FIXED COUPON"
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
-            val fixedCouponPolicy = FixedCouponDiscount(couponId, userCouponId, discountTitle, discountAmount)
+            val fixedCouponPolicy = FixedCoupon(couponId, userCouponId, discountTitle, discountAmount)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
                 couponPolicyApplier.apply(any(), any())
             } answers {
                 val questionPayment = firstArg<QuestionPayment>()
-                questionPayment.applyDiscountPolicy(fixedCouponPolicy)
+                questionPayment.applyDiscount(fixedCouponPolicy)
             }
             justRun { questionPaymentRecorder.record(any()) }
             justRun { eventPublisher.publish(any()) }

@@ -9,24 +9,24 @@ import java.time.LocalDateTime
 class QuestionPayment(
     var order: QuestionOrder,
     var userId: Long,
-    var discountPolicy: MutableList<DiscountPolicy> = mutableListOf(),
+    var appliedDiscountList: MutableList<Discountable> = mutableListOf(),
     var originalAmount: Int,
     var realAmount: Int,
     var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
-    fun applyDiscountPolicy(policy: DiscountPolicy) {
-        realAmount -= policy.getDiscountAmount(order.getPriceAppliedPromotion())
+    fun applyDiscount(policy: Discountable) {
+        realAmount -= policy.getDiscountAmount(order.getCurrentPrice())
         
         if (realAmount < 0) {
             throw CoreException(Error.WRONG_COUPON)
         }
         
-        discountPolicy.add(policy)
+        appliedDiscountList.add(policy)
     }
     
     fun getDiscountInformation(): List<DiscountInformation> {
-        return discountPolicy.map { DiscountInformation(it.getPolicyName(), it.getDiscountAmount(order.getPriceAppliedPromotion())) }
+        return appliedDiscountList.map { DiscountInformation(it.getName(), it.getDiscountAmount(order.getCurrentPrice())) }
     }
     
     companion object {
@@ -38,7 +38,7 @@ class QuestionPayment(
                 order = order,
                 userId = userId,
                 originalAmount = order.getOriginalPrice(),
-                realAmount = order.getPriceAppliedPromotion()
+                realAmount = order.getCurrentPrice()
             )
         }
     }

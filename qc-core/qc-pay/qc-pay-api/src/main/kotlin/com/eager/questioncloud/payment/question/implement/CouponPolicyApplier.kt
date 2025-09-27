@@ -28,19 +28,19 @@ class CouponPolicyApplier(
         
         val coupon = couponRepository.findById(userCoupon.couponId)
         
-        questionPayment.applyDiscountPolicy(createCouponDiscountPolicy(coupon, userCoupon))
+        questionPayment.applyDiscount(createCouponDiscountPolicy(coupon, userCoupon))
     }
     
-    private fun createCouponDiscountPolicy(coupon: Coupon, userCoupon: UserCoupon): DiscountPolicy {
+    private fun createCouponDiscountPolicy(coupon: Coupon, userCoupon: UserCoupon): Discountable {
         return when (coupon.couponType) {
-            CouponType.Fixed -> FixedCouponDiscount(
+            CouponType.Fixed -> FixedCoupon(
                 couponId = coupon.id,
                 userCouponId = userCoupon.couponId,
                 title = coupon.title,
                 value = coupon.value
             )
             
-            CouponType.Percent -> PercentCouponDiscount(
+            CouponType.Percent -> PercentCoupon(
                 couponId = coupon.id,
                 userCouponId = userCoupon.couponId,
                 title = coupon.title,

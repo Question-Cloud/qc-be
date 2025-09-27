@@ -1,15 +1,21 @@
 package com.eager.questioncloud.payment.domain
 
-class FixedPromotionDiscount(
+import kotlin.math.floor
+
+class PercentPromotion(
     val promotionId: Long,
     val title: String,
     val value: Int,
-) : DiscountPolicy {
+    var appliedDiscountAmount: Int = 0,
+) : Discountable {
     override fun getDiscountAmount(originAmount: Int): Int {
-        return value
+        val discountRate = value / 100.0
+        val discountAmount = floor(originAmount * discountRate).toInt()
+        appliedDiscountAmount = discountAmount
+        return discountAmount
     }
     
-    override fun getPolicyName(): String {
+    override fun getName(): String {
         return title
     }
     
@@ -22,6 +28,6 @@ class FixedPromotionDiscount(
     }
     
     override fun getAppliedDiscountAmount(): Int {
-        return value
+        return appliedDiscountAmount
     }
 }

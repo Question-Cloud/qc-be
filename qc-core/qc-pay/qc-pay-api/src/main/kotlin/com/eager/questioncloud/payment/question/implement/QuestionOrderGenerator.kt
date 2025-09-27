@@ -42,7 +42,7 @@ class QuestionOrderGenerator(
         return questions.map {
             val promotion = promotions[it.id]
             if (promotion == null) QuestionOrderItem(questionId = it.id, originalPrice = it.price)
-            else QuestionOrderItem(questionId = it.id, originalPrice = it.price, promotion = promotion.toDiscountPolicy())
+            else QuestionOrderItem(questionId = it.id, originalPrice = it.price, promotion = promotion.toDiscountable())
         }
     }
     

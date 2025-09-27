@@ -2,8 +2,8 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.FixedCouponDiscount
-import com.eager.questioncloud.payment.domain.PercentCouponDiscount
+import com.eager.questioncloud.payment.domain.FixedCoupon
+import com.eager.questioncloud.payment.domain.PercentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
@@ -50,7 +50,7 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("기본 정책이 적용된다.") {
-                    questionPayment.discountPolicy.size shouldBeEqual 0
+                    questionPayment.appliedDiscountList.size shouldBeEqual 0
                     questionPayment.realAmount shouldBeEqual questionPayment.originalAmount
                 }
             }
@@ -66,9 +66,9 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("고정 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.discountPolicy.size shouldBeEqual 1
-                    questionPayment.discountPolicy[0].shouldBeTypeOf<FixedCouponDiscount>()
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountPolicy[0].getDiscountAmount(
+                    questionPayment.appliedDiscountList.size shouldBeEqual 1
+                    questionPayment.appliedDiscountList[0].shouldBeTypeOf<FixedCoupon>()
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.appliedDiscountList[0].getDiscountAmount(
                         questionPayment.originalAmount
                     )
                     
@@ -89,9 +89,9 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.discountPolicy.size shouldBeEqual 1
-                    questionPayment.discountPolicy[0].shouldBeTypeOf<PercentCouponDiscount>()
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountPolicy[0].getDiscountAmount(
+                    questionPayment.appliedDiscountList.size shouldBeEqual 1
+                    questionPayment.appliedDiscountList[0].shouldBeTypeOf<PercentCoupon>()
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.appliedDiscountList[0].getDiscountAmount(
                         questionPayment.originalAmount
                     )
                     
