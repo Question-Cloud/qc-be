@@ -1,8 +1,7 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
+import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
 import org.bson.Document
 import org.springframework.core.convert.converter.Converter
 import java.time.LocalDateTime
@@ -19,7 +18,6 @@ class QuestionPaymentHistoryDocumentReadConverter :
             discountInformation = (convertDiscountInformation(source.getList("discountInformation", Document::class.java))),
             originalAmount = (source.getInteger("originalAmount")),
             realAmount = (source.getInteger("realAmount")),
-            status = (QuestionPaymentStatus.valueOf(source.getString("status"))),
             createdAt = (convertDate(source.get("createdAt", Date::class.java)))
         )
     }
@@ -32,7 +30,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
                     orderDocument.getInteger("originalPrice"),
                     orderDocument.getInteger("realPrice"),
                     orderDocument.getString("promotionName"),
-                    orderDocument.getInteger("appliedPromotionDiscountAmount"),
+                    orderDocument.getInteger("promotionDiscountAmount"),
                     orderDocument.getString("title"),
                     orderDocument.getString("thumbnail"),
                     orderDocument.getString("creatorName"),
@@ -44,8 +42,8 @@ class QuestionPaymentHistoryDocumentReadConverter :
             .toList()
     }
     
-    private fun convertDiscountInformation(discountInformation: List<Document>): List<DiscountInformation> {
-        return discountInformation.map { DiscountInformation(it.getString("title"), it.getInteger("value")) }
+    private fun convertDiscountInformation(discountInformation: List<Document>): List<SimpleDiscountHistory> {
+        return discountInformation.map { SimpleDiscountHistory(it.getString("title"), it.getInteger("value")) }
     }
     
     private fun convertDate(date: Date): LocalDateTime {

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.dto
 
-class QuestionOrderData(
+data class QuestionOrderData(
     val orderItemId: Long,
     val orderId: String,
     val questionId: Long,
@@ -8,5 +8,5 @@ class QuestionOrderData(
     val realPrice: Int,
     val promotionId: Long? = null,
     val promotionName: String? = null,
-    val appliedPromotionDiscountAmount: Int,
+    val promotionDiscountAmount: Int,
 )

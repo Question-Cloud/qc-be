@@ -4,11 +4,11 @@ import com.eager.questioncloud.payment.enums.CouponType
 import java.time.LocalDateTime
 
 class Coupon(
-    var id: Long = 0,
-    var code: String,
-    var title: String,
-    var couponType: CouponType,
-    var value: Int,
-    var remainingCount: Int,
-    var endAt: LocalDateTime
+    val id: Long = 0,
+    val code: String,
+    val title: String,
+    val couponType: CouponType,
+    val value: Int,
+    val remainingCount: Int,
+    val endAt: LocalDateTime
 )

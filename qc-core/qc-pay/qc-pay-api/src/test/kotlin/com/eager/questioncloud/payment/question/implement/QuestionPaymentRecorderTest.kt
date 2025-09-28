@@ -44,7 +44,7 @@ class QuestionPaymentRecorderTest(
                     questionPaymentData.originalAmount shouldBe questionPayment.originalAmount
                     
                     discountHistories[0].name shouldBe questionPayment.discountHistory[0].name
-                    discountHistories[0].appliedAmount shouldBe questionPayment.discountHistory[0].appliedAmount
+                    discountHistories[0].discountAmount shouldBe questionPayment.discountHistory[0].discountAmount
                 }
             }
         }

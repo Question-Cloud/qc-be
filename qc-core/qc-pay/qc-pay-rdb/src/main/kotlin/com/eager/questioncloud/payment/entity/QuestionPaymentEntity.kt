@@ -2,8 +2,10 @@ package com.eager.questioncloud.payment.entity
 
 import com.eager.questioncloud.common.entity.BaseCustomIdEntity
 import com.eager.questioncloud.payment.domain.QuestionPayment
-import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
@@ -13,7 +15,6 @@ class QuestionPaymentEntity(
     @Column val userId: Long,
     @Column val realAmount: Int,
     @Column val originalAmount: Int,
-    @Enumerated(EnumType.STRING) @Column val status: QuestionPaymentStatus,
     @Column val createdAt: LocalDateTime,
     isNewEntity: Boolean
 ) : BaseCustomIdEntity<String>(isNewEntity) {
@@ -24,7 +25,6 @@ class QuestionPaymentEntity(
                 questionPayment.userId,
                 questionPayment.realAmount,
                 questionPayment.originalAmount,
-                questionPayment.status,
                 questionPayment.createdAt,
                 true
             )

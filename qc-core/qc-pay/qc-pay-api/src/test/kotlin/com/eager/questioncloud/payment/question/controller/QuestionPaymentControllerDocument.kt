@@ -2,11 +2,10 @@ package com.eager.questioncloud.payment.question.controller
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
+import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
 import com.eager.questioncloud.payment.question.dto.QuestionPaymentRequest
 import com.eager.questioncloud.payment.question.service.QuestionPaymentHistoryService
 import com.eager.questioncloud.payment.question.service.QuestionPaymentService
@@ -219,7 +218,7 @@ class QuestionPaymentControllerDocument(
                     originalPrice = 5000,
                     realPrice = 5000,
                     promotionName = null,
-                    appliedPromotionDiscountAmount = 0,
+                    promotionDiscountAmount = 0,
                     title = "미적분 기본 문제집",
                     thumbnail = "https://example.com/thumbnail1.jpg",
                     creatorName = "김수학",
@@ -232,7 +231,7 @@ class QuestionPaymentControllerDocument(
                     originalPrice = 5000,
                     realPrice = 4000,
                     promotionName = "첫 문제 기념 할인",
-                    appliedPromotionDiscountAmount = 1000,
+                    promotionDiscountAmount = 1000,
                     title = "물리 역학 문제집",
                     thumbnail = "https://example.com/thumbnail2.jpg",
                     creatorName = "이물리",
@@ -247,20 +246,18 @@ class QuestionPaymentControllerDocument(
                     orderId = "order-123456",
                     userId = 1L,
                     orders = sampleOrders,
-                    discountInformation = listOf(DiscountInformation("coupon", 1000)),
+                    discountInformation = listOf(SimpleDiscountHistory("coupon", 1000)),
                     originalAmount = 10000,
                     realAmount = 8000,
-                    status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
                 ),
                 QuestionPaymentHistory(
                     orderId = "order-789012",
                     userId = 1L,
                     orders = listOf(sampleOrders[0]),
-                    discountInformation = listOf(DiscountInformation("coupon", 3000)),
+                    discountInformation = listOf(SimpleDiscountHistory("coupon", 3000)),
                     originalAmount = 5000,
                     realAmount = 4000,
-                    status = QuestionPaymentStatus.SUCCESS,
                     createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
                 )
             )
@@ -302,7 +299,7 @@ class QuestionPaymentControllerDocument(
                                         fieldWithPath("result[].orders[].originalPrice").description("문제 금액"),
                                         fieldWithPath("result[].orders[].realPrice").description("할인이 적용된 금액"),
                                         fieldWithPath("result[].orders[].promotionName").description("프로모션(할인) 이름").optional(),
-                                        fieldWithPath("result[].orders[].appliedPromotionDiscountAmount").description("프로모션(할인) 금액"),
+                                        fieldWithPath("result[].orders[].promotionDiscountAmount").description("프로모션(할인) 금액"),
                                         fieldWithPath("result[].orders[].title").description("문제 제목"),
                                         fieldWithPath("result[].orders[].thumbnail").description("문제 썸네일 URL"),
                                         fieldWithPath("result[].orders[].creatorName").description("문제 출제자 이름"),
@@ -310,9 +307,8 @@ class QuestionPaymentControllerDocument(
                                         fieldWithPath("result[].orders[].mainCategory").description("대분류"),
                                         fieldWithPath("result[].orders[].subCategory").description("소분류"),
                                         fieldWithPath("result[].discountInformation[]").description("할인 정보"),
-                                        fieldWithPath("result[].discountInformation[].title").description("할인 종류"),
-                                        fieldWithPath("result[].discountInformation[].value").description("할인금액"),
-                                        fieldWithPath("result[].status").description("결제 상태 (SUCCESS, FAIL)"),
+                                        fieldWithPath("result[].discountInformation[].name").description("할인 종류"),
+                                        fieldWithPath("result[].discountInformation[].discountAmount").description("할인금액"),
                                         fieldWithPath("result[].createdAt").description("구매일시")
                                     )
                                 )

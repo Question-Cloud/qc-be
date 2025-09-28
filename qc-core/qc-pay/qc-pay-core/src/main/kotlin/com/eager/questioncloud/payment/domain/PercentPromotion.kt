@@ -1,9 +1,10 @@
 package com.eager.questioncloud.payment.domain
 
+import com.eager.questioncloud.payment.enums.DiscountType
 import kotlin.math.floor
 
 class PercentPromotion(
-    val promotionId: Long,
+    private val promotionId: Long,
     val title: String,
     val value: Int,
 ) : Discountable {

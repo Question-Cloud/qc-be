@@ -3,7 +3,7 @@ package com.eager.questioncloud.payment.question.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.Promotion
-import com.eager.questioncloud.payment.domain.PromotionType
+import com.eager.questioncloud.payment.enums.PromotionType
 import com.eager.questioncloud.payment.repository.PromotionRepository
 import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult

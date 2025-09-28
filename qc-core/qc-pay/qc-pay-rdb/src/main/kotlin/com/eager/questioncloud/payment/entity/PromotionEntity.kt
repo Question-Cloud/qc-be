@@ -1,7 +1,7 @@
 package com.eager.questioncloud.payment.entity
 
 import com.eager.questioncloud.payment.domain.Promotion
-import com.eager.questioncloud.payment.domain.PromotionType
+import com.eager.questioncloud.payment.enums.PromotionType
 import jakarta.persistence.*
 
 

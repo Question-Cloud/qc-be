@@ -2,9 +2,9 @@ package com.eager.questioncloud.payment.question.handler
 
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
-import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
+import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
 import com.eager.questioncloud.payment.repository.DiscountHistoryRepository
 import com.eager.questioncloud.payment.repository.QuestionOrderRepository
 import com.eager.questioncloud.payment.repository.QuestionPaymentHistoryRepository
@@ -34,7 +34,7 @@ class QuestionPaymentHistoryRegisterHandler(
         val questionPaymentData = questionPaymentRepository.getQuestionPaymentData(event.orderId)
         val questionOrderData = questionOrderRepository.getQuestionOrderData(event.orderId)
         val discountHistories =
-            discountHistoryRepository.findByOrderId(event.orderId).map { DiscountInformation(it.name, it.appliedAmount) }
+            discountHistoryRepository.findByOrderId(event.orderId).map { SimpleDiscountHistory(it.name, it.discountAmount) }
         
         val orders = questionOrderData.map {
             val question = questionMap.getValue(it.questionId)
@@ -45,7 +45,7 @@ class QuestionPaymentHistoryRegisterHandler(
                 it.originalPrice,
                 it.realPrice,
                 it.promotionName,
-                it.appliedPromotionDiscountAmount,
+                it.promotionDiscountAmount,
                 question.title,
                 question.thumbnail,
                 creatorUser.name,

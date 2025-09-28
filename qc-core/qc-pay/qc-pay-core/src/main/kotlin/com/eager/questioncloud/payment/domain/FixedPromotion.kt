@@ -1,7 +1,9 @@
 package com.eager.questioncloud.payment.domain
 
+import com.eager.questioncloud.payment.enums.DiscountType
+
 class FixedPromotion(
-    val promotionId: Long,
+    private val promotionId: Long,
     val title: String,
     val value: Int,
 ) : Discountable {

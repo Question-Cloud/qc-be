@@ -1,4 +1,4 @@
-package com.eager.questioncloud.payment.domain
+package com.eager.questioncloud.payment.enums
 
 enum class DiscountType {
     COUPON, PROMOTION

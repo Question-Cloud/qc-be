@@ -5,13 +5,13 @@ import com.eager.questioncloud.common.exception.Error
 import java.time.LocalDateTime
 
 class UserCoupon(
-    var id: Long = 0,
-    var userId: Long,
-    var couponId: Long,
+    val id: Long = 0,
+    val userId: Long,
+    val couponId: Long,
     var isUsed: Boolean,
     var usedOrderId: String? = null,
-    var createdAt: LocalDateTime,
-    var endAt: LocalDateTime,
+    val createdAt: LocalDateTime,
+    val endAt: LocalDateTime,
 ) {
     fun validate() {
         if (endAt.isBefore(LocalDateTime.now())) {

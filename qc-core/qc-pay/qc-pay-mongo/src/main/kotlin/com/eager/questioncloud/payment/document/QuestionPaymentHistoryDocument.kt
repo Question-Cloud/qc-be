@@ -1,9 +1,8 @@
 package com.eager.questioncloud.payment.document
 
-import com.eager.questioncloud.payment.domain.DiscountInformation
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
+import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
@@ -14,10 +13,9 @@ class QuestionPaymentHistoryDocument(
     val orderId: String,
     val userId: Long,
     val orders: List<QuestionPaymentHistoryOrder>,
-    val discountInformation: List<DiscountInformation>,
+    val discountInformation: List<SimpleDiscountHistory>,
     val originalAmount: Int,
     val realAmount: Int,
-    val status: QuestionPaymentStatus,
     val createdAt: LocalDateTime,
 ) {
     fun toModel(): QuestionPaymentHistory {
@@ -28,7 +26,6 @@ class QuestionPaymentHistoryDocument(
             discountInformation,
             originalAmount,
             realAmount,
-            status,
             createdAt
         )
     }
@@ -42,7 +39,6 @@ class QuestionPaymentHistoryDocument(
                 questionPaymentHistory.discountInformation,
                 questionPaymentHistory.originalAmount,
                 questionPaymentHistory.realAmount,
-                questionPaymentHistory.status,
                 questionPaymentHistory.createdAt,
             )
         }

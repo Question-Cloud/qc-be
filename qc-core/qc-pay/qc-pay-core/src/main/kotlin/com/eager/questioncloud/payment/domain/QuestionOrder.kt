@@ -3,8 +3,8 @@ package com.eager.questioncloud.payment.domain
 import io.hypersistence.tsid.TSID
 
 class QuestionOrder(
-    var orderId: String,
-    var items: List<QuestionOrderItem>
+    val orderId: String,
+    val items: List<QuestionOrderItem>
 ) {
     val totalOriginalPrice: Int
         get() = items.sumOf { it.originalPrice }

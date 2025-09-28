@@ -33,7 +33,7 @@ class QuestionOrderRepositoryImpl(
                 questionOrderEntity.realPrice,
                 questionOrderEntity.promotionId,
                 questionOrderEntity.promotionName,
-                questionOrderEntity.appliedPromotionDiscountAmount
+                questionOrderEntity.promotionDiscountAmount
             )
         )
             .from(questionOrderEntity)

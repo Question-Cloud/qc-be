@@ -1,7 +1,7 @@
 package com.eager.questioncloud.payment.entity
 
 import com.eager.questioncloud.payment.domain.DiscountHistory
-import com.eager.questioncloud.payment.domain.DiscountType
+import com.eager.questioncloud.payment.enums.DiscountType
 import jakarta.persistence.*
 
 @Entity
@@ -10,7 +10,7 @@ class DiscountHistoryEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
     @Column val orderId: String,
     @Enumerated(EnumType.STRING) @Column val discountType: DiscountType,
-    @Column val appliedAmount: Int,
+    @Column val discountAmount: Int,
     @Column val name: String,
     @Column val sourceId: Long,
 ) {
@@ -20,7 +20,7 @@ class DiscountHistoryEntity(
                 discountHistory.id,
                 discountHistory.orderId,
                 discountHistory.discountType,
-                discountHistory.appliedAmount,
+                discountHistory.discountAmount,
                 discountHistory.name,
                 discountHistory.sourceId,
             )
@@ -28,6 +28,6 @@ class DiscountHistoryEntity(
     }
     
     fun toModel(): DiscountHistory {
-        return DiscountHistory(id, orderId, discountType, appliedAmount, name, sourceId)
+        return DiscountHistory(id, orderId, discountType, discountAmount, name, sourceId)
     }
 }

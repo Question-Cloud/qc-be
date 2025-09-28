@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.dto
 
-class QuestionPaymentData(
+data class QuestionPaymentData(
     val orderId: String,
     val userId: Long,
     val originalAmount: Int,

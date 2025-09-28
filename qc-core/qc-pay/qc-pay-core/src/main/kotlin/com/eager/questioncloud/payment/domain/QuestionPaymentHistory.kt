@@ -1,16 +1,14 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.payment.enums.QuestionPaymentStatus
 import java.time.LocalDateTime
 
-class QuestionPaymentHistory(
+data class QuestionPaymentHistory(
     val orderId: String,
     val userId: Long,
     val orders: List<QuestionPaymentHistoryOrder>,
-    val discountInformation: List<DiscountInformation>,
+    val discountInformation: List<SimpleDiscountHistory>,
     val originalAmount: Int,
     val realAmount: Int,
-    val status: QuestionPaymentStatus,
     val createdAt: LocalDateTime,
 ) {
     
@@ -19,7 +17,7 @@ class QuestionPaymentHistory(
             orderId: String,
             userId: Long,
             orders: List<QuestionPaymentHistoryOrder>,
-            discountInformation: List<DiscountInformation>,
+            discountInformation: List<SimpleDiscountHistory>,
             originalAmount: Int,
             realAmount: Int,
         ): QuestionPaymentHistory {
@@ -30,14 +28,22 @@ class QuestionPaymentHistory(
                 discountInformation,
                 originalAmount,
                 realAmount,
-                QuestionPaymentStatus.SUCCESS,
                 LocalDateTime.now(),
             )
         }
     }
 }
 
-class DiscountInformation(
+data class QuestionPaymentHistoryOrder(
+    val questionId: Long,
+    val originalPrice: Int,
+    val realPrice: Int,
+    val promotionName: String?,
+    val promotionDiscountAmount: Int,
     val title: String,
-    val value: Int,
+    val thumbnail: String,
+    val creatorName: String,
+    val subject: String,
+    val mainCategory: String,
+    val subCategory: String,
 )

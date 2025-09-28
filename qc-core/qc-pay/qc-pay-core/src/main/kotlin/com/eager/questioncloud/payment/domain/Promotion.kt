@@ -1,5 +1,7 @@
 package com.eager.questioncloud.payment.domain
 
+import com.eager.questioncloud.payment.enums.PromotionType
+
 class Promotion(
     val id: Long = 0,
     val questionId: Long,

@@ -1,5 +1,7 @@
 package com.eager.questioncloud.payment.domain
 
+import com.eager.questioncloud.payment.enums.DiscountType
+
 class FixedCoupon(
     val couponId: Long,
     val userCouponId: Long,

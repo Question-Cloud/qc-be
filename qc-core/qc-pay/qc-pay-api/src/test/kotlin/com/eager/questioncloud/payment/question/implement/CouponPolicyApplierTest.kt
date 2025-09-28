@@ -64,7 +64,7 @@ class CouponPolicyApplierTest(
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("고정 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
                     questionPayment.discountHistory.size shouldBeEqual 1
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].appliedAmount
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].discountAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true
@@ -84,7 +84,7 @@ class CouponPolicyApplierTest(
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
                     questionPayment.discountHistory.size shouldBeEqual 1
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].appliedAmount
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].discountAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true

@@ -4,15 +4,14 @@ class QuestionOrderItem(
     var id: Long = 0,
     var questionId: Long,
     var originalPrice: Int,
-    var realPrice: Int = originalPrice,
     val promotion: Discountable? = null,
-    var promotionDiscountAmount: Int = 0,
 ) {
+    val realPrice: Int
+    val promotionDiscountAmount: Int
+    
     init {
-        if (promotion != null) {
-            val discountAmount = promotion.getDiscountAmount(originalPrice)
-            realPrice -= discountAmount
-            promotionDiscountAmount = discountAmount
-        }
+        val discountAmount = promotion?.getDiscountAmount(originalPrice) ?: 0
+        realPrice = originalPrice - discountAmount
+        promotionDiscountAmount = discountAmount
     }
 }
