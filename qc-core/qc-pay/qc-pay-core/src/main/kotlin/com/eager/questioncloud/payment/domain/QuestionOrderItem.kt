@@ -6,10 +6,13 @@ class QuestionOrderItem(
     var originalPrice: Int,
     var realPrice: Int = originalPrice,
     val promotion: Discountable? = null,
+    var promotionDiscountAmount: Int = 0,
 ) {
     init {
         if (promotion != null) {
-            realPrice -= promotion.getDiscountAmount(originalPrice)
+            val discountAmount = promotion.getDiscountAmount(originalPrice)
+            realPrice -= discountAmount
+            promotionDiscountAmount = discountAmount
         }
     }
 }

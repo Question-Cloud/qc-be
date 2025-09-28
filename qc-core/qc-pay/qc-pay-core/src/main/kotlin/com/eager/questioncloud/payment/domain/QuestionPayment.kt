@@ -8,20 +8,29 @@ import java.time.LocalDateTime
 class QuestionPayment(
     var order: QuestionOrder,
     var userId: Long,
-    var appliedDiscountList: MutableList<Discountable> = mutableListOf(),
+    var discountHistory: MutableList<DiscountHistory> = mutableListOf(),
     var originalAmount: Int,
     var realAmount: Int,
     var status: QuestionPaymentStatus = QuestionPaymentStatus.SUCCESS,
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun applyDiscount(policy: Discountable) {
-        realAmount -= policy.getDiscountAmount(order.getCurrentPrice())
+        val discountAmount = policy.getDiscountAmount(order.getCurrentPrice())
+        realAmount -= discountAmount
         
         if (realAmount < 0) {
             throw CoreException(Error.WRONG_COUPON)
         }
         
-        appliedDiscountList.add(policy)
+        discountHistory.add(
+            DiscountHistory(
+                orderId = order.orderId,
+                discountType = policy.getDiscountType(),
+                appliedAmount = discountAmount,
+                name = policy.getName(),
+                sourceId = policy.getSourceId()
+            )
+        )
     }
     
     companion object {

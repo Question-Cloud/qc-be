@@ -7,12 +7,10 @@ class PercentCoupon(
     val userCouponId: Long,
     val title: String,
     val value: Int,
-    var appliedAmount: Int = 0,
 ) : Discountable {
     override fun getDiscountAmount(originAmount: Int): Int {
         val discountRate = value / 100.0
         val discountAmount = floor(originAmount * discountRate).toInt()
-        appliedAmount = discountAmount
         return discountAmount
     }
     
@@ -26,9 +24,5 @@ class PercentCoupon(
     
     override fun getSourceId(): Long {
         return userCouponId
-    }
-    
-    override fun getAppliedDiscountAmount(): Int {
-        return appliedAmount
     }
 }

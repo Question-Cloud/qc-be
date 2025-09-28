@@ -1,6 +1,5 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.payment.domain.DiscountHistory
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.repository.DiscountHistoryRepository
 import com.eager.questioncloud.payment.repository.QuestionPaymentRepository
@@ -15,6 +14,6 @@ class QuestionPaymentRecorder(
     @Transactional
     fun record(questionPayment: QuestionPayment) {
         questionPaymentRepository.save(questionPayment)
-        discountHistoryRepository.saveAll(DiscountHistory.create(questionPayment))
+        discountHistoryRepository.saveAll(questionPayment.discountHistory)
     }
 }

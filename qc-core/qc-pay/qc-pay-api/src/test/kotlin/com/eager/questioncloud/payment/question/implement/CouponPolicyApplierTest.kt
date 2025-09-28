@@ -2,8 +2,6 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.FixedCoupon
-import com.eager.questioncloud.payment.domain.PercentCoupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
@@ -20,7 +18,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeTypeOf
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.CountDownLatch
@@ -50,7 +47,7 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("기본 정책이 적용된다.") {
-                    questionPayment.appliedDiscountList.size shouldBeEqual 0
+                    questionPayment.discountHistory.size shouldBeEqual 0
                     questionPayment.realAmount shouldBeEqual questionPayment.originalAmount
                 }
             }
@@ -66,11 +63,8 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("고정 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.appliedDiscountList.size shouldBeEqual 1
-                    questionPayment.appliedDiscountList[0].shouldBeTypeOf<FixedCoupon>()
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.appliedDiscountList[0].getDiscountAmount(
-                        questionPayment.originalAmount
-                    )
+                    questionPayment.discountHistory.size shouldBeEqual 1
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].appliedAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true
@@ -89,11 +83,8 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.appliedDiscountList.size shouldBeEqual 1
-                    questionPayment.appliedDiscountList[0].shouldBeTypeOf<PercentCoupon>()
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.appliedDiscountList[0].getDiscountAmount(
-                        questionPayment.originalAmount
-                    )
+                    questionPayment.discountHistory.size shouldBeEqual 1
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].appliedAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true

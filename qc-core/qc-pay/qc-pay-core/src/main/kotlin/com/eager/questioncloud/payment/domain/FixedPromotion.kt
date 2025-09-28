@@ -20,8 +20,4 @@ class FixedPromotion(
     override fun getSourceId(): Long {
         return promotionId
     }
-    
-    override fun getAppliedDiscountAmount(): Int {
-        return value
-    }
 }

@@ -8,6 +8,4 @@ interface Discountable {
     fun getDiscountType(): DiscountType
     
     fun getSourceId(): Long
-    
-    fun getAppliedDiscountAmount(): Int
 }

@@ -21,8 +21,4 @@ class FixedCoupon(
     override fun getSourceId(): Long {
         return userCouponId
     }
-    
-    override fun getAppliedDiscountAmount(): Int {
-        return value
-    }
 }
