@@ -15,7 +15,7 @@ class QuestionPayment(
     var createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     fun applyDiscount(policy: Discountable) {
-        val discountAmount = policy.getDiscountAmount(order.getCurrentPrice())
+        val discountAmount = policy.getDiscountAmount(order.totalPriceAfterPromotions)
         realAmount -= discountAmount
         
         if (realAmount < 0) {
@@ -41,8 +41,8 @@ class QuestionPayment(
             return QuestionPayment(
                 order = order,
                 userId = userId,
-                originalAmount = order.getOriginalPrice(),
-                realAmount = order.getCurrentPrice()
+                originalAmount = order.totalOriginalPrice,
+                realAmount = order.totalPriceAfterPromotions
             )
         }
     }
