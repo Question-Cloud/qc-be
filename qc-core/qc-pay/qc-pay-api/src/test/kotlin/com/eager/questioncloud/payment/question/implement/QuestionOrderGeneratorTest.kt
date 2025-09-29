@@ -2,10 +2,6 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.Promotion
-import com.eager.questioncloud.payment.enums.PromotionType
-import com.eager.questioncloud.payment.repository.PromotionRepository
-import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
@@ -27,7 +23,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class QuestionOrderGeneratorTest(
     private val questionOrderGenerator: QuestionOrderGenerator,
-    private val promotionRepository: PromotionRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -54,38 +49,6 @@ class QuestionOrderGeneratorTest(
                 
                 Then("요청한 문제들로 주문이 생성된다") {
                     questionOrder.questionIds shouldContainExactlyInAnyOrder questions.map { it.id }
-                }
-            }
-        }
-        
-        Given("사용자가 프로모션 중인 문제로 주문을 생성할 때") {
-            val userId = 1L
-            val promotionQuestions = QuestionPaymentScenario.create(5).questionInformationQueryResult
-            val promotionMap = promotionQuestions.map {
-                promotionRepository.save(
-                    Promotion(
-                        questionId = it.id,
-                        promotionType = PromotionType.FIXED,
-                        title = "promtion ${it.id}",
-                        value = (100..it.price).random(),
-                        isActive = true
-                    )
-                )
-            }.associateBy { it.questionId }
-            
-            every { questionQueryAPI.isOwned(any(), any<List<Long>>()) } returns false
-            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns promotionQuestions
-            
-            When("주문 생성을 요청하면") {
-                val questionOrder = questionOrderGenerator.generateQuestionOrder(userId, promotionQuestions.map { it.id })
-                Then("프로모션이 적용되어 주문이 생성된다") {
-                    questionOrder.questionIds shouldContainExactlyInAnyOrder promotionQuestions.map { it.id }
-                    
-                    questionOrder.items.forEach {
-                        val promotion = promotionMap.getValue(it.questionId)
-                        it.promotionDiscountAmount shouldBe promotion.toDiscountable().getDiscountAmount(it.originalPrice)
-                        it.realPrice shouldBe it.originalPrice - it.promotionDiscountAmount
-                    }
                 }
             }
         }

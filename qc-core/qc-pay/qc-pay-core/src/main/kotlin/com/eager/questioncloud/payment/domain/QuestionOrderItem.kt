@@ -1,17 +1,20 @@
 package com.eager.questioncloud.payment.domain
 
 class QuestionOrderItem(
-    var id: Long = 0,
-    var questionId: Long,
-    var originalPrice: Int,
-    val promotion: Discountable? = null,
+    val id: Long = 0,
+    val questionId: Long,
+    val originalPrice: Int,
+    var realPrice: Int = originalPrice,
 ) {
-    val realPrice: Int
-    val promotionDiscountAmount: Int
+    var promotionId: Long? = null
+    var promotionName: String? = null
+    var promotionDiscountAmount: Int = 0
     
-    init {
-        val discountAmount = promotion?.getDiscountAmount(originalPrice) ?: 0
-        realPrice = originalPrice - discountAmount
-        promotionDiscountAmount = discountAmount
+    fun applyPromotion(promotion: Promotion) {
+        val discountable = promotion.toDiscountable()
+        promotionId = discountable.getSourceId()
+        promotionName = discountable.getName()
+        promotionDiscountAmount = discountable.getDiscountAmount(originalPrice)
+        realPrice -= promotionDiscountAmount
     }
 }
