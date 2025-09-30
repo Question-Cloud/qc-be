@@ -13,16 +13,6 @@ class UserCoupon(
     val createdAt: LocalDateTime,
     val endAt: LocalDateTime,
 ) {
-    fun validate() {
-        if (endAt.isBefore(LocalDateTime.now())) {
-            throw CoreException(Error.EXPIRED_COUPON)
-        }
-        
-        if (this.isUsed) {
-            throw CoreException(Error.FAIL_USE_COUPON)
-        }
-    }
-    
     companion object {
         fun create(userId: Long, coupon: Coupon): UserCoupon {
             if (coupon.endAt.isBefore(LocalDateTime.now())) {

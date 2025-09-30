@@ -1,5 +1,7 @@
 package com.eager.questioncloud.payment.repository
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.QuestionOrder
 import com.eager.questioncloud.payment.dto.QuestionOrderData
 import com.eager.questioncloud.payment.entity.QQuestionOrderEntity.questionOrderEntity
@@ -15,7 +17,16 @@ class QuestionOrderRepositoryImpl(
 ) : QuestionOrderRepository {
     
     override fun save(questionOrder: QuestionOrder) {
-        questionOrderJpaRepository.saveAll(QuestionOrderEntity.from(questionOrder))
+        val orderItemEntities = questionOrderJpaRepository.saveAll(QuestionOrderEntity.from(questionOrder))
+        questionOrder.items.forEach {
+            val savedEntity = orderItemEntities.find { entity -> entity.questionId == it.questionId }
+            
+            if (savedEntity == null) {
+                throw CoreException(Error.PAYMENT_ERROR)
+            }
+            
+            it.stored(savedEntity.id)
+        }
     }
     
     override fun deleteAllInBatch() {

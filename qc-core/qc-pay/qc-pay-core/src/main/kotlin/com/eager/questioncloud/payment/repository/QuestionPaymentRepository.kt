@@ -8,5 +8,5 @@ interface QuestionPaymentRepository {
     
     fun countByUserId(userId: Long): Int
     
-    fun getQuestionPaymentData(orderId: String): QuestionPaymentData
+    fun getQuestionPaymentData(paymentId: Long): QuestionPaymentData
 }

@@ -2,6 +2,7 @@ package com.eager.questioncloud.payment.document
 
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
 import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
+import com.eager.questioncloud.payment.enums.CouponType
 import org.bson.Document
 import org.springframework.core.convert.converter.Converter
 import java.time.LocalDateTime
@@ -26,6 +27,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
         return orders.stream()
             .map { orderDocument: Document ->
                 QuestionPaymentHistoryOrder(
+                    orderDocument.getLong("orderItemId"),
                     orderDocument.getLong("questionId"),
                     orderDocument.getInteger("originalPrice"),
                     orderDocument.getInteger("realPrice"),
@@ -43,7 +45,14 @@ class QuestionPaymentHistoryDocumentReadConverter :
     }
     
     private fun convertDiscountInformation(discountInformation: List<Document>): List<SimpleDiscountHistory> {
-        return discountInformation.map { SimpleDiscountHistory(it.getString("title"), it.getInteger("value")) }
+        return discountInformation.map {
+            SimpleDiscountHistory(
+                it.getString("title"),
+                CouponType.valueOf(it.getString("couponType")),
+                it.getLong("orderItemId"),
+                it.getInteger("discountAmount"),
+            )
+        }
     }
     
     private fun convertDate(date: Date): LocalDateTime {

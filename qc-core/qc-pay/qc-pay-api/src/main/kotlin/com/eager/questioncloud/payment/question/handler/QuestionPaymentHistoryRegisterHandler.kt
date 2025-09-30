@@ -31,16 +31,18 @@ class QuestionPaymentHistoryRegisterHandler(
         val creatorMap = creators.associateBy { it.creatorId }
         val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
         
-        val questionPaymentData = questionPaymentRepository.getQuestionPaymentData(event.orderId)
+        val questionPaymentData = questionPaymentRepository.getQuestionPaymentData(event.paymentId)
         val questionOrderData = questionOrderRepository.getQuestionOrderData(event.orderId)
         val discountHistories =
-            discountHistoryRepository.findByOrderId(event.orderId).map { SimpleDiscountHistory(it.name, it.discountAmount) }
+            discountHistoryRepository.findByPaymentId(event.paymentId)
+                .map { SimpleDiscountHistory(it.name, it.couponType, it.orderItemId, it.discountAmount) }
         
         val orders = questionOrderData.map {
             val question = questionMap.getValue(it.questionId)
             val creator = creatorMap.getValue(question.creatorId)
             val creatorUser = creatorUserMap.getValue(creator.userId)
             QuestionPaymentHistoryOrder(
+                it.orderItemId,
                 question.id,
                 it.originalPrice,
                 it.realPrice,

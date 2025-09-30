@@ -35,6 +35,7 @@ data class QuestionPaymentHistory(
 }
 
 data class QuestionPaymentHistoryOrder(
+    val orderItemId: Long,
     val questionId: Long,
     val originalPrice: Int,
     val realPrice: Int,

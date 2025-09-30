@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
 class CouponPolicyApplierTest(
-    private val couponPolicyApplier: CouponPolicyApplier,
+    private val orderCouponApplier: OrderCouponApplier,
     private val userCouponRepository: UserCouponRepository,
     private val couponRepository: CouponRepository,
     private val dbCleaner: DBCleaner,
@@ -45,9 +45,9 @@ class CouponPolicyApplierTest(
             val questionPayment = QuestionPayment.create(userId, questionPaymentScenario.order)
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, null)
             When("할인 정책을 적용하면") {
-                couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("기본 정책이 적용된다.") {
-                    questionPayment.discountHistory.size shouldBeEqual 0
+                    questionPayment.paymentDiscount.size shouldBeEqual 0
                     questionPayment.realAmount shouldBeEqual questionPayment.originalAmount
                 }
             }
@@ -61,10 +61,10 @@ class CouponPolicyApplierTest(
             val questionPayment = QuestionPayment.create(userId, questionPaymentScenario.order)
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCoupon.id)
             When("할인 정책을 적용하면") {
-                couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("고정 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.discountHistory.size shouldBeEqual 1
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].discountAmount
+                    questionPayment.paymentDiscount.size shouldBeEqual 1
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.paymentDiscount[0].discountAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true
@@ -81,10 +81,10 @@ class CouponPolicyApplierTest(
             val questionPayment = QuestionPayment.create(userId, questionPaymentScenario.order)
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCoupon.id)
             When("할인 정책을 적용하면") {
-                couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인 쿠폰 정책이 적용되고 사용처리 된다.") {
-                    questionPayment.discountHistory.size shouldBeEqual 1
-                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.discountHistory[0].discountAmount
+                    questionPayment.paymentDiscount.size shouldBeEqual 1
+                    questionPayment.realAmount shouldBeEqual questionPayment.originalAmount - questionPayment.paymentDiscount[0].discountAmount
                     
                     val usedUserCoupon = userCouponRepository.getUserCoupon(userCoupon.id)
                     usedUserCoupon.isUsed shouldBe true
@@ -103,7 +103,7 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 Then("WRONG_COUPON 예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
+                        orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
@@ -119,7 +119,7 @@ class CouponPolicyApplierTest(
             When("할인 정책을 적용하면") {
                 Then("WRONG_COUPON 예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        couponPolicyApplier.apply(questionPayment, questionPaymentCommand)
+                        orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
@@ -144,7 +144,7 @@ class CouponPolicyApplierTest(
                 for (i in 1 until questionPaymentScenarios.size) {
                     excutors.submit {
                         try {
-                            couponPolicyApplier.apply(questionPayments[i], questionPaymentCommands[i])
+                            orderCouponApplier.apply(questionPayments[i], questionPaymentCommands[i])
                             successCount.getAndIncrement()
                         } catch (e: Exception) {
                             failCount.incrementAndGet()

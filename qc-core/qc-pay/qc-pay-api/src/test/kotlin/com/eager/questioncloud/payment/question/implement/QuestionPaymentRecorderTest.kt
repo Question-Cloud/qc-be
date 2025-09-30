@@ -1,6 +1,5 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.payment.domain.FixedCoupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.repository.DiscountHistoryRepository
 import com.eager.questioncloud.payment.repository.QuestionOrderRepository
@@ -39,15 +38,15 @@ class QuestionPaymentRecorderTest(
                 questionPaymentRecorder.record(questionPayment)
                 Then("주문 정보, 결제 정보, 할인 내역이 DB에 저장된다.") {
                     val questionPaymentData = questionPaymentRepository.getQuestionPaymentData(questionPayment.order.orderId)
-                    val discountHistories = discountHistoryRepository.findByOrderId(questionPayment.order.orderId)
+                    val discountHistories = discountHistoryRepository.findByPaymentId(questionPayment.order.orderId)
                     val questionOrderData = questionOrderRepository.getQuestionOrderData(questionPayment.order.orderId)
                     
                     questionPaymentData.orderId shouldBe questionPayment.order.orderId
                     questionPaymentData.realAmount shouldBe questionPayment.realAmount
                     questionPaymentData.originalAmount shouldBe questionPayment.originalAmount
                     
-                    discountHistories[0].name shouldBe questionPayment.discountHistory[0].name
-                    discountHistories[0].discountAmount shouldBe questionPayment.discountHistory[0].discountAmount
+                    discountHistories[0].name shouldBe questionPayment.paymentDiscount[0].name
+                    discountHistories[0].discountAmount shouldBe questionPayment.paymentDiscount[0].discountAmount
                     
                     questionOrderData.size shouldBe questionPayment.order.items.size
                     questionOrderData.forEach { data ->

@@ -1,5 +1,6 @@
 package com.eager.questioncloud.payment.question.implement
 
+import com.eager.questioncloud.payment.domain.DiscountHistory
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.repository.DiscountHistoryRepository
 import com.eager.questioncloud.payment.repository.QuestionOrderRepository
@@ -15,8 +16,13 @@ class QuestionPaymentRecorder(
 ) {
     @Transactional
     fun record(questionPayment: QuestionPayment) {
-        questionOrderRepository.save(questionPayment.order)
         questionPaymentRepository.save(questionPayment)
-        discountHistoryRepository.saveAll(questionPayment.discountHistory)
+        questionOrderRepository.save(questionPayment.order)
+        
+        val discountHistories = mutableListOf<DiscountHistory>()
+        discountHistories.addAll(questionPayment.paymentDiscount)
+        discountHistories.addAll(questionPayment.orderDiscount)
+        discountHistories.forEach { it.updatePaymentId(questionPayment.paymentId) }
+        discountHistoryRepository.saveAll(discountHistories)
     }
 }

@@ -17,11 +17,12 @@ class QuestionPaymentRepositoryImpl(
 ) : QuestionPaymentRepository {
     
     override fun save(questionPayment: QuestionPayment): QuestionPayment {
-        questionPaymentJpaRepository.save(
+        val questionPaymentEntity = questionPaymentJpaRepository.save(
             QuestionPaymentEntity.createNewEntity(
                 questionPayment
             )
         )
+        questionPayment.stored(questionPaymentEntity.paymentId)
         return questionPayment
     }
     
@@ -29,7 +30,7 @@ class QuestionPaymentRepositoryImpl(
         return questionPaymentJpaRepository.countByUserId(userId)
     }
     
-    override fun getQuestionPaymentData(orderId: String): QuestionPaymentData {
+    override fun getQuestionPaymentData(paymentId: Long): QuestionPaymentData {
         val result = jpaQueryFactory.select(
             Projections.constructor(
                 QuestionPaymentData::class.java, questionPaymentEntity.orderId,
@@ -37,7 +38,7 @@ class QuestionPaymentRepositoryImpl(
             )
         )
             .from(questionPaymentEntity)
-            .where(questionPaymentEntity.orderId.eq(orderId))
+            .where(questionPaymentEntity.paymentId.eq(paymentId))
             .fetchFirst()
         
         if (result == null) {

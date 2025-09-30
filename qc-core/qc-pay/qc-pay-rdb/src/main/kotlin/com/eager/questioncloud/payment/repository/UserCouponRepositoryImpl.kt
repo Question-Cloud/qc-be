@@ -20,9 +20,11 @@ class UserCouponRepositoryImpl(
 ) : UserCouponRepository {
     
     override fun getUserCoupon(userCouponId: Long, userId: Long): UserCoupon {
-        return userCouponJpaRepository.findByIdAndUserIdAndIsUsedFalse(userCouponId, userId)
-            .orElseThrow { CoreException(Error.WRONG_COUPON) }
-            .toModel()
+        return jpaQueryFactory.select(userCouponEntity)
+            .from(userCouponEntity)
+            .where(userCouponEntity.isUsed.isFalse, userCouponEntity.endAt.after(LocalDateTime.now()))
+            .fetchFirst()
+            ?.toModel() ?: throw CoreException(Error.WRONG_COUPON)
     }
     
     override fun getUserCoupon(userCouponId: Long): UserCoupon {

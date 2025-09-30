@@ -3,10 +3,9 @@ package com.eager.questioncloud.payment.question.service
 import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.FixedCoupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.question.implement.CouponPolicyApplier
+import com.eager.questioncloud.payment.question.implement.OrderCouponApplier
 import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
 import com.eager.questioncloud.payment.question.implement.QuestionPaymentRecorder
 import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
@@ -38,7 +37,7 @@ class QuestionPaymentServiceTest(
     private lateinit var questionOrderGenerator: QuestionOrderGenerator
     
     @MockkBean
-    private lateinit var couponPolicyApplier: CouponPolicyApplier
+    private lateinit var orderCouponApplier: OrderCouponApplier
     
     @MockkBean
     private lateinit var questionPaymentRecorder: QuestionPaymentRecorder
@@ -60,7 +59,7 @@ class QuestionPaymentServiceTest(
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, null)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
-            justRun { couponPolicyApplier.apply(any(), any()) }
+            justRun { orderCouponApplier.apply(any(), any()) }
             justRun { questionPaymentRecorder.record(any()) }
             justRun { eventPublisher.publish(any()) }
             justRun { pointCommandAPI.usePoint(any(), any()) }
@@ -87,7 +86,7 @@ class QuestionPaymentServiceTest(
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
             every {
-                couponPolicyApplier.apply(any(), any())
+                orderCouponApplier.apply(any(), any())
             } answers {
                 val questionPayment = firstArg<QuestionPayment>()
                 questionPayment.applyDiscount(fixedCouponPolicy)
@@ -113,7 +112,7 @@ class QuestionPaymentServiceTest(
             val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
             
             every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
-            justRun { couponPolicyApplier.apply(any(), any()) }
+            justRun { orderCouponApplier.apply(any(), any()) }
             justRun { questionPaymentRecorder.record(any()) }
             every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
             

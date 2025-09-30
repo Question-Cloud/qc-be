@@ -1,5 +1,5 @@
 package com.eager.questioncloud.payment.enums
 
-enum class PromotionType {
+enum class DiscountCalculationType {
     FIXED, PERCENT
 }

@@ -27,8 +27,8 @@ class QuestionOrderEntity(
                         item.questionId,
                         item.originalPrice,
                         item.realPrice,
-                        item.promotionId,
-                        item.promotionName,
+                        item.appliedPromotion?.getSourceId(),
+                        item.appliedPromotion?.getName(),
                         item.promotionDiscountAmount
                     )
                 }

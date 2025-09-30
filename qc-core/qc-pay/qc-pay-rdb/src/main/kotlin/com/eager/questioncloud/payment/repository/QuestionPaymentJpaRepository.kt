@@ -4,6 +4,6 @@ import com.eager.questioncloud.payment.entity.QuestionPaymentEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface QuestionPaymentJpaRepository :
-    JpaRepository<QuestionPaymentEntity, String> {
+    JpaRepository<QuestionPaymentEntity, Long> {
     fun countByUserId(userId: Long): Int
 }

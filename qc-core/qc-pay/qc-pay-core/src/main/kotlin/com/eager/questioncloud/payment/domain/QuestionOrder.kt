@@ -11,12 +11,15 @@ class QuestionOrder(
     val totalOriginalPrice: Int
         get() = items.sumOf { it.originalPrice }
     
-    val totalPriceAfterPromotions: Int
+    val totalPrice: Int
         get() = items.sumOf { it.realPrice }
     
     val questionIds: List<Long>
         get() = items
             .map { obj: QuestionOrderItem -> obj.questionId }
+    
+    val orderDiscount: List<DiscountHistory>
+        get() = items.flatMap { it.discountHistories }
     
     fun applyPromotion(promotion: Promotion) {
         val target = items.find { it.questionId == promotion.questionId }
@@ -26,6 +29,16 @@ class QuestionOrder(
         }
         
         target.applyPromotion(promotion)
+    }
+    
+    fun applyTargetCoupon(questionId: Long, couponPolicy: CouponPolicy) {
+        val target = items.find { it.questionId == questionId }
+        
+        if (target == null) {
+            throw CoreException(Error.PAYMENT_ERROR)
+        }
+        
+        target.applyCoupon(couponPolicy)
     }
     
     companion object {

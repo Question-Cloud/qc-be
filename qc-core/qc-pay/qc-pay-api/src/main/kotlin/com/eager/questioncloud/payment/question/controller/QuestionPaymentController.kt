@@ -22,7 +22,13 @@ class QuestionPaymentController(
         userPrincipal: UserPrincipal,
         @RequestBody request: QuestionPaymentRequest
     ): DefaultResponse {
-        questionPaymentService.payment(QuestionPaymentCommand(userPrincipal.userId, request.questionIds, request.userCouponId))
+        questionPaymentService.payment(
+            QuestionPaymentCommand(
+                userPrincipal.userId,
+                request.orders.map { it.toCommand() },
+                request.userCouponId
+            )
+        )
         return DefaultResponse.success()
     }
     
