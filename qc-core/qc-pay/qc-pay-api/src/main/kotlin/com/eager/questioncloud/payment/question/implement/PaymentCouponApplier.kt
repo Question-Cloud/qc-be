@@ -1,7 +1,5 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.CouponPolicy
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
@@ -20,12 +18,8 @@ class PaymentCouponApplier(
         }
         
         val userCoupon = userCouponRepository.getUserCoupon(command.paymentUserCouponId, command.userId)
-        
-        if (!userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)) {
-            throw CoreException(Error.FAIL_USE_COUPON)
-        }
-        
         val coupon = couponRepository.findById(userCoupon.couponId)
+        userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)
         
         questionPayment.applyPaymentCoupon(CouponPolicy(coupon, userCoupon))
     }

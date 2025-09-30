@@ -17,6 +17,7 @@ class Coupon(
     val minimumPurchaseAmount: Int,
     val maximumDiscountAmount: Int,
     val remainingCount: Int,
+    val isDuplicable: Boolean,
     val endAt: LocalDateTime
 )
 

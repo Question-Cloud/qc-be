@@ -6,9 +6,14 @@ data class QuestionPaymentCommand(
     val paymentUserCouponId: Long?,
 ) {
     val questionIds: List<Long> = orders.map { it.questionId }
+    val allUserCouponIds: List<Long> = orders.flatMap { it.userCouponIds }
 }
 
 data class QuestionOrderCommand(
     val questionId: Long,
-    val orderUserCouponIds: List<Long>,
-)
+    val orderUserCouponId: Long? = null,
+    val duplicableOrderUserCouponId: Long? = null,
+) {
+    val userCouponIds: List<Long>
+        get() = listOfNotNull(orderUserCouponId, duplicableOrderUserCouponId)
+}

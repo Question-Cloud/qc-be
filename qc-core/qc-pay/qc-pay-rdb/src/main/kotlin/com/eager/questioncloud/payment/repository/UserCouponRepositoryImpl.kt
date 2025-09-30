@@ -87,8 +87,8 @@ class UserCouponRepositoryImpl(
     }
     
     @Transactional
-    override fun use(userCouponId: Long, orderId: String): Boolean {
-        return jpaQueryFactory.update(userCouponEntity)
+    override fun use(userCouponId: Long, orderId: String) {
+        val result = jpaQueryFactory.update(userCouponEntity)
             .set(userCouponEntity.isUsed, true)
             .set(userCouponEntity.usedOrderId, orderId)
             .where(
@@ -96,6 +96,10 @@ class UserCouponRepositoryImpl(
                 userCouponEntity.isUsed.isFalse()
             )
             .execute() == 1L
+        
+        if (!result) {
+            throw CoreException(Error.FAIL_USE_COUPON)
+        }
     }
     
     override fun deleteAllInBatch() {

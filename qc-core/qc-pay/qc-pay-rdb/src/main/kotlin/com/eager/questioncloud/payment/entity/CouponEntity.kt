@@ -21,6 +21,7 @@ class CouponEntity(
     @Column val minimumPurchaseAmount: Int,
     @Column val maximumDiscountAmount: Int,
     @Column var remainingCount: Int,
+    @Column val isDuplicable: Boolean,
     @Column var endAt: LocalDateTime
 ) {
     fun toDomain(): Coupon {
@@ -37,6 +38,7 @@ class CouponEntity(
             minimumPurchaseAmount,
             maximumDiscountAmount,
             remainingCount,
+            isDuplicable,
             endAt
         )
     }
@@ -56,6 +58,7 @@ class CouponEntity(
                 coupon.minimumPurchaseAmount,
                 coupon.maximumDiscountAmount,
                 coupon.remainingCount,
+                coupon.isDuplicable,
                 coupon.endAt
             )
         }

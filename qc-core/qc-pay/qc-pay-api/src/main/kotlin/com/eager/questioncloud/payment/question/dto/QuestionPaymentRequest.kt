@@ -22,9 +22,10 @@ class QuestionPaymentRequest(
 
 class QuestionOrderRequest(
     val questionId: Long,
-    val orderUserCouponIds: List<Long> = listOf(),
+    val orderUserCouponId: Long? = null,
+    val duplicableOrderUserCouponId: Long? = null,
 ) {
     fun toCommand(): QuestionOrderCommand {
-        return QuestionOrderCommand(questionId, orderUserCouponIds)
+        return QuestionOrderCommand(questionId, orderUserCouponId, duplicableOrderUserCouponId)
     }
 }
