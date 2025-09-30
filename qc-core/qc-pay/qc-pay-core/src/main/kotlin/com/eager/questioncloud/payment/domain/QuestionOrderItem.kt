@@ -13,6 +13,7 @@ class QuestionOrderItem(
     var promotionDiscountAmount: Int = 0
     val appliedCoupons: MutableList<CouponPolicy> = mutableListOf()
     var appliedPromotion: PromotionPolicy? = null
+    var promotionPrice: Int = originalPrice
     
     val discountHistories: List<DiscountHistory>
         get() {
@@ -34,16 +35,17 @@ class QuestionOrderItem(
     fun applyPromotion(promotion: Promotion) {
         val discountable = PromotionPolicy(promotion)
         promotionDiscountAmount = discountable.getDiscountAmount(originalPrice)
-        realPrice -= promotionDiscountAmount
+        
+        realPrice = originalPrice - promotionDiscountAmount
+        promotionPrice = originalPrice - promotionDiscountAmount
+        
         appliedPromotion = discountable
     }
     
     fun applyCoupon(couponPolicy: CouponPolicy) {
         if (!isApplicableCoupon(couponPolicy)) throw CoreException(Error.WRONG_COUPON)
-        realPrice -= couponPolicy.getDiscountAmount(realPrice)
-        
-        if (realPrice < 0) throw CoreException(Error.WRONG_COUPON)
-        
+        realPrice -= couponPolicy.getDiscountAmount(promotionPrice)
+        realPrice = realPrice.coerceAtLeast(0)
         appliedCoupons.add(couponPolicy)
     }
     
