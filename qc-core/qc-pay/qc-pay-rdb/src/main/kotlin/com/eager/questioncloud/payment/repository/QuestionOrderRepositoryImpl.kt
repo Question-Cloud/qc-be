@@ -19,7 +19,7 @@ class QuestionOrderRepositoryImpl(
     override fun save(questionOrder: QuestionOrder) {
         val orderItemEntities = questionOrderJpaRepository.saveAll(QuestionOrderEntity.from(questionOrder))
         questionOrder.items.forEach {
-            val savedEntity = orderItemEntities.find { entity -> entity.questionId == it.questionId }
+            val savedEntity = orderItemEntities.find { entity -> entity.questionId == it.questionInfo.questionId }
             
             if (savedEntity == null) {
                 throw CoreException(Error.PAYMENT_ERROR)

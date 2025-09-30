@@ -15,14 +15,13 @@ class QuestionOrder(
         get() = items.sumOf { it.realPrice }
     
     val questionIds: List<Long>
-        get() = items
-            .map { obj: QuestionOrderItem -> obj.questionId }
+        get() = items.map { it.questionInfo.questionId }
     
     val orderDiscount: List<DiscountHistory>
         get() = items.flatMap { it.orderDiscountHistories }
     
     fun applyPromotion(promotion: Promotion) {
-        val target = items.find { it.questionId == promotion.questionId }
+        val target = items.find { it.questionInfo.questionId == promotion.questionId }
         
         if (target == null) {
             throw CoreException(Error.PAYMENT_ERROR)
@@ -32,7 +31,7 @@ class QuestionOrder(
     }
     
     fun applyOrderCoupon(questionId: Long, couponPolicy: CouponPolicy) {
-        val target = items.find { it.questionId == questionId }
+        val target = items.find { it.questionInfo.questionId == questionId }
         
         if (target == null) {
             throw CoreException(Error.PAYMENT_ERROR)

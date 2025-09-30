@@ -24,7 +24,7 @@ class QuestionOrderEntity(
                     QuestionOrderEntity(
                         item.id,
                         questionOrder.orderId,
-                        item.questionId,
+                        item.questionInfo.questionId,
                         item.originalPrice,
                         item.realPrice,
                         item.appliedPromotion?.id,

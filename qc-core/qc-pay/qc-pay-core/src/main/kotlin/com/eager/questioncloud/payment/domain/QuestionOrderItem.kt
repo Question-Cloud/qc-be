@@ -2,12 +2,13 @@ package com.eager.questioncloud.payment.domain
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.dto.QuestionInfo
 import com.eager.questioncloud.payment.enums.CouponType
 
 class QuestionOrderItem(
     var id: Long = 0,
-    val questionId: Long,
-    val originalPrice: Int,
+    val questionInfo: QuestionInfo,
+    val originalPrice: Int = questionInfo.price,
     var realPrice: Int = originalPrice,
 ) {
     private val appliedCouponsWithAmount: MutableList<Pair<CouponPolicy, Int>> = mutableListOf()
@@ -49,7 +50,7 @@ class QuestionOrderItem(
     
     private fun isApplicableCoupon(couponPolicy: CouponPolicy): Boolean {
         return when (couponPolicy.coupon.couponType) {
-            CouponType.PRODUCT_TARGET -> questionId == couponPolicy.coupon.targetQuestionId
+            CouponType.PRODUCT_TARGET -> questionInfo.questionId == couponPolicy.coupon.targetQuestionId
             else -> false
         }
     }

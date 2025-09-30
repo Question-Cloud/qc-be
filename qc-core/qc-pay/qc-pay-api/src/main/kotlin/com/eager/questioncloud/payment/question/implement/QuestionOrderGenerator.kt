@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.QuestionOrder
 import com.eager.questioncloud.payment.domain.QuestionOrderItem
+import com.eager.questioncloud.payment.dto.QuestionInfo
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
@@ -18,7 +19,7 @@ class QuestionOrderGenerator(
         }
         
         val questions = getQuestions(questionIds)
-        val orderItems = questions.map { QuestionOrderItem(questionId = it.id, originalPrice = it.price) }
+        val orderItems = questions.map { QuestionOrderItem(questionInfo = QuestionInfo(it.id, it.creatorId, it.title, it.price)) }
         val order = QuestionOrder.createOrder(orderItems)
         
         return order
