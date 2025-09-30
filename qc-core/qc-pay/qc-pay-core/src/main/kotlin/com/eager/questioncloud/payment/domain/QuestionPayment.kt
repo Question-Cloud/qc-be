@@ -1,7 +1,5 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import java.time.LocalDateTime
 
 class QuestionPayment(
@@ -9,10 +7,10 @@ class QuestionPayment(
     val userId: Long,
     val order: QuestionOrder,
     val paymentDiscount: MutableList<DiscountHistory> = mutableListOf(),
-    val originalAmount: Int,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     val orderId = order.orderId
+    val originalAmount: Int = order.totalOriginalPrice
     var realAmount: Int = order.totalPrice
     val orderDiscount: List<DiscountHistory>
         get() = order.orderDiscount
@@ -25,7 +23,6 @@ class QuestionPayment(
             return QuestionPayment(
                 order = order,
                 userId = userId,
-                originalAmount = order.totalOriginalPrice
             )
         }
     }
@@ -35,12 +32,9 @@ class QuestionPayment(
     }
     
     fun applyPaymentCoupon(couponPolicy: CouponPolicy) {
-        val discountAmount = couponPolicy.getDiscountAmount(realAmount)
+        val discountAmount = couponPolicy.getDiscountAmount(order.totalPrice)
         realAmount -= discountAmount
-        
-        if (realAmount < 0) {
-            throw CoreException(Error.WRONG_COUPON)
-        }
+        realAmount = realAmount.coerceAtLeast(0)
         
         paymentDiscount.add(
             DiscountHistory(
