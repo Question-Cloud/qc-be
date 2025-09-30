@@ -19,7 +19,7 @@ class QuestionOrder(
             .map { obj: QuestionOrderItem -> obj.questionId }
     
     val orderDiscount: List<DiscountHistory>
-        get() = items.flatMap { it.discountHistories }
+        get() = items.flatMap { it.orderDiscountHistories }
     
     fun applyPromotion(promotion: Promotion) {
         val target = items.find { it.questionId == promotion.questionId }

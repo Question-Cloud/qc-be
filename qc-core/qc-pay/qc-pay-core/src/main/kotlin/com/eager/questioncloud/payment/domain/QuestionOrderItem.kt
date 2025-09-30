@@ -10,43 +10,38 @@ class QuestionOrderItem(
     val originalPrice: Int,
     var realPrice: Int = originalPrice,
 ) {
-    var promotionDiscountAmount: Int = 0
-    val appliedCoupons: MutableList<CouponPolicy> = mutableListOf()
-    var appliedPromotion: PromotionPolicy? = null
-    var promotionPrice: Int = originalPrice
+    private val appliedCouponsWithAmount: MutableList<Pair<CouponPolicy, Int>> = mutableListOf()
+    private val priceAfterPromotion: Int
+        get() = originalPrice - promotionDiscountAmount
     
-    val discountHistories: List<DiscountHistory>
+    var promotionDiscountAmount: Int = 0
+    var appliedPromotion: PromotionPolicy? = null
+    val orderDiscountHistories: List<DiscountHistory>
         get() {
-            val discountHistories = mutableListOf<DiscountHistory>()
-            appliedCoupons.forEach {
-                discountHistories.add(
-                    DiscountHistory(
-                        couponType = it.coupon.couponType,
-                        orderItemId = id,
-                        discountAmount = it.getDiscountAmount(realPrice),
-                        name = it.getName(),
-                        sourceId = it.getSourceId()
-                    )
+            return appliedCouponsWithAmount.map { (policy, amount) ->
+                DiscountHistory(
+                    couponType = policy.coupon.couponType,
+                    orderItemId = id,
+                    discountAmount = amount,
+                    name = policy.getName(),
+                    sourceId = policy.getSourceId()
                 )
             }
-            return discountHistories
         }
     
     fun applyPromotion(promotion: Promotion) {
         val discountable = PromotionPolicy(promotion)
         promotionDiscountAmount = discountable.getDiscountAmount(originalPrice)
-        
         realPrice = originalPrice - promotionDiscountAmount
-        promotionPrice = originalPrice - promotionDiscountAmount
-        
         appliedPromotion = discountable
     }
     
     fun applyCoupon(couponPolicy: CouponPolicy) {
         if (!isApplicableCoupon(couponPolicy)) throw CoreException(Error.WRONG_COUPON)
-        realPrice -= couponPolicy.getDiscountAmount(promotionPrice)
+        val discountAmount = couponPolicy.getDiscountAmount(priceAfterPromotion)
+        realPrice -= discountAmount
         realPrice = realPrice.coerceAtLeast(0)
-        appliedCoupons.add(couponPolicy)
+        appliedCouponsWithAmount.add(couponPolicy to discountAmount)
     }
     
     fun stored(id: Long) {
