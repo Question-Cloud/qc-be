@@ -15,7 +15,7 @@ class QuestionOrderItem(
         get() = originalPrice - promotionDiscountAmount
     
     var promotionDiscountAmount: Int = 0
-    var appliedPromotion: PromotionPolicy? = null
+    var appliedPromotion: Promotion? = null
     val orderDiscountHistories: List<DiscountHistory>
         get() {
             return appliedCouponsWithAmount.map { (policy, amount) ->
@@ -30,10 +30,9 @@ class QuestionOrderItem(
         }
     
     fun applyPromotion(promotion: Promotion) {
-        val discountable = PromotionPolicy(promotion)
-        promotionDiscountAmount = discountable.getDiscountAmount(originalPrice)
-        realPrice = originalPrice - promotionDiscountAmount
-        appliedPromotion = discountable
+        promotionDiscountAmount = originalPrice - promotion.salePrice
+        realPrice = promotion.salePrice
+        appliedPromotion = promotion
     }
     
     fun applyCoupon(couponPolicy: CouponPolicy) {
