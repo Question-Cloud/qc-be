@@ -31,7 +31,7 @@ class QuestionOrder(
         target.applyPromotion(promotion)
     }
     
-    fun applyTargetCoupon(questionId: Long, couponPolicy: CouponPolicy) {
+    fun applyOrderCoupon(questionId: Long, couponPolicy: CouponPolicy) {
         val target = items.find { it.questionId == questionId }
         
         if (target == null) {

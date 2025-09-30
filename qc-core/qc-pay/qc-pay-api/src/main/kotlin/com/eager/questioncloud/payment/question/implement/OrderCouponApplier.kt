@@ -16,12 +16,14 @@ class OrderCouponApplier(
 ) {
     fun apply(questionOrder: QuestionOrder, command: QuestionPaymentCommand) {
         command.orders.forEach { order ->
-            order.orderUserCouponIds.forEach { userCouponId ->
-                val userCoupon = userCouponRepository.getUserCoupon(userCouponId, command.userId)
-                val coupon = couponRepository.findById(userCoupon.couponId)
-                val couponPolicy = CouponPolicy(coupon, userCoupon)
-                questionOrder.applyTargetCoupon(order.questionId, couponPolicy)
-                
+            if (order.orderUserCouponIds.isEmpty()) return@forEach
+            
+            val userCoupons = userCouponRepository.getUserCoupon(order.orderUserCouponIds, command.userId)
+            val couponMap = couponRepository.findByIdIn(userCoupons.map { it.couponId }).associateBy { it.id }
+            
+            userCoupons.forEach { userCoupon ->
+                val couponPolicy = CouponPolicy(couponMap.getValue(userCoupon.couponId), userCoupon)
+                questionOrder.applyOrderCoupon(order.questionId, couponPolicy)
                 if (!userCouponRepository.use(userCoupon.id, questionOrder.orderId)) {
                     throw CoreException(Error.FAIL_USE_COUPON)
                 }

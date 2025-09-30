@@ -8,6 +8,8 @@ interface UserCouponRepository {
     
     fun getUserCoupon(userCouponId: Long): UserCoupon
     
+    fun getUserCoupon(userCouponIds: List<Long>, userId: Long): List<UserCoupon>
+    
     fun isRegistered(userId: Long, couponId: Long): Boolean
     
     fun save(userCoupon: UserCoupon): UserCoupon

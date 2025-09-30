@@ -22,7 +22,12 @@ class UserCouponRepositoryImpl(
     override fun getUserCoupon(userCouponId: Long, userId: Long): UserCoupon {
         return jpaQueryFactory.select(userCouponEntity)
             .from(userCouponEntity)
-            .where(userCouponEntity.isUsed.isFalse, userCouponEntity.endAt.after(LocalDateTime.now()))
+            .where(
+                userCouponEntity.id.eq(userCouponId),
+                userCouponEntity.userId.eq(userId),
+                userCouponEntity.isUsed.isFalse,
+                userCouponEntity.endAt.after(LocalDateTime.now())
+            )
             .fetchFirst()
             ?.toModel() ?: throw CoreException(Error.WRONG_COUPON)
     }
@@ -31,6 +36,25 @@ class UserCouponRepositoryImpl(
         return userCouponJpaRepository.findById(userCouponId)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
+    }
+    
+    override fun getUserCoupon(userCouponIds: List<Long>, userId: Long): List<UserCoupon> {
+        val result = jpaQueryFactory.select(userCouponEntity)
+            .from(userCouponEntity)
+            .where(
+                userCouponEntity.id.`in`(userCouponIds),
+                userCouponEntity.userId.eq(userId),
+                userCouponEntity.isUsed.isFalse,
+                userCouponEntity.endAt.after(LocalDateTime.now())
+            )
+            .fetch()
+            .map { it.toModel() }
+        
+        if (result.size != userCouponIds.size) {
+            throw CoreException(Error.WRONG_COUPON)
+        }
+        
+        return result
     }
     
     override fun isRegistered(userId: Long, couponId: Long): Boolean {

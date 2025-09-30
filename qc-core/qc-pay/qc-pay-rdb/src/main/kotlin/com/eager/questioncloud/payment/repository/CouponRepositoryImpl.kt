@@ -20,6 +20,14 @@ class CouponRepositoryImpl(
             .toDomain()
     }
     
+    override fun findByIdIn(ids: List<Long>): List<Coupon> {
+        return jpaQueryFactory.select(couponEntity)
+            .from(couponEntity)
+            .where(couponEntity.id.`in`(ids))
+            .fetch()
+            .map { it.toDomain() }
+    }
+    
     override fun findByCode(code: String): Coupon {
         return couponJpaRepository.findByCode(code)
             .orElseThrow { CoreException(Error.NOT_FOUND) }
