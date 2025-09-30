@@ -6,7 +6,6 @@ import com.eager.questioncloud.payment.repository.DiscountHistoryRepository
 import com.eager.questioncloud.payment.repository.QuestionOrderRepository
 import com.eager.questioncloud.payment.repository.QuestionPaymentRepository
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 class QuestionPaymentRecorder(
@@ -14,7 +13,6 @@ class QuestionPaymentRecorder(
     private val questionOrderRepository: QuestionOrderRepository,
     private val discountHistoryRepository: DiscountHistoryRepository,
 ) {
-    @Transactional
     fun record(questionPayment: QuestionPayment) {
         questionPaymentRepository.save(questionPayment)
         questionOrderRepository.save(questionPayment.order)
