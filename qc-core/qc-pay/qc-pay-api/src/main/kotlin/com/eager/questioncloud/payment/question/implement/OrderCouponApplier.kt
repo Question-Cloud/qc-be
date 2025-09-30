@@ -16,9 +16,7 @@ class OrderCouponApplier(
 ) {
     fun apply(questionOrder: QuestionOrder, command: QuestionPaymentCommand) {
         command.orders.forEach { order ->
-            if (order.userCouponIds.isEmpty()) return@forEach
-            
-            order.userCouponIds.forEach { userCouponId ->
+            order.orderUserCouponIds.forEach { userCouponId ->
                 val userCoupon = userCouponRepository.getUserCoupon(userCouponId, command.userId)
                 val coupon = couponRepository.findById(userCoupon.couponId)
                 val couponPolicy = CouponPolicy(coupon, userCoupon)

@@ -53,7 +53,7 @@ class QuestionPaymentControllerDocument(
         Given("문제 구매 API 테스트") {
             val questionPaymentRequest = QuestionPaymentRequest(
                 questionIds = listOf(1L, 2L),
-                userCouponId = 1L
+                paymentUserCouponId = 1L
             )
             val userId = 1L
             val questionPaymentScenario = QuestionPaymentScenario.create(questionPaymentRequest.questionIds.size)
@@ -97,7 +97,7 @@ class QuestionPaymentControllerDocument(
         Given("이미 구매한 문제로 구매를 시도할 때") {
             val questionPaymentRequest = QuestionPaymentRequest(
                 questionIds = listOf(101L),
-                userCouponId = null
+                paymentUserCouponId = null
             )
             every { questionPaymentService.payment(any()) } throws
                     CoreException(Error.ALREADY_OWN_QUESTION)
@@ -136,7 +136,7 @@ class QuestionPaymentControllerDocument(
         Given("사용할 수 없는 문제로 구매를 시도할 때") {
             val questionPaymentRequest = QuestionPaymentRequest(
                 questionIds = listOf(999L, 1000L),
-                userCouponId = null
+                paymentUserCouponId = null
             )
             every { questionPaymentService.payment(any()) } throws CoreException(Error.UNAVAILABLE_QUESTION)
             
@@ -175,7 +175,7 @@ class QuestionPaymentControllerDocument(
         Given("포인트가 부족한 상황에서 구매를 시도할 때") {
             val questionPaymentRequest = QuestionPaymentRequest(
                 questionIds = listOf(101L, 102L),
-                userCouponId = null
+                paymentUserCouponId = null
             )
             every { questionPaymentService.payment(any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
             

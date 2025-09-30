@@ -26,7 +26,7 @@ class QuestionPaymentController(
             QuestionPaymentCommand(
                 userPrincipal.userId,
                 request.orders.map { it.toCommand() },
-                request.userCouponId
+                request.paymentUserCouponId
             )
         )
         return DefaultResponse.success()

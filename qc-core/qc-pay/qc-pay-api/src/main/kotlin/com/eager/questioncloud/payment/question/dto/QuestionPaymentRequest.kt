@@ -7,7 +7,7 @@ import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 
 class QuestionPaymentRequest(
     val orders: List<QuestionOrderRequest>,
-    val userCouponId: Long?,
+    val paymentUserCouponId: Long?,
 ) : Validatable {
     init {
         validate()
@@ -22,9 +22,9 @@ class QuestionPaymentRequest(
 
 class QuestionOrderRequest(
     val questionId: Long,
-    val userCouponIds: List<Long> = listOf(),
+    val orderUserCouponIds: List<Long> = listOf(),
 ) {
     fun toCommand(): QuestionOrderCommand {
-        return QuestionOrderCommand(questionId, userCouponIds)
+        return QuestionOrderCommand(questionId, orderUserCouponIds)
     }
 }

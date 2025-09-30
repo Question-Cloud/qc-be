@@ -15,11 +15,11 @@ class PaymentCouponApplier(
     private val couponRepository: CouponRepository
 ) {
     fun apply(questionPayment: QuestionPayment, command: QuestionPaymentCommand) {
-        if (command.userCouponId == null) {
+        if (command.paymentUserCouponId == null) {
             return
         }
         
-        val userCoupon = userCouponRepository.getUserCoupon(command.userCouponId, command.userId)
+        val userCoupon = userCouponRepository.getUserCoupon(command.paymentUserCouponId, command.userId)
         
         if (!userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)) {
             throw CoreException(Error.FAIL_USE_COUPON)
