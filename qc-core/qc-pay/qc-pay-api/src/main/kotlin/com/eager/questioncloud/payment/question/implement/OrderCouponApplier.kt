@@ -2,27 +2,27 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.Coupon
+import com.eager.questioncloud.payment.domain.CouponInformation
 import com.eager.questioncloud.payment.domain.CouponPolicy
 import com.eager.questioncloud.payment.domain.QuestionOrder
 import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.repository.CouponRepository
+import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import org.springframework.stereotype.Component
 
 @Component
 class OrderCouponApplier(
     private val userCouponRepository: UserCouponRepository,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
 ) {
     fun apply(questionOrder: QuestionOrder, command: QuestionPaymentCommand) {
         val allUserCouponIds = command.allUserCouponIds
         if (allUserCouponIds.isEmpty()) return
         
         val userCoupons = userCouponRepository.getUserCoupon(allUserCouponIds, command.userId)
-        val coupons = couponRepository.findByIdIn(userCoupons.map { it.couponId })
+        val coupons = couponInformationRepository.findByIdIn(userCoupons.map { it.couponId })
         
         val userCouponMap = userCoupons.associateBy { it.id }
         val couponMap = coupons.associateBy { it.id }
@@ -37,11 +37,11 @@ class OrderCouponApplier(
         questionOrder: QuestionOrder,
         orderCommand: QuestionOrderCommand,
         userCouponMap: Map<Long, UserCoupon>,
-        couponMap: Map<Long, Coupon>
+        couponInformationMap: Map<Long, CouponInformation>
     ) {
         orderCommand.orderUserCouponId?.let { couponId ->
             val userCoupon = userCouponMap.getValue(couponId)
-            val coupon = couponMap.getValue(userCoupon.couponId)
+            val coupon = couponInformationMap.getValue(userCoupon.couponId)
             
             userCouponRepository.use(userCoupon.id, questionOrder.orderId)
             
@@ -54,11 +54,11 @@ class OrderCouponApplier(
         questionOrder: QuestionOrder,
         orderCommand: QuestionOrderCommand,
         userCouponMap: Map<Long, UserCoupon>,
-        couponMap: Map<Long, Coupon>
+        couponInformationMap: Map<Long, CouponInformation>
     ) {
         orderCommand.duplicableOrderUserCouponId?.let { couponId ->
             val userCoupon = userCouponMap.getValue(couponId)
-            val coupon = couponMap.getValue(userCoupon.couponId)
+            val coupon = couponInformationMap.getValue(userCoupon.couponId)
             
             if (!coupon.isDuplicable) throw CoreException(Error.WRONG_COUPON)
             

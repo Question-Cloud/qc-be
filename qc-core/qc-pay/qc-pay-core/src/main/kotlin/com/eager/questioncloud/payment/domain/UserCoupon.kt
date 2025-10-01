@@ -14,19 +14,19 @@ class UserCoupon(
     val endAt: LocalDateTime,
 ) {
     companion object {
-        fun create(userId: Long, coupon: Coupon): UserCoupon {
-            if (coupon.endAt.isBefore(LocalDateTime.now())) {
+        fun create(userId: Long, couponInformation: CouponInformation): UserCoupon {
+            if (couponInformation.endAt.isBefore(LocalDateTime.now())) {
                 throw CoreException(Error.EXPIRED_COUPON)
             }
-            if (coupon.remainingCount == 0) {
+            if (couponInformation.remainingCount == 0) {
                 throw CoreException(Error.LIMITED_COUPON)
             }
             return UserCoupon(
                 userId = userId,
-                couponId = coupon.id,
+                couponId = couponInformation.id,
                 isUsed = false,
                 createdAt = LocalDateTime.now(),
-                endAt = coupon.endAt
+                endAt = couponInformation.endAt
             )
         }
     }

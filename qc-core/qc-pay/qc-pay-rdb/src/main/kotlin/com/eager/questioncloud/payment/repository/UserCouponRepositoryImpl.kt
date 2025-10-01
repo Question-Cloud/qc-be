@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.dto.AvailableUserCoupon
-import com.eager.questioncloud.payment.entity.QCouponEntity.couponEntity
+import com.eager.questioncloud.payment.entity.QCouponInformationEntity.couponInformationEntity
 import com.eager.questioncloud.payment.entity.QUserCouponEntity.userCouponEntity
 import com.eager.questioncloud.payment.entity.UserCouponEntity
 import com.querydsl.core.types.Projections
@@ -70,21 +70,21 @@ class UserCouponRepositoryImpl(
             Projections.constructor(
                 AvailableUserCoupon::class.java,
                 userCouponEntity.id,
-                couponEntity.title,
-                couponEntity.couponType,
-                couponEntity.discountCalculationType,
-                couponEntity.targetQuestionId,
-                couponEntity.targetCreatorId,
-                couponEntity.targetCategoryId,
-                couponEntity.minimumPurchaseAmount,
-                couponEntity.maximumDiscountAmount,
-                couponEntity.isDuplicable,
-                couponEntity.value,
+                couponInformationEntity.title,
+                couponInformationEntity.couponType,
+                couponInformationEntity.discountCalculationType,
+                couponInformationEntity.targetQuestionId,
+                couponInformationEntity.targetCreatorId,
+                couponInformationEntity.targetCategoryId,
+                couponInformationEntity.minimumPurchaseAmount,
+                couponInformationEntity.maximumDiscountAmount,
+                couponInformationEntity.isDuplicable,
+                couponInformationEntity.value,
                 userCouponEntity.endAt
             )
         )
             .from(userCouponEntity)
-            .leftJoin(couponEntity).on(couponEntity.id.eq(userCouponEntity.couponId))
+            .leftJoin(couponInformationEntity).on(couponInformationEntity.id.eq(userCouponEntity.couponId))
             .where(
                 userCouponEntity.userId.eq(userId),
                 userCouponEntity.isUsed.isFalse(),

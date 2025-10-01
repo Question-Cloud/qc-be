@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.repository.CouponRepository
+import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
@@ -25,7 +25,7 @@ import org.springframework.test.context.ActiveProfiles
 class OrderCouponApplierTest(
     private val orderCouponApplier: OrderCouponApplier,
     private val userCouponRepository: UserCouponRepository,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     init {
@@ -41,16 +41,16 @@ class OrderCouponApplierTest(
             val item0 = questionOrder.items[0]
             val item0DiscountAmount = 1000
             val item0Coupon = CouponScenario.productFixedCoupon(item0.questionInfo.questionId, item0DiscountAmount)
-                .save(couponRepository)
+                .save(couponInformationRepository)
             val item0UserCoupon = item0Coupon.setUserCoupon(userId, userCouponRepository)
             
             // 단일 고정 할인 상품 쿠폰 + 중복 쿠폰
             val item1 = questionOrder.items[1]
             val item1DiscountAmount = 1000
             val item1Coupon = CouponScenario.productFixedCoupon(item1.questionInfo.questionId, item1DiscountAmount)
-                .save(couponRepository)
+                .save(couponInformationRepository)
             val item1DuplicableCoupon = CouponScenario.duplicableFixedProductCoupon(item1.questionInfo.questionId, item1DiscountAmount)
-                .save(couponRepository)
+                .save(couponInformationRepository)
             val item1UserCoupon = item1Coupon.setUserCoupon(userId, userCouponRepository)
             val item1DuplicableUserCoupon = item1DuplicableCoupon.setUserCoupon(userId, userCouponRepository)
             
@@ -99,11 +99,12 @@ class OrderCouponApplierTest(
             val item = questionOrder.items[0]
             val percentValue1 = 10
             val percentValue2 = 20
-            val itemPercentCoupon = CouponScenario.productPercentCoupon(item.questionInfo.questionId, percentValue1).save(couponRepository)
+            val itemPercentCoupon =
+                CouponScenario.productPercentCoupon(item.questionInfo.questionId, percentValue1).save(couponInformationRepository)
             val itemPercentUserCoupon = itemPercentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val itemDiscountablePercentCoupon =
-                CouponScenario.duplicablePercentProductCoupon(item.questionInfo.questionId, percentValue2).save(couponRepository)
+                CouponScenario.duplicablePercentProductCoupon(item.questionInfo.questionId, percentValue2).save(couponInformationRepository)
             val itemDiscountablePercentUserCoupon = itemDiscountablePercentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionOrderCommand = listOf(
@@ -129,12 +130,13 @@ class OrderCouponApplierTest(
             
             val item = questionOrder.items[0]
             val percentValue = 10
-            val itemPercentCoupon = CouponScenario.productPercentCoupon(item.questionInfo.questionId, percentValue).save(couponRepository)
+            val itemPercentCoupon =
+                CouponScenario.productPercentCoupon(item.questionInfo.questionId, percentValue).save(couponInformationRepository)
             val itemPercentUserCoupon = itemPercentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val fixedValue = 3000
             val itemDiscountableFixedCoupon =
-                CouponScenario.duplicableFixedProductCoupon(item.questionInfo.questionId, fixedValue).save(couponRepository)
+                CouponScenario.duplicableFixedProductCoupon(item.questionInfo.questionId, fixedValue).save(couponInformationRepository)
             val itemDiscountableFixedUserCoupon = itemDiscountableFixedCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionOrderCommand = listOf(
@@ -161,11 +163,11 @@ class OrderCouponApplierTest(
             val item = questionOrder.items[0]
             
             val itemCoupon1 = CouponScenario.productFixedCoupon(item.questionInfo.questionId, 1000)
-                .save(couponRepository)
+                .save(couponInformationRepository)
             val itemUserCoupon1 = itemCoupon1.setUserCoupon(userId, userCouponRepository)
             
             val itemCoupon2 = CouponScenario.productFixedCoupon(item.questionInfo.questionId, 1500)
-                .save(couponRepository)
+                .save(couponInformationRepository)
             val itemUserCoupon2 = itemCoupon2.setUserCoupon(userId, userCouponRepository)
             
             val questionOrderCommand = listOf(QuestionOrderCommand(item.questionInfo.questionId, itemUserCoupon1.id, itemUserCoupon2.id))
@@ -206,7 +208,8 @@ class OrderCouponApplierTest(
             val userId = 1L
             val questionOrder = QuestionOrderScenario.create(1)
             
-            val coupon = CouponScenario.productFixedCoupon(questionOrder.items[0].questionInfo.questionId, 1500).save(couponRepository)
+            val coupon =
+                CouponScenario.productFixedCoupon(questionOrder.items[0].questionInfo.questionId, 1500).save(couponInformationRepository)
             val usedUserCoupon = coupon.setUserCoupon(userId, userCouponRepository, true)
             
             val questionOrderCommand =

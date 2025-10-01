@@ -21,7 +21,7 @@ class QuestionOrderItem(
         get() {
             return appliedCouponsWithAmount.map { (policy, amount) ->
                 DiscountHistory(
-                    couponType = policy.coupon.couponType,
+                    couponType = policy.couponInformation.couponType,
                     orderItemId = id,
                     discountAmount = amount,
                     name = policy.getName(),
@@ -49,8 +49,8 @@ class QuestionOrderItem(
     }
     
     private fun isApplicableCoupon(couponPolicy: CouponPolicy): Boolean {
-        return when (couponPolicy.coupon.couponType) {
-            CouponType.PRODUCT_TARGET -> questionInfo.questionId == couponPolicy.coupon.targetQuestionId
+        return when (couponPolicy.couponInformation.couponType) {
+            CouponType.PRODUCT_TARGET -> questionInfo.questionId == couponPolicy.couponInformation.targetQuestionId
             else -> false
         }
     }

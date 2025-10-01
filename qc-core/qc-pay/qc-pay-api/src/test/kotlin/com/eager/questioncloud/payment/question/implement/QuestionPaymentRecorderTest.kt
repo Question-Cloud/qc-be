@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles
 class QuestionPaymentRecorderTest(
     private val questionPaymentRecorder: QuestionPaymentRecorder,
     private val promotionRepository: PromotionRepository,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
     private val userCouponRepository: UserCouponRepository,
     private val questionOrderRepository: QuestionOrderRepository,
     private val questionPaymentRepository: QuestionPaymentRepository,
@@ -45,18 +45,18 @@ class QuestionPaymentRecorderTest(
             // 쿠폰 + 중복 쿠폰
             val couponDiscountAmount = 1000
             
-            val coupon = CouponScenario.productFixedCoupon(questionId, discount = couponDiscountAmount).save(couponRepository)
+            val coupon = CouponScenario.productFixedCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
             val userCoupon = coupon.setUserCoupon(userId, userCouponRepository)
             
             val duplicableCoupon =
-                CouponScenario.duplicableFixedProductCoupon(questionId, discount = couponDiscountAmount).save(couponRepository)
+                CouponScenario.duplicableFixedProductCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
             val duplicabeUserCoupon = duplicableCoupon.setUserCoupon(userId, userCouponRepository)
             
             questionOrder.items[0].applyCoupon(CouponPolicy(coupon, userCoupon))
             questionOrder.items[0].applyCoupon(CouponPolicy(duplicableCoupon, duplicabeUserCoupon))
             
             // 결제 할인 쿠폰
-            val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponRepository)
+            val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponInformationRepository)
             val paymentUserCoupon = paymentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionPayment = QuestionPayment.create(userId, questionOrder)

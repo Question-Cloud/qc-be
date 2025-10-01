@@ -35,7 +35,7 @@ class QuestionPayment(
     }
     
     fun applyPaymentCoupon(couponPolicy: CouponPolicy) {
-        if (couponPolicy.coupon.couponType != CouponType.PAYMENT) throw CoreException(Error.WRONG_COUPON)
+        if (couponPolicy.couponInformation.couponType != CouponType.PAYMENT) throw CoreException(Error.WRONG_COUPON)
         
         val discountAmount = couponPolicy.getDiscountAmount(realAmount)
         realAmount -= discountAmount
@@ -43,7 +43,7 @@ class QuestionPayment(
         
         paymentDiscount.add(
             DiscountHistory(
-                couponType = couponPolicy.coupon.couponType,
+                couponType = couponPolicy.couponInformation.couponType,
                 discountAmount = discountAmount,
                 name = couponPolicy.getName(),
                 sourceId = couponPolicy.getSourceId()

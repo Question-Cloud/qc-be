@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.entity
 
-import com.eager.questioncloud.payment.domain.Coupon
+import com.eager.questioncloud.payment.domain.CouponInformation
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.enums.DiscountCalculationType
 import jakarta.persistence.*
@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "coupon")
-class CouponEntity(
+class CouponInformationEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
     @Column var code: String,
     @Column var title: String,
@@ -24,8 +24,8 @@ class CouponEntity(
     @Column val isDuplicable: Boolean,
     @Column var endAt: LocalDateTime
 ) {
-    fun toDomain(): Coupon {
-        return Coupon(
+    fun toDomain(): CouponInformation {
+        return CouponInformation(
             id,
             code,
             title,
@@ -44,22 +44,22 @@ class CouponEntity(
     }
     
     companion object {
-        fun from(coupon: Coupon): CouponEntity {
-            return CouponEntity(
-                coupon.id,
-                coupon.code,
-                coupon.title,
-                coupon.couponType,
-                coupon.discountCalculationType,
-                coupon.targetQuestionId,
-                coupon.targetCreatorId,
-                coupon.targetCategoryId,
-                coupon.value,
-                coupon.minimumPurchaseAmount,
-                coupon.maximumDiscountAmount,
-                coupon.remainingCount,
-                coupon.isDuplicable,
-                coupon.endAt
+        fun from(couponInformation: CouponInformation): CouponInformationEntity {
+            return CouponInformationEntity(
+                couponInformation.id,
+                couponInformation.code,
+                couponInformation.title,
+                couponInformation.couponType,
+                couponInformation.discountCalculationType,
+                couponInformation.targetQuestionId,
+                couponInformation.targetCreatorId,
+                couponInformation.targetCategoryId,
+                couponInformation.value,
+                couponInformation.minimumPurchaseAmount,
+                couponInformation.maximumDiscountAmount,
+                couponInformation.remainingCount,
+                couponInformation.isDuplicable,
+                couponInformation.endAt
             )
         }
     }

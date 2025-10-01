@@ -1,7 +1,7 @@
 package com.eager.questioncloud.payment.coupon.service
 
-import com.eager.questioncloud.payment.domain.Coupon
-import com.eager.questioncloud.payment.repository.CouponRepository
+import com.eager.questioncloud.payment.domain.CouponInformation
+import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.eager.questioncloud.payment.scenario.custom
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class UserCouponServiceTest(
     private val userCouponService: UserCouponService,
     private val userCouponRepository: UserCouponRepository,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
     private val dbCleaner: DBCleaner
 ) : BehaviorSpec() {
     
@@ -44,14 +44,15 @@ class UserCouponServiceTest(
             val unavailableCouponCount = 5
             
             (1..availableCouponCount).forEach { _ ->
-                val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
             (1..unavailableCouponCount).forEach { _ ->
-                val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::endAt, LocalDateTime.now().minusDays(10)) }
-                    .save(couponRepository)
-                coupon.setUserCoupon(userId, userCouponRepository)
+                val couponInformation =
+                    CouponScenario.paymentFixedCoupon().custom { set(CouponInformation::endAt, LocalDateTime.now().minusDays(10)) }
+                        .save(couponInformationRepository)
+                couponInformation.setUserCoupon(userId, userCouponRepository)
             }
             
             When("사용 가능한 쿠폰 목록을 조회하면") {
@@ -67,13 +68,14 @@ class UserCouponServiceTest(
             val userId = 1L
             val couponCount = 5
             (1..couponCount).forEach { _ ->
-                val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::endAt, LocalDateTime.now().minusDays(10)) }
-                    .save(couponRepository)
-                coupon.setUserCoupon(userId, userCouponRepository)
+                val couponInformation =
+                    CouponScenario.paymentFixedCoupon().custom { set(CouponInformation::endAt, LocalDateTime.now().minusDays(10)) }
+                        .save(couponInformationRepository)
+                couponInformation.setUserCoupon(userId, userCouponRepository)
             }
             
             (1..couponCount).forEach { _ ->
-                val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
                 coupon.setUserCoupon(userId, userCouponRepository, true)
             }
             
@@ -88,7 +90,7 @@ class UserCouponServiceTest(
         
         Given("동일한 사용자가 쿠폰 등록 요청을 동시에 할 때") {
             val userId = 1L
-            val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
+            val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
             
             When("여러번 등록 요청을 하면") {
                 val threadCount = 100
@@ -126,8 +128,9 @@ class UserCouponServiceTest(
         }
         
         Given("제한된 수량의 쿠폰이 있을 때") {
-            val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::remainingCount, 10) }.save(couponRepository)
-            val couponLimit = coupon.remainingCount
+            val couponInformation =
+                CouponScenario.paymentFixedCoupon().custom { set(CouponInformation::remainingCount, 10) }.save(couponInformationRepository)
+            val couponLimit = couponInformation.remainingCount
             val requestCount = 100
             
             When("서로 다른 사용자 100명이 동시에 등록 요청을 하면") {
@@ -139,7 +142,7 @@ class UserCouponServiceTest(
                 for (userId in 1L..100L) {
                     executorService.submit {
                         runCatching {
-                            userCouponService.registerCoupon(userId, coupon.code)
+                            userCouponService.registerCoupon(userId, couponInformation.code)
                         }.onSuccess {
                             successCount.incrementAndGet()
                         }.onFailure {
@@ -158,11 +161,11 @@ class UserCouponServiceTest(
                     successCount.get() shouldBe couponLimit
                     limitedCouponFailureCount.get() shouldBe (requestCount - couponLimit)
                     
-                    val updatedCoupon = couponRepository.findById(coupon.id)
+                    val updatedCoupon = couponInformationRepository.findById(couponInformation.id)
                     updatedCoupon.remainingCount shouldBe 0
                     
                     val registeredCount = (1L..100L).count { userId ->
-                        userCouponRepository.isRegistered(userId, coupon.id)
+                        userCouponRepository.isRegistered(userId, couponInformation.id)
                     }
                     
                     registeredCount shouldBe couponLimit

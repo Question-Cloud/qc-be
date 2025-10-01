@@ -3,7 +3,7 @@ package com.eager.questioncloud.payment.question.implement
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.repository.CouponRepository
+import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class PaymentCouponApplierTest(
     private val paymentCouponApplier: PaymentCouponApplier,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
     private val userCouponRepository: UserCouponRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
@@ -37,7 +37,7 @@ class PaymentCouponApplierTest(
             val questionOrderCommands = questionOrder.items.map { QuestionOrderCommand(it.questionInfo.questionId) }
             
             val discountAmount = 3000
-            val paymentCoupon = CouponScenario.paymentFixedCoupon(discountAmount).save(couponRepository)
+            val paymentCoupon = CouponScenario.paymentFixedCoupon(discountAmount).save(couponInformationRepository)
             val paymentUserCoupon = paymentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionPayment = QuestionPayment.create(userId, questionOrder)
@@ -60,7 +60,8 @@ class PaymentCouponApplierTest(
             val questionOrderCommands = questionOrder.items.map { QuestionOrderCommand(it.questionInfo.questionId) }
             
             val discountPercent = 30
-            val paymentCoupon = CouponScenario.paymentPercentCoupon(discountPercent, maxDiscount = Int.MAX_VALUE).save(couponRepository)
+            val paymentCoupon =
+                CouponScenario.paymentPercentCoupon(discountPercent, maxDiscount = Int.MAX_VALUE).save(couponInformationRepository)
             val paymentUserCoupon = paymentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionPayment = QuestionPayment.create(userId, questionOrder)

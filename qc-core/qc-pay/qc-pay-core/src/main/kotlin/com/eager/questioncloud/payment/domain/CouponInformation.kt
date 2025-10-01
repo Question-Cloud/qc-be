@@ -4,7 +4,7 @@ import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.enums.DiscountCalculationType
 import java.time.LocalDateTime
 
-class Coupon(
+class CouponInformation(
     val id: Long = 0,
     val code: String,
     val title: String,

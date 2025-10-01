@@ -2,8 +2,8 @@ package com.eager.questioncloud.payment.coupon.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.Coupon
-import com.eager.questioncloud.payment.repository.CouponRepository
+import com.eager.questioncloud.payment.domain.CouponInformation
+import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.eager.questioncloud.payment.scenario.custom
@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class UserCouponRegisterTest(
     private val userCouponRegister: UserCouponRegister,
-    private val couponRepository: CouponRepository,
+    private val couponInformationRepository: CouponInformationRepository,
     private val userCouponRepository: UserCouponRepository,
     private val dbCleaner: DBCleaner
 ) : BehaviorSpec() {
@@ -34,7 +34,7 @@ class UserCouponRegisterTest(
         
         Given("등록 가능한 쿠폰이 존재할 때") {
             val userId = 1L
-            val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
+            val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
             
             When("사용자가 쿠폰 등록 요청을 하면") {
                 userCouponRegister.registerCoupon(userId, coupon.code)
@@ -43,7 +43,7 @@ class UserCouponRegisterTest(
                     val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
                     isRegistered shouldBe true
                     
-                    val updatedCoupon = couponRepository.findById(coupon.id)
+                    val updatedCoupon = couponInformationRepository.findById(coupon.id)
                     updatedCoupon.remainingCount shouldBe (coupon.remainingCount - 1)
                 }
             }
@@ -51,7 +51,7 @@ class UserCouponRegisterTest(
         
         Given("사용자가 이미 등록한 쿠폰이 있을 때") {
             val userId = 1L
-            val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
+            val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
             coupon.setUserCoupon(userId, userCouponRepository)
             
             When("동일한 쿠폰을 다시 등록하려고 하면") {
@@ -66,14 +66,14 @@ class UserCouponRegisterTest(
         
         Given("수량이 소진된 쿠폰이 있을 때") {
             val userId = 1L
-            val coupon = CouponScenario.paymentFixedCoupon().custom {
-                set(Coupon::remainingCount, 0)
-            }.save(couponRepository)
+            val couponInformation = CouponScenario.paymentFixedCoupon().custom {
+                set(CouponInformation::remainingCount, 0)
+            }.save(couponInformationRepository)
             
             When("해당 쿠폰을 등록하려고 하면") {
                 Then("LIMITED_COUPON 예외가 발생한다") {
                     val exception = shouldThrow<CoreException> {
-                        userCouponRegister.registerCoupon(userId, coupon.code)
+                        userCouponRegister.registerCoupon(userId, couponInformation.code)
                     }
                     exception.message shouldBe Error.LIMITED_COUPON.message
                 }
