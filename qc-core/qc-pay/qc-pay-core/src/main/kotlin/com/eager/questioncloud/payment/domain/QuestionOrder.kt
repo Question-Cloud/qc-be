@@ -30,16 +30,6 @@ class QuestionOrder(
         return target
     }
     
-    fun applyOrderCoupon(questionId: Long, couponPolicy: CouponPolicy) {
-        val target = items.find { it.questionInfo.questionId == questionId }
-        
-        if (target == null) {
-            throw CoreException(Error.PAYMENT_ERROR)
-        }
-        
-        target.applyCoupon(couponPolicy)
-    }
-    
     companion object {
         fun createOrder(orderItems: List<QuestionOrderItem>): QuestionOrder {
             val orderId = TSID.Factory.getTsid().toString()

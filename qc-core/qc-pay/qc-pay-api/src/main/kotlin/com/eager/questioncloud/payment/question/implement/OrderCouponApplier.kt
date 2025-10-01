@@ -44,7 +44,9 @@ class OrderCouponApplier(
             val coupon = couponMap.getValue(userCoupon.couponId)
             
             userCouponRepository.use(userCoupon.id, questionOrder.orderId)
-            questionOrder.applyOrderCoupon(orderCommand.questionId, CouponPolicy(coupon, userCoupon))
+            
+            val orderItem = questionOrder.getOrderItem(orderCommand.questionId)
+            orderItem.applyCoupon(CouponPolicy(coupon, userCoupon))
         }
     }
     
@@ -60,8 +62,10 @@ class OrderCouponApplier(
             
             if (!coupon.isDuplicable) throw CoreException(Error.WRONG_COUPON)
             
-            questionOrder.applyOrderCoupon(orderCommand.questionId, CouponPolicy(coupon, userCoupon))
             userCouponRepository.use(userCoupon.id, questionOrder.orderId)
+            
+            val orderItem = questionOrder.getOrderItem(orderCommand.questionId)
+            orderItem.applyCoupon(CouponPolicy(coupon, userCoupon))
         }
     }
 }
