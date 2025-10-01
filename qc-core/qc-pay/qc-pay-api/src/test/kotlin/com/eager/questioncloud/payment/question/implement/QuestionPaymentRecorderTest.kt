@@ -34,6 +34,7 @@ class QuestionPaymentRecorderTest(
         Given("결제가 완료 된 QuestionPayment가 있을 때") {
             val userId = 1L
             val questionOrder = QuestionOrderScenario.create(1)
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             val questionId = questionOrder.items[0].questionInfo.questionId
             
             // 프로모션
@@ -45,22 +46,25 @@ class QuestionPaymentRecorderTest(
             // 쿠폰 + 중복 쿠폰
             val couponDiscountAmount = 1000
             
-            val coupon = CouponScenario.productFixedCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
-            val userCoupon = coupon.setUserCoupon(userId, userCouponRepository)
+            val couponInformation =
+                CouponScenario.productFixedCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
+            val userCoupon = couponInformation.setUserCoupon(userId, userCouponRepository)
+            val coupon = Coupon.createProductCoupon(questionId, couponInformation, userCoupon)
             
-            val duplicableCoupon =
+            val duplicableCouponInformation =
                 CouponScenario.duplicableFixedProductCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
-            val duplicabeUserCoupon = duplicableCoupon.setUserCoupon(userId, userCouponRepository)
-            
-            questionOrder.items[0].applyDiscount(Coupon(coupon, userCoupon))
-            questionOrder.items[0].applyDiscount(Coupon(duplicableCoupon, duplicabeUserCoupon))
+            val duplicabeUserCoupon = duplicableCouponInformation.setUserCoupon(userId, userCouponRepository)
+            val duplicableCoupon = Coupon.createDuplicableProductCoupon(questionId, duplicableCouponInformation, duplicabeUserCoupon)
             
             // 결제 할인 쿠폰
-            val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponInformationRepository)
-            val paymentUserCoupon = paymentCoupon.setUserCoupon(userId, userCouponRepository)
+            val paymentCouponInformation =
+                CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponInformationRepository)
+            val paymentUserCoupon = paymentCouponInformation.setUserCoupon(userId, userCouponRepository)
+            val paymentCoupon = Coupon.createPaymentCoupon(paymentCouponInformation, paymentUserCoupon)
             
-            val questionPayment = QuestionPayment.create(userId, questionOrder)
-            questionPayment.applyPaymentCoupon(Coupon(paymentCoupon, paymentUserCoupon))
+            coupon.apply(questionPayment)
+            duplicableCoupon.apply(questionPayment)
+            paymentCoupon.apply(questionPayment)
             
             When("QuestionPayment를 기록하면") {
                 questionPaymentRecorder.record(questionPayment)
@@ -81,9 +85,9 @@ class QuestionPaymentRecorderTest(
                     questionOrderData[0].promotionName shouldBe promotion.title
                     
                     discountHistories.map { it.name } shouldContainExactlyInAnyOrder listOf(
-                        coupon.title,
-                        duplicableCoupon.title,
-                        paymentCoupon.title,
+                        couponInformation.title,
+                        duplicableCouponInformation.title,
+                        paymentCoupon.couponInformation.title,
                     )
                     
                     discountHistories.map { it.sourceId } shouldContainExactlyInAnyOrder listOf(

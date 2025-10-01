@@ -46,7 +46,7 @@ class PaymentCouponApplierTest(
             When("결제 할인 쿠폰을 적용하면") {
                 paymentCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("최종 결제 금액이 할인되고 쿠폰은 사용처리 된다.") {
-                    questionPayment.paymentDiscount.size shouldBe 1
+                    questionPayment.appliedPaymentCoupons.size shouldBe 1
                     questionPayment.realAmount shouldBe questionPayment.originalAmount - discountAmount
                     val usedUserCoupon = userCouponRepository.getUserCoupon(paymentUserCoupon.id)
                     usedUserCoupon.isUsed shouldBe true
@@ -70,7 +70,7 @@ class PaymentCouponApplierTest(
             When("결제 할인 쿠폰을 적용하면") {
                 paymentCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("최종 결제 금액이 할인되고 쿠폰은 사용처리 된다.") {
-                    questionPayment.paymentDiscount.size shouldBe 1
+                    questionPayment.appliedPaymentCoupons.size shouldBe 1
                     val expectedDiscountAmount = questionPayment.originalAmount * discountPercent / 100
                     questionPayment.realAmount shouldBe questionPayment.originalAmount - expectedDiscountAmount
                     val usedUserCoupon = userCouponRepository.getUserCoupon(paymentUserCoupon.id)

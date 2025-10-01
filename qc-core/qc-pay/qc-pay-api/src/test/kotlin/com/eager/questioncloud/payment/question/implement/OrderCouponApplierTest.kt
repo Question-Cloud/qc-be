@@ -2,6 +2,7 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.repository.CouponInformationRepository
@@ -63,21 +64,22 @@ class OrderCouponApplierTest(
                 QuestionOrderCommand(item2.questionInfo.questionId, null, null),
             )
             
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommands)
             
             When("쿠폰을 적용하면") {
-                orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("쿠폰이 적용된 상품은 할인된 가격으로 변경되고 쿠폰은 사용 처리 된다.") {
                     val orderItem0 = questionOrder.items[0]
-                    orderItem0.orderDiscountHistories.size shouldBe 1
+                    orderItem0.appliedCoupons.size shouldBe 1
                     orderItem0.realPrice shouldBe orderItem0.originalPrice - item1DiscountAmount
                     
                     val orderItem1 = questionOrder.items[1]
-                    orderItem1.orderDiscountHistories.size shouldBe 2
+                    orderItem1.appliedCoupons.size shouldBe 2
                     orderItem1.realPrice shouldBe orderItem1.originalPrice - (item1DiscountAmount * 2)
                     
                     val orderItem2 = questionOrder.items[2]
-                    orderItem2.orderDiscountHistories.size shouldBe 0
+                    orderItem2.appliedCoupons.size shouldBe 0
                     orderItem2.realPrice shouldBe orderItem2.originalPrice
                     
                     val usedItem0UserCoupon = userCouponRepository.getUserCoupon(item0UserCoupon.id)
@@ -112,13 +114,13 @@ class OrderCouponApplierTest(
             )
             
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommand)
-            
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             When("쿠폰을 적용하면") {
-                orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인이 적용된다.") {
                     val orderItem = questionOrder.items[0]
                     val discountAmount = orderItem.originalPrice * (percentValue1 + percentValue2) / 100
-                    orderItem.orderDiscountHistories.size shouldBe 2
+                    orderItem.appliedCoupons.size shouldBe 2
                     orderItem.realPrice shouldBe orderItem.originalPrice - discountAmount
                 }
             }
@@ -144,13 +146,13 @@ class OrderCouponApplierTest(
             )
             
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommand)
-            
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             When("쿠폰을 적용하면") {
-                orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                 Then("퍼센트 할인과 고정 할인이 적용된다.") {
                     val orderItem = questionOrder.items[0]
                     val discountAmount = (orderItem.originalPrice * (percentValue) / 100) + fixedValue
-                    orderItem.orderDiscountHistories.size shouldBe 2
+                    orderItem.appliedCoupons.size shouldBe 2
                     orderItem.realPrice shouldBe orderItem.originalPrice - discountAmount
                 }
             }
@@ -172,11 +174,12 @@ class OrderCouponApplierTest(
             
             val questionOrderCommand = listOf(QuestionOrderCommand(item.questionInfo.questionId, itemUserCoupon1.id, itemUserCoupon2.id))
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommand)
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             
             When("쿠폰을 적용하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                        orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
@@ -193,11 +196,12 @@ class OrderCouponApplierTest(
             val questionOrderCommand =
                 listOf(QuestionOrderCommand(questionOrder.items[0].questionInfo.questionId, wrongUserCouponId, wrongDuplicableUserCouponId))
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommand)
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             
             When("쿠폰을 적용하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                        orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
@@ -215,11 +219,12 @@ class OrderCouponApplierTest(
             val questionOrderCommand =
                 listOf(QuestionOrderCommand(questionOrder.items[0].questionInfo.questionId, usedUserCoupon.id))
             val questionPaymentCommand = QuestionPaymentCommand(userId, questionOrderCommand)
+            val questionPayment = QuestionPayment.create(userId, questionOrder)
             
             When("쿠폰을 적용하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        orderCouponApplier.apply(questionOrder, questionPaymentCommand)
+                        orderCouponApplier.apply(questionPayment, questionPaymentCommand)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
