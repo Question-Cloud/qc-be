@@ -19,7 +19,7 @@ class CouponPolicyTest : BehaviorSpec() {
             
             val originalAmount = 10000
             
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             When("할인 금액 계산을 하면") {
                 val discountAmount = couponPolicy.getDiscountAmount(originalAmount)
                 Then("정해진 고정 금액이 반환된다.") {
@@ -39,7 +39,7 @@ class CouponPolicyTest : BehaviorSpec() {
             
             val expectedDiscountAmount = originalAmount * discountPercent / 100
             
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             When("할인 금액 계산을 하면") {
                 val discountAmount = couponPolicy.getDiscountAmount(originalAmount)
                 Then("정해진 고정 금액이 반환된다.") {
@@ -59,7 +59,7 @@ class CouponPolicyTest : BehaviorSpec() {
                 CouponScenario.productPercentCoupon(questionId = questionId, percent = discountPercent, maxDiscount = maximumDiscountAmount)
             val userCoupon = UserCoupon.create(userId, coupon)
             
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             When("할인 금액이 최대 할인 금액을 초과하게 되면") {
                 val discountAmount = couponPolicy.getDiscountAmount(originalAmount)
                 Then("최대할인 금액으로 계산된다.") {
@@ -78,7 +78,7 @@ class CouponPolicyTest : BehaviorSpec() {
                 CouponScenario.productPercentCoupon(questionId = questionId, percent = discountPercent, minPurchase = originalAmount + 1000)
             val userCoupon = UserCoupon.create(userId, coupon)
             
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             When("최소 주문 금액을 만족한 채 쿠폰 적용을 시도하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.payment.domain.CouponPolicy
+import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.repository.CouponInformationRepository
@@ -18,9 +18,11 @@ class PaymentCouponApplier(
         }
         
         val userCoupon = userCouponRepository.getUserCoupon(command.paymentUserCouponId, command.userId)
-        val coupon = couponInformationRepository.findById(userCoupon.couponId)
-        userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)
+        val couponInformation = couponInformationRepository.findById(userCoupon.couponId)
         
-        questionPayment.applyPaymentCoupon(CouponPolicy(coupon, userCoupon))
+        val coupon = Coupon.createPaymentCoupon(couponInformation, userCoupon)
+        coupon.apply(questionPayment)
+        
+        userCouponRepository.use(userCoupon.id, questionPayment.order.orderId)
     }
 }

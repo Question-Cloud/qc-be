@@ -10,11 +10,7 @@ data class DiscountHistory(
     val discountAmount: Int,
     val name: String,
     val sourceId: Long,
-) {
-    fun updatePaymentId(paymentId: Long) {
-        this.paymentId = paymentId
-    }
-}
+)
 
 data class SimpleDiscountHistory(
     val name: String,

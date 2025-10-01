@@ -39,10 +39,10 @@ class QuestionOrderItemTest : BehaviorSpec() {
             val discountAmount = 1000
             val coupon = CouponScenario.productFixedCoupon(questionId, discountAmount)
             val userCoupon = UserCoupon.create(userId, coupon)
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             
             When("상품에 쿠폰을 적용하면") {
-                questionOrderItem.applyCoupon(couponPolicy)
+                questionOrderItem.applyDiscount(couponPolicy)
                 Then("상품 가격이 할인된다.") {
                     questionOrderItem.realPrice shouldBe questionOrderItem.originalPrice - discountAmount
                     
@@ -63,12 +63,12 @@ class QuestionOrderItemTest : BehaviorSpec() {
             val discountAmount = 1000
             val coupon = CouponScenario.productFixedCoupon(couponTargetQuestionId, discountAmount)
             val userCoupon = UserCoupon.create(userId, coupon)
-            val couponPolicy = CouponPolicy(coupon, userCoupon)
+            val couponPolicy = Coupon(coupon, userCoupon)
             
             When("쿠폰 적용을 시도하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        questionOrderItem.applyCoupon(couponPolicy)
+                        questionOrderItem.applyDiscount(couponPolicy)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
@@ -84,12 +84,12 @@ class QuestionOrderItemTest : BehaviorSpec() {
             val discountAmount = 1000
             val notProductCoupon = CouponScenario.paymentFixedCoupon(discountAmount)
             val userCoupon = UserCoupon.create(userId, notProductCoupon)
-            val couponPolicy = CouponPolicy(notProductCoupon, userCoupon)
+            val coupon = Coupon(notProductCoupon, userCoupon)
             
             When("쿠폰 적용을 시도하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        questionOrderItem.applyCoupon(couponPolicy)
+                        questionOrderItem.applyDiscount(coupon)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }

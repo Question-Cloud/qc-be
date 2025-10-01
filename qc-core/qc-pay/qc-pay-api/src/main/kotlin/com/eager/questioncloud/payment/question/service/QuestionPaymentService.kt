@@ -22,10 +22,10 @@ class QuestionPaymentService(
     @Transactional
     fun payment(command: QuestionPaymentCommand): QuestionPayment {
         val order = questionOrderGenerator.generateQuestionOrder(command.userId, command.questionIds)
-        promotionApplier.apply(order)
-        orderCouponApplier.apply(order, command)
-        
         val questionPayment = QuestionPayment.create(command.userId, order)
+        
+        promotionApplier.apply(order)
+        orderCouponApplier.apply(questionPayment, command)
         
         paymentCouponApplier.apply(questionPayment, command)
         pointCommandAPI.usePoint(questionPayment.userId, questionPayment.realAmount)

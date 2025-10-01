@@ -1,22 +1,22 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.enums.CouponType
 import java.time.LocalDateTime
 
 class QuestionPayment(
     var paymentId: Long = 0,
     val userId: Long,
     val order: QuestionOrder,
-    val paymentDiscount: MutableList<DiscountHistory> = mutableListOf(),
-    val createdAt: LocalDateTime = LocalDateTime.now(),
 ) {
     val orderId = order.orderId
-    val originalAmount: Int = order.totalOriginalPrice
-    var realAmount: Int = order.totalPrice
-    val orderDiscount: List<DiscountHistory>
-        get() = order.orderDiscount
+    val createdAt: LocalDateTime = LocalDateTime.now()
+    val appliedPaymentCoupons: MutableList<Coupon> = mutableListOf()
+    var paymentDiscountAmount: Int = 0
+    
+    val originalAmount: Int
+        get() = order.totalOriginalPrice
+    
+    val realAmount: Int
+        get() = order.totalPrice - paymentDiscountAmount
     
     companion object {
         fun create(
@@ -34,20 +34,11 @@ class QuestionPayment(
         this.paymentId = paymentId
     }
     
-    fun applyPaymentCoupon(couponPolicy: CouponPolicy) {
-        if (couponPolicy.couponInformation.couponType != CouponType.PAYMENT) throw CoreException(Error.WRONG_COUPON)
-        
-        val discountAmount = couponPolicy.getDiscountAmount(realAmount)
-        realAmount -= discountAmount
-        realAmount = realAmount.coerceAtLeast(0)
-        
-        paymentDiscount.add(
-            DiscountHistory(
-                couponType = couponPolicy.couponInformation.couponType,
-                discountAmount = discountAmount,
-                name = couponPolicy.getName(),
-                sourceId = couponPolicy.getSourceId()
-            )
-        )
+    fun applyDiscount(discountAmount: Int) {
+        paymentDiscountAmount += discountAmount
+    }
+    
+    fun getOrderItem(questionId: Long): QuestionOrderItem {
+        return order.getOrderItem(questionId)
     }
 }

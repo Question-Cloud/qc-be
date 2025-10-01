@@ -17,8 +17,8 @@ class QuestionOrder(
     val questionIds: List<Long>
         get() = items.map { it.questionInfo.questionId }
     
-    val orderDiscount: List<DiscountHistory>
-        get() = items.flatMap { it.orderDiscountHistories }
+    val appliedCoupons: List<Coupon>
+        get() = items.flatMap { it.appliedCoupons }
     
     fun getOrderItem(questionId: Long): QuestionOrderItem {
         val target = items.find { it.questionInfo.questionId == questionId }

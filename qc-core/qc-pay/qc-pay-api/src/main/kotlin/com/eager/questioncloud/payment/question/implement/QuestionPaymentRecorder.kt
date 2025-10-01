@@ -18,9 +18,33 @@ class QuestionPaymentRecorder(
         questionOrderRepository.save(questionPayment.order)
         
         val discountHistories = mutableListOf<DiscountHistory>()
-        discountHistories.addAll(questionPayment.paymentDiscount)
-        discountHistories.addAll(questionPayment.orderDiscount)
-        discountHistories.forEach { it.updatePaymentId(questionPayment.paymentId) }
+        
+        questionPayment.appliedPaymentCoupons.forEach { appliedPaymentCoupon ->
+            discountHistories.add(
+                DiscountHistory(
+                    couponType = appliedPaymentCoupon.couponInformation.couponType,
+                    paymentId = questionPayment.paymentId,
+                    discountAmount = appliedPaymentCoupon.appliedDiscountAmount,
+                    name = appliedPaymentCoupon.getName(),
+                    sourceId = appliedPaymentCoupon.getSourceId()
+                )
+            )
+        }
+        questionPayment.order.items.forEach {
+            if (it.appliedCoupons.isEmpty()) return@forEach
+            it.appliedCoupons.forEach { appliedCoupon ->
+                discountHistories.add(
+                    DiscountHistory(
+                        couponType = appliedCoupon.couponInformation.couponType,
+                        paymentId = questionPayment.paymentId,
+                        orderItemId = it.id,
+                        discountAmount = appliedCoupon.appliedDiscountAmount,
+                        name = appliedCoupon.getName(),
+                        sourceId = appliedCoupon.getSourceId()
+                    )
+                )
+            }
+        }
         discountHistoryRepository.saveAll(discountHistories)
     }
 }

@@ -1,6 +1,6 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.payment.domain.CouponPolicy
+import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.repository.*
 import com.eager.questioncloud.payment.scenario.*
@@ -52,15 +52,15 @@ class QuestionPaymentRecorderTest(
                 CouponScenario.duplicableFixedProductCoupon(questionId, discount = couponDiscountAmount).save(couponInformationRepository)
             val duplicabeUserCoupon = duplicableCoupon.setUserCoupon(userId, userCouponRepository)
             
-            questionOrder.items[0].applyCoupon(CouponPolicy(coupon, userCoupon))
-            questionOrder.items[0].applyCoupon(CouponPolicy(duplicableCoupon, duplicabeUserCoupon))
+            questionOrder.items[0].applyDiscount(Coupon(coupon, userCoupon))
+            questionOrder.items[0].applyDiscount(Coupon(duplicableCoupon, duplicabeUserCoupon))
             
             // 결제 할인 쿠폰
             val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponInformationRepository)
             val paymentUserCoupon = paymentCoupon.setUserCoupon(userId, userCouponRepository)
             
             val questionPayment = QuestionPayment.create(userId, questionOrder)
-            questionPayment.applyPaymentCoupon(CouponPolicy(paymentCoupon, paymentUserCoupon))
+            questionPayment.applyPaymentCoupon(Coupon(paymentCoupon, paymentUserCoupon))
             
             When("QuestionPayment를 기록하면") {
                 questionPaymentRecorder.record(questionPayment)

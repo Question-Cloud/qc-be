@@ -1,10 +1,8 @@
 package com.eager.questioncloud.payment.question.implement
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.domain.CouponInformation
-import com.eager.questioncloud.payment.domain.CouponPolicy
-import com.eager.questioncloud.payment.domain.QuestionOrder
+import com.eager.questioncloud.payment.domain.QuestionPayment
 import com.eager.questioncloud.payment.domain.UserCoupon
 import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
@@ -17,55 +15,51 @@ class OrderCouponApplier(
     private val userCouponRepository: UserCouponRepository,
     private val couponInformationRepository: CouponInformationRepository,
 ) {
-    fun apply(questionOrder: QuestionOrder, command: QuestionPaymentCommand) {
+    fun apply(questionPayment: QuestionPayment, command: QuestionPaymentCommand) {
         val allUserCouponIds = command.allUserCouponIds
         if (allUserCouponIds.isEmpty()) return
         
         val userCoupons = userCouponRepository.getUserCoupon(allUserCouponIds, command.userId)
-        val coupons = couponInformationRepository.findByIdIn(userCoupons.map { it.couponId })
+        val couponInformation = couponInformationRepository.findByIdIn(userCoupons.map { it.couponId })
         
         val userCouponMap = userCoupons.associateBy { it.id }
-        val couponMap = coupons.associateBy { it.id }
+        val couponMap = couponInformation.associateBy { it.id }
         
         command.orders.forEach { orderCommand ->
-            applyOrderCoupon(questionOrder, orderCommand, userCouponMap, couponMap)
-            applyDuplicableCoupon(questionOrder, orderCommand, userCouponMap, couponMap)
+            applyOrderCoupon(questionPayment, orderCommand, userCouponMap, couponMap)
+            applyDuplicableCoupon(questionPayment, orderCommand, userCouponMap, couponMap)
         }
     }
     
     private fun applyOrderCoupon(
-        questionOrder: QuestionOrder,
+        questionPayment: QuestionPayment,
         orderCommand: QuestionOrderCommand,
         userCouponMap: Map<Long, UserCoupon>,
         couponInformationMap: Map<Long, CouponInformation>
     ) {
         orderCommand.orderUserCouponId?.let { couponId ->
             val userCoupon = userCouponMap.getValue(couponId)
-            val coupon = couponInformationMap.getValue(userCoupon.couponId)
+            val couponInformation = couponInformationMap.getValue(userCoupon.couponId)
+            val coupon = Coupon.createProductCoupon(orderCommand.questionId, couponInformation, userCoupon)
             
-            userCouponRepository.use(userCoupon.id, questionOrder.orderId)
-            
-            val orderItem = questionOrder.getOrderItem(orderCommand.questionId)
-            orderItem.applyCoupon(CouponPolicy(coupon, userCoupon))
+            userCouponRepository.use(userCoupon.id, questionPayment.orderId)
+            coupon.apply(questionPayment)
         }
     }
     
     private fun applyDuplicableCoupon(
-        questionOrder: QuestionOrder,
+        questionPayment: QuestionPayment,
         orderCommand: QuestionOrderCommand,
         userCouponMap: Map<Long, UserCoupon>,
         couponInformationMap: Map<Long, CouponInformation>
     ) {
         orderCommand.duplicableOrderUserCouponId?.let { couponId ->
             val userCoupon = userCouponMap.getValue(couponId)
-            val coupon = couponInformationMap.getValue(userCoupon.couponId)
+            val couponInformation = couponInformationMap.getValue(userCoupon.couponId)
+            val coupon = Coupon.createDuplicableProductCoupon(orderCommand.questionId, couponInformation, userCoupon)
             
-            if (!coupon.isDuplicable) throw CoreException(Error.WRONG_COUPON)
-            
-            userCouponRepository.use(userCoupon.id, questionOrder.orderId)
-            
-            val orderItem = questionOrder.getOrderItem(orderCommand.questionId)
-            orderItem.applyCoupon(CouponPolicy(coupon, userCoupon))
+            userCouponRepository.use(userCoupon.id, questionPayment.orderId)
+            coupon.apply(questionPayment)
         }
     }
 }

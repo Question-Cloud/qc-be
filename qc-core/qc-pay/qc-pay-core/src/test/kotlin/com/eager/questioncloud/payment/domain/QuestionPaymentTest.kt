@@ -16,12 +16,12 @@ class QuestionPaymentTest : BehaviorSpec() {
             val expectedDiscountAmount = 5000
             val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = expectedDiscountAmount)
             val userCoupon = UserCoupon.create(userId, paymentCoupon)
-            val couponPolicy = CouponPolicy(paymentCoupon, userCoupon)
+            val coupon = Coupon(paymentCoupon, userCoupon)
             
             val questionOrder = QuestionOrderScenario.create(5)
             val questioPayment = QuestionPayment.create(userId, questionOrder)
             When("결제 할인 쿠폰을 적용하면") {
-                questioPayment.applyPaymentCoupon(couponPolicy)
+                questioPayment.applyPaymentCoupon(coupon)
                 Then("최종 결제 금액이 할인된다.") {
                     questioPayment.realAmount shouldBe questioPayment.originalAmount - expectedDiscountAmount
                     
@@ -38,14 +38,14 @@ class QuestionPaymentTest : BehaviorSpec() {
             val expectedDiscountAmount = 5000
             val notPaymentCoupon = CouponScenario.productFixedCoupon(questionId = 1L, discount = expectedDiscountAmount)
             val userCoupon = UserCoupon.create(userId, notPaymentCoupon)
-            val couponPolicy = CouponPolicy(notPaymentCoupon, userCoupon)
+            val coupon = Coupon(notPaymentCoupon, userCoupon)
             
             val questionOrder = QuestionOrderScenario.create(5)
             val questioPayment = QuestionPayment.create(userId, questionOrder)
             When("결제 할인 쿠폰을 적용하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        questioPayment.applyPaymentCoupon(couponPolicy)
+                        questioPayment.applyPaymentCoupon(coupon)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }
