@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.coupon.dto.RegisterCouponRequest
 import com.eager.questioncloud.payment.coupon.service.UserCouponService
 import com.eager.questioncloud.payment.dto.AvailableUserCoupon
-import com.eager.questioncloud.payment.enums.CouponType
+import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -26,7 +26,6 @@ import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import java.time.LocalDateTime
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,36 +39,27 @@ class UserCouponControllerDocument(
     @MockkBean
     private lateinit var userCouponService: UserCouponService
     
-    private fun createSampleAvailableCoupons(): List<AvailableUserCoupon> {
-        return listOf(
-            AvailableUserCoupon(
-                id = 1L,
-                title = "10% 할인 쿠폰",
-                couponType = CouponType.Percent,
-                value = 10,
-                endAt = LocalDateTime.of(2024, 12, 31, 23, 59, 59)
-            ),
-            AvailableUserCoupon(
-                id = 2L,
-                title = "5000원 할인 쿠폰",
-                couponType = CouponType.Fixed,
-                value = 5000,
-                endAt = LocalDateTime.of(2024, 6, 30, 23, 59, 59)
-            ),
-            AvailableUserCoupon(
-                id = 3L,
-                title = "신규가입 특별 할인",
-                couponType = CouponType.Percent,
-                value = 20,
-                endAt = LocalDateTime.of(2024, 12, 25, 23, 59, 59)
-            )
-        )
-    }
-    
     init {
         Given("사용 가능한 쿠폰 목록을 조회할 때") {
             When("사용자가 보유한 쿠폰 목록 조회를 요청하면") {
-                val sampleCoupons = createSampleAvailableCoupons()
+                val sampleCoupons = (1L..10L).map {
+                    val coupon = CouponScenario.paymentFixedCoupon()
+                    AvailableUserCoupon(
+                        it,
+                        coupon.title,
+                        coupon.couponType,
+                        coupon.discountCalculationType,
+                        coupon.targetQuestionId,
+                        coupon.targetCreatorId,
+                        coupon.targetCategoryId,
+                        coupon.minimumPurchaseAmount,
+                        coupon.maximumDiscountAmount,
+                        coupon.isDuplicable,
+                        coupon.value,
+                        coupon.endAt
+                    )
+                }
+                
                 every { userCouponService.getAvailableUserCoupons(any()) } returns sampleCoupons
                 
                 Then("사용 가능한 쿠폰 목록이 반환된다") {
@@ -90,7 +80,14 @@ class UserCouponControllerDocument(
                                         fieldWithPath("coupons").description("사용 가능한 쿠폰 목록"),
                                         fieldWithPath("coupons[].id").description("쿠폰 ID"),
                                         fieldWithPath("coupons[].title").description("쿠폰 제목"),
-                                        fieldWithPath("coupons[].couponType").description("쿠폰 타입 (Percent: 할인율, Fixed: 고정 할인금액)"),
+                                        fieldWithPath("coupons[].couponType").description("쿠폰 종류"),
+                                        fieldWithPath("coupons[].discountCalculationType").description("할인 방식"),
+                                        fieldWithPath("coupons[].targetQuestionId").description("쿠폰 대상 문제").optional(),
+                                        fieldWithPath("coupons[].targetCreatorId").description("쿠폰 대상 크리에이터").optional(),
+                                        fieldWithPath("coupons[].targetCategoryId").description("쿠폰 대상 과목").optional(),
+                                        fieldWithPath("coupons[].minimumPurchaseAmount").description("최소 주문 금액"),
+                                        fieldWithPath("coupons[].maximumDiscountAmount").description("최대 할인 금액"),
+                                        fieldWithPath("coupons[].isDuplicable").description("중복 가능 여부"),
                                         fieldWithPath("coupons[].value").description("쿠폰 값 (할인율 또는 할인금액)"),
                                         fieldWithPath("coupons[].endAt").description("쿠폰 만료일시")
                                     )

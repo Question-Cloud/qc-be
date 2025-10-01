@@ -72,6 +72,13 @@ class UserCouponRepositoryImpl(
                 userCouponEntity.id,
                 couponEntity.title,
                 couponEntity.couponType,
+                couponEntity.discountCalculationType,
+                couponEntity.targetQuestionId,
+                couponEntity.targetCreatorId,
+                couponEntity.targetCategoryId,
+                couponEntity.minimumPurchaseAmount,
+                couponEntity.maximumDiscountAmount,
+                couponEntity.isDuplicable,
                 couponEntity.value,
                 userCouponEntity.endAt
             )

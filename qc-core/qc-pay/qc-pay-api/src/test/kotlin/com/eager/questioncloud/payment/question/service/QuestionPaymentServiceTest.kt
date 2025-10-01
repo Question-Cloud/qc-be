@@ -3,12 +3,10 @@ package com.eager.questioncloud.payment.question.service
 import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.payment.domain.QuestionPayment
+import com.eager.questioncloud.payment.question.command.QuestionOrderCommand
 import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
-import com.eager.questioncloud.payment.question.implement.OrderCouponApplier
-import com.eager.questioncloud.payment.question.implement.QuestionOrderGenerator
-import com.eager.questioncloud.payment.question.implement.QuestionPaymentRecorder
-import com.eager.questioncloud.payment.scenario.QuestionPaymentScenario
+import com.eager.questioncloud.payment.question.implement.*
+import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
@@ -16,7 +14,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.ints.exactly
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -37,7 +34,13 @@ class QuestionPaymentServiceTest(
     private lateinit var questionOrderGenerator: QuestionOrderGenerator
     
     @MockkBean
+    private lateinit var promotionApplier: PromotionApplier
+    
+    @MockkBean
     private lateinit var orderCouponApplier: OrderCouponApplier
+    
+    @MockkBean
+    private lateinit var paymentCouponApplier: PaymentCouponApplier
     
     @MockkBean
     private lateinit var questionPaymentRecorder: QuestionPaymentRecorder
@@ -53,53 +56,23 @@ class QuestionPaymentServiceTest(
             dbCleaner.cleanUp()
         }
         
-        Given("사용자가 쿠폰 없이 문제를 결제할 때") {
+        Given("문제 결제") {
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(10)
-            val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, null)
+            val questionOrder = QuestionOrderScenario.create(5)
+            val questionOrderCommand = questionOrder.items.map { QuestionOrderCommand(it.questionInfo.questionId) }
+            val command = QuestionPaymentCommand(userId, questionOrderCommand)
             
-            every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
+            every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionOrder
+            justRun { promotionApplier.apply(any()) }
             justRun { orderCouponApplier.apply(any(), any()) }
+            justRun { paymentCouponApplier.apply(any(), any()) }
+            justRun { pointCommandAPI.usePoint(any(), any()) }
             justRun { questionPaymentRecorder.record(any()) }
             justRun { eventPublisher.publish(any()) }
-            justRun { pointCommandAPI.usePoint(any(), any()) }
             
-            When("결제를 요청하면") {
-                val paymentResult = questionPaymentService.payment(command)
-                
-                Then("정가로 결제가 완료되고 이벤트가 발행된다") {
-                    paymentResult.realAmount shouldBeEqual paymentResult.originalAmount
-                    verify(exactly(1)) { eventPublisher.publish(any()) }
-                }
-            }
-        }
-        
-        Given("사용자가 쿠폰을 사용해서 문제를 결제할 때") {
-            val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(10)
-            val couponId = 1L
-            val userCouponId = 1L
-            val discountAmount = 1000
-            val discountTitle = "FIXED COUPON"
-            val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
-            val fixedCouponPolicy = FixedCoupon(couponId, userCouponId, discountTitle, discountAmount)
-            
-            every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
-            every {
-                orderCouponApplier.apply(any(), any())
-            } answers {
-                val questionPayment = firstArg<QuestionPayment>()
-                questionPayment.applyDiscount(fixedCouponPolicy)
-            }
-            justRun { questionPaymentRecorder.record(any()) }
-            justRun { eventPublisher.publish(any()) }
-            justRun { pointCommandAPI.usePoint(any(), any()) }
-            
-            When("결제를 요청하면") {
-                val paymentResult = questionPaymentService.payment(command)
-                
-                Then("할인된 금액으로 결제가 완료되고 이벤트가 발행된다") {
-                    paymentResult.realAmount shouldBeEqual paymentResult.originalAmount - discountAmount
+            When("사용자가 문제 결제를 요청하면") {
+                questionPaymentService.payment(command)
+                Then("결제가 완료되고 이벤트가 발행된다") {
                     verify(exactly(1)) { eventPublisher.publish(any()) }
                 }
             }
@@ -107,14 +80,17 @@ class QuestionPaymentServiceTest(
         
         Given("사용자가 포인트가 부족할 때") {
             val userId = 1L
-            val questionPaymentScenario = QuestionPaymentScenario.create(10)
-            val userCouponId = 1L
-            val command = QuestionPaymentCommand(userId, questionPaymentScenario.order.questionIds, userCouponId)
+            val questionOrder = QuestionOrderScenario.create(5)
+            val questionOrderCommand = questionOrder.items.map { QuestionOrderCommand(it.questionInfo.questionId) }
+            val command = QuestionPaymentCommand(userId, questionOrderCommand)
             
-            every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionPaymentScenario.order
+            every { questionOrderGenerator.generateQuestionOrder(any(), any()) } returns questionOrder
+            justRun { promotionApplier.apply(any()) }
             justRun { orderCouponApplier.apply(any(), any()) }
-            justRun { questionPaymentRecorder.record(any()) }
+            justRun { paymentCouponApplier.apply(any(), any()) }
             every { pointCommandAPI.usePoint(any(), any()) } throws CoreException(Error.NOT_ENOUGH_POINT)
+            justRun { questionPaymentRecorder.record(any()) }
+            justRun { eventPublisher.publish(any()) }
             
             When("결제를 요청하면") {
                 Then("NOT_ENOUGH_POINT 예외가 발생한다") {

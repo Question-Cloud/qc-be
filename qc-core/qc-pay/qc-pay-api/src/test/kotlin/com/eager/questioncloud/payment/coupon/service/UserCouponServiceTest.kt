@@ -1,8 +1,10 @@
 package com.eager.questioncloud.payment.coupon.service
 
+import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.repository.CouponRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
 import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.custom
 import com.eager.questioncloud.payment.scenario.save
 import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.utils.DBCleaner
@@ -14,6 +16,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDateTime
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -41,12 +44,13 @@ class UserCouponServiceTest(
             val unavailableCouponCount = 5
             
             (1..availableCouponCount).forEach { _ ->
-                val coupon = CouponScenario.available().coupon.save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
             (1..unavailableCouponCount).forEach { _ ->
-                val coupon = CouponScenario.expired().coupon.save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::endAt, LocalDateTime.now().minusDays(10)) }
+                    .save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
@@ -63,12 +67,13 @@ class UserCouponServiceTest(
             val userId = 1L
             val couponCount = 5
             (1..couponCount).forEach { _ ->
-                val coupon = CouponScenario.expired().coupon.save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::endAt, LocalDateTime.now().minusDays(10)) }
+                    .save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository)
             }
             
             (1..couponCount).forEach { _ ->
-                val coupon = CouponScenario.available().coupon.save(couponRepository)
+                val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
                 coupon.setUserCoupon(userId, userCouponRepository, true)
             }
             
@@ -83,7 +88,7 @@ class UserCouponServiceTest(
         
         Given("동일한 사용자가 쿠폰 등록 요청을 동시에 할 때") {
             val userId = 1L
-            val coupon = CouponScenario.available().coupon.save(couponRepository)
+            val coupon = CouponScenario.paymentFixedCoupon().save(couponRepository)
             
             When("여러번 등록 요청을 하면") {
                 val threadCount = 100
@@ -121,7 +126,7 @@ class UserCouponServiceTest(
         }
         
         Given("제한된 수량의 쿠폰이 있을 때") {
-            val coupon = CouponScenario.available().coupon.save(couponRepository)
+            val coupon = CouponScenario.paymentFixedCoupon().custom { set(Coupon::remainingCount, 10) }.save(couponRepository)
             val couponLimit = coupon.remainingCount
             val requestCount = 100
             
