@@ -13,8 +13,7 @@ repositories {
 dependencies {
     implementation(project(":qc-infra::qc-rdb"))
     
-    implementation("com.navercorp.fixturemonkey:fixture-monkey-starter:1.1.8")
-    implementation("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
+    api("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")
     
     testImplementation(kotlin("test"))
 }

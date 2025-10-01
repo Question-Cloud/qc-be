@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     
-    
+    testImplementation(testFixtures(project(":qc-core:qc-pay:qc-pay-core")))
 }
 
 tasks.test {
