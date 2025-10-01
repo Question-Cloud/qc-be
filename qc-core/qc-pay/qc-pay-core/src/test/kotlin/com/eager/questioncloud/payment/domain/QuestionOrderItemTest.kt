@@ -1,11 +1,7 @@
 package com.eager.questioncloud.payment.domain
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.payment.dto.QuestionInfo
-import com.eager.questioncloud.payment.scenario.CouponScenario
 import com.eager.questioncloud.payment.scenario.PromotionScenario
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -30,68 +26,17 @@ class QuestionOrderItemTest : BehaviorSpec() {
             }
         }
         
-        Given("상픔 쿠폰 적용") {
-            val userId = 1L
+        Given("상픔 할인 적용") {
             val questionId = 1L
             val questionOrderItem =
                 QuestionOrderItem(questionInfo = QuestionInfo(questionId = questionId, creatorId = 1L, title = "문제", price = 10000))
             
             val discountAmount = 1000
-            val coupon = CouponScenario.productFixedCoupon(questionId, discountAmount)
-            val userCoupon = UserCoupon.create(userId, coupon)
-            val couponPolicy = Coupon(coupon, userCoupon)
             
-            When("상품에 쿠폰을 적용하면") {
-                questionOrderItem.applyDiscount(couponPolicy)
+            When("상품에 할인을 적용하면") {
+                questionOrderItem.applyDiscount(discountAmount)
                 Then("상품 가격이 할인된다.") {
                     questionOrderItem.realPrice shouldBe questionOrderItem.originalPrice - discountAmount
-                    
-                    questionOrderItem.orderDiscountHistories.size shouldBe 1
-                    questionOrderItem.orderDiscountHistories[0].discountAmount shouldBe discountAmount
-                    questionOrderItem.orderDiscountHistories[0].name shouldBe coupon.title
-                }
-            }
-        }
-        
-        Given("쿠폰 대상이 아닌 상품에 쿠폰을 적용할 때") {
-            val userId = 1L
-            val questionId = 1L
-            val couponTargetQuestionId = 2L
-            val questionOrderItem =
-                QuestionOrderItem(questionInfo = QuestionInfo(questionId = questionId, creatorId = 1L, title = "문제", price = 10000))
-            
-            val discountAmount = 1000
-            val coupon = CouponScenario.productFixedCoupon(couponTargetQuestionId, discountAmount)
-            val userCoupon = UserCoupon.create(userId, coupon)
-            val couponPolicy = Coupon(coupon, userCoupon)
-            
-            When("쿠폰 적용을 시도하면") {
-                Then("예외가 발생한다.") {
-                    val exception = shouldThrow<CoreException> {
-                        questionOrderItem.applyDiscount(couponPolicy)
-                    }
-                    exception.error shouldBe Error.WRONG_COUPON
-                }
-            }
-        }
-        
-        Given("상품 쿠폰이 아닌 쿠폰을 상품에 적용할 때") {
-            val userId = 1L
-            val questionId = 1L
-            val questionOrderItem =
-                QuestionOrderItem(questionInfo = QuestionInfo(questionId = questionId, creatorId = 1L, title = "문제", price = 10000))
-            
-            val discountAmount = 1000
-            val notProductCoupon = CouponScenario.paymentFixedCoupon(discountAmount)
-            val userCoupon = UserCoupon.create(userId, notProductCoupon)
-            val coupon = Coupon(notProductCoupon, userCoupon)
-            
-            When("쿠폰 적용을 시도하면") {
-                Then("예외가 발생한다.") {
-                    val exception = shouldThrow<CoreException> {
-                        questionOrderItem.applyDiscount(coupon)
-                    }
-                    exception.error shouldBe Error.WRONG_COUPON
                 }
             }
         }
