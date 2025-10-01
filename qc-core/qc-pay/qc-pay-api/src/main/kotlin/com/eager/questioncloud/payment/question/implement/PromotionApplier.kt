@@ -10,6 +10,9 @@ class PromotionApplier(
 ) {
     fun apply(questionOrder: QuestionOrder) {
         val promotions = promotionRepository.findByQuestionIdIn(questionOrder.questionIds)
-        promotions.forEach { promotion -> questionOrder.applyPromotion(promotion) }
+        promotions.forEach { promotion ->
+            val orderItem = questionOrder.getOrderItem(promotion.questionId)
+            orderItem.applyPromotion(promotion)
+        }
     }
 }

@@ -20,14 +20,14 @@ class QuestionOrder(
     val orderDiscount: List<DiscountHistory>
         get() = items.flatMap { it.orderDiscountHistories }
     
-    fun applyPromotion(promotion: Promotion) {
-        val target = items.find { it.questionInfo.questionId == promotion.questionId }
+    fun getOrderItem(questionId: Long): QuestionOrderItem {
+        val target = items.find { it.questionInfo.questionId == questionId }
         
         if (target == null) {
             throw CoreException(Error.PAYMENT_ERROR)
         }
         
-        target.applyPromotion(promotion)
+        return target
     }
     
     fun applyOrderCoupon(questionId: Long, couponPolicy: CouponPolicy) {

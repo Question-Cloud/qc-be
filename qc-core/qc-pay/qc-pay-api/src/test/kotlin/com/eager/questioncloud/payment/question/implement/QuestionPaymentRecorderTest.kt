@@ -40,7 +40,7 @@ class QuestionPaymentRecorderTest(
             val promotionSalePrice = 7000
             val promotion = PromotionScenario.create(questionId, promotionSalePrice)
             promotionRepository.save(promotion)
-            questionOrder.applyPromotion(promotion)
+            questionOrder.items[0].applyPromotion(promotion)
             
             // 쿠폰 + 중복 쿠폰
             val couponDiscountAmount = 1000
@@ -52,8 +52,8 @@ class QuestionPaymentRecorderTest(
                 CouponScenario.duplicableFixedProductCoupon(questionId, discount = couponDiscountAmount).save(couponRepository)
             val duplicabeUserCoupon = duplicableCoupon.setUserCoupon(userId, userCouponRepository)
             
-            questionOrder.applyOrderCoupon(questionId, CouponPolicy(coupon, userCoupon))
-            questionOrder.applyOrderCoupon(questionId, CouponPolicy(duplicableCoupon, duplicabeUserCoupon))
+            questionOrder.items[0].applyCoupon(CouponPolicy(coupon, userCoupon))
+            questionOrder.items[0].applyCoupon(CouponPolicy(duplicableCoupon, duplicabeUserCoupon))
             
             // 결제 할인 쿠폰
             val paymentCoupon = CouponScenario.paymentFixedCoupon(discount = couponDiscountAmount).save(couponRepository)
