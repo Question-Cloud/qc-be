@@ -1,5 +1,8 @@
 package com.eager.questioncloud.payment.domain
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.payment.enums.CouponType
 import java.time.LocalDateTime
 
 class QuestionPayment(
@@ -32,7 +35,9 @@ class QuestionPayment(
     }
     
     fun applyPaymentCoupon(couponPolicy: CouponPolicy) {
-        val discountAmount = couponPolicy.getDiscountAmount(order.totalPrice)
+        if (couponPolicy.coupon.couponType != CouponType.PAYMENT) throw CoreException(Error.WRONG_COUPON)
+        
+        val discountAmount = couponPolicy.getDiscountAmount(realAmount)
         realAmount -= discountAmount
         realAmount = realAmount.coerceAtLeast(0)
         
