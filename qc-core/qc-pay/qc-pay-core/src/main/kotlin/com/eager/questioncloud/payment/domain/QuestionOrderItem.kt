@@ -5,9 +5,10 @@ import com.eager.questioncloud.payment.dto.QuestionInfo
 class QuestionOrderItem(
     var id: Long = 0,
     val questionInfo: QuestionInfo,
-    val originalPrice: Int = questionInfo.price,
-    var realPrice: Int = originalPrice,
 ) {
+    val originalPrice: Int = questionInfo.price
+    var realPrice: Int = originalPrice
+    
     val priceAfterPromotion: Int
         get() = originalPrice - promotionDiscountAmount
     var promotionDiscountAmount: Int = 0
