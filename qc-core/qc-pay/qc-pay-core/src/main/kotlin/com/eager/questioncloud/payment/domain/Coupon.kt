@@ -13,9 +13,9 @@ abstract class Coupon(
 ) : Discountable {
     var appliedDiscountAmount: Int = 0
     
-    abstract fun isApplicable(questionPayment: QuestionPayment): Boolean
+    protected abstract fun isApplicable(questionPayment: QuestionPayment): Boolean
     
-    abstract fun doApply(questionPayment: QuestionPayment)
+    protected abstract fun doApply(questionPayment: QuestionPayment)
     
     fun apply(questionPayment: QuestionPayment) {
         if (!isApplicable(questionPayment)) {
