@@ -6,6 +6,7 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.question.common.QuestionFilter
 import com.eager.questioncloud.question.domain.Question
 import com.eager.questioncloud.question.dto.QuestionInformation
+import com.eager.questioncloud.question.entity.QPromotionEntity.promotionEntity
 import com.eager.questioncloud.question.entity.QQuestionCategoryEntity
 import com.eager.questioncloud.question.entity.QQuestionEntity.questionEntity
 import com.eager.questioncloud.question.entity.QQuestionMetadataEntity.questionMetadataEntity
@@ -57,6 +58,7 @@ class QuestionRepositoryImpl(
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
+            .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .groupBy(questionEntity.id)
             .orderBy(sort(questionFilter.sort), questionEntity.id.desc())
             .where(
@@ -78,6 +80,7 @@ class QuestionRepositoryImpl(
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
+            .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst()
             ?: throw CoreException(Error.NOT_FOUND)
@@ -139,6 +142,7 @@ class QuestionRepositoryImpl(
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
+            .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .fetch()
             .stream()
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
@@ -160,6 +164,7 @@ class QuestionRepositoryImpl(
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
+            .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .fetch()
             .stream()
             .map { tuple -> this.parseQuestionInformationTuple(tuple) }
@@ -250,6 +255,8 @@ class QuestionRepositoryImpl(
             tuple.get(questionEntity.questionContentEntity.thumbnail)!!,
             tuple.get(questionEntity.questionContentEntity.questionLevel)!!,
             tuple.get(questionEntity.questionContentEntity.price)!!,
+            tuple.get(promotionEntity.title),
+            tuple.get(promotionEntity.salePrice),
             tuple.get(questionMetadataEntity.reviewAverageRate)!!,
         )
     }
@@ -266,6 +273,8 @@ class QuestionRepositoryImpl(
                 questionEntity.questionContentEntity.thumbnail,
                 questionEntity.questionContentEntity.questionLevel,
                 questionEntity.questionContentEntity.price,
+                promotionEntity.title,
+                promotionEntity.salePrice,
                 questionMetadataEntity.reviewAverageRate,
                 questionEntity.questionContentEntity.subject
             )

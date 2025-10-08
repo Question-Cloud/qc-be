@@ -13,5 +13,7 @@ open class QuestionInformation(
     val thumbnail: String,
     val questionLevel: QuestionLevel,
     val price: Int,
+    val promotionName: String?,
+    val promotionPrice: Int?,
     val rate: Double,
 )

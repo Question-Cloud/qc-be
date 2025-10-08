@@ -34,14 +34,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class StoreProductControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @MockBean
     private lateinit var storeProductService: StoreProductService
-
+    
     private lateinit var sampleStoreProductDetails: List<StoreProductDetail>
     private lateinit var sampleStoreProductDetail: StoreProductDetail
     private lateinit var sampleQuestionCategories: List<QuestionCategoryGroupBySubject>
-
+    
     @BeforeEach
     fun setUp() {
         sampleStoreProductDetails = listOf(
@@ -56,6 +56,8 @@ class StoreProductControllerDocument {
                     thumbnail = "https://example.com/thumbnail1.jpg",
                     questionLevel = QuestionLevel.LEVEL1,
                     price = 15000,
+                    promotionName = "깜짝 프로모션",
+                    promotionPrice = 12000,
                     rate = 4.8,
                 ),
                 "Creator1",
@@ -72,13 +74,15 @@ class StoreProductControllerDocument {
                     thumbnail = "https://example.com/thumbnail2.jpg",
                     questionLevel = QuestionLevel.LEVEL3,
                     price = 20000,
+                    promotionName = "깜짝 프로모션",
+                    promotionPrice = 12000,
                     rate = 4.5,
                 ),
                 "Creator2",
                 false,
             )
         )
-
+        
         sampleStoreProductDetail = StoreProductDetail(
             QuestionInformation(
                 id = 3L,
@@ -90,50 +94,52 @@ class StoreProductControllerDocument {
                 thumbnail = "https://example.com/thumbnail1.jpg",
                 questionLevel = QuestionLevel.LEVEL1,
                 price = 15000,
+                promotionName = "깜짝 프로모션",
+                promotionPrice = 12000,
                 rate = 4.8,
             ),
             "Creator1",
             true,
         )
-
+        
         val mathSubCategories = listOf(
             QuestionCategoryGroupBySubject.SubQuestionCategory(1L, "대수"),
             QuestionCategoryGroupBySubject.SubQuestionCategory(2L, "기하")
         )
-
+        
         val physicsSubCategories = listOf(
             QuestionCategoryGroupBySubject.SubQuestionCategory(3L, "역학"),
             QuestionCategoryGroupBySubject.SubQuestionCategory(4L, "전자기학")
         )
-
+        
         val mathMainCategory = QuestionCategoryGroupBySubject.MainQuestionCategory(
             title = "수학",
             subject = Subject.Mathematics,
             sub = mathSubCategories
         )
-
+        
         val physicsMainCategory = QuestionCategoryGroupBySubject.MainQuestionCategory(
             title = "물리",
             subject = Subject.Physics,
             sub = physicsSubCategories
         )
-
+        
         sampleQuestionCategories = listOf(
             QuestionCategoryGroupBySubject(Subject.Mathematics, listOf(mathMainCategory)),
             QuestionCategoryGroupBySubject(Subject.Physics, listOf(physicsMainCategory))
         )
     }
-
+    
     @Test
     fun `문제 목록 조회 API 테스트`() {
         // Given
         val totalCount = 100
-
+        
         whenever(storeProductService.getTotalFiltering(any()))
             .thenReturn(totalCount)
         whenever(storeProductService.getQuestionListByFiltering(any(), any(), any()))
             .thenReturn(sampleStoreProductDetails)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/store/product")
@@ -174,6 +180,8 @@ class StoreProductControllerDocument {
                             fieldWithPath("result[].questionContent.thumbnail").description("썸네일 이미지 URL"),
                             fieldWithPath("result[].questionContent.questionLevel").description("문제 난이도"),
                             fieldWithPath("result[].questionContent.price").description("문제 가격"),
+                            fieldWithPath("result[].questionContent.promotionName").description("문제 프로모션 이름"),
+                            fieldWithPath("result[].questionContent.promotionPrice").description("문제 프로모션 가격"),
                             fieldWithPath("result[].questionContent.rate").description("평균 평점"),
                             fieldWithPath("result[].creator").description("크리에이터 이름"),
                             fieldWithPath("result[].isOwned").description("사용자 보유 여부")
@@ -182,13 +190,13 @@ class StoreProductControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 카테고리 목록 조회 API 테스트`() {
         // Given
         whenever(storeProductService.getQuestionCategories())
             .thenReturn(sampleQuestionCategories)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/store/product/categories")
@@ -216,15 +224,15 @@ class StoreProductControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 상세 조회 API 테스트`() {
         // Given
         val questionId = 1L
-
+        
         whenever(storeProductService.getQuestionInformation(any(), any()))
             .thenReturn(sampleStoreProductDetail)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/store/product/{questionId}", questionId)
@@ -253,6 +261,8 @@ class StoreProductControllerDocument {
                             fieldWithPath("productDetail.questionContent.thumbnail").description("썸네일 이미지 URL"),
                             fieldWithPath("productDetail.questionContent.questionLevel").description("문제 난이도"),
                             fieldWithPath("productDetail.questionContent.price").description("문제 가격"),
+                            fieldWithPath("productDetail.questionContent.promotionName").description("문제 프로모션 이름"),
+                            fieldWithPath("productDetail.questionContent.promotionPrice").description("문제 프로모션 가격"),
                             fieldWithPath("productDetail.questionContent.rate").description("평균 평점"),
                             fieldWithPath("productDetail.creator").description("크리에이터 이름"),
                             fieldWithPath("productDetail.isOwned").description("사용자 보유 여부")
@@ -261,15 +271,15 @@ class StoreProductControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 상세 조회 API 실패 테스트 - 존재하지 않는 문제`() {
         // Given
         val nonExistentQuestionId = 999L
-
+        
         whenever(storeProductService.getQuestionInformation(any(), any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/store/product/{questionId}", nonExistentQuestionId)
