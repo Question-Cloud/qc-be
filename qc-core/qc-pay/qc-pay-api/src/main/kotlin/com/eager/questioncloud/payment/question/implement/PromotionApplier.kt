@@ -1,18 +1,25 @@
 package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.payment.domain.QuestionOrder
-import com.eager.questioncloud.payment.repository.PromotionRepository
+import com.eager.questioncloud.payment.dto.QuestionPromotionData
+import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
 
 @Component
 class PromotionApplier(
-    private val promotionRepository: PromotionRepository
+    private val questionQueryAPI: QuestionQueryAPI
 ) {
     fun apply(questionOrder: QuestionOrder) {
-        val promotions = promotionRepository.findByQuestionIdIn(questionOrder.questionIds)
-        promotions.forEach { promotion ->
-            val orderItem = questionOrder.getOrderItem(promotion.questionId)
-            orderItem.applyPromotion(promotion)
+        val promotions = questionQueryAPI.getQuestionPromotions(questionOrder.questionIds).promotionInformation
+        promotions.forEach { promotionQueryItem ->
+            val orderItem = questionOrder.getOrderItem(promotionQueryItem.questionId)
+            val promotionData = QuestionPromotionData(
+                promotionQueryItem.id,
+                promotionQueryItem.questionId,
+                promotionQueryItem.title,
+                promotionQueryItem.salePrice
+            )
+            orderItem.applyPromotion(promotionData)
         }
     }
 }

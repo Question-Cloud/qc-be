@@ -1,4 +1,4 @@
-package com.eager.questioncloud.payment.domain
+package com.eager.questioncloud.question.domain
 
 class Promotion(
     val id: Long = 0,

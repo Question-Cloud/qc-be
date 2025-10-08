@@ -1,8 +1,8 @@
-package com.eager.questioncloud.payment.repository
+package com.eager.questioncloud.question.repository
 
-import com.eager.questioncloud.payment.domain.Promotion
-import com.eager.questioncloud.payment.entity.PromotionEntity
-import com.eager.questioncloud.payment.entity.QPromotionEntity.promotionEntity
+import com.eager.questioncloud.question.domain.Promotion
+import com.eager.questioncloud.question.entity.PromotionEntity
+import com.eager.questioncloud.question.entity.QPromotionEntity.promotionEntity
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 

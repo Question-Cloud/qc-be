@@ -1,6 +1,6 @@
-package com.eager.questioncloud.payment.repository
+package com.eager.questioncloud.question.repository
 
-import com.eager.questioncloud.payment.domain.Promotion
+import com.eager.questioncloud.question.domain.Promotion
 
 interface PromotionRepository {
     fun save(promotion: Promotion): Promotion

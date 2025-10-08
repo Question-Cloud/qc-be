@@ -1,6 +1,7 @@
 package com.eager.questioncloud.payment.domain
 
 import com.eager.questioncloud.payment.dto.QuestionInfo
+import com.eager.questioncloud.payment.dto.QuestionPromotionData
 
 class QuestionOrderItem(
     var id: Long = 0,
@@ -12,10 +13,10 @@ class QuestionOrderItem(
     val priceAfterPromotion: Int
         get() = originalPrice - promotionDiscountAmount
     var promotionDiscountAmount: Int = 0
-    var appliedPromotion: Promotion? = null
+    var appliedPromotion: QuestionPromotionData? = null
     val appliedCoupons: MutableList<Coupon> = mutableListOf()
     
-    fun applyPromotion(promotion: Promotion) {
+    fun applyPromotion(promotion: QuestionPromotionData) {
         promotionDiscountAmount = originalPrice - promotion.salePrice
         realPrice = promotion.salePrice
         appliedPromotion = promotion

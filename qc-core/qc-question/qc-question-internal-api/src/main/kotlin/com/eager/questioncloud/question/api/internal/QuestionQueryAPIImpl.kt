@@ -1,6 +1,7 @@
 package com.eager.questioncloud.question.api.internal
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.question.repository.PromotionRepository
 import com.eager.questioncloud.question.repository.QuestionRepository
 import com.eager.questioncloud.question.repository.UserQuestionRepository
 import org.springframework.stereotype.Component
@@ -8,7 +9,8 @@ import org.springframework.stereotype.Component
 @Component
 class QuestionQueryAPIImpl(
     private val questionRepository: QuestionRepository,
-    private val userQuestionRepository: UserQuestionRepository
+    private val userQuestionRepository: UserQuestionRepository,
+    private val promotionRepository: PromotionRepository
 ) : QuestionQueryAPI {
     override fun getQuestionInformation(questionId: Long): QuestionInformationQueryResult {
         val question = questionRepository.getQuestionInformation(questionId)
@@ -96,5 +98,19 @@ class QuestionQueryAPIImpl(
             question.questionContent.questionLevel.value,
             question.questionContent.price,
         )
+    }
+    
+    override fun getQuestionPromotions(questionIds: List<Long>): QuestionPromotionQueryResult {
+        val promotionInformation = promotionRepository.findByQuestionIdIn(questionIds)
+            .map {
+                QuestionPromotionQueryItem(
+                    it.id,
+                    it.questionId,
+                    it.title,
+                    it.salePrice
+                )
+            }
+        
+        return QuestionPromotionQueryResult(promotionInformation)
     }
 }

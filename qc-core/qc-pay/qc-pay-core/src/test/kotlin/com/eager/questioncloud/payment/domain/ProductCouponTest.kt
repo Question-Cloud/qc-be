@@ -104,7 +104,7 @@ class ProductCouponTest : BehaviorSpec() {
             When("최소 주문 금액을 만족하지 않은 채 쿠폰 적용을 시도하면") {
                 Then("예외가 발생한다.") {
                     val exception = shouldThrow<CoreException> {
-                        productCoupon.isApplicable(questionPayment)
+                        productCoupon.apply(questionPayment)
                     }
                     exception.error shouldBe Error.WRONG_COUPON
                 }

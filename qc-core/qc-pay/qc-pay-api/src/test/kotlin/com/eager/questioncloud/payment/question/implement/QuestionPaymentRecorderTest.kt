@@ -2,8 +2,12 @@ package com.eager.questioncloud.payment.question.implement
 
 import com.eager.questioncloud.payment.domain.Coupon
 import com.eager.questioncloud.payment.domain.QuestionPayment
+import com.eager.questioncloud.payment.dto.QuestionPromotionData
 import com.eager.questioncloud.payment.repository.*
-import com.eager.questioncloud.payment.scenario.*
+import com.eager.questioncloud.payment.scenario.CouponScenario
+import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
+import com.eager.questioncloud.payment.scenario.save
+import com.eager.questioncloud.payment.scenario.setUserCoupon
 import com.eager.questioncloud.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class QuestionPaymentRecorderTest(
     private val questionPaymentRecorder: QuestionPaymentRecorder,
-    private val promotionRepository: PromotionRepository,
     private val couponInformationRepository: CouponInformationRepository,
     private val userCouponRepository: UserCouponRepository,
     private val questionOrderRepository: QuestionOrderRepository,
@@ -39,9 +42,8 @@ class QuestionPaymentRecorderTest(
             
             // 프로모션
             val promotionSalePrice = 7000
-            val promotion = PromotionScenario.create(questionId, promotionSalePrice)
-            promotionRepository.save(promotion)
-            questionOrder.items[0].applyPromotion(promotion)
+            val questionPromotionData = QuestionPromotionData(1L, questionId, "promotion", promotionSalePrice)
+            questionOrder.items[0].applyPromotion(questionPromotionData)
             
             // 쿠폰 + 중복 쿠폰
             val couponDiscountAmount = 1000
@@ -81,8 +83,8 @@ class QuestionPaymentRecorderTest(
                     questionOrderData[0].questionId shouldBe questionId
                     questionOrderData[0].originalPrice shouldBe questionOrder.items[0].originalPrice
                     questionOrderData[0].realPrice shouldBe questionOrder.items[0].realPrice
-                    questionOrderData[0].promotionId shouldBe promotion.id
-                    questionOrderData[0].promotionName shouldBe promotion.title
+                    questionOrderData[0].promotionId shouldBe questionPromotionData.id
+                    questionOrderData[0].promotionName shouldBe questionPromotionData.title
                     
                     discountHistories.map { it.name } shouldContainExactlyInAnyOrder listOf(
                         couponInformation.title,

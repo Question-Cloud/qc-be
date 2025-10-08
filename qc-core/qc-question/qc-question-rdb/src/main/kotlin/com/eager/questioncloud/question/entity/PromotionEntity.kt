@@ -1,6 +1,6 @@
-package com.eager.questioncloud.payment.entity
+package com.eager.questioncloud.question.entity
 
-import com.eager.questioncloud.payment.domain.Promotion
+import com.eager.questioncloud.question.domain.Promotion
 import jakarta.persistence.*
 
 

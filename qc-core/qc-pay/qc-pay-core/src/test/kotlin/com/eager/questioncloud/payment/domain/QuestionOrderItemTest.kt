@@ -1,7 +1,7 @@
 package com.eager.questioncloud.payment.domain
 
 import com.eager.questioncloud.payment.dto.QuestionInfo
-import com.eager.questioncloud.payment.scenario.PromotionScenario
+import com.eager.questioncloud.payment.dto.QuestionPromotionData
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -14,14 +14,14 @@ class QuestionOrderItemTest : BehaviorSpec() {
                 QuestionOrderItem(questionInfo = QuestionInfo(questionId = questionId, creatorId = 1L, title = "문제", price = 10000))
             
             val promotionSalePrice = 5000
-            val promotion = PromotionScenario.create(questionId, promotionSalePrice)
+            val questionPromotionData = QuestionPromotionData(1L, questionId, "promotion", promotionSalePrice)
             When("상품에 프로모션을 적용하면") {
-                questionOrderItem.applyPromotion(promotion)
+                questionOrderItem.applyPromotion(questionPromotionData)
                 Then("상품 가격이 프로모션 가격으로 적용된다.") {
                     questionOrderItem.realPrice shouldBe promotionSalePrice
                     
                     questionOrderItem.appliedPromotion.shouldNotBeNull()
-                    questionOrderItem.appliedPromotion?.title shouldBe promotion.title
+                    questionOrderItem.appliedPromotion?.title shouldBe questionPromotionData.title
                 }
             }
         }
