@@ -23,6 +23,8 @@ dependencies {
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
+    
+    testImplementation(testFixtures(project(":qc-core:qc-subscribe:qc-subscribe-core")))
 }
 
 tasks.test {

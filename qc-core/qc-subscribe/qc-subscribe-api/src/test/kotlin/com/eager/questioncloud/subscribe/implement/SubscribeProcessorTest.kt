@@ -3,88 +3,98 @@ package com.eager.questioncloud.subscribe.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
+import com.eager.questioncloud.subscribe.domain.Subscribe
 import com.eager.questioncloud.subscribe.repository.SubscribeRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class SubscribeProcessorTest(
-    @Autowired val subscribeProcessor: SubscribeProcessor,
-    @Autowired val subscribeRepository: SubscribeRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
+    private val subscribeProcessor: SubscribeProcessor,
+    private val subscribeRepository: SubscribeRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
     lateinit var creatorQueryAPI: CreatorQueryAPI
     
-    private val userId = 1L
-    private val creatorId = 2L
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `구독을 할 수 있다`() {
-        //given
-        given(creatorQueryAPI.isExistsById(creatorId)).willReturn(true)
-        
-        //when
-        subscribeProcessor.subscribe(userId, creatorId)
-        
-        //then
-        val isSubscribed = subscribeRepository.isSubscribed(userId, creatorId)
-        Assertions.assertThat(isSubscribed).isTrue()
-    }
-    
-    @Test
-    fun `존재하지 않는 크리에이터를 구독할 수 없다`() {
-        //given
-        given(creatorQueryAPI.isExistsById(creatorId)).willReturn(false)
-        
-        //when then
-        Assertions.assertThatThrownBy {
-            subscribeProcessor.subscribe(userId, creatorId)
+    init {
+        afterEach {
+            dbCleaner.cleanUp()
         }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.NOT_FOUND)
-    }
-    
-    @Test
-    fun `이미 구독한 크리에이터를 다시 구독할 수 없다`() {
-        //given
-        given(creatorQueryAPI.isExistsById(creatorId)).willReturn(true)
-        subscribeProcessor.subscribe(userId, creatorId)
         
-        //when then
-        Assertions.assertThatThrownBy {
-            subscribeProcessor.subscribe(userId, creatorId)
+        Given("존재하는 크리에이터가 주어졌을 때") {
+            val creatorId = 1L
+            val userId = 1L
+            every { creatorQueryAPI.isExistsById(creatorId) } returns true
+            
+            When("구독하면") {
+                subscribeProcessor.subscribe(userId, creatorId)
+                
+                Then("구독이 완료된다") {
+                    val isSubscribed = subscribeRepository.isSubscribed(userId, creatorId)
+                    isSubscribed shouldBe true
+                }
+            }
         }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.ALREADY_SUBSCRIBE_CREATOR)
-    }
-    
-    @Test
-    fun `구독을 취소할 수 있다`() {
-        //given
-        given(creatorQueryAPI.isExistsById(creatorId)).willReturn(true)
-        subscribeProcessor.subscribe(userId, creatorId)
         
-        Assertions.assertThat(subscribeRepository.isSubscribed(userId, creatorId)).isTrue()
+        Given("존재하지 않는 크리에이터가 주어졌을 때") {
+            val creatorId = 1L
+            val userId = 1L
+            
+            every { creatorQueryAPI.isExistsById(creatorId) } returns false
+            
+            When("구독하면") {
+                Then("NOT_FOUND 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        subscribeProcessor.subscribe(userId, creatorId)
+                    }
+                    exception.error shouldBe Error.NOT_FOUND
+                }
+            }
+        }
         
-        //when
-        subscribeProcessor.unSubscribe(userId, creatorId)
+        Given("이미 크리에이터를 구독한 상태에서") {
+            val creatorId = 1L
+            val userId = 1L
+            
+            subscribeRepository.save(Subscribe.create(userId, creatorId))
+            
+            every { creatorQueryAPI.isExistsById(creatorId) } returns true
+            
+            When("다시 구독하면") {
+                Then("ALREADY_SUBSCRIBE_CREATOR 예외가 발생한다") {
+                    val exception = shouldThrow<CoreException> {
+                        subscribeProcessor.subscribe(userId, creatorId)
+                    }
+                    exception.error shouldBe Error.ALREADY_SUBSCRIBE_CREATOR
+                }
+            }
+        }
         
-        //then
-        val isSubscribed = subscribeRepository.isSubscribed(userId, creatorId)
-        Assertions.assertThat(isSubscribed).isFalse()
+        Given("구독 취소 하고자 하는 크리에이터가 주어졌을 때") {
+            val creatorId = 1L
+            val userId = 1L
+            
+            every { creatorQueryAPI.isExistsById(creatorId) } returns true
+            subscribeRepository.save(Subscribe.create(userId, creatorId))
+            When("구독을 취소하면") {
+                subscribeProcessor.unSubscribe(userId, creatorId)
+                
+                Then("구독이 취소된다") {
+                    val isSubscribed = subscribeRepository.isSubscribed(userId, creatorId)
+                    isSubscribed shouldBe false
+                }
+            }
+        }
     }
 }

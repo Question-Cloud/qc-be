@@ -21,12 +21,11 @@ class SubscribedCreatorInformationReader(
         val creators = creatorQueryAPI.getCreators(subscribedCreatorIds)
         val creatorMap = creators.associateBy { it.creatorId }
         val creatorUserMap = userQueryAPI.getUsers(creators.map { it.userId }).associateBy { it.userId }
-        val creatorSubscriberCountMap = subscribeRepository.countSubscriber(subscribedCreatorIds)
         
         return subscribedCreatorIds.map {
             val creator = creatorMap.getValue(it)
             val creatorUser = creatorUserMap.getValue(creator.userId)
-            val creatorSubscriberCount = creatorSubscriberCountMap.getValue(it)
+            val creatorSubscriberCount = creator.subscriberCount
             
             SubscribedCreatorInformation(
                 it,
