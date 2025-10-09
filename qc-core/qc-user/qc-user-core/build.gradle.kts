@@ -2,6 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     kotlin("jvm")
+    id("java-test-fixtures")
     kotlin("plugin.spring") version "2.1.10"
     kotlin("plugin.jpa") version "2.1.10"
 }
@@ -20,6 +21,7 @@ dependencies {
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     
     testImplementation(kotlin("test"))
+    testFixturesImplementation(project(":qc-test-utils"))
 }
 
 tasks.test {

@@ -1,48 +1,57 @@
 package com.eager.questioncloud.user.profile.service
 
-import com.eager.questioncloud.application.utils.fixture.helper.UserFixtureHelper
-import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.repository.UserRepository
-import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import com.eager.questioncloud.user.scenario.UserScenario
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 
-@SpringBootTest
-@ActiveProfiles("test")
-class UserProfileServiceTest(
-    @Autowired val userProfileService: UserProfileService,
-    @Autowired val userRepository: UserRepository,
-    @Autowired val dbCleaner: DBCleaner
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
+class UserProfileServiceTest : BehaviorSpec() {
+    private val userRepository = mockk<UserRepository>()
+    private val userProfileService = UserProfileService(userRepository)
     
-    @Test
-    fun `사용자의 이름과 프로필 이미지를 업데이트할 수 있다`() {
-        // given
-        val user = UserFixtureHelper.createEmailUser(
-            "test@example.com",
-            "password123",
-            UserStatus.Active,
-            userRepository
-        )
+    init {
+        Given("사용자 정보 업데이트 - 사용자가 존재할 때") {
+            val password = "password123"
+            val user = UserScenario.createEmailUser(password)
+            val newName = "업데이트된 이름"
+            val newProfileImage = "https://example.com/new-profile.jpg"
+            
+            every { userRepository.getUser(user.uid) } returns user
+            every { userRepository.save(user) } returns user
+            
+            When("사용자 정보를 업데이트하면") {
+                userProfileService.updateUserInformation(user.uid, newName, newProfileImage)
+                
+                Then("사용자 정보가 변경된다") {
+                    verify(exactly = 1) { userRepository.getUser(user.uid) }
+                    verify(exactly = 1) { userRepository.save(user) }
+                    
+                    user.userInformation.name shouldBe newName
+                    user.userInformation.profileImage shouldBe newProfileImage
+                }
+            }
+        }
         
-        val newName = "업데이트된 이름"
-        val newProfileImage = "https://example.com/new-profile.jpg"
-        
-        // when
-        userProfileService.updateUserInformation(user.uid, newName, newProfileImage)
-        
-        // then
-        val updatedUser = userRepository.getUser(user.uid)
-        
-        assertThat(updatedUser.userInformation.name).isEqualTo(newName)
-        assertThat(updatedUser.userInformation.profileImage).isEqualTo(newProfileImage)
+        Given("내 정보 조회 - 사용자가 존재할 때") {
+            val password = "password123"
+            val user = UserScenario.createEmailUser(password)
+            
+            every { userRepository.getUser(user.uid) } returns user
+            
+            When("내 정보를 조회하면") {
+                val myInformation = userProfileService.getMyInformation(user.uid)
+                
+                Then("사용자 정보를 반환한다") {
+                    verify(exactly = 1) { userRepository.getUser(user.uid) }
+                    
+                    myInformation.email shouldBe user.userInformation.email
+                    myInformation.name shouldBe user.userInformation.name
+                    myInformation.profileImage shouldBe user.userInformation.profileImage
+                }
+            }
+        }
     }
 }

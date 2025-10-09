@@ -28,6 +28,8 @@ dependencies {
     implementation(project(":qc-core:qc-user:qc-user-redis"))
     
     implementation(project(":qc-internal-api-interface:qc-point-internal-api-interface"))
+    
+    testImplementation(testFixtures(project(":qc-core:qc-user:qc-user-core")))
 }
 
 tasks.test {

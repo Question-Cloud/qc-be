@@ -5,61 +5,73 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.*
 import javax.crypto.SecretKey
 
+
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class AuthenticationTokenRefresherTest(
-    @Autowired val authenticationTokenRefresher: AuthenticationTokenRefresher,
-    @Autowired val authenticationTokenGenerator: AuthenticationTokenGenerator,
-    @Autowired val refreshTokenRepository: RefreshTokenRepository,
-    @Value("\${JWT_SECRET_KEY}") secretKey: String,
-) {
+    private val authenticationTokenRefresher: AuthenticationTokenRefresher,
+    private val authenticationTokenGenerator: AuthenticationTokenGenerator,
+    private val refreshTokenRepository: RefreshTokenRepository,
+    @Value("\${JWT_SECRET_KEY}") secretKeyString: String,
+) : BehaviorSpec() {
+    
     private lateinit var secretKey: SecretKey
     
     init {
-        val keyBytes = Decoders.BASE64.decode(secretKey)
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes)
-    }
-    
-    @Test
-    fun `인증 토큰을 갱신할 수 있다`() {
-        //given
-        val userId = 1L
-        val authenticationToken = authenticationTokenGenerator.createAuthenticationToken(userId)
+        val keyBytes = Decoders.BASE64.decode(secretKeyString)
+        secretKey = Keys.hmacShaKeyFor(keyBytes)
         
-        //when
-        val newAuthenticationToken = authenticationTokenRefresher.refresh(authenticationToken.refreshToken)
+        Given("유효한 리프레시 토큰이 있을 때") {
+            val userId = 1L
+            val authenticationToken = authenticationTokenGenerator.createAuthenticationToken(userId)
+            
+            When("리프레시 토큰으로 인증 토큰을 갱신하면") {
+                val newAuthenticationToken = authenticationTokenRefresher.refresh(authenticationToken.refreshToken)
+                
+                Then("새로운 액세스 토큰과 리프레시 토큰이 발급된다.") {
+                    val newAccessTokenClaims = getClaims(newAuthenticationToken.accessToken)
+                    val newRefreshToken = refreshTokenRepository.getByUserId(userId)
+                    
+                    newAccessTokenClaims shouldNotBe null
+                    newAccessTokenClaims["uid"].toString().toLong() shouldBe userId
+                    
+                    newRefreshToken shouldBe newAuthenticationToken.refreshToken
+                }
+            }
+        }
         
-        //then
-        val newAccessTokenClaims = getClaims(newAuthenticationToken.accessToken)
-        
-        Assertions.assertThat(newAccessTokenClaims["uid"].toString().toLong()).isNotNull().isEqualTo(userId)
-    }
-    
-    @Test
-    fun `만료 된 리프레시 토큰일 경우 갱신에 실패한다`() {
-        //given
-        val userId = 1L
-        val currentTime = Date()
-        val expiredRefreshToken = Jwts.builder()
-            .subject("refreshToken")
-            .claim("uid", userId)
-            .issuedAt(currentTime)
-            .expiration(Date(currentTime.time - 1000L))
-            .signWith(secretKey)
-            .compact()
-        
-        // when then
-        Assertions.assertThatThrownBy { authenticationTokenRefresher.refresh(expiredRefreshToken) }
-            .isInstanceOf(Exception::class.java)
+        Given("만료된 리프레시 토큰이 있을 때") {
+            val userId = 1L
+            val currentTime = Date()
+            val expiredRefreshToken = Jwts.builder()
+                .subject("refreshToken")
+                .claim("uid", userId)
+                .issuedAt(currentTime)
+                .expiration(Date(currentTime.time - 1000L))
+                .signWith(secretKey)
+                .compact()
+            
+            When("만료된 리프레시 토큰으로 갱신을 시도하면") {
+                Then("예외가 발생한다") {
+                    shouldThrow<Exception> {
+                        authenticationTokenRefresher.refresh(expiredRefreshToken)
+                    }
+                }
+            }
+        }
     }
     
     private fun getClaims(token: String?): Claims {
