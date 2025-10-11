@@ -3,138 +3,149 @@ package com.eager.questioncloud.review.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class StoreReviewRegisterTest(
-    @Autowired val storeReviewRegister: StoreReviewRegister,
-    @Autowired val questionReviewRepository: QuestionReviewRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val storeReviewRegister: StoreReviewRegister,
+    private val questionReviewRepository: QuestionReviewRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
     
-    private val questionId = 1L
-    private val userId = 100L
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `리뷰를 등록할 수 있다`() {
-        //given
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        
-        given(questionQueryAPI.isAvailable(questionId)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId)).willReturn(true)
-        
-        //when
-        storeReviewRegister.register(questionReview)
-        
-        //then
-        val isWritten = questionReviewRepository.isWritten(userId, questionId)
-        Assertions.assertThat(isWritten).isTrue()
-        
-        val savedReview = questionReviewRepository.findByQuestionIdAndUserId(questionId, userId)
-        Assertions.assertThat(savedReview.comment).isEqualTo("좋은 문제입니다")
-        Assertions.assertThat(savedReview.rate).isEqualTo(5)
-    }
-    
-    @Test
-    fun `사용할 수 없는 문제에는 리뷰를 등록할 수 없다`() {
-        //given
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        
-        given(questionQueryAPI.isAvailable(questionId)).willReturn(false)
-        
-        //when then
-        Assertions.assertThatThrownBy {
-            storeReviewRegister.register(questionReview)
+    init {
+        afterEach {
+            dbCleaner.cleanUp()
         }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.UNAVAILABLE_QUESTION)
-    }
-    
-    @Test
-    fun `소유하지 않은 문제에는 리뷰를 등록할 수 없다`() {
-        //given
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
         
-        given(questionQueryAPI.isAvailable(questionId)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId)).willReturn(false)
-        
-        //when then
-        Assertions.assertThatThrownBy {
-            storeReviewRegister.register(questionReview)
-        }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.NOT_OWNED_QUESTION)
-    }
-    
-    @Test
-    fun `이미 리뷰를 작성한 문제에는 중복 등록할 수 없다`() {
-        //given
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        
-        given(questionQueryAPI.isAvailable(questionId)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId)).willReturn(true)
-        
-        storeReviewRegister.register(questionReview)
-        
-        val duplicateReview = QuestionReview.create(questionId, userId, "다른 리뷰", 4)
-        
-        //when then
-        Assertions.assertThatThrownBy {
-            storeReviewRegister.register(duplicateReview)
-        }
-            .isInstanceOf(CoreException::class.java)
-            .hasFieldOrPropertyWithValue("error", Error.ALREADY_REGISTER_REVIEW)
-    }
-    
-    @Test
-    fun `리뷰 중복 작성 동시성 문제를 방지할 수 있다`() {
-        //given
-        val concurrencyQuestionId = 999L
-        val questionReview = QuestionReview.create(concurrencyQuestionId, userId, "동시성 테스트", 5)
-        
-        given(questionQueryAPI.isAvailable(concurrencyQuestionId)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, concurrencyQuestionId)).willReturn(true)
-        
-        //when
-        val threadCount = 100
-        val executorService = Executors.newFixedThreadPool(threadCount)
-        val latch = CountDownLatch(threadCount)
-        
-        for (i in 0..<threadCount) {
-            executorService.execute {
-                try {
-                    storeReviewRegister.register(questionReview)
-                } catch (ignored: Exception) {
-                } finally {
-                    latch.countDown()
+        Given("리뷰 등록") {
+            val questionId = 1L
+            val userId = 1L
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "좋은 문제입니다", 5)
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns true
+            every { questionQueryAPI.isOwned(userId, questionId) } returns true
+            
+            When("리뷰를 등록하면") {
+                storeReviewRegister.register(registerReviewCommand)
+                Then("리뷰가 등록된다") {
+                    val isWritten = questionReviewRepository.isWritten(userId, questionId)
+                    isWritten shouldBe true
+                    
+                    val savedReview = questionReviewRepository.findByQuestionIdAndUserId(questionId, userId)
+                    savedReview.comment shouldBe "좋은 문제입니다"
+                    savedReview.rate shouldBe 5
                 }
             }
         }
         
-        latch.await()
+        Given("사용할 수 없는 문제") {
+            val questionId = 1L
+            val userId = 1L
+            
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "좋은 문제입니다", 5)
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns false
+            
+            When("리뷰를 등록하면") {
+                val exception = shouldThrow<CoreException> {
+                    storeReviewRegister.register(registerReviewCommand)
+                }
+                Then("UNAVAILABLE_QUESTION 에러가 발생한다") {
+                    exception.error shouldBe Error.UNAVAILABLE_QUESTION
+                }
+            }
+        }
         
-        //then
-        val reviewCount = questionReviewRepository.countByQuestionId(concurrencyQuestionId)
-        Assertions.assertThat(reviewCount).isEqualTo(1)
+        Given("소유하지 않은 문제") {
+            val questionId = 1L
+            val userId = 1L
+            
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "좋은 문제입니다", 5)
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns true
+            every { questionQueryAPI.isOwned(userId, questionId) } returns false
+            
+            When("리뷰를 등록하면") {
+                val exception = shouldThrow<CoreException> {
+                    storeReviewRegister.register(registerReviewCommand)
+                }
+                Then("NOT_OWNED_QUESTION 에러가 발생한다") {
+                    exception.error shouldBe Error.NOT_OWNED_QUESTION
+                }
+            }
+        }
+        
+        Given("이미 리뷰를 작성한 문제") {
+            val questionId = 1L
+            val userId = 1L
+            
+            val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
+            questionReviewRepository.save(questionReview)
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns true
+            every { questionQueryAPI.isOwned(userId, questionId) } returns true
+            
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "좋은 문제입니다", 5)
+            
+            When("중복 리뷰를 등록하면") {
+                val exception = shouldThrow<CoreException> {
+                    storeReviewRegister.register(registerReviewCommand)
+                }
+                Then("ALREADY_REGISTER_REVIEW 에러가 발생한다") {
+                    exception.error shouldBe Error.ALREADY_REGISTER_REVIEW
+                }
+            }
+        }
+        
+        Given("리뷰 중복 작성 동시성 테스트") {
+            val questionId = 1L
+            val userId = 1L
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "좋은 문제입니다", 5)
+            
+            every { questionQueryAPI.isAvailable(questionId) } returns true
+            every { questionQueryAPI.isOwned(userId, questionId) } returns true
+            
+            When("100개의 스레드에서 동시에 리뷰를 등록하면") {
+                val threadCount = 100
+                val executorService = Executors.newFixedThreadPool(threadCount)
+                val latch = CountDownLatch(threadCount)
+                
+                for (i in 0..<threadCount) {
+                    executorService.execute {
+                        try {
+                            storeReviewRegister.register(registerReviewCommand)
+                        } catch (ignored: Exception) {
+                        } finally {
+                            latch.countDown()
+                        }
+                    }
+                }
+                
+                latch.await()
+                
+                Then("하나의 리뷰만 등록된다") {
+                    val reviewCount = questionReviewRepository.countByQuestionId(questionId)
+                    reviewCount shouldBe 1
+                }
+            }
+        }
     }
 }

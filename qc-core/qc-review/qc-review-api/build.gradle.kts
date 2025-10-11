@@ -23,6 +23,7 @@ dependencies {
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-question-internal-api-interface"))
+    testImplementation(testFixtures(project(":qc-core:qc-review:qc-review-core")))
 }
 
 tasks.test {

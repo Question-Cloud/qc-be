@@ -4,7 +4,9 @@ import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.event.ReviewEvent
 import com.eager.questioncloud.common.event.ReviewEventType
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.review.domain.QuestionReview
+import com.eager.questioncloud.review.command.DeleteReviewCommand
+import com.eager.questioncloud.review.command.ModifyReviewCommand
+import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.dto.MyQuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
 import com.eager.questioncloud.review.implement.StoreReviewReader
@@ -39,20 +41,20 @@ class StoreReviewService(
     }
     
     @Transactional
-    fun register(questionReview: QuestionReview) {
-        storeReviewRegister.register(questionReview)
+    fun register(command: RegisterReviewCommand) {
+        val questionReview = storeReviewRegister.register(command)
         eventPublisher.publish(ReviewEvent.create(questionReview.questionId, questionReview.rate, ReviewEventType.REGISTER))
     }
     
     @Transactional
-    fun modify(reviewId: Long, userId: Long, comment: String, rate: Int) {
-        val (questionId, varianceRate) = storeReviewUpdater.modify(reviewId, userId, comment, rate)
+    fun modify(command: ModifyReviewCommand) {
+        val (questionId, varianceRate) = storeReviewUpdater.modify(command)
         eventPublisher.publish(ReviewEvent.create(questionId, varianceRate, ReviewEventType.MODIFY))
     }
     
     @Transactional
-    fun delete(reviewId: Long, userId: Long) {
-        val (questionId, varianceRate) = storeReviewRemover.delete(reviewId, userId)
+    fun delete(command: DeleteReviewCommand) {
+        val (questionId, varianceRate) = storeReviewRemover.delete(command)
         eventPublisher.publish(ReviewEvent.create(questionId, varianceRate, ReviewEventType.DELETE))
     }
 }

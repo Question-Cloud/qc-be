@@ -2,202 +2,256 @@ package com.eager.questioncloud.review.service
 
 import com.eager.questioncloud.common.event.EventPublisher
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import com.eager.questioncloud.review.ReviewScenario
+import com.eager.questioncloud.review.command.DeleteReviewCommand
+import com.eager.questioncloud.review.command.ModifyReviewCommand
+import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.domain.QuestionReview
-import com.eager.questioncloud.review.repository.QuestionReviewRepository
-import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.mockito.kotlin.verify
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ActiveProfiles
+import com.eager.questioncloud.review.dto.MyQuestionReview
+import com.eager.questioncloud.review.dto.QuestionReviewDetail
+import com.eager.questioncloud.review.dto.ReviewerStatistics
+import com.eager.questioncloud.review.implement.StoreReviewReader
+import com.eager.questioncloud.review.implement.StoreReviewRegister
+import com.eager.questioncloud.review.implement.StoreReviewRemover
+import com.eager.questioncloud.review.implement.StoreReviewUpdater
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.*
+import java.time.LocalDateTime
 
-@SpringBootTest
-@ActiveProfiles("test")
-class StoreReviewServiceTest(
-    @Autowired val storeReviewService: StoreReviewService,
-    @Autowired val questionReviewRepository: QuestionReviewRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var userQueryAPI: UserQueryAPI
+class StoreReviewServiceTest : BehaviorSpec() {
+    private val storeReviewReader = mockk<StoreReviewReader>()
+    private val storeReviewRegister = mockk<StoreReviewRegister>()
+    private val storeReviewUpdater = mockk<StoreReviewUpdater>()
+    private val storeReviewRemover = mockk<StoreReviewRemover>()
+    private val eventPublisher = mockk<EventPublisher>()
     
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val storeReviewService = StoreReviewService(
+        storeReviewReader,
+        storeReviewRegister,
+        storeReviewUpdater,
+        storeReviewRemover,
+        eventPublisher
+    )
     
-    @MockBean
-    lateinit var eventPublisher: EventPublisher
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `리뷰 개수를 조회할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        questionReviewRepository.save(questionReview)
+    init {
+        afterEach {
+            clearMocks(
+                storeReviewReader,
+                storeReviewRegister,
+                storeReviewUpdater,
+                storeReviewRemover,
+                eventPublisher
+            )
+        }
         
-        //when
-        val count = storeReviewService.count(questionId)
+        Given("리뷰 개수 조회") {
+            val questionId = 1L
+            every { storeReviewReader.count(questionId) } returns 3
+            
+            When("리뷰 개수를 조회하면") {
+                val count = storeReviewService.count(questionId)
+                Then("리뷰 개수가 반환된다") {
+                    count shouldBe 3
+                    verify(exactly = 1) { storeReviewReader.count(questionId) }
+                }
+            }
+        }
         
-        //then
-        Assertions.assertThat(count).isEqualTo(1)
-    }
-    
-    @Test
-    fun `리뷰 상세 정보를 조회할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        questionReviewRepository.save(questionReview)
+        Given("리뷰 상세 정보 조회") {
+            val questionId = 1L
+            val userId = 1L
+            val pagingInformation = PagingInformation(0, 10)
+            val reviewScenario = ReviewScenario.create(questionId, 3)
+            
+            val reviewDetails = reviewScenario.reviews.mapIndexed { index, review ->
+                QuestionReviewDetail(
+                    id = review.id,
+                    reviewerName = reviewScenario.userQueryDatas[index].name,
+                    reviewerStatistics = ReviewerStatistics(10, 4.5),
+                    rate = review.rate,
+                    comment = review.comment,
+                    isWriter = review.reviewerId == userId,
+                    createdAt = LocalDateTime.now()
+                )
+            }
+            
+            every {
+                storeReviewReader.getQuestionReviewDetails(questionId, userId, pagingInformation)
+            } returns reviewDetails
+            
+            When("리뷰 상세 정보를 조회하면") {
+                val result = storeReviewService.getReviewDetails(questionId, userId, pagingInformation)
+                Then("리뷰 상세 정보가 반환된다") {
+                    result shouldBe reviewDetails
+                    verify(exactly = 1) {
+                        storeReviewReader.getQuestionReviewDetails(questionId, userId, pagingInformation)
+                    }
+                }
+            }
+        }
         
-        val pagingInformation = PagingInformation(0, 10)
-        val userQueryData = UserQueryData(userId, "리뷰어", "profile.jpg", "reviewer@test.com")
+        Given("내 리뷰 조회") {
+            val questionId = 1L
+            val userId = 1L
+            val reviewScenario = ReviewScenario.createMyReveiw(questionId, userId)
+            val review = reviewScenario.reviews[0]
+            val myReview = MyQuestionReview(
+                id = review.id,
+                rate = review.rate,
+                comment = review.comment
+            )
+            
+            every { storeReviewReader.getMyQuestionReview(questionId, userId) } returns myReview
+            
+            When("내 리뷰를 조회하면") {
+                val result = storeReviewService.getMyReview(questionId, userId)
+                Then("내 리뷰 정보가 반환된다") {
+                    result.comment shouldBe review.comment
+                    result.rate shouldBe review.rate
+                    verify(exactly = 1) { storeReviewReader.getMyQuestionReview(questionId, userId) }
+                }
+            }
+        }
         
-        given(userQueryAPI.getUsers(listOf(userId))).willReturn(listOf(userQueryData))
+        Given("리뷰 등록") {
+            val questionId = 1L
+            val userId = 1L
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "새로운 리뷰", 4)
+            val review = QuestionReview.create(
+                registerReviewCommand.questionId,
+                registerReviewCommand.reviewerId,
+                registerReviewCommand.comment,
+                registerReviewCommand.rate
+            )
+            
+            every { storeReviewRegister.register(registerReviewCommand) } returns review
+            justRun { eventPublisher.publish(any()) }
+            
+            When("리뷰를 등록하면") {
+                storeReviewService.register(registerReviewCommand)
+                Then("리뷰가 등록되고 이벤트가 발행된다") {
+                    verify(exactly = 1) { storeReviewRegister.register(registerReviewCommand) }
+                    verify(exactly = 1) { eventPublisher.publish(any()) }
+                }
+            }
+        }
         
-        //when
-        val reviewDetails = storeReviewService.getReviewDetails(questionId, userId, pagingInformation)
+        Given("리뷰 수정") {
+            val reviewId = 100L
+            val questionId = 1L
+            val userId = 1L
+            val newComment = "수정된 리뷰"
+            val newRate = 5
+            val modifyReviewCommand = ModifyReviewCommand(reviewId, userId, newComment, newRate)
+            every { storeReviewUpdater.modify(modifyReviewCommand) } returns Pair(questionId, 2)
+            justRun { eventPublisher.publish(any()) }
+            
+            When("리뷰를 수정하면") {
+                storeReviewService.modify(modifyReviewCommand)
+                Then("리뷰가 수정되고 이벤트가 발행된다") {
+                    verify(exactly = 1) { storeReviewUpdater.modify(modifyReviewCommand) }
+                    verify(exactly = 1) { eventPublisher.publish(any()) }
+                }
+            }
+        }
         
-        //then
-        Assertions.assertThat(reviewDetails).hasSize(1)
-        Assertions.assertThat(reviewDetails[0].reviewerName).isEqualTo("리뷰어")
-        Assertions.assertThat(reviewDetails[0].comment).isEqualTo("좋은 문제입니다")
-        Assertions.assertThat(reviewDetails[0].rate).isEqualTo(5)
-        Assertions.assertThat(reviewDetails[0].isWriter).isTrue()
-    }
-    
-    @Test
-    fun `내 리뷰를 조회할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val questionReview = QuestionReview.create(questionId, userId, "좋은 문제입니다", 5)
-        questionReviewRepository.save(questionReview)
+        Given("리뷰 삭제") {
+            val reviewId = 100L
+            val questionId = 1L
+            val userId = 1L
+            
+            val deleteReviewCommand = DeleteReviewCommand(reviewId, userId)
+            
+            every { storeReviewRemover.delete(deleteReviewCommand) } returns Pair(questionId, 5)
+            justRun { eventPublisher.publish(any()) }
+            
+            When("리뷰를 삭제하면") {
+                storeReviewService.delete(deleteReviewCommand)
+                Then("리뷰가 삭제되고 이벤트가 발행된다") {
+                    verify(exactly = 1) { storeReviewRemover.delete(deleteReviewCommand) }
+                    verify(exactly = 1) { eventPublisher.publish(any()) }
+                }
+            }
+        }
         
-        //when
-        val myReview = storeReviewService.getMyReview(questionId, userId)
-        
-        //then
-        Assertions.assertThat(myReview.comment).isEqualTo("좋은 문제입니다")
-        Assertions.assertThat(myReview.rate).isEqualTo(5)
-    }
-    
-    @Test
-    fun `리뷰를 등록할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val newReview = QuestionReview.create(questionId, userId, "새로운 리뷰", 4)
-        
-        given(questionQueryAPI.isAvailable(questionId)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId)).willReturn(true)
-        
-        //when
-        storeReviewService.register(newReview)
-        
-        //then
-        val isWritten = questionReviewRepository.isWritten(userId, questionId)
-        Assertions.assertThat(isWritten).isTrue()
-        
-        // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).publish(any())
-    }
-    
-    @Test
-    fun `리뷰를 수정할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val questionReview = QuestionReview.create(questionId, userId, "원래 리뷰", 3)
-        val savedReview = questionReviewRepository.save(questionReview)
-        
-        //when
-        storeReviewService.modify(savedReview.id, userId, "수정된 리뷰", 5)
-        
-        //then
-        val updatedReview = questionReviewRepository.findByIdAndUserId(savedReview.id, userId)
-        Assertions.assertThat(updatedReview.comment).isEqualTo("수정된 리뷰")
-        Assertions.assertThat(updatedReview.rate).isEqualTo(5)
-        
-        // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).publish(any())
-    }
-    
-    @Test
-    fun `리뷰를 삭제할 수 있다`() {
-        //given
-        val questionId = 1L
-        val userId = 100L
-        val questionReview = QuestionReview.create(questionId, userId, "삭제할 리뷰", 4)
-        val savedReview = questionReviewRepository.save(questionReview)
-        
-        //when
-        storeReviewService.delete(savedReview.id, userId)
-        
-        //then
-        Assertions.assertThat(questionReviewRepository.isWritten(userId, questionId)).isFalse()
-        
-        // 이벤트 처리가 호출되었는지 확인
-        verify(eventPublisher).publish(any())
-    }
-    
-    @Test
-    fun `여러 리뷰 작업을 연속으로 수행할 수 있다`() {
-        //given
-        val questionId1 = 1L
-        val questionId2 = 2L
-        val questionId3 = 3L
-        val userId = 100L
-        
-        // 수정할 기존 리뷰 생성
-        val existingReview = QuestionReview.create(questionId1, userId, "기존 리뷰", 3)
-        val savedReview = questionReviewRepository.save(existingReview)
-        
-        given(questionQueryAPI.isAvailable(questionId2)).willReturn(true)
-        given(questionQueryAPI.isAvailable(questionId3)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId2)).willReturn(true)
-        given(questionQueryAPI.isOwned(userId, questionId3)).willReturn(true)
-        
-        //when
-        // 새 리뷰 등록
-        val newReview1 = QuestionReview.create(questionId2, userId, "리뷰2", 4)
-        storeReviewService.register(newReview1)
-        
-        val newReview2 = QuestionReview.create(questionId3, userId, "리뷰3", 2)
-        storeReviewService.register(newReview2)
-        
-        // 기존 리뷰 수정
-        storeReviewService.modify(savedReview.id, userId, "수정된 리뷰", 1)
-        
-        //then
-        Assertions.assertThat(storeReviewService.count(questionId1)).isEqualTo(1)
-        Assertions.assertThat(storeReviewService.count(questionId2)).isEqualTo(1)
-        Assertions.assertThat(storeReviewService.count(questionId3)).isEqualTo(1)
-        
-        val myReview1 = storeReviewService.getMyReview(questionId1, userId)
-        val myReview2 = storeReviewService.getMyReview(questionId2, userId)
-        val myReview3 = storeReviewService.getMyReview(questionId3, userId)
-        
-        Assertions.assertThat(myReview1.comment).isEqualTo("수정된 리뷰")
-        Assertions.assertThat(myReview1.rate).isEqualTo(1)
-        
-        Assertions.assertThat(myReview2.comment).isEqualTo("리뷰2")
-        Assertions.assertThat(myReview2.rate).isEqualTo(4)
-        
-        Assertions.assertThat(myReview3.comment).isEqualTo("리뷰3")
-        Assertions.assertThat(myReview3.rate).isEqualTo(2)
+        Given("여러 리뷰 작업 연속 수행") {
+            val reviewId = 100L
+            val questionId1 = 1L
+            val questionId2 = 2L
+            val questionId3 = 3L
+            val userId = 1L
+            
+            val registerReviewCommand1 = RegisterReviewCommand(questionId2, userId, "리뷰2", 4)
+            val registerReviewCommand2 = RegisterReviewCommand(questionId3, userId, "리뷰3", 2)
+            val modifyReviewCommand1 = ModifyReviewCommand(reviewId, userId, "수정된 리뷰", 1)
+            
+            every { storeReviewRegister.register(registerReviewCommand1) } returns QuestionReview.create(
+                registerReviewCommand1.questionId,
+                registerReviewCommand1.reviewerId,
+                registerReviewCommand1.comment,
+                registerReviewCommand1.rate
+            )
+            
+            every { storeReviewRegister.register(registerReviewCommand2) } returns QuestionReview.create(
+                registerReviewCommand2.questionId,
+                registerReviewCommand2.reviewerId,
+                registerReviewCommand2.comment,
+                registerReviewCommand2.rate
+            )
+            
+            every { storeReviewUpdater.modify(modifyReviewCommand1) } returns Pair(questionId1, -2)
+            
+            justRun { eventPublisher.publish(any()) }
+            
+            every { storeReviewReader.count(questionId1) } returns 1
+            every { storeReviewReader.count(questionId2) } returns 1
+            every { storeReviewReader.count(questionId3) } returns 1
+            
+            every { storeReviewReader.getMyQuestionReview(questionId1, userId) } returns MyQuestionReview(
+                1L,
+                1,
+                "수정된 리뷰"
+            )
+            every { storeReviewReader.getMyQuestionReview(questionId2, userId) } returns MyQuestionReview(
+                2L,
+                4,
+                "리뷰2"
+            )
+            every { storeReviewReader.getMyQuestionReview(questionId3, userId) } returns MyQuestionReview(
+                3L,
+                2,
+                "리뷰3"
+            )
+            
+            When("여러 리뷰 작업을 연속으로 수행하면") {
+                storeReviewService.register(registerReviewCommand1)
+                storeReviewService.register(registerReviewCommand2)
+                storeReviewService.modify(modifyReviewCommand1)
+                
+                Then("모든 작업이 정상적으로 수행된다") {
+                    storeReviewService.count(questionId1) shouldBe 1
+                    storeReviewService.count(questionId2) shouldBe 1
+                    storeReviewService.count(questionId3) shouldBe 1
+                    
+                    val myReview1 = storeReviewService.getMyReview(questionId1, userId)
+                    val myReview2 = storeReviewService.getMyReview(questionId2, userId)
+                    val myReview3 = storeReviewService.getMyReview(questionId3, userId)
+                    
+                    myReview1.comment shouldBe "수정된 리뷰"
+                    myReview1.rate shouldBe 1
+                    
+                    myReview2.comment shouldBe "리뷰2"
+                    myReview2.rate shouldBe 4
+                    
+                    myReview3.comment shouldBe "리뷰3"
+                    myReview3.rate shouldBe 2
+                    
+                    verify(exactly = 2) { storeReviewRegister.register(any()) }
+                    verify(exactly = 1) { storeReviewUpdater.modify(modifyReviewCommand1) }
+                    verify(exactly = 3) { eventPublisher.publish(any()) }
+                }
+            }
+        }
     }
 }

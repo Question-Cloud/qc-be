@@ -1,49 +1,50 @@
 package com.eager.questioncloud.review.implement
 
-import com.eager.questioncloud.review.domain.QuestionReview
+import com.eager.questioncloud.review.ReviewScenario
+import com.eager.questioncloud.review.command.ModifyReviewCommand
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class StoreReviewUpdaterTest(
-    @Autowired val storeReviewUpdater: StoreReviewUpdater,
-    @Autowired val questionReviewRepository: QuestionReviewRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `리뷰를 수정할 수 있다`() {
-        val questionId = 1L
-        val userId = 100L
-        val otherUserId = 200L
+    private val storeReviewUpdater: StoreReviewUpdater,
+    private val questionReviewRepository: QuestionReviewRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    init {
+        afterEach {
+            dbCleaner.cleanUp()
+        }
         
-        val questionReview = QuestionReview.create(questionId, userId, "원래 코멘트", 3)
-        val savedReview = questionReviewRepository.save(questionReview)
-        
-        questionReviewRepository.save(
-            QuestionReview.create(questionId, otherUserId, "다른 사용자 리뷰", 4)
-        )
-        
-        //when
-        val result = storeReviewUpdater.modify(savedReview.id, userId, "수정된 코멘트", 5)
-        
-        //then
-        Assertions.assertThat(result.first).isEqualTo(questionId)
-        Assertions.assertThat(result.second).isEqualTo(2)
-        
-        val updatedReview = questionReviewRepository.findByIdAndUserId(savedReview.id, userId)
-        Assertions.assertThat(updatedReview.comment).isEqualTo("수정된 코멘트")
-        Assertions.assertThat(updatedReview.rate).isEqualTo(5)
+        Given("작성한 리뷰가 있을 때") {
+            val questionId = 1L
+            val reviewScenario = ReviewScenario.create(questionId)
+            val savedReviews = reviewScenario.reviews.map { questionReviewRepository.save(it) }
+            val savedMyReview = savedReviews[0]
+            
+            val newComment = "수정 된 코멘트"
+            val newRate = 4
+            
+            val modifyReviewCommand = ModifyReviewCommand(savedMyReview.id, savedMyReview.reviewerId, newComment, newRate)
+            When("리뷰를 수정하면") {
+                val result = storeReviewUpdater.modify(modifyReviewCommand)
+                Then("리뷰가 수정되고 수정된 리뷰 정보가 반환된다") {
+                    result.first shouldBe questionId
+                    result.second shouldBe newRate - savedMyReview.rate
+                    
+                    val updatedReview = questionReviewRepository.findByIdAndUserId(savedMyReview.id, savedMyReview.reviewerId)
+                    updatedReview.comment shouldBe newComment
+                    updatedReview.rate shouldBe newRate
+                }
+            }
+        }
     }
 }

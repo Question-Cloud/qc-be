@@ -3,6 +3,7 @@ package com.eager.questioncloud.review.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
 import org.springframework.dao.DataIntegrityViolationException
@@ -13,8 +14,9 @@ class StoreReviewRegister(
     private val questionReviewRepository: QuestionReviewRepository,
     private val questionQueryAPI: QuestionQueryAPI
 ) {
-    fun register(questionReview: QuestionReview) {
-        runCatching {
+    fun register(command: RegisterReviewCommand): QuestionReview {
+        return runCatching {
+            val questionReview = QuestionReview.create(command.questionId, command.reviewerId, command.comment, command.rate)
             if (isUnAvailableQuestion(questionReview.questionId)) {
                 throw CoreException(Error.UNAVAILABLE_QUESTION)
             }
@@ -33,7 +35,7 @@ class StoreReviewRegister(
             }
             
             throw it
-        }
+        }.getOrThrow()
     }
     
     private fun isUnAvailableQuestion(questionId: Long): Boolean {
