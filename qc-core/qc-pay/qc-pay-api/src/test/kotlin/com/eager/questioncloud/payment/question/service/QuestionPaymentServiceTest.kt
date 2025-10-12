@@ -8,52 +8,41 @@ import com.eager.questioncloud.payment.question.command.QuestionPaymentCommand
 import com.eager.questioncloud.payment.question.implement.*
 import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
 import com.eager.questioncloud.point.api.internal.PointCommandAPI
-import com.eager.questioncloud.utils.DBCleaner
-import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.ints.exactly
 import io.kotest.matchers.shouldBe
-import io.mockk.every
-import io.mockk.justRun
-import org.mockito.kotlin.any
-import org.mockito.kotlin.verify
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import io.mockk.*
 
-@SpringBootTest
-@ActiveProfiles("test")
-@ApplyExtension(SpringExtension::class)
-class QuestionPaymentServiceTest(
-    private val questionPaymentService: QuestionPaymentService,
-    private val dbCleaner: DBCleaner,
-) : BehaviorSpec() {
-    @MockkBean
-    private lateinit var questionOrderGenerator: QuestionOrderGenerator
-    
-    @MockkBean
-    private lateinit var promotionApplier: PromotionApplier
-    
-    @MockkBean
-    private lateinit var orderCouponApplier: OrderCouponApplier
-    
-    @MockkBean
-    private lateinit var paymentCouponApplier: PaymentCouponApplier
-    
-    @MockkBean
-    private lateinit var questionPaymentRecorder: QuestionPaymentRecorder
-    
-    @MockkBean
-    private lateinit var pointCommandAPI: PointCommandAPI
-    
-    @MockkBean
-    private lateinit var eventPublisher: EventPublisher
-    
+class QuestionPaymentServiceTest : BehaviorSpec() {
+    private val questionOrderGenerator = mockk<QuestionOrderGenerator>()
+    private val promotionApplier = mockk<PromotionApplier>()
+    private val orderCouponApplier = mockk<OrderCouponApplier>()
+    private val paymentCouponApplier = mockk<PaymentCouponApplier>()
+    private val questionPaymentRecorder = mockk<QuestionPaymentRecorder>()
+    private val pointCommandAPI = mockk<PointCommandAPI>()
+    private val eventPublisher = mockk<EventPublisher>()
+
+    private val questionPaymentService = QuestionPaymentService(
+        questionOrderGenerator,
+        promotionApplier,
+        orderCouponApplier,
+        paymentCouponApplier,
+        questionPaymentRecorder,
+        pointCommandAPI,
+        eventPublisher
+    )
+
     init {
-        afterTest {
-            dbCleaner.cleanUp()
+        afterEach {
+            clearMocks(
+                questionOrderGenerator,
+                promotionApplier,
+                orderCouponApplier,
+                paymentCouponApplier,
+                questionPaymentRecorder,
+                pointCommandAPI,
+                eventPublisher
+            )
         }
         
         Given("문제 결제") {
@@ -73,7 +62,7 @@ class QuestionPaymentServiceTest(
             When("사용자가 문제 결제를 요청하면") {
                 questionPaymentService.payment(command)
                 Then("결제가 완료되고 이벤트가 발행된다") {
-                    verify(exactly(1)) { eventPublisher.publish(any()) }
+                    verify(exactly = 1) { eventPublisher.publish(any()) }
                 }
             }
         }
