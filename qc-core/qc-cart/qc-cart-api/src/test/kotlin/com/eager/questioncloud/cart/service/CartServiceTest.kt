@@ -1,95 +1,99 @@
 package com.eager.questioncloud.cart.service
 
-import com.eager.questioncloud.cart.domain.CartItem
+import com.eager.questioncloud.cart.dto.CartItemDetail
+import com.eager.questioncloud.cart.implement.CartItemAppender
+import com.eager.questioncloud.cart.implement.CartItemDetailReader
 import com.eager.questioncloud.cart.repository.CartItemRepository
-import com.eager.questioncloud.cart.scenario.CartItemScenario
-import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
-import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
-import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.utils.DBCleaner
-import com.ninjasquad.springmockk.MockkBean
-import io.kotest.core.extensions.ApplyExtension
-import io.kotest.core.spec.style.FunSpec
-import io.kotest.extensions.spring.SpringExtension
+import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import io.mockk.every
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import io.mockk.*
 
-@SpringBootTest
-@ActiveProfiles("test")
-@ApplyExtension(SpringExtension::class)
-class CartServiceTest(
-    private val cartService: CartService,
-    private val cartItemRepository: CartItemRepository,
-    private val dbCleaner: DBCleaner,
-) : FunSpec() {
-    @MockkBean
-    private lateinit var questionQueryAPI: QuestionQueryAPI
+class CartServiceTest : BehaviorSpec() {
+    private val cartItemAppender = mockk<CartItemAppender>()
+    private val cartItemDetailReader = mockk<CartItemDetailReader>()
+    private val cartItemRepository = mockk<CartItemRepository>()
     
-    @MockkBean
-    private lateinit var creatorQueryAPI: CreatorQueryAPI
-    
-    @MockkBean
-    private lateinit var userQueryAPI: UserQueryAPI
+    private val cartService = CartService(
+        cartItemAppender,
+        cartItemDetailReader,
+        cartItemRepository
+    )
     
     init {
-        afterTest { dbCleaner.cleanUp() }
-        
-        test("장바구니에 문제를 추가할 수 있다") {
-            val userId = 100L
-            val questionId = 200L
-            
-            every { questionQueryAPI.isAvailable(questionId) } returns true
-            every { questionQueryAPI.isOwned(userId, questionId) } returns false
-            
-            cartService.appendCartItem(userId, questionId)
-            
-            val cartItems = cartItemRepository.findByUserId(userId)
-            cartItems shouldHaveSize 1
-            cartItems[0].questionId shouldBe questionId
+        afterEach {
+            clearMocks(cartItemAppender, cartItemDetailReader, cartItemRepository)
         }
         
-        test("장바구니 아이템 상세 목록을 조회할 수 있다") {
+        Given("장바구니에 문제 추가") {
             val userId = 1L
-            val cartItemCount = 10
-            val scenario = CartItemScenario.create(cartItemCount)
-            val savedCartItems = scenario.cartItemQuestionIds.map { cartItemRepository.save(CartItem.create(userId, it)) }
+            val questionId = 1L
             
-            every { questionQueryAPI.getQuestionInformation(any<List<Long>>()) } returns scenario.questionInformationQueryResults
-            every { creatorQueryAPI.getCreators(any()) } returns scenario.creatorQueryDatas
-            every { userQueryAPI.getUsers(any()) } returns scenario.creatorUserQueryDatas
+            justRun { cartItemAppender.append(userId, questionId) }
             
-            val result = cartService.getCartItemDetails(userId)
-            
-            result shouldHaveSize 10
-            
-            scenario.cartItemQuestionIds.forEachIndexed { index, questionId ->
-                val detail = result.find { it.questionId == questionId }!!
-                val expectedQuestion = scenario.questionInformationQueryResults[index]
-                val expectedCreatorUser = scenario.creatorUserQueryDatas[index]
-                val expectedCartItem = savedCartItems[index]
+            When("사용자가 장바구니에 문제를 추가하면") {
+                cartService.appendCartItem(userId, questionId)
                 
-                detail.id shouldBe expectedCartItem.id
-                detail.title shouldBe expectedQuestion.title
-                detail.creatorName shouldBe expectedCreatorUser.name
-                detail.subject shouldBe expectedQuestion.subject
-                detail.price shouldBe expectedQuestion.price
+                Then("문제가 장바구니에 추가된다") {
+                    verify(exactly = 1) { cartItemAppender.append(userId, questionId) }
+                }
             }
         }
         
-        test("장바구니에서 문제를 삭제할 수 있다") {
+        Given("장바구니 아이템 상세 목록 조회") {
             val userId = 1L
-            val beforeCartItemCount = 5
-            val scenario = CartItemScenario.create(beforeCartItemCount)
-            scenario.cartItemQuestionIds.forEach { cartItemRepository.save(CartItem.create(userId, it)) }
-            val idsToDelete = listOf(scenario.cartItemQuestionIds[0], scenario.cartItemQuestionIds[1])
             
-            cartService.removeCartItem(idsToDelete, userId)
+            val cartItemDetails = listOf(
+                CartItemDetail(
+                    id = 1L,
+                    questionId = 1L,
+                    title = "문제 제목 1",
+                    thumbnail = "thumbnail1.jpg",
+                    creatorName = "크리에이터 1",
+                    subject = "수학",
+                    price = 10000
+                ),
+                CartItemDetail(
+                    id = 2L,
+                    questionId = 2L,
+                    title = "문제 제목 2",
+                    thumbnail = "thumbnail2.jpg",
+                    creatorName = "크리에이터 2",
+                    subject = "영어",
+                    price = 15000
+                )
+            )
             
-            val remainingItems = cartItemRepository.findByUserId(userId)
-            remainingItems shouldHaveSize beforeCartItemCount - idsToDelete.size
+            every { cartItemDetailReader.getCartItemDetails(userId) } returns cartItemDetails
+            
+            When("장바구니 아이템 상세 목록을 조회하면") {
+                val result = cartService.getCartItemDetails(userId)
+                
+                Then("장바구니 아이템 상세 목록이 반환된다") {
+                    result shouldHaveSize 2
+                    result[0].title shouldBe cartItemDetails[0].title
+                    result[0].creatorName shouldBe cartItemDetails[0].creatorName
+                    result[1].title shouldBe cartItemDetails[1].title
+                    result[1].creatorName shouldBe cartItemDetails[1].creatorName
+                    
+                    verify(exactly = 1) { cartItemDetailReader.getCartItemDetails(userId) }
+                }
+            }
+        }
+        
+        Given("장바구니에서 문제 삭제") {
+            val userId = 1L
+            val idsToDelete = listOf(1L, 2L, 3L)
+            
+            justRun { cartItemRepository.deleteByIdInAndUserId(idsToDelete, userId) }
+            
+            When("장바구니에서 문제를 삭제하면") {
+                cartService.removeCartItem(idsToDelete, userId)
+                
+                Then("문제가 장바구니에서 삭제된다") {
+                    verify(exactly = 1) { cartItemRepository.deleteByIdInAndUserId(idsToDelete, userId) }
+                }
+            }
         }
     }
 }
