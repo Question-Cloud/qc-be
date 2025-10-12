@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
     kotlin("plugin.jpa") version "2.1.10"
+    id("java-test-fixtures")
 }
 
 group = "com.eager.questioncloud"
@@ -17,6 +18,10 @@ dependencies {
     implementation(project(":qc-common"))
     
     testImplementation(kotlin("test"))
+    testFixturesImplementation(project(":qc-test-utils"))
+    testFixturesImplementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
+    testFixturesImplementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
+    testFixturesImplementation(project(":qc-internal-api-interface:qc-question-internal-api-interface"))
 }
 
 tasks.test {

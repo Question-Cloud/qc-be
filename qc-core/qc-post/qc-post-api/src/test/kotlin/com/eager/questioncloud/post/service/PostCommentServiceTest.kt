@@ -1,177 +1,165 @@
 package com.eager.questioncloud.post.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.command.DeletePostCommentCommand
+import com.eager.questioncloud.post.command.ModifyPostCommentCommand
+import com.eager.questioncloud.post.command.RegisterPostCommentCommand
 import com.eager.questioncloud.post.domain.PostComment
-import com.eager.questioncloud.post.implement.PostPermissionChecker
-import com.eager.questioncloud.post.repository.PostCommentRepository
-import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
-import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
-import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ActiveProfiles
+import com.eager.questioncloud.post.dto.PostCommentDetail
+import com.eager.questioncloud.post.implement.PostCommentReader
+import com.eager.questioncloud.post.implement.PostCommentRegister
+import com.eager.questioncloud.post.implement.PostCommentRemover
+import com.eager.questioncloud.post.implement.PostCommentUpdater
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.*
+import java.time.LocalDateTime
 
-@SpringBootTest
-@ActiveProfiles("test")
-class PostCommentServiceTest(
-    @Autowired val postCommentService: PostCommentService,
-    @Autowired val postCommentRepository: PostCommentRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var postPermissionChecker: PostPermissionChecker
+class PostCommentServiceTest : BehaviorSpec() {
+    private val postCommentRegister = mockk<PostCommentRegister>()
+    private val postCommentUpdater = mockk<PostCommentUpdater>()
+    private val postCommentReader = mockk<PostCommentReader>()
+    private val postCommentRemover = mockk<PostCommentRemover>()
     
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val postCommentService = PostCommentService(
+        postCommentRegister,
+        postCommentUpdater,
+        postCommentReader,
+        postCommentRemover
+    )
     
-    @MockBean
-    lateinit var userQueryAPI: UserQueryAPI
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `댓글을 등록할 수 있다`() {
-        //given
-        val postId = 100L
-        val userId = 200L
-        val questionId = 300L
-        val creatorId = 400L
-        val comment = "테스트 댓글입니다"
+    init {
+        afterEach {
+            clearMocks(postCommentRegister, postCommentUpdater, postCommentReader, postCommentRemover)
+        }
         
-        given(postPermissionChecker.hasCommentPermission(userId, postId))
-            .willReturn(true)
+        Given("댓글 등록") {
+            val postId = 1L
+            val userId = 1L
+            val comment = "테스트 댓글입니다"
+            
+            val registerPostCommentCommand = RegisterPostCommentCommand(
+                postId = postId,
+                userId = userId,
+                comment = comment
+            )
+            
+            val savedPost = PostComment.create(postId, userId, comment, true)
+            
+            every { postCommentRegister.register(registerPostCommentCommand) } returns savedPost
+            
+            When("댓글을 등록하면") {
+                postCommentService.addPostComment(registerPostCommentCommand)
+                
+                Then("댓글이 등록된다") {
+                    verify(exactly = 1) { postCommentRegister.register(registerPostCommentCommand) }
+                }
+            }
+        }
         
-        given(questionQueryAPI.getQuestionInformation(postId))
-            .willReturn(createQuestionInformation(questionId, creatorId))
+        Given("댓글 수정") {
+            val commentId = 1L
+            val userId = 1L
+            val modifiedComment = "수정된 댓글"
+            
+            val modifyPostCommentCommand = ModifyPostCommentCommand(
+                commentId = commentId,
+                userId = userId,
+                comment = modifiedComment
+            )
+            
+            justRun { postCommentUpdater.modify(modifyPostCommentCommand) }
+            
+            When("댓글을 수정하면") {
+                postCommentService.modifyPostComment(modifyPostCommentCommand)
+                
+                Then("댓글이 수정된다") {
+                    verify(exactly = 1) { postCommentUpdater.modify(modifyPostCommentCommand) }
+                }
+            }
+        }
         
-        given(postPermissionChecker.isCreator(userId, questionId))
-            .willReturn(false)
+        Given("댓글 삭제") {
+            val commentId = 1L
+            val userId = 1L
+            
+            val deletePostCommentCommand = DeletePostCommentCommand(
+                commentId = commentId,
+                userId = userId
+            )
+            
+            justRun { postCommentRemover.deletePostComment(deletePostCommentCommand) }
+            
+            When("댓글을 삭제하면") {
+                postCommentService.deletePostComment(deletePostCommentCommand)
+                
+                Then("댓글이 삭제된다") {
+                    verify(exactly = 1) { postCommentRemover.deletePostComment(deletePostCommentCommand) }
+                }
+            }
+        }
         
-        //when
-        postCommentService.addPostComment(postId, userId, comment)
+        Given("댓글 목록 조회") {
+            val postId = 1L
+            val userId = 1L
+            val pagingInformation = PagingInformation(0, 10)
+            
+            val postCommentDetails = listOf(
+                PostCommentDetail(
+                    id = 1L,
+                    writerName = "작성자1",
+                    profileImage = "profile1.jpg",
+                    comment = "첫 번째 댓글",
+                    isCreator = false,
+                    isWriter = false,
+                    createdAt = LocalDateTime.now()
+                ),
+                PostCommentDetail(
+                    id = 2L,
+                    writerName = "작성자2",
+                    profileImage = "profile2.jpg",
+                    comment = "두 번째 댓글",
+                    isCreator = false,
+                    isWriter = false,
+                    createdAt = LocalDateTime.now()
+                )
+            )
+            
+            every { postCommentReader.getPostCommentDetails(userId, postId, pagingInformation) } returns postCommentDetails
+            
+            When("댓글 목록을 조회하면") {
+                val result = postCommentService.getPostCommentDetails(postId, userId, pagingInformation)
+                
+                Then("댓글 목록이 반환된다") {
+                    result.size shouldBe 2
+                    
+                    val commentDetail1 = result.find { it.id == postCommentDetails[0].id }!!
+                    commentDetail1.writerName shouldBe postCommentDetails[0].writerName
+                    commentDetail1.profileImage shouldBe postCommentDetails[0].profileImage
+                    
+                    val commentDetail2 = result.find { it.id == postCommentDetails[1].id }!!
+                    commentDetail2.writerName shouldBe postCommentDetails[1].writerName
+                    commentDetail2.profileImage shouldBe postCommentDetails[1].profileImage
+                    
+                    verify(exactly = 1) { postCommentReader.getPostCommentDetails(userId, postId, pagingInformation) }
+                }
+            }
+        }
         
-        //then
-        val commentCount = postCommentRepository.count(postId)
-        Assertions.assertThat(commentCount).isEqualTo(1)
-    }
-    
-    @Test
-    fun `댓글을 수정할 수 있다`() {
-        //given
-        val postId = 101L
-        val userId = 201L
-        val originalComment = "원본 댓글"
-        val modifiedComment = "수정된 댓글"
-        
-        val postComment = PostComment.create(postId, userId, originalComment, false)
-        val savedComment = postCommentRepository.save(postComment)
-        
-        //when
-        postCommentService.modifyPostComment(savedComment.id, userId, modifiedComment)
-        
-        //then
-        val updatedComment = postCommentRepository.findByIdAndWriterId(savedComment.id, userId)
-        Assertions.assertThat(updatedComment.comment).isEqualTo(modifiedComment)
-    }
-    
-    @Test
-    fun `댓글을 삭제할 수 있다`() {
-        //given
-        val postId = 102L
-        val userId = 202L
-        val comment = "삭제될 댓글"
-        
-        val postComment = PostComment.create(postId, userId, comment, false)
-        val savedComment = postCommentRepository.save(postComment)
-        
-        //when
-        postCommentService.deletePostComment(savedComment.id, userId)
-        
-        //then
-        val commentCount = postCommentRepository.count(postId)
-        Assertions.assertThat(commentCount).isEqualTo(0)
-    }
-    
-    @Test
-    fun `댓글 목록을 조회할 수 있다`() {
-        //given
-        val postId = 103L
-        val userId = 203L
-        val writerId1 = 301L
-        val writerId2 = 302L
-        
-        val comment1 = PostComment.create(postId, writerId1, "첫 번째 댓글", false)
-        val comment2 = PostComment.create(postId, writerId2, "두 번째 댓글", false)
-        postCommentRepository.save(comment1)
-        postCommentRepository.save(comment2)
-        
-        given(postPermissionChecker.hasCommentPermission(userId, postId))
-            .willReturn(true)
-        
-        val userData1 = UserQueryData(writerId1, "작성자1", "profile1.jpg", "user1@test.com")
-        val userData2 = UserQueryData(writerId2, "작성자2", "profile2.jpg", "user2@test.com")
-        given(userQueryAPI.getUsers(listOf(writerId1, writerId2)))
-            .willReturn(listOf(userData1, userData2))
-        
-        val pagingInformation = PagingInformation(0, 10)
-        
-        //when
-        val result = postCommentService.getPostCommentDetails(postId, userId, pagingInformation)
-        
-        //then
-        Assertions.assertThat(result).hasSize(2)
-        
-        val commentDetail1 = result.find { it.comment == "첫 번째 댓글" }
-        Assertions.assertThat(commentDetail1).isNotNull
-        Assertions.assertThat(commentDetail1!!.writerName).isEqualTo("작성자1")
-        
-        val commentDetail2 = result.find { it.comment == "두 번째 댓글" }
-        Assertions.assertThat(commentDetail2).isNotNull
-        Assertions.assertThat(commentDetail2!!.writerName).isEqualTo("작성자2")
-    }
-    
-    @Test
-    fun `댓글 개수를 조회할 수 있다`() {
-        //given
-        val postId = 104L
-        val userId = 204L
-        
-        val comment1 = PostComment.create(postId, userId, "댓글1", false)
-        val comment2 = PostComment.create(postId, userId, "댓글2", false)
-        val comment3 = PostComment.create(postId, userId, "댓글3", false)
-        postCommentRepository.save(comment1)
-        postCommentRepository.save(comment2)
-        postCommentRepository.save(comment3)
-        
-        //when
-        val result = postCommentService.count(postId)
-        
-        //then
-        Assertions.assertThat(result).isEqualTo(3)
-    }
-    
-    private fun createQuestionInformation(questionId: Long, creatorId: Long): QuestionInformationQueryResult {
-        return QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
+        Given("댓글 개수 조회") {
+            val postId = 1L
+            
+            every { postCommentReader.count(postId) } returns 3
+            
+            When("댓글 개수를 조회하면") {
+                val result = postCommentService.count(postId)
+                
+                Then("댓글 개수가 반환된다") {
+                    result shouldBe 3
+                    
+                    verify(exactly = 1) { postCommentReader.count(postId) }
+                }
+            }
+        }
     }
 }

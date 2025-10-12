@@ -1,31 +1,25 @@
 package com.eager.questioncloud.post.service
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.command.DeletePostCommand
+import com.eager.questioncloud.post.command.ModifyPostCommand
+import com.eager.questioncloud.post.command.RegisterPostCommand
 import com.eager.questioncloud.post.domain.Post
-import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.dto.PostDetail
 import com.eager.questioncloud.post.dto.PostPreview
-import com.eager.questioncloud.post.implement.PostPermissionChecker
 import com.eager.questioncloud.post.implement.PostReader
-import com.eager.questioncloud.post.repository.PostRepository
+import com.eager.questioncloud.post.implement.PostRegister
+import com.eager.questioncloud.post.implement.PostRemover
+import com.eager.questioncloud.post.implement.PostUpdater
 import org.springframework.stereotype.Service
 
 @Service
 class PostService(
-    private val postPermissionChecker: PostPermissionChecker,
+    private val postRegister: PostRegister,
     private val postReader: PostReader,
-    private val postRepository: PostRepository,
+    private val postUpdater: PostUpdater,
+    private val postRemover: PostRemover
 ) {
-    fun register(post: Post): Post {
-        if (!postPermissionChecker.hasPermission(post.writerId, post.questionId)) {
-            throw CoreException(Error.FORBIDDEN)
-        }
-        
-        return postRepository.save(post)
-    }
-    
     fun getPostPreviews(userId: Long, questionId: Long, pagingInformation: PagingInformation): List<PostPreview> {
         return postReader.getPostPreviews(userId, questionId, pagingInformation)
     }
@@ -38,14 +32,15 @@ class PostService(
         return postReader.getPostDetail(userId, postId)
     }
     
-    fun modify(postId: Long, userId: Long, postContent: PostContent) {
-        val post = postRepository.findByIdAndWriterId(postId, userId)
-        post.updateQuestionBoardContent(postContent)
-        postRepository.save(post)
+    fun register(command: RegisterPostCommand): Post {
+        return postRegister.register(command)
     }
     
-    fun delete(postId: Long, userId: Long) {
-        val post = postRepository.findByIdAndWriterId(postId, userId)
-        postRepository.delete(post)
+    fun modify(command: ModifyPostCommand) {
+        postUpdater.modify(command)
+    }
+    
+    fun delete(command: DeletePostCommand) {
+        postRemover.delete(command)
     }
 }

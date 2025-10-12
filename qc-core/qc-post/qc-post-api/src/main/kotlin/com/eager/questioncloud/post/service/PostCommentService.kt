@@ -1,31 +1,33 @@
 package com.eager.questioncloud.post.service
 
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.post.command.DeletePostCommentCommand
+import com.eager.questioncloud.post.command.ModifyPostCommentCommand
+import com.eager.questioncloud.post.command.RegisterPostCommentCommand
 import com.eager.questioncloud.post.dto.PostCommentDetail
-import com.eager.questioncloud.post.implement.PostCommentDetailReader
+import com.eager.questioncloud.post.implement.PostCommentReader
 import com.eager.questioncloud.post.implement.PostCommentRegister
-import com.eager.questioncloud.post.repository.PostCommentRepository
+import com.eager.questioncloud.post.implement.PostCommentRemover
+import com.eager.questioncloud.post.implement.PostCommentUpdater
 import org.springframework.stereotype.Service
 
 @Service
 class PostCommentService(
     private val postCommentRegister: PostCommentRegister,
-    private val postCommentDetailReader: PostCommentDetailReader,
-    private val postCommentRepository: PostCommentRepository,
+    private val postCommentUpdater: PostCommentUpdater,
+    private val postCommentReader: PostCommentReader,
+    private val postCommentRemover: PostCommentRemover,
 ) {
-    fun addPostComment(postId: Long, userId: Long, comment: String) {
-        postCommentRegister.register(postId, userId, comment)
+    fun addPostComment(command: RegisterPostCommentCommand) {
+        postCommentRegister.register(command)
     }
     
-    fun modifyPostComment(commentId: Long, userId: Long, comment: String) {
-        val postComment = postCommentRepository.findByIdAndWriterId(commentId, userId)
-        postComment.modify(comment)
-        postCommentRepository.save(postComment)
+    fun modifyPostComment(command: ModifyPostCommentCommand) {
+        postCommentUpdater.modify(command)
     }
     
-    fun deletePostComment(commentId: Long, userId: Long) {
-        val postComment = postCommentRepository.findByIdAndWriterId(commentId, userId)
-        postCommentRepository.delete(postComment)
+    fun deletePostComment(command: DeletePostCommentCommand) {
+        postCommentRemover.deletePostComment(command)
     }
     
     fun getPostCommentDetails(
@@ -33,10 +35,10 @@ class PostCommentService(
         userId: Long,
         pagingInformation: PagingInformation
     ): List<PostCommentDetail> {
-        return postCommentDetailReader.getPostCommentDetails(userId, postId, pagingInformation)
+        return postCommentReader.getPostCommentDetails(userId, postId, pagingInformation)
     }
     
     fun count(postId: Long): Int {
-        return postCommentRepository.count(postId)
+        return postCommentReader.count(postId)
     }
 }

@@ -32,18 +32,18 @@ import java.time.LocalDateTime
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 class PostCommentControllerDocument {
-
+    
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockBean
     private lateinit var postCommentService: PostCommentService
-
+    
     private lateinit var samplePostComments: List<PostCommentDetail>
-
+    
     @BeforeEach
     fun setUp() {
         samplePostComments = listOf(
@@ -67,18 +67,18 @@ class PostCommentControllerDocument {
             )
         )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 조회 API 테스트`() {
         // Given
         val postId = 101L
         val totalCount = 25
-
+        
         whenever(postCommentService.count(any()))
             .thenReturn(totalCount)
         whenever(postCommentService.getPostCommentDetails(any(), any(), any()))
             .thenReturn(samplePostComments)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post/comment")
@@ -116,15 +116,15 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 조회 API 실패 테스트 - 권한 없음`() {
         // Given
         val postId = 101L
-
+        
         whenever(postCommentService.getPostCommentDetails(any(), any(), any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post/comment")
@@ -155,7 +155,7 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 작성 API 테스트`() {
         // Given
@@ -163,7 +163,7 @@ class PostCommentControllerDocument {
             postId = 101L,
             comment = "정말 유익한 글이네요!"
         )
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/post/comment")
@@ -191,7 +191,7 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 작성 API 실패 테스트 - 권한 없음`() {
         // Given
@@ -199,10 +199,10 @@ class PostCommentControllerDocument {
             postId = 101L,
             comment = "정말 유익한 글이네요!"
         )
-
-        whenever(postCommentService.addPostComment(any(), any(), any()))
+        
+        whenever(postCommentService.addPostComment(any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/post/comment")
@@ -231,7 +231,7 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 수정 API 테스트`() {
         // Given
@@ -239,7 +239,7 @@ class PostCommentControllerDocument {
         val modifyCommentRequest = ModifyPostCommentRequest(
             comment = "수정된 댓글 내용입니다."
         )
-
+        
         // When & Then
         mockMvc.perform(
             patch("/api/post/comment/{commentId}", commentId)
@@ -269,7 +269,7 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 수정 API 실패 테스트 - 존재하지 않는 댓글`() {
         // Given
@@ -277,10 +277,10 @@ class PostCommentControllerDocument {
         val modifyCommentRequest = ModifyPostCommentRequest(
             comment = "수정된 댓글 내용입니다."
         )
-
-        whenever(postCommentService.modifyPostComment(any(), any(), any()))
+        
+        whenever(postCommentService.modifyPostComment(any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             patch("/api/post/comment/{commentId}", commentId)
@@ -311,12 +311,12 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 삭제 API 테스트`() {
         // Given
         val commentId = 1L
-
+        
         // When & Then
         mockMvc.perform(
             delete("/api/post/comment/{commentId}", commentId)
@@ -341,15 +341,15 @@ class PostCommentControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시글 댓글 삭제 API 실패 테스트 - 존재하지 않는 댓글`() {
         // Given
         val commentId = 999L
-
-        whenever(postCommentService.deletePostComment(any(), any()))
+        
+        whenever(postCommentService.deletePostComment(any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             delete("/api/post/comment/{commentId}", commentId)

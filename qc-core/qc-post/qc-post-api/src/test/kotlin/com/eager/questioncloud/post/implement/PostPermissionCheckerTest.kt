@@ -5,47 +5,183 @@ import com.eager.questioncloud.creator.api.internal.CreatorQueryData
 import com.eager.questioncloud.post.domain.Post
 import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.repository.PostRepository
+import com.eager.questioncloud.post.scenario.PostScenario
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.given
-import org.springframework.beans.factory.annotation.Autowired
+import com.ninjasquad.springmockk.MockkBean
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.mockk.every
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class PostPermissionCheckerTest(
-    @Autowired val postPermissionChecker: PostPermissionChecker,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @MockBean
-    lateinit var questionQueryAPI: QuestionQueryAPI
+    private val postRepository: PostRepository,
+    private val postPermissionChecker: PostPermissionChecker,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    @MockkBean
+    private lateinit var questionQueryAPI: QuestionQueryAPI
     
-    @MockBean
-    lateinit var creatorQueryAPI: CreatorQueryAPI
+    @MockkBean
+    private lateinit var creatorQueryAPI: CreatorQueryAPI
     
-    @MockBean
-    lateinit var postRepository: PostRepository
-    
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
+    init {
+        afterEach {
+            dbCleaner.cleanUp()
+        }
+        
+        Given("문제 크리에이터가 문제 게시글 접근 권한 확인") {
+            val questionId = 1L
+            val creatorId = 1L
+            
+            val requestUserId = 1L
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(requestUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            When("문제 크리에이터가 게시글 접근 권한을 확인하면") {
+                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
+                Then("권한이 있다") {
+                    hasPermission shouldBe true
+                }
+            }
+        }
+        
+        Given("문제 구매자 게시글 접근 권한 확인") {
+            val questionId = 1L
+            val creatorId = 2L
+            val creatorUserId = 2L
+            
+            val requestUserId = 1L
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(creatorUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            every { questionQueryAPI.isOwned(requestUserId, questionId) } returns true
+            
+            When("문제를 소유한 사용자가 게시글 접근 권한을 확인하면") {
+                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
+                Then("권한이 있다") {
+                    hasPermission shouldBe true
+                }
+            }
+        }
+        
+        Given("권한이 없는 사용자 확인") {
+            val questionId = 1L
+            val creatorId = 2L
+            val creatorUserId = 3L
+            
+            val requestUserId = 1L
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(creatorUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            every { questionQueryAPI.isOwned(requestUserId, questionId) } returns false
+            
+            When("크리에이터도 아니고 문제를 소유하지도 않은 사용자가 게시글 접근 권한을 확인하면") {
+                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
+                Then("권한이 없다") {
+                    hasPermission shouldBe false
+                }
+            }
+        }
+        
+        Given("댓글 권한 확인 - 권한이 있는 경우") {
+            val postWriterId = 1L
+            val questionId = 1L
+            val postId = 1L
+            val creatorId = 1L
+            
+            val requestUserId = 1L
+            
+            val postScenario = PostScenario.createSinglePost(questionId, postWriterId)
+            postRepository.save(postScenario.posts[0])
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(requestUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            When("해당 포스트의 문제에 대한 권한이 있는 사용자가 댓글 권한을 확인하면") {
+                val hasCommentPermission = postPermissionChecker.hasCommentPermission(requestUserId, postId)
+                Then("댓글 권한이 있다") {
+                    hasCommentPermission shouldBe true
+                }
+            }
+        }
+        
+        Given("댓글 권한 확인 - 권한이 없는 경우") {
+            val postWriterId = 1L
+            val questionId = 1L
+            val postId = 1L
+            val creatorId = 2L
+            val creatorUserId = 3L
+            
+            val requestUserId = 1L
+            
+            val postScenario = PostScenario.createSinglePost(questionId, postWriterId)
+            postRepository.save(postScenario.posts[0])
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(creatorUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            every { questionQueryAPI.isOwned(requestUserId, questionId) } returns false
+            
+            When("해당 포스트의 문제에 대한 권한이 없는 사용자가 댓글 권한을 확인하면") {
+                val hasCommentPermission = postPermissionChecker.hasCommentPermission(requestUserId, postId)
+                Then("댓글 권한이 없다") {
+                    hasCommentPermission shouldBe false
+                }
+            }
+        }
+        
+        Given("문제 크리에이터 여부 확인") {
+            val questionId = 1L
+            val creatorId = 1L
+            val notCreatorUserId = 1L
+            val creatorUserId = 2L
+            
+            val questionInformation = createQuestionInformation(questionId, creatorId)
+            every { questionQueryAPI.getQuestionInformation(questionId) } returns questionInformation
+            
+            val creatorQueryData = createCreatorQueryData(creatorUserId, creatorId)
+            every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
+            
+            When("문제를 만든 크리에이터인지 확인을 하면") {
+                val isCreator = postPermissionChecker.isCreator(creatorUserId, questionId)
+                val isNotCreator = postPermissionChecker.isCreator(notCreatorUserId, questionId)
+                
+                Then("크리에이터 확인이 정확하게 동작한다") {
+                    isCreator shouldBe true
+                    isNotCreator shouldBe false
+                }
+            }
+        }
     }
     
-    @Test
-    fun `크리에이터는 문제에 대한 권한을 가진다`() {
-        //given
-        val userId = 1L
-        val questionId = 100L
-        val creatorId = 301L
-        val creatorUserId = 401L
-        
-        val questionInformation = QuestionInformationQueryResult(
+    private fun createQuestionInformation(questionId: Long, creatorId: Long): QuestionInformationQueryResult {
+        return QuestionInformationQueryResult(
             id = questionId,
             creatorId = creatorId,
             title = "테스트 문제",
@@ -57,295 +193,17 @@ class PostPermissionCheckerTest(
             price = 1000,
             rate = 4.5
         )
-        
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        //when
-        val hasPermission = postPermissionChecker.hasPermission(creatorUserId, questionId)
-        
-        //then
-        Assertions.assertThat(hasPermission).isTrue()
     }
     
-    @Test
-    fun `문제를 소유한 사용자는 권한을 가진다`() {
-        //given
-        val userId = 2L
-        val questionId = 200L
-        val creatorId = 302L
-        val creatorUserId = 402L
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
+    private fun createCreatorQueryData(userId: Long, creatorId: Long): CreatorQueryData {
+        return CreatorQueryData(
+            userId = userId,
             creatorId = creatorId,
             mainSubject = "수학",
             rate = 4.5,
             sales = 100,
             subscriberCount = 500
         )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(true)
-        
-        //when
-        val hasPermission = postPermissionChecker.hasPermission(userId, questionId)
-        
-        //then
-        Assertions.assertThat(hasPermission).isTrue()
-    }
-    
-    @Test
-    fun `크리에이터도 아니고 문제를 소유하지도 않은 사용자는 권한이 없다`() {
-        //given
-        val userId = 3L
-        val questionId = 300L
-        val creatorId = 303L
-        val creatorUserId = 403L
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(false)
-        
-        //when
-        val hasPermission = postPermissionChecker.hasPermission(userId, questionId)
-        
-        //then
-        Assertions.assertThat(hasPermission).isFalse()
-    }
-    
-    @Test
-    fun `댓글 권한 확인 - 해당 포스트의 문제에 대한 권한이 있으면 댓글 권한도 있다`() {
-        //given
-        val userId = 4L
-        val questionId = 400L
-        val postId = 500L
-        val creatorId = 304L
-        val creatorUserId = 404L
-        
-        val post = createMockPost(questionId, userId, "테스트 포스트")
-        given(postRepository.findById(postId))
-            .willReturn(post)
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        //when
-        val hasCommentPermission = postPermissionChecker.hasCommentPermission(creatorUserId, postId)
-        
-        //then
-        Assertions.assertThat(hasCommentPermission).isTrue()
-    }
-    
-    @Test
-    fun `댓글 권한 확인 - 해당 포스트의 문제에 대한 권한이 없으면 댓글 권한도 없다`() {
-        //given
-        val userId = 5L
-        val questionId = 500L
-        val postId = 600L
-        val creatorId = 305L
-        val creatorUserId = 405L
-        
-        val post = createMockPost(questionId, userId, "테스트 포스트")
-        given(postRepository.findById(postId))
-            .willReturn(post)
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        given(questionQueryAPI.isOwned(userId, questionId))
-            .willReturn(false)
-        
-        //when
-        val hasCommentPermission = postPermissionChecker.hasCommentPermission(userId, postId)
-        
-        //then
-        Assertions.assertThat(hasCommentPermission).isFalse()
-    }
-    
-    @Test
-    fun `isCreator - 크리에이터 확인이 정확하게 동작한다`() {
-        //given
-        val userId = 6L
-        val questionId = 600L
-        val creatorId = 306L
-        val creatorUserId = 406L
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        //when
-        val isCreator = postPermissionChecker.isCreator(creatorUserId, questionId)
-        val isNotCreator = postPermissionChecker.isCreator(userId, questionId)
-        
-        //then
-        Assertions.assertThat(isCreator).isTrue()
-        Assertions.assertThat(isNotCreator).isFalse()
-    }
-    
-    @Test
-    fun `크리에이터는 문제 소유 여부와 관계없이 권한을 가진다`() {
-        //given
-        val questionId = 700L
-        val creatorId = 307L
-        val creatorUserId = 407L
-        
-        val questionInformation = QuestionInformationQueryResult(
-            id = questionId,
-            creatorId = creatorId,
-            title = "테스트 문제",
-            subject = "수학",
-            parentCategory = "수학",
-            childCategory = "대수",
-            thumbnail = "thumbnail.jpg",
-            questionLevel = "중급",
-            price = 1000,
-            rate = 4.5
-        )
-        given(questionQueryAPI.getQuestionInformation(questionId))
-            .willReturn(questionInformation)
-        
-        val creatorQueryData = CreatorQueryData(
-            userId = creatorUserId,
-            creatorId = creatorId,
-            mainSubject = "수학",
-            rate = 4.5,
-            sales = 100,
-            subscriberCount = 500
-        )
-        given(creatorQueryAPI.getCreator(creatorId))
-            .willReturn(creatorQueryData)
-        
-        given(questionQueryAPI.isOwned(creatorUserId, questionId))
-            .willReturn(false)
-        
-        //when
-        val hasPermission = postPermissionChecker.hasPermission(creatorUserId, questionId)
-        
-        //then
-        Assertions.assertThat(hasPermission).isTrue()
     }
     
     private fun createMockPost(questionId: Long, writerId: Long, content: String): Post {

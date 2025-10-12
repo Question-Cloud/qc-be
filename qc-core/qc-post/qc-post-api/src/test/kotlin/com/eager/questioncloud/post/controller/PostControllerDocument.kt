@@ -34,19 +34,19 @@ import java.time.LocalDateTime
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 class PostControllerDocument {
-
+    
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockBean
     private lateinit var postService: PostService
-
+    
     private lateinit var samplePostPreviews: List<PostPreview>
     private lateinit var samplePostDetail: PostDetail
-
+    
     @BeforeEach
     fun setUp() {
         samplePostPreviews = listOf(
@@ -63,7 +63,7 @@ class PostControllerDocument {
                 createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
             )
         )
-
+        
         val sampleFiles = listOf(
             PostFile(
                 fileName = "solution.jpg",
@@ -74,7 +74,7 @@ class PostControllerDocument {
                 url = "https://example.com/files/diagram.png"
             )
         )
-
+        
         samplePostDetail = PostDetail(
             id = 1L,
             questionId = 101L,
@@ -88,18 +88,18 @@ class PostControllerDocument {
             createdAt = LocalDateTime.of(2024, 3, 15, 14, 30)
         )
     }
-
+    
     @Test
     fun `문제 게시판 글 목록 조회 API 테스트`() {
         // Given
         val questionId = 101L
         val totalCount = 50
-
+        
         whenever(postService.countPost(any()))
             .thenReturn(totalCount)
         whenever(postService.getPostPreviews(any(), any(), any()))
             .thenReturn(samplePostPreviews)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post")
@@ -134,15 +134,15 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 목록 조회 API 실패 테스트 - 권한 없음`() {
         // Given
         val questionId = 101L
-
+        
         whenever(postService.getPostPreviews(any(), any(), any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post")
@@ -173,15 +173,15 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 조회 API 테스트`() {
         // Given
         val postId = 1L
-
+        
         whenever(postService.getPostDetail(any(), any()))
             .thenReturn(samplePostDetail)
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post/{postId}", postId)
@@ -218,15 +218,15 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 조회 API 실패 테스트 - 권한 없음`() {
         // Given
         val postId = 1L
-
+        
         whenever(postService.getPostDetail(any(), any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post/{postId}", postId)
@@ -252,15 +252,15 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 조회 API 실패 테스트 - 게시글 없음`() {
         // Given
         val postId = 999L
-
+        
         whenever(postService.getPostDetail(any(), any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/post/{postId}", postId)
@@ -286,7 +286,7 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 등록 API 테스트`() {
         // Given
@@ -301,7 +301,7 @@ class PostControllerDocument {
                 )
             )
         )
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/post")
@@ -333,7 +333,7 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 등록 API 테스트 - 파일 없이`() {
         // Given
@@ -343,7 +343,7 @@ class PostControllerDocument {
             content = "이 문제는 어떻게 접근해야 할까요?",
             files = emptyList()
         )
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/post")
@@ -373,7 +373,7 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 등록 API 실패 테스트 - 권한 없음`() {
         // Given
@@ -383,10 +383,10 @@ class PostControllerDocument {
             content = "이 문제를 풀다가 막혔는데 도움을 받을 수 있을까요?",
             files = emptyList()
         )
-
+        
         whenever(postService.register(any()))
             .thenThrow(CoreException(Error.FORBIDDEN))
-
+        
         // When & Then
         mockMvc.perform(
             post("/api/post")
@@ -417,7 +417,7 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 수정 API 테스트`() {
         // Given
@@ -432,7 +432,7 @@ class PostControllerDocument {
                 )
             )
         )
-
+        
         // When & Then
         mockMvc.perform(
             patch("/api/post/{postId}", postId)
@@ -466,7 +466,7 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 수정 API 실패 테스트 - 게시글 없음`() {
         // Given
@@ -476,10 +476,10 @@ class PostControllerDocument {
             content = "수정된 게시글 내용입니다.",
             files = emptyList()
         )
-
-        whenever(postService.modify(any(), any(), any()))
+        
+        whenever(postService.modify(any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             patch("/api/post/{postId}", postId)
@@ -512,12 +512,12 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 삭제 API 테스트`() {
         // Given
         val postId = 1L
-
+        
         // When & Then
         mockMvc.perform(
             delete("/api/post/{postId}", postId)
@@ -542,15 +542,15 @@ class PostControllerDocument {
                 )
             )
     }
-
+    
     @Test
     fun `문제 게시판 글 삭제 API 실패 테스트 - 게시글 없음`() {
         // Given
         val postId = 999L
-
-        whenever(postService.delete(any(), any()))
+        
+        whenever(postService.delete(any()))
             .thenThrow(CoreException(Error.NOT_FOUND))
-
+        
         // When & Then
         mockMvc.perform(
             delete("/api/post/{postId}", postId)

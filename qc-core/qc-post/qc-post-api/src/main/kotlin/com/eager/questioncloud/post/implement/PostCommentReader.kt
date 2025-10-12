@@ -9,7 +9,7 @@ import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import org.springframework.stereotype.Component
 
 @Component
-class PostCommentDetailReader(
+class PostCommentReader(
     private val postPermissionChecker: PostPermissionChecker,
     private val postCommentRepository: PostCommentRepository,
     private val userQueryAPI: UserQueryAPI,
@@ -44,5 +44,9 @@ class PostCommentDetailReader(
         }
         
         return postCommentDetails
+    }
+    
+    fun count(postId: Long): Int {
+        return postCommentRepository.count(postId)
     }
 }
