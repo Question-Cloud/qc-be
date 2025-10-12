@@ -1,154 +1,231 @@
 package com.eager.questioncloud.workspace.service
 
+import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.*
-import com.eager.questioncloud.scenario.CreatorScenario
-import com.eager.questioncloud.utils.DBCleaner
-import com.eager.questioncloud.utils.Fixture
-import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
-import com.ninjasquad.springmockk.MockkBean
-import io.kotest.core.extensions.ApplyExtension
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.ints.exactly
 import io.kotest.matchers.shouldBe
-import io.mockk.every
-import io.mockk.justRun
-import org.mockito.kotlin.verify
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import io.mockk.*
 
-@SpringBootTest
-@ActiveProfiles("test")
-@ApplyExtension(SpringExtension::class)
-class WorkspaceQuestionServiceTest(
-    private val workspaceQuestionService: WorkspaceQuestionService,
-    private val creatorRepository: CreatorRepository,
-    private val dbCleaner: DBCleaner,
-) : BehaviorSpec() {
-    @MockkBean
-    private lateinit var questionQueryAPI: QuestionQueryAPI
+class WorkspaceQuestionServiceTest : BehaviorSpec() {
+    private val creatorRepository = mockk<CreatorRepository>()
+    private val questionQueryAPI = mockk<QuestionQueryAPI>()
+    private val questionCommandAPI = mockk<QuestionCommandAPI>()
     
-    @MockkBean
-    private lateinit var questionCommandAPI: QuestionCommandAPI
+    private val workspaceQuestionService = WorkspaceQuestionService(
+        creatorRepository,
+        questionQueryAPI,
+        questionCommandAPI
+    )
     
     init {
-        afterTest {
-            dbCleaner.cleanUp()
+        afterEach {
+            clearMocks(creatorRepository, questionQueryAPI, questionCommandAPI)
         }
         
-        Given("크리에이터가 본인의 문제 목록을 조회할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
-            val pagingInformation = PagingInformation.max
-            val expectedQuestions = (1..10).map {
-                Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
-                    .set(QuestionInformationQueryResult::id, it)
-                    .set(QuestionInformationQueryResult::creatorId, creator.id)
-                    .sample()
-            }
-            every { questionQueryAPI.getCreatorQuestions(creator.id, pagingInformation) } returns expectedQuestions
+        Given("크리에이터가 본인의 문제 목록 조회") {
+            val userId = 1L
+            val creatorId = 1L
+            val pagingInformation = PagingInformation(0, 10)
             
-            When("조회 요청을 하면") {
-                val actualQuestions = workspaceQuestionService.getMyQuestions(creator.userId, pagingInformation)
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            val expectedQuestions = listOf(
+                QuestionInformationQueryResult(
+                    id = 1L,
+                    creatorId = creatorId,
+                    title = "문제 1",
+                    subject = "수학",
+                    parentCategory = "수학",
+                    childCategory = "대수",
+                    thumbnail = "thumb1.jpg",
+                    questionLevel = "중급",
+                    price = 10000,
+                    rate = 4.5
+                ),
+                QuestionInformationQueryResult(
+                    id = 2L,
+                    creatorId = creatorId,
+                    title = "문제 2",
+                    subject = "수학",
+                    parentCategory = "수학",
+                    childCategory = "기하",
+                    thumbnail = "thumb2.jpg",
+                    questionLevel = "고급",
+                    price = 15000,
+                    rate = 4.8
+                )
+            )
+            
+            every { creatorRepository.findByUserId(userId) } returns creator
+            every { questionQueryAPI.getCreatorQuestions(any(), pagingInformation) } returns expectedQuestions
+            
+            When("문제 목록을 조회하면") {
+                val result = workspaceQuestionService.getMyQuestions(userId, pagingInformation)
                 
-                Then("본인이 만든 문제 목록이 반환된다") {
-                    actualQuestions shouldBe expectedQuestions
+                Then("문제 목록이 반환된다") {
+                    result shouldBe expectedQuestions
+                    
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionQueryAPI.getCreatorQuestions(any(), pagingInformation) }
                 }
             }
         }
         
-        Given("크리에이터가 본인의 문제 개수를 조회할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
-            val expectedQuestions = (1..10).map {
-                Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionInformationQueryResult>()
-                    .set(QuestionInformationQueryResult::id, it)
-                    .set(QuestionInformationQueryResult::creatorId, creator.id)
-                    .sample()
-            }
-            every { questionQueryAPI.countByCreatorId(creator.id) } returns expectedQuestions.size
+        Given("존재하지 않는 크리에이터의 문제 목록 조회") {
+            val userId = 1L
+            val pagingInformation = PagingInformation(0, 10)
             
-            When("개수 조회 요청을 하면") {
-                val actualCount = workspaceQuestionService.countMyQuestions(creator.id)
-                
-                Then("본인이 만든 문제 개수가 반환된다") {
-                    actualCount shouldBe expectedQuestions.size
+            every { creatorRepository.findByUserId(userId) } returns null
+            
+            When("문제 목록을 조회하려고 하면") {
+                Then("예외가 발생한다") {
+                    shouldThrow<CoreException> {
+                        workspaceQuestionService.getMyQuestions(userId, pagingInformation)
+                    }
+                    
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
                 }
             }
         }
         
-        Given("크리에이터가 본인 문제의 상세 정보를 조회할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
-            val questionId = 1L
-            val expectedQuestion = Fixture.fixtureMonkey.giveMeKotlinBuilder<QuestionContentQueryResult>()
-                .sample()
+        Given("크리에이터가 본인의 문제 개수 조회") {
+            val userId = 1L
             
-            every { questionQueryAPI.getQuestionContent(any(), any()) } returns expectedQuestion
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            val expectedCount = 10
             
-            When("특정 문제의 상세 조회 요청을 하면") {
-                val actualContent = workspaceQuestionService.getMyQuestionContent(creator.userId, questionId)
+            every { creatorRepository.findByUserId(userId) } returns creator
+            every { questionQueryAPI.countByCreatorId(any()) } returns expectedCount
+            
+            When("문제 개수를 조회하면") {
+                val result = workspaceQuestionService.countMyQuestions(userId)
                 
-                Then("해당 문제의 상세 정보가 반환된다") {
-                    actualContent.title shouldBe expectedQuestion.title
-                    actualContent.subject shouldBe expectedQuestion.subject
-                    actualContent.questionCategoryId shouldBe expectedQuestion.questionCategoryId
-                    actualContent.description shouldBe expectedQuestion.description
-                    actualContent.thumbnail shouldBe expectedQuestion.thumbnail
-                    actualContent.fileUrl shouldBe expectedQuestion.fileUrl
-                    actualContent.explanationUrl shouldBe expectedQuestion.explanationUrl
-                    actualContent.questionLevel shouldBe expectedQuestion.questionLevel
-                    actualContent.price shouldBe expectedQuestion.price
+                Then("문제 개수가 반환된다") {
+                    result shouldBe expectedCount
+                    
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionQueryAPI.countByCreatorId(any()) }
                 }
             }
         }
         
-        Given("크리에이터가 새로운 문제를 등록할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
-            val command = Fixture.fixtureMonkey.giveMeKotlinBuilder<RegisterQuestionCommand>().sample()
-            every { questionCommandAPI.register(any(), any()) } returns 1L
-            
-            When("문제 등록 요청을 하면") {
-                workspaceQuestionService.registerQuestion(creator.userId, command)
-                
-                Then("문제가 성공적으로 등록된다") {
-                    verify(exactly(1)) { questionCommandAPI.register(creator.id, command) }
-                }
-            }
-        }
-        
-        Given("크리에이터가 기존 문제를 수정할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
-            val command = Fixture.fixtureMonkey.giveMeKotlinBuilder<ModifyQuestionCommand>().sample()
-            val questionId = 1L
-            
-            justRun { questionCommandAPI.modify(any(), any()) }
-            
-            When("문제 수정 요청을 하면") {
-                workspaceQuestionService.modifyQuestion(creator.userId, questionId, command)
-                
-                Then("문제가 성공적으로 수정된다") {
-                    verify(exactly(1)) { questionCommandAPI.modify(questionId, command) }
-                }
-            }
-        }
-        
-        Given("크리에이터가 본인 문제를 삭제할 때") {
-            val creator = CreatorScenario.create(1).creators[0]
-            creatorRepository.save(creator)
+        Given("크리에이터가 본인 문제의 상세 정보 조회") {
+            val userId = 1L
             val questionId = 1L
             
-            justRun { questionCommandAPI.delete(any(), any()) }
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            val expectedContent = QuestionContentQueryResult(
+                questionCategoryId = 1L,
+                subject = "수학",
+                title = "문제 제목",
+                description = "문제 설명",
+                thumbnail = "thumb.jpg",
+                fileUrl = "file.pdf",
+                explanationUrl = "exp.pdf",
+                questionLevel = "중급",
+                price = 10000
+            )
             
-            When("문제 삭제 요청을 하면") {
-                workspaceQuestionService.deleteQuestion(creator.userId, questionId)
+            every { creatorRepository.findByUserId(userId) } returns creator
+            every { questionQueryAPI.getQuestionContent(questionId, any()) } returns expectedContent
+            
+            When("문제 상세 정보를 조회하면") {
+                val result = workspaceQuestionService.getMyQuestionContent(userId, questionId)
                 
-                Then("문제가 성공적으로 삭제된다") {
-                    verify(exactly(1)) { questionCommandAPI.delete(questionId, creator.id) }
+                Then("문제 상세 정보가 반환된다") {
+                    result.title shouldBe expectedContent.title
+                    result.subject shouldBe expectedContent.subject
+                    result.questionCategoryId shouldBe expectedContent.questionCategoryId
+                    result.description shouldBe expectedContent.description
+                    result.thumbnail shouldBe expectedContent.thumbnail
+                    result.fileUrl shouldBe expectedContent.fileUrl
+                    result.explanationUrl shouldBe expectedContent.explanationUrl
+                    result.questionLevel shouldBe expectedContent.questionLevel
+                    result.price shouldBe expectedContent.price
+                    
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionQueryAPI.getQuestionContent(questionId, any()) }
+                }
+            }
+        }
+        
+        Given("크리에이터가 새로운 문제 등록") {
+            val userId = 1L
+            
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            val command = RegisterQuestionCommand(
+                questionCategoryId = 1L,
+                subject = "수학",
+                title = "새 문제",
+                description = "문제 설명",
+                thumbnail = "thumb.jpg",
+                fileUrl = "file.pdf",
+                explanationUrl = "exp.pdf",
+                questionLevel = "중급",
+                price = 10000
+            )
+            
+            every { creatorRepository.findByUserId(userId) } returns creator
+            every { questionCommandAPI.register(any(), command) } returns 1L
+            
+            When("문제를 등록하면") {
+                workspaceQuestionService.registerQuestion(userId, command)
+                
+                Then("문제가 등록된다") {
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionCommandAPI.register(any(), command) }
+                }
+            }
+        }
+        
+        Given("크리에이터가 기존 문제 수정") {
+            val userId = 1L
+            val questionId = 1L
+            
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            val command = ModifyQuestionCommand(
+                questionCategoryId = 1L,
+                subject = "수학",
+                title = "수정된 문제",
+                description = "수정된 설명",
+                thumbnail = "thumb.jpg",
+                fileUrl = "file.pdf",
+                explanationUrl = "exp.pdf",
+                questionLevel = "고급",
+                price = 15000
+            )
+            
+            every { creatorRepository.findByUserId(userId) } returns creator
+            justRun { questionCommandAPI.modify(any(), command) }
+            
+            When("문제를 수정하면") {
+                workspaceQuestionService.modifyQuestion(userId, questionId, command)
+                
+                Then("문제가 수정된다") {
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionCommandAPI.modify(any(), command) }
+                }
+            }
+        }
+        
+        Given("크리에이터가 본인 문제 삭제") {
+            val userId = 1L
+            val questionId = 1L
+            
+            val creator = Creator.create(userId, "수학", "수학 전문")
+            
+            every { creatorRepository.findByUserId(userId) } returns creator
+            justRun { questionCommandAPI.delete(questionId, any()) }
+            
+            When("문제를 삭제하면") {
+                workspaceQuestionService.deleteQuestion(userId, questionId)
+                
+                Then("문제가 삭제된다") {
+                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { questionCommandAPI.delete(questionId, any()) }
                 }
             }
         }
