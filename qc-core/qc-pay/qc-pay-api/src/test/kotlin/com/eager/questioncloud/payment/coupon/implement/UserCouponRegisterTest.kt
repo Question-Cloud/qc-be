@@ -17,6 +17,10 @@ import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -88,6 +92,92 @@ class UserCouponRegisterTest(
                     shouldThrow<CoreException> {
                         userCouponRegister.registerCoupon(userId, "INVALID_COUPON_CODE")
                     }
+                }
+            }
+        }
+        
+        Given("동일한 사용자가 쿠폰 등록 요청을 동시에 할 때") {
+            val userId = 1L
+            val coupon = CouponScenario.paymentFixedCoupon().save(couponInformationRepository)
+            
+            When("여러번 등록 요청을 하면") {
+                val threadCount = 100
+                val executorService = Executors.newFixedThreadPool(threadCount)
+                val latch = CountDownLatch(threadCount)
+                val successCount = AtomicInteger(0)
+                val failureCount = AtomicInteger(0)
+                
+                repeat(threadCount) {
+                    executorService.submit {
+                        runCatching {
+                            userCouponRegister.registerCoupon(userId, coupon.code)
+                        }.onSuccess {
+                            successCount.incrementAndGet()
+                        }.onFailure {
+                            failureCount.incrementAndGet()
+                        }.also {
+                            latch.countDown()
+                        }.getOrNull()
+                    }
+                }
+                
+                latch.await(10, TimeUnit.SECONDS)
+                executorService.shutdown()
+                executorService.awaitTermination(5, TimeUnit.SECONDS)
+                
+                Then("1회만 성공하고 나머지는 모두 실패한다") {
+                    successCount.get() shouldBe 1
+                    failureCount.get() shouldBe 99
+                    
+                    val isRegistered = userCouponRepository.isRegistered(userId, coupon.id)
+                    isRegistered shouldBe true
+                }
+            }
+        }
+        
+        Given("제한된 수량의 쿠폰이 있을 때") {
+            val couponInformation =
+                CouponScenario.paymentFixedCoupon().custom { set(CouponInformation::remainingCount, 10) }
+                    .save(couponInformationRepository)
+            val couponLimit = couponInformation.remainingCount
+            val requestCount = 100
+            
+            When("서로 다른 사용자 동시에 등록 요청을 하면") {
+                val executorService = Executors.newFixedThreadPool(requestCount)
+                val latch = CountDownLatch(requestCount)
+                val successCount = AtomicInteger(0)
+                val limitedCouponFailureCount = AtomicInteger(0)
+                
+                for (userId in 1L..100L) {
+                    executorService.submit {
+                        runCatching {
+                            userCouponRegister.registerCoupon(userId, couponInformation.code)
+                        }.onSuccess {
+                            successCount.incrementAndGet()
+                        }.onFailure {
+                            limitedCouponFailureCount.incrementAndGet()
+                        }.also {
+                            latch.countDown()
+                        }.getOrNull()
+                    }
+                }
+                
+                latch.await(10, TimeUnit.SECONDS)
+                executorService.shutdown()
+                executorService.awaitTermination(5, TimeUnit.SECONDS)
+                
+                Then("쿠폰 수량만큼만 발급되고 나머지는 실패한다") {
+                    successCount.get() shouldBe couponLimit
+                    limitedCouponFailureCount.get() shouldBe (requestCount - couponLimit)
+                    
+                    val updatedCoupon = couponInformationRepository.findById(couponInformation.id)
+                    updatedCoupon.remainingCount shouldBe 0
+                    
+                    val registeredCount = (1L..100L).count { userId ->
+                        userCouponRepository.isRegistered(userId, couponInformation.id)
+                    }
+                    
+                    registeredCount shouldBe couponLimit
                 }
             }
         }
