@@ -4,7 +4,12 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.repository.CreatorRepository
-import com.eager.questioncloud.question.api.internal.*
+import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
+import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
+import com.eager.questioncloud.question.api.internal.RegisterQuestionCommand
+import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
+import com.eager.questioncloud.workspace.dto.MyQuestionContent
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -12,18 +17,18 @@ import io.mockk.*
 
 class WorkspaceQuestionServiceTest : BehaviorSpec() {
     private val creatorRepository = mockk<CreatorRepository>()
-    private val questionQueryAPI = mockk<QuestionQueryAPI>()
+    private val workspaceQuestionReader = mockk<WorkspaceQuestionReader>()
     private val questionCommandAPI = mockk<QuestionCommandAPI>()
     
     private val workspaceQuestionService = WorkspaceQuestionService(
+        workspaceQuestionReader,
         creatorRepository,
-        questionQueryAPI,
         questionCommandAPI
     )
     
     init {
         afterEach {
-            clearMocks(creatorRepository, questionQueryAPI, questionCommandAPI)
+            clearMocks(creatorRepository, workspaceQuestionReader, questionCommandAPI)
         }
         
         Given("크리에이터가 본인의 문제 목록 조회") {
@@ -31,9 +36,8 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
             val creatorId = 1L
             val pagingInformation = PagingInformation(0, 10)
             
-            val creator = Creator.create(userId, "수학", "수학 전문")
             val expectedQuestions = listOf(
-                QuestionInformationQueryResult(
+                CreatorQuestionInformation(
                     id = 1L,
                     creatorId = creatorId,
                     title = "문제 1",
@@ -45,7 +49,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                     price = 10000,
                     rate = 4.5
                 ),
-                QuestionInformationQueryResult(
+                CreatorQuestionInformation(
                     id = 2L,
                     creatorId = creatorId,
                     title = "문제 2",
@@ -59,8 +63,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 )
             )
             
-            every { creatorRepository.findByUserId(userId) } returns creator
-            every { questionQueryAPI.getCreatorQuestions(any(), pagingInformation) } returns expectedQuestions
+            every { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) } returns expectedQuestions
             
             When("문제 목록을 조회하면") {
                 val result = workspaceQuestionService.getMyQuestions(userId, pagingInformation)
@@ -68,8 +71,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 Then("문제 목록이 반환된다") {
                     result shouldBe expectedQuestions
                     
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionQueryAPI.getCreatorQuestions(any(), pagingInformation) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) }
                 }
             }
         }
@@ -78,7 +80,12 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
             val userId = 1L
             val pagingInformation = PagingInformation(0, 10)
             
-            every { creatorRepository.findByUserId(userId) } returns null
+            every {
+                workspaceQuestionReader.getMyQuestions(
+                    userId,
+                    pagingInformation
+                )
+            } throws CoreException(com.eager.questioncloud.common.exception.Error.NOT_FOUND)
             
             When("문제 목록을 조회하려고 하면") {
                 Then("예외가 발생한다") {
@@ -86,7 +93,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                         workspaceQuestionService.getMyQuestions(userId, pagingInformation)
                     }
                     
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) }
                 }
             }
         }
@@ -94,11 +101,9 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         Given("크리에이터가 본인의 문제 개수 조회") {
             val userId = 1L
             
-            val creator = Creator.create(userId, "수학", "수학 전문")
             val expectedCount = 10
             
-            every { creatorRepository.findByUserId(userId) } returns creator
-            every { questionQueryAPI.countByCreatorId(any()) } returns expectedCount
+            every { workspaceQuestionReader.countMyQuestions(userId) } returns expectedCount
             
             When("문제 개수를 조회하면") {
                 val result = workspaceQuestionService.countMyQuestions(userId)
@@ -106,8 +111,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 Then("문제 개수가 반환된다") {
                     result shouldBe expectedCount
                     
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionQueryAPI.countByCreatorId(any()) }
+                    verify(exactly = 1) { workspaceQuestionReader.countMyQuestions(userId) }
                 }
             }
         }
@@ -116,8 +120,7 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
             val userId = 1L
             val questionId = 1L
             
-            val creator = Creator.create(userId, "수학", "수학 전문")
-            val expectedContent = QuestionContentQueryResult(
+            val expectedContent = MyQuestionContent(
                 questionCategoryId = 1L,
                 subject = "수학",
                 title = "문제 제목",
@@ -129,25 +132,15 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 price = 10000
             )
             
-            every { creatorRepository.findByUserId(userId) } returns creator
-            every { questionQueryAPI.getQuestionContent(questionId, any()) } returns expectedContent
+            every { workspaceQuestionReader.getMyQuestionContent(userId, questionId) } returns expectedContent
             
             When("문제 상세 정보를 조회하면") {
                 val result = workspaceQuestionService.getMyQuestionContent(userId, questionId)
                 
                 Then("문제 상세 정보가 반환된다") {
-                    result.title shouldBe expectedContent.title
-                    result.subject shouldBe expectedContent.subject
-                    result.questionCategoryId shouldBe expectedContent.questionCategoryId
-                    result.description shouldBe expectedContent.description
-                    result.thumbnail shouldBe expectedContent.thumbnail
-                    result.fileUrl shouldBe expectedContent.fileUrl
-                    result.explanationUrl shouldBe expectedContent.explanationUrl
-                    result.questionLevel shouldBe expectedContent.questionLevel
-                    result.price shouldBe expectedContent.price
+                    result shouldBe expectedContent
                     
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionQueryAPI.getQuestionContent(questionId, any()) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestionContent(userId, questionId) }
                 }
             }
         }

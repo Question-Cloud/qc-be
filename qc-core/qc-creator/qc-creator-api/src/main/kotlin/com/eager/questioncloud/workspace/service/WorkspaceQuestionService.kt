@@ -4,40 +4,30 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.repository.CreatorRepository
-import com.eager.questioncloud.question.api.internal.*
+import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
+import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
+import com.eager.questioncloud.question.api.internal.RegisterQuestionCommand
+import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
 import org.springframework.stereotype.Component
 
 @Component
 class WorkspaceQuestionService(
+    private val workspaceQuestionReader: WorkspaceQuestionReader,
     private val creatorRepository: CreatorRepository,
-    private val questionQueryAPI: QuestionQueryAPI,
     private val questionCommandAPI: QuestionCommandAPI,
 ) {
-    fun getMyQuestions(userId: Long, pagingInformation: PagingInformation): List<QuestionInformationQueryResult> {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        return questionQueryAPI.getCreatorQuestions(creator.id, pagingInformation)
+    fun getMyQuestions(userId: Long, pagingInformation: PagingInformation): List<CreatorQuestionInformation> {
+        return workspaceQuestionReader.getMyQuestions(userId, pagingInformation)
     }
     
     fun countMyQuestions(userId: Long): Int {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        return questionQueryAPI.countByCreatorId(creator.id)
+        return workspaceQuestionReader.countMyQuestions(userId)
     }
     
     fun getMyQuestionContent(userId: Long, questionId: Long): MyQuestionContent {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        val questionContent = questionQueryAPI.getQuestionContent(questionId, creator.id)
-        return MyQuestionContent(
-            questionContent.questionCategoryId,
-            questionContent.subject,
-            questionContent.title,
-            questionContent.description,
-            questionContent.thumbnail,
-            questionContent.fileUrl,
-            questionContent.explanationUrl,
-            questionContent.questionLevel,
-            questionContent.price
-        )
+        return workspaceQuestionReader.getMyQuestionContent(userId, questionId)
     }
     
     fun registerQuestion(userId: Long, command: RegisterQuestionCommand) {
