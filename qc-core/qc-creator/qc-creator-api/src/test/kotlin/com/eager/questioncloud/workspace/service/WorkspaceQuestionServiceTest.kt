@@ -4,13 +4,14 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.repository.CreatorRepository
-import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
+import com.eager.questioncloud.workspace.command.ModifyQuestionCommand
 import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionRegister
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionUpdater
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -20,11 +21,13 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
     private val creatorRepository = mockk<CreatorRepository>()
     private val workspaceQuestionReader = mockk<WorkspaceQuestionReader>()
     private val workspaceQuestionRegister = mockk<WorkspaceQuestionRegister>()
+    private val workspaceQuestionUpdater = mockk<WorkspaceQuestionUpdater>()
     private val questionCommandAPI = mockk<QuestionCommandAPI>()
     
     private val workspaceQuestionService = WorkspaceQuestionService(
         workspaceQuestionReader,
         workspaceQuestionRegister,
+        workspaceQuestionUpdater,
         creatorRepository,
         questionCommandAPI
     )
@@ -178,9 +181,9 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         Given("크리에이터가 기존 문제 수정") {
             val userId = 1L
             val questionId = 1L
-            
-            val creator = Creator.create(userId, "수학", "수학 전문")
             val command = ModifyQuestionCommand(
+                userId,
+                questionId,
                 questionCategoryId = 1L,
                 subject = "수학",
                 title = "수정된 문제",
@@ -192,15 +195,13 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 price = 15000
             )
             
-            every { creatorRepository.findByUserId(userId) } returns creator
-            justRun { questionCommandAPI.modify(any(), command) }
+            justRun { workspaceQuestionUpdater.modifyQuestion(any()) }
             
             When("문제를 수정하면") {
-                workspaceQuestionService.modifyQuestion(userId, questionId, command)
+                workspaceQuestionService.modifyQuestion(command)
                 
                 Then("문제가 수정된다") {
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionCommandAPI.modify(any(), command) }
+                    verify(exactly = 1) { workspaceQuestionUpdater.modifyQuestion(any()) }
                 }
             }
         }

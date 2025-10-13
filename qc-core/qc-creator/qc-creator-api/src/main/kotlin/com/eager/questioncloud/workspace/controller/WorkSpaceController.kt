@@ -92,7 +92,7 @@ class WorkSpaceController(
         userPrincipal: UserPrincipal, @PathVariable questionId: Long,
         @RequestBody request: @Valid ModifyQuestionRequest
     ): DefaultResponse {
-        workspaceQuestionService.modifyQuestion(userPrincipal.userId, questionId, request.toCommand())
+        workspaceQuestionService.modifyQuestion(request.toCommand(userPrincipal.userId, questionId))
         return DefaultResponse.success()
     }
     

@@ -76,7 +76,7 @@ class QuestionCommandAPIImplTest(
             questionMetadataRepository = questionMetadataRepository
         )
         
-        val modifyCommand = ModifyQuestionCommand(
+        val modifyCommand = ModifyQuestionAPIRequest(
             questionCategoryId = 2L,
             subject = "Physics",
             title = "수정된 물리 문제",

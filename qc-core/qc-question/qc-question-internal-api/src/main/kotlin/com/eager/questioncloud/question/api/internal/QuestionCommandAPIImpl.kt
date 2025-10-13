@@ -40,7 +40,7 @@ class QuestionCommandAPIImpl(
     }
     
     @Transactional
-    override fun modify(questionId: Long, command: ModifyQuestionCommand) {
+    override fun modify(questionId: Long, command: ModifyQuestionAPIRequest) {
         val question = questionRepository.get(questionId)
         question.modify(
             QuestionContent(

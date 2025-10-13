@@ -1,6 +1,6 @@
 package com.eager.questioncloud.workspace.dto
 
-import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
+import com.eager.questioncloud.workspace.command.ModifyQuestionCommand
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -16,8 +16,10 @@ class ModifyQuestionRequest(
     @NotNull val questionLevel: String,
     @Min(value = 100) val price: Int,
 ) {
-    fun toCommand(): ModifyQuestionCommand {
+    fun toCommand(userId: Long, questionId: Long): ModifyQuestionCommand {
         return ModifyQuestionCommand(
+            userId,
+            questionId,
             questionCategoryId,
             subject,
             title,
