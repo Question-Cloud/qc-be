@@ -2,15 +2,14 @@ package com.eager.questioncloud.workspace.service
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.creator.domain.Creator
-import com.eager.questioncloud.creator.repository.CreatorRepository
-import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
+import com.eager.questioncloud.workspace.command.DeleteQuestionCommand
 import com.eager.questioncloud.workspace.command.ModifyQuestionCommand
 import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionRegister
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionRemover
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionUpdater
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,23 +17,21 @@ import io.kotest.matchers.shouldBe
 import io.mockk.*
 
 class WorkspaceQuestionServiceTest : BehaviorSpec() {
-    private val creatorRepository = mockk<CreatorRepository>()
     private val workspaceQuestionReader = mockk<WorkspaceQuestionReader>()
     private val workspaceQuestionRegister = mockk<WorkspaceQuestionRegister>()
     private val workspaceQuestionUpdater = mockk<WorkspaceQuestionUpdater>()
-    private val questionCommandAPI = mockk<QuestionCommandAPI>()
+    private val workspaceQuestionRemover = mockk<WorkspaceQuestionRemover>()
     
     private val workspaceQuestionService = WorkspaceQuestionService(
         workspaceQuestionReader,
         workspaceQuestionRegister,
         workspaceQuestionUpdater,
-        creatorRepository,
-        questionCommandAPI
+        workspaceQuestionRemover
     )
     
     init {
         afterEach {
-            clearMocks(creatorRepository, workspaceQuestionReader, questionCommandAPI)
+            clearMocks(workspaceQuestionReader, workspaceQuestionReader, workspaceQuestionUpdater, workspaceQuestionRemover)
         }
         
         Given("크리에이터가 본인의 문제 목록 조회") {
@@ -209,18 +206,15 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         Given("크리에이터가 본인 문제 삭제") {
             val userId = 1L
             val questionId = 1L
+            val deleteQuestionCommand = DeleteQuestionCommand(userId, questionId)
             
-            val creator = Creator.create(userId, "수학", "수학 전문")
-            
-            every { creatorRepository.findByUserId(userId) } returns creator
-            justRun { questionCommandAPI.delete(questionId, any()) }
+            justRun { workspaceQuestionRemover.deleteQuestion(deleteQuestionCommand) }
             
             When("문제를 삭제하면") {
-                workspaceQuestionService.deleteQuestion(userId, questionId)
+                workspaceQuestionService.deleteQuestion(deleteQuestionCommand)
                 
                 Then("문제가 삭제된다") {
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionCommandAPI.delete(questionId, any()) }
+                    verify(exactly = 1) { workspaceQuestionRemover.deleteQuestion(deleteQuestionCommand) }
                 }
             }
         }

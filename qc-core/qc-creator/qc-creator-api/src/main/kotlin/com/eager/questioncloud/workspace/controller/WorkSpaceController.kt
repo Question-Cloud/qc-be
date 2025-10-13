@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.auth.UserPrincipal
 import com.eager.questioncloud.common.dto.DefaultResponse
 import com.eager.questioncloud.common.dto.PagingResponse
 import com.eager.questioncloud.common.pagination.PagingInformation
+import com.eager.questioncloud.workspace.command.DeleteQuestionCommand
 import com.eager.questioncloud.workspace.dto.*
 import com.eager.questioncloud.workspace.service.WorkspacePostService
 import com.eager.questioncloud.workspace.service.WorkspaceProfileService
@@ -98,7 +99,7 @@ class WorkSpaceController(
     
     @DeleteMapping("/question/{questionId}")
     fun delete(userPrincipal: UserPrincipal, @PathVariable questionId: Long): DefaultResponse {
-        workspaceQuestionService.deleteQuestion(userPrincipal.userId, questionId)
+        workspaceQuestionService.deleteQuestion(DeleteQuestionCommand(userPrincipal.userId, questionId))
         return DefaultResponse.success()
     }
     
