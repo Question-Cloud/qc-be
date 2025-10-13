@@ -33,7 +33,7 @@ class QuestionCommandAPIImplTest(
     @Test
     fun `새로운 문제를 등록할 수 있다`() {
         //given
-        val registerCommand = RegisterQuestionCommand(
+        val registerCommand = RegisterQuestionAPIRequest(
             questionCategoryId = 1L,
             subject = "Mathematics",
             title = "수학 문제 제목",

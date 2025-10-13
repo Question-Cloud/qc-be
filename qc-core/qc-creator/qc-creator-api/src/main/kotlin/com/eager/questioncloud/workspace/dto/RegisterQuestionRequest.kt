@@ -1,6 +1,6 @@
 package com.eager.questioncloud.workspace.dto
 
-import com.eager.questioncloud.question.api.internal.RegisterQuestionCommand
+import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -16,8 +16,9 @@ class RegisterQuestionRequest(
     @NotNull val questionLevel: String,
     @Min(value = 100) val price: Int,
 ) {
-    fun toCommand(): RegisterQuestionCommand {
+    fun toCommand(userId: Long): RegisterQuestionCommand {
         return RegisterQuestionCommand(
+            userId,
             questionCategoryId,
             subject,
             title,

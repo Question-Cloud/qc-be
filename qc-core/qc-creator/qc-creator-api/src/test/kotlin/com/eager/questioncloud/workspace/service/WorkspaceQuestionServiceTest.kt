@@ -6,10 +6,11 @@ import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.question.api.internal.RegisterQuestionCommand
+import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionRegister
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -18,10 +19,12 @@ import io.mockk.*
 class WorkspaceQuestionServiceTest : BehaviorSpec() {
     private val creatorRepository = mockk<CreatorRepository>()
     private val workspaceQuestionReader = mockk<WorkspaceQuestionReader>()
+    private val workspaceQuestionRegister = mockk<WorkspaceQuestionRegister>()
     private val questionCommandAPI = mockk<QuestionCommandAPI>()
     
     private val workspaceQuestionService = WorkspaceQuestionService(
         workspaceQuestionReader,
+        workspaceQuestionRegister,
         creatorRepository,
         questionCommandAPI
     )
@@ -148,8 +151,8 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         Given("크리에이터가 새로운 문제 등록") {
             val userId = 1L
             
-            val creator = Creator.create(userId, "수학", "수학 전문")
             val command = RegisterQuestionCommand(
+                userId = userId,
                 questionCategoryId = 1L,
                 subject = "수학",
                 title = "새 문제",
@@ -161,15 +164,13 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 price = 10000
             )
             
-            every { creatorRepository.findByUserId(userId) } returns creator
-            every { questionCommandAPI.register(any(), command) } returns 1L
+            justRun { workspaceQuestionRegister.registerQuestion(command) }
             
             When("문제를 등록하면") {
-                workspaceQuestionService.registerQuestion(userId, command)
+                workspaceQuestionService.registerQuestion(command)
                 
                 Then("문제가 등록된다") {
-                    verify(exactly = 1) { creatorRepository.findByUserId(userId) }
-                    verify(exactly = 1) { questionCommandAPI.register(any(), command) }
+                    verify(exactly = 1) { workspaceQuestionRegister.registerQuestion(command) }
                 }
             }
         }

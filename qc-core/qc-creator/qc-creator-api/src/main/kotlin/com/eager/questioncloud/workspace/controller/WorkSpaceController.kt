@@ -27,13 +27,13 @@ class WorkSpaceController(
         val creator = workspaceRegisterService.register(userPrincipal.userId, request.mainSubject, request.introduction)
         return RegisterCreatorResponse(creator.id)
     }
-
+    
     @GetMapping("/me")
     fun getMyCreatorInformation(userPrincipal: UserPrincipal): CreatorProfileResponse {
         val me = workspaceProfileService.me(userPrincipal.userId)
         return CreatorProfileResponse(me.mainSubject, me.introduction)
     }
-
+    
     @PatchMapping("/me")
     fun updateMyCreatorInformation(
         userPrincipal: UserPrincipal,
@@ -42,7 +42,7 @@ class WorkSpaceController(
         workspaceProfileService.updateCreatorProfile(userPrincipal.userId, request.mainSubject, request.introduction)
         return DefaultResponse.success()
     }
-
+    
     @GetMapping("/question")
     fun getQuestions(
         userPrincipal: UserPrincipal, pagingInformation: PagingInformation
@@ -68,7 +68,7 @@ class WorkSpaceController(
                 )
             })
     }
-
+    
     @GetMapping("/question/{questionId}")
     fun getQuestion(
         userPrincipal: UserPrincipal,
@@ -77,16 +77,16 @@ class WorkSpaceController(
         val questionContent = workspaceQuestionService.getMyQuestionContent(userPrincipal.userId, questionId)
         return MyQuestionContentResponse(questionContent)
     }
-
+    
     @PostMapping("/question")
     fun register(
         userPrincipal: UserPrincipal,
         @RequestBody request: @Valid RegisterQuestionRequest
     ): DefaultResponse {
-        workspaceQuestionService.registerQuestion(userPrincipal.userId, request.toCommand())
+        workspaceQuestionService.registerQuestion(request.toCommand(userPrincipal.userId))
         return DefaultResponse.success()
     }
-
+    
     @PatchMapping("/question/{questionId}")
     fun modify(
         userPrincipal: UserPrincipal, @PathVariable questionId: Long,
@@ -95,13 +95,13 @@ class WorkSpaceController(
         workspaceQuestionService.modifyQuestion(userPrincipal.userId, questionId, request.toCommand())
         return DefaultResponse.success()
     }
-
+    
     @DeleteMapping("/question/{questionId}")
     fun delete(userPrincipal: UserPrincipal, @PathVariable questionId: Long): DefaultResponse {
         workspaceQuestionService.deleteQuestion(userPrincipal.userId, questionId)
         return DefaultResponse.success()
     }
-
+    
     @GetMapping("/board")
     fun creatorQuestionBoardList(
         userPrincipal: UserPrincipal, pagingInformation: PagingInformation

@@ -6,15 +6,17 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.ModifyQuestionCommand
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.question.api.internal.RegisterQuestionCommand
+import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
 import com.eager.questioncloud.workspace.implement.WorkspaceQuestionReader
+import com.eager.questioncloud.workspace.implement.WorkspaceQuestionRegister
 import org.springframework.stereotype.Component
 
 @Component
 class WorkspaceQuestionService(
     private val workspaceQuestionReader: WorkspaceQuestionReader,
+    private val workspaceQuestionRegister: WorkspaceQuestionRegister,
     private val creatorRepository: CreatorRepository,
     private val questionCommandAPI: QuestionCommandAPI,
 ) {
@@ -30,9 +32,8 @@ class WorkspaceQuestionService(
         return workspaceQuestionReader.getMyQuestionContent(userId, questionId)
     }
     
-    fun registerQuestion(userId: Long, command: RegisterQuestionCommand) {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        questionCommandAPI.register(creator.id, command)
+    fun registerQuestion(command: RegisterQuestionCommand) {
+        workspaceQuestionRegister.registerQuestion(command)
     }
     
     fun modifyQuestion(userId: Long, questionId: Long, command: ModifyQuestionCommand) {
