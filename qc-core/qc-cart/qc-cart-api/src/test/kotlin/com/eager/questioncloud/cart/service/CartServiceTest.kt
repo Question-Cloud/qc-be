@@ -3,8 +3,8 @@ package com.eager.questioncloud.cart.service
 import com.eager.questioncloud.cart.dto.CartItemDetail
 import com.eager.questioncloud.cart.implement.CartItemAppender
 import com.eager.questioncloud.cart.implement.CartItemDetailReader
+import com.eager.questioncloud.cart.implement.CartItemRemover
 import com.eager.questioncloud.cart.implement.CartItemValidator
-import com.eager.questioncloud.cart.repository.CartItemRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -14,30 +14,30 @@ class CartServiceTest : BehaviorSpec() {
     private val cartItemValidator = mockk<CartItemValidator>()
     private val cartItemAppender = mockk<CartItemAppender>()
     private val cartItemDetailReader = mockk<CartItemDetailReader>()
-    private val cartItemRepository = mockk<CartItemRepository>()
+    private val cartItemRemover = mockk<CartItemRemover>()
     
     private val cartService = CartService(
         cartItemValidator,
         cartItemAppender,
         cartItemDetailReader,
-        cartItemRepository
+        cartItemRemover
     )
     
     init {
         afterEach {
-            clearMocks(cartItemValidator, cartItemAppender, cartItemDetailReader, cartItemRepository)
+            clearMocks(cartItemValidator, cartItemAppender, cartItemDetailReader, cartItemRemover)
         }
-
+        
         Given("장바구니에 문제를 추가할 때") {
             val userId = 1L
             val questionId = 1L
-
+            
             justRun { cartItemValidator.validate(userId, questionId) }
             justRun { cartItemAppender.append(userId, questionId) }
-
+            
             When("장바구니에 문제를 추가하면") {
                 cartService.appendCartItem(userId, questionId)
-
+                
                 Then("검증 후 장바구니에 추가된다") {
                     verifyOrder {
                         cartItemValidator.validate(userId, questionId)
@@ -92,13 +92,13 @@ class CartServiceTest : BehaviorSpec() {
             val userId = 1L
             val idsToDelete = listOf(1L, 2L, 3L)
             
-            justRun { cartItemRepository.deleteByIdInAndUserId(idsToDelete, userId) }
+            justRun { cartItemRemover.removeCartItem(idsToDelete, userId) }
             
             When("장바구니에서 문제를 삭제하면") {
                 cartService.removeCartItem(idsToDelete, userId)
                 
                 Then("문제가 장바구니에서 삭제된다") {
-                    verify(exactly = 1) { cartItemRepository.deleteByIdInAndUserId(idsToDelete, userId) }
+                    verify(exactly = 1) { cartItemRemover.removeCartItem(idsToDelete, userId) }
                 }
             }
         }

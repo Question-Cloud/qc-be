@@ -3,8 +3,8 @@ package com.eager.questioncloud.cart.service
 import com.eager.questioncloud.cart.dto.CartItemDetail
 import com.eager.questioncloud.cart.implement.CartItemAppender
 import com.eager.questioncloud.cart.implement.CartItemDetailReader
+import com.eager.questioncloud.cart.implement.CartItemRemover
 import com.eager.questioncloud.cart.implement.CartItemValidator
-import com.eager.questioncloud.cart.repository.CartItemRepository
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,7 +12,7 @@ class CartService(
     private val cartItemValidator: CartItemValidator,
     private val cartItemAppender: CartItemAppender,
     private val cartItemDetailReader: CartItemDetailReader,
-    private val cartItemRepository: CartItemRepository,
+    private val cartItemRemover: CartItemRemover,
 ) {
     fun getCartItemDetails(userId: Long): List<CartItemDetail> {
         return cartItemDetailReader.getCartItemDetails(userId)
@@ -24,6 +24,6 @@ class CartService(
     }
     
     fun removeCartItem(ids: List<Long>, userId: Long) {
-        cartItemRepository.deleteByIdInAndUserId(ids, userId)
+        cartItemRemover.removeCartItem(ids, userId)
     }
 }
