@@ -3,6 +3,7 @@ package com.eager.questioncloud.cart.service
 import com.eager.questioncloud.cart.dto.CartItemDetail
 import com.eager.questioncloud.cart.implement.CartItemAppender
 import com.eager.questioncloud.cart.implement.CartItemDetailReader
+import com.eager.questioncloud.cart.implement.CartItemValidator
 import com.eager.questioncloud.cart.repository.CartItemRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -10,11 +11,13 @@ import io.kotest.matchers.shouldBe
 import io.mockk.*
 
 class CartServiceTest : BehaviorSpec() {
+    private val cartItemValidator = mockk<CartItemValidator>()
     private val cartItemAppender = mockk<CartItemAppender>()
     private val cartItemDetailReader = mockk<CartItemDetailReader>()
     private val cartItemRepository = mockk<CartItemRepository>()
     
     private val cartService = CartService(
+        cartItemValidator,
         cartItemAppender,
         cartItemDetailReader,
         cartItemRepository
@@ -22,20 +25,24 @@ class CartServiceTest : BehaviorSpec() {
     
     init {
         afterEach {
-            clearMocks(cartItemAppender, cartItemDetailReader, cartItemRepository)
+            clearMocks(cartItemValidator, cartItemAppender, cartItemDetailReader, cartItemRepository)
         }
-        
-        Given("장바구니에 문제 추가") {
+
+        Given("장바구니에 문제를 추가할 때") {
             val userId = 1L
             val questionId = 1L
-            
+
+            justRun { cartItemValidator.validate(userId, questionId) }
             justRun { cartItemAppender.append(userId, questionId) }
-            
-            When("사용자가 장바구니에 문제를 추가하면") {
+
+            When("장바구니에 문제를 추가하면") {
                 cartService.appendCartItem(userId, questionId)
-                
-                Then("문제가 장바구니에 추가된다") {
-                    verify(exactly = 1) { cartItemAppender.append(userId, questionId) }
+
+                Then("검증 후 장바구니에 추가된다") {
+                    verifyOrder {
+                        cartItemValidator.validate(userId, questionId)
+                        cartItemAppender.append(userId, questionId)
+                    }
                 }
             }
         }
