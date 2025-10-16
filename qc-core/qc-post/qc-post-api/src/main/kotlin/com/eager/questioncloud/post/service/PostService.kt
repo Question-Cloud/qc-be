@@ -7,20 +7,19 @@ import com.eager.questioncloud.post.command.RegisterPostCommand
 import com.eager.questioncloud.post.domain.Post
 import com.eager.questioncloud.post.dto.PostDetail
 import com.eager.questioncloud.post.dto.PostPreview
-import com.eager.questioncloud.post.implement.PostReader
-import com.eager.questioncloud.post.implement.PostRegister
-import com.eager.questioncloud.post.implement.PostRemover
-import com.eager.questioncloud.post.implement.PostUpdater
+import com.eager.questioncloud.post.implement.*
 import org.springframework.stereotype.Service
 
 @Service
 class PostService(
+    private val postPermissionValidator: PostPermissionValidator,
     private val postRegister: PostRegister,
     private val postReader: PostReader,
     private val postUpdater: PostUpdater,
     private val postRemover: PostRemover
 ) {
     fun getPostPreviews(userId: Long, questionId: Long, pagingInformation: PagingInformation): List<PostPreview> {
+        postPermissionValidator.validatePostPermission(userId, questionId)
         return postReader.getPostPreviews(userId, questionId, pagingInformation)
     }
     
@@ -29,10 +28,13 @@ class PostService(
     }
     
     fun getPostDetail(userId: Long, postId: Long): PostDetail {
-        return postReader.getPostDetail(userId, postId)
+        val postDetail = postReader.getPostDetail(userId, postId)
+        postPermissionValidator.validatePostPermission(userId, postDetail.questionId)
+        return postDetail
     }
     
     fun register(command: RegisterPostCommand): Post {
+        postPermissionValidator.validatePostPermission(command.writerId, command.questionId)
         return postRegister.register(command)
     }
     

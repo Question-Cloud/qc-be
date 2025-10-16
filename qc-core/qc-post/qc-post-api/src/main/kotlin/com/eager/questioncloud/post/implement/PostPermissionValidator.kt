@@ -1,31 +1,33 @@
 package com.eager.questioncloud.post.implement
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.post.repository.PostRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import org.springframework.stereotype.Component
 
 @Component
-class PostPermissionChecker(
+class PostPermissionValidator(
     private val questionQueryAPI: QuestionQueryAPI,
     private val creatorQueryAPI: CreatorQueryAPI,
     private val postRepository: PostRepository,
 ) {
-    fun hasPermission(userId: Long, questionId: Long): Boolean {
+    fun validatePostPermission(userId: Long, questionId: Long) {
         if (isCreator(userId, questionId)) {
-            return true
+            return
         }
         
         if (questionQueryAPI.isOwned(userId, questionId)) {
-            return true
+            return
         }
         
-        return false
+        throw CoreException(Error.FORBIDDEN)
     }
     
-    fun hasCommentPermission(userId: Long, postId: Long): Boolean {
+    fun validateCommentPermission(userId: Long, postId: Long) {
         val post = postRepository.findById(postId)
-        return hasPermission(userId, post.questionId)
+        validatePostPermission(userId, post.questionId)
     }
     
     fun isCreator(userId: Long, questionId: Long): Boolean {

@@ -1,15 +1,16 @@
 package com.eager.questioncloud.post.implement
 
+import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.creator.api.internal.CreatorQueryData
-import com.eager.questioncloud.post.domain.Post
-import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.repository.PostRepository
 import com.eager.questioncloud.post.scenario.PostScenario
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
+import io.kotest.assertions.throwables.shouldNotThrowAny
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -21,9 +22,9 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class PostPermissionCheckerTest(
+class PostPermissionValidatorTest(
     private val postRepository: PostRepository,
-    private val postPermissionChecker: PostPermissionChecker,
+    private val postPermissionValidator: PostPermissionValidator,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -50,9 +51,8 @@ class PostPermissionCheckerTest(
             every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
             
             When("문제 크리에이터가 게시글 접근 권한을 확인하면") {
-                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
                 Then("권한이 있다") {
-                    hasPermission shouldBe true
+                    shouldNotThrowAny { postPermissionValidator.validatePostPermission(requestUserId, questionId) }
                 }
             }
         }
@@ -73,9 +73,8 @@ class PostPermissionCheckerTest(
             every { questionQueryAPI.isOwned(requestUserId, questionId) } returns true
             
             When("문제를 소유한 사용자가 게시글 접근 권한을 확인하면") {
-                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
                 Then("권한이 있다") {
-                    hasPermission shouldBe true
+                    shouldNotThrowAny { postPermissionValidator.validatePostPermission(requestUserId, questionId) }
                 }
             }
         }
@@ -96,9 +95,8 @@ class PostPermissionCheckerTest(
             every { questionQueryAPI.isOwned(requestUserId, questionId) } returns false
             
             When("크리에이터도 아니고 문제를 소유하지도 않은 사용자가 게시글 접근 권한을 확인하면") {
-                val hasPermission = postPermissionChecker.hasPermission(requestUserId, questionId)
                 Then("권한이 없다") {
-                    hasPermission shouldBe false
+                    shouldThrow<CoreException> { postPermissionValidator.validatePostPermission(requestUserId, questionId) }
                 }
             }
         }
@@ -121,9 +119,8 @@ class PostPermissionCheckerTest(
             every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
             
             When("해당 포스트의 문제에 대한 권한이 있는 사용자가 댓글 권한을 확인하면") {
-                val hasCommentPermission = postPermissionChecker.hasCommentPermission(requestUserId, postId)
                 Then("댓글 권한이 있다") {
-                    hasCommentPermission shouldBe true
+                    shouldNotThrowAny { postPermissionValidator.validateCommentPermission(requestUserId, postId) }
                 }
             }
         }
@@ -149,9 +146,8 @@ class PostPermissionCheckerTest(
             every { questionQueryAPI.isOwned(requestUserId, questionId) } returns false
             
             When("해당 포스트의 문제에 대한 권한이 없는 사용자가 댓글 권한을 확인하면") {
-                val hasCommentPermission = postPermissionChecker.hasCommentPermission(requestUserId, postId)
                 Then("댓글 권한이 없다") {
-                    hasCommentPermission shouldBe false
+                    shouldThrow<CoreException> { postPermissionValidator.validateCommentPermission(requestUserId, postId) }
                 }
             }
         }
@@ -169,8 +165,8 @@ class PostPermissionCheckerTest(
             every { creatorQueryAPI.getCreator(creatorId) } returns creatorQueryData
             
             When("문제를 만든 크리에이터인지 확인을 하면") {
-                val isCreator = postPermissionChecker.isCreator(creatorUserId, questionId)
-                val isNotCreator = postPermissionChecker.isCreator(notCreatorUserId, questionId)
+                val isCreator = postPermissionValidator.isCreator(creatorUserId, questionId)
+                val isNotCreator = postPermissionValidator.isCreator(notCreatorUserId, questionId)
                 
                 Then("크리에이터 확인이 정확하게 동작한다") {
                     isCreator shouldBe true
@@ -204,10 +200,5 @@ class PostPermissionCheckerTest(
             sales = 100,
             subscriberCount = 500
         )
-    }
-    
-    private fun createMockPost(questionId: Long, writerId: Long, content: String): Post {
-        val postContent = PostContent.create("테스트 제목", content, emptyList())
-        return Post.create(questionId, writerId, postContent)
     }
 }

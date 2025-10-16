@@ -1,6 +1,5 @@
 package com.eager.questioncloud.post.implement
 
-import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.repository.PostRepository
 import com.eager.questioncloud.post.scenario.PostScenario
@@ -9,7 +8,6 @@ import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -28,9 +26,6 @@ class PostReaderTest(
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
-    private lateinit var postPermissionChecker: PostPermissionChecker
-    
-    @MockkBean
     private lateinit var questionQueryAPI: QuestionQueryAPI
     
     @MockkBean
@@ -41,13 +36,12 @@ class PostReaderTest(
             dbCleaner.cleanUp()
         }
         
-        Given("권한이 있는 사용자가 게시글 목록 조회") {
+        Given("게시글 목록 조회") {
             val userId = 1L
             val questionId = 1L
             val postScenario = PostScenario.create(questionId, 2)
             val savedPosts = postScenario.posts.map { postRepository.save(it) }
             
-            every { postPermissionChecker.hasPermission(userId, questionId) } returns true
             every { userQueryAPI.getUsers(any()) } returns postScenario.userQueryDatas
             
             val pagingInformation = PagingInformation(0, 10)
@@ -70,23 +64,6 @@ class PostReaderTest(
             }
         }
         
-        Given("권한이 없는 사용자가 게시글 목록 조회") {
-            val userId = 1L
-            val questionId = 1L
-            
-            every { postPermissionChecker.hasPermission(userId, questionId) } returns false
-            
-            val pagingInformation = PagingInformation(0, 10)
-            
-            When("게시글 목록을 조회하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        postReader.getPostPreviews(userId, questionId, pagingInformation)
-                    }
-                }
-            }
-        }
-        
         Given("게시글 개수 조회") {
             val questionId = 1L
             val postScenario = PostScenario.create(questionId, 3)
@@ -100,7 +77,7 @@ class PostReaderTest(
             }
         }
         
-        Given("권한이 있는 사용자가 게시글 상세 정보 조회") {
+        Given("게시글 상세 정보 조회") {
             val userId = 1L
             val questionId = 1L
             val creatorId = 1L
@@ -108,8 +85,6 @@ class PostReaderTest(
             
             val postScenario = PostScenario.createSinglePost(questionId, writerId)
             val savedPost = postRepository.save(postScenario.posts[0])
-            
-            every { postPermissionChecker.hasPermission(userId, savedPost.questionId) } returns true
             
             val questionInformation = QuestionInformationQueryResult(
                 id = questionId,
@@ -141,23 +116,6 @@ class PostReaderTest(
                     result.questionTitle shouldBe questionInformation.title
                     result.writer shouldBe postScenario.userQueryDatas[0].name
                     result.createdAt shouldNotBe null
-                }
-            }
-        }
-        
-        Given("권한이 없는 사용자가 게시글 상세 정보 조회") {
-            val userId = 1L
-            val questionId = 1L
-            val postScenario = PostScenario.createSinglePost(questionId, 801L)
-            val savedPost = postRepository.save(postScenario.posts[0])
-            
-            every { postPermissionChecker.hasPermission(userId, savedPost.questionId) } returns false
-            
-            When("게시글 상세 정보를 조회하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        postReader.getPostDetail(userId, savedPost.id)
-                    }
                 }
             }
         }

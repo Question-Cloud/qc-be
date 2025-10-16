@@ -1,6 +1,5 @@
 package com.eager.questioncloud.post.implement
 
-import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.domain.PostComment
 import com.eager.questioncloud.post.repository.PostCommentRepository
@@ -9,7 +8,6 @@ import com.eager.questioncloud.post.scenario.custom
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -27,9 +25,6 @@ class PostCommentReaderTest(
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
-    private lateinit var postPermissionChecker: PostPermissionChecker
-    
-    @MockkBean
     private lateinit var userQueryAPI: UserQueryAPI
     
     init {
@@ -43,8 +38,6 @@ class PostCommentReaderTest(
             
             val postCommentScenario = PostCommentScenario.create(postId)
             val savedPostComments = postCommentScenario.postComments.map { postCommentRepository.save(it) }
-            
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns true
             
             every { userQueryAPI.getUsers(any()) } returns postCommentScenario.userQueryDatas
             
@@ -77,7 +70,6 @@ class PostCommentReaderTest(
             
             val savedMyComment = savedPostComments[0]
             
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns true
             every { userQueryAPI.getUsers(any()) } returns postCommentScenario.userQueryDatas
             
             val pagingInformation = PagingInformation.max
@@ -88,23 +80,6 @@ class PostCommentReaderTest(
                 Then("자신의 댓글은 isWriter가 true이다") {
                     val myComment = result.find { it.id == savedMyComment.id }!!
                     myComment.isWriter shouldBe true
-                }
-            }
-        }
-        
-        Given("댓글 조회 권한이 없는 사용자의 댓글 조회 시도") {
-            val userId = 1L
-            val postId = 1L
-            
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns false
-            
-            val pagingInformation = PagingInformation(0, 10)
-            
-            When("댓글 목록을 조회하려고 하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        postCommentReader.getPostCommentDetails(userId, postId, pagingInformation)
-                    }
                 }
             }
         }
@@ -123,7 +98,6 @@ class PostCommentReaderTest(
             val savedPostComments = postCommentScenario.postComments.map { postCommentRepository.save(it) }
             val savedCreatorComment = savedPostComments[0]
             
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns true
             every { userQueryAPI.getUsers(any()) } returns postCommentScenario.userQueryDatas
             
             val pagingInformation = PagingInformation.max

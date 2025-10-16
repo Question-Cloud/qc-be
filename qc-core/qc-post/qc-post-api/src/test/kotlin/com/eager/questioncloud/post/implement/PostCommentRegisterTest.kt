@@ -1,13 +1,11 @@
 package com.eager.questioncloud.post.implement
 
-import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.post.command.RegisterPostCommentCommand
 import com.eager.questioncloud.post.repository.PostCommentRepository
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
@@ -26,7 +24,7 @@ class PostCommentRegisterTest(
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
-    private lateinit var postPermissionChecker: PostPermissionChecker
+    private lateinit var postPermissionValidator: PostPermissionValidator
     
     @MockkBean
     private lateinit var questionQueryAPI: QuestionQueryAPI
@@ -49,9 +47,6 @@ class PostCommentRegisterTest(
                 comment = comment
             )
             
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns true
-            every { postPermissionChecker.isCreator(userId, questionId) } returns false
-            
             val questionInformation = QuestionInformationQueryResult(
                 id = questionId,
                 creatorId = creatorId,
@@ -64,7 +59,9 @@ class PostCommentRegisterTest(
                 price = 1000,
                 rate = 4.5
             )
+            
             every { questionQueryAPI.getQuestionInformation(postId) } returns questionInformation
+            every { postPermissionValidator.isCreator(userId, questionId) } returns false
             
             When("댓글을 등록하면") {
                 val result = postCommentRegister.register(registerPostCommentCommand)
@@ -95,9 +92,6 @@ class PostCommentRegisterTest(
                 comment = comment
             )
             
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns true
-            every { postPermissionChecker.isCreator(userId, questionId) } returns true
-            
             val questionInformation = QuestionInformationQueryResult(
                 id = questionId,
                 creatorId = creatorId,
@@ -110,7 +104,9 @@ class PostCommentRegisterTest(
                 price = 1000,
                 rate = 4.5
             )
+            
             every { questionQueryAPI.getQuestionInformation(postId) } returns questionInformation
+            every { postPermissionValidator.isCreator(userId, questionId) } returns true
             
             When("크리에이터가 댓글을 등록하면") {
                 val result = postCommentRegister.register(registerPostCommentCommand)
@@ -124,28 +120,6 @@ class PostCommentRegisterTest(
                     
                     val commentCount = postCommentRepository.count(postId)
                     commentCount shouldBe 1
-                }
-            }
-        }
-        
-        Given("댓글 작성 권한이 없는 사용자의 댓글 등록 시도") {
-            val userId = 1L
-            val postId = 1L
-            val comment = "권한 없이 작성하려는 댓글"
-            
-            val registerPostCommentCommand = RegisterPostCommentCommand(
-                postId = postId,
-                userId = userId,
-                comment = comment
-            )
-            
-            every { postPermissionChecker.hasCommentPermission(userId, postId) } returns false
-            
-            When("댓글을 등록하려고 하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        postCommentRegister.register(registerPostCommentCommand)
-                    }
                 }
             }
         }

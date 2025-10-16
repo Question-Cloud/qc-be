@@ -1,27 +1,32 @@
 package com.eager.questioncloud.post.service
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.command.DeletePostCommentCommand
 import com.eager.questioncloud.post.command.ModifyPostCommentCommand
 import com.eager.questioncloud.post.command.RegisterPostCommentCommand
 import com.eager.questioncloud.post.domain.PostComment
 import com.eager.questioncloud.post.dto.PostCommentDetail
-import com.eager.questioncloud.post.implement.PostCommentReader
-import com.eager.questioncloud.post.implement.PostCommentRegister
-import com.eager.questioncloud.post.implement.PostCommentRemover
-import com.eager.questioncloud.post.implement.PostCommentUpdater
+import com.eager.questioncloud.post.implement.*
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.*
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.verify
 import java.time.LocalDateTime
 
 class PostCommentServiceTest : BehaviorSpec() {
+    private val postPermissionValidator = mockk<PostPermissionValidator>()
     private val postCommentRegister = mockk<PostCommentRegister>()
     private val postCommentUpdater = mockk<PostCommentUpdater>()
     private val postCommentReader = mockk<PostCommentReader>()
     private val postCommentRemover = mockk<PostCommentRemover>()
     
     private val postCommentService = PostCommentService(
+        postPermissionValidator,
         postCommentRegister,
         postCommentUpdater,
         postCommentReader,
@@ -29,10 +34,6 @@ class PostCommentServiceTest : BehaviorSpec() {
     )
     
     init {
-        afterEach {
-            clearMocks(postCommentRegister, postCommentUpdater, postCommentReader, postCommentRemover)
-        }
-        
         Given("댓글 등록") {
             val postId = 1L
             val userId = 1L
@@ -47,6 +48,7 @@ class PostCommentServiceTest : BehaviorSpec() {
             val savedPost = PostComment.create(postId, userId, comment, true)
             
             every { postCommentRegister.register(registerPostCommentCommand) } returns savedPost
+            justRun { postPermissionValidator.validateCommentPermission(any(), any()) }
             
             When("댓글을 등록하면") {
                 postCommentService.addPostComment(registerPostCommentCommand)
@@ -126,6 +128,7 @@ class PostCommentServiceTest : BehaviorSpec() {
             )
             
             every { postCommentReader.getPostCommentDetails(userId, postId, pagingInformation) } returns postCommentDetails
+            justRun { postPermissionValidator.validateCommentPermission(any(), any()) }
             
             When("댓글 목록을 조회하면") {
                 val result = postCommentService.getPostCommentDetails(postId, userId, pagingInformation)
@@ -161,5 +164,36 @@ class PostCommentServiceTest : BehaviorSpec() {
                 }
             }
         }
+        
+        Given("권한이 없을 때") {
+            val postId = 1L
+            val userId = 1L
+            val comment = "테스트 댓글입니다"
+            
+            val registerPostCommentCommand = RegisterPostCommentCommand(
+                postId = postId,
+                userId = userId,
+                comment = comment
+            )
+            
+            every { postPermissionValidator.validateCommentPermission(any(), any()) } throws CoreException(Error.FORBIDDEN)
+            
+            When("댓글을 등록하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        postCommentService.addPostComment(registerPostCommentCommand)
+                    }
+                }
+            }
+            
+            When("댓글 목록을 조회하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        postCommentService.getPostCommentDetails(postId, userId, PagingInformation.max)
+                    }
+                }
+            }
+        }
+        
     }
 }

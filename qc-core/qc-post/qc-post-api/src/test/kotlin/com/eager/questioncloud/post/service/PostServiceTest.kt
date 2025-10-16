@@ -1,5 +1,7 @@
 package com.eager.questioncloud.post.service
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.command.*
 import com.eager.questioncloud.post.domain.Post
@@ -7,23 +9,26 @@ import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.domain.PostFile
 import com.eager.questioncloud.post.dto.PostDetail
 import com.eager.questioncloud.post.dto.PostPreview
-import com.eager.questioncloud.post.implement.PostReader
-import com.eager.questioncloud.post.implement.PostRegister
-import com.eager.questioncloud.post.implement.PostRemover
-import com.eager.questioncloud.post.implement.PostUpdater
+import com.eager.questioncloud.post.implement.*
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.mockk.*
+import io.mockk.every
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.verify
 import java.time.LocalDateTime
 
 class PostServiceTest : BehaviorSpec() {
+    private val postPermissionValidator = mockk<PostPermissionValidator>()
     private val postRegister = mockk<PostRegister>()
     private val postReader = mockk<PostReader>()
     private val postUpdater = mockk<PostUpdater>()
     private val postRemover = mockk<PostRemover>()
     
     private val postService = PostService(
+        postPermissionValidator,
         postRegister,
         postReader,
         postUpdater,
@@ -31,10 +36,6 @@ class PostServiceTest : BehaviorSpec() {
     )
     
     init {
-        afterEach {
-            clearMocks(postRegister, postReader, postRemover, postUpdater)
-        }
-        
         Given("게시글 등록") {
             val userId = 1L
             val questionId = 1L
@@ -56,6 +57,7 @@ class PostServiceTest : BehaviorSpec() {
             )
             
             every { postRegister.register(registerPostCommand) } returns savedPost
+            justRun { postPermissionValidator.validatePostPermission(any(), any()) }
             
             When("게시글을 등록하면") {
                 val result = postService.register(registerPostCommand)
@@ -93,6 +95,7 @@ class PostServiceTest : BehaviorSpec() {
             )
             
             every { postReader.getPostPreviews(userId, questionId, pagingInformation) } returns postPreviews
+            justRun { postPermissionValidator.validatePostPermission(any(), any()) }
             
             When("게시글 목록을 조회하면") {
                 val result = postService.getPostPreviews(userId, questionId, pagingInformation)
@@ -151,6 +154,7 @@ class PostServiceTest : BehaviorSpec() {
             )
             
             every { postReader.getPostDetail(userId, postId) } returns postDetail
+            justRun { postPermissionValidator.validatePostPermission(any(), any()) }
             
             When("게시글 상세 정보를 조회하면") {
                 val result = postService.getPostDetail(userId, postId)
@@ -205,6 +209,66 @@ class PostServiceTest : BehaviorSpec() {
                 
                 Then("게시글이 삭제된다") {
                     verify(exactly = 1) { postRemover.delete(deletePostCommand) }
+                }
+            }
+        }
+        
+        Given("문제 게시글 권한이 없을 때") {
+            val userId = 1L
+            val questionId = 1L
+            val postId = 1L
+            
+            val registerPostCommand = RegisterPostCommand(
+                questionId = questionId,
+                writerId = userId,
+                postContent = RegisterPostCommandPostContent(
+                    title = "테스트 게시글",
+                    content = "게시글 내용입니다",
+                    files = emptyList()
+                )
+            )
+            
+            val postDetail = PostDetail(
+                id = postId,
+                questionId = questionId,
+                title = "상세 게시글",
+                content = "상세 내용입니다",
+                files = listOf(
+                    PostFile("file1.txt", "https://example.com/file1.txt"),
+                    PostFile("file2.jpg", "https://example.com/file2.jpg")
+                ),
+                parentCategory = "수학",
+                childCategory = "대수",
+                questionTitle = "테스트 문제",
+                writer = "게시글작성자",
+                createdAt = LocalDateTime.now()
+            )
+            
+            
+            every { postPermissionValidator.validatePostPermission(any(), any()) } throws CoreException(Error.FORBIDDEN)
+            every { postReader.getPostDetail(any(), any()) } returns postDetail
+            
+            When("게시글을 등록하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        postService.register(registerPostCommand)
+                    }
+                }
+            }
+            
+            When("게시글 목록을 조회하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        postService.getPostPreviews(userId, questionId, PagingInformation.max)
+                    }
+                }
+            }
+            
+            When("게시글 상세 정보를 조회하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        postService.getPostDetail(userId, postId)
+                    }
                 }
             }
         }
