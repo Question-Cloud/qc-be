@@ -1,5 +1,7 @@
 package com.eager.questioncloud.subscribe.repository
 
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.subscribe.domain.Subscribe
 import com.eager.questioncloud.subscribe.entity.QSubscribeEntity.subscribeEntity
@@ -23,7 +25,14 @@ class SubscribeRepositoryImpl(
     
     @Transactional
     override fun unSubscribe(subscriberId: Long, creatorId: Long) {
-        subscribeJpaRepository.deleteBySubscriberIdAndCreatorId(subscriberId, creatorId)
+        val result = jpaQueryFactory.delete(subscribeEntity)
+            .where(subscribeEntity.subscriberId.eq(subscriberId), subscribeEntity.creatorId.eq(creatorId))
+            .execute()
+            .toInt()
+        
+        if (result != 1) {
+            throw CoreException(Error.BAD_REQUEST)
+        }
     }
     
     override fun countSubscriber(creatorId: Long): Int {
