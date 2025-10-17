@@ -7,23 +7,33 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.subscribe.dto.CreatorSubscribeInformationResponse
 import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
 import com.eager.questioncloud.subscribe.service.SubscribeService
+import com.eager.questioncloud.subscribe.service.UserSubscriptionService
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/subscribe")
 class SubscribeController(
-    private val subscribeService: SubscribeService
+    private val subscribeService: SubscribeService,
+    private val userSubscriptionService: UserSubscriptionService
 ) {
     @GetMapping("/status/{creatorId}")
     fun isSubscribed(
         userPrincipal: UserPrincipal,
         @PathVariable creatorId: Long
     ): CreatorSubscribeInformationResponse {
-        val isSubscribed = subscribeService.isSubscribed(userPrincipal.userId, creatorId)
-        val countSubscriber = subscribeService.countCreatorSubscriber(creatorId)
-        return CreatorSubscribeInformationResponse(isSubscribed, countSubscriber)
+        val isSubscribed = userSubscriptionService.isSubscribed(userPrincipal.userId, creatorId)
+        return CreatorSubscribeInformationResponse(isSubscribed)
     }
-
+    
+    @GetMapping("/my-subscribe")
+    fun getMySubscribe(
+        userPrincipal: UserPrincipal, pagingInformation: PagingInformation
+    ): PagingResponse<SubscribedCreatorInformation> {
+        val total = userSubscriptionService.countMySubscribe(userPrincipal.userId)
+        val subscribedCreatorInformation = userSubscriptionService.getMySubscribes(userPrincipal.userId, pagingInformation)
+        return PagingResponse(total, subscribedCreatorInformation)
+    }
+    
     @PostMapping("/{creatorId}")
     fun subscribe(
         userPrincipal: UserPrincipal,
@@ -32,7 +42,7 @@ class SubscribeController(
         subscribeService.subscribe(userPrincipal.userId, creatorId)
         return DefaultResponse.success()
     }
-
+    
     @DeleteMapping("/{creatorId}")
     fun unSubscribe(
         userPrincipal: UserPrincipal,
@@ -40,14 +50,5 @@ class SubscribeController(
     ): DefaultResponse {
         subscribeService.unSubscribe(userPrincipal.userId, creatorId)
         return DefaultResponse.success()
-    }
-
-    @GetMapping("/my-subscribe")
-    fun getMySubscribe(
-        userPrincipal: UserPrincipal, pagingInformation: PagingInformation
-    ): PagingResponse<SubscribedCreatorInformation> {
-        val total = subscribeService.countMySubscribe(userPrincipal.userId)
-        val subscribedCreatorInformation = subscribeService.getMySubscribes(userPrincipal.userId, pagingInformation)
-        return PagingResponse(total, subscribedCreatorInformation)
     }
 }

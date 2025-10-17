@@ -4,6 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
 import com.eager.questioncloud.subscribe.service.SubscribeService
+import com.eager.questioncloud.subscribe.service.UserSubscriptionService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.ninjasquad.springmockk.MockkBean
@@ -33,7 +34,10 @@ class SubscribeControllerDocument(
 ) : FunSpec() {
     @MockkBean
     private lateinit var subscribeService: SubscribeService
-
+    
+    @MockkBean
+    private lateinit var userSubscriptionService: UserSubscriptionService
+    
     private val sampleCreatorInformations = listOf(
         SubscribedCreatorInformation(
             creatorId = 1L,
@@ -50,16 +54,14 @@ class SubscribeControllerDocument(
             mainSubject = "Physics"
         )
     )
-
+    
     init {
         test("특정 크리에이터 구독 여부 확인 API 테스트") {
             val creatorId = 101L
             val isSubscribed = true
-            val subscriberCount = 1250
-
-            every { subscribeService.isSubscribed(any(), any()) } returns isSubscribed
-            every { subscribeService.countCreatorSubscriber(any()) } returns subscriberCount
-
+            
+            every { userSubscriptionService.isSubscribed(any(), any()) } returns isSubscribed
+            
             mockMvc.perform(
                 get("/api/subscribe/status/{creatorId}", creatorId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -77,19 +79,18 @@ class SubscribeControllerDocument(
                                 parameterWithName("creatorId").description("구독 여부를 확인할 크리에이터 ID")
                             ),
                             responseFields(
-                                fieldWithPath("isSubscribed").description("구독 여부"),
-                                fieldWithPath("count").description("크리에이터의 총 구독자 수")
+                                fieldWithPath("isSubscribed").description("구독 여부")
                             )
                         )
                     )
                 )
         }
-
+        
         test("크리에이터 구독 API 테스트") {
             val creatorId = 101L
-
+            
             justRun { subscribeService.subscribe(any(), any()) }
-
+            
             mockMvc.perform(
                 post("/api/subscribe/{creatorId}", creatorId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -113,13 +114,13 @@ class SubscribeControllerDocument(
                     )
                 )
         }
-
+        
         test("나의 구독 목록 조회 API 테스트") {
             val totalCount = 5
-
-            every { subscribeService.countMySubscribe(any()) } returns totalCount
-            every { subscribeService.getMySubscribes(any(), any()) } returns sampleCreatorInformations
-
+            
+            every { userSubscriptionService.countMySubscribe(any()) } returns totalCount
+            every { userSubscriptionService.getMySubscribes(any(), any()) } returns sampleCreatorInformations
+            
             mockMvc.perform(
                 get("/api/subscribe/my-subscribe")
                     .header("Authorization", "Bearer mock_access_token")
@@ -152,12 +153,12 @@ class SubscribeControllerDocument(
                     )
                 )
         }
-
+        
         test("크리에이터 구독 API 실패 테스트 - 존재하지 않는 크리에이터") {
             val creatorId = 999L
-
+            
             every { subscribeService.subscribe(any(), any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             mockMvc.perform(
                 post("/api/subscribe/{creatorId}", creatorId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -182,12 +183,12 @@ class SubscribeControllerDocument(
                     )
                 )
         }
-
+        
         test("크리에이터 구독 API 실패 테스트 - 이미 구독함") {
             val creatorId = 101L
-
+            
             every { subscribeService.subscribe(any(), any()) } throws CoreException(Error.ALREADY_SUBSCRIBE_CREATOR)
-
+            
             mockMvc.perform(
                 post("/api/subscribe/{creatorId}", creatorId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -212,12 +213,12 @@ class SubscribeControllerDocument(
                     )
                 )
         }
-
+        
         test("크리에이터 구독 취소 API 테스트") {
             val creatorId = 101L
-
+            
             justRun { subscribeService.unSubscribe(any(), any()) }
-
+            
             mockMvc.perform(
                 delete("/api/subscribe/{creatorId}", creatorId)
                     .header("Authorization", "Bearer mock_access_token")
