@@ -15,11 +15,15 @@ class UserAuthenticator(
     private val socialAPIManager: SocialAPIManager,
     private val userRepository: UserRepository,
 ) {
-    fun emailPasswordAuthentication(email: String, password: String): User { // TODO NOT FOUND EXCEPTION HANDLING
-        val user = userRepository.getUserByEmail(email)
-        user.passwordAuthentication(password)
-        user.checkUserStatus()
-        return user
+    fun emailPasswordAuthentication(email: String, password: String): User {
+        return runCatching {
+            val user = userRepository.getUserByEmail(email)
+            user.passwordAuthentication(password)
+            user.checkUserStatus()
+            user
+        }
+            .onFailure { ex -> if (ex is CoreException && ex.error == Error.NOT_FOUND) throw CoreException(Error.FAIL_LOGIN) }
+            .getOrThrow()
     }
     
     fun socialAuthentication(code: String, accountType: AccountType): User {
