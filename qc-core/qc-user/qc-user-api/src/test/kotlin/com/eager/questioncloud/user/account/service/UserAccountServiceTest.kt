@@ -25,8 +25,8 @@ class UserAccountServiceTest : BehaviorSpec() {
     
     private val userAccountService = UserAccountService(
         userFinder,
-        emailVerificationProcessor,
         userAccountUpdater,
+        emailVerificationProcessor,
         emailSender
     )
     

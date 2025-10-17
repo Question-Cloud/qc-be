@@ -1,21 +1,21 @@
 package com.eager.questioncloud.user.profile.service
 
+import com.eager.questioncloud.user.common.implement.UserFinder
 import com.eager.questioncloud.user.dto.MyInformation
-import com.eager.questioncloud.user.repository.UserRepository
+import com.eager.questioncloud.user.profile.implement.UserProfileUpdater
 import org.springframework.stereotype.Service
 
 @Service
 class UserProfileService(
-    private val userRepository: UserRepository
+    private val userFinder: UserFinder,
+    private val userProfileUpdater: UserProfileUpdater
 ) {
     fun updateUserInformation(userId: Long, name: String, profileImage: String) {
-        val user = userRepository.getUser(userId)
-        user.updateUserInformation(name, profileImage)
-        userRepository.save(user)
+        userProfileUpdater.updateUserInformation(userId, name, profileImage)
     }
     
     fun getMyInformation(userId: Long): MyInformation {
-        val user = userRepository.getUser(userId)
+        val user = userFinder.getById(userId)
         return MyInformation.from(user)
     }
 }
