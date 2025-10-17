@@ -18,7 +18,7 @@ class UserRepositoryImpl(
     
     override fun getUserByEmail(email: String): User {
         return userJpaRepository.findByUserInformationEntityEmail(email)
-            .orElseThrow { CoreException(Error.FAIL_LOGIN) }
+            .orElseThrow { CoreException(Error.NOT_FOUND) }
             .toModel()
     }
     

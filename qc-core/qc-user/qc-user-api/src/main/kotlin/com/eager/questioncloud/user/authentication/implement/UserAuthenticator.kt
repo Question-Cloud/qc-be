@@ -15,7 +15,7 @@ class UserAuthenticator(
     private val socialAPIManager: SocialAPIManager,
     private val userRepository: UserRepository,
 ) {
-    fun emailPasswordAuthentication(email: String, password: String): User {
+    fun emailPasswordAuthentication(email: String, password: String): User { // TODO NOT FOUND EXCEPTION HANDLING
         val user = userRepository.getUserByEmail(email)
         user.passwordAuthentication(password)
         user.checkUserStatus()
