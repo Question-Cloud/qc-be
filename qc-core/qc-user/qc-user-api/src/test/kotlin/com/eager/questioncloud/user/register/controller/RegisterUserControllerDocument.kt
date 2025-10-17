@@ -45,10 +45,10 @@ class RegisterUserControllerDocument(
 ) : FunSpec() {
     @MockkBean
     lateinit var registerUserService: RegisterUserService
-
+    
     private lateinit var sampleUser: User
     private lateinit var sampleEmailVerification: EmailVerification
-
+    
     init {
         beforeTest {
             val userAccountInformation = UserAccountInformation.createEmailAccountInformation("hashedPassword123")
@@ -58,7 +58,7 @@ class RegisterUserControllerDocument(
                 email = "newuser@example.com",
                 phone = "01012345678"
             )
-
+            
             sampleUser = User.create(
                 userAccountInformation = userAccountInformation,
                 userInformation = userInformation,
@@ -66,7 +66,7 @@ class RegisterUserControllerDocument(
                 userStatus = UserStatus.PendingEmailVerification
             )
             sampleUser.uid = 123L
-
+            
             sampleEmailVerification = EmailVerification(
                 uid = 123L,
                 email = "newuser@example.com",
@@ -75,7 +75,7 @@ class RegisterUserControllerDocument(
                 emailVerificationType = EmailVerificationType.CreateUser,
             )
         }
-
+        
         test("회원가입 API 테스트 - 이메일 회원가입") {
             // Given
             val createUserRequest = CreateUserRequest(
@@ -86,10 +86,9 @@ class RegisterUserControllerDocument(
                 phone = "01012345678",
                 name = "김회원"
             )
-
-            every { registerUserService.create(any()) } returns sampleUser
-            every { registerUserService.sendCreateUserVerifyMail(any()) } returns sampleEmailVerification
-
+            
+            every { registerUserService.register(any()) } returns sampleEmailVerification
+            
             // When & Then
             mockMvc.perform(
                 post("/api/user/register")
@@ -120,7 +119,7 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 API 테스트 - 소셜 회원가입") {
             // Given
             val createUserRequest = CreateUserRequest(
@@ -131,10 +130,9 @@ class RegisterUserControllerDocument(
                 phone = "01087654321",
                 name = "이소셜"
             )
-
-            every { registerUserService.create(any()) } returns sampleUser
-            every { registerUserService.sendCreateUserVerifyMail(any()) } returns sampleEmailVerification
-
+            
+            every { registerUserService.register(any()) } returns sampleEmailVerification
+            
             // When & Then
             mockMvc.perform(
                 post("/api/user/register")
@@ -165,7 +163,7 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 API 실패 테스트 - 중복 이메일") {
             // Given
             val createUserRequest = CreateUserRequest(
@@ -176,9 +174,9 @@ class RegisterUserControllerDocument(
                 phone = "01012345678",
                 name = "김회원"
             )
-
-            every { registerUserService.create(any()) } throws CoreException(Error.DUPLICATE_EMAIL)
-
+            
+            every { registerUserService.register(any()) } throws CoreException(Error.DUPLICATE_EMAIL)
+            
             // When & Then
             mockMvc.perform(
                 post("/api/user/register")
@@ -210,7 +208,7 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 API 실패 테스트 - 중복 전화번호") {
             // Given
             val createUserRequest = CreateUserRequest(
@@ -221,9 +219,9 @@ class RegisterUserControllerDocument(
                 phone = "01012345678",
                 name = "김회원"
             )
-
-            every { registerUserService.create(any()) } throws CoreException(Error.DUPLICATE_PHONE)
-
+            
+            every { registerUserService.register(any()) } throws CoreException(Error.DUPLICATE_PHONE)
+            
             // When & Then
             mockMvc.perform(
                 post("/api/user/register")
@@ -255,13 +253,13 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 인증 메일 재요청 API 테스트") {
             // Given
             val resendToken = "resend_token_67890"
-
+            
             justRun { registerUserService.resend(any()) }
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/user/register/resend-verification-mail")
@@ -286,13 +284,13 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 인증 메일 재요청 API 실패 테스트 - 유효하지 않은 토큰") {
             // Given
             val resendToken = "invalid_resend_token"
-
+            
             every { registerUserService.resend(any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/user/register/resend-verification-mail")
@@ -318,13 +316,13 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 인증 메일 확인 API 테스트") {
             // Given
             val token = "verification_token_12345"
-
+            
             justRun { registerUserService.verifyCreateUser(any(), any()) }
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/user/register/verify")
@@ -349,13 +347,13 @@ class RegisterUserControllerDocument(
                     )
                 )
         }
-
+        
         test("회원가입 인증 메일 확인 API 실패 테스트 - 유효하지 않은 토큰") {
             // Given
             val token = "invalid_verification_token"
-
+            
             every { registerUserService.verifyCreateUser(any(), any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/user/register/verify")

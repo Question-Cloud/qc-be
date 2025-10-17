@@ -2,7 +2,6 @@ package com.eager.questioncloud.user.register.implement
 
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.social.SocialAPIManager
 import com.eager.questioncloud.user.dto.CreateUser
 import com.eager.questioncloud.user.enums.AccountType
@@ -19,8 +18,6 @@ import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.every
-import io.mockk.justRun
-import io.mockk.verify
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
@@ -34,9 +31,6 @@ class UserRegisterTest(
 ) : BehaviorSpec() {
     @MockkBean
     lateinit var socialAPIManager: SocialAPIManager
-    
-    @MockkBean
-    lateinit var pointCommandAPI: PointCommandAPI
     
     init {
         afterEach {
@@ -52,8 +46,6 @@ class UserRegisterTest(
                 phone = "010-1234-5678",
                 name = "테스트 사용자"
             )
-            
-            justRun { pointCommandAPI.initialize(any()) }
             
             When("사용자를 생성하면") {
                 val createdUser = userRegister.create(createUser)
@@ -83,8 +75,6 @@ class UserRegisterTest(
                 name = "카카오 사용자"
             )
             
-            justRun { pointCommandAPI.initialize(any()) }
-            
             When("사용자를 생성하면") {
                 val createdUser = userRegister.create(createUser)
                 
@@ -111,8 +101,6 @@ class UserRegisterTest(
                 name = "구글 사용자"
             )
             
-            justRun { pointCommandAPI.initialize(any()) }
-            
             When("사용자를 생성하면") {
                 val createdUser = userRegister.create(createUser)
                 
@@ -138,8 +126,6 @@ class UserRegisterTest(
                 phone = "010-5555-6666",
                 name = "네이버 사용자"
             )
-            
-            justRun { pointCommandAPI.initialize(any()) }
             
             When("사용자를 생성하면") {
                 val createdUser = userRegister.create(createUser)
@@ -220,28 +206,6 @@ class UserRegisterTest(
                         userRegister.create(createUser)
                     }
                     exception.error shouldBe Error.DUPLICATE_SOCIAL_UID
-                }
-            }
-        }
-        
-        Given("사용자 생성 요청이 주어졌을 때") {
-            val createUser = CreateUser(
-                email = "point@example.com",
-                password = "password123",
-                socialRegisterToken = null,
-                accountType = AccountType.EMAIL,
-                phone = "010-5555-6666",
-                name = "포인트 테스트 사용자"
-            )
-            
-            justRun { pointCommandAPI.initialize(any()) }
-            
-            When("사용자를 생성하면") {
-                val createdUser = userRegister.create(createUser)
-                
-                Then("포인트가 초기화된다") {
-                    createdUser.uid shouldNotBe 0
-                    verify(exactly = 1) { pointCommandAPI.initialize(any()) }
                 }
             }
         }

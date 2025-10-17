@@ -1,6 +1,5 @@
 package com.eager.questioncloud.user.register.implement
 
-import com.eager.questioncloud.point.api.internal.PointCommandAPI
 import com.eager.questioncloud.social.SocialAPIManager
 import com.eager.questioncloud.social.SocialPlatform
 import com.eager.questioncloud.user.domain.User
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class UserRegister(
     private val userRegistrationValidator: UserRegistrationValidator,
-    private val pointCommandAPI: PointCommandAPI,
     private val socialAPIManager: SocialAPIManager,
     private val userRepository: UserRepository,
 ) {
@@ -35,8 +33,6 @@ class UserRegister(
                 UserStatus.PendingEmailVerification
             )
         )
-        
-        pointCommandAPI.initialize(user.uid)
         return user
     }
     

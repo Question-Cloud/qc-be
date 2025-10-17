@@ -23,6 +23,7 @@ object UserScenario {
     fun createSocialUser(): User {
         val userAccountInformation =
             Fixture.fixtureMonkey.giveMeKotlinBuilder<UserAccountInformation>()
+                .set(UserAccountInformation::socialUid, "abcdefg")
                 .set(UserAccountInformation::accountType, AccountType.KAKAO)
                 .set(UserAccountInformation::password, null)
                 .sample()

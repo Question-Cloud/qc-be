@@ -2,26 +2,22 @@ package com.eager.questioncloud.user.register.service
 
 import com.eager.questioncloud.common.mail.EmailSender
 import com.eager.questioncloud.user.domain.EmailVerification
-import com.eager.questioncloud.user.domain.User
 import com.eager.questioncloud.user.dto.CreateUser
 import com.eager.questioncloud.user.enums.EmailVerificationType
 import com.eager.questioncloud.user.implement.EmailVerificationProcessor
+import com.eager.questioncloud.user.register.implement.UserActivator
 import com.eager.questioncloud.user.register.implement.UserRegister
-import com.eager.questioncloud.user.repository.UserRepository
 import org.springframework.stereotype.Component
 
 @Component
 class RegisterUserService(
     private val emailVerificationProcessor: EmailVerificationProcessor,
-    private val userRepository: UserRepository,
+    private val userActivator: UserActivator,
     private val emailSender: EmailSender,
     private val userRegister: UserRegister,
 ) {
-    fun create(createUser: CreateUser): User {
-        return userRegister.create(createUser)
-    }
-    
-    fun sendCreateUserVerifyMail(user: User): EmailVerification {
+    fun register(createUser: CreateUser): EmailVerification {
+        val user = userRegister.create(createUser)
         val emailVerification = emailVerificationProcessor.createEmailVerification(
             user.uid,
             user.userInformation.email,
@@ -38,8 +34,6 @@ class RegisterUserService(
     
     fun verifyCreateUser(token: String, emailVerificationType: EmailVerificationType) {
         val emailVerification = emailVerificationProcessor.verifyEmailVerification(token, emailVerificationType)
-        val user = userRepository.getUser(emailVerification.uid)
-        user.active()
-        userRepository.save(user)
+        userActivator.activate(emailVerification.uid)
     }
 }

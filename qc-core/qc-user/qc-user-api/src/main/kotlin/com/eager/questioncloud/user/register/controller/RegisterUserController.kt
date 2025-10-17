@@ -15,17 +15,16 @@ class RegisterUserController(
 ) {
     @PostMapping
     fun createUser(@RequestBody request: @Valid CreateUserRequest): CreateUserResponse {
-        val user = registerUserService.create(request.toCreateUser())
-        val emailVerification = registerUserService.sendCreateUserVerifyMail(user)
+        val emailVerification = registerUserService.register(request.toCreateUser())
         return CreateUserResponse(emailVerification.resendToken)
     }
-
+    
     @GetMapping("/resend-verification-mail")
     fun resendVerificationMail(@RequestParam resendToken: String): DefaultResponse {
         registerUserService.resend(resendToken)
         return DefaultResponse.success()
     }
-
+    
     @GetMapping("/verify")
     fun verifyCreateUser(@RequestParam token: String): DefaultResponse {
         registerUserService.verifyCreateUser(token, EmailVerificationType.CreateUser)
