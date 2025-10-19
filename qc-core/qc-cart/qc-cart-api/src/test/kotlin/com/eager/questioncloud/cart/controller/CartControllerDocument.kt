@@ -1,11 +1,13 @@
 package com.eager.questioncloud.cart.controller
 
+import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.cart.dto.AddCartItemRequest
 import com.eager.questioncloud.cart.dto.CartItemDetail
 import com.eager.questioncloud.cart.dto.RemoveCartItemRequest
 import com.eager.questioncloud.cart.service.CartService
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -18,7 +20,9 @@ import io.mockk.justRun
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
@@ -27,9 +31,21 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
+@WebMvcTest(
+    controllers = [CartController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthenticationFilter::class]
+        ),
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [FilterExceptionHandlerFilter::class]
+        ),
+    ]
+)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
 @ApplyExtension(SpringExtension::class)
 class CartControllerDocument(

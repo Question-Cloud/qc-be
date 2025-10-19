@@ -3,9 +3,9 @@ package com.eager.questioncloud.point.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pg.PGConfirmRequest
+import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.common.pg.PaymentAPI
 import com.eager.questioncloud.point.domain.ChargePointPayment
-import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
@@ -48,20 +48,18 @@ class ChargePointPaymentPGProcessorTest(
     }
     
     @Test
-    fun `PG API 호출 시 400번대 응답이면 fail처리 된다`() {
+    fun `유효하지 않은 결제라면 PGConfirmResult Fail을 반환한다`() {
         // given
         val userId = 1L
         val chargePointPaymenType = ChargePointType.PackageA
         val savedChargePointPayment = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointPaymenType))
         
-        whenever(paymentAPI.confirm(any())).thenThrow(CoreException::class.java)
+        whenever(paymentAPI.confirm(any())).thenReturn(PGConfirmResult.Fail(savedChargePointPayment.orderId, "paymentId"))
+        
+        // when
+        val result = chargePointPaymentPGProcessor.confirm(PGConfirmRequest("paymentId", savedChargePointPayment.orderId, 10000))
         
         // then
-        Assertions.assertThatThrownBy {
-            chargePointPaymentPGProcessor.confirm(PGConfirmRequest("paymentId", savedChargePointPayment.orderId, 10000))
-        }.isInstanceOf(CoreException::class.java)
-        
-        val chargePointPayment = chargePointPaymentRepository.findByOrderId(savedChargePointPayment.orderId)
-        Assertions.assertThat(chargePointPayment.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.FAILED)
+        Assertions.assertThat(result).isInstanceOf(PGConfirmResult.Fail::class.java)
     }
 }

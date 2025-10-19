@@ -1,5 +1,7 @@
 package com.eager.questioncloud.question.library.controller
 
+import com.eager.questioncloud.application.security.JwtAuthenticationFilter
+import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.question.dto.UserQuestionContent
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.library.dto.ContentCreator
@@ -7,6 +9,8 @@ import com.eager.questioncloud.question.library.dto.LibraryContent
 import com.eager.questioncloud.question.library.service.LibraryService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.extensions.spring.SpringExtension
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -14,8 +18,10 @@ import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
@@ -25,22 +31,35 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
+@WebMvcTest(
+    controllers = [LibraryController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthenticationFilter::class]
+        ),
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [FilterExceptionHandlerFilter::class]
+        ),
+    ]
+)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
+@ApplyExtension(SpringExtension::class)
 class LibraryControllerDocument {
-
+    
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @MockBean
     private lateinit var libraryService: LibraryService
-
+    
     private lateinit var sampleUserQuestionContent: List<UserQuestionContent>
-
+    
     private lateinit var sampleContentCreator: ContentCreator
-
+    
     @BeforeEach
     fun setUp() {
         sampleUserQuestionContent = listOf(
@@ -67,23 +86,23 @@ class LibraryControllerDocument {
                 explanationUrl = "https://example.com/explanation1.pdf"
             )
         )
-
+        
         sampleContentCreator = ContentCreator("creatorName", "creatorProfileImage", "Math")
     }
-
+    
     @Test
     fun `나의 문제 목록 조회 API 테스트`() {
         // Given
         val totalCount = 10
-
+        
         whenever(libraryService.countUserQuestions(any(), any()))
             .thenReturn(totalCount)
-
+        
         whenever(libraryService.getUserQuestions(any(), any(), any()))
             .thenReturn(sampleUserQuestionContent.map {
                 LibraryContent(it, sampleContentCreator)
             })
-
+        
         // When & Then
         mockMvc.perform(
             get("/api/library")

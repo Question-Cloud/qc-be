@@ -1,8 +1,10 @@
 package com.eager.questioncloud.subscribe.controller
 
+import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
+import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
+import com.eager.questioncloud.subscribe.dto.UserSubscriptionDetail
 import com.eager.questioncloud.subscribe.service.SubscribeService
 import com.eager.questioncloud.subscribe.service.UserSubscriptionService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
@@ -15,7 +17,9 @@ import io.mockk.every
 import io.mockk.justRun
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
@@ -24,9 +28,21 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
+@WebMvcTest(
+    controllers = [SubscribeController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthenticationFilter::class]
+        ),
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [FilterExceptionHandlerFilter::class]
+        ),
+    ]
+)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
 @ApplyExtension(SpringExtension::class)
 class SubscribeControllerDocument(
@@ -39,14 +55,14 @@ class SubscribeControllerDocument(
     private lateinit var userSubscriptionService: UserSubscriptionService
     
     private val sampleCreatorInformations = listOf(
-        SubscribedCreatorInformation(
+        UserSubscriptionDetail(
             creatorId = 1L,
             creatorName = "크리에이터 1",
             profileImage = "https://example.com/profile1.jpg",
             subscriberCount = 1000,
             mainSubject = "Mathematics"
         ),
-        SubscribedCreatorInformation(
+        UserSubscriptionDetail(
             creatorId = 2L,
             creatorName = "크리에이터 2",
             profileImage = "https://example.com/profile2.jpg",

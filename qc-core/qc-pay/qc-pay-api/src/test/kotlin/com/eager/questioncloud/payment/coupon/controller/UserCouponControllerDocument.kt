@@ -1,7 +1,9 @@
 package com.eager.questioncloud.payment.coupon.controller
 
+import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.payment.coupon.dto.RegisterCouponRequest
 import com.eager.questioncloud.payment.coupon.service.UserCouponService
 import com.eager.questioncloud.payment.dto.AvailableUserCoupon
@@ -18,7 +20,9 @@ import io.mockk.justRun
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
@@ -27,9 +31,21 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
+@WebMvcTest(
+    controllers = [UserCouponController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthenticationFilter::class]
+        ),
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [FilterExceptionHandlerFilter::class]
+        ),
+    ]
+)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
 @ApplyExtension(SpringExtension::class)
 class UserCouponControllerDocument(

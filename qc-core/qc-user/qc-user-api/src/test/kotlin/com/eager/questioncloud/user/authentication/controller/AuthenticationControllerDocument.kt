@@ -1,7 +1,9 @@
 package com.eager.questioncloud.user.authentication.controller
 
+import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.user.authentication.dto.LoginRequest
 import com.eager.questioncloud.user.authentication.model.AuthenticationToken
 import com.eager.questioncloud.user.authentication.service.AuthenticationService
@@ -15,8 +17,10 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.FilterType
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
@@ -27,9 +31,21 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
+@WebMvcTest(
+    controllers = [AuthenticationController::class],
+    excludeFilters = [
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [JwtAuthenticationFilter::class]
+        ),
+        ComponentScan.Filter(
+            type = FilterType.ASSIGNABLE_TYPE,
+            classes = [FilterExceptionHandlerFilter::class]
+        ),
+    ]
+)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs
 @ApplyExtension(SpringExtension::class)
 class AuthenticationControllerDocument(
@@ -38,23 +54,23 @@ class AuthenticationControllerDocument(
 ) : FunSpec() {
     @MockBean
     private lateinit var authenticationService: AuthenticationService
-
+    
     init {
         val sampleAuthenticationToken = AuthenticationToken(
             accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
             refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.refresh_token_example"
         )
-
+        
         test("로그인 API 테스트") {
             // Given
             val loginRequest = LoginRequest(
                 email = "test@example.com",
                 password = "password123!"
             )
-
+            
             whenever(authenticationService.login(any(), any()))
                 .thenReturn(sampleAuthenticationToken)
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth")
@@ -83,17 +99,17 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("로그인 API 실패 테스트 - 존재하지 않는 사용자") {
             // Given
             val loginRequest = LoginRequest(
                 email = "nonexistent@example.com",
                 password = "password123!"
             )
-
+            
             whenever(authenticationService.login("nonexistent@example.com", "password123!"))
                 .thenThrow(CoreException(Error.FAIL_LOGIN))
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth")
@@ -121,17 +137,17 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("로그인 API 실패 테스트 - 잘못된 비밀번호") {
             // Given
             val loginRequest = LoginRequest(
                 email = "test@example.com",
                 password = "wrongpassword"
             )
-
+            
             whenever(authenticationService.login("test@example.com", "wrongpassword"))
                 .thenThrow(CoreException(Error.FAIL_LOGIN))
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth")
@@ -159,17 +175,17 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("로그인 API 실패 테스트 - 이메일 인증 미완료") {
             // Given
             val loginRequest = LoginRequest(
                 email = "unverified@example.com",
                 password = "password123!"
             )
-
+            
             whenever(authenticationService.login("unverified@example.com", "password123!"))
                 .thenThrow(CoreException(Error.PENDING_EMAIL_VERIFICATION))
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth")
@@ -197,17 +213,17 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("로그인 API 실패 테스트 - 탈퇴 또는 정지된 사용자") {
             // Given
             val loginRequest = LoginRequest(
                 email = "inactive@example.com",
                 password = "password123!"
             )
-
+            
             whenever(authenticationService.login("inactive@example.com", "password123!"))
                 .thenThrow(CoreException(Error.NOT_ACTIVE_USER))
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth")
@@ -235,14 +251,14 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("토큰 리프레시 API 테스트") {
             // Given
             val refreshToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh_token_example"
-
+            
             whenever(authenticationService.refresh(any()))
                 .thenReturn(sampleAuthenticationToken)
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth/refresh")
@@ -269,14 +285,14 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("토큰 리프레시 API 실패 테스트 - 유효하지 않은 리프레시 토큰") {
             // Given
             val invalidRefreshToken = "invalid.refresh.token"
-
+            
             whenever(authenticationService.refresh(invalidRefreshToken))
                 .thenThrow(CoreException(Error.UNAUTHORIZED_TOKEN))
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/auth/refresh")
@@ -302,12 +318,12 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("소셜 로그인 API 테스트 - 기존 사용자") {
             // Given
             whenever(authenticationService.socialLogin(any(), any()))
                 .thenReturn(sampleAuthenticationToken)
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/auth/social")
@@ -336,12 +352,12 @@ class AuthenticationControllerDocument(
                     )
                 )
         }
-
+        
         test("소셜 로그인 API 테스트 - 등록되지 않은 소셜 계정") {
             // Given
             whenever(authenticationService.socialLogin(any(), any()))
                 .thenThrow(CoreException(Error.NOT_REGISTERED_SOCIAL_USER))
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/auth/social")

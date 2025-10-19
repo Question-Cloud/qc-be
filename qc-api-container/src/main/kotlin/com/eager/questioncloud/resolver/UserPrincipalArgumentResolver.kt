@@ -14,13 +14,16 @@ class UserPrincipalArgumentResolver : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.parameterType == UserPrincipal::class.java
     }
-
+    
     override fun resolveArgument(
         parameter: MethodParameter,
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): UserPrincipal {
+        if (SecurityContextHolder.getContext().authentication == null) {
+            return UserPrincipal(-1L)
+        }
         return SecurityContextHolder.getContext().authentication.principal as UserPrincipal
     }
 }

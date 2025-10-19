@@ -2,21 +2,21 @@ package com.eager.questioncloud.subscribe.implement
 
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
-import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
+import com.eager.questioncloud.subscribe.dto.UserSubscriptionDetail
 import com.eager.questioncloud.subscribe.repository.SubscribeRepository
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
 import org.springframework.stereotype.Component
 
 @Component
-class SubscribedCreatorInformationReader(
+class UserSubscriptionReader(
     private val subscribeRepository: SubscribeRepository,
     private val userQueryAPI: UserQueryAPI,
     private val creatorQueryAPI: CreatorQueryAPI,
 ) {
-    fun getSubscribedCreatorInformation(
+    fun getUserSubscriptionDetails(
         userId: Long,
         pagingInformation: PagingInformation
-    ): List<SubscribedCreatorInformation> {
+    ): List<UserSubscriptionDetail> {
         val subscribedCreatorIds = subscribeRepository.getMySubscribedCreators(userId, pagingInformation)
         val creators = creatorQueryAPI.getCreators(subscribedCreatorIds)
         val creatorMap = creators.associateBy { it.creatorId }
@@ -27,7 +27,7 @@ class SubscribedCreatorInformationReader(
             val creatorUser = creatorUserMap.getValue(creator.userId)
             val creatorSubscriberCount = creator.subscriberCount
             
-            SubscribedCreatorInformation(
+            UserSubscriptionDetail(
                 it,
                 creatorUser.name,
                 creatorUser.profileImage,
@@ -35,5 +35,13 @@ class SubscribedCreatorInformationReader(
                 creator.mainSubject
             )
         }
+    }
+    
+    fun countMySubscribe(userId: Long): Int {
+        return subscribeRepository.countMySubscribe(userId)
+    }
+    
+    fun isSubscribed(userId: Long, creatorId: Long): Boolean {
+        return subscribeRepository.isSubscribed(userId, creatorId)
     }
 }

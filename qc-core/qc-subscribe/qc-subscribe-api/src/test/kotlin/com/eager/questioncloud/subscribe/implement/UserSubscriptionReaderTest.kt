@@ -18,49 +18,87 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class SubscribedCreatorInformationReaderTest(
-    private val subscribedCreatorInformationReader: SubscribedCreatorInformationReader,
+class UserSubscriptionReaderTest(
+    private val userSubscriptionReader: UserSubscriptionReader,
     private val subscribeRepository: SubscribeRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
     lateinit var userQueryAPI: UserQueryAPI
-
+    
     @MockkBean
     lateinit var creatorQueryAPI: CreatorQueryAPI
-
+    
     init {
         afterEach {
             dbCleaner.cleanUp()
         }
-
-        Given("구독한 크리에이터가 존재할 때") {
+        
+        Given("구독 중인 크리에이터 목록 조회") {
             val pagingInformation = PagingInformation.max
             val userId = 1L
             val subscribedScenario = SubscribeScenario.create(userId)
-
+            
             subscribedScenario.subscribeds.forEach {
                 subscribeRepository.save(it)
             }
-
+            
             every { creatorQueryAPI.getCreators(any()) } returns subscribedScenario.creatorQueryDatas
             every { userQueryAPI.getUsers(any()) } returns subscribedScenario.userQueryDatas
-
+            
             When("구독한 크리에이터 정보를 조회하면") {
-                val result = subscribedCreatorInformationReader.getSubscribedCreatorInformation(userId, pagingInformation)
-
+                val result = userSubscriptionReader.getUserSubscriptionDetails(userId, pagingInformation)
+                
                 Then("구독한 크리에이터 정보가 반환된다") {
                     result.size shouldBe subscribedScenario.subscribeds.size
-
+                    
                     result.forEach { subscribe ->
                         val creatorQuery = subscribedScenario.creatorQueryDatas.find { subscribe.creatorId == it.creatorId }!!
                         val userQuery = subscribedScenario.userQueryDatas.find { creatorQuery.userId == it.userId }!!
-
+                        
                         subscribe.creatorName shouldBe userQuery.name
                         subscribe.profileImage shouldBe userQuery.profileImage
                         subscribe.mainSubject shouldBe creatorQuery.mainSubject
                         subscribe.subscriberCount shouldBe creatorQuery.subscriberCount
                     }
+                }
+            }
+        }
+        
+        Given("구독 중인 크리에이터 수 조회") {
+            val userId = 1L
+            val subscribedScenario = SubscribeScenario.create(userId)
+            
+            subscribedScenario.subscribeds.forEach {
+                subscribeRepository.save(it)
+            }
+            
+            When("구독한 크리에이터 수를 조회하면") {
+                val result = userSubscriptionReader.countMySubscribe(userId)
+                Then("구독한 크리에이터 수가 반환된다.") {
+                    result shouldBe subscribedScenario.subscribeds.size
+                }
+            }
+        }
+        
+        Given("구독 여부 조회") {
+            val userId = 1L
+            val subscribedScenario = SubscribeScenario.create(userId, count = 1)
+            
+            subscribedScenario.subscribeds.forEach {
+                subscribeRepository.save(it)
+            }
+            
+            val subscribedCreator = subscribedScenario.subscribeds[0].creatorId
+            val nonSubscribedCreator = 100L
+            
+            When("크리에이터의 구독 여부를 조회하면") {
+                val result1 = userSubscriptionReader.isSubscribed(userId, subscribedCreator)
+                val result2 = userSubscriptionReader.isSubscribed(userId, nonSubscribedCreator)
+                
+                Then("구독 여부가 반환된다.") {
+                    result1 shouldBe true
+                    result2 shouldBe false
                 }
             }
         }

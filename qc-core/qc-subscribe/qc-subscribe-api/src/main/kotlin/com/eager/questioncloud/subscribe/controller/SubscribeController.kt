@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.dto.DefaultResponse
 import com.eager.questioncloud.common.dto.PagingResponse
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.subscribe.dto.CreatorSubscribeInformationResponse
-import com.eager.questioncloud.subscribe.dto.SubscribedCreatorInformation
+import com.eager.questioncloud.subscribe.dto.UserSubscriptionDetail
 import com.eager.questioncloud.subscribe.service.SubscribeService
 import com.eager.questioncloud.subscribe.service.UserSubscriptionService
 import org.springframework.web.bind.annotation.*
@@ -28,7 +28,7 @@ class SubscribeController(
     @GetMapping("/my-subscribe")
     fun getMySubscribe(
         userPrincipal: UserPrincipal, pagingInformation: PagingInformation
-    ): PagingResponse<SubscribedCreatorInformation> {
+    ): PagingResponse<UserSubscriptionDetail> {
         val total = userSubscriptionService.countMySubscribe(userPrincipal.userId)
         val subscribedCreatorInformation = userSubscriptionService.getMySubscribes(userPrincipal.userId, pagingInformation)
         return PagingResponse(total, subscribedCreatorInformation)

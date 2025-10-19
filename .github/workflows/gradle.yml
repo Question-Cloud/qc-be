@@ -30,7 +30,13 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle Wrapper
+      - name: Create Rest Docs
+        run: ./gradlew :qc-api-container:collectSnippets
+
+      - name: Create OpenAPI
+        run: ./gradlew :qc-api-container:generateSwagger
+
+      - name: Build
         run: ./gradlew :qc-api-container:build -x test
 
       - name: docker image build

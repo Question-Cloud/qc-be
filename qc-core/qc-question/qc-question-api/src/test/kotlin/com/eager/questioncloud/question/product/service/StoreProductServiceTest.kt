@@ -23,33 +23,33 @@ class StoreProductServiceTest(
 ) {
     @MockBean
     lateinit var storeProductDetailReader: StoreProductDetailReader
-
+    
     private val userId = 1L
     private val questionId = 100L
     private val creatorId = 101L
-
+    
     @Test
     fun `필터링된 전체 문제 개수를 조회할 수 있다`() {
         //given
         val questionFilter = QuestionFilter(sort = QuestionSortType.Latest)
         val expectedCount = 10
-
+        
         given(storeProductDetailReader.count(questionFilter))
             .willReturn(expectedCount)
-
+        
         //when
         val result = storeProductService.getTotalFiltering(questionFilter)
-
+        
         //then
         Assertions.assertThat(result).isEqualTo(10)
     }
-
+    
     @Test
     fun `필터링된 문제 목록을 조회할 수 있다`() {
         //given
         val questionFilter = QuestionFilter(sort = QuestionSortType.Latest)
         val pagingInformation = PagingInformation(0, 10)
-
+        
         val questionInformation = QuestionInformation(
             id = questionId,
             creatorId = creatorId,
@@ -60,30 +60,32 @@ class StoreProductServiceTest(
             thumbnail = "thumbnail.jpg",
             questionLevel = QuestionLevel.LEVEL3,
             price = 1000,
+            promotionName = "300번째 문제 행사",
+            promotionPrice = 300,
             rate = 4.5
         )
-
+        
         val storeProductDetail = StoreProductDetail(
             questionContent = questionInformation,
             creator = "수학선생님",
             isOwned = false
         )
-
+        
         val expectedResult = listOf(storeProductDetail)
-
+        
         given(storeProductDetailReader.getStoreProductDetails(userId, questionFilter, pagingInformation))
             .willReturn(expectedResult)
-
+        
         //when
         val result = storeProductService.getQuestionListByFiltering(userId, questionFilter, pagingInformation)
-
+        
         //then
         Assertions.assertThat(result).hasSize(1)
         Assertions.assertThat(result[0].questionContent.title).isEqualTo("수학 문제 1")
         Assertions.assertThat(result[0].creator).isEqualTo("수학선생님")
         Assertions.assertThat(result[0].isOwned).isFalse()
     }
-
+    
     @Test
     fun `문제 정보를 조회할 수 있다`() {
         //given
@@ -97,21 +99,23 @@ class StoreProductServiceTest(
             thumbnail = "advanced_thumbnail.jpg",
             questionLevel = QuestionLevel.LEVEL5,
             price = 2000,
+            promotionName = "300번째 문제 행사",
+            promotionPrice = 300,
             rate = 4.8
         )
-
+        
         val storeProductDetail = StoreProductDetail(
             questionContent = questionInformation,
             creator = "고급수학선생님",
             isOwned = true
         )
-
+        
         given(storeProductDetailReader.getStoreProductDetail(questionId, userId))
             .willReturn(storeProductDetail)
-
+        
         //when
         val result = storeProductService.getQuestionInformation(questionId, userId)
-
+        
         //then
         Assertions.assertThat(result.questionContent.id).isEqualTo(questionId)
         Assertions.assertThat(result.questionContent.title).isEqualTo("고급 수학 문제")

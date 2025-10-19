@@ -67,33 +67,48 @@ tasks.test {
 }
 
 openapi3 {
-    setServer("http://localhost:8080")
+    setServer("https://questioncloud.store")
     title = "Question Cloud API"
     description = "Question Cloud Unified API Documentation"
     version = "1.1.1"
     format = "yaml"
 }
 
-tasks.register<Copy>("collectSnippets") {
-    dependsOn(":qc-core:qc-cart:qc-cart-api:test")
-    dependsOn(":qc-core:qc-creator:qc-creator-api:test")
-    dependsOn(":qc-core:qc-pay:qc-pay-api:test")
-    dependsOn(":qc-core:qc-point:qc-point-api:test")
-    dependsOn(":qc-core:qc-post:qc-post-api:test")
-    dependsOn(":qc-core:qc-question:qc-question-api:test")
-    dependsOn(":qc-core:qc-review:qc-review-api:test")
-    dependsOn(":qc-core:qc-subscribe:qc-subscribe-api:test")
-    dependsOn(":qc-core:qc-user:qc-user-api:test")
-    
-    from("../qc-core/qc-cart/qc-cart-api/build/generated-snippets")
-    from("../qc-core/qc-creator/qc-creator-api/build/generated-snippets")
-    from("../qc-core/qc-pay/qc-pay-api/build/generated-snippets")
-    from("../qc-core/qc-point/qc-point-api/build/generated-snippets")
-    from("../qc-core/qc-post/qc-post-api/build/generated-snippets")
-    from("../qc-core/qc-question/qc-question-api/build/generated-snippets")
-    from("../qc-core/qc-review/qc-review-api/build/generated-snippets")
-    from("../qc-core/qc-subscribe/qc-subscribe-api/build/generated-snippets")
-    from("../qc-core/qc-user/qc-user-api/build/generated-snippets")
-    
-    into("build/generated-snippets")
+val modules = listOf(
+    "qc-cart",
+    "qc-creator",
+    "qc-pay",
+    "qc-point",
+    "qc-post",
+    "qc-question",
+    "qc-review",
+    "qc-subscribe",
+    "qc-user"
+)
+
+val documentTests = modules.map { moduleName ->
+    tasks.register<Test>("${moduleName}DocumentTest") {
+        val apiProject = project(":qc-core:${moduleName}:${moduleName}-api")
+        testClassesDirs = apiProject.sourceSets.test.get().output.classesDirs
+        classpath = apiProject.sourceSets.test.get().runtimeClasspath
+        useJUnitPlatform()
+        include("**/*Document.class")
+    }
+}
+
+tasks.register<Task>("collectSnippets") {
+    documentTests.forEach {
+        dependsOn(it)
+    }
+}
+
+tasks.register<Copy>("generateSwagger") {
+    dependsOn("openapi3")
+    delete("src/main/resources/static/openapi3.yaml")
+    from("$buildDir/api-spec/openapi3.yaml")
+    into("src/main/resources/static")
+}
+
+tasks.test {
+    minHeapSize = "2g"
 }

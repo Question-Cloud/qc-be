@@ -1,6 +1,6 @@
 package com.eager.questioncloud.subscribe.dto
 
-class SubscribedCreatorInformation(
+class UserSubscriptionDetail(
     val creatorId: Long,
     val creatorName: String,
     val profileImage: String,
