@@ -1,12 +1,12 @@
-package com.eager.questioncloud.point.service
+package com.eager.questioncloud.point.implement
 
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.repository.UserPointRepository
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 
-@Service
-class PointService(
-    private val userPointRepository: UserPointRepository
+@Component
+class UserPointReader(
+    private val userPointRepository: UserPointRepository,
 ) {
     fun getUserPoint(userId: Long): UserPoint {
         return userPointRepository.getUserPoint(userId)

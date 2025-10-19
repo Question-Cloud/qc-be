@@ -20,7 +20,7 @@ class ChargePointPaymentHistory(
                 }
                 .collect(Collectors.toList())
         }
-
+        
         private fun from(chargePointPayment: ChargePointPayment): ChargePointPaymentHistory {
             return ChargePointPaymentHistory(
                 chargePointPayment.orderId,

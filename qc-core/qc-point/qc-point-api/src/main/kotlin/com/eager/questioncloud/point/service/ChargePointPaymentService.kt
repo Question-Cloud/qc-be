@@ -1,26 +1,22 @@
 package com.eager.questioncloud.point.service
 
 import com.eager.questioncloud.common.pg.PGConfirmRequest
-import com.eager.questioncloud.point.domain.ChargePointPayment
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.implement.ChargePointPaymentIdempotentInfoReader
-import com.eager.questioncloud.point.implement.ChargePointPaymentPGProcessor
-import com.eager.questioncloud.point.implement.ChargePointPaymentPostProcessor
-import com.eager.questioncloud.point.implement.ChargePointPaymentPreparer
-import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
+import com.eager.questioncloud.point.implement.*
 import org.springframework.stereotype.Component
 
 @Component
 class ChargePointPaymentService(
+    private val chargePointPaymentReader: ChargePointPaymentReader,
     private val chargePointPaymentPreparer: ChargePointPaymentPreparer,
-    private val chargePointPaymentRepository: ChargePointPaymentRepository,
+    private val chargePointPaymentAppender: ChargePointPaymentAppender,
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
     private val chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor,
     private val chargePointPaymentIdempotentInfoReader: ChargePointPaymentIdempotentInfoReader
 ) {
     fun createOrder(userId: Long, chargePointType: ChargePointType): String {
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointType))
+        val order = chargePointPaymentAppender.createOrder(userId, chargePointType)
         return order.orderId
     }
     
@@ -41,6 +37,6 @@ class ChargePointPaymentService(
     }
     
     fun isCompletePayment(userId: Long, orderId: String): Boolean {
-        return chargePointPaymentRepository.isCompletedPayment(userId, orderId)
+        return chargePointPaymentReader.isCompletedPayment(userId, orderId)
     }
 }

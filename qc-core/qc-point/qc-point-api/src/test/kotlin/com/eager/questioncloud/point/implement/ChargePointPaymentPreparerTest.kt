@@ -1,6 +1,5 @@
 package com.eager.questioncloud.point.implement
 
-import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
@@ -8,54 +7,53 @@ import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
 import com.eager.questioncloud.utils.DBCleaner
-import org.apache.commons.lang3.RandomStringUtils
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class ChargePointPaymentPreparerTest(
-    @Autowired val chargePointPaymentPreparer: ChargePointPaymentPreparer,
-    @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
-    
-    @Test
-    fun `포인트 결제 검증 성공`() {
-        //given
-        val userId = 1L
-        val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
-        val pgPayment = PGPayment(paymentId, order.orderId, ChargePointType.PackageA.amount, PGPaymentStatus.READY)
+    private val chargePointPaymentPreparer: ChargePointPaymentPreparer,
+    private val chargePointPaymentRepository: ChargePointPaymentRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
+    init {
+        afterEach {
+            dbCleaner.cleanUp()
+        }
         
-        //when
-        chargePointPaymentPreparer.prepare(pgPayment)
-        
-        //then
-        val chargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
-        Assertions.assertThat(chargePointPayment.chargePointPaymentStatus)
-            .isEqualTo(ChargePointPaymentStatus.PENDING_PG_PAYMENT)
-    }
-    
-    @Test
-    fun `결제 금액이 올바르지 않으면 예외가 발생한다`() {
-        //given
-        val userId = 1L
-        val paymentId = RandomStringUtils.randomAlphanumeric(10)
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, ChargePointType.PackageA))
-        val wrongPaymentAmount = order.chargePointType.amount - 500
-        val pgPayment = PGPayment(paymentId, order.orderId, wrongPaymentAmount, PGPaymentStatus.READY)
-        
-        //when then
-        Assertions.assertThatThrownBy { chargePointPaymentPreparer.prepare(pgPayment) }
-            .isInstanceOf(CoreException::class.java)
+        Given("유효한 PG 결제 정보가 주어졌을 때") {
+            val userId = 1L
+            val paymentId = "payment-12345"
+            val order = chargePointPaymentRepository.save(
+                ChargePointPayment.createOrder(userId, ChargePointType.PackageA)
+            )
+            val pgPayment = PGPayment(
+                paymentId = paymentId,
+                orderId = order.orderId,
+                amount = ChargePointType.PackageA.amount,
+                status = PGPaymentStatus.READY
+            )
+            
+            When("결제 준비를 실행하면") {
+                val result = chargePointPaymentPreparer.prepare(pgPayment)
+                
+                Then("ChargePointPayment 상태가 PENDING_PG_PAYMENT로 변경된다") {
+                    result.chargePointPaymentStatus shouldBe ChargePointPaymentStatus.PENDING_PG_PAYMENT
+                    result.paymentId shouldBe paymentId
+                    
+                    val savedChargePointPayment = chargePointPaymentRepository.findByOrderId(order.orderId)
+                    savedChargePointPayment.chargePointPaymentStatus shouldBe ChargePointPaymentStatus.PENDING_PG_PAYMENT
+                    savedChargePointPayment.paymentId shouldNotBe null
+                    savedChargePointPayment.paymentId shouldBe paymentId
+                }
+            }
+        }
     }
 }

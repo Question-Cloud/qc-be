@@ -2,11 +2,14 @@ package com.eager.questioncloud.point.repository
 
 import com.eager.questioncloud.point.domain.ChargePointPaymentIdempotentInfo
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 
 @Repository
 class ChargePointPaymentIdempotentInfoEntityImpl(
     private val chargePointPaymentIdempotentInfoJpaRepository: ChargePointPaymentIdempotentInfoJpaRepository
 ) : ChargePointPaymentIdempotentInfoRepository {
+    
+    @Transactional
     override fun insert(chargePointPaymentIdempotentInfo: ChargePointPaymentIdempotentInfo): Boolean {
         return chargePointPaymentIdempotentInfoJpaRepository.insert(
             chargePointPaymentIdempotentInfo.orderId,

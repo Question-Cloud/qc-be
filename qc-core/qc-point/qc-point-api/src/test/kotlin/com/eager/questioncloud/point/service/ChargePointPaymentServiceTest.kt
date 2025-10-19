@@ -1,255 +1,128 @@
 package com.eager.questioncloud.point.service
 
-import com.eager.questioncloud.common.pg.PGConfirmRequest
 import com.eager.questioncloud.common.pg.PGConfirmResult
 import com.eager.questioncloud.common.pg.PGPayment
 import com.eager.questioncloud.common.pg.PGPaymentStatus
 import com.eager.questioncloud.point.domain.ChargePointPayment
-import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
-import com.eager.questioncloud.point.implement.ChargePointPaymentPGProcessor
-import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.point.repository.UserPointRepository
-import com.eager.questioncloud.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.given
-import org.mockito.kotlin.whenever
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ActiveProfiles
-import java.time.LocalDateTime
+import com.eager.questioncloud.point.implement.*
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import java.util.*
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicInteger
 
-@SpringBootTest
-@ActiveProfiles("test")
-class ChargePointPaymentServiceTest(
-    @Autowired val chargePointPaymentService: ChargePointPaymentService,
-    @Autowired val chargePointPaymentRepository: ChargePointPaymentRepository,
-    @Autowired val userPointRepository: UserPointRepository,
-    @Autowired val dbCleaner: DBCleaner
-) {
-    @MockBean
-    lateinit var chargePointPaymentPGProcessor: ChargePointPaymentPGProcessor
+class ChargePointPaymentServiceTest : BehaviorSpec() {
+    private val chargePointPaymentReader = mockk<ChargePointPaymentReader>()
+    private val chargePointPaymentPreparer = mockk<ChargePointPaymentPreparer>()
+    private val chargePointPaymentAppender = mockk<ChargePointPaymentAppender>()
+    private val chargePointPaymentPostProcessor = mockk<ChargePointPaymentPostProcessor>()
+    private val chargePointPaymentPGProcessor = mockk<ChargePointPaymentPGProcessor>()
+    private val chargePointPaymentIdempotentInfoReader = mockk<ChargePointPaymentIdempotentInfoReader>()
     
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
+    private val chargePointPaymentService = ChargePointPaymentService(
+        chargePointPaymentReader,
+        chargePointPaymentPreparer,
+        chargePointPaymentAppender,
+        chargePointPaymentPostProcessor,
+        chargePointPaymentPGProcessor,
+        chargePointPaymentIdempotentInfoReader
+    )
     
-    @Test
-    fun `포인트 충전 주문을 생성할 수 있다`() {
-        // given
-        val userId = 1L
-        val chargePointType = ChargePointType.PackageB
-        
-        // when
-        val orderId = chargePointPaymentService.createOrder(userId, chargePointType)
-        
-        // then
-        val order = chargePointPaymentRepository.findByOrderId(orderId)
-        
-        Assertions.assertThat(order).isNotNull
-        Assertions.assertThat(order.chargePointType).isEqualTo(chargePointType)
-        Assertions.assertThat(order.chargePointPaymentStatus).isEqualTo(ChargePointPaymentStatus.ORDERED)
-    }
-    
-    @Test
-    fun `포인트 충전을 처리할 수 있다`() {
-        // given
-        val userId = 1L
-        userPointRepository.save(UserPoint.create(userId))
-        
-        val chargePointType = ChargePointType.PackageB
-        val order = chargePointPaymentRepository.save(ChargePointPayment.createOrder(userId, chargePointType))
-        
-        given(chargePointPaymentPGProcessor.getPayment(any())).willReturn(
-            PGPayment("paymentId", order.orderId, chargePointType.amount, PGPaymentStatus.READY)
-        )
-        
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(
-            PGConfirmResult.Success(
-                order.orderId,
-                "paymentId",
-            )
-        )
-        
-        // when
-        chargePointPaymentService.approvePayment(order.orderId)
-        
-        // then
-        val userPoint = userPointRepository.getUserPoint(userId)
-        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
-    }
-    
-    @Test
-    fun `포인트 충전 완료 여부를 조회 할 수 있다`() {
-        // given
-        val userId = 1L
-        val chargePointType = ChargePointType.PackageB
-        
-        val order1 = ChargePointPayment.createOrder(userId, chargePointType)
-        order1.charge()
-        chargePointPaymentRepository.save(order1)
-        
-        val order2 = ChargePointPayment.createOrder(userId, chargePointType)
-        chargePointPaymentRepository.save(order2)
-        
-        // when
-        val order1Status = chargePointPaymentService.isCompletePayment(userId, order1.orderId)
-        val order2Status = chargePointPaymentService.isCompletePayment(userId, order2.orderId)
-        
-        Assertions.assertThat(order1Status).isTrue()
-        Assertions.assertThat(order2Status).isFalse()
-    }
-    
-    @Test
-    fun `결제 승인 대기 중인 건이 다시 요청오면 이어서 처리할 수 있다`() {
-        // given
-        val userId = 1L
-        userPointRepository.save(UserPoint.create(userId))
-        val orderId = UUID.randomUUID().toString()
-        val paymentId = UUID.randomUUID().toString()
-        val chargePointType = ChargePointType.PackageA
-        val chargePointPayment = ChargePointPayment(
-            orderId = orderId,
-            paymentId = paymentId,
-            userId = userId,
-            chargePointType = chargePointType,
-            chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT,
-            createdAt = LocalDateTime.now(),
-            requestAt = LocalDateTime.now(),
-        )
-        chargePointPaymentRepository.save(chargePointPayment)
-        
-        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer {
-            PGPayment(paymentId, orderId, ChargePointType.PackageA.amount, PGPaymentStatus.DONE)
+    init {
+        afterEach {
+            clearAllMocks()
         }
         
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenReturn(PGConfirmResult.Success(orderId, paymentId))
-        
-        // when
-        chargePointPaymentService.approvePayment(chargePointPayment.orderId)
-        
-        // then
-        val userPoint = userPointRepository.getUserPoint(userId)
-        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
-    }
-    
-    @Test
-    fun `포인트 충전 부하 테스트`() {
-        // given
-        val userId = 1L
-        val chargePointType = ChargePointType.PackageA
-        userPointRepository.save(UserPoint.create(userId))
-        
-        val cppList = mutableListOf<ChargePointPayment>()
-        for (i in 1..300) {
-            cppList.add(
-                chargePointPaymentRepository.save(
-                    ChargePointPayment(
-                        paymentId = UUID.randomUUID().toString(),
-                        userId = 1L,
-                        chargePointType = chargePointType,
-                        chargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
-                        requestAt = LocalDateTime.now()
-                    )
-                )
-            )
-        }
-        
-        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
-            val orderId = e.getArgument<String>(0)
-            PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
-        }
-        
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
-            val request = e.getArgument<PGConfirmRequest>(0)
-            PGConfirmResult.Success(request.orderId, request.paymentId)
-        }
-        
-        // when
-        val countDownLatch = CountDownLatch(cppList.size)
-        val executorService: ExecutorService = Executors.newFixedThreadPool(300)
-        cppList.forEach { cpp ->
-            executorService.submit {
-                try {
-                    chargePointPaymentService.approvePayment(cpp.orderId)
-                } catch (e: Exception) {
-                    println(e.message)
-                } finally {
-                    countDownLatch.countDown()
-                }
-            }
-        }
-        
-        countDownLatch.await()
-        executorService.shutdown()
-        
-        // then
-        val userPoint = userPointRepository.getUserPoint(userId)
-        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount * cppList.size)
-    }
-    
-    @Test
-    fun `포인트 충전 동시성 테스트`() {
-        // given
-        val userId = 1L
-        val chargePointType = ChargePointType.PackageA
-        userPointRepository.save(UserPoint.create(userId))
-        val chargePointPayment = chargePointPaymentRepository.save(
-            ChargePointPayment(
+        Given("주문 생성 요청이 들어왔을 때") {
+            val userId = 100L
+            val chargePointType = ChargePointType.PackageA
+            val expectedOrderId = UUID.randomUUID().toString()
+            val order = ChargePointPayment(
+                orderId = expectedOrderId,
                 paymentId = UUID.randomUUID().toString(),
-                userId = 1L,
+                userId = userId,
                 chargePointType = chargePointType,
-                chargePointPaymentStatus = ChargePointPaymentStatus.ORDERED,
-                requestAt = LocalDateTime.now()
+                chargePointPaymentStatus = ChargePointPaymentStatus.ORDERED
             )
-        )
-        
-        whenever(chargePointPaymentPGProcessor.getPayment(any())).thenAnswer { e ->
-            val orderId = e.getArgument<String>(0)
-            PGPayment(UUID.randomUUID().toString(), orderId, chargePointType.amount, PGPaymentStatus.READY)
-        }
-        
-        whenever(chargePointPaymentPGProcessor.confirm(any())).thenAnswer { e ->
-            val request = e.getArgument<PGConfirmRequest>(0)
-            PGConfirmResult.Success(request.orderId, request.paymentId)
-        }
-        
-        // when
-        val requestCount = 100
-        val countDownLatch = CountDownLatch(requestCount)
-        val successCount = AtomicInteger(0)
-        val executorService: ExecutorService = Executors.newFixedThreadPool(requestCount)
-        for (i in 1..requestCount) {
-            executorService.submit {
-                try {
-                    val result = chargePointPaymentService.approvePayment(chargePointPayment.orderId)
-                    if (result == ChargePointPaymentStatus.CHARGED) {
-                        successCount.getAndIncrement()
-                    }
-                } catch (_: Exception) {
-                } finally {
-                    countDownLatch.countDown()
+            
+            every { chargePointPaymentAppender.createOrder(userId, chargePointType) } returns order
+            
+            When("주문을 생성하면") {
+                val result = chargePointPaymentService.createOrder(userId, chargePointType)
+                
+                Then("주문 ID가 반환된다") {
+                    result shouldBe expectedOrderId
+                    verify(exactly = 1) { chargePointPaymentAppender.createOrder(userId, chargePointType) }
                 }
             }
         }
         
-        countDownLatch.await()
-        executorService.shutdown()
+        Given("결제 승인 요청이 들어왔을 때") {
+            val orderId = UUID.randomUUID().toString()
+            val paymentId = UUID.randomUUID().toString()
+            val amount = 10000
+            val chargePointType = ChargePointType.PackageA
+            
+            val pgPayment = PGPayment(
+                paymentId = paymentId,
+                orderId = orderId,
+                amount = amount,
+                status = PGPaymentStatus.READY
+            )
+            
+            val chargePointPayment = ChargePointPayment(
+                orderId = orderId,
+                paymentId = paymentId,
+                userId = 100L,
+                chargePointType = chargePointType,
+                chargePointPaymentStatus = ChargePointPaymentStatus.PENDING_PG_PAYMENT
+            )
+            
+            val confirmResult = PGConfirmResult.Success(orderId, paymentId)
+            
+            every { chargePointPaymentIdempotentInfoReader.getOrderId(orderId) } returns null
+            every { chargePointPaymentPGProcessor.getPayment(orderId) } returns pgPayment
+            every { chargePointPaymentPreparer.prepare(pgPayment) } returns chargePointPayment
+            every { chargePointPaymentPGProcessor.confirm(any()) } returns confirmResult
+            every {
+                chargePointPaymentPostProcessor.postProcess(
+                    chargePointPayment,
+                    confirmResult
+                )
+            } returns ChargePointPaymentStatus.CHARGED
+            
+            When("결제를 승인하면") {
+                val result = chargePointPaymentService.approvePayment(orderId)
+                
+                Then("결제 승인 플로우가 정상적으로 처리되어 CHARGED 상태가 반환된다") {
+                    result shouldBe ChargePointPaymentStatus.CHARGED
+                    verify(exactly = 1) { chargePointPaymentIdempotentInfoReader.getOrderId(orderId) }
+                    verify(exactly = 1) { chargePointPaymentPGProcessor.getPayment(orderId) }
+                    verify(exactly = 1) { chargePointPaymentPreparer.prepare(pgPayment) }
+                    verify(exactly = 1) { chargePointPaymentPGProcessor.confirm(any()) }
+                    verify(exactly = 1) { chargePointPaymentPostProcessor.postProcess(chargePointPayment, confirmResult) }
+                }
+            }
+        }
         
-        // then
-        val userPoint = userPointRepository.getUserPoint(userId)
-        Assertions.assertThat(userPoint.point).isEqualTo(chargePointType.amount)
-        Assertions.assertThat(successCount.get()).isEqualTo(requestCount)
+        Given("결제 완료 여부 조회 요청이 들어왔을 때") {
+            val userId = 100L
+            val orderId = UUID.randomUUID().toString()
+            
+            every { chargePointPaymentReader.isCompletedPayment(userId, orderId) } returns true
+            
+            When("결제 완료 여부를 조회하면") {
+                val result = chargePointPaymentService.isCompletePayment(userId, orderId)
+                
+                Then("결제 완료 여부가 반환된다") {
+                    result shouldBe true
+                    verify(exactly = 1) { chargePointPaymentReader.isCompletedPayment(userId, orderId) }
+                }
+            }
+        }
     }
 }

@@ -43,9 +43,7 @@ class ChargePointController(
     ): PagingResponse<ChargePointPaymentHistory> {
         return PagingResponse(
             chargePointPaymentHistoryService.countChargePointPayment(userPrincipal.userId),
-            ChargePointPaymentHistory.from(
-                chargePointPaymentHistoryService.getChargePointPayments(userPrincipal.userId, pagingInformation)
-            )
+            chargePointPaymentHistoryService.getChargePointPaymentHistory(userPrincipal.userId, pagingInformation)
         )
     }
 }
