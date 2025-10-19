@@ -30,7 +30,7 @@ class ReviewScenario(
             val reviews = mutableListOf<QuestionReview>()
             val userQueryDatas = mutableListOf<UserQueryData>()
             
-            reviews.add(QuestionReview.create(questionId, 1L, "review", IntRange(1, 5).random()))
+            reviews.add(QuestionReview.create(questionId, userId, "review", IntRange(1, 5).random()))
             userQueryDatas.add(
                 Fixture.fixtureMonkey.giveMeKotlinBuilder<UserQueryData>()
                     .set(UserQueryData::userId, userId)

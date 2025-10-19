@@ -9,15 +9,13 @@ import com.eager.questioncloud.review.command.ModifyReviewCommand
 import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.dto.MyQuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
-import com.eager.questioncloud.review.implement.StoreReviewReader
-import com.eager.questioncloud.review.implement.StoreReviewRegister
-import com.eager.questioncloud.review.implement.StoreReviewRemover
-import com.eager.questioncloud.review.implement.StoreReviewUpdater
+import com.eager.questioncloud.review.implement.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class StoreReviewService(
+    private val storeReviewValidator: StoreReviewValidator,
     private val storeReviewReader: StoreReviewReader,
     private val storeReviewRegister: StoreReviewRegister,
     private val storeReviewUpdater: StoreReviewUpdater,
@@ -42,6 +40,7 @@ class StoreReviewService(
     
     @Transactional
     fun register(command: RegisterReviewCommand) {
+        storeReviewValidator.validate(command)
         val questionReview = storeReviewRegister.register(command)
         eventPublisher.publish(ReviewEvent.create(questionReview.questionId, questionReview.rate, ReviewEventType.REGISTER))
     }

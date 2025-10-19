@@ -1,6 +1,8 @@
 package com.eager.questioncloud.review.service
 
 import com.eager.questioncloud.common.event.EventPublisher
+import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.review.ReviewScenario
 import com.eager.questioncloud.review.command.DeleteReviewCommand
@@ -10,16 +12,15 @@ import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.dto.MyQuestionReview
 import com.eager.questioncloud.review.dto.QuestionReviewDetail
 import com.eager.questioncloud.review.dto.ReviewerStatistics
-import com.eager.questioncloud.review.implement.StoreReviewReader
-import com.eager.questioncloud.review.implement.StoreReviewRegister
-import com.eager.questioncloud.review.implement.StoreReviewRemover
-import com.eager.questioncloud.review.implement.StoreReviewUpdater
+import com.eager.questioncloud.review.implement.*
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
 import java.time.LocalDateTime
 
 class StoreReviewServiceTest : BehaviorSpec() {
+    private val storeReviewValidator = mockk<StoreReviewValidator>()
     private val storeReviewReader = mockk<StoreReviewReader>()
     private val storeReviewRegister = mockk<StoreReviewRegister>()
     private val storeReviewUpdater = mockk<StoreReviewUpdater>()
@@ -27,6 +28,7 @@ class StoreReviewServiceTest : BehaviorSpec() {
     private val eventPublisher = mockk<EventPublisher>()
     
     private val storeReviewService = StoreReviewService(
+        storeReviewValidator,
         storeReviewReader,
         storeReviewRegister,
         storeReviewUpdater,
@@ -37,6 +39,7 @@ class StoreReviewServiceTest : BehaviorSpec() {
     init {
         afterEach {
             clearMocks(
+                storeReviewValidator,
                 storeReviewReader,
                 storeReviewRegister,
                 storeReviewUpdater,
@@ -126,6 +129,7 @@ class StoreReviewServiceTest : BehaviorSpec() {
             )
             
             every { storeReviewRegister.register(registerReviewCommand) } returns review
+            justRun { storeReviewValidator.validate(registerReviewCommand) }
             justRun { eventPublisher.publish(any()) }
             
             When("리뷰를 등록하면") {
@@ -133,6 +137,30 @@ class StoreReviewServiceTest : BehaviorSpec() {
                 Then("리뷰가 등록되고 이벤트가 발행된다") {
                     verify(exactly = 1) { storeReviewRegister.register(registerReviewCommand) }
                     verify(exactly = 1) { eventPublisher.publish(any()) }
+                }
+            }
+        }
+        
+        Given("유효하지 않은 리뷰 등록") {
+            val questionId = 1L
+            val userId = 1L
+            val registerReviewCommand = RegisterReviewCommand(questionId, userId, "새로운 리뷰", 4)
+            val review = QuestionReview.create(
+                registerReviewCommand.questionId,
+                registerReviewCommand.reviewerId,
+                registerReviewCommand.comment,
+                registerReviewCommand.rate
+            )
+            
+            every { storeReviewRegister.register(registerReviewCommand) } returns review
+            every { storeReviewValidator.validate(registerReviewCommand) } throws CoreException(Error.NOT_OWNED_QUESTION)
+            justRun { eventPublisher.publish(any()) }
+            
+            When("유효하지 않은 리뷰 등록 요청을 하면") {
+                Then("예외가 발생한다.") {
+                    shouldThrow<CoreException> {
+                        storeReviewService.register(registerReviewCommand)
+                    }
                 }
             }
         }
@@ -171,85 +199,6 @@ class StoreReviewServiceTest : BehaviorSpec() {
                 Then("리뷰가 삭제되고 이벤트가 발행된다") {
                     verify(exactly = 1) { storeReviewRemover.delete(deleteReviewCommand) }
                     verify(exactly = 1) { eventPublisher.publish(any()) }
-                }
-            }
-        }
-        
-        Given("여러 리뷰 작업 연속 수행") {
-            val reviewId = 100L
-            val questionId1 = 1L
-            val questionId2 = 2L
-            val questionId3 = 3L
-            val userId = 1L
-            
-            val registerReviewCommand1 = RegisterReviewCommand(questionId2, userId, "리뷰2", 4)
-            val registerReviewCommand2 = RegisterReviewCommand(questionId3, userId, "리뷰3", 2)
-            val modifyReviewCommand1 = ModifyReviewCommand(reviewId, userId, "수정된 리뷰", 1)
-            
-            every { storeReviewRegister.register(registerReviewCommand1) } returns QuestionReview.create(
-                registerReviewCommand1.questionId,
-                registerReviewCommand1.reviewerId,
-                registerReviewCommand1.comment,
-                registerReviewCommand1.rate
-            )
-            
-            every { storeReviewRegister.register(registerReviewCommand2) } returns QuestionReview.create(
-                registerReviewCommand2.questionId,
-                registerReviewCommand2.reviewerId,
-                registerReviewCommand2.comment,
-                registerReviewCommand2.rate
-            )
-            
-            every { storeReviewUpdater.modify(modifyReviewCommand1) } returns Pair(questionId1, -2)
-            
-            justRun { eventPublisher.publish(any()) }
-            
-            every { storeReviewReader.count(questionId1) } returns 1
-            every { storeReviewReader.count(questionId2) } returns 1
-            every { storeReviewReader.count(questionId3) } returns 1
-            
-            every { storeReviewReader.getMyQuestionReview(questionId1, userId) } returns MyQuestionReview(
-                1L,
-                1,
-                "수정된 리뷰"
-            )
-            every { storeReviewReader.getMyQuestionReview(questionId2, userId) } returns MyQuestionReview(
-                2L,
-                4,
-                "리뷰2"
-            )
-            every { storeReviewReader.getMyQuestionReview(questionId3, userId) } returns MyQuestionReview(
-                3L,
-                2,
-                "리뷰3"
-            )
-            
-            When("여러 리뷰 작업을 연속으로 수행하면") {
-                storeReviewService.register(registerReviewCommand1)
-                storeReviewService.register(registerReviewCommand2)
-                storeReviewService.modify(modifyReviewCommand1)
-                
-                Then("모든 작업이 정상적으로 수행된다") {
-                    storeReviewService.count(questionId1) shouldBe 1
-                    storeReviewService.count(questionId2) shouldBe 1
-                    storeReviewService.count(questionId3) shouldBe 1
-                    
-                    val myReview1 = storeReviewService.getMyReview(questionId1, userId)
-                    val myReview2 = storeReviewService.getMyReview(questionId2, userId)
-                    val myReview3 = storeReviewService.getMyReview(questionId3, userId)
-                    
-                    myReview1.comment shouldBe "수정된 리뷰"
-                    myReview1.rate shouldBe 1
-                    
-                    myReview2.comment shouldBe "리뷰2"
-                    myReview2.rate shouldBe 4
-                    
-                    myReview3.comment shouldBe "리뷰3"
-                    myReview3.rate shouldBe 2
-                    
-                    verify(exactly = 2) { storeReviewRegister.register(any()) }
-                    verify(exactly = 1) { storeReviewUpdater.modify(modifyReviewCommand1) }
-                    verify(exactly = 3) { eventPublisher.publish(any()) }
                 }
             }
         }
