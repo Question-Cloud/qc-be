@@ -181,6 +181,7 @@ class PostPermissionValidatorTest(
             id = questionId,
             creatorId = creatorId,
             title = "테스트 문제",
+            description = "엄청 어려운 문제임",
             subject = "수학",
             parentCategory = "수학",
             childCategory = "대수",

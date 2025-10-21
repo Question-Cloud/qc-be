@@ -15,8 +15,8 @@ import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.enums.QuestionSortType
 import com.eager.questioncloud.question.enums.QuestionStatus
 import com.eager.questioncloud.question.enums.QuestionType
-import com.querydsl.core.Tuple
 import com.querydsl.core.types.OrderSpecifier
+import com.querydsl.core.types.Projections
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -69,13 +69,10 @@ class QuestionRepositoryImpl(
                 questionStatusFilter()
             )
             .fetch()
-            .stream()
-            .map { tuple: Tuple -> this.parseQuestionInformationTuple(tuple) }
-            .collect(Collectors.toList())
     }
     
     override fun getQuestionInformation(questionId: Long): QuestionInformation {
-        val tuple = questionInformationSelectFrom()
+        return questionInformationSelectFrom()
             .leftJoin(child).on(child.id.eq(questionEntity.questionContentEntity.questionCategoryId))
             .leftJoin(parent).on(parent.id.eq(child.parentId))
             .leftJoin(questionMetadataEntity)
@@ -84,8 +81,6 @@ class QuestionRepositoryImpl(
             .where(questionEntity.id.eq(questionId), questionStatusFilter())
             .fetchFirst()
             ?: throw CoreException(Error.NOT_FOUND)
-        
-        return parseQuestionInformationTuple(tuple)
     }
     
     override fun getQuestionsByQuestionIds(questionIds: List<Long>): List<Question> {
@@ -144,9 +139,6 @@ class QuestionRepositoryImpl(
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
             .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .fetch()
-            .stream()
-            .map { tuple -> this.parseQuestionInformationTuple(tuple) }
-            .collect(Collectors.toList())
     }
     
     override fun findByCreatorId(creatorId: Long): List<Question> {
@@ -166,9 +158,6 @@ class QuestionRepositoryImpl(
             .on(questionMetadataEntity.questionId.eq(questionEntity.id))
             .leftJoin(promotionEntity).on(promotionEntity.questionId.eq(questionEntity.id))
             .fetch()
-            .stream()
-            .map { tuple -> this.parseQuestionInformationTuple(tuple) }
-            .collect(Collectors.toList())
     }
     
     override fun countByCreatorId(creatorId: Long): Int {
@@ -244,30 +233,15 @@ class QuestionRepositoryImpl(
             .and(questionEntity.questionStatus.ne(QuestionStatus.UnAvailable))
     }
     
-    private fun parseQuestionInformationTuple(tuple: Tuple): QuestionInformation {
-        return QuestionInformation(
-            tuple.get(questionEntity.id)!!,
-            tuple.get(questionEntity.creatorId)!!,
-            tuple.get(questionEntity.questionContentEntity.title)!!,
-            tuple.get(questionEntity.questionContentEntity.subject)!!,
-            tuple.get(parent.title)!!,
-            tuple.get(child.title)!!,
-            tuple.get(questionEntity.questionContentEntity.thumbnail)!!,
-            tuple.get(questionEntity.questionContentEntity.questionLevel)!!,
-            tuple.get(questionEntity.questionContentEntity.price)!!,
-            tuple.get(promotionEntity.title),
-            tuple.get(promotionEntity.salePrice),
-            tuple.get(questionMetadataEntity.reviewAverageRate)!!,
-        )
-    }
-    
-    private fun questionInformationSelectFrom(): JPAQuery<Tuple> {
-        return jpaQueryFactory.query()
-            .select(
+    private fun questionInformationSelectFrom(): JPAQuery<QuestionInformation> {
+        return jpaQueryFactory.select(
+            Projections.constructor(
+                QuestionInformation::class.java,
                 questionEntity.id,
-                questionEntity.questionContentEntity.title,
                 questionEntity.creatorId,
-                questionEntity.count,
+                questionEntity.questionContentEntity.title,
+                questionEntity.questionContentEntity.description,
+                questionEntity.questionContentEntity.subject,
                 parent.title,
                 child.title,
                 questionEntity.questionContentEntity.thumbnail,
@@ -276,8 +250,8 @@ class QuestionRepositoryImpl(
                 promotionEntity.title,
                 promotionEntity.salePrice,
                 questionMetadataEntity.reviewAverageRate,
-                questionEntity.questionContentEntity.subject
             )
+        )
             .from(questionEntity)
     }
 }

@@ -7,6 +7,7 @@ open class QuestionInformation(
     val id: Long,
     val creatorId: Long,
     val title: String,
+    val description: String,
     val subject: Subject,
     val parentCategory: String,
     val childCategory: String,

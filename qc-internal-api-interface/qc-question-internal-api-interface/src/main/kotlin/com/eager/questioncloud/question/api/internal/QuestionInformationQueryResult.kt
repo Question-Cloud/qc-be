@@ -4,6 +4,7 @@ class QuestionInformationQueryResult(
     val id: Long,
     val creatorId: Long,
     val title: String,
+    val description: String,
     val subject: String,
     val parentCategory: String,
     val childCategory: String,
