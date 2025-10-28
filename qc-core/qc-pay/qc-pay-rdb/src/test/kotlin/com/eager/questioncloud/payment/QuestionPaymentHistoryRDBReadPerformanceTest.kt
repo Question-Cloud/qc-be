@@ -21,14 +21,53 @@ class QuestionPaymentHistoryRDBReadPerformanceTest(
     fun mock() {
         val questionPaymentHistoryOrders =
             listOf(
-                QuestionPaymentHistoryOrder(1L, 1000, "title1", "thumb1", "creator1", "subject1", "main", "sub"),
-                QuestionPaymentHistoryOrder(2L, 1000, "title2", "thumb2", "creator2", "subject2", "main", "sub"),
-                QuestionPaymentHistoryOrder(3L, 1000, "title3", "thumb3", "creator3", "subject3", "main", "sub")
+                QuestionPaymentHistoryOrder(
+                    1L,
+                    1L,
+                    1000,
+                    500,
+                    "promoton",
+                    500,
+                    "title1",
+                    "thumb1",
+                    "creator1",
+                    "subject1",
+                    "main",
+                    "sub"
+                ),
+                QuestionPaymentHistoryOrder(
+                    2L,
+                    2L,
+                    1000,
+                    500,
+                    "promoton",
+                    500,
+                    "title1",
+                    "thumb1",
+                    "creator1",
+                    "subject1",
+                    "main",
+                    "sub"
+                ),
+                QuestionPaymentHistoryOrder(
+                    3L,
+                    3L,
+                    1000,
+                    500,
+                    "promoton",
+                    500,
+                    "title1",
+                    "thumb1",
+                    "creator1",
+                    "subject1",
+                    "main",
+                    "sub"
+                ),
             )
         
         for (i in 1..100) {
             questionPaymentHistoryRDBRepository.save(
-                QuestionPaymentHistory.create(TSID.Factory.getTsid().toString(), 1L, questionPaymentHistoryOrders, null, 3000)
+                QuestionPaymentHistory.create(TSID.Factory.getTsid().toString(), 1L, questionPaymentHistoryOrders, listOf(), 3000, 1500)
             )
         }
     }
