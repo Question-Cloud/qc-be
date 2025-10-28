@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace.implement
+package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.user.api.internal.UserCommandAPI
@@ -18,8 +18,8 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class WorkspaceCreatorRegisterTest(
-    private val workspaceCreatorRegister: WorkspaceCreatorRegister,
+class CreatorRegisterTest(
+    private val creatorRegister: CreatorRegister,
     private val creatorRepository: CreatorRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
@@ -40,7 +40,7 @@ class WorkspaceCreatorRegisterTest(
                 val mainSubject = "수학"
                 val introduction = "안녕하세요. 수학 크리에이터입니다."
                 
-                val newCreator = workspaceCreatorRegister.register(userId, mainSubject, introduction)
+                val newCreator = creatorRegister.register(userId, mainSubject, introduction)
                 
                 Then("크리에이터로 등록된다.") {
                     val foundCreator = creatorRepository.findById(newCreator.id)

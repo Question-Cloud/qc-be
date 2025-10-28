@@ -9,7 +9,6 @@ import com.eager.questioncloud.workspace.dto.*
 import com.eager.questioncloud.workspace.service.WorkspacePostService
 import com.eager.questioncloud.workspace.service.WorkspaceProfileService
 import com.eager.questioncloud.workspace.service.WorkspaceQuestionService
-import com.eager.questioncloud.workspace.service.WorkspaceRegisterService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
@@ -19,16 +18,7 @@ class WorkSpaceController(
     private val workspaceProfileService: WorkspaceProfileService,
     private val workspacePostService: WorkspacePostService,
     private val workspaceQuestionService: WorkspaceQuestionService,
-    private val workspaceRegisterService: WorkspaceRegisterService,
 ) {
-    @PostMapping("/register")
-    fun registerCreator(
-        userPrincipal: UserPrincipal, @RequestBody request: @Valid RegisterCreatorRequest
-    ): RegisterCreatorResponse {
-        val creator = workspaceRegisterService.register(userPrincipal.userId, request.mainSubject, request.introduction)
-        return RegisterCreatorResponse(creator.id)
-    }
-    
     @GetMapping("/me")
     fun getMyCreatorInformation(userPrincipal: UserPrincipal): CreatorProfileResponse {
         val me = workspaceProfileService.me(userPrincipal.userId)

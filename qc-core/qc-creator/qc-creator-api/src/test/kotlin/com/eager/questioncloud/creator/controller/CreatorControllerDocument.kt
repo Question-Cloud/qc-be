@@ -3,16 +3,20 @@ package com.eager.questioncloud.creator.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
+import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.domain.CreatorProfile
 import com.eager.questioncloud.creator.dto.CreatorInformation
 import com.eager.questioncloud.creator.service.CreatorInformationService
+import com.eager.questioncloud.creator.service.RegisterCreatorService
 import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.extensions.spring.SpringExtension
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -21,9 +25,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
+import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get
-import org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath
-import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
+import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 import org.springframework.test.context.ActiveProfiles
@@ -51,8 +56,14 @@ class CreatorControllerDocument {
     @Autowired
     private lateinit var mockMvc: MockMvc
     
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
+    
     @MockBean
     private lateinit var creatorInformationService: CreatorInformationService
+    
+    @MockBean
+    private lateinit var registerCreatorService: RegisterCreatorService
     
     private lateinit var sampleCreatorInformation: CreatorInformation
     
@@ -85,7 +96,7 @@ class CreatorControllerDocument {
         
         // When & Then
         mockMvc.perform(
-            get("/api/creator/info/{creatorId}", creatorId)
+            get("/api/creator/{creatorId}", creatorId)
         )
             .andExpect(status().isOk)
             .andDo(
@@ -128,7 +139,7 @@ class CreatorControllerDocument {
         
         // When & Then
         mockMvc.perform(
-            get("/api/creator/info/{creatorId}", nonExistentCreatorId)
+            get("/api/creator/{creatorId}", nonExistentCreatorId)
         )
             .andExpect(status().isNotFound)
             .andDo(
@@ -145,6 +156,56 @@ class CreatorControllerDocument {
                         responseFields(
                             fieldWithPath("status").description("HTTP 상태 코드"),
                             fieldWithPath("message").description("에러 메시지")
+                        )
+                    )
+                )
+            )
+    }
+    
+    @Test
+    fun `크리에이터 등록 API 테스트`() {
+        // Given
+        val userId = 1L
+        val mainSubject = "Mathematics"
+        val introduction = "수학 전문 크리에이터입니다."
+        val createdCreatorId = 1L
+        
+        val mockCreator = Creator(
+            id = createdCreatorId,
+            userId = userId,
+            mainSubject = mainSubject,
+            introduction = introduction
+        )
+        
+        whenever(registerCreatorService.register(any(), any(), any()))
+            .thenReturn(mockCreator)
+        
+        val requestBody = mapOf(
+            "mainSubject" to mainSubject,
+            "introduction" to introduction
+        )
+        
+        // When & Then
+        mockMvc.perform(
+            post("/api/creator/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestBody))
+        )
+            .andExpect(status().isOk)
+            .andDo(
+                document(
+                    "크리에이터 등록",
+                    resourceDetails = ResourceSnippetParametersBuilder()
+                        .summary("크리에이터 등록")
+                        .description("사용자를 크리에이터로 등록합니다.")
+                        .tag("creator"),
+                    snippets = arrayOf(
+                        requestFields(
+                            fieldWithPath("mainSubject").description("주요 과목"),
+                            fieldWithPath("introduction").description("자기소개")
+                        ),
+                        responseFields(
+                            fieldWithPath("creatorId").description("생성된 크리에이터 ID")
                         )
                     )
                 )

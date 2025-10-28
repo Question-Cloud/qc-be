@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace.implement
+package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.repository.CreatorRepository
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class WorkspaceCreatorRegister(
+class CreatorRegister(
     private val creatorRepository: CreatorRepository,
     private val userCommandAPI: UserCommandAPI,
 ) {

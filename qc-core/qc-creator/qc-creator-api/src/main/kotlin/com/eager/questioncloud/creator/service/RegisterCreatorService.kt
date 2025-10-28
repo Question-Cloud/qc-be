@@ -1,19 +1,19 @@
-package com.eager.questioncloud.workspace.service
+package com.eager.questioncloud.creator.service
 
 import com.eager.questioncloud.creator.domain.Creator
-import com.eager.questioncloud.workspace.implement.CreatorStatisticsInitializer
-import com.eager.questioncloud.workspace.implement.WorkspaceCreatorRegister
+import com.eager.questioncloud.creator.implement.CreatorRegister
+import com.eager.questioncloud.creator.implement.CreatorStatisticsInitializer
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class WorkspaceRegisterService(
-    private val workspaceCreatorRegister: WorkspaceCreatorRegister,
+class RegisterCreatorService(
+    private val creatorRegister: CreatorRegister,
     private val creatorStatisticsInitializer: CreatorStatisticsInitializer,
 ) {
     @Transactional
     fun register(userId: Long, mainSubject: String, introduction: String): Creator {
-        val creator = workspaceCreatorRegister.register(userId, mainSubject, introduction)
+        val creator = creatorRegister.register(userId, mainSubject, introduction)
         creatorStatisticsInitializer.initializeCreatorStatistics(creator.id)
         return creator
     }

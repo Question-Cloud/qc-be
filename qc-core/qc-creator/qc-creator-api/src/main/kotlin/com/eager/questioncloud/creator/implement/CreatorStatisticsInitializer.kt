@@ -1,4 +1,4 @@
-package com.eager.questioncloud.workspace.implement
+package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
