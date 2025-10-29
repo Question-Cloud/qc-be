@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":qc-core:qc-review:qc-review-api"))
     implementation(project(":qc-core:qc-subscribe:qc-subscribe-api"))
     implementation(project(":qc-core:qc-user:qc-user-api"))
+    implementation(project(":qc-core:qc-workspace:qc-workspace-api"))
     
     implementation(project(":qc-core:qc-question:qc-question-internal-api"))
     implementation(project(":qc-core:qc-point:qc-point-internal-api"))

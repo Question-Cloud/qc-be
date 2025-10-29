@@ -34,6 +34,7 @@ class QuestionCommandAPIImplTest(
     fun `새로운 문제를 등록할 수 있다`() {
         //given
         val registerCommand = RegisterQuestionAPIRequest(
+            creatorId = creatorId,
             questionCategoryId = 1L,
             subject = "Mathematics",
             title = "수학 문제 제목",
@@ -46,7 +47,7 @@ class QuestionCommandAPIImplTest(
         )
         
         //when
-        val newQuestionId = questionCommandAPI.register(creatorId, registerCommand)
+        val newQuestionId = questionCommandAPI.register(registerCommand)
         
         //then
         val createdQuestion = questionRepository.get(newQuestionId)
@@ -77,6 +78,8 @@ class QuestionCommandAPIImplTest(
         )
         
         val modifyCommand = ModifyQuestionAPIRequest(
+            creatorId = creatorId,
+            questionId = 1L,
             questionCategoryId = 2L,
             subject = "Physics",
             title = "수정된 물리 문제",
@@ -89,7 +92,7 @@ class QuestionCommandAPIImplTest(
         )
         
         //when
-        questionCommandAPI.modify(existingQuestion.id, modifyCommand)
+        questionCommandAPI.modify(modifyCommand)
         
         //then
         val modifiedQuestion = questionRepository.get(existingQuestion.id)

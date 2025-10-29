@@ -16,21 +16,21 @@ class QuestionCommandAPIImpl(
     private val questionMetadataInitializer: QuestionMetadataInitializer
 ) : QuestionCommandAPI {
     @Transactional
-    override fun register(creatorId: Long, command: RegisterQuestionAPIRequest): Long {
+    override fun register(registerQuestionAPIRequest: RegisterQuestionAPIRequest): Long {
         val question = questionRepository.save(
             Question.create(
-                creatorId,
+                registerQuestionAPIRequest.creatorId,
                 QuestionContent(
-                    command.questionCategoryId,
-                    Subject.valueOf(command.subject),
-                    command.title,
-                    command.description,
-                    command.thumbnail,
-                    command.fileUrl,
-                    command.explanationUrl,
+                    registerQuestionAPIRequest.questionCategoryId,
+                    Subject.valueOf(registerQuestionAPIRequest.subject),
+                    registerQuestionAPIRequest.title,
+                    registerQuestionAPIRequest.description,
+                    registerQuestionAPIRequest.thumbnail,
+                    registerQuestionAPIRequest.fileUrl,
+                    registerQuestionAPIRequest.explanationUrl,
                     QuestionType.SelfMade,
-                    QuestionLevel.valueOf(command.questionLevel),
-                    command.price
+                    QuestionLevel.valueOf(registerQuestionAPIRequest.questionLevel),
+                    registerQuestionAPIRequest.price
                 ),
             )
         )
@@ -40,20 +40,21 @@ class QuestionCommandAPIImpl(
     }
     
     @Transactional
-    override fun modify(questionId: Long, command: ModifyQuestionAPIRequest) {
-        val question = questionRepository.get(questionId)
+    override fun modify(modifyQuestionAPIRequest: ModifyQuestionAPIRequest) {
+        val question =
+            questionRepository.findByQuestionIdAndCreatorId(modifyQuestionAPIRequest.questionId, modifyQuestionAPIRequest.creatorId)
         question.modify(
             QuestionContent(
-                command.questionCategoryId,
-                Subject.valueOf(command.subject),
-                command.title,
-                command.description,
-                command.thumbnail,
-                command.fileUrl,
-                command.explanationUrl,
+                modifyQuestionAPIRequest.questionCategoryId,
+                Subject.valueOf(modifyQuestionAPIRequest.subject),
+                modifyQuestionAPIRequest.title,
+                modifyQuestionAPIRequest.description,
+                modifyQuestionAPIRequest.thumbnail,
+                modifyQuestionAPIRequest.fileUrl,
+                modifyQuestionAPIRequest.explanationUrl,
                 QuestionType.SelfMade,
-                QuestionLevel.valueOf(command.questionLevel),
-                command.price
+                QuestionLevel.valueOf(modifyQuestionAPIRequest.questionLevel),
+                modifyQuestionAPIRequest.price
             )
         )
         

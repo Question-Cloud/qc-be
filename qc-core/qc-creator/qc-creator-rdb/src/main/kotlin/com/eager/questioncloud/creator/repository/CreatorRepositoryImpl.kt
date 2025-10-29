@@ -17,8 +17,8 @@ class CreatorRepositoryImpl(
             .toModel()
     }
     
-    override fun findByUserId(userId: Long): Creator? {
-        return creatorJpaRepository.findByUserId(userId)?.toModel()
+    override fun findByUserId(userId: Long): Creator {
+        return creatorJpaRepository.findByUserId(userId)?.toModel() ?: throw CoreException(Error.NOT_FOUND)
     }
     
     override fun findByIdIn(creatorIds: List<Long>): List<Creator> {

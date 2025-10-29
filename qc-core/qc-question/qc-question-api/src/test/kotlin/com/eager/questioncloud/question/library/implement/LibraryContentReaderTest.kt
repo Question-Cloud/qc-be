@@ -69,8 +69,8 @@ class LibraryContentReaderTest(
         
         saveUserQuestions(userId, listOf(question1.id, question2.id))
         
-        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학", 4.5, 100, 50)
-        val creatorQueryData2 = CreatorQueryData(creatorUserId2, creatorId2, "영어", 4.8, 80, 30)
+        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학", "zzzz", 4.5, 100, 50)
+        val creatorQueryData2 = CreatorQueryData(creatorUserId2, creatorId2, "영어", "zzzz", 4.8, 80, 30)
         val userQueryData1 = UserQueryData(creatorUserId1, "수학선생님", "math_profile.jpg", "math@test.com")
         val userQueryData2 = UserQueryData(creatorUserId2, "영어선생님", "english_profile.jpg", "english@test.com")
         
@@ -178,7 +178,7 @@ class LibraryContentReaderTest(
         val allQuestions = creator1Questions + creator2Questions
         saveUserQuestions(userId, allQuestions.map { it.id })
         
-        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학선생님", 4.5, 100, 50)
+        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학선생님", "zzzz", 4.5, 100, 50)
         val userQueryData1 = UserQueryData(creatorUserId1, "김수학", "math_teacher.jpg", "math@example.com")
         
         given(creatorQueryAPI.getCreators(any()))
@@ -237,7 +237,7 @@ class LibraryContentReaderTest(
         val allQuestions = easyQuestions + mediumQuestions + hardQuestions
         saveUserQuestions(userId, allQuestions.map { it.id })
         
-        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "난이도전문가", 4.7, 200, 100)
+        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "난이도전문가", "zzzz", 4.7, 200, 100)
         val userQueryData = UserQueryData(creatorUserId1, "박난이도", "level_expert.jpg", "level@test.com")
         
         given(creatorQueryAPI.getCreators(any()))
@@ -304,7 +304,7 @@ class LibraryContentReaderTest(
         val allQuestions = category1Questions + category2Questions + category3Questions
         saveUserQuestions(userId, allQuestions.map { it.id })
         
-        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "카테고리마스터", 4.9, 300, 150)
+        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "카테고리마스터", "zzzz", 4.9, 300, 150)
         val userQueryData = UserQueryData(creatorUserId1, "이카테고리", "category_master.jpg", "category@test.com")
         
         given(creatorQueryAPI.getCreators(any()))
@@ -357,7 +357,7 @@ class LibraryContentReaderTest(
         val allQuestions = selfMadeQuestions + pastQuestions
         saveUserQuestions(userId, allQuestions.map { it.id })
         
-        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "자작문제전문가", 4.8, 150, 75)
+        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "자작문제전문가", "zzzz", 4.8, 150, 75)
         val userQueryData = UserQueryData(creatorUserId1, "최자작", "selfmade_expert.jpg", "selfmade@test.com")
         
         given(creatorQueryAPI.getCreators(any()))

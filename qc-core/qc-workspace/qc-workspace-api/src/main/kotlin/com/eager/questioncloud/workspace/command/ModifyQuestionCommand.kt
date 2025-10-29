@@ -1,7 +1,8 @@
 package com.eager.questioncloud.workspace.command
 
-data class RegisterQuestionCommand(
-    val userId: Long,
+data class ModifyQuestionCommand(
+    val creatorId: Long,
+    val questionId: Long,
     val questionCategoryId: Long,
     val subject: String,
     val title: String,
@@ -10,5 +11,5 @@ data class RegisterQuestionCommand(
     val fileUrl: String,
     val explanationUrl: String,
     val questionLevel: String,
-    val price: Int
+    val price: Int,
 )

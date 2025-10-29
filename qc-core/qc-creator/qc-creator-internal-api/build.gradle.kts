@@ -15,6 +15,7 @@ repositories {
 dependencies {
     implementation("org.springframework:spring-context")
     
+    implementation(project(":qc-common"))
     implementation(project(":qc-core:qc-creator:qc-creator-core"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
     

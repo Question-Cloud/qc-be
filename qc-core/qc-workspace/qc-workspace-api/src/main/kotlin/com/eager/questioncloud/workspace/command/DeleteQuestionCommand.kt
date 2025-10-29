@@ -1,6 +1,6 @@
 package com.eager.questioncloud.workspace.command
 
 data class DeleteQuestionCommand(
-    val userId: Long,
+    val creatorId: Long,
     val questionId: Long,
 )

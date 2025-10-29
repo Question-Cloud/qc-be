@@ -1,6 +1,7 @@
 package com.eager.questioncloud.question.api.internal
 
 class RegisterQuestionAPIRequest(
+    val creatorId: Long,
     val questionCategoryId: Long,
     val subject: String,
     val title: String,

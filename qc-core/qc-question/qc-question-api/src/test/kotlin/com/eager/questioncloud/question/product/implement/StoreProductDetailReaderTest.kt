@@ -68,8 +68,8 @@ class StoreProductDetailReaderTest(
         
         saveUserQuestion(userId, question1.id)
         
-        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학", 4.5, 100, 50)
-        val creatorQueryData2 = CreatorQueryData(creatorUserId2, creatorId2, "영어", 4.8, 80, 30)
+        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "수학", "zzzz", 4.5, 100, 50)
+        val creatorQueryData2 = CreatorQueryData(creatorUserId2, creatorId2, "영어", "zzzz", 4.8, 80, 30)
         val userQueryData1 = UserQueryData(creatorUserId1, "수학선생님", "math_profile.jpg", "math@test.com")
         val userQueryData2 = UserQueryData(creatorUserId2, "영어선생님", "english_profile.jpg", "english@test.com")
         
@@ -111,7 +111,7 @@ class StoreProductDetailReaderTest(
         
         saveUserQuestion(userId, question.id)
         
-        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "수학전문가", 4.7, 200, 100)
+        val creatorQueryData = CreatorQueryData(creatorUserId1, creatorId1, "수학전문가", "zzzz", 4.7, 200, 100)
         val userQueryData = UserQueryData(creatorUserId1, "김수학", "math_expert.jpg", "math@example.com")
         
         given(creatorQueryAPI.getCreator(creatorId1))
@@ -191,7 +191,7 @@ class StoreProductDetailReaderTest(
             )
         )
         
-        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "전문크리에이터", 4.6, 150, 75)
+        val creatorQueryData1 = CreatorQueryData(creatorUserId1, creatorId1, "전문크리에이터", "zzzz", 4.6, 150, 75)
         val userQueryData1 = UserQueryData(creatorUserId1, "이전문", "expert.jpg", "expert@test.com")
         
         given(creatorQueryAPI.getCreators(any()))

@@ -87,6 +87,10 @@ include 'qc-core:qc-pay:qc-pay-api'
 include 'qc-core:qc-pay:qc-pay-rdb'
 include 'qc-core:qc-pay:qc-pay-mongo'
 
+// Workspace Domain
+include 'qc-core:qc-workspace'
+include 'qc-core:qc-workspace:qc-workspace-api'
+
 // =============================================================================
 // 🔌 Internal API Interface Modules (도메인 간 통신 인터페이스)
 // =============================================================================

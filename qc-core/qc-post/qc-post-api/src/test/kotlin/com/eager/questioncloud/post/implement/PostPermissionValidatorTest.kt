@@ -197,6 +197,7 @@ class PostPermissionValidatorTest(
             userId = userId,
             creatorId = creatorId,
             mainSubject = "수학",
+            introduction = "zzzzzz",
             rate = 4.5,
             sales = 100,
             subscriberCount = 500

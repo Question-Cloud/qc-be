@@ -1,9 +1,6 @@
 package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
@@ -11,12 +8,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class WorkspaceQuestionReader(
-    private val creatorRepository: CreatorRepository,
     private val questionQueryAPI: QuestionQueryAPI,
 ) {
-    fun getMyQuestions(userId: Long, pagingInformation: PagingInformation): List<CreatorQuestionInformation> {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        return questionQueryAPI.getCreatorQuestions(creator.id, pagingInformation).map {
+    fun getMyQuestions(creatorId: Long, pagingInformation: PagingInformation): List<CreatorQuestionInformation> {
+        return questionQueryAPI.getCreatorQuestions(creatorId, pagingInformation).map {
             CreatorQuestionInformation(
                 it.id,
                 it.creatorId,
@@ -32,14 +27,12 @@ class WorkspaceQuestionReader(
         }
     }
     
-    fun countMyQuestions(userId: Long): Int {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        return questionQueryAPI.countByCreatorId(creator.id)
+    fun countMyQuestions(creatorId: Long): Int {
+        return questionQueryAPI.countByCreatorId(creatorId)
     }
     
-    fun getMyQuestionContent(userId: Long, questionId: Long): MyQuestionContent {
-        val creator = creatorRepository.findByUserId(userId) ?: throw CoreException(Error.NOT_FOUND)
-        val questionContent = questionQueryAPI.getQuestionContent(questionId, creator.id)
+    fun getMyQuestionContent(creatorId: Long, questionId: Long): MyQuestionContent {
+        val questionContent = questionQueryAPI.getQuestionContent(questionId, creatorId)
         return MyQuestionContent(
             questionContent.questionCategoryId,
             questionContent.subject,

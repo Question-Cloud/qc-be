@@ -5,7 +5,7 @@ import com.eager.questioncloud.creator.domain.Creator
 interface CreatorRepository {
     fun findById(creatorId: Long): Creator
     
-    fun findByUserId(userId: Long): Creator?
+    fun findByUserId(userId: Long): Creator
     
     fun findByIdIn(creatorIds: List<Long>): List<Creator>
     

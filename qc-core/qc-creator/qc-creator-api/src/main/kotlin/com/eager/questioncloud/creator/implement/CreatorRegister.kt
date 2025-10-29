@@ -13,6 +13,7 @@ class CreatorRegister(
 ) {
     @Transactional
     fun register(userId: Long, mainSubject: String, introduction: String): Creator {
+        //TODO 중복 등록 방지 처리
         userCommandAPI.toCreator(userId)
         return creatorRepository.save(Creator.create(userId, mainSubject, introduction))
     }
