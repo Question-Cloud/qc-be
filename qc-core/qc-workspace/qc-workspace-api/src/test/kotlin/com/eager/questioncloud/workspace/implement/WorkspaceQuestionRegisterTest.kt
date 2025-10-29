@@ -1,8 +1,6 @@
 package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.eager.questioncloud.workspace.command.RegisterQuestionCommand
 import com.ninjasquad.springmockk.MockkBean
@@ -19,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class WorkspaceQuestionRegisterTest(
     private val workspaceQuestionRegister: WorkspaceQuestionRegister,
-    private val creatorRepository: CreatorRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -31,13 +28,10 @@ class WorkspaceQuestionRegisterTest(
         }
         
         Given("크리에이터가 새로운 문제 등록") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val creatorId = 1L
             
             val command = RegisterQuestionCommand(
-                userId = userId,
+                creatorId = creatorId,
                 questionCategoryId = 1L,
                 subject = "수학",
                 title = "새 문제",
@@ -50,7 +44,7 @@ class WorkspaceQuestionRegisterTest(
             )
             
             every {
-                questionCommandAPI.register(creatorId, any())
+                questionCommandAPI.register(any())
             } returns 1L
             
             When("문제를 등록하면") {
@@ -58,7 +52,7 @@ class WorkspaceQuestionRegisterTest(
                 
                 Then("QuestionCommandAPI가 호출된다") {
                     verify(exactly = 1) {
-                        questionCommandAPI.register(creatorId, any())
+                        questionCommandAPI.register(any())
                     }
                 }
             }

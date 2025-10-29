@@ -1,12 +1,11 @@
 package com.eager.questioncloud.workspace.implement
 
 import com.eager.questioncloud.common.exception.CoreException
+import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.common.pagination.PagingInformation
-import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.QuestionContentQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
-import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldThrow
@@ -23,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class WorkspaceQuestionReaderTest(
     private val workspaceQuestionReader: WorkspaceQuestionReader,
-    private val creatorRepository: CreatorRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -35,10 +33,8 @@ class WorkspaceQuestionReaderTest(
         }
         
         Given("크리에이터가 본인의 문제 목록 조회") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val userId = 1L
+            val creatorId = 1L
             val pagingInformation = PagingInformation(0, 10)
             
             val expectedQuestions = listOf(
@@ -101,24 +97,9 @@ class WorkspaceQuestionReaderTest(
             }
         }
         
-        Given("존재하지 않는 크리에이터의 문제 목록 조회") {
-            val unknownUserId = 999L
-            val pagingInformation = PagingInformation(0, 10)
-            
-            When("문제 목록을 조회하려고 하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        workspaceQuestionReader.getMyQuestions(unknownUserId, pagingInformation)
-                    }
-                }
-            }
-        }
-        
         Given("크리에이터가 본인의 문제 개수 조회") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val userId = 1L
+            val creatorId = 1L
             val expectedCount = 10
             
             every { questionQueryAPI.countByCreatorId(creatorId) } returns expectedCount
@@ -132,23 +113,9 @@ class WorkspaceQuestionReaderTest(
             }
         }
         
-        Given("존재하지 않는 크리에이터의 문제 개수 조회") {
-            val unknownUserId = 999L
-            
-            When("문제 개수를 조회하려고 하면") {
-                Then("예외가 발생한다") {
-                    shouldThrow<CoreException> {
-                        workspaceQuestionReader.countMyQuestions(unknownUserId)
-                    }
-                }
-            }
-        }
-        
         Given("크리에이터가 본인 문제의 상세 정보 조회") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val userId = 1L
+            val creatorId = 1L
             val questionId = 1L
             
             val expectedContent = QuestionContentQueryResult(
@@ -182,14 +149,16 @@ class WorkspaceQuestionReaderTest(
             }
         }
         
-        Given("존재하지 않는 크리에이터의 문제 상세 정보 조회") {
-            val unknownUserId = 999L
+        Given("존재하지 않거나, 다른 크리에이터의 문제 상세 조회") {
+            val creatorId = 999L
             val questionId = 1L
             
-            When("문제 상세 정보를 조회하려고 하면") {
+            every { questionQueryAPI.getQuestionContent(questionId, creatorId) } throws CoreException(Error.NOT_FOUND)
+            
+            When("잘못된 문제 상세 정보를 조회를 시도하면") {
                 Then("예외가 발생한다") {
                     shouldThrow<CoreException> {
-                        workspaceQuestionReader.getMyQuestionContent(unknownUserId, questionId)
+                        workspaceQuestionReader.getMyQuestionContent(creatorId, questionId)
                     }
                 }
             }

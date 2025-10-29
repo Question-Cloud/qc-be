@@ -1,8 +1,6 @@
 package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.eager.questioncloud.workspace.command.ModifyQuestionCommand
 import com.ninjasquad.springmockk.MockkBean
@@ -19,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class WorkspaceQuestionUpdaterTest(
     private val workspaceQuestionUpdater: WorkspaceQuestionUpdater,
-    private val creatorRepository: CreatorRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -31,14 +28,11 @@ class WorkspaceQuestionUpdaterTest(
         }
         
         Given("크리에이터가 기존 문제 수정") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val creatorId = 1L
             val questionId = 1L
             
             val command = ModifyQuestionCommand(
-                userId = userId,
+                creatorId = creatorId,
                 questionId = questionId,
                 questionCategoryId = 1L,
                 subject = "수학",
@@ -51,14 +45,14 @@ class WorkspaceQuestionUpdaterTest(
                 price = 15000
             )
             
-            justRun { questionCommandAPI.modify(creatorId, any()) }
+            justRun { questionCommandAPI.modify(any()) }
             
             When("문제를 수정하면") {
                 workspaceQuestionUpdater.modifyQuestion(command)
                 
                 Then("QuestionCommandAPI가 호출된다") {
                     verify(exactly = 1) {
-                        questionCommandAPI.modify(creatorId, any())
+                        questionCommandAPI.modify(any())
                     }
                 }
             }

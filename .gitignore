@@ -42,3 +42,4 @@ out/
 .vscode/!/.kotlin/
 
 /qc-api-container/src/main/resources/static/openapi3.yaml
+/CLAUDE.md

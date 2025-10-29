@@ -1,4 +1,4 @@
-package com.eager.questioncloud.scenario
+package com.eager.questioncloud.workspace.scenario
 
 import com.eager.questioncloud.post.api.CreatorPostQueryAPIResult
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult

@@ -1,8 +1,6 @@
 package com.eager.questioncloud.workspace.implement
 
-import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.utils.DBCleaner
 import com.eager.questioncloud.workspace.command.DeleteQuestionCommand
 import com.ninjasquad.springmockk.MockkBean
@@ -19,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles
 @ApplyExtension(SpringExtension::class)
 class WorkspaceQuestionRemoverTest(
     private val workspaceQuestionRemover: WorkspaceQuestionRemover,
-    private val creatorRepository: CreatorRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
     @MockkBean
@@ -31,14 +28,11 @@ class WorkspaceQuestionRemoverTest(
         }
         
         Given("크리에이터가 본인 문제 삭제") {
-            val creatorScenario = CreatorScenario.create(1)
-            val creator = creatorRepository.save(creatorScenario.creators[0])
-            val userId = creator.userId
-            val creatorId = creator.id
+            val creatorId = 1L
             val questionId = 1L
             
             val command = DeleteQuestionCommand(
-                userId = userId,
+                creatorId = creatorId,
                 questionId = questionId
             )
             

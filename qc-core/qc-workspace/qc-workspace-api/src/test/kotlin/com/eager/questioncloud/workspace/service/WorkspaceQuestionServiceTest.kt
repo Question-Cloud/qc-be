@@ -35,7 +35,6 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         }
         
         Given("크리에이터가 본인의 문제 목록 조회") {
-            val userId = 1L
             val creatorId = 1L
             val pagingInformation = PagingInformation(0, 10)
             
@@ -66,26 +65,26 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 )
             )
             
-            every { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) } returns expectedQuestions
+            every { workspaceQuestionReader.getMyQuestions(creatorId, pagingInformation) } returns expectedQuestions
             
             When("문제 목록을 조회하면") {
-                val result = workspaceQuestionService.getMyQuestions(userId, pagingInformation)
+                val result = workspaceQuestionService.getMyQuestions(creatorId, pagingInformation)
                 
                 Then("문제 목록이 반환된다") {
                     result shouldBe expectedQuestions
                     
-                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(creatorId, pagingInformation) }
                 }
             }
         }
         
         Given("존재하지 않는 크리에이터의 문제 목록 조회") {
-            val userId = 1L
+            val creatorId = 1L
             val pagingInformation = PagingInformation(0, 10)
             
             every {
                 workspaceQuestionReader.getMyQuestions(
-                    userId,
+                    creatorId,
                     pagingInformation
                 )
             } throws CoreException(com.eager.questioncloud.common.exception.Error.NOT_FOUND)
@@ -93,34 +92,34 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
             When("문제 목록을 조회하려고 하면") {
                 Then("예외가 발생한다") {
                     shouldThrow<CoreException> {
-                        workspaceQuestionService.getMyQuestions(userId, pagingInformation)
+                        workspaceQuestionService.getMyQuestions(creatorId, pagingInformation)
                     }
                     
-                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(userId, pagingInformation) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestions(creatorId, pagingInformation) }
                 }
             }
         }
         
         Given("크리에이터가 본인의 문제 개수 조회") {
-            val userId = 1L
+            val creatorId = 1L
             
             val expectedCount = 10
             
-            every { workspaceQuestionReader.countMyQuestions(userId) } returns expectedCount
+            every { workspaceQuestionReader.countMyQuestions(creatorId) } returns expectedCount
             
             When("문제 개수를 조회하면") {
-                val result = workspaceQuestionService.countMyQuestions(userId)
+                val result = workspaceQuestionService.countMyQuestions(creatorId)
                 
                 Then("문제 개수가 반환된다") {
                     result shouldBe expectedCount
                     
-                    verify(exactly = 1) { workspaceQuestionReader.countMyQuestions(userId) }
+                    verify(exactly = 1) { workspaceQuestionReader.countMyQuestions(creatorId) }
                 }
             }
         }
         
         Given("크리에이터가 본인 문제의 상세 정보 조회") {
-            val userId = 1L
+            val creatorId = 1L
             val questionId = 1L
             
             val expectedContent = MyQuestionContent(
@@ -135,24 +134,24 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
                 price = 10000
             )
             
-            every { workspaceQuestionReader.getMyQuestionContent(userId, questionId) } returns expectedContent
+            every { workspaceQuestionReader.getMyQuestionContent(creatorId, questionId) } returns expectedContent
             
             When("문제 상세 정보를 조회하면") {
-                val result = workspaceQuestionService.getMyQuestionContent(userId, questionId)
+                val result = workspaceQuestionService.getMyQuestionContent(creatorId, questionId)
                 
                 Then("문제 상세 정보가 반환된다") {
                     result shouldBe expectedContent
                     
-                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestionContent(userId, questionId) }
+                    verify(exactly = 1) { workspaceQuestionReader.getMyQuestionContent(creatorId, questionId) }
                 }
             }
         }
         
         Given("크리에이터가 새로운 문제 등록") {
-            val userId = 1L
+            val creatorId = 1L
             
             val command = RegisterQuestionCommand(
-                userId = userId,
+                creatorId = creatorId,
                 questionCategoryId = 1L,
                 subject = "수학",
                 title = "새 문제",
@@ -176,10 +175,10 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         }
         
         Given("크리에이터가 기존 문제 수정") {
-            val userId = 1L
+            val creatorId = 1L
             val questionId = 1L
             val command = ModifyQuestionCommand(
-                userId,
+                creatorId,
                 questionId,
                 questionCategoryId = 1L,
                 subject = "수학",
@@ -204,9 +203,9 @@ class WorkspaceQuestionServiceTest : BehaviorSpec() {
         }
         
         Given("크리에이터가 본인 문제 삭제") {
-            val userId = 1L
+            val creatorId = 1L
             val questionId = 1L
-            val deleteQuestionCommand = DeleteQuestionCommand(userId, questionId)
+            val deleteQuestionCommand = DeleteQuestionCommand(creatorId, questionId)
             
             justRun { workspaceQuestionRemover.deleteQuestion(deleteQuestionCommand) }
             
