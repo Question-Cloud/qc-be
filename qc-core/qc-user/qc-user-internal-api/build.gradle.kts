@@ -21,10 +21,6 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

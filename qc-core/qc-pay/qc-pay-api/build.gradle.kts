@@ -32,10 +32,6 @@ dependencies {
     testImplementation(testFixtures(project(":qc-core:qc-pay:qc-pay-core")))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

@@ -26,10 +26,6 @@ dependencies {
     testImplementation(testFixtures(project(":qc-core:qc-review:qc-review-core")))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

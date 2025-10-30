@@ -24,10 +24,6 @@ dependencies {
     testFixturesImplementation(project(":qc-internal-api-interface:qc-question-internal-api-interface"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

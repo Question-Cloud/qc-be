@@ -1,45 +1,44 @@
 package com.eager.questioncloud.user.api.internal
 
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.eager.questioncloud.user.domain.User
 import com.eager.questioncloud.user.domain.UserAccountInformation
 import com.eager.questioncloud.user.domain.UserInformation
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
 import com.eager.questioncloud.user.repository.UserRepository
-import com.eager.questioncloud.test.utils.DBCleaner
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
+import io.kotest.core.extensions.ApplyExtension
+import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.shouldBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
 @ActiveProfiles("test")
+@ApplyExtension(SpringExtension::class)
 class UserCommandAPIImplTest(
-    @Autowired val userCommandAPI: UserCommandAPIImpl,
-    @Autowired val userRepository: UserRepository,
-    @Autowired val dbCleaner: DBCleaner,
-) {
-    @AfterEach
-    fun tearDown() {
-        dbCleaner.cleanUp()
-    }
+    private val userCommandAPI: UserCommandAPIImpl,
+    private val userRepository: UserRepository,
+    private val dbCleaner: DBCleaner,
+) : BehaviorSpec() {
     
-    @Test
-    fun `일반 사용자를 크리에이터로 변환할 수 있다`() {
-        //given
-        val user = createEmailUser("test@test.com", "password123", "김테스트")
+    init {
+        afterTest {
+            dbCleaner.cleanUp()
+        }
         
-        // 초기 상태 확인
-        Assertions.assertThat(user.userType).isEqualTo(UserType.NormalUser)
-        
-        //when
-        userCommandAPI.toCreator(user.uid)
-        
-        //then
-        val updatedUser = userRepository.getUser(user.uid)
-        Assertions.assertThat(updatedUser.userType).isEqualTo(UserType.CreatorUser)
+        Given("일반 사용자가 존재할 때") {
+            val user = createEmailUser("test@test.com", "password123", "김테스트")
+            When("사용자를 크리에이터로 변환하면") {
+                userCommandAPI.toCreator(user.uid)
+                
+                Then("사용자 타입이 크리에이터로 변경된다") {
+                    val updatedUser = userRepository.getUser(user.uid)
+                    updatedUser.userType shouldBe UserType.CreatorUser
+                }
+            }
+        }
     }
     
     private fun createEmailUser(email: String, password: String, name: String): User {

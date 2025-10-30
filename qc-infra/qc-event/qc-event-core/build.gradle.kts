@@ -35,10 +35,6 @@ dependencies {
     testImplementation(project(":qc-api-container"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

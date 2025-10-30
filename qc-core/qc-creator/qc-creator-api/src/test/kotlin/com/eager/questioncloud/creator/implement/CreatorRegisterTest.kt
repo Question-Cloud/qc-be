@@ -1,17 +1,16 @@
 package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.repository.CreatorRepository
-import com.eager.questioncloud.user.api.internal.UserCommandAPI
 import com.eager.questioncloud.test.utils.DBCleaner
+import com.eager.questioncloud.user.api.internal.UserCommandAPI
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.ints.exactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.justRun
-import org.mockito.kotlin.verify
+import io.mockk.verify
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
@@ -50,7 +49,7 @@ class CreatorRegisterTest(
                     foundCreator.mainSubject shouldBe mainSubject
                     foundCreator.introduction shouldBe introduction
                     
-                    verify(exactly(1)) { userCommandAPI.toCreator(userId) }
+                    verify(exactly = 1) { userCommandAPI.toCreator(userId) }
                 }
             }
         }

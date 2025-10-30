@@ -24,10 +24,6 @@ dependencies {
     testFixturesImplementation(project(":qc-test-utils"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }

@@ -21,10 +21,6 @@ dependencies {
     implementation(project(":qc-common"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-
 tasks.getByName<BootJar>("bootJar") {
     enabled = false
 }
