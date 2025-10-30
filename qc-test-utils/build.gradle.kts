@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    
+    implementation(project(":qc-common"))
     implementation(project(":qc-infra::qc-rdb"))
     
     api("com.navercorp.fixturemonkey:fixture-monkey-starter-kotlin:1.1.9")

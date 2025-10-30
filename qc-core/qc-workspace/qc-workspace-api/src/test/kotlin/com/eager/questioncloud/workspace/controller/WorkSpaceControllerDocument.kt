@@ -2,13 +2,10 @@ package com.eager.questioncloud.workspace.controller
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
-import com.eager.questioncloud.workspace.config.CreatorPrincipalResolverConfig
-import com.eager.questioncloud.workspace.config.TestConfig
 import com.eager.questioncloud.workspace.dto.CreatorPostItem
 import com.eager.questioncloud.workspace.dto.CreatorProfile
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
 import com.eager.questioncloud.workspace.dto.MyQuestionContent
-import com.eager.questioncloud.workspace.resolver.CreatorPrincipalArgumentResolver
 import com.eager.questioncloud.workspace.service.WorkspacePostService
 import com.eager.questioncloud.workspace.service.WorkspaceProfileService
 import com.eager.questioncloud.workspace.service.WorkspaceQuestionService
@@ -27,7 +24,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
@@ -48,17 +44,8 @@ import java.time.LocalDateTime
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [FilterExceptionHandlerFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [CreatorPrincipalArgumentResolver::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [CreatorPrincipalResolverConfig::class]
-        ),
     ]
 )
-@Import(TestConfig::class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs

@@ -3,7 +3,7 @@ package com.eager.questioncloud.cart.scenario
 import com.eager.questioncloud.creator.api.internal.CreatorQueryData
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 
 class CartItemScenario(

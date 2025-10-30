@@ -4,7 +4,7 @@ import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

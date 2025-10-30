@@ -6,7 +6,7 @@ import com.eager.questioncloud.post.domain.PostComment
 import com.eager.questioncloud.post.repository.PostCommentRepository
 import com.eager.questioncloud.post.scenario.PostCommentScenario
 import com.eager.questioncloud.post.scenario.custom
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

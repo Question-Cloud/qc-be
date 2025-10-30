@@ -5,7 +5,7 @@ import com.eager.questioncloud.cart.repository.CartItemRepository
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow

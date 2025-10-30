@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.user.repository.UserRepository
 import com.eager.questioncloud.user.scenario.UserScenario
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

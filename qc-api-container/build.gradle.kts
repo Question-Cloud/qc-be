@@ -44,6 +44,8 @@ dependencies {
     implementation(project(":qc-common"))
     implementation(project(":qc-logging"))
     
+    implementation(project(":qc-test-utils"))
+    
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testImplementation("org.springframework:spring-tx")
@@ -84,7 +86,8 @@ val modules = listOf(
     "qc-question",
     "qc-review",
     "qc-subscribe",
-    "qc-user"
+    "qc-user",
+    "qc-workspace"
 )
 
 val documentTests = modules.map { moduleName ->

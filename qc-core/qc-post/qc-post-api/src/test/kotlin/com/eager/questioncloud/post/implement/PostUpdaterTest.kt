@@ -6,7 +6,7 @@ import com.eager.questioncloud.post.command.ModifyPostCommandPostContent
 import com.eager.questioncloud.post.command.ModifyPostCommandPostFile
 import com.eager.questioncloud.post.repository.PostRepository
 import com.eager.questioncloud.post.scenario.PostScenario
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

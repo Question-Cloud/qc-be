@@ -2,7 +2,7 @@ package com.eager.questioncloud.post.scenario
 
 import com.eager.questioncloud.post.domain.PostComment
 import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.KotlinTypeDefaultArbitraryBuilder
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 

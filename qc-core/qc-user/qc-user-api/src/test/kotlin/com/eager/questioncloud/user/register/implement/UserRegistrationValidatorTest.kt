@@ -7,7 +7,7 @@ import com.eager.questioncloud.user.domain.UserInformation
 import com.eager.questioncloud.user.enums.AccountType
 import com.eager.questioncloud.user.repository.UserRepository
 import com.eager.questioncloud.user.scenario.UserScenario
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension

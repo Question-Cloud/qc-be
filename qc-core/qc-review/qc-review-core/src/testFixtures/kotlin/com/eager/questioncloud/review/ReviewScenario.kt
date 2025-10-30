@@ -2,7 +2,7 @@ package com.eager.questioncloud.review
 
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 
 class ReviewScenario(

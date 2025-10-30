@@ -6,7 +6,7 @@ import com.eager.questioncloud.post.repository.PostCommentRepository
 import com.eager.questioncloud.post.scenario.PostCommentScenario
 import com.eager.questioncloud.post.scenario.custom
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

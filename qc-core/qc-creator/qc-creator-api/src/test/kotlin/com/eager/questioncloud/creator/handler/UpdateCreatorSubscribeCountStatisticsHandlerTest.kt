@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.event.SubscribeEvent
 import com.eager.questioncloud.common.event.SubscribeEventType
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.scenario.CreatorScenario
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension

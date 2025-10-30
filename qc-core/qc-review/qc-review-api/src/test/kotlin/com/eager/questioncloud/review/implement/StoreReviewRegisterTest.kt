@@ -6,7 +6,7 @@ import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.review.command.RegisterReviewCommand
 import com.eager.questioncloud.review.domain.QuestionReview
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension

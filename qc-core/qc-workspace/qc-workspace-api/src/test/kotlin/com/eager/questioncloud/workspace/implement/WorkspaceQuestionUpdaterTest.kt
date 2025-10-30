@@ -1,7 +1,7 @@
 package com.eager.questioncloud.workspace.implement
 
 import com.eager.questioncloud.question.api.internal.QuestionCommandAPI
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.eager.questioncloud.workspace.command.ModifyQuestionCommand
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension

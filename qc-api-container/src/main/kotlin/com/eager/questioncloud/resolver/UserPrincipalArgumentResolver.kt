@@ -21,9 +21,6 @@ class UserPrincipalArgumentResolver : HandlerMethodArgumentResolver {
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): UserPrincipal {
-        if (SecurityContextHolder.getContext().authentication == null) {
-            return UserPrincipal(-1L)
-        }
         return SecurityContextHolder.getContext().authentication.principal as UserPrincipal
     }
 }

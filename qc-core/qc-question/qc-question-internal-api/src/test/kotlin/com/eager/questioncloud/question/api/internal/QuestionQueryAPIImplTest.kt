@@ -8,7 +8,7 @@ import com.eager.questioncloud.question.fixture.QuestionFixtureHelper
 import com.eager.questioncloud.question.repository.QuestionMetadataRepository
 import com.eager.questioncloud.question.repository.QuestionRepository
 import com.eager.questioncloud.question.repository.UserQuestionRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

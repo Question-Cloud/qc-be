@@ -5,7 +5,7 @@ import com.eager.questioncloud.creator.repository.CreatorRepository
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.scenario.CreatorScenario
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension

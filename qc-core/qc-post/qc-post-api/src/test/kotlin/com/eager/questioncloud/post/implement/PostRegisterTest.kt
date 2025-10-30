@@ -3,7 +3,7 @@ package com.eager.questioncloud.post.implement
 import com.eager.questioncloud.post.command.RegisterPostCommand
 import com.eager.questioncloud.post.command.RegisterPostCommandPostContent
 import com.eager.questioncloud.post.repository.PostRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension

@@ -1,7 +1,7 @@
 package com.eager.questioncloud.creator.implement
 
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension

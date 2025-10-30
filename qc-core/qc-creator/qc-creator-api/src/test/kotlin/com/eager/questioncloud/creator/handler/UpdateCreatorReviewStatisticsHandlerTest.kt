@@ -6,8 +6,8 @@ import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionInformationQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.scenario.CreatorScenario
-import com.eager.questioncloud.utils.DBCleaner
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.DBCleaner
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension

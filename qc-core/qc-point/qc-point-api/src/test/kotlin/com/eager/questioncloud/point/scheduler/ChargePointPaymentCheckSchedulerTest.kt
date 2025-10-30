@@ -7,7 +7,7 @@ import com.eager.questioncloud.point.enums.ChargePointPaymentStatus
 import com.eager.questioncloud.point.enums.ChargePointType
 import com.eager.questioncloud.point.implement.ChargePointPaymentPGProcessor
 import com.eager.questioncloud.point.repository.ChargePointPaymentRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

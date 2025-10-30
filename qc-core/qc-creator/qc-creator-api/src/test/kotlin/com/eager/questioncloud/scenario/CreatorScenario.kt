@@ -3,7 +3,7 @@ package com.eager.questioncloud.scenario
 import com.eager.questioncloud.creator.domain.Creator
 import com.eager.questioncloud.creator.domain.CreatorStatistics
 import com.eager.questioncloud.user.api.internal.UserQueryData
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 
 class CreatorScenario(

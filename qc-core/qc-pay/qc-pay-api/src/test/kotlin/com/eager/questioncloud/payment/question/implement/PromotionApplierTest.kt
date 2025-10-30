@@ -4,7 +4,7 @@ import com.eager.questioncloud.payment.scenario.QuestionOrderScenario
 import com.eager.questioncloud.question.api.internal.QuestionPromotionQueryItem
 import com.eager.questioncloud.question.api.internal.QuestionPromotionQueryResult
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

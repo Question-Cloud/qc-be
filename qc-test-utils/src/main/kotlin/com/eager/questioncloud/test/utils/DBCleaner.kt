@@ -1,4 +1,4 @@
-package com.eager.questioncloud.utils
+package com.eager.questioncloud.test.utils
 
 import jakarta.annotation.PostConstruct
 import jakarta.persistence.Entity
@@ -14,11 +14,11 @@ class DBCleaner(
     @PersistenceContext private val entityManager: EntityManager
 ) {
     private lateinit var tableNames: List<String>
-
+    
     @PostConstruct
     fun resolveTableNames() {
         val entities: Set<EntityType<*>> = entityManager.metamodel.entities
-
+        
         tableNames = entities
             .filter { entityType ->
                 entityType.javaType?.getAnnotation(Entity::class.java) != null
@@ -34,7 +34,7 @@ class DBCleaner(
             }
             .toList()
     }
-
+    
     @Transactional
     fun cleanUp() {
         entityManager.flush()

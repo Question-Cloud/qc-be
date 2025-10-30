@@ -5,7 +5,7 @@ import com.eager.questioncloud.user.domain.UserAccountInformation
 import com.eager.questioncloud.user.enums.AccountType
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.KotlinTypeDefaultArbitraryBuilder
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 

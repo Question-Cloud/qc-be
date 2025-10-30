@@ -2,7 +2,7 @@ package com.eager.questioncloud.cart.implement
 
 import com.eager.questioncloud.cart.domain.CartItem
 import com.eager.questioncloud.cart.repository.CartItemRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension

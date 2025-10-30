@@ -6,7 +6,7 @@ import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.enums.DiscountCalculationType
 import com.eager.questioncloud.payment.repository.CouponInformationRepository
 import com.eager.questioncloud.payment.repository.UserCouponRepository
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.KotlinTypeDefaultArbitraryBuilder
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 import java.time.LocalDateTime

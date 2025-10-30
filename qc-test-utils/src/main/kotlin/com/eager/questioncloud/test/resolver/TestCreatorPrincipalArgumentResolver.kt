@@ -1,13 +1,8 @@
-package com.eager.questioncloud.workspace.resolver
+package com.eager.questioncloud.test.resolver
 
 import com.eager.questioncloud.common.auth.CreatorPrincipal
-import com.eager.questioncloud.common.auth.UserPrincipal
-import com.eager.questioncloud.common.exception.CoreException
-import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import org.springframework.context.annotation.Profile
 import org.springframework.core.MethodParameter
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
@@ -15,9 +10,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
-@Profile("prod", "local")
-class CreatorPrincipalArgumentResolver(
-    private val creatorQueryAPI: CreatorQueryAPI
+@Profile("test")
+class TestCreatorPrincipalArgumentResolver(
 ) : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
         return parameter.parameterType == CreatorPrincipal::class.java
@@ -29,12 +23,6 @@ class CreatorPrincipalArgumentResolver(
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
     ): CreatorPrincipal {
-        val userPrincipal = SecurityContextHolder.getContext().authentication.principal as UserPrincipal
-        
-        if (userPrincipal.userId == -1L) throw CoreException(Error.FORBIDDEN)
-        
-        val creatorQueryData = creatorQueryAPI.getCreatorByUserId(userPrincipal.userId)
-        
-        return CreatorPrincipal(userPrincipal.userId, creatorQueryData.creatorId)
+        return CreatorPrincipal(1L, 1L)
     }
 }

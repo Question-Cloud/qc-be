@@ -3,7 +3,7 @@ package com.eager.questioncloud.subscribe.implement
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.subscribe.domain.Subscribe
 import com.eager.questioncloud.subscribe.repository.SubscribeRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec

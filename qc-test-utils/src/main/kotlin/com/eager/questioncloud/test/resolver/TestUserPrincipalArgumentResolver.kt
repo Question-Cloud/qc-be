@@ -1,6 +1,7 @@
-package com.eager.questioncloud.workspace.resolver
+package com.eager.questioncloud.test.resolver
 
-import com.eager.questioncloud.workspace.auth.CreatorPrincipal
+import com.eager.questioncloud.common.auth.UserPrincipal
+import org.springframework.context.annotation.Profile
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -9,9 +10,10 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 
 @Component
-class TestCreatorPrincipalArgumentResolver : HandlerMethodArgumentResolver {
+@Profile("test")
+class TestUserPrincipalArgumentResolver : HandlerMethodArgumentResolver {
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.parameterType == CreatorPrincipal::class.java
+        return parameter.parameterType == UserPrincipal::class.java
     }
     
     override fun resolveArgument(
@@ -19,7 +21,7 @@ class TestCreatorPrincipalArgumentResolver : HandlerMethodArgumentResolver {
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): CreatorPrincipal {
-        return CreatorPrincipal(1L, 1L)
+    ): UserPrincipal {
+        return UserPrincipal(1L)
     }
 }

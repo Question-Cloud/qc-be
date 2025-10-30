@@ -2,7 +2,7 @@ package com.eager.questioncloud.payment.scenario
 
 import com.eager.questioncloud.payment.domain.QuestionOrderItem
 import com.eager.questioncloud.payment.dto.QuestionInfo
-import com.eager.questioncloud.utils.Fixture
+import com.eager.questioncloud.test.utils.Fixture
 import com.navercorp.fixturemonkey.kotlin.KotlinTypeDefaultArbitraryBuilder
 import com.navercorp.fixturemonkey.kotlin.giveMeKotlinBuilder
 

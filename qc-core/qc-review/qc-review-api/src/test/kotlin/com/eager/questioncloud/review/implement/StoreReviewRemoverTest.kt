@@ -3,7 +3,7 @@ package com.eager.questioncloud.review.implement
 import com.eager.questioncloud.review.ReviewScenario
 import com.eager.questioncloud.review.command.DeleteReviewCommand
 import com.eager.questioncloud.review.repository.QuestionReviewRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import io.kotest.core.extensions.ApplyExtension
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.extensions.spring.SpringExtension

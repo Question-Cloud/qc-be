@@ -4,7 +4,7 @@ import com.eager.questioncloud.common.pagination.PagingInformation
 import com.eager.questioncloud.post.domain.Post
 import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.repository.PostRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

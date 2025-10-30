@@ -6,7 +6,7 @@ import com.eager.questioncloud.user.domain.UserInformation
 import com.eager.questioncloud.user.enums.UserStatus
 import com.eager.questioncloud.user.enums.UserType
 import com.eager.questioncloud.user.repository.UserRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

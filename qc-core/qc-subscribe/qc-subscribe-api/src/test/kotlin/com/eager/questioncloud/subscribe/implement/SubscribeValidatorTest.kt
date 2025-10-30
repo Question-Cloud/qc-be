@@ -5,7 +5,7 @@ import com.eager.questioncloud.common.exception.Error
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.subscribe.domain.Subscribe
 import com.eager.questioncloud.subscribe.repository.SubscribeRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow

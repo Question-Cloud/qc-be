@@ -2,7 +2,7 @@ package com.eager.questioncloud.point.api.internal
 
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.repository.UserPointRepository
-import com.eager.questioncloud.utils.DBCleaner
+import com.eager.questioncloud.test.utils.DBCleaner
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
