@@ -7,6 +7,7 @@ import com.eager.questioncloud.event.model.EventTicket
 import com.eager.questioncloud.event.repository.EventTicketRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 import software.amazon.awssdk.services.sns.model.PublishRequest
 
+@Profile("prod", "local")
 @Component
 class SNSEventPublisher(
     private val objectMapper: ObjectMapper,

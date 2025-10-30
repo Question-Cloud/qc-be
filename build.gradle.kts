@@ -56,6 +56,10 @@ subprojects {
         testImplementation("io.kotest:kotest-extensions-spring:6.0.3")
         testImplementation("com.ninja-squad:springmockk:4.0.2")
     }
+    
+    tasks.test {
+        useJUnitPlatform()
+    }
 }
 
 tasks.test {

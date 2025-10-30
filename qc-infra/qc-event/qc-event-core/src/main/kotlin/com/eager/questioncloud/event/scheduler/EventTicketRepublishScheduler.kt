@@ -5,10 +5,12 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.supervisorScope
+import org.springframework.context.annotation.Profile
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import software.amazon.awssdk.services.sns.SnsAsyncClient
 
+@Profile("prod", "local")
 @Component
 class EventTicketRepublishScheduler(
     private val eventTicketRepository: EventTicketRepository,
