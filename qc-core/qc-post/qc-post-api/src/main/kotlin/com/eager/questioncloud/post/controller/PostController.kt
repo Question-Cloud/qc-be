@@ -46,8 +46,8 @@ class PostController(
         @RequestParam questionId: Long,
         pagingInformation: PagingInformation
     ): PagingResponse<PostPreview> {
-        val total = postService.countPost(questionId)
         val boards = postService.getPostPreviews(userPrincipal.userId, questionId, pagingInformation)
+        val total = postService.countPost(questionId)
         return PagingResponse(total, boards)
     }
     

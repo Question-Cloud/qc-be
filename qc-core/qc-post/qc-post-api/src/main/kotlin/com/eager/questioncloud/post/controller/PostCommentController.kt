@@ -25,11 +25,11 @@ class PostCommentController(
         @RequestParam postId: Long,
         pagingInformation: PagingInformation
     ): PagingResponse<PostCommentDetail> {
-        val total = postCommentService.count(postId)
         val comments = postCommentService.getPostCommentDetails(
             postId,
             userPrincipal.userId, pagingInformation
         )
+        val total = postCommentService.count(postId)
         return PagingResponse(total, comments)
     }
     
