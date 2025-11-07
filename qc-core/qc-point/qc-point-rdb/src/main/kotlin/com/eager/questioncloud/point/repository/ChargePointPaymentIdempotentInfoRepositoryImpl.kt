@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-class ChargePointPaymentIdempotentInfoEntityImpl(
+class ChargePointPaymentIdempotentInfoRepositoryImpl(
     private val chargePointPaymentIdempotentInfoJpaRepository: ChargePointPaymentIdempotentInfoJpaRepository
 ) : ChargePointPaymentIdempotentInfoRepository {
     
