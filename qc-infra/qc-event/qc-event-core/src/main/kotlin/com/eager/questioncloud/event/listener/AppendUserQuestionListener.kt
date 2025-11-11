@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class AppendUserQuestionListener(
     private val appendUserQuestionHandler: AppendUserQuestionHandler,
 ) {
-    @SqsListener("append-user-question.fifo")
+    @SqsListener("append-user-question")
     @IdempotentEvent
     fun handle(@Payload event: QuestionPaymentEvent) {
         appendUserQuestionHandler.appendUserQuestion(event)

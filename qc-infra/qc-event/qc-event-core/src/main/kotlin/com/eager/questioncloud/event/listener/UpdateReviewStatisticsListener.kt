@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class UpdateReviewStatisticsListener(
     private val updateReviewStatisticsHandler: UpdateReviewStatisticsHandler
 ) {
-    @SqsListener("update-question-review-statistics.fifo")
+    @SqsListener("update-question-review-statistics")
     @IdempotentEvent
     fun handle(@Payload event: ReviewEvent) {
         updateReviewStatisticsHandler.updateByRegisteredReview(event)

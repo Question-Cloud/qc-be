@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class UpdateCreatorSalesStatisticsListener(
     private val updateCreatorSalesStatisticsHandler: UpdateCreatorSalesStatisticsHandler
 ) {
-    @SqsListener("update-creator-sales-statistics.fifo")
+    @SqsListener("update-creator-sales-statistics")
     @IdempotentEvent
     fun handle(@Payload event: QuestionPaymentEvent) {
         updateCreatorSalesStatisticsHandler.updateCreatorStatistics(event)

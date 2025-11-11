@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class QuestionPaymentHistoryRegisterListener(
     private val questionPaymentHistoryRegisterHandler: QuestionPaymentHistoryRegisterHandler
 ) {
-    @SqsListener("question-payment-history-register.fifo")
+    @SqsListener("question-payment-history-register")
     fun handle(@Payload event: QuestionPaymentEvent) {
         questionPaymentHistoryRegisterHandler.saveQuestionPaymentHistory(event)
     }

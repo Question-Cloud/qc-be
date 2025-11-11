@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class UpdateCreatorSubscribeCountStatisticsListener(
     private val updateCreatorSubscribeCountStatisticsHandler: UpdateCreatorSubscribeCountStatisticsHandler
 ) {
-    @SqsListener("update-creator-subscribe-statistics.fifo")
+    @SqsListener("update-creator-subscribe-statistics")
     @IdempotentEvent
     fun handle(@Payload event: SubscribeEvent) {
         updateCreatorSubscribeCountStatisticsHandler.handler(event)

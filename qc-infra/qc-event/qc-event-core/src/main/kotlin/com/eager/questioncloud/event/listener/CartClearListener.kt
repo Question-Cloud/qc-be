@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class CartClearListener(
     private val cartClearHandler: CartClearHandler
 ) {
-    @SqsListener("clear-cart-item.fifo")
+    @SqsListener("clear-cart-item")
     fun handle(@Payload event: QuestionPaymentEvent) {
         cartClearHandler.clearCart(event)
     }
