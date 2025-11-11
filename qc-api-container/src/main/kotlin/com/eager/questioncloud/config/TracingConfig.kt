@@ -16,9 +16,14 @@ class TracingConfig {
             return@ObservationPredicate true
         }
     }
-
+    
     @Bean
     fun noSpringSecurity(): ObservationPredicate {
         return ObservationPredicate { name, _ -> !name.startsWith("spring.security") }
+    }
+    
+    @Bean
+    fun noSchedulingTask(): ObservationPredicate {
+        return ObservationPredicate { name, _ -> !name.startsWith("task") }
     }
 }
