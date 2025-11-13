@@ -1,5 +1,6 @@
 package com.eager.questioncloud.payment.config
 
+import com.eager.questioncloud.payment.document.QuestionPaymentHistoryDocumentReadConverter
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions.MongoConverterConfigurationAdapter
@@ -11,6 +12,6 @@ class MongoConfig : AbstractMongoClientConfiguration() {
     }
     
     override fun configureConverters(adapter: MongoConverterConfigurationAdapter) {
-//        adapter.registerConverter(QuestionPaymentHistoryDocumentReadConverter())
+        adapter.registerConverter(QuestionPaymentHistoryDocumentReadConverter())
     }
 }
