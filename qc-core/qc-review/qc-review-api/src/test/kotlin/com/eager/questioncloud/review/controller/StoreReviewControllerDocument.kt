@@ -3,7 +3,6 @@ package com.eager.questioncloud.review.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.review.dto.*
 import com.eager.questioncloud.review.service.StoreReviewService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
@@ -35,10 +34,6 @@ import java.time.LocalDateTime
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

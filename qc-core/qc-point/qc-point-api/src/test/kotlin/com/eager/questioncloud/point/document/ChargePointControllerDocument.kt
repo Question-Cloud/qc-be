@@ -1,7 +1,6 @@
 package com.eager.questioncloud.point.document
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.point.controller.ChargePointController
 import com.eager.questioncloud.point.dto.ChargePointOrderRequest
 import com.eager.questioncloud.point.dto.ChargePointPaymentHistory
@@ -41,10 +40,6 @@ import java.time.LocalDateTime
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
-        ),
     ]
 )
 @ActiveProfiles("test")
@@ -54,16 +49,16 @@ import java.time.LocalDateTime
 class ChargePointControllerDocument : FunSpec() {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @Autowired
     private lateinit var objectMapper: ObjectMapper
-
+    
     @MockkBean
     private lateinit var chargePointPaymentService: ChargePointPaymentService
-
+    
     @MockkBean
     private lateinit var chargePointPaymentHistoryService: ChargePointPaymentHistoryService
-
+    
     init {
         val sampleChargePointPayment = listOf(
             ChargePointPaymentHistory(
@@ -82,14 +77,14 @@ class ChargePointControllerDocument : FunSpec() {
                 paidAt = LocalDateTime.of(2024, 3, 15, 14, 30)
             )
         )
-
+        
         test("포인트 충전 완료 여부 조회 API 테스트") {
             // Given
             val paymentId = "payment-123456"
             val isComplete = true
-
+            
             every { chargePointPaymentService.isCompletePayment(any(), any()) } returns isComplete
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/payment/point/status/{paymentId}", paymentId)
@@ -114,16 +109,16 @@ class ChargePointControllerDocument : FunSpec() {
                     )
                 )
         }
-
+        
         test("포인트 충전 주문 생성 API 테스트") {
             // Given
             val orderRequest = ChargePointOrderRequest(
                 chargePointType = ChargePointType.PackageB
             )
             val orderId = "order-123456789"
-
+            
             every { chargePointPaymentService.createOrder(any(), any()) } returns orderId
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/payment/point/order")
@@ -150,15 +145,15 @@ class ChargePointControllerDocument : FunSpec() {
                     )
                 )
         }
-
+        
         test("포인트 충전 결제 승인 요청 API 테스트") {
             // Given
             val paymentRequest = ChargePointPaymentRequest(
                 orderId = "order-123456789"
             )
-
+            
             every { chargePointPaymentService.approvePayment(any()) } returns ChargePointPaymentStatus.CHARGED
-
+            
             // When & Then
             mockMvc.perform(
                 post("/api/payment/point")
@@ -184,14 +179,14 @@ class ChargePointControllerDocument : FunSpec() {
                     )
                 )
         }
-
+        
         test("포인트 충전 내역 조회 API 테스트") {
             // Given
             val totalCount = 15
-
+            
             every { chargePointPaymentHistoryService.countChargePointPayment(any()) } returns totalCount
             every { chargePointPaymentHistoryService.getChargePointPaymentHistory(any(), any()) } returns sampleChargePointPayment
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/payment/point/history")

@@ -21,7 +21,7 @@ import java.nio.charset.Charset
 
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order(Ordered.HIGHEST_PRECEDENCE + 2)
 class ApiTransactionContextFilter(
     private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
@@ -35,7 +35,7 @@ class ApiTransactionContextFilter(
         val cachingRequest = ContentCachingRequestWrapper(request)
         val cachingResponse = ContentCachingResponseWrapper(response)
         
-        runCatching {
+        try {
             ApiTransactionContextHolder.init()
             
             Sentry.configureScope { scope: IScope ->
@@ -43,10 +43,9 @@ class ApiTransactionContextFilter(
             }
             
             filterChain.doFilter(cachingRequest, cachingResponse)
-        }.onFailure {
+        } catch (e: Exception) {
             toErrorResponse(cachingResponse)
-        }.also {
-            ApiTransactionContextHolder.end()
+        } finally {
             ApiTransactionContextHolder.loggingApiRequest(toApiRequest(cachingRequest))
             ApiTransactionContextHolder.loggingApiResponse(toApiResponse(cachingResponse))
             fileLogger.info(objectMapper.writeValueAsString(ApiTransactionContextHolder.get()))

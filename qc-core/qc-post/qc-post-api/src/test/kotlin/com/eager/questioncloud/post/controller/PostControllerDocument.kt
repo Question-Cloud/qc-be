@@ -3,7 +3,6 @@ package com.eager.questioncloud.post.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.post.domain.Post
 import com.eager.questioncloud.post.domain.PostContent
 import com.eager.questioncloud.post.domain.PostFile
@@ -42,10 +41,6 @@ import java.time.LocalDateTime
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

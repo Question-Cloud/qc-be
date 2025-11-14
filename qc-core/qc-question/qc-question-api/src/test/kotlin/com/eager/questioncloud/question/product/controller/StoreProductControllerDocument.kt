@@ -3,7 +3,6 @@ package com.eager.questioncloud.question.product.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.question.dto.QuestionCategoryGroupBySubject
 import com.eager.questioncloud.question.dto.QuestionInformation
 import com.eager.questioncloud.question.enums.QuestionLevel
@@ -38,10 +37,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
-        ),
     ]
 )
 @ActiveProfiles("test")
@@ -51,10 +46,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class StoreProductControllerDocument(
     @Autowired private val mockMvc: MockMvc,
 ) : FunSpec() {
-
+    
     @MockkBean
     private lateinit var storeProductService: StoreProductService
-
+    
     private val sampleStoreProductDetails = listOf(
         StoreProductDetail(
             QuestionInformation(
@@ -95,7 +90,7 @@ class StoreProductControllerDocument(
             false,
         )
     )
-
+    
     private val sampleStoreProductDetail = StoreProductDetail(
         QuestionInformation(
             id = 3L,
@@ -115,41 +110,41 @@ class StoreProductControllerDocument(
         "Creator1",
         true,
     )
-
+    
     private val mathSubCategories = listOf(
         QuestionCategoryGroupBySubject.SubQuestionCategory(1L, "대수"),
         QuestionCategoryGroupBySubject.SubQuestionCategory(2L, "기하")
     )
-
+    
     private val physicsSubCategories = listOf(
         QuestionCategoryGroupBySubject.SubQuestionCategory(3L, "역학"),
         QuestionCategoryGroupBySubject.SubQuestionCategory(4L, "전자기학")
     )
-
+    
     private val mathMainCategory = QuestionCategoryGroupBySubject.MainQuestionCategory(
         title = "수학",
         subject = Subject.Mathematics,
         sub = mathSubCategories
     )
-
+    
     private val physicsMainCategory = QuestionCategoryGroupBySubject.MainQuestionCategory(
         title = "물리",
         subject = Subject.Physics,
         sub = physicsSubCategories
     )
-
+    
     private val sampleQuestionCategories = listOf(
         QuestionCategoryGroupBySubject(Subject.Mathematics, listOf(mathMainCategory)),
         QuestionCategoryGroupBySubject(Subject.Physics, listOf(physicsMainCategory))
     )
-
+    
     init {
         test("문제 목록 조회 API 테스트") {
             val totalCount = 100
-
+            
             every { storeProductService.getTotalFiltering(any()) } returns totalCount
             every { storeProductService.getQuestionListByFiltering(any(), any(), any()) } returns sampleStoreProductDetails
-
+            
             mockMvc.perform(
                 get("/api/store/product")
                     .param("page", "1")
@@ -200,10 +195,10 @@ class StoreProductControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 카테고리 목록 조회 API 테스트") {
             every { storeProductService.getQuestionCategories() } returns sampleQuestionCategories
-
+            
             mockMvc.perform(
                 get("/api/store/product/categories")
             )
@@ -230,12 +225,12 @@ class StoreProductControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 상세 조회 API 테스트") {
             val questionId = 1L
-
+            
             every { storeProductService.getQuestionInformation(any(), any()) } returns sampleStoreProductDetail
-
+            
             mockMvc.perform(
                 get("/api/store/product/{questionId}", questionId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -274,12 +269,12 @@ class StoreProductControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 상세 조회 API 실패 테스트 - 존재하지 않는 문제") {
             val nonExistentQuestionId = 999L
-
+            
             every { storeProductService.getQuestionInformation(any(), any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             mockMvc.perform(
                 get("/api/store/product/{questionId}", nonExistentQuestionId)
                     .header("Authorization", "Bearer mock_access_token")

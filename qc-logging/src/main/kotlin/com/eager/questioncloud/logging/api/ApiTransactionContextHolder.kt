@@ -18,21 +18,6 @@ class ApiTransactionContextHolder {
             context.loggingApiResponse(apiResponse)
         }
         
-        fun end() {
-            val context = apiTransactionContext.get()
-            context.end()
-        }
-        
-        fun markException() {
-            val context = apiTransactionContext.get()
-            context.markException()
-        }
-        
-        fun isMarkedException(): Boolean {
-            val context = apiTransactionContext.get()
-            return context.isMarkedException
-        }
-        
         fun destroy() {
             apiTransactionContext.remove()
         }

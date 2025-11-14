@@ -7,7 +7,6 @@ import com.eager.questioncloud.cart.dto.RemoveCartItemRequest
 import com.eager.questioncloud.cart.service.CartService
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -37,10 +36,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

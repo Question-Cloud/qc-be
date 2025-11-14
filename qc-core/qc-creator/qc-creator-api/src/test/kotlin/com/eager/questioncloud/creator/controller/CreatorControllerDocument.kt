@@ -8,7 +8,6 @@ import com.eager.questioncloud.creator.domain.CreatorProfile
 import com.eager.questioncloud.creator.dto.CreatorInformation
 import com.eager.questioncloud.creator.service.CreatorInformationService
 import com.eager.questioncloud.creator.service.RegisterCreatorService
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -39,10 +38,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

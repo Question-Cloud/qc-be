@@ -34,7 +34,9 @@ class JwtAuthenticationFilter(
             if (SecurityContextHolder.getContext().authentication == null) {
                 setGuestAuthentication()
             }
-        }.also { filterChain.doFilter(request, response) }
+        }.also {
+            filterChain.doFilter(request, response)
+        }
     }
     
     private fun parseToken(authorization: String): String {

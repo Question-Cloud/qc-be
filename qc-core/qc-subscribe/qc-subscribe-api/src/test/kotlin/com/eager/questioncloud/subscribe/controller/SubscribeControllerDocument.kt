@@ -3,7 +3,6 @@ package com.eager.questioncloud.subscribe.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.subscribe.dto.UserSubscriptionDetail
 import com.eager.questioncloud.subscribe.service.SubscribeService
 import com.eager.questioncloud.subscribe.service.UserSubscriptionService
@@ -34,10 +33,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

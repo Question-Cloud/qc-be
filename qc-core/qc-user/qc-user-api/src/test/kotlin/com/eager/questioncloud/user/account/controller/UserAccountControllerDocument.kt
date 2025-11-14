@@ -3,7 +3,6 @@ package com.eager.questioncloud.user.account.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.user.account.dto.ChangePasswordRequest
 import com.eager.questioncloud.user.account.service.UserAccountService
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
@@ -35,10 +34,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

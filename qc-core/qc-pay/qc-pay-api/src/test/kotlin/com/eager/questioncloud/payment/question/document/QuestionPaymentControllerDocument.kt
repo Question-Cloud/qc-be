@@ -1,7 +1,6 @@
 package com.eager.questioncloud.payment.question.document
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.payment.domain.*
 import com.eager.questioncloud.payment.enums.CouponType
 import com.eager.questioncloud.payment.question.controller.QuestionPaymentController
@@ -41,10 +40,6 @@ import java.time.LocalDateTime
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

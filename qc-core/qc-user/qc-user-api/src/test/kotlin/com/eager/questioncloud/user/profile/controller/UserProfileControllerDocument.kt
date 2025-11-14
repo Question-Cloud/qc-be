@@ -1,7 +1,6 @@
 package com.eager.questioncloud.user.profile.controller
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.user.dto.MyInformation
 import com.eager.questioncloud.user.enums.UserType
 import com.eager.questioncloud.user.profile.dto.UpdateMyInformationRequest
@@ -34,10 +33,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

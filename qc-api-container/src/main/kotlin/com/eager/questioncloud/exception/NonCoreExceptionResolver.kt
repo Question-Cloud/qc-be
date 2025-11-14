@@ -1,7 +1,6 @@
 package com.eager.questioncloud.exception
 
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -27,7 +26,6 @@ class NonCoreExceptionResolver(
         handler: Any?,
         ex: Exception
     ): ModelAndView {
-        ApiTransactionContextHolder.markException()
         writeResponse(res)
         return ModelAndView()
     }

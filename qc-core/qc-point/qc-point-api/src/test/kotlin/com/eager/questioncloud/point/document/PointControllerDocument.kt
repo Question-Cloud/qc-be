@@ -1,7 +1,6 @@
 package com.eager.questioncloud.point.document
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.point.controller.PointController
 import com.eager.questioncloud.point.domain.UserPoint
 import com.eager.questioncloud.point.service.UserPointService
@@ -32,10 +31,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
-        ),
     ]
 )
 @ActiveProfiles("test")
@@ -45,10 +40,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class PointControllerDocument : FunSpec() {
     @Autowired
     private lateinit var mockMvc: MockMvc
-
+    
     @MockkBean
     private lateinit var userPointService: UserPointService
-
+    
     init {
         test("보유중인 포인트 조회 API 테스트") {
             // Given
@@ -56,9 +51,9 @@ class PointControllerDocument : FunSpec() {
                 userId = 1L,
                 point = 12500
             )
-
+            
             every { userPointService.getUserPoint(any()) } returns userPoint
-
+            
             // When & Then
             mockMvc.perform(
                 get("/api/payment/point")

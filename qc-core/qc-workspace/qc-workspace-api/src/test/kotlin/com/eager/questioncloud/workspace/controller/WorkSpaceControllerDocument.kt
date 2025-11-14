@@ -1,7 +1,6 @@
 package com.eager.questioncloud.workspace.controller
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.workspace.dto.CreatorPostItem
 import com.eager.questioncloud.workspace.dto.CreatorProfile
 import com.eager.questioncloud.workspace.dto.CreatorQuestionInformation
@@ -39,10 +38,6 @@ import java.time.LocalDateTime
         ComponentScan.Filter(
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
-        ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
         ),
     ]
 )

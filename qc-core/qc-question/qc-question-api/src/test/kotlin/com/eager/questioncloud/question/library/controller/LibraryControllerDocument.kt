@@ -1,7 +1,6 @@
 package com.eager.questioncloud.question.library.controller
 
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.question.dto.UserQuestionContent
 import com.eager.questioncloud.question.enums.QuestionLevel
 import com.eager.questioncloud.question.library.dto.ContentCreator
@@ -36,10 +35,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
-        ),
     ]
 )
 @ActiveProfiles("test")
@@ -49,10 +44,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class LibraryControllerDocument(
     @Autowired private val mockMvc: MockMvc,
 ) : FunSpec() {
-
+    
     @MockkBean
     private lateinit var libraryService: LibraryService
-
+    
     private val sampleUserQuestionContent = listOf(
         UserQuestionContent(
             questionId = 1L,
@@ -77,19 +72,19 @@ class LibraryControllerDocument(
             explanationUrl = "https://example.com/explanation1.pdf"
         )
     )
-
+    
     private val sampleContentCreator = ContentCreator("creatorName", "creatorProfileImage", "Math")
-
+    
     init {
         test("나의 문제 목록 조회 API 테스트") {
             val totalCount = 10
-
+            
             every { libraryService.countUserQuestions(any(), any()) } returns totalCount
-
+            
             every { libraryService.getUserQuestions(any(), any(), any()) } returns sampleUserQuestionContent.map {
                 LibraryContent(it, sampleContentCreator)
             }
-
+            
             mockMvc.perform(
                 get("/api/library")
                     .header("Authorization", "Bearer mock_access_token")

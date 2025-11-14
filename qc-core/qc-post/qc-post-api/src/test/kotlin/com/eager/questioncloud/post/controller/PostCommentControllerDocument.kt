@@ -3,7 +3,6 @@ package com.eager.questioncloud.post.controller
 import com.eager.questioncloud.application.security.JwtAuthenticationFilter
 import com.eager.questioncloud.common.exception.CoreException
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.filter.FilterExceptionHandlerFilter
 import com.eager.questioncloud.post.dto.AddPostCommentRequest
 import com.eager.questioncloud.post.dto.ModifyPostCommentRequest
 import com.eager.questioncloud.post.dto.PostCommentDetail
@@ -39,10 +38,6 @@ import java.time.LocalDateTime
             type = FilterType.ASSIGNABLE_TYPE,
             classes = [JwtAuthenticationFilter::class]
         ),
-        ComponentScan.Filter(
-            type = FilterType.ASSIGNABLE_TYPE,
-            classes = [FilterExceptionHandlerFilter::class]
-        ),
     ]
 )
 @ActiveProfiles("test")
@@ -53,10 +48,10 @@ class PostCommentControllerDocument(
     @Autowired private val mockMvc: MockMvc,
     @Autowired private val objectMapper: ObjectMapper,
 ) : FunSpec() {
-
+    
     @MockkBean
     private lateinit var postCommentService: PostCommentService
-
+    
     private val samplePostComments = listOf(
         PostCommentDetail(
             id = 1L,
@@ -77,15 +72,15 @@ class PostCommentControllerDocument(
             createdAt = LocalDateTime.of(2024, 3, 10, 9, 15)
         )
     )
-
+    
     init {
         test("문제 게시글 댓글 조회 API 테스트") {
             val postId = 101L
             val totalCount = 25
-
+            
             every { postCommentService.count(any()) } returns totalCount
             every { postCommentService.getPostCommentDetails(any(), any(), any()) } returns samplePostComments
-
+            
             mockMvc.perform(
                 get("/api/post/comment")
                     .header("Authorization", "Bearer mock_access_token")
@@ -122,12 +117,12 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 조회 API 실패 테스트 - 권한 없음") {
             val postId = 101L
-
+            
             every { postCommentService.getPostCommentDetails(any(), any(), any()) } throws CoreException(Error.FORBIDDEN)
-
+            
             mockMvc.perform(
                 get("/api/post/comment")
                     .header("Authorization", "Bearer mock_access_token")
@@ -157,15 +152,15 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 작성 API 테스트") {
             val addCommentRequest = AddPostCommentRequest(
                 postId = 101L,
                 comment = "정말 유익한 글이네요!"
             )
-
+            
             justRun { postCommentService.addPostComment(any()) }
-
+            
             mockMvc.perform(
                 post("/api/post/comment")
                     .header("Authorization", "Bearer mock_access_token")
@@ -192,15 +187,15 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 작성 API 실패 테스트 - 권한 없음") {
             val addCommentRequest = AddPostCommentRequest(
                 postId = 101L,
                 comment = "정말 유익한 글이네요!"
             )
-
+            
             every { postCommentService.addPostComment(any()) } throws CoreException(Error.FORBIDDEN)
-
+            
             mockMvc.perform(
                 post("/api/post/comment")
                     .header("Authorization", "Bearer mock_access_token")
@@ -228,15 +223,15 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 수정 API 테스트") {
             val commentId = 1L
             val modifyCommentRequest = ModifyPostCommentRequest(
                 comment = "수정된 댓글 내용입니다."
             )
-
+            
             justRun { postCommentService.modifyPostComment(any()) }
-
+            
             mockMvc.perform(
                 patch("/api/post/comment/{commentId}", commentId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -265,15 +260,15 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 수정 API 실패 테스트 - 존재하지 않는 댓글") {
             val commentId = 999L
             val modifyCommentRequest = ModifyPostCommentRequest(
                 comment = "수정된 댓글 내용입니다."
             )
-
+            
             every { postCommentService.modifyPostComment(any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             mockMvc.perform(
                 patch("/api/post/comment/{commentId}", commentId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -303,12 +298,12 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 삭제 API 테스트") {
             val commentId = 1L
-
+            
             justRun { postCommentService.deletePostComment(any()) }
-
+            
             mockMvc.perform(
                 delete("/api/post/comment/{commentId}", commentId)
                     .header("Authorization", "Bearer mock_access_token")
@@ -332,12 +327,12 @@ class PostCommentControllerDocument(
                     )
                 )
         }
-
+        
         test("문제 게시글 댓글 삭제 API 실패 테스트 - 존재하지 않는 댓글") {
             val commentId = 999L
-
+            
             every { postCommentService.deletePostComment(any()) } throws CoreException(Error.NOT_FOUND)
-
+            
             mockMvc.perform(
                 delete("/api/post/comment/{commentId}", commentId)
                     .header("Authorization", "Bearer mock_access_token")
