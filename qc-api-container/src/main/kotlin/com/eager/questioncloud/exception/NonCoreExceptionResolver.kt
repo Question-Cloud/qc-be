@@ -1,7 +1,6 @@
 package com.eager.questioncloud.exception
 
 import com.eager.questioncloud.common.exception.Error
-import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
 class NonCoreExceptionResolver(
-    private val slackNotifier: ExceptionSlackNotifier,
     private val objectMapper: ObjectMapper
 ) : HandlerExceptionResolver {
     private val cacheResponse =
@@ -29,8 +27,6 @@ class NonCoreExceptionResolver(
         handler: Any?,
         ex: Exception
     ): ModelAndView {
-        val transactionId = ApiTransactionContextHolder.get().transactionId
-        slackNotifier.sendApiException(ex, transactionId, req.requestURI, req.method)
         ApiTransactionContextHolder.markException()
         writeResponse(res)
         return ModelAndView()

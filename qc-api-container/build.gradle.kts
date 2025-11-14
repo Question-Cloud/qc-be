@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
     id("com.epages.restdocs-api-spec") version "0.19.2"
+    id("io.sentry.jvm.gradle") version "5.12.2"
 }
 
 group = "com.eager.questioncloud"
@@ -53,6 +54,13 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.2")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+}
+
+sentry {
+    includeSourceContext = true
+    org = "questioncloud"
+    projectName = "questioncloud-application"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 
 sourceSets {

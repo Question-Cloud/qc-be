@@ -1,6 +1,5 @@
 package com.eager.questioncloud.filter
 
-import com.eager.questioncloud.common.exception.ExceptionSlackNotifier
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -12,9 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)
-class FilterExceptionHandlerFilter(
-    private val exceptionSlackNotifier: ExceptionSlackNotifier
-) : OncePerRequestFilter() {
+class FilterExceptionHandlerFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -25,12 +22,6 @@ class FilterExceptionHandlerFilter(
                 if (ApiTransactionContextHolder.isMarkedException()) {
                     return@onFailure
                 }
-                exceptionSlackNotifier.sendApiException(
-                    e,
-                    ApiTransactionContextHolder.get().transactionId,
-                    request.requestURI,
-                    request.method
-                )
             }.getOrThrow();
     }
 }

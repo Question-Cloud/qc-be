@@ -17,13 +17,13 @@ class AuthenticationController(
         val authenticationToken = authenticationService.login(loginRequest.email, loginRequest.password)
         return LoginResponse(authenticationToken)
     }
-
+    
     @PostMapping("/refresh")
     fun refresh(@RequestParam refreshToken: String): RefreshResponse {
         val authenticationToken = authenticationService.refresh(refreshToken)
         return RefreshResponse(authenticationToken)
     }
-
+    
     @GetMapping("/social")
     fun socialLogin(@RequestParam accountType: AccountType, @RequestParam code: String): LoginResponse {
         val authenticationToken = authenticationService.socialLogin(accountType, code)
