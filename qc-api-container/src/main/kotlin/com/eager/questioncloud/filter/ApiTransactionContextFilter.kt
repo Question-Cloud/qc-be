@@ -5,14 +5,10 @@ import com.eager.questioncloud.logging.api.ApiResponse
 import com.eager.questioncloud.logging.api.ApiTransactionContextHolder
 import com.eager.questioncloud.logging.api.SensitiveMasker
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.sentry.IScope
-import io.sentry.Sentry
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
@@ -21,7 +17,6 @@ import java.nio.charset.Charset
 
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 2)
 class ApiTransactionContextFilter(
     private val objectMapper: ObjectMapper,
 ) : OncePerRequestFilter() {
@@ -37,11 +32,6 @@ class ApiTransactionContextFilter(
         
         try {
             ApiTransactionContextHolder.init()
-            
-            Sentry.configureScope { scope: IScope ->
-                scope.setExtra("transactionId", ApiTransactionContextHolder.get().transactionId)
-            }
-            
             filterChain.doFilter(cachingRequest, cachingResponse)
         } catch (e: Exception) {
             toErrorResponse(cachingResponse)
