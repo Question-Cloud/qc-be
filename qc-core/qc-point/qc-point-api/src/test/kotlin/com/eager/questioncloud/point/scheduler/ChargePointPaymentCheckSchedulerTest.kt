@@ -56,7 +56,7 @@ class ChargePointPaymentCheckSchedulerTest(
             }
             
             When("스케줄러 task를 실행하면") {
-                chargePointPaymentCheckScheduler.task()
+                chargePointPaymentCheckScheduler.chargePointPaymentCheckScheduler()
                 
                 Then("모든 PENDING 결제 건이 처리되어 0건이 된다") {
                     val remainingPendingPayments = chargePointPaymentRepository.getPendingPayments()

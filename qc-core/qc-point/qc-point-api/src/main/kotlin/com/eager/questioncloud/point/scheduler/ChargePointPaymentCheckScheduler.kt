@@ -14,7 +14,7 @@ class ChargePointPaymentCheckScheduler(
     private val chargePointPaymentPostProcessor: ChargePointPaymentPostProcessor,
 ) {
     @Scheduled(fixedRate = 60000)
-    fun task() {
+    fun chargePointPaymentCheckScheduler() {
         val targets = chargePointPaymentRepository.getPendingPayments()
         
         targets.forEach { payment ->
