@@ -59,7 +59,7 @@ dependencies {
 sentry {
     includeSourceContext = true
     org = "questioncloud"
-    projectName = "questioncloud-application"
+    projectName = "questioncloud"
     authToken = System.getenv("SENTRY_AUTH_TOKEN")
 }
 

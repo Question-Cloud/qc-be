@@ -37,6 +37,8 @@ jobs:
         run: ./gradlew :qc-api-container:generateSwagger
 
       - name: Build
+        env:
+          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
         run: ./gradlew :qc-api-container:build -x test
 
       - name: docker image build
