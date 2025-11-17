@@ -47,7 +47,7 @@ class QuestionPaymentHistoryDocumentReadConverter :
     private fun convertDiscountInformation(discountInformation: List<Document>): List<SimpleDiscountHistory> {
         return discountInformation.map {
             SimpleDiscountHistory(
-                it.getString("title"),
+                it.getString("name"),
                 CouponType.valueOf(it.getString("couponType")),
                 it.getLong("orderItemId"),
                 it.getInteger("discountAmount"),
