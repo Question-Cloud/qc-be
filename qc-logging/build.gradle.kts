@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    kotlin("plugin.spring") version "2.1.10"
 }
 
 group = "com.eager.questioncloud"
@@ -18,6 +19,12 @@ dependencies {
     implementation(platform("io.micrometer:micrometer-tracing-bom:latest.release"))
     implementation("io.micrometer:micrometer-tracing-bridge-brave")
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+    
+    implementation("ch.qos.logback:logback-classic")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+    
+    compileOnly("org.springframework:spring-web")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
     
     testImplementation(kotlin("test"))
 }

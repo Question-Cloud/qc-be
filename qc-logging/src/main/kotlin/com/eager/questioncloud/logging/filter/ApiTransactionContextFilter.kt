@@ -1,4 +1,4 @@
-package com.eager.questioncloud.filter
+package com.eager.questioncloud.logging.filter
 
 import com.eager.questioncloud.logging.api.ApiRequest
 import com.eager.questioncloud.logging.api.ApiResponse
@@ -14,7 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 import java.nio.charset.Charset
-
 
 @Component
 class ApiTransactionContextFilter(
