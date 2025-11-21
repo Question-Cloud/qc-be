@@ -1,4 +1,4 @@
-package com.eager.questioncloud.creator.handler
+package com.eager.questioncloud.creator.listener
 
 import com.eager.questioncloud.common.event.SubscribeEvent
 import com.eager.questioncloud.common.event.SubscribeEventType
@@ -15,8 +15,8 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class UpdateCreatorSubscribeCountStatisticsHandlerTest(
-    private val updateCreatorSubscribeCountStatisticsHandler: UpdateCreatorSubscribeCountStatisticsHandler,
+class UpdateCreatorSubscribeCountStatisticsListenerTest(
+    private val updateCreatorSubscribeCountStatisticsListener: UpdateCreatorSubscribeCountStatisticsListener,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val dbCleaner: DBCleaner
 ) : BehaviorSpec() {
@@ -33,7 +33,7 @@ class UpdateCreatorSubscribeCountStatisticsHandlerTest(
             val event = SubscribeEvent(creator.id, SubscribeEventType.SUBSCRIBE)
             
             When("구독 이벤트가 발행되어 처리되면") {
-                updateCreatorSubscribeCountStatisticsHandler.handler(event)
+                updateCreatorSubscribeCountStatisticsListener.onMessage(event)
                 Then("크리에이터 통계의 구독자 수 데이터가 갱신된다.") {
                     val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     creatorStatistics.subscriberCount shouldBe 1
@@ -51,7 +51,7 @@ class UpdateCreatorSubscribeCountStatisticsHandlerTest(
             val event = SubscribeEvent(creator.id, SubscribeEventType.UNSUBSCRIBE)
             
             When("구독 취소 이벤트가 발행되어 처리되면") {
-                updateCreatorSubscribeCountStatisticsHandler.handler(event)
+                updateCreatorSubscribeCountStatisticsListener.onMessage(event)
                 Then("크리에이터 통계의 구독자 수 데이터가 갱신된다.") {
                     val creatorStatistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     creatorStatistics.subscriberCount shouldBe originSubscribeCount - 1

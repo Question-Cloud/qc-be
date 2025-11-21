@@ -1,4 +1,4 @@
-package com.eager.questioncloud.creator.handler
+package com.eager.questioncloud.creator.listener
 
 import com.eager.questioncloud.common.event.ReviewEvent
 import com.eager.questioncloud.common.event.ReviewEventType
@@ -22,8 +22,8 @@ import kotlin.math.abs
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class UpdateCreatorReviewStatisticsHandlerTest(
-    private val updateCreatorReviewStatisticsHandler: UpdateCreatorReviewStatisticsHandler,
+class UpdateCreatorReviewStatisticsListenerTest(
+    private val updateCreatorReviewStatisticsListener: UpdateCreatorReviewStatisticsListener,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
@@ -52,7 +52,7 @@ class UpdateCreatorReviewStatisticsHandlerTest(
                 .sample()
             
             When("Register Review Event가 발행되어 처리되면") {
-                updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
+                updateCreatorReviewStatisticsListener.onMessage(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 갱신된다.") {
                     val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     abs(originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
@@ -79,7 +79,7 @@ class UpdateCreatorReviewStatisticsHandlerTest(
                 .sample()
             
             When("Modify Review Event가 발행되어 처리되면") {
-                updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
+                updateCreatorReviewStatisticsListener.onMessage(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 갱신된다.") {
                     val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     (statistics.totalReviewRate - originStatistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate
@@ -106,7 +106,7 @@ class UpdateCreatorReviewStatisticsHandlerTest(
                 .sample()
             
             When("Delete Review Event가 발행되어 처리되면") {
-                updateCreatorReviewStatisticsHandler.updateCreatorReviewStatistics(reviewEvent)
+                updateCreatorReviewStatisticsListener.onMessage(reviewEvent)
                 Then("크리에이터 통계의 리뷰 관련 데이터가 갱신된다.") {
                     val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
                     (originStatistics.totalReviewRate - statistics.totalReviewRate) shouldBeEqual reviewEvent.varianceRate

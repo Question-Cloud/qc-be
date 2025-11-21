@@ -1,4 +1,4 @@
-package com.eager.questioncloud.cart.handler
+package com.eager.questioncloud.cart.listener
 
 import com.eager.questioncloud.cart.domain.CartItem
 import com.eager.questioncloud.cart.repository.CartItemRepository
@@ -16,8 +16,8 @@ import java.util.*
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class CartClearHandlerTest(
-    private val cartClearHandler: CartClearHandler,
+class CartClearListenerTest(
+    private val cartClearListener: CartClearListener,
     private val cartItemRepository: CartItemRepository,
     private val dbCleaner: DBCleaner
 ) : BehaviorSpec() {
@@ -47,7 +47,7 @@ class CartClearHandlerTest(
             )
             
             When("QuestionPaymentEvent를 처리하면") {
-                cartClearHandler.clearCart(questionPaymentEvent)
+                cartClearListener.onMessage(questionPaymentEvent)
                 
                 Then("구매한 문제는 장바구니에서 제거 된다.") {
                     val cartItems = cartItemRepository.findByUserId(userId)

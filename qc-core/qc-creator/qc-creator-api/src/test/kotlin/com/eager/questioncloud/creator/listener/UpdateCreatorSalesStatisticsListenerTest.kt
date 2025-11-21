@@ -1,4 +1,4 @@
-package com.eager.questioncloud.creator.handler
+package com.eager.questioncloud.creator.listener
 
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
@@ -21,8 +21,8 @@ import java.util.*
 @SpringBootTest
 @ActiveProfiles("test")
 @ApplyExtension(SpringExtension::class)
-class UpdateCreatorSalesStatisticsHandlerTest(
-    private val updateCreatorSalesStatisticsHandler: UpdateCreatorSalesStatisticsHandler,
+class UpdateCreatorSalesStatisticsListenerTest(
+    private val updateCreatorSalesStatisticsListener: UpdateCreatorSalesStatisticsListener,
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val dbCleaner: DBCleaner,
 ) : BehaviorSpec() {
@@ -63,7 +63,7 @@ class UpdateCreatorSalesStatisticsHandlerTest(
             )
             
             When("QuestionPaymentEvent가 발행되어 처리되면") {
-                updateCreatorSalesStatisticsHandler.updateCreatorStatistics(event)
+                updateCreatorSalesStatisticsListener.onMessage(event)
                 Then("크리에이터 통계의 판매 관련 데이터가 갱신된다.") {
                     creatorScenario.creators.forEach { creator ->
                         val statistics = creatorStatisticsRepository.findByCreatorId(creator.id)
