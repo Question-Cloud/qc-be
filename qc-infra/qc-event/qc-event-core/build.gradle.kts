@@ -4,6 +4,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.spring") version "2.1.10"
     kotlin("plugin.jpa") version "2.1.10"
+    id("io.sentry.jvm.gradle") version "5.12.2"
 }
 
 group = "com.eager.questioncloud"
@@ -18,16 +19,12 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0"))
-    implementation("io.awspring.cloud:spring-cloud-aws-starter-sqs")
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sns")
     
     api("software.amazon.awssdk:netty-nio-client:2.31.32")
     
-    implementation(project(":qc-core:qc-question:qc-question-api"))
-    implementation(project(":qc-core:qc-cart:qc-cart-api"))
-    implementation(project(":qc-core:qc-point:qc-point-api"))
-    implementation(project(":qc-core:qc-pay:qc-pay-api"))
-    implementation(project(":qc-core:qc-creator:qc-creator-api"))
+    implementation(platform("software.amazon.awssdk:bom:2.27.21"))
+    implementation("software.amazon.awssdk:sqs")
     
     implementation(project(":qc-common"))
     

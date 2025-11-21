@@ -1,19 +1,21 @@
-package com.eager.questioncloud.creator.handler
+package com.eager.questioncloud.creator.listener
 
-import com.eager.questioncloud.common.event.ReviewEvent
-import com.eager.questioncloud.common.event.ReviewEventType
+import com.eager.questioncloud.common.event.*
 import com.eager.questioncloud.creator.repository.CreatorStatisticsRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
+@Profile("prod", "local")
 @Component
-class UpdateCreatorReviewStatisticsHandler(
+@QueueListener(queueName = "update-creator-review-statistics", type = ReviewEvent::class)
+class UpdateCreatorReviewStatisticsListener(
     private val creatorStatisticsRepository: CreatorStatisticsRepository,
     private val questionQueryAPI: QuestionQueryAPI
-) {
-    @Transactional
-    fun updateCreatorReviewStatistics(event: ReviewEvent) {
+) : MessageListener<ReviewEvent> {
+    
+    @IdempotentEvent
+    override fun onMessage(event: ReviewEvent) {
         val question = questionQueryAPI.getQuestionInformation(event.questionId)
         val creatorStatistics = creatorStatisticsRepository.getForUpdate(question.creatorId)
         when (event.reviewEventType) {

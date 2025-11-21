@@ -1,6 +1,8 @@
-package com.eager.questioncloud.payment.question.handler
+package com.eager.questioncloud.payment.question.listener
 
+import com.eager.questioncloud.common.event.MessageListener
 import com.eager.questioncloud.common.event.QuestionPaymentEvent
+import com.eager.questioncloud.common.event.QueueListener
 import com.eager.questioncloud.creator.api.internal.CreatorQueryAPI
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
@@ -11,10 +13,13 @@ import com.eager.questioncloud.payment.repository.QuestionPaymentHistoryReposito
 import com.eager.questioncloud.payment.repository.QuestionPaymentRepository
 import com.eager.questioncloud.question.api.internal.QuestionQueryAPI
 import com.eager.questioncloud.user.api.internal.UserQueryAPI
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
+@Profile("prod", "local")
 @Component
-class QuestionPaymentHistoryRegisterHandler(
+@QueueListener(queueName = "question-payment-history-register", type = QuestionPaymentEvent::class)
+class QuestionPaymentHistoryRegisterListener(
     private val questionQueryAPI: QuestionQueryAPI,
     private val creatorQueryAPI: CreatorQueryAPI,
     private val userQueryAPI: UserQueryAPI,
@@ -22,8 +27,9 @@ class QuestionPaymentHistoryRegisterHandler(
     private val questionOrderRepository: QuestionOrderRepository,
     private val discountHistoryRepository: DiscountHistoryRepository,
     private val questionPaymentHistoryRepository: QuestionPaymentHistoryRepository,
-) {
-    fun saveQuestionPaymentHistory(event: QuestionPaymentEvent) {
+) : MessageListener<QuestionPaymentEvent> {
+    
+    override fun onMessage(event: QuestionPaymentEvent) {
         val questions = questionQueryAPI.getQuestionInformation(event.questionIds)
         val creators = creatorQueryAPI.getCreators(questions.map { it.creatorId })
         

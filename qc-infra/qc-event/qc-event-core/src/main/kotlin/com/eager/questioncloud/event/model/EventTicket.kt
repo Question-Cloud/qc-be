@@ -2,7 +2,7 @@ package com.eager.questioncloud.event.model
 
 import com.eager.questioncloud.common.event.Event
 import com.eager.questioncloud.common.event.EventType
-import com.eager.questioncloud.event.TopicArn
+import com.eager.questioncloud.common.event.TopicArn
 import com.fasterxml.jackson.databind.ObjectMapper
 import software.amazon.awssdk.services.sns.model.PublishRequest
 import java.time.LocalDateTime

@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event
+package com.eager.questioncloud.common.event
 
 enum class TopicArn(
     val topicArn: String

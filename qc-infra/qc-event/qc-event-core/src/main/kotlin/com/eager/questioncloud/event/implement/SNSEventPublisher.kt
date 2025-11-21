@@ -2,7 +2,7 @@ package com.eager.questioncloud.event.implement
 
 import com.eager.questioncloud.common.event.Event
 import com.eager.questioncloud.common.event.EventPublisher
-import com.eager.questioncloud.event.TopicArn
+import com.eager.questioncloud.common.event.TopicArn
 import com.eager.questioncloud.event.model.EventTicket
 import com.eager.questioncloud.event.repository.EventTicketRepository
 import com.fasterxml.jackson.databind.ObjectMapper

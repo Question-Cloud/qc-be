@@ -14,7 +14,6 @@ class ScheduledExceptionHandler {
     fun handleSchedulerException(joinPoint: ProceedingJoinPoint): Any? {
         Sentry.withScope { scope: IScope ->
             scope.setTransaction(joinPoint.signature.name)
-            
             try {
                 joinPoint.proceed()
             } catch (e: Throwable) {

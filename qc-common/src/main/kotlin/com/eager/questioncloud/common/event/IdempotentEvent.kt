@@ -1,4 +1,4 @@
-package com.eager.questioncloud.event.annotation
+package com.eager.questioncloud.common.event
 
 
 @Target(AnnotationTarget.FUNCTION)

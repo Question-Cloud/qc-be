@@ -1,17 +1,19 @@
-package com.eager.questioncloud.question.handler
+package com.eager.questioncloud.question.listener
 
-import com.eager.questioncloud.common.event.ReviewEvent
-import com.eager.questioncloud.common.event.ReviewEventType
+import com.eager.questioncloud.common.event.*
 import com.eager.questioncloud.question.repository.QuestionMetadataRepository
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
+@Profile("prod", "local")
 @Component
-class UpdateReviewStatisticsHandler(
+@QueueListener(queueName = "update-question-review-statistics", type = ReviewEvent::class)
+class UpdateReviewStatisticsListener(
     private val questionMetadataRepository: QuestionMetadataRepository,
-) {
-    @Transactional
-    fun updateByRegisteredReview(event: ReviewEvent) {
+) : MessageListener<ReviewEvent> {
+    
+    @IdempotentEvent
+    override fun onMessage(event: ReviewEvent) {
         val questionMetadata = questionMetadataRepository.getForUpdate(event.questionId)
         when (event.reviewEventType) {
             ReviewEventType.REGISTER -> questionMetadata.updateByNewReview(event.varianceRate)
