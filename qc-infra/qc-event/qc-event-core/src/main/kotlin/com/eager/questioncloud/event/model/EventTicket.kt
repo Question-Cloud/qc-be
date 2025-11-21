@@ -34,7 +34,6 @@ class EventTicket(
         return PublishRequest.builder()
             .topicArn(topicArn)
             .messageGroupId(eventId)
-            .messageDeduplicationId(eventId)
             .message(payload)
             .build()
     }
