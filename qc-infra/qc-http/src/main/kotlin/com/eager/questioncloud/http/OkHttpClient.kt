@@ -38,7 +38,7 @@ class OkHttpClient(
                 throw HttpClientException.Response5xxException()
             }
             
-            return objectMapper.readValue(response.body?.string(), valueType)
+            return objectMapper.readValue(response.body.string(), valueType)
         }
     }
     
