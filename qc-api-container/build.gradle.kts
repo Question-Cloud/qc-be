@@ -15,10 +15,11 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-aop")
-    compileOnly("org.springframework:spring-tx")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    
     implementation("org.springframework.retry:spring-retry")
+    compileOnly("org.springframework:spring-tx")
     
     implementation(project(":qc-core:qc-cart:qc-cart-api"))
     implementation(project(":qc-core:qc-creator:qc-creator-api"))
@@ -37,14 +38,8 @@ dependencies {
     implementation(project(":qc-core:qc-creator:qc-creator-internal-api"))
     implementation(project(":qc-core:qc-user:qc-user-internal-api"))
     
-    implementation(project(":qc-infra:qc-rdb"))
-    implementation(project(":qc-infra:qc-redis"))
-    implementation(project(":qc-infra:qc-mail"))
-    implementation(project(":qc-infra:qc-event"))
-    
     implementation(project(":qc-common"))
     implementation(project(":qc-logging"))
-    
     implementation(project(":qc-test-utils"))
     
     testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -105,7 +105,6 @@ include 'qc-internal-api-interface:qc-post-internal-api-interface'
 // 🛠️ Infrastructure Modules (인프라스트럭처)
 // =============================================================================
 include 'qc-infra:qc-rdb'           // RDB
-include 'qc-infra:qc-redis'         // Redis
 include 'qc-infra:qc-http'          // Http
 
 include 'qc-infra:qc-event'         // 이벤트 처리

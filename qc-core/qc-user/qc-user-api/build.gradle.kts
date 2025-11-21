@@ -23,6 +23,7 @@ dependencies {
     
     api(project(":qc-core:qc-user:qc-user-core"))
     implementation(project(":qc-common"))
+    implementation(project(":qc-infra:qc-mail"))
     implementation(project(":qc-core:qc-user:qc-user-rdb"))
     implementation(project(":qc-core:qc-user:qc-user-social"))
     implementation(project(":qc-core:qc-user:qc-user-redis"))

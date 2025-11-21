@@ -17,6 +17,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.springframework:spring-tx")
     
+    implementation(project(":qc-infra:qc-event"))
     implementation(project(":qc-core:qc-creator:qc-creator-core"))
     implementation(project(":qc-core:qc-creator:qc-creator-rdb"))
     implementation(project(":qc-common"))

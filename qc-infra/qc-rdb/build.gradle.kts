@@ -15,19 +15,9 @@ repositories {
 
 dependencies {
     implementation(project(":qc-common"))
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
-    
-    api("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
-    
-    //TODO Delete
-    
-    api("com.querydsl:querydsl-jpa:5.0.0:jakarta")
-    
-    kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
-    kapt("jakarta.annotation:jakarta.annotation-api")
-    kapt("jakarta.persistence:jakarta.persistence-api")
-    
+    implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
+    compileOnly("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    compileOnly("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation(kotlin("test"))
 }
 

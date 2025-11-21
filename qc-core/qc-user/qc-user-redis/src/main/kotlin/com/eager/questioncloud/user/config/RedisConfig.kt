@@ -1,4 +1,4 @@
-package com.eager.questioncloud.config
+package com.eager.questioncloud.user.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

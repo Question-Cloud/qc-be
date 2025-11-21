@@ -18,6 +18,7 @@ dependencies {
     compileOnly("org.springframework:spring-tx")
     
     implementation(project(":qc-common"))
+    implementation(project(":qc-infra:qc-event"))
     implementation(project(":qc-core:qc-cart:qc-cart-core"))
     implementation(project(":qc-core:qc-cart:qc-cart-rdb"))
     

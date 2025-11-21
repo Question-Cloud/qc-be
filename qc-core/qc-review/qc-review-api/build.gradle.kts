@@ -19,6 +19,7 @@ dependencies {
     
     implementation(project(":qc-core:qc-review:qc-review-core"))
     implementation(project(":qc-core:qc-review:qc-review-rdb"))
+    implementation(project(":qc-infra:qc-event"))
     implementation(project(":qc-common"))
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))

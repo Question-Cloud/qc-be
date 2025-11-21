@@ -11,8 +11,11 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework:spring-context")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    compileOnly("org.springframework:spring-context")
+    compileOnly("org.springframework.boot:spring-boot-starter-aop")
+    compileOnly("org.springframework:spring-web")
+    compileOnly("jakarta.servlet:jakarta.servlet-api")
+    
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
     
     implementation("io.micrometer:micrometer-registry-prometheus")
@@ -22,9 +25,6 @@ dependencies {
     
     implementation("ch.qos.logback:logback-classic")
     implementation("org.springframework.boot:spring-boot-starter-logging")
-    
-    compileOnly("org.springframework:spring-web")
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
     
     testImplementation(kotlin("test"))
 }

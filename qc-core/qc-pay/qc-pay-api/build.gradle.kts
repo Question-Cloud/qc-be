@@ -23,6 +23,7 @@ dependencies {
     
     implementation(project(":qc-common"))
     implementation(project(":qc-infra:qc-lock"))
+    implementation(project(":qc-infra:qc-event"))
     
     implementation(project(":qc-internal-api-interface:qc-point-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-question-internal-api-interface"))

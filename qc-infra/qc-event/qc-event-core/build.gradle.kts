@@ -21,10 +21,9 @@ dependencies {
     implementation(platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0"))
     implementation("io.awspring.cloud:spring-cloud-aws-starter-sns")
     
-    api("software.amazon.awssdk:netty-nio-client:2.31.32")
-    
-    implementation(platform("software.amazon.awssdk:bom:2.27.21"))
+    implementation(platform("software.amazon.awssdk:bom:2.39.0"))
     implementation("software.amazon.awssdk:sqs")
+    implementation("software.amazon.awssdk:netty-nio-client")
     
     implementation(project(":qc-common"))
     

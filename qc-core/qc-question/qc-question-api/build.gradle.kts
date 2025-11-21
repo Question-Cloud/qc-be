@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":qc-core:qc-question:qc-question-core"))
     implementation(project(":qc-core:qc-question:qc-question-rdb"))
     implementation(project(":qc-common"))
+    implementation(project(":qc-infra:qc-event"))
     
     implementation(project(":qc-internal-api-interface:qc-user-internal-api-interface"))
     implementation(project(":qc-internal-api-interface:qc-creator-internal-api-interface"))
