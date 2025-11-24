@@ -1,32 +1,35 @@
 package com.eager.questioncloud.payment.document
 
 import com.eager.questioncloud.payment.domain.QuestionPaymentHistory
-import com.eager.questioncloud.payment.domain.QuestionPaymentHistoryOrder
-import com.eager.questioncloud.payment.domain.SimpleDiscountHistory
+import com.github.jershell.kbson.DateSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import java.time.LocalDateTime
+import java.sql.Timestamp
+import java.time.ZoneId
+import java.util.*
 
 @Document(collection = "question_payment_history")
-class QuestionPaymentHistoryDocument(
-    @Id
-    val orderId: String,
+@Serializable
+data class QuestionPaymentHistoryDocument(
+    @Id @SerialName("_id") val orderId: String,
     val userId: Long,
-    val orders: List<QuestionPaymentHistoryOrder>,
-    val discountInformation: List<SimpleDiscountHistory>,
+    val orders: List<QuestionPaymentHistoryOrderDocument>,
+    val discountInformation: List<SimpleDiscountHistoryDocument>,
     val originalAmount: Int,
     val realAmount: Int,
-    val createdAt: LocalDateTime,
+    @Serializable(with = DateSerializer::class) val createdAt: Date,
 ) {
     fun toModel(): QuestionPaymentHistory {
         return QuestionPaymentHistory(
             orderId,
             userId,
-            orders,
-            discountInformation,
+            orders.map { it.toModel() },
+            discountInformation.map { it.toModel() },
             originalAmount,
             realAmount,
-            createdAt
+            createdAt.toInstant().atZone(ZoneId.of("Asia/Seoul")).toLocalDateTime(),
         )
     }
     
@@ -35,11 +38,11 @@ class QuestionPaymentHistoryDocument(
             return QuestionPaymentHistoryDocument(
                 questionPaymentHistory.orderId,
                 questionPaymentHistory.userId,
-                questionPaymentHistory.orders,
-                questionPaymentHistory.discountInformation,
+                QuestionPaymentHistoryOrderDocument.from(questionPaymentHistory.orders),
+                SimpleDiscountHistoryDocument.from(questionPaymentHistory.discountInformation),
                 questionPaymentHistory.originalAmount,
                 questionPaymentHistory.realAmount,
-                questionPaymentHistory.createdAt,
+                Timestamp.valueOf(questionPaymentHistory.createdAt),
             )
         }
     }

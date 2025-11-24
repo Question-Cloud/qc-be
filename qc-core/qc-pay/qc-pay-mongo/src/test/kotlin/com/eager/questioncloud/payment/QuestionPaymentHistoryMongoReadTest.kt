@@ -84,6 +84,11 @@ class QuestionPaymentHistoryMongoReadTest(
         }
         
         test("read 성능 테스트") {
+            warmup(5000)
+            
+            System.gc()
+            Thread.sleep(1000)
+            
             val cnt = 100000
             val executors = Executors.newFixedThreadPool(100)
             val countDownLatch = CountDownLatch(cnt)
@@ -93,6 +98,8 @@ class QuestionPaymentHistoryMongoReadTest(
                     executors.submit {
                         try {
                             questionPaymentHistoryRepository.getQuestionPaymentHistory(1L, PagingInformation(0, 100))
+                        } catch (e: Exception) {
+                            println(e.message)
                         } finally {
                             countDownLatch.countDown()
                         }
@@ -105,5 +112,23 @@ class QuestionPaymentHistoryMongoReadTest(
             
             executors.shutdown()
         }
+    }
+    
+    private fun warmup(requests: Int) {
+        val executors = Executors.newFixedThreadPool(50)
+        val countDownLatch = CountDownLatch(requests)
+        
+        repeat(requests) {
+            executors.submit {
+                try {
+                    questionPaymentHistoryRepository.getQuestionPaymentHistory(1L, PagingInformation(0, 100))
+                } finally {
+                    countDownLatch.countDown()
+                }
+            }
+        }
+        
+        countDownLatch.await()
+        executors.shutdown()
     }
 }

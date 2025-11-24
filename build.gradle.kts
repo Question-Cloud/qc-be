@@ -4,6 +4,7 @@ plugins {
     id("org.springframework.boot") version "3.5.8"
     id("io.spring.dependency-management") version "1.1.6"
     id("io.kotest") version "6.0.3"
+    kotlin("plugin.serialization") version "2.2.21"
 }
 
 group = "com.eager.questioncloud"
@@ -29,6 +30,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "io.kotest")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
     
     repositories {
         mavenCentral()
@@ -48,6 +50,8 @@ subprojects {
         
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+        
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0")
         
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.kotest:kotest-runner-junit5:6.0.3")

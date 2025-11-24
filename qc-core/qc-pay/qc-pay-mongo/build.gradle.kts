@@ -16,6 +16,9 @@ repositories {
 dependencies {
     implementation(project(":qc-common"))
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    
+    implementation("com.github.jershell:kbson:0.5.0")
+    
     implementation(project(":qc-core:qc-pay:qc-pay-core"))
     testImplementation(kotlin("test"))
 }
